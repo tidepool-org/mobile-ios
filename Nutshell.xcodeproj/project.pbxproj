@@ -116,7 +116,6 @@
 		485922A11B9A634E0056E605 /* EventListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListTableViewController.swift; path = ViewControllers/EventListTableViewController.swift; sourceTree = "<group>"; };
 		485922A31B9A639B0056E605 /* EventGroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventGroupTableViewController.swift; path = ViewControllers/EventGroupTableViewController.swift; sourceTree = "<group>"; };
 		485922A61B9C98420056E605 /* splash_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "splash_logo@2x.png"; path = "Images/splash_logo@2x.png"; sourceTree = "<group>"; };
-		485922AA1B9C99570056E605 /* ToDo.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ToDo.txt; path = Docs/ToDo.txt; sourceTree = "<group>"; };
 		485922AD1B9C9BAE0056E605 /* menu-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu-button@2x.png"; path = "Images/menu-button@2x.png"; sourceTree = "<group>"; };
 		485922B31B9C9C430056E605 /* add-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add-button@2x.png"; path = "Images/add-button@2x.png"; sourceTree = "<group>"; };
 		485922B91B9C9D860056E605 /* menu-button@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu-button@3x.png"; path = "Images/menu-button@3x.png"; sourceTree = "<group>"; };
@@ -138,7 +137,6 @@
 		486F5DEF1B9F874A00BA2A57 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Bold.ttf"; path = "Resources/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		486F5DF01B9F874A00BA2A57 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Regular.ttf"; path = "Resources/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		486F5DF11B9F874A00BA2A57 /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Semibold.ttf"; path = "Resources/OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
-		486F5E001B9F8D5900BA2A57 /* ConstantsAndStyleUrchin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstantsAndStyleUrchin.swift; sourceTree = "<group>"; };
 		486F5E041B9FA7A800BA2A57 /* ConstantsAndStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConstantsAndStyle.swift; path = Resources/ConstantsAndStyle.swift; sourceTree = "<group>"; };
 		486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutshellStyles.swift; path = Resources/NutshellStyles.swift; sourceTree = "<group>"; };
 		486F5E101BA08DE900BA2A57 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ViewControllers/LoginViewController.swift; sourceTree = "<group>"; };
@@ -157,6 +155,7 @@
 		486F5E631BA1F20600BA2A57 /* NutEventItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutEventItem.swift; path = DataModel/NutEventItem.swift; sourceTree = "<group>"; };
 		486F5E6B1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventGroupTableViewCell.swift; path = ViewControllers/EventGroupTableViewCell.swift; sourceTree = "<group>"; };
 		486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventDetailViewController.swift; path = ViewControllers/EventDetailViewController.swift; sourceTree = "<group>"; };
+		486F5E751BA35CD800BA2A57 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,14 +237,6 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
-		485922AC1B9C99650056E605 /* Docs */ = {
-			isa = PBXGroup;
-			children = (
-				485922AA1B9C99570056E605 /* ToDo.txt */,
-			);
-			name = Docs;
-			sourceTree = "<group>";
-		};
 		485922BB1B9CA0890056E605 /* MenuViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -258,6 +249,7 @@
 		4859FCAC1B9A4DE4000C1269 = {
 			isa = PBXGroup;
 			children = (
+				486F5E751BA35CD800BA2A57 /* LICENSE */,
 				4859FCB71B9A4DE4000C1269 /* Nutshell */,
 				4859FCCF1B9A4DE5000C1269 /* NutshellTests */,
 				4859FCDA1B9A4DE5000C1269 /* NutshellUITests */,
@@ -286,7 +278,6 @@
 				486F5DFE1B9F876300BA2A57 /* View Controllers */,
 				486F5E381BA0E51F00BA2A57 /* Extensions */,
 				486F5DED1B9F86E800BA2A57 /* Resources */,
-				485922AC1B9C99650056E605 /* Docs */,
 			);
 			path = Nutshell;
 			sourceTree = "<group>";
@@ -313,7 +304,6 @@
 			isa = PBXGroup;
 			children = (
 				486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */,
-				486F5E001B9F8D5900BA2A57 /* ConstantsAndStyleUrchin.swift */,
 				486F5E041B9FA7A800BA2A57 /* ConstantsAndStyle.swift */,
 				4859FCC71B9A4DE4000C1269 /* Info.plist */,
 				4859FCC21B9A4DE4000C1269 /* Assets.xcassets */,
