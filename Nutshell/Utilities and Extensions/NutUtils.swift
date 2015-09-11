@@ -5,32 +5,15 @@
 //  2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 //  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import Foundation
 import UIKit
 
-/*
-    Most of the service interface is exposed via the data classes. However, for login/logout, some set of service interface functions are needed. Much of the needed login code should be portable from Urchin.
-*/
+class NutUtils {
 
-class APIConnector {
-    
-    class func login(username: String, password: String, completion: (Bool) -> (Void)) {
-        
-        // For now, just return true after a second... 
-        // TODO: actual login attempt...
-        NutUtils.dispatchBoolToVoidAfterSecs(0.5, result:true, boolToVoid:completion)
-        
-    }
-    
-    class func logout() {
+    class func dispatchBoolToVoidAfterSecs(secs: Float, result: Bool, boolToVoid: (Bool) -> (Void)) {
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(secs * Float(NSEC_PER_SEC)))
+        dispatch_after(time, dispatch_get_main_queue()){
+            boolToVoid(result)
+        }
     }
 
-    /** 
-        :returns: Returns true if connected.
-        Uses reachability to determine whether device is connected to a network.
-    */
-    class func isConnectedToNetwork() -> Bool {
-        return true;
-    }
-    
- }
+}

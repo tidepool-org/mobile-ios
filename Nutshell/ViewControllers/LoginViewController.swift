@@ -11,11 +11,24 @@ class LoginViewController: BaseViewController {
 
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var loginIndicator: UIActivityIndicatorView!
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
+    deinit {
+        let nc = NSNotificationCenter.defaultCenter()
+        nc.removeObserver(self, name: nil, object: nil)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
+        updateButtonStates()
     }
 
     override func didReceiveMemoryWarning() {
@@ -30,6 +43,35 @@ class LoginViewController: BaseViewController {
     @IBAction func rememberMeButtonTapped(sender: AnyObject) {
     }
     
+    @IBAction func login_button_tapped(sender: AnyObject) {
+        updateButtonStates()
+        loginIndicator.startAnimating()
+        APIConnector.login(emailTextField.text!, password: passwordTextField.text!) {
+            self.loginIndicator.stopAnimating()
+            if ($0) {
+                print("login success!")
+                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                appDelegate.setupUIForLoginSuccess()
+            } else {
+                print("login failed!")
+            }
+        }
+    }
+    
+    func textFieldDidChange() {
+        updateButtonStates()
+    }
+
+    internal func updateButtonStates() {
+        // login button
+        if (emailTextField.text != "" && passwordTextField.text != "") {
+            loginButton.enabled = true
+            loginButton.setTitleColor(UIColor.whiteColor(), forState:UIControlState.Normal)
+        } else {
+            loginButton.enabled = false
+            loginButton.setTitleColor(UIColor.lightGrayColor(), forState:UIControlState.Normal)
+        }
+    }
     /*
     // MARK: - Navigation
 

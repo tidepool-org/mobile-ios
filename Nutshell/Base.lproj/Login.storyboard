@@ -136,7 +136,7 @@
                                                             <color key="titleColor" red="0.30196078431372547" green="0.30588235294117649" blue="0.29803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         </state>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zPr-G0-r47" userLabel="LogInButton">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zPr-G0-r47" userLabel="LogInButton">
                                                         <rect key="frame" x="160" y="0.0" width="160" height="54"/>
                                                         <color key="backgroundColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="22"/>
@@ -166,6 +166,9 @@
                                                     </mask>
                                                 </variation>
                                             </view>
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="75w-tb-LSw">
+                                                <rect key="frame" x="142" y="440" width="37" height="37"/>
+                                            </activityIndicatorView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -174,6 +177,8 @@
                                             <constraint firstItem="Ucb-jq-HNI" firstAttribute="centerX" secondItem="iHd-Hc-UkR" secondAttribute="centerX" id="Wbr-s1-P9t"/>
                                             <constraint firstItem="Ucb-jq-HNI" firstAttribute="top" secondItem="kJo-Zi-pFB" secondAttribute="bottom" constant="40" id="XxF-kz-Tpz"/>
                                             <constraint firstItem="kJo-Zi-pFB" firstAttribute="top" secondItem="iHd-Hc-UkR" secondAttribute="top" constant="80" id="bZ7-dV-922"/>
+                                            <constraint firstItem="75w-tb-LSw" firstAttribute="centerX" secondItem="iHd-Hc-UkR" secondAttribute="centerX" id="knA-Iq-avV"/>
+                                            <constraint firstItem="PQA-rp-TeB" firstAttribute="top" secondItem="75w-tb-LSw" secondAttribute="bottom" constant="37" id="r9x-pM-JRc"/>
                                             <constraint firstItem="kJo-Zi-pFB" firstAttribute="centerX" secondItem="iHd-Hc-UkR" secondAttribute="centerX" id="uC1-T4-Rja"/>
                                         </constraints>
                                     </view>
@@ -202,6 +207,7 @@
                     <connections>
                         <outlet property="emailTextField" destination="6dr-nu-GmC" id="dNd-vg-klQ"/>
                         <outlet property="loginButton" destination="zPr-G0-r47" id="eY9-IV-5A5"/>
+                        <outlet property="loginIndicator" destination="75w-tb-LSw" id="dfD-21-TW1"/>
                         <outlet property="passwordTextField" destination="yzu-4v-Bis" id="lam-yL-6uE"/>
                     </connections>
                 </viewController>
