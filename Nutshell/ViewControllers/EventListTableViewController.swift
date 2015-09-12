@@ -1,15 +1,23 @@
-//  Copyright (c) 2015, Tidepool Project
-//  All rights reserved.
-//  Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-//  1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-//  2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-//  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+/*
+* Copyright (c) 2015, Tidepool Project
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the associated License, which is identical to the BSD 2-Clause
+* License as published by the Open Source Initiative at opensource.org.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the License for more details.
+*
+* You should have received a copy of the License along with this program; if
+* not, you can obtain one from Tidepool Project at tidepool.org.
+*/
 
 import UIKit
 
 class EventListTableViewController: BaseTableTableViewController {
 
-    var eventList: NSArray
+    private var eventList: NSArray!
   
     required init?(coder aDecoder: NSCoder) {
         eventList = []
@@ -21,7 +29,7 @@ class EventListTableViewController: BaseTableTableViewController {
         nc.removeObserver(self, name: "EventListChanged", object: nil)
     }
 
-    func updateEventList(notification: NSNotification) {
+    private func updateEventList(notification: NSNotification) {
         self.eventList = EventListDB.testNutEventList();
     }
 
@@ -46,8 +54,23 @@ class EventListTableViewController: BaseTableTableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    // MARK: - Table view data source
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        if(segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventGroupSegue {
+            let cell = sender as! EventListTableViewCell
+            let eventGroupVC = segue.destinationViewController as! EventGroupTableViewController
+            eventGroupVC.eventGroup = cell.eventGroup
+        }
+    }
+}
 
+// MARK: - Table view data source
+extension EventListTableViewController {
+    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -57,7 +80,7 @@ class EventListTableViewController: BaseTableTableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("eventlistcell", forIndexPath: indexPath) as! EventListTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(EventViewStoryboard.TableViewCellIdentifiers.eventListCell, forIndexPath: indexPath) as! EventListTableViewCell
 
         if (indexPath.item < self.eventList.count) {
             let event = self.eventList[indexPath.item] as! NutEvent
@@ -109,18 +132,5 @@ class EventListTableViewController: BaseTableTableViewController {
         return true
     }
     */
-
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        if(segue.identifier) == "eventGroupSegue" {
-            let cell = sender as! EventListTableViewCell
-            let eventGroupVC = segue.destinationViewController as! EventGroupTableViewController
-            eventGroupVC.eventGroup = cell.eventGroup
-        }
-    }
 
 }

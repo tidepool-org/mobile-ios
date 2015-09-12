@@ -22,7 +22,7 @@
                         <viewControllerLayoutGuide type="top" id="zkr-4N-FyE"/>
                         <viewControllerLayoutGuide type="bottom" id="cJz-jh-nmi"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="lik-Jb-UNr">
+                    <view key="view" contentMode="scaleToFill" id="lik-Jb-UNr" customClass="BackgroundUIView" customModule="Nutshell" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -42,15 +42,6 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ucb-jq-HNI" userLabel="InputContainerView">
                                                 <rect key="frame" x="48" y="235" width="225" height="184"/>
                                                 <subviews>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="line" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6dr-nu-GmC" userLabel="emailTextField">
-                                                        <rect key="frame" x="0.0" y="0.0" width="225" height="40"/>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="40" id="9M7-hN-ci0"/>
-                                                        </constraints>
-                                                        <attributedString key="attributedText"/>
-                                                        <textInputTraits key="textInputTraits"/>
-                                                    </textField>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yzu-4v-Bis" userLabel="passwordTextField">
                                                         <rect key="frame" x="0.0" y="65" width="225" height="40"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -99,6 +90,15 @@
                                                         </attributedString>
                                                         <nil key="highlightedColor"/>
                                                     </label>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="line" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6dr-nu-GmC" userLabel="emailTextField">
+                                                        <rect key="frame" x="0.0" y="0.0" width="225" height="40"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="40" id="9M7-hN-ci0"/>
+                                                        </constraints>
+                                                        <attributedString key="attributedText"/>
+                                                        <textInputTraits key="textInputTraits"/>
+                                                    </textField>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
@@ -194,13 +194,16 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.15686274510000001" green="0.098039215690000001" blue="0.27450980390000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="zV2-Yb-tzp" secondAttribute="trailing" constant="-16" id="J27-C5-10f"/>
                             <constraint firstItem="zV2-Yb-tzp" firstAttribute="top" secondItem="lik-Jb-UNr" secondAttribute="topMargin" id="UpW-YU-KqM"/>
                             <constraint firstItem="zV2-Yb-tzp" firstAttribute="leading" secondItem="lik-Jb-UNr" secondAttribute="leadingMargin" constant="-16" id="Uza-nX-Obr"/>
                             <constraint firstItem="cJz-jh-nmi" firstAttribute="top" secondItem="zV2-Yb-tzp" secondAttribute="bottom" id="u2F-sm-h1a"/>
                         </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isLightTable" value="NO"/>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="isDarkScene" value="YES"/>
+                        </userDefinedRuntimeAttributes>
                     </view>
                     <navigationItem key="navigationItem" id="JwL-W6-1O1"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
