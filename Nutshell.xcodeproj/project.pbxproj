@@ -89,6 +89,7 @@
 		486F5E6C1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E6B1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift */; };
 		486F5E6E1BA24C5C00BA2A57 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */; };
 		486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
+		949A33B350C643B74EB54D43 /* Pods_Nutshell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +110,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nutshell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUIViewController.swift; path = ViewControllers/BaseUIViewController.swift; sourceTree = "<group>"; };
 		483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewController.swift; path = ViewControllers/BaseUITableViewController.swift; sourceTree = "<group>"; };
 		483E3C3A1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
@@ -164,6 +166,8 @@
 		486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventDetailViewController.swift; path = ViewControllers/EventDetailViewController.swift; sourceTree = "<group>"; };
 		486F5E751BA35CD800BA2A57 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		486F5E771BA3891600BA2A57 /* NutUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutUtils.swift; path = "Utilities and Extensions/NutUtils.swift"; sourceTree = "<group>"; };
+		691EA93AF2D5DC902113C37D /* Pods-Nutshell.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.debug.xcconfig"; sourceTree = "<group>"; };
+		A08B5E3A2659E0859F53527E /* Pods-Nutshell.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +175,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				949A33B350C643B74EB54D43 /* Pods_Nutshell.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -191,6 +196,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B896CBEA8D0BFD3140D313E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		483E3C331B9F4A3000DA49E7 /* LoginViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -263,6 +276,8 @@
 				4859FCCF1B9A4DE5000C1269 /* NutshellTests */,
 				4859FCDA1B9A4DE5000C1269 /* NutshellUITests */,
 				4859FCB61B9A4DE4000C1269 /* Products */,
+				8B1414A3E58F828463AFF25F /* Pods */,
+				0B896CBEA8D0BFD3140D313E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -380,6 +395,15 @@
 			name = Extensions;
 			sourceTree = "<group>";
 		};
+		8B1414A3E58F828463AFF25F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				691EA93AF2D5DC902113C37D /* Pods-Nutshell.debug.xcconfig */,
+				A08B5E3A2659E0859F53527E /* Pods-Nutshell.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -387,9 +411,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4859FCE01B9A4DE5000C1269 /* Build configuration list for PBXNativeTarget "Nutshell" */;
 			buildPhases = (
+				1786D06C2DABABAA4963A7C4 /* Check Pods Manifest.lock */,
 				4859FCB11B9A4DE4000C1269 /* Sources */,
 				4859FCB21B9A4DE4000C1269 /* Frameworks */,
 				4859FCB31B9A4DE4000C1269 /* Resources */,
+				838E70CEDBB762B0F806261D /* Copy Pods Resources */,
+				D6925E0BAEF72ACB60DED46B /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -442,6 +469,7 @@
 		4859FCAD1B9A4DE4000C1269 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Tidepool;
 				TargetAttributes = {
@@ -528,6 +556,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1786D06C2DABABAA4963A7C4 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		838E70CEDBB762B0F806261D /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D6925E0BAEF72ACB60DED46B /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4859FCB11B9A4DE4000C1269 /* Sources */ = {
@@ -734,6 +810,7 @@
 		};
 		4859FCE11B9A4DE5000C1269 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 691EA93AF2D5DC902113C37D /* Pods-Nutshell.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Nutshell/Info.plist;
@@ -746,6 +823,7 @@
 		};
 		4859FCE21B9A4DE5000C1269 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A08B5E3A2659E0859F53527E /* Pods-Nutshell.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Nutshell/Info.plist;
