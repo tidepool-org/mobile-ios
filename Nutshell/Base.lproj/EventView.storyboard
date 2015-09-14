@@ -5,14 +5,13 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
     </dependencies>
     <scenes>
-        <!--All events-->
+        <!--EventList-->
         <scene sceneID="pZD-8B-I9t">
             <objects>
-                <tableViewController title="All events" id="1ND-G3-Xkn" customClass="EventListTableViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="zPG-RC-CX0">
+                <tableViewController title="EventList" id="1ND-G3-Xkn" customClass="EventListTableViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="zPG-RC-CX0" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.94901960784313721" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="eventListCell" id="YKP-WE-Q77" customClass="EventListTableViewCell" customModule="Nutshell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="375" height="44"/>
@@ -22,11 +21,17 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.94901960780000005" green="0.95294117649999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <segue destination="gjn-FB-qdd" kind="show" identifier="EventGroupSegue" id="clS-Qu-a7b"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                        </userDefinedRuntimeAttributes>
                         <connections>
                             <outlet property="dataSource" destination="1ND-G3-Xkn" id="c1C-rZ-jHI"/>
                             <outlet property="delegate" destination="1ND-G3-Xkn" id="3BK-by-SMN"/>
@@ -49,11 +54,11 @@
             </objects>
             <point key="canvasLocation" x="821.5" y="852.5"/>
         </scene>
-        <!--Title-->
+        <!--EventGroup-->
         <scene sceneID="ULr-NQ-tPV">
             <objects>
-                <tableViewController id="gjn-FB-qdd" customClass="EventGroupTableViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="zmj-7u-0MC">
+                <tableViewController title="EventGroup" id="gjn-FB-qdd" customClass="EventGroupTableViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="zmj-7u-0MC" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -65,17 +70,23 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <segue destination="S8b-Gx-dOJ" kind="show" identifier="EventItemDetailSegue" id="ZxF-XL-Bbb"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                        </userDefinedRuntimeAttributes>
                         <connections>
                             <outlet property="dataSource" destination="gjn-FB-qdd" id="sde-UF-aDY"/>
                             <outlet property="delegate" destination="gjn-FB-qdd" id="YSA-il-3Z4"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Title" id="gpn-pI-6nu">
+                    <navigationItem key="navigationItem" id="gpn-pI-6nu">
                         <barButtonItem key="rightBarButtonItem" image="add-button.png" id="l4y-4d-XHJ"/>
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
@@ -97,7 +108,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Title" id="6wN-kQ-yx9">
+                    <navigationItem key="navigationItem" id="6wN-kQ-yx9">
                         <barButtonItem key="rightBarButtonItem" image="add-button.png" id="VKK-Ko-uQU"/>
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
@@ -115,9 +126,6 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="xoN-ni-B6S">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="1" green="0.85098039219999999" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="tintColor" red="0.078431372550000003" green="0.59999999999999998" blue="0.25098039220000001" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="barTintColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.22745098039215686" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>

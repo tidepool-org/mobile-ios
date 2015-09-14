@@ -22,7 +22,7 @@
                         <viewControllerLayoutGuide type="top" id="zkr-4N-FyE"/>
                         <viewControllerLayoutGuide type="bottom" id="cJz-jh-nmi"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="lik-Jb-UNr" customClass="BackgroundUIView" customModule="Nutshell" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="lik-Jb-UNr" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -201,8 +201,7 @@
                             <constraint firstItem="cJz-jh-nmi" firstAttribute="top" secondItem="zV2-Yb-tzp" secondAttribute="bottom" id="u2F-sm-h1a"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="isLightTable" value="NO"/>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="isDarkScene" value="YES"/>
+                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
                         </userDefinedRuntimeAttributes>
                     </view>
                     <navigationItem key="navigationItem" id="JwL-W6-1O1"/>

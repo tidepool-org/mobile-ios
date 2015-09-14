@@ -15,7 +15,7 @@
 
 import UIKit
 
-class MenuTableViewController: BaseTableTableViewController {
+class MenuTableViewController: BaseUITableViewController {
 
     let menuListArray = ["Tidepool account settings", "Support", "Privacy and terms of use"]
 

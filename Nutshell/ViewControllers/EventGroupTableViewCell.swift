@@ -16,7 +16,7 @@
 
 import UIKit
 
-class EventGroupTableViewCell: BaseTableViewCell {
+class EventGroupTableViewCell: NutshellUITableViewCell {
 
     var eventItem: NutEventItem?
 

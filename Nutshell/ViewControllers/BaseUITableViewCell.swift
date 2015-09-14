@@ -15,7 +15,7 @@
 
 import UIKit
 
-class BaseTableViewCell: UITableViewCell {
+class BaseUITableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -26,7 +26,7 @@ class BaseTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-        self.backgroundColor = Styles.tableLightBkgndColor
+        //self.backgroundColor = Styles.tableLightBkgndColor
         
         self.textLabel?.font = listItemFont
     }

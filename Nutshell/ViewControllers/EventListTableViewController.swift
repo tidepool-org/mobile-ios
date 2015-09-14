@@ -15,7 +15,7 @@
 
 import UIKit
 
-class EventListTableViewController: BaseTableTableViewController {
+class EventListTableViewController: BaseUITableViewController {
 
     private var eventList: NSArray!
   

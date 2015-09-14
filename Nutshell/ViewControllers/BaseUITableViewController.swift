@@ -15,7 +15,7 @@
 
 import UIKit
 
-class BaseTableTableViewController: UITableViewController {
+class BaseUITableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +26,6 @@ class BaseTableTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        self.tableView.backgroundColor = Styles.tableLightBkgndColor
     }
 
     override func didReceiveMemoryWarning() {

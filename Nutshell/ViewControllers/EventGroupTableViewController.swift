@@ -15,7 +15,7 @@
 
 import UIKit
 
-class EventGroupTableViewController: BaseTableTableViewController {
+class EventGroupTableViewController: BaseUITableViewController {
 
     var eventGroup: NutEvent?
 

@@ -17,7 +17,7 @@
 import UIKit
 
 
-class EventDetailViewController: UIViewController {
+class EventDetailViewController: BaseUIViewController {
 
     var eventItem: NutEventItem?
 
