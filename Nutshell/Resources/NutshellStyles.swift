@@ -32,28 +32,55 @@ extension UIColor {
 
 public class Styles: NSObject {
 
-    
-    //// Cache
-
-    private struct Cache {
-        static var darkBackground: UIColor = UIColor(red: 0.157, green: 0.098, blue: 0.275, alpha: 1.000)
-        static var brightBackground: UIColor = UIColor(red: 0.384, green: 0.486, blue: 1.000, alpha: 1.000)
-        static var listItemDeleteBackground: UIColor = UIColor(red: 0.965, green: 0.435, blue: 0.337, alpha: 1.000)
-        static var tableLightBkgndColor: UIColor = UIColor(red: 0.949, green: 0.953, blue: 0.961, alpha: 1.000)
-    }
-
-    //// Colors
-
-    class var darkBackground: UIColor { return Cache.darkBackground }
-    class var brightBackground: UIColor { return Cache.brightBackground }
-    class var listItemDeleteBackground: UIColor { return Cache.listItemDeleteBackground }
-    class var tableLightBkgndColor: UIColor { return Cache.tableLightBkgndColor }
-
-    static var usageToColor = [
-        "brightBackground": Styles.brightBlueColor,
-        "darkBackground": Styles.darkPurpleColor,
-        "lightBackground": Styles.lightGreyColor
+    // This table determines the background style design to color mapping in the UI. Setting "usage" variables in storyboards will determine color settings via this table; actual colors are defined below and can be changed globally there.
+    static var usageToBackgroundColor = [
+        "brightBackground": brightBlueColor,
+        "darkBackground": darkPurpleColor,
+        "lightBackground": lightGreyColor,
+        // login & signup
+        "activeLoginButton": brightBlueColor,
+        "inactiveLoginButton": veryLightGreyColor,
     ]
+
+    // This table is used for mapping usage to font and font color for UI elements including fonts (UITextField, UILabel, UIButton). An entry may appear here as well as in the basic color mapping table above to set both font attributes as well as background coloring.
+    static var usageToFontWithColor = [
+        // login & signup
+        "userDataEntry": (mediumRegularFont, brightBlueColor),
+        "dataEntryErrorFeedback": (smallSemiboldFont, pinkColor),
+        "inactiveLoginButton": (mediumButtonRegularFont, altDarkGreyColor),
+        "activeLoginButton": (largeRegularFont, whiteColor),
+        // event detail view
+        "healthkitEventSubtext": (smallBoldFont, pinkColor),
+        // table views
+        "tableCellTitle": (mediumRegularFont, darkGreyColor),
+        "tableCellSubtitle": (smallRegularFont, darkMediumGreyColor),
+        // account configuration views
+        "accountSettingItem": (mediumSemiboldFont, darkGreyColor),
+        "largeTargetValueInactive": (veryLargeSemiboldFont, mediumLightGreyColor),
+        "largeTargetLow": (veryLargeSemiboldFont, peachColor),
+        "largeTargetHigh": (veryLargeSemiboldFont, purpleColor),
+    ]
+
+    //
+    // MARK: - Fonts
+    //
+    class var smallRegularFont: UIFont { return UIFont(name: "OpenSans", size: 12.5)! }
+    class var mediumRegularFont: UIFont { return UIFont(name: "OpenSans", size: 17.0)! }
+    class var mediumButtonRegularFont: UIFont { return UIFont(name: "OpenSans", size: 15.0)! }
+    class var largeRegularFont: UIFont { return UIFont(name: "OpenSans", size: 22.0)! }
+
+    class var smallSemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 11.0)! }
+    class var mediumSemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 17.0)! }
+    class var veryLargeSemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 25.5)! }
+
+    class var smallBoldFont: UIFont { return UIFont(name: "OpenSans-Bold", size: 12.0)! }
+
+    // Fonts for special graph view
+    
+    class var verySmallRegularFont: UIFont { return UIFont(name: "OpenSans", size: 10.0)! }
+    class var tinyRegularFont: UIFont { return UIFont(name: "OpenSans", size: 8.5)! }
+    class var verySmallSemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 10.0)! }
+    class var veryTinySemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 4.5)! }
 
     //
     // MARK: - Background Colors
@@ -62,7 +89,7 @@ public class Styles: NSObject {
     // Nav bar:     header
     // Button:      done button in account settings
     // View:        splash screen
-    class var darkPurpleColor: UIColor { return UIColor(hex: 0x281946) }
+    static var darkPurpleColor: UIColor { return UIColor(hex: 0x281946) }
 
     // Table cell:  selected event
     // Button:      signup/login active, cancel for account settings,
@@ -100,12 +127,16 @@ public class Styles: NSObject {
     // Open Sans Semibold 17:   UILabel table cell title text
     // Open Sans Regular 17:    UILabel account settings item description
     class var darkGreyColor: UIColor { return UIColor(hex: 0x4a4a4a) }
+
     // Open Sans Regular 15:    UIButton inactive login button text
     class var altDarkGreyColor: UIColor { return UIColor(hex: 0x4d4e4c) }
+
     // Open Sans Regular 12.5:    UILabel table cell subtext
     class var darkMediumGreyColor: UIColor { return UIColor(hex: 0x8e8e8e) }
+
     // Open Sans Semibold 25.5:   UILabel account settings, target level text inactive
     class var mediumLightGreyColor: UIColor { return UIColor(hex: 0xd0d3d4) }
+
     // Open Sans Semibold 10:   custom graph insulin amount text
     class var mediumBlueColor: UIColor { return UIColor(hex: 0x6db7d4) }
 
