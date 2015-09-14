@@ -25,7 +25,8 @@ class NutshellUITests: XCTestCase {
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
         // UI tests must launch the application that they test. Doing this in setup will make sure it happens for each test method.
-        XCUIApplication().launch()
+        // TODO: BSK: XCUIApplication requires iOS 9, we support 8+.
+        // XCUIApplication().launch()
     }
     
     override func tearDown() {

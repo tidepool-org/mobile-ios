@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0334C8861BA7403200013096 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
+		0334C8871BA7403300013096 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
+		0334C8881BA7404200013096 /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
+		0334C8891BA7404300013096 /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
+		0334C88A1BA7405A00013096 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
 		483E3C361B9F4A6300DA49E7 /* BaseUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */; };
 		483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */; };
 		483E3C3B1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C3A1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift */; };
@@ -442,6 +447,7 @@
 		4859FCAD1B9A4DE4000C1269 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Tidepool;
 				TargetAttributes = {
@@ -571,6 +577,7 @@
 			files = (
 				486F5E251BA0DC1000BA2A57 /* APIConnect.swift in Sources */,
 				486F5E2C1BA0DC6700BA2A57 /* NutEvent.swift in Sources */,
+				0334C8881BA7404200013096 /* NutshellStyles.swift in Sources */,
 				486F5E4D1BA1CEE100BA2A57 /* WorkoutEventList.swift in Sources */,
 				486F5E691BA2029200BA2A57 /* BaseUITableViewCell.swift in Sources */,
 				486F5E651BA1F20600BA2A57 /* NutEventItem.swift in Sources */,
@@ -582,6 +589,7 @@
 				486F5E591BA1D0CC00BA2A57 /* InsulinInputs.swift in Sources */,
 				486F5E551BA1D02900BA2A57 /* GlucoseReadings.swift in Sources */,
 				486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */,
+				0334C8861BA7403200013096 /* NutUtils.swift in Sources */,
 				486F5E061B9FA7A800BA2A57 /* ConstantsAndStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -592,6 +600,7 @@
 			files = (
 				486F5E681BA1FE2A00BA2A57 /* BaseUIViewController.swift in Sources */,
 				486F5E461BA1CABF00BA2A57 /* NutEventList.swift in Sources */,
+				0334C88A1BA7405A00013096 /* NutEvent.swift in Sources */,
 				486F5E661BA1F20600BA2A57 /* NutEventItem.swift in Sources */,
 				486F5E6A1BA2029200BA2A57 /* BaseUITableViewCell.swift in Sources */,
 				486283AC1BA396AE00547BE3 /* APIConnect.swift in Sources */,
@@ -602,7 +611,9 @@
 				4859FCDC1B9A4DE5000C1269 /* NutshellUITests.swift in Sources */,
 				486F5E5A1BA1D0CC00BA2A57 /* InsulinInputs.swift in Sources */,
 				486F5E561BA1D02900BA2A57 /* GlucoseReadings.swift in Sources */,
+				0334C8891BA7404300013096 /* NutshellStyles.swift in Sources */,
 				486F5E071B9FA7A800BA2A57 /* ConstantsAndStyle.swift in Sources */,
+				0334C8871BA7403300013096 /* NutUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
