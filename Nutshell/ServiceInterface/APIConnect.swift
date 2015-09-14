@@ -47,7 +47,7 @@ class APIConnector {
     
     
     // Convenience initializer using the server name
-    convenience init(server: String = "Production") {
+    convenience init(_ server: String = "Production") {
         self.init(baseUrl: NSURL(string:APIConnector.kServers[server]!)!)
     }
     
@@ -58,7 +58,13 @@ class APIConnector {
         password: String,
         completion: (NSURLRequest?, NSURLResponse?, Result<AnyObject>) -> (Void)) {
             let endpoint = "auth/login"
-            sendRequest(endpoint: endpoint) { (request, response, result) -> (Void) in
+            let base64LoginString = NSString(format: "%@:%@", username, password)
+                .dataUsingEncoding(NSUTF8StringEncoding)?
+                .base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+            let headers = ["Authorization" : "Basic " + base64LoginString!]
+            
+            // Login
+            sendRequest(Method.POST, endpoint: endpoint, headers:headers) { (request, response, result) -> (Void) in
                 if let httpResponse:(NSHTTPURLResponse) = response as? NSHTTPURLResponse {
                     // Look for the auth token
                     self._sessionToken = httpResponse.allHeaderFields[APIConnector.kSessionIdHeader] as! String?
@@ -96,12 +102,27 @@ class APIConnector {
     */
     func sendRequest(requestType: (Alamofire.Method)? = Method.GET,
         endpoint: (String),
+        parameters: [String: AnyObject]? = nil,
         headers: [String: String]? = nil,
         completion: (NSURLRequest?, NSURLResponse?, Result<AnyObject>) -> (Void))
     {
         let url = _baseUrl.URLByAppendingPathComponent(endpoint)
+        
+        // Get our API headers (the session token) and add any headers supplied by the caller
         var apiHeaders = getApiHeaders()
-        Alamofire.request(requestType!, url, headers: headers).responseJSON {
+        if ( apiHeaders != nil ) {
+            if ( headers != nil ) {
+                for(k, v) in headers! {
+                    apiHeaders?.updateValue(v, forKey: k)
+                }
+            }
+        } else {
+            // We have no headers of our own to use- just use the caller's directly
+            apiHeaders = headers
+        }
+        
+        // Fire off the network request
+        Alamofire.request(requestType!, url, headers: apiHeaders, parameters:parameters).responseJSON {
             (request, response, result) -> Void in
             completion(request, response, result)
         }
@@ -109,7 +130,7 @@ class APIConnector {
     
     func getApiHeaders() -> [String: String]? {
         if ( _sessionToken != nil ) {
-            return [kSessionIdHeader : _sessionToken]
+            return [APIConnector.kSessionIdHeader : _sessionToken!]
         }
         return nil;
     }

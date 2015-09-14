@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import Alamofire
 
 class LoginViewController: BaseUIViewController {
 
@@ -54,16 +55,20 @@ class LoginViewController: BaseUIViewController {
     @IBAction func login_button_tapped(sender: AnyObject) {
         updateButtonStates()
         loginIndicator.startAnimating()
-        APIConnector.login(emailTextField.text!, password: passwordTextField.text!) { loginSuccessful in
-            self.loginIndicator.stopAnimating()
-            if (loginSuccessful) {
-                print("login success!")
-                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                appDelegate.setupUIForLoginSuccess()
-            } else {
-                print("login failed!")
-            }
-        }
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        appDelegate.API?.login(emailTextField.text!,
+            password: passwordTextField.text!,
+            completion: { (_, _, result:(Alamofire.Result<AnyObject>)) -> (Void) in
+                print("Login result: \(result)")
+                if ( result.isSuccess ) {
+                    print("login success!")
+                    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                    appDelegate.setupUIForLoginSuccess()
+                } else {
+                    print("login failed!")
+                }
+        })
     }
     
     func textFieldDidChange() {
