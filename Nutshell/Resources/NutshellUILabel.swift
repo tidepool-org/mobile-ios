@@ -15,19 +15,23 @@
 
 import UIKit
 
-// This intermediate class is used to enable UITableView views in storyboards to show backgrounds with NutshellStyles coloring. 
+// This intermediate class is used to enable UITextField views in storyboards to have fonts and backgrounds determined by NutshellStyles data.
 
-@IBDesignable class NutshellUITableView: UITableView {
+@IBDesignable class NutshellUILabel: UILabel {
     
     @IBInspectable var usage: String = "" {
         didSet {
-            updateBackgroundColor()
+            updateStyling()
         }
     }
     
-    private func updateBackgroundColor() {
+    private func updateStyling() {
         if let backColor = Styles.usageToBackgroundColor[usage] {
             self.backgroundColor = backColor
+        }
+        if let (font, textColor) = Styles.usageToFontWithColor[usage] {
+            self.font = font
+            self.textColor = textColor
         }
     }
 }
