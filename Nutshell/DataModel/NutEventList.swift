@@ -27,8 +27,6 @@ import Foundation
 
 class EventListDB {
 
-    //    public class var darkBackground: UIColor { return Cache.darkBackground }
-
     class func testNutEventList() -> NSArray {
         return [NutEvent.testNutEvent("Three Tacos"),
             NutEvent.testNutEvent("Workout"),

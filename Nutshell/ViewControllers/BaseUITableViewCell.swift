@@ -26,9 +26,6 @@ class BaseUITableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-        //self.backgroundColor = Styles.tableLightBkgndColor
-        
-        self.textLabel?.font = listItemFont
     }
 
 }

@@ -17,8 +17,8 @@ import UIKit
 
 class LoginViewController: BaseUIViewController {
 
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var emailTextField: NutshellUITextField!
+    @IBOutlet weak var passwordTextField: NutshellUITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var loginIndicator: UIActivityIndicatorView!
     

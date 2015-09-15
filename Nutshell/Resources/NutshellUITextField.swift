@@ -15,23 +15,45 @@
 
 import UIKit
 
-// This intermediate class is used to enable UITableView views in storyboards to show backgrounds with NutshellStyles coloring.
+// This intermediate class is used to enable UITextField views in storyboards to have fonts and backgrounds determined by NutshellStyles data.
 
-@IBDesignable class NutshellUITableViewCell: UITableViewCell {
+@IBDesignable class NutshellUITextField: UITextField {
     
     @IBInspectable var usage: String = "" {
         didSet {
-            updateBackgroundColor()
+            updateStyling()
         }
     }
     
-    private func updateBackgroundColor() {
+    private func updateStyling() {
         if let backColor = Styles.usageToBackgroundColor[usage] {
             self.backgroundColor = backColor
         }
         if let (font, textColor) = Styles.usageToFontWithColor[usage] {
-            self.textLabel?.font = font
-            self.textLabel?.textColor = textColor
+            self.font = font
+            self.textColor = textColor
         }
+    }
+    
+    let paddingLeft: CGFloat = 20
+    
+    override func textRectForBounds(bounds: CGRect) -> CGRect {
+        return self.newBounds(bounds)
+    }
+    
+    override func placeholderRectForBounds(bounds: CGRect) -> CGRect {
+        return self.newBounds(bounds)
+    }
+    
+    override func editingRectForBounds(bounds: CGRect) -> CGRect {
+        return self.newBounds(bounds)
+    }
+    
+    private func newBounds(bounds: CGRect) -> CGRect {
+        
+        var newBounds = bounds
+        newBounds.origin.x += paddingLeft
+        newBounds.size.width -= paddingLeft
+        return newBounds
     }
 }

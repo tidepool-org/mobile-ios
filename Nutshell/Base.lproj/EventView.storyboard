@@ -104,18 +104,76 @@
                         <viewControllerLayoutGuide type="bottom" id="hG6-oc-20X"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="YxP-hy-3au">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A21-yX-8hn" userLabel="SceneContainer">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zQo-Kx-sDE" userLabel="TopSection" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mIX-aw-qQf" userLabel="PhotoContainerView">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
+                                                <subviews>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ThreeTacosDemoPic.png" translatesAutoresizingMaskIntoConstraints="NO" id="wb3-dF-d2O">
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
+                                                    </imageView>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="wb3-dF-d2O" secondAttribute="trailing" id="0Kg-lT-Eqx"/>
+                                                    <constraint firstAttribute="height" constant="114" id="bGT-FS-nJx"/>
+                                                    <constraint firstAttribute="bottom" secondItem="wb3-dF-d2O" secondAttribute="bottom" id="cvz-gk-1gU"/>
+                                                    <constraint firstItem="wb3-dF-d2O" firstAttribute="leading" secondItem="mIX-aw-qQf" secondAttribute="leading" id="ucL-lf-ucF"/>
+                                                    <constraint firstItem="wb3-dF-d2O" firstAttribute="top" secondItem="mIX-aw-qQf" secondAttribute="top" id="wsM-UL-MLi"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="01k-k4-6OI" userLabel="EventDescriptionContainer">
+                                                <rect key="frame" x="0.0" y="114" width="320" height="86"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="200" id="5us-xD-HoR"/>
+                                            <constraint firstItem="mIX-aw-qQf" firstAttribute="top" secondItem="zQo-Kx-sDE" secondAttribute="top" id="6ZG-Sf-eV6"/>
+                                            <constraint firstAttribute="trailing" secondItem="01k-k4-6OI" secondAttribute="trailing" id="9b3-4B-dQc"/>
+                                            <constraint firstItem="01k-k4-6OI" firstAttribute="leading" secondItem="zQo-Kx-sDE" secondAttribute="leading" id="Gah-jq-k3F"/>
+                                            <constraint firstItem="01k-k4-6OI" firstAttribute="top" secondItem="mIX-aw-qQf" secondAttribute="bottom" id="Q81-r5-fSM"/>
+                                            <constraint firstAttribute="trailing" secondItem="mIX-aw-qQf" secondAttribute="trailing" id="TBe-1N-zAs"/>
+                                            <constraint firstAttribute="bottom" secondItem="01k-k4-6OI" secondAttribute="bottom" id="Zqq-jT-mPJ"/>
+                                            <constraint firstItem="mIX-aw-qQf" firstAttribute="leading" secondItem="zQo-Kx-sDE" secondAttribute="leading" id="b5V-gh-dbP"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.90196078430000004" green="0.0078431372550000003" blue="0.090196078430000007" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="zQo-Kx-sDE" firstAttribute="top" secondItem="A21-yX-8hn" secondAttribute="top" id="hF0-Mw-B4X"/>
+                                    <constraint firstAttribute="trailing" secondItem="zQo-Kx-sDE" secondAttribute="trailing" id="ieE-ho-hJu"/>
+                                    <constraint firstItem="zQo-Kx-sDE" firstAttribute="leading" secondItem="A21-yX-8hn" secondAttribute="leading" id="nau-xA-SC5"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="hG6-oc-20X" firstAttribute="top" secondItem="A21-yX-8hn" secondAttribute="bottom" id="VSq-Nr-C6M"/>
+                            <constraint firstItem="A21-yX-8hn" firstAttribute="leading" secondItem="YxP-hy-3au" secondAttribute="leading" id="hqL-To-wdr"/>
+                            <constraint firstItem="A21-yX-8hn" firstAttribute="top" secondItem="q0D-5Q-txA" secondAttribute="bottom" id="pAs-w9-VWr"/>
+                            <constraint firstAttribute="trailing" secondItem="A21-yX-8hn" secondAttribute="trailing" id="vzS-Bi-2Z3"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="6wN-kQ-yx9">
                         <barButtonItem key="rightBarButtonItem" image="add-button.png" id="VKK-Ko-uQU"/>
                     </navigationItem>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0lz-qm-Gfy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1803.5" y="852.5"/>
+            <point key="canvasLocation" x="1803" y="852"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PPE-fc-DuL">
@@ -141,6 +199,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ThreeTacosDemoPic.png" width="1280" height="456"/>
         <image name="add-button.png" width="24" height="24"/>
         <image name="menu-button.png" width="22" height="15"/>
     </resources>
