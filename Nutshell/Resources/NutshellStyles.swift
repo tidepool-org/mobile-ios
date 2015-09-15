@@ -36,10 +36,14 @@ public class Styles: NSObject {
     static var usageToBackgroundColor = [
         "brightBackground": brightBlueColor,
         "darkBackground": darkPurpleColor,
-        "lightBackground": lightGreyColor,
+        "lightBackground": veryLightGreyColor,
         // login & signup
         "activeLoginButton": brightBlueColor,
         "inactiveLoginButton": veryLightGreyColor,
+        "userDataEntry": whiteColor,
+        // menu and account settings
+        "rowSeparator": mediumDarkGreyColor,
+        "darkBackgroundButton": darkPurpleColor,
     ]
 
     // This table is used for mapping usage to font and font color for UI elements including fonts (UITextField, UILabel, UIButton). An entry may appear here as well as in the basic color mapping table above to set both font attributes as well as background coloring.
@@ -47,6 +51,7 @@ public class Styles: NSObject {
         // login & signup
         "userDataEntry": (mediumRegularFont, brightBlueColor),
         "dataEntryErrorFeedback": (smallSemiboldFont, pinkColor),
+        "brightLinkText": (mediumRegularFont, brightBlueColor),
         "inactiveLoginButton": (mediumButtonRegularFont, altDarkGreyColor),
         "activeLoginButton": (largeRegularFont, whiteColor),
         // event detail view
@@ -55,10 +60,11 @@ public class Styles: NSObject {
         "tableCellTitle": (mediumRegularFont, darkGreyColor),
         "tableCellSubtitle": (smallRegularFont, darkMediumGreyColor),
         // account configuration views
-        "accountSettingItem": (mediumSemiboldFont, darkGreyColor),
+        "accountSettingItem": (mediumRegularFont, darkGreyColor),
         "largeTargetValueInactive": (veryLargeSemiboldFont, mediumLightGreyColor),
         "largeTargetLow": (veryLargeSemiboldFont, peachColor),
         "largeTargetHigh": (veryLargeSemiboldFont, purpleColor),
+        "darkBackgroundButton": (largeRegularFont, whiteColor),
     ]
 
     //

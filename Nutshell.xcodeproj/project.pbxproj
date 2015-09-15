@@ -10,6 +10,7 @@
 		4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */; };
 		4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */; };
 		4837CC691BA7394E00BA2CDE /* NutshellUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC681BA7394E00BA2CDE /* NutshellUIButton.swift */; };
+		4837CC6B1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */; };
 		483E3C361B9F4A6300DA49E7 /* BaseUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */; };
 		483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */; };
 		483E3C3B1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C3A1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift */; };
@@ -84,6 +85,12 @@
 		486F5E6C1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E6B1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift */; };
 		486F5E6E1BA24C5C00BA2A57 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */; };
 		486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
+		48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
+		48DDD30B1BA76D12007365FE /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
+		48DDD30C1BA76D1A007365FE /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
+		48DDD30D1BA76D1B007365FE /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
+		48DDD30F1BA78057007365FE /* ThreeTacosDemoPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48DDD30E1BA78057007365FE /* ThreeTacosDemoPic.png */; };
+		48DDD3111BA78F8A007365FE /* BackgroundUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DDD3101BA78F8A007365FE /* BackgroundUIImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +114,7 @@
 		4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUITextField.swift; path = Resources/NutshellUITextField.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUILabel.swift; path = Resources/NutshellUILabel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4837CC681BA7394E00BA2CDE /* NutshellUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUIButton.swift; path = Resources/NutshellUIButton.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuAccountSettingsViewController.swift; path = ViewControllers/MenuAccountSettingsViewController.swift; sourceTree = "<group>"; };
 		483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUIViewController.swift; path = ViewControllers/BaseUIViewController.swift; sourceTree = "<group>"; };
 		483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewController.swift; path = ViewControllers/BaseUITableViewController.swift; sourceTree = "<group>"; };
 		483E3C3A1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
@@ -162,6 +170,8 @@
 		486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventDetailViewController.swift; path = ViewControllers/EventDetailViewController.swift; sourceTree = "<group>"; };
 		486F5E751BA35CD800BA2A57 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		486F5E771BA3891600BA2A57 /* NutUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutUtils.swift; path = "Utilities and Extensions/NutUtils.swift"; sourceTree = "<group>"; };
+		48DDD30E1BA78057007365FE /* ThreeTacosDemoPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ThreeTacosDemoPic.png; sourceTree = "<group>"; };
+		48DDD3101BA78F8A007365FE /* BackgroundUIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundUIImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +243,7 @@
 		485922A51B9C982D0056E605 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				48DDD30E1BA78057007365FE /* ThreeTacosDemoPic.png */,
 				486F5E181BA0AA5D00BA2A57 /* checked@2x.png */,
 				486F5E191BA0AA5D00BA2A57 /* unchecked@2x.png */,
 				486F5E141BA0908900BA2A57 /* login_logo@2x.png */,
@@ -249,6 +260,7 @@
 			children = (
 				4859229E1B9A61920056E605 /* Menu.storyboard */,
 				485922BC1B9CA13E0056E605 /* MenuTableViewController.swift */,
+				4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */,
 			);
 			name = MenuViewControllers;
 			sourceTree = "<group>";
@@ -285,6 +297,7 @@
 				486F5DFE1B9F876300BA2A57 /* View Controllers */,
 				486F5E381BA0E51F00BA2A57 /* Extensions */,
 				486F5DED1B9F86E800BA2A57 /* Resources and UI */,
+				48DDD3101BA78F8A007365FE /* BackgroundUIImage.swift */,
 			);
 			path = Nutshell;
 			sourceTree = "<group>";
@@ -497,6 +510,7 @@
 				486F5DF51B9F874A00BA2A57 /* OpenSans-Bold.ttf in Resources */,
 				4859229F1B9A61920056E605 /* Menu.storyboard in Resources */,
 				486F5DF81B9F874A00BA2A57 /* OpenSans-Regular.ttf in Resources */,
+				48DDD30F1BA78057007365FE /* ThreeTacosDemoPic.png in Resources */,
 				485922B01B9C9BAE0056E605 /* menu-button@2x.png in Resources */,
 				4859FCC31B9A4DE4000C1269 /* Assets.xcassets in Resources */,
 				486F5E1B1BA0AA5D00BA2A57 /* unchecked@2x.png in Resources */,
@@ -539,6 +553,7 @@
 				485922A41B9A639B0056E605 /* EventGroupTableViewController.swift in Sources */,
 				486F5E3A1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
 				486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */,
+				48DDD3111BA78F8A007365FE /* BackgroundUIImage.swift in Sources */,
 				485922A21B9A634E0056E605 /* EventListTableViewController.swift in Sources */,
 				483E3C361B9F4A6300DA49E7 /* BaseUIViewController.swift in Sources */,
 				486F5E441BA1CABF00BA2A57 /* NutEventList.swift in Sources */,
@@ -547,6 +562,7 @@
 				486F5E581BA1D0CC00BA2A57 /* InsulinInputs.swift in Sources */,
 				4859FCB91B9A4DE4000C1269 /* AppDelegate.swift in Sources */,
 				486F5E6E1BA24C5C00BA2A57 /* EventDetailViewController.swift in Sources */,
+				4837CC6B1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift in Sources */,
 				486F5E2B1BA0DC6700BA2A57 /* NutEvent.swift in Sources */,
 				483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */,
 				483E3C3B1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift in Sources */,
@@ -566,6 +582,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				486F5E251BA0DC1000BA2A57 /* APIConnect.swift in Sources */,
+				48DDD30C1BA76D1A007365FE /* NutUtils.swift in Sources */,
 				486F5E2C1BA0DC6700BA2A57 /* NutEvent.swift in Sources */,
 				486F5E4D1BA1CEE100BA2A57 /* WorkoutEventList.swift in Sources */,
 				486F5E691BA2029200BA2A57 /* BaseUITableViewCell.swift in Sources */,
@@ -577,6 +594,7 @@
 				486F5E511BA1CEF400BA2A57 /* WorkoutEvent.swift in Sources */,
 				486F5E591BA1D0CC00BA2A57 /* InsulinInputs.swift in Sources */,
 				486F5E551BA1D02900BA2A57 /* GlucoseReadings.swift in Sources */,
+				48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */,
 				486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */,
 				486F5E061B9FA7A800BA2A57 /* ConstantsAndStyle.swift in Sources */,
 			);
@@ -594,10 +612,12 @@
 				486F5E521BA1CEF400BA2A57 /* WorkoutEvent.swift in Sources */,
 				486F5E4E1BA1CEE100BA2A57 /* WorkoutEventList.swift in Sources */,
 				486283AE1BA398A800547BE3 /* AppDelegate.swift in Sources */,
+				48DDD30B1BA76D12007365FE /* NutshellStyles.swift in Sources */,
 				486F5E3C1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
 				4859FCDC1B9A4DE5000C1269 /* NutshellUITests.swift in Sources */,
 				486F5E5A1BA1D0CC00BA2A57 /* InsulinInputs.swift in Sources */,
 				486F5E561BA1D02900BA2A57 /* GlucoseReadings.swift in Sources */,
+				48DDD30D1BA76D1B007365FE /* NutUtils.swift in Sources */,
 				486F5E071B9FA7A800BA2A57 /* ConstantsAndStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

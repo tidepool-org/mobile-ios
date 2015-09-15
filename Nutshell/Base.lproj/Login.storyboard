@@ -64,14 +64,16 @@
                                                             <action selector="rememberMeButtonTapped:" destination="4G7-DP-gat" eventType="touchUpInside" id="xMc-DV-JSe"/>
                                                         </connections>
                                                     </button>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="remember me" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iby-0V-DJ8" userLabel="remember me label">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="remember me" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iby-0V-DJ8" userLabel="remember me label" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="26" y="118" width="114" height="23"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="23" id="LXv-EE-eR4"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
-                                                        <color key="textColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightLinkText"/>
+                                                        </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kFz-1S-09L">
                                                         <rect key="frame" x="0.0" y="153" width="159" height="23"/>
@@ -133,19 +135,23 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PQA-rp-TeB" userLabel="BottomButtonContainerView">
                                                 <rect key="frame" x="0.0" y="514" width="320" height="54"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="REp-R0-dOl" userLabel="SignUpButton">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="REp-R0-dOl" userLabel="SignUpButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="160" height="54"/>
-                                                        <color key="backgroundColor" red="0.94901960780000005" green="0.95294117649999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
                                                         <state key="normal" title="sign up">
                                                             <color key="titleColor" red="0.30196078431372547" green="0.30588235294117649" blue="0.29803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="inactiveLoginButton"/>
+                                                        </userDefinedRuntimeAttributes>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zPr-G0-r47" userLabel="LogInButton">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zPr-G0-r47" userLabel="LogInButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="160" y="0.0" width="160" height="54"/>
-                                                        <color key="backgroundColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="22"/>
                                                         <state key="normal" title="log in"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="activeLoginButton"/>
+                                                        </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="login_button_tapped:" destination="4G7-DP-gat" eventType="touchUpInside" id="SFd-0x-Gaz"/>
                                                         </connections>

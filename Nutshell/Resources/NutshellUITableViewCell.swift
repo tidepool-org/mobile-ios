@@ -29,5 +29,9 @@ import UIKit
         if let backColor = Styles.usageToBackgroundColor[usage] {
             self.backgroundColor = backColor
         }
+        if let (font, textColor) = Styles.usageToFontWithColor[usage] {
+            self.textLabel?.font = font
+            self.textLabel?.textColor = textColor
+        }
     }
 }
