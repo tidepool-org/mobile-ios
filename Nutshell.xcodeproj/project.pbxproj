@@ -7,18 +7,142 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0334C8861BA7403200013096 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
-		0334C8871BA7403300013096 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
-		0334C8881BA7404200013096 /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
-		0334C8891BA7404300013096 /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
-		0334C88A1BA7405A00013096 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
-		0334C88D1BA76BB500013096 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C88B1BA76BB500013096 /* User+CoreDataProperties.swift */; };
-		0334C88E1BA76BB500013096 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C88C1BA76BB500013096 /* User.swift */; };
-		0334C88F1BA7737500013096 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C88C1BA76BB500013096 /* User.swift */; };
-		0334C8901BA7737500013096 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C88C1BA76BB500013096 /* User.swift */; };
-		0334C8911BA7737900013096 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C88B1BA76BB500013096 /* User+CoreDataProperties.swift */; };
-		0334C8921BA7737A00013096 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C88B1BA76BB500013096 /* User+CoreDataProperties.swift */; };
 		0334C8941BA7814700013096 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0334C8931BA7814700013096 /* CoreData.framework */; };
+		0334CA131BA8DDFC00013096 /* Activity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E61BA8DDFC00013096 /* Activity+CoreDataProperties.swift */; };
+		0334CA141BA8DDFC00013096 /* Activity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E61BA8DDFC00013096 /* Activity+CoreDataProperties.swift */; };
+		0334CA151BA8DDFC00013096 /* Activity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E61BA8DDFC00013096 /* Activity+CoreDataProperties.swift */; };
+		0334CA161BA8DDFC00013096 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E71BA8DDFC00013096 /* Activity.swift */; };
+		0334CA171BA8DDFC00013096 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E71BA8DDFC00013096 /* Activity.swift */; };
+		0334CA181BA8DDFC00013096 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E71BA8DDFC00013096 /* Activity.swift */; };
+		0334CA191BA8DDFC00013096 /* Alarm+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E81BA8DDFC00013096 /* Alarm+CoreDataProperties.swift */; };
+		0334CA1A1BA8DDFC00013096 /* Alarm+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E81BA8DDFC00013096 /* Alarm+CoreDataProperties.swift */; };
+		0334CA1B1BA8DDFC00013096 /* Alarm+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E81BA8DDFC00013096 /* Alarm+CoreDataProperties.swift */; };
+		0334CA1C1BA8DDFC00013096 /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E91BA8DDFC00013096 /* Alarm.swift */; };
+		0334CA1D1BA8DDFC00013096 /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E91BA8DDFC00013096 /* Alarm.swift */; };
+		0334CA1E1BA8DDFC00013096 /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E91BA8DDFC00013096 /* Alarm.swift */; };
+		0334CA1F1BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EA1BA8DDFC00013096 /* Basal+CoreDataProperties.swift */; };
+		0334CA201BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EA1BA8DDFC00013096 /* Basal+CoreDataProperties.swift */; };
+		0334CA211BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EA1BA8DDFC00013096 /* Basal+CoreDataProperties.swift */; };
+		0334CA221BA8DDFC00013096 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
+		0334CA231BA8DDFC00013096 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
+		0334CA241BA8DDFC00013096 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
+		0334CA251BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EC1BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift */; };
+		0334CA261BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EC1BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift */; };
+		0334CA271BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EC1BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift */; };
+		0334CA281BA8DDFC00013096 /* BloodKetone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9ED1BA8DDFC00013096 /* BloodKetone.swift */; };
+		0334CA291BA8DDFC00013096 /* BloodKetone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9ED1BA8DDFC00013096 /* BloodKetone.swift */; };
+		0334CA2A1BA8DDFC00013096 /* BloodKetone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9ED1BA8DDFC00013096 /* BloodKetone.swift */; };
+		0334CA2B1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EE1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift */; };
+		0334CA2C1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EE1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift */; };
+		0334CA2D1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EE1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift */; };
+		0334CA2E1BA8DDFC00013096 /* Calibration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EF1BA8DDFC00013096 /* Calibration.swift */; };
+		0334CA2F1BA8DDFC00013096 /* Calibration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EF1BA8DDFC00013096 /* Calibration.swift */; };
+		0334CA301BA8DDFC00013096 /* Calibration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EF1BA8DDFC00013096 /* Calibration.swift */; };
+		0334CA311BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F01BA8DDFC00013096 /* CommonData+CoreDataProperties.swift */; };
+		0334CA321BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F01BA8DDFC00013096 /* CommonData+CoreDataProperties.swift */; };
+		0334CA331BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F01BA8DDFC00013096 /* CommonData+CoreDataProperties.swift */; };
+		0334CA341BA8DDFC00013096 /* CommonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F11BA8DDFC00013096 /* CommonData.swift */; };
+		0334CA351BA8DDFC00013096 /* CommonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F11BA8DDFC00013096 /* CommonData.swift */; };
+		0334CA361BA8DDFC00013096 /* CommonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F11BA8DDFC00013096 /* CommonData.swift */; };
+		0334CA371BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F21BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift */; };
+		0334CA381BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F21BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift */; };
+		0334CA391BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F21BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift */; };
+		0334CA3A1BA8DDFC00013096 /* ContinuousGlucose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F31BA8DDFC00013096 /* ContinuousGlucose.swift */; };
+		0334CA3B1BA8DDFC00013096 /* ContinuousGlucose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F31BA8DDFC00013096 /* ContinuousGlucose.swift */; };
+		0334CA3C1BA8DDFC00013096 /* ContinuousGlucose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F31BA8DDFC00013096 /* ContinuousGlucose.swift */; };
+		0334CA3D1BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F41BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift */; };
+		0334CA3E1BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F41BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift */; };
+		0334CA3F1BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F41BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift */; };
+		0334CA401BA8DDFC00013096 /* DeviceMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F51BA8DDFC00013096 /* DeviceMetadata.swift */; };
+		0334CA411BA8DDFC00013096 /* DeviceMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F51BA8DDFC00013096 /* DeviceMetadata.swift */; };
+		0334CA421BA8DDFC00013096 /* DeviceMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F51BA8DDFC00013096 /* DeviceMetadata.swift */; };
+		0334CA431BA8DDFC00013096 /* Food+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F61BA8DDFC00013096 /* Food+CoreDataProperties.swift */; };
+		0334CA441BA8DDFC00013096 /* Food+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F61BA8DDFC00013096 /* Food+CoreDataProperties.swift */; };
+		0334CA451BA8DDFC00013096 /* Food+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F61BA8DDFC00013096 /* Food+CoreDataProperties.swift */; };
+		0334CA461BA8DDFC00013096 /* Food.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F71BA8DDFC00013096 /* Food.swift */; };
+		0334CA471BA8DDFC00013096 /* Food.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F71BA8DDFC00013096 /* Food.swift */; };
+		0334CA481BA8DDFC00013096 /* Food.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F71BA8DDFC00013096 /* Food.swift */; };
+		0334CA4C1BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F91BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift */; };
+		0334CA4D1BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F91BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift */; };
+		0334CA4E1BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F91BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift */; };
+		0334CA4F1BA8DDFC00013096 /* GrabBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FA1BA8DDFC00013096 /* GrabBag.swift */; };
+		0334CA501BA8DDFC00013096 /* GrabBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FA1BA8DDFC00013096 /* GrabBag.swift */; };
+		0334CA511BA8DDFC00013096 /* GrabBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FA1BA8DDFC00013096 /* GrabBag.swift */; };
+		0334CA521BA8DDFC00013096 /* Note+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FB1BA8DDFC00013096 /* Note+CoreDataProperties.swift */; };
+		0334CA531BA8DDFC00013096 /* Note+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FB1BA8DDFC00013096 /* Note+CoreDataProperties.swift */; };
+		0334CA541BA8DDFC00013096 /* Note+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FB1BA8DDFC00013096 /* Note+CoreDataProperties.swift */; };
+		0334CA551BA8DDFC00013096 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FC1BA8DDFC00013096 /* Note.swift */; };
+		0334CA561BA8DDFC00013096 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FC1BA8DDFC00013096 /* Note.swift */; };
+		0334CA571BA8DDFC00013096 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FC1BA8DDFC00013096 /* Note.swift */; };
+		0334CA581BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FD1BA8DDFC00013096 /* Prime+CoreDataProperties.swift */; };
+		0334CA591BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FD1BA8DDFC00013096 /* Prime+CoreDataProperties.swift */; };
+		0334CA5A1BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FD1BA8DDFC00013096 /* Prime+CoreDataProperties.swift */; };
+		0334CA5B1BA8DDFC00013096 /* Prime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FE1BA8DDFC00013096 /* Prime.swift */; };
+		0334CA5C1BA8DDFC00013096 /* Prime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FE1BA8DDFC00013096 /* Prime.swift */; };
+		0334CA5D1BA8DDFC00013096 /* Prime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FE1BA8DDFC00013096 /* Prime.swift */; };
+		0334CA5E1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FF1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift */; };
+		0334CA5F1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FF1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift */; };
+		0334CA601BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FF1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift */; };
+		0334CA611BA8DDFC00013096 /* ReservoirChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA001BA8DDFC00013096 /* ReservoirChange.swift */; };
+		0334CA621BA8DDFC00013096 /* ReservoirChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA001BA8DDFC00013096 /* ReservoirChange.swift */; };
+		0334CA631BA8DDFC00013096 /* ReservoirChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA001BA8DDFC00013096 /* ReservoirChange.swift */; };
+		0334CA641BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA011BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift */; };
+		0334CA651BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA011BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift */; };
+		0334CA661BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA011BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift */; };
+		0334CA671BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA021BA8DDFC00013096 /* SelfMonitoringGlucose.swift */; };
+		0334CA681BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA021BA8DDFC00013096 /* SelfMonitoringGlucose.swift */; };
+		0334CA691BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA021BA8DDFC00013096 /* SelfMonitoringGlucose.swift */; };
+		0334CA6A1BA8DDFC00013096 /* Settings+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA031BA8DDFC00013096 /* Settings+CoreDataProperties.swift */; };
+		0334CA6B1BA8DDFC00013096 /* Settings+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA031BA8DDFC00013096 /* Settings+CoreDataProperties.swift */; };
+		0334CA6C1BA8DDFC00013096 /* Settings+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA031BA8DDFC00013096 /* Settings+CoreDataProperties.swift */; };
+		0334CA6D1BA8DDFC00013096 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA041BA8DDFC00013096 /* Settings.swift */; };
+		0334CA6E1BA8DDFC00013096 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA041BA8DDFC00013096 /* Settings.swift */; };
+		0334CA6F1BA8DDFC00013096 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA041BA8DDFC00013096 /* Settings.swift */; };
+		0334CA701BA8DDFC00013096 /* Status+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA051BA8DDFC00013096 /* Status+CoreDataProperties.swift */; };
+		0334CA711BA8DDFC00013096 /* Status+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA051BA8DDFC00013096 /* Status+CoreDataProperties.swift */; };
+		0334CA721BA8DDFC00013096 /* Status+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA051BA8DDFC00013096 /* Status+CoreDataProperties.swift */; };
+		0334CA731BA8DDFC00013096 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA061BA8DDFC00013096 /* Status.swift */; };
+		0334CA741BA8DDFC00013096 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA061BA8DDFC00013096 /* Status.swift */; };
+		0334CA751BA8DDFC00013096 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA061BA8DDFC00013096 /* Status.swift */; };
+		0334CA761BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA071BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift */; };
+		0334CA771BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA071BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift */; };
+		0334CA781BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA071BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift */; };
+		0334CA791BA8DDFC00013096 /* TimeChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA081BA8DDFC00013096 /* TimeChange.swift */; };
+		0334CA7A1BA8DDFC00013096 /* TimeChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA081BA8DDFC00013096 /* TimeChange.swift */; };
+		0334CA7B1BA8DDFC00013096 /* TimeChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA081BA8DDFC00013096 /* TimeChange.swift */; };
+		0334CA7C1BA8DDFC00013096 /* Upload+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA091BA8DDFC00013096 /* Upload+CoreDataProperties.swift */; };
+		0334CA7D1BA8DDFC00013096 /* Upload+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA091BA8DDFC00013096 /* Upload+CoreDataProperties.swift */; };
+		0334CA7E1BA8DDFC00013096 /* Upload+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA091BA8DDFC00013096 /* Upload+CoreDataProperties.swift */; };
+		0334CA7F1BA8DDFC00013096 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0A1BA8DDFC00013096 /* Upload.swift */; };
+		0334CA801BA8DDFC00013096 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0A1BA8DDFC00013096 /* Upload.swift */; };
+		0334CA811BA8DDFC00013096 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0A1BA8DDFC00013096 /* Upload.swift */; };
+		0334CA821BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0B1BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift */; };
+		0334CA831BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0B1BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift */; };
+		0334CA841BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0B1BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift */; };
+		0334CA851BA8DDFC00013096 /* UrineKetone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0C1BA8DDFC00013096 /* UrineKetone.swift */; };
+		0334CA861BA8DDFC00013096 /* UrineKetone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0C1BA8DDFC00013096 /* UrineKetone.swift */; };
+		0334CA871BA8DDFC00013096 /* UrineKetone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0C1BA8DDFC00013096 /* UrineKetone.swift */; };
+		0334CA881BA8DDFC00013096 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0D1BA8DDFC00013096 /* User+CoreDataProperties.swift */; };
+		0334CA891BA8DDFC00013096 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0D1BA8DDFC00013096 /* User+CoreDataProperties.swift */; };
+		0334CA8A1BA8DDFC00013096 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0D1BA8DDFC00013096 /* User+CoreDataProperties.swift */; };
+		0334CA8B1BA8DDFC00013096 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0E1BA8DDFC00013096 /* User.swift */; };
+		0334CA8C1BA8DDFC00013096 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0E1BA8DDFC00013096 /* User.swift */; };
+		0334CA8D1BA8DDFC00013096 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0E1BA8DDFC00013096 /* User.swift */; };
+		0334CA8E1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0F1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift */; };
+		0334CA8F1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0F1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift */; };
+		0334CA901BA8DDFC00013096 /* Wizard+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0F1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift */; };
+		0334CA911BA8DDFC00013096 /* Wizard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA101BA8DDFC00013096 /* Wizard.swift */; };
+		0334CA921BA8DDFC00013096 /* Wizard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA101BA8DDFC00013096 /* Wizard.swift */; };
+		0334CA931BA8DDFC00013096 /* Wizard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA101BA8DDFC00013096 /* Wizard.swift */; };
+		0334CA9B1BA8DE5B00013096 /* GlucoseReadings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA9A1BA8DE5B00013096 /* GlucoseReadings.swift */; };
+		0334CA9C1BA8DE5B00013096 /* GlucoseReadings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA9A1BA8DE5B00013096 /* GlucoseReadings.swift */; };
+		0334CA9D1BA8DE5B00013096 /* GlucoseReadings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA9A1BA8DE5B00013096 /* GlucoseReadings.swift */; };
+		0334CAA01BA8DF5A00013096 /* WorkoutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA9E1BA8DF5A00013096 /* WorkoutEvent.swift */; };
+		0334CAA11BA8DF5A00013096 /* WorkoutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA9E1BA8DF5A00013096 /* WorkoutEvent.swift */; };
+		0334CAA21BA8DF5A00013096 /* WorkoutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA9E1BA8DF5A00013096 /* WorkoutEvent.swift */; };
+		0334CAA31BA8DF5A00013096 /* WorkoutEventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA9F1BA8DF5A00013096 /* WorkoutEventList.swift */; };
+		0334CAA41BA8DF5A00013096 /* WorkoutEventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA9F1BA8DF5A00013096 /* WorkoutEventList.swift */; };
+		0334CAA51BA8DF5A00013096 /* WorkoutEventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA9F1BA8DF5A00013096 /* WorkoutEventList.swift */; };
 		4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */; };
 		4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */; };
 		4837CC691BA7394E00BA2CDE /* NutshellUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC681BA7394E00BA2CDE /* NutshellUIButton.swift */; };
@@ -73,15 +197,6 @@
 		486F5E441BA1CABF00BA2A57 /* NutEventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E431BA1CABF00BA2A57 /* NutEventList.swift */; };
 		486F5E451BA1CABF00BA2A57 /* NutEventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E431BA1CABF00BA2A57 /* NutEventList.swift */; };
 		486F5E461BA1CABF00BA2A57 /* NutEventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E431BA1CABF00BA2A57 /* NutEventList.swift */; };
-		486F5E4C1BA1CEE100BA2A57 /* WorkoutEventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E4B1BA1CEE100BA2A57 /* WorkoutEventList.swift */; };
-		486F5E4D1BA1CEE100BA2A57 /* WorkoutEventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E4B1BA1CEE100BA2A57 /* WorkoutEventList.swift */; };
-		486F5E4E1BA1CEE100BA2A57 /* WorkoutEventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E4B1BA1CEE100BA2A57 /* WorkoutEventList.swift */; };
-		486F5E501BA1CEF400BA2A57 /* WorkoutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E4F1BA1CEF400BA2A57 /* WorkoutEvent.swift */; };
-		486F5E511BA1CEF400BA2A57 /* WorkoutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E4F1BA1CEF400BA2A57 /* WorkoutEvent.swift */; };
-		486F5E521BA1CEF400BA2A57 /* WorkoutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E4F1BA1CEF400BA2A57 /* WorkoutEvent.swift */; };
-		486F5E541BA1D02900BA2A57 /* GlucoseReadings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E531BA1D02900BA2A57 /* GlucoseReadings.swift */; };
-		486F5E551BA1D02900BA2A57 /* GlucoseReadings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E531BA1D02900BA2A57 /* GlucoseReadings.swift */; };
-		486F5E561BA1D02900BA2A57 /* GlucoseReadings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E531BA1D02900BA2A57 /* GlucoseReadings.swift */; };
 		486F5E581BA1D0CC00BA2A57 /* InsulinInputs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E571BA1D0CC00BA2A57 /* InsulinInputs.swift */; };
 		486F5E591BA1D0CC00BA2A57 /* InsulinInputs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E571BA1D0CC00BA2A57 /* InsulinInputs.swift */; };
 		486F5E5A1BA1D0CC00BA2A57 /* InsulinInputs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E571BA1D0CC00BA2A57 /* InsulinInputs.swift */; };
@@ -125,9 +240,52 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0334C88B1BA76BB500013096 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "DataModel/User+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0334C88C1BA76BB500013096 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = DataModel/User.swift; sourceTree = "<group>"; };
 		0334C8931BA7814700013096 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		0334C9E61BA8DDFC00013096 /* Activity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Activity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334C9E71BA8DDFC00013096 /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
+		0334C9E81BA8DDFC00013096 /* Alarm+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Alarm+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334C9E91BA8DDFC00013096 /* Alarm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alarm.swift; sourceTree = "<group>"; };
+		0334C9EA1BA8DDFC00013096 /* Basal+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Basal+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334C9EB1BA8DDFC00013096 /* Basal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Basal.swift; sourceTree = "<group>"; };
+		0334C9EC1BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BloodKetone+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334C9ED1BA8DDFC00013096 /* BloodKetone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BloodKetone.swift; sourceTree = "<group>"; };
+		0334C9EE1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Calibration+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334C9EF1BA8DDFC00013096 /* Calibration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Calibration.swift; sourceTree = "<group>"; };
+		0334C9F01BA8DDFC00013096 /* CommonData+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CommonData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334C9F11BA8DDFC00013096 /* CommonData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonData.swift; sourceTree = "<group>"; };
+		0334C9F21BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ContinuousGlucose+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334C9F31BA8DDFC00013096 /* ContinuousGlucose.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinuousGlucose.swift; sourceTree = "<group>"; };
+		0334C9F41BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DeviceMetadata+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334C9F51BA8DDFC00013096 /* DeviceMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceMetadata.swift; sourceTree = "<group>"; };
+		0334C9F61BA8DDFC00013096 /* Food+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Food+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334C9F71BA8DDFC00013096 /* Food.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Food.swift; sourceTree = "<group>"; };
+		0334C9F91BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "GrabBag+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334C9FA1BA8DDFC00013096 /* GrabBag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GrabBag.swift; sourceTree = "<group>"; };
+		0334C9FB1BA8DDFC00013096 /* Note+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Note+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334C9FC1BA8DDFC00013096 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		0334C9FD1BA8DDFC00013096 /* Prime+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Prime+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334C9FE1BA8DDFC00013096 /* Prime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Prime.swift; sourceTree = "<group>"; };
+		0334C9FF1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ReservoirChange+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334CA001BA8DDFC00013096 /* ReservoirChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReservoirChange.swift; sourceTree = "<group>"; };
+		0334CA011BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SelfMonitoringGlucose+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334CA021BA8DDFC00013096 /* SelfMonitoringGlucose.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelfMonitoringGlucose.swift; sourceTree = "<group>"; };
+		0334CA031BA8DDFC00013096 /* Settings+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334CA041BA8DDFC00013096 /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		0334CA051BA8DDFC00013096 /* Status+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Status+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334CA061BA8DDFC00013096 /* Status.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Status.swift; sourceTree = "<group>"; };
+		0334CA071BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TimeChange+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334CA081BA8DDFC00013096 /* TimeChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeChange.swift; sourceTree = "<group>"; };
+		0334CA091BA8DDFC00013096 /* Upload+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Upload+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334CA0A1BA8DDFC00013096 /* Upload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Upload.swift; sourceTree = "<group>"; };
+		0334CA0B1BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UrineKetone+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334CA0C1BA8DDFC00013096 /* UrineKetone.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrineKetone.swift; sourceTree = "<group>"; };
+		0334CA0D1BA8DDFC00013096 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334CA0E1BA8DDFC00013096 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		0334CA0F1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Wizard+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334CA101BA8DDFC00013096 /* Wizard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wizard.swift; sourceTree = "<group>"; };
+		0334CA9A1BA8DE5B00013096 /* GlucoseReadings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GlucoseReadings.swift; path = DataModel/GlucoseReadings.swift; sourceTree = "<group>"; };
+		0334CA9E1BA8DF5A00013096 /* WorkoutEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutEvent.swift; path = DataModel/WorkoutEvent.swift; sourceTree = "<group>"; };
+		0334CA9F1BA8DF5A00013096 /* WorkoutEventList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutEventList.swift; path = DataModel/WorkoutEventList.swift; sourceTree = "<group>"; };
 		11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nutshell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUITextField.swift; path = Resources/NutshellUITextField.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUILabel.swift; path = Resources/NutshellUILabel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -178,9 +336,6 @@
 		486F5E291BA0DC6700BA2A57 /* NutEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutEvent.swift; path = DataModel/NutEvent.swift; sourceTree = "<group>"; };
 		486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIDateFormatterExtension.swift; path = "Utilities and Extensions/UIDateFormatterExtension.swift"; sourceTree = "<group>"; };
 		486F5E431BA1CABF00BA2A57 /* NutEventList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutEventList.swift; path = DataModel/NutEventList.swift; sourceTree = "<group>"; };
-		486F5E4B1BA1CEE100BA2A57 /* WorkoutEventList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutEventList.swift; path = DataModel/WorkoutEventList.swift; sourceTree = "<group>"; };
-		486F5E4F1BA1CEF400BA2A57 /* WorkoutEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutEvent.swift; path = DataModel/WorkoutEvent.swift; sourceTree = "<group>"; };
-		486F5E531BA1D02900BA2A57 /* GlucoseReadings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GlucoseReadings.swift; path = DataModel/GlucoseReadings.swift; sourceTree = "<group>"; };
 		486F5E571BA1D0CC00BA2A57 /* InsulinInputs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InsulinInputs.swift; path = DataModel/InsulinInputs.swift; sourceTree = "<group>"; };
 		486F5E5F1BA1EBE100BA2A57 /* EventListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListTableViewCell.swift; path = ViewControllers/EventListTableViewCell.swift; sourceTree = "<group>"; };
 		486F5E631BA1F20600BA2A57 /* NutEventItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutEventItem.swift; path = DataModel/NutEventItem.swift; sourceTree = "<group>"; };
@@ -221,6 +376,56 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0334C9E51BA8DDFC00013096 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				0334C9E61BA8DDFC00013096 /* Activity+CoreDataProperties.swift */,
+				0334C9E71BA8DDFC00013096 /* Activity.swift */,
+				0334C9E81BA8DDFC00013096 /* Alarm+CoreDataProperties.swift */,
+				0334C9E91BA8DDFC00013096 /* Alarm.swift */,
+				0334C9EA1BA8DDFC00013096 /* Basal+CoreDataProperties.swift */,
+				0334C9EB1BA8DDFC00013096 /* Basal.swift */,
+				0334C9EC1BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift */,
+				0334C9ED1BA8DDFC00013096 /* BloodKetone.swift */,
+				0334C9EE1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift */,
+				0334C9EF1BA8DDFC00013096 /* Calibration.swift */,
+				0334C9F01BA8DDFC00013096 /* CommonData+CoreDataProperties.swift */,
+				0334C9F11BA8DDFC00013096 /* CommonData.swift */,
+				0334C9F21BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift */,
+				0334C9F31BA8DDFC00013096 /* ContinuousGlucose.swift */,
+				0334C9F41BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift */,
+				0334C9F51BA8DDFC00013096 /* DeviceMetadata.swift */,
+				0334C9F61BA8DDFC00013096 /* Food+CoreDataProperties.swift */,
+				0334C9F71BA8DDFC00013096 /* Food.swift */,
+				0334C9F91BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift */,
+				0334C9FA1BA8DDFC00013096 /* GrabBag.swift */,
+				0334C9FB1BA8DDFC00013096 /* Note+CoreDataProperties.swift */,
+				0334C9FC1BA8DDFC00013096 /* Note.swift */,
+				0334C9FD1BA8DDFC00013096 /* Prime+CoreDataProperties.swift */,
+				0334C9FE1BA8DDFC00013096 /* Prime.swift */,
+				0334C9FF1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift */,
+				0334CA001BA8DDFC00013096 /* ReservoirChange.swift */,
+				0334CA011BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift */,
+				0334CA021BA8DDFC00013096 /* SelfMonitoringGlucose.swift */,
+				0334CA031BA8DDFC00013096 /* Settings+CoreDataProperties.swift */,
+				0334CA041BA8DDFC00013096 /* Settings.swift */,
+				0334CA051BA8DDFC00013096 /* Status+CoreDataProperties.swift */,
+				0334CA061BA8DDFC00013096 /* Status.swift */,
+				0334CA071BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift */,
+				0334CA081BA8DDFC00013096 /* TimeChange.swift */,
+				0334CA091BA8DDFC00013096 /* Upload+CoreDataProperties.swift */,
+				0334CA0A1BA8DDFC00013096 /* Upload.swift */,
+				0334CA0B1BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift */,
+				0334CA0C1BA8DDFC00013096 /* UrineKetone.swift */,
+				0334CA0D1BA8DDFC00013096 /* User+CoreDataProperties.swift */,
+				0334CA0E1BA8DDFC00013096 /* User.swift */,
+				0334CA0F1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift */,
+				0334CA101BA8DDFC00013096 /* Wizard.swift */,
+			);
+			name = CoreData;
+			path = DataModel/CoreData;
+			sourceTree = "<group>";
+		};
 		0B896CBEA8D0BFD3140D313E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -407,15 +612,14 @@
 		486F5E221BA0DB7400BA2A57 /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
-				0334C88B1BA76BB500013096 /* User+CoreDataProperties.swift */,
-				0334C88C1BA76BB500013096 /* User.swift */,
+				0334C9E51BA8DDFC00013096 /* CoreData */,
+				0334CA9A1BA8DE5B00013096 /* GlucoseReadings.swift */,
+				486F5E571BA1D0CC00BA2A57 /* InsulinInputs.swift */,
 				486F5E431BA1CABF00BA2A57 /* NutEventList.swift */,
 				486F5E291BA0DC6700BA2A57 /* NutEvent.swift */,
 				486F5E631BA1F20600BA2A57 /* NutEventItem.swift */,
-				486F5E4B1BA1CEE100BA2A57 /* WorkoutEventList.swift */,
-				486F5E4F1BA1CEF400BA2A57 /* WorkoutEvent.swift */,
-				486F5E531BA1D02900BA2A57 /* GlucoseReadings.swift */,
-				486F5E571BA1D0CC00BA2A57 /* InsulinInputs.swift */,
+				0334CA9E1BA8DF5A00013096 /* WorkoutEvent.swift */,
+				0334CA9F1BA8DF5A00013096 /* WorkoutEventList.swift */,
 			);
 			name = DataModel;
 			sourceTree = "<group>";
@@ -637,39 +841,79 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0334CA4C1BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift in Sources */,
 				486F5E051B9FA7A800BA2A57 /* ConstantsAndStyle.swift in Sources */,
+				0334CA1F1BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */,
+				0334CA371BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift in Sources */,
+				0334CA641BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift in Sources */,
 				4859FCC11B9A4DE4000C1269 /* Nutshell.xcdatamodeld in Sources */,
 				4851C6951BA689FC00F8E0EE /* NutshellUITableView.swift in Sources */,
 				485922BD1B9CA13E0056E605 /* MenuTableViewController.swift in Sources */,
+				0334CA671BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
 				4851C6971BA68C0D00F8E0EE /* NutshellUITableViewCell.swift in Sources */,
+				0334CA791BA8DDFC00013096 /* TimeChange.swift in Sources */,
+				0334CAA31BA8DF5A00013096 /* WorkoutEventList.swift in Sources */,
 				4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */,
+				0334CA851BA8DDFC00013096 /* UrineKetone.swift in Sources */,
+				0334CA551BA8DDFC00013096 /* Note.swift in Sources */,
 				486283B41BA48B1500547BE3 /* EventViewStoryboardTypes.swift in Sources */,
+				0334CA6D1BA8DDFC00013096 /* Settings.swift in Sources */,
+				0334CA341BA8DDFC00013096 /* CommonData.swift in Sources */,
 				486F5E091B9FB1C600BA2A57 /* NutshellStyles.swift in Sources */,
 				486F5E6C1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift in Sources */,
-				0334C88E1BA76BB500013096 /* User.swift in Sources */,
 				485922A41B9A639B0056E605 /* EventGroupTableViewController.swift in Sources */,
+				0334CA431BA8DDFC00013096 /* Food+CoreDataProperties.swift in Sources */,
+				0334CA8B1BA8DDFC00013096 /* User.swift in Sources */,
 				486F5E3A1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
+				0334CA2E1BA8DDFC00013096 /* Calibration.swift in Sources */,
 				486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */,
 				48DDD3111BA78F8A007365FE /* BackgroundUIImage.swift in Sources */,
+				0334CA731BA8DDFC00013096 /* Status.swift in Sources */,
 				485922A21B9A634E0056E605 /* EventListTableViewController.swift in Sources */,
+				0334CA5E1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift in Sources */,
+				0334CA821BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift in Sources */,
 				483E3C361B9F4A6300DA49E7 /* BaseUIViewController.swift in Sources */,
+				0334CA7C1BA8DDFC00013096 /* Upload+CoreDataProperties.swift in Sources */,
+				0334CA3A1BA8DDFC00013096 /* ContinuousGlucose.swift in Sources */,
 				486F5E441BA1CABF00BA2A57 /* NutEventList.swift in Sources */,
 				4837CC691BA7394E00BA2CDE /* NutshellUIButton.swift in Sources */,
-				486F5E501BA1CEF400BA2A57 /* WorkoutEvent.swift in Sources */,
+				0334CA761BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift in Sources */,
 				486F5E581BA1D0CC00BA2A57 /* InsulinInputs.swift in Sources */,
 				4859FCB91B9A4DE4000C1269 /* AppDelegate.swift in Sources */,
+				0334CA8E1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift in Sources */,
 				486F5E6E1BA24C5C00BA2A57 /* EventDetailViewController.swift in Sources */,
+				0334CA881BA8DDFC00013096 /* User+CoreDataProperties.swift in Sources */,
+				0334CA221BA8DDFC00013096 /* Basal.swift in Sources */,
+				0334CA6A1BA8DDFC00013096 /* Settings+CoreDataProperties.swift in Sources */,
+				0334CA581BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,
+				0334CA4F1BA8DDFC00013096 /* GrabBag.swift in Sources */,
+				0334CA521BA8DDFC00013096 /* Note+CoreDataProperties.swift in Sources */,
+				0334CA401BA8DDFC00013096 /* DeviceMetadata.swift in Sources */,
+				0334CA191BA8DDFC00013096 /* Alarm+CoreDataProperties.swift in Sources */,
+				0334CAA01BA8DF5A00013096 /* WorkoutEvent.swift in Sources */,
+				0334CA461BA8DDFC00013096 /* Food.swift in Sources */,
 				4837CC6B1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift in Sources */,
 				486F5E2B1BA0DC6700BA2A57 /* NutEvent.swift in Sources */,
+				0334CA161BA8DDFC00013096 /* Activity.swift in Sources */,
 				483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */,
+				0334CA1C1BA8DDFC00013096 /* Alarm.swift in Sources */,
+				0334CA911BA8DDFC00013096 /* Wizard.swift in Sources */,
+				0334CA2B1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */,
 				483E3C3B1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift in Sources */,
-				486F5E541BA1D02900BA2A57 /* GlucoseReadings.swift in Sources */,
-				0334C88D1BA76BB500013096 /* User+CoreDataProperties.swift in Sources */,
-				486F5E4C1BA1CEE100BA2A57 /* WorkoutEventList.swift in Sources */,
+				0334CA251BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */,
+				0334CA311BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,
+				0334CA281BA8DDFC00013096 /* BloodKetone.swift in Sources */,
 				486F5E111BA08DE900BA2A57 /* LoginViewController.swift in Sources */,
+				0334CA611BA8DDFC00013096 /* ReservoirChange.swift in Sources */,
 				486F5E641BA1F20600BA2A57 /* NutEventItem.swift in Sources */,
+				0334CA131BA8DDFC00013096 /* Activity+CoreDataProperties.swift in Sources */,
+				0334CA3D1BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift in Sources */,
 				486F5E241BA0DC1000BA2A57 /* APIConnect.swift in Sources */,
+				0334CA701BA8DDFC00013096 /* Status+CoreDataProperties.swift in Sources */,
+				0334CA7F1BA8DDFC00013096 /* Upload.swift in Sources */,
+				0334CA9B1BA8DE5B00013096 /* GlucoseReadings.swift in Sources */,
 				486F5E601BA1EBE100BA2A57 /* EventListTableViewCell.swift in Sources */,
+				0334CA5B1BA8DDFC00013096 /* Prime.swift in Sources */,
 				4851C6921BA6281800F8E0EE /* NutshellUIView.swift in Sources */,
 				4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */,
 			);
@@ -679,23 +923,63 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0334CA7A1BA8DDFC00013096 /* TimeChange.swift in Sources */,
+				0334CA171BA8DDFC00013096 /* Activity.swift in Sources */,
+				0334CA5F1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift in Sources */,
+				0334CA651BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift in Sources */,
+				0334CA1A1BA8DDFC00013096 /* Alarm+CoreDataProperties.swift in Sources */,
+				0334CA141BA8DDFC00013096 /* Activity+CoreDataProperties.swift in Sources */,
 				486F5E251BA0DC1000BA2A57 /* APIConnect.swift in Sources */,
+				0334CA3B1BA8DDFC00013096 /* ContinuousGlucose.swift in Sources */,
+				0334CA441BA8DDFC00013096 /* Food+CoreDataProperties.swift in Sources */,
+				0334CA621BA8DDFC00013096 /* ReservoirChange.swift in Sources */,
+				0334CAA11BA8DF5A00013096 /* WorkoutEvent.swift in Sources */,
+				0334CA831BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift in Sources */,
+				0334CA7D1BA8DDFC00013096 /* Upload+CoreDataProperties.swift in Sources */,
+				0334CA261BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */,
+				0334CA861BA8DDFC00013096 /* UrineKetone.swift in Sources */,
+				0334CA591BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,
 				48EC32321BA7BDDE00A75103 /* NutUtils.swift in Sources */,
-				486F5E4D1BA1CEE100BA2A57 /* WorkoutEventList.swift in Sources */,
 				486F5E691BA2029200BA2A57 /* BaseUITableViewCell.swift in Sources */,
+				0334CA381BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift in Sources */,
 				486F5E651BA1F20600BA2A57 /* NutEventItem.swift in Sources */,
+				0334CA4D1BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift in Sources */,
+				0334CA231BA8DDFC00013096 /* Basal.swift in Sources */,
+				0334CA741BA8DDFC00013096 /* Status.swift in Sources */,
 				486F5E671BA1FE2A00BA2A57 /* BaseUIViewController.swift in Sources */,
-				0334C88F1BA7737500013096 /* User.swift in Sources */,
-				0334C8911BA7737900013096 /* User+CoreDataProperties.swift in Sources */,
+				0334CA1D1BA8DDFC00013096 /* Alarm.swift in Sources */,
+				0334CA201BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */,
+				0334CA471BA8DDFC00013096 /* Food.swift in Sources */,
 				4859FCD11B9A4DE5000C1269 /* NutshellTests.swift in Sources */,
+				0334CA801BA8DDFC00013096 /* Upload.swift in Sources */,
 				486F5E3B1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
+				0334CA5C1BA8DDFC00013096 /* Prime.swift in Sources */,
+				0334CA2F1BA8DDFC00013096 /* Calibration.swift in Sources */,
+				0334CA8C1BA8DDFC00013096 /* User.swift in Sources */,
+				0334CA681BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
+				0334CA411BA8DDFC00013096 /* DeviceMetadata.swift in Sources */,
+				0334CA351BA8DDFC00013096 /* CommonData.swift in Sources */,
+				0334CA561BA8DDFC00013096 /* Note.swift in Sources */,
+				0334CA711BA8DDFC00013096 /* Status+CoreDataProperties.swift in Sources */,
 				486F5E451BA1CABF00BA2A57 /* NutEventList.swift in Sources */,
-				486F5E511BA1CEF400BA2A57 /* WorkoutEvent.swift in Sources */,
 				486F5E591BA1D0CC00BA2A57 /* InsulinInputs.swift in Sources */,
-				486F5E551BA1D02900BA2A57 /* GlucoseReadings.swift in Sources */,
+				0334CA921BA8DDFC00013096 /* Wizard.swift in Sources */,
 				48EC32301BA7BDD700A75103 /* NutEvent.swift in Sources */,
 				48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */,
+				0334CA3E1BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift in Sources */,
+				0334CA771BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift in Sources */,
+				0334CA6B1BA8DDFC00013096 /* Settings+CoreDataProperties.swift in Sources */,
+				0334CA501BA8DDFC00013096 /* GrabBag.swift in Sources */,
+				0334CA9C1BA8DE5B00013096 /* GlucoseReadings.swift in Sources */,
+				0334CA531BA8DDFC00013096 /* Note+CoreDataProperties.swift in Sources */,
+				0334CA2C1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */,
+				0334CA8F1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift in Sources */,
+				0334CA891BA8DDFC00013096 /* User+CoreDataProperties.swift in Sources */,
+				0334CAA41BA8DF5A00013096 /* WorkoutEventList.swift in Sources */,
+				0334CA321BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,
 				486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */,
+				0334CA291BA8DDFC00013096 /* BloodKetone.swift in Sources */,
+				0334CA6E1BA8DDFC00013096 /* Settings.swift in Sources */,
 				486F5E061B9FA7A800BA2A57 /* ConstantsAndStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -704,23 +988,63 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0334CA7B1BA8DDFC00013096 /* TimeChange.swift in Sources */,
+				0334CA181BA8DDFC00013096 /* Activity.swift in Sources */,
+				0334CA601BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift in Sources */,
+				0334CA661BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift in Sources */,
+				0334CA1B1BA8DDFC00013096 /* Alarm+CoreDataProperties.swift in Sources */,
+				0334CA151BA8DDFC00013096 /* Activity+CoreDataProperties.swift in Sources */,
 				486F5E681BA1FE2A00BA2A57 /* BaseUIViewController.swift in Sources */,
+				0334CA3C1BA8DDFC00013096 /* ContinuousGlucose.swift in Sources */,
+				0334CA451BA8DDFC00013096 /* Food+CoreDataProperties.swift in Sources */,
+				0334CA631BA8DDFC00013096 /* ReservoirChange.swift in Sources */,
+				0334CAA21BA8DF5A00013096 /* WorkoutEvent.swift in Sources */,
+				0334CA841BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift in Sources */,
+				0334CA7E1BA8DDFC00013096 /* Upload+CoreDataProperties.swift in Sources */,
+				0334CA271BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */,
+				0334CA871BA8DDFC00013096 /* UrineKetone.swift in Sources */,
+				0334CA5A1BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,
 				48EC32331BA7BDDF00A75103 /* NutUtils.swift in Sources */,
 				486F5E461BA1CABF00BA2A57 /* NutEventList.swift in Sources */,
+				0334CA391BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift in Sources */,
 				486F5E661BA1F20600BA2A57 /* NutEventItem.swift in Sources */,
+				0334CA4E1BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift in Sources */,
+				0334CA241BA8DDFC00013096 /* Basal.swift in Sources */,
+				0334CA751BA8DDFC00013096 /* Status.swift in Sources */,
 				486F5E6A1BA2029200BA2A57 /* BaseUITableViewCell.swift in Sources */,
+				0334CA1E1BA8DDFC00013096 /* Alarm.swift in Sources */,
+				0334CA211BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */,
+				0334CA481BA8DDFC00013096 /* Food.swift in Sources */,
 				486283AC1BA396AE00547BE3 /* APIConnect.swift in Sources */,
-				486F5E521BA1CEF400BA2A57 /* WorkoutEvent.swift in Sources */,
-				0334C8901BA7737500013096 /* User.swift in Sources */,
-				0334C8921BA7737A00013096 /* User+CoreDataProperties.swift in Sources */,
-				486F5E4E1BA1CEE100BA2A57 /* WorkoutEventList.swift in Sources */,
+				0334CA811BA8DDFC00013096 /* Upload.swift in Sources */,
 				486283AE1BA398A800547BE3 /* AppDelegate.swift in Sources */,
+				0334CA5D1BA8DDFC00013096 /* Prime.swift in Sources */,
+				0334CA301BA8DDFC00013096 /* Calibration.swift in Sources */,
+				0334CA8D1BA8DDFC00013096 /* User.swift in Sources */,
+				0334CA691BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
+				0334CA421BA8DDFC00013096 /* DeviceMetadata.swift in Sources */,
+				0334CA361BA8DDFC00013096 /* CommonData.swift in Sources */,
+				0334CA571BA8DDFC00013096 /* Note.swift in Sources */,
+				0334CA721BA8DDFC00013096 /* Status+CoreDataProperties.swift in Sources */,
 				48DDD30B1BA76D12007365FE /* NutshellStyles.swift in Sources */,
 				486F5E3C1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
+				0334CA931BA8DDFC00013096 /* Wizard.swift in Sources */,
 				4859FCDC1B9A4DE5000C1269 /* NutshellUITests.swift in Sources */,
 				48EC32311BA7BDD800A75103 /* NutEvent.swift in Sources */,
+				0334CA3F1BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift in Sources */,
+				0334CA781BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift in Sources */,
+				0334CA6C1BA8DDFC00013096 /* Settings+CoreDataProperties.swift in Sources */,
+				0334CA511BA8DDFC00013096 /* GrabBag.swift in Sources */,
+				0334CA9D1BA8DE5B00013096 /* GlucoseReadings.swift in Sources */,
+				0334CA541BA8DDFC00013096 /* Note+CoreDataProperties.swift in Sources */,
+				0334CA2D1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */,
+				0334CA901BA8DDFC00013096 /* Wizard+CoreDataProperties.swift in Sources */,
+				0334CA8A1BA8DDFC00013096 /* User+CoreDataProperties.swift in Sources */,
+				0334CAA51BA8DF5A00013096 /* WorkoutEventList.swift in Sources */,
+				0334CA331BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,
 				486F5E5A1BA1D0CC00BA2A57 /* InsulinInputs.swift in Sources */,
-				486F5E561BA1D02900BA2A57 /* GlucoseReadings.swift in Sources */,
+				0334CA2A1BA8DDFC00013096 /* BloodKetone.swift in Sources */,
+				0334CA6F1BA8DDFC00013096 /* Settings.swift in Sources */,
 				486F5E071B9FA7A800BA2A57 /* ConstantsAndStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

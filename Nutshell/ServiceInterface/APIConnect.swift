@@ -126,8 +126,7 @@ class APIConnector {
         
         sendRequest(Method.GET, endpoint: endpoint).responseJSON { (request, response, result) -> Void in
             if ( result.isSuccess ) {
-                let json = JSON(result.value!)
-                print("JSON:\n\(json)")
+                
                 completion(result)
             } else {
                 // Failure
