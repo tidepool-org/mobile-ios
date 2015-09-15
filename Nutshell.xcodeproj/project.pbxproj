@@ -143,6 +143,12 @@
 		0334CAA31BA8DF5A00013096 /* WorkoutEventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA9F1BA8DF5A00013096 /* WorkoutEventList.swift */; };
 		0334CAA41BA8DF5A00013096 /* WorkoutEventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA9F1BA8DF5A00013096 /* WorkoutEventList.swift */; };
 		0334CAA51BA8DF5A00013096 /* WorkoutEventList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA9F1BA8DF5A00013096 /* WorkoutEventList.swift */; };
+		0334CAA81BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */; };
+		0334CAA91BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */; };
+		0334CAAA1BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */; };
+		0334CAAB1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
+		0334CAAC1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
+		0334CAAD1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
 		4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */; };
 		4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */; };
 		4837CC691BA7394E00BA2CDE /* NutshellUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC681BA7394E00BA2CDE /* NutshellUIButton.swift */; };
@@ -286,6 +292,8 @@
 		0334CA9A1BA8DE5B00013096 /* GlucoseReadings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GlucoseReadings.swift; path = DataModel/GlucoseReadings.swift; sourceTree = "<group>"; };
 		0334CA9E1BA8DF5A00013096 /* WorkoutEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutEvent.swift; path = DataModel/WorkoutEvent.swift; sourceTree = "<group>"; };
 		0334CA9F1BA8DF5A00013096 /* WorkoutEventList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutEventList.swift; path = DataModel/WorkoutEventList.swift; sourceTree = "<group>"; };
+		0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bolus+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334CAA71BA8E22E00013096 /* Bolus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bolus.swift; sourceTree = "<group>"; };
 		11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nutshell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUITextField.swift; path = Resources/NutshellUITextField.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUILabel.swift; path = Resources/NutshellUILabel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -387,6 +395,8 @@
 				0334C9EB1BA8DDFC00013096 /* Basal.swift */,
 				0334C9EC1BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift */,
 				0334C9ED1BA8DDFC00013096 /* BloodKetone.swift */,
+				0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */,
+				0334CAA71BA8E22E00013096 /* Bolus.swift */,
 				0334C9EE1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift */,
 				0334C9EF1BA8DDFC00013096 /* Calibration.swift */,
 				0334C9F01BA8DDFC00013096 /* CommonData+CoreDataProperties.swift */,
@@ -854,6 +864,8 @@
 				0334CA791BA8DDFC00013096 /* TimeChange.swift in Sources */,
 				0334CAA31BA8DF5A00013096 /* WorkoutEventList.swift in Sources */,
 				4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */,
+				0334CAA81BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */,
+				0334CAAB1BA8E22E00013096 /* Bolus.swift in Sources */,
 				0334CA851BA8DDFC00013096 /* UrineKetone.swift in Sources */,
 				0334CA551BA8DDFC00013096 /* Note.swift in Sources */,
 				486283B41BA48B1500547BE3 /* EventViewStoryboardTypes.swift in Sources */,
@@ -954,6 +966,7 @@
 				0334CA801BA8DDFC00013096 /* Upload.swift in Sources */,
 				486F5E3B1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
 				0334CA5C1BA8DDFC00013096 /* Prime.swift in Sources */,
+				0334CAAC1BA8E22E00013096 /* Bolus.swift in Sources */,
 				0334CA2F1BA8DDFC00013096 /* Calibration.swift in Sources */,
 				0334CA8C1BA8DDFC00013096 /* User.swift in Sources */,
 				0334CA681BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
@@ -980,6 +993,7 @@
 				486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */,
 				0334CA291BA8DDFC00013096 /* BloodKetone.swift in Sources */,
 				0334CA6E1BA8DDFC00013096 /* Settings.swift in Sources */,
+				0334CAA91BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */,
 				486F5E061B9FA7A800BA2A57 /* ConstantsAndStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1019,6 +1033,7 @@
 				0334CA811BA8DDFC00013096 /* Upload.swift in Sources */,
 				486283AE1BA398A800547BE3 /* AppDelegate.swift in Sources */,
 				0334CA5D1BA8DDFC00013096 /* Prime.swift in Sources */,
+				0334CAAD1BA8E22E00013096 /* Bolus.swift in Sources */,
 				0334CA301BA8DDFC00013096 /* Calibration.swift in Sources */,
 				0334CA8D1BA8DDFC00013096 /* User.swift in Sources */,
 				0334CA691BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
@@ -1045,6 +1060,7 @@
 				486F5E5A1BA1D0CC00BA2A57 /* InsulinInputs.swift in Sources */,
 				0334CA2A1BA8DDFC00013096 /* BloodKetone.swift in Sources */,
 				0334CA6F1BA8DDFC00013096 /* Settings.swift in Sources */,
+				0334CAAA1BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */,
 				486F5E071B9FA7A800BA2A57 /* ConstantsAndStyle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
