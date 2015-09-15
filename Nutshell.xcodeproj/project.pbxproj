@@ -12,6 +12,13 @@
 		0334C8881BA7404200013096 /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
 		0334C8891BA7404300013096 /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
 		0334C88A1BA7405A00013096 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
+		0334C88D1BA76BB500013096 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C88B1BA76BB500013096 /* User+CoreDataProperties.swift */; };
+		0334C88E1BA76BB500013096 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C88C1BA76BB500013096 /* User.swift */; };
+		0334C88F1BA7737500013096 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C88C1BA76BB500013096 /* User.swift */; };
+		0334C8901BA7737500013096 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C88C1BA76BB500013096 /* User.swift */; };
+		0334C8911BA7737900013096 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C88B1BA76BB500013096 /* User+CoreDataProperties.swift */; };
+		0334C8921BA7737A00013096 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C88B1BA76BB500013096 /* User+CoreDataProperties.swift */; };
+		0334C8941BA7814700013096 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0334C8931BA7814700013096 /* CoreData.framework */; };
 		483E3C361B9F4A6300DA49E7 /* BaseUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */; };
 		483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */; };
 		483E3C3B1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C3A1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift */; };
@@ -115,6 +122,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0334C88B1BA76BB500013096 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "DataModel/User+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0334C88C1BA76BB500013096 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = DataModel/User.swift; sourceTree = "<group>"; };
+		0334C8931BA7814700013096 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nutshell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUIViewController.swift; path = ViewControllers/BaseUIViewController.swift; sourceTree = "<group>"; };
 		483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewController.swift; path = ViewControllers/BaseUITableViewController.swift; sourceTree = "<group>"; };
@@ -180,6 +190,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0334C8941BA7814700013096 /* CoreData.framework in Frameworks */,
 				949A33B350C643B74EB54D43 /* Pods_Nutshell.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -204,6 +215,7 @@
 		0B896CBEA8D0BFD3140D313E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0334C8931BA7814700013096 /* CoreData.framework */,
 				11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */,
 			);
 			name = Frameworks;
@@ -380,6 +392,8 @@
 		486F5E221BA0DB7400BA2A57 /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
+				0334C88B1BA76BB500013096 /* User+CoreDataProperties.swift */,
+				0334C88C1BA76BB500013096 /* User.swift */,
 				486F5E431BA1CABF00BA2A57 /* NutEventList.swift */,
 				486F5E291BA0DC6700BA2A57 /* NutEvent.swift */,
 				486F5E631BA1F20600BA2A57 /* NutEventItem.swift */,
@@ -623,6 +637,7 @@
 				486283B41BA48B1500547BE3 /* EventViewStoryboardTypes.swift in Sources */,
 				486F5E091B9FB1C600BA2A57 /* NutshellStyles.swift in Sources */,
 				486F5E6C1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift in Sources */,
+				0334C88E1BA76BB500013096 /* User.swift in Sources */,
 				485922A41B9A639B0056E605 /* EventGroupTableViewController.swift in Sources */,
 				486F5E3A1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
 				486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */,
@@ -637,6 +652,7 @@
 				483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */,
 				483E3C3B1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift in Sources */,
 				486F5E541BA1D02900BA2A57 /* GlucoseReadings.swift in Sources */,
+				0334C88D1BA76BB500013096 /* User+CoreDataProperties.swift in Sources */,
 				486F5E4C1BA1CEE100BA2A57 /* WorkoutEventList.swift in Sources */,
 				486F5E111BA08DE900BA2A57 /* LoginViewController.swift in Sources */,
 				486F5E641BA1F20600BA2A57 /* NutEventItem.swift in Sources */,
@@ -657,6 +673,8 @@
 				486F5E691BA2029200BA2A57 /* BaseUITableViewCell.swift in Sources */,
 				486F5E651BA1F20600BA2A57 /* NutEventItem.swift in Sources */,
 				486F5E671BA1FE2A00BA2A57 /* BaseUIViewController.swift in Sources */,
+				0334C88F1BA7737500013096 /* User.swift in Sources */,
+				0334C8911BA7737900013096 /* User+CoreDataProperties.swift in Sources */,
 				4859FCD11B9A4DE5000C1269 /* NutshellTests.swift in Sources */,
 				486F5E3B1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
 				486F5E451BA1CABF00BA2A57 /* NutEventList.swift in Sources */,
@@ -680,6 +698,8 @@
 				486F5E6A1BA2029200BA2A57 /* BaseUITableViewCell.swift in Sources */,
 				486283AC1BA396AE00547BE3 /* APIConnect.swift in Sources */,
 				486F5E521BA1CEF400BA2A57 /* WorkoutEvent.swift in Sources */,
+				0334C8901BA7737500013096 /* User.swift in Sources */,
+				0334C8921BA7737A00013096 /* User+CoreDataProperties.swift in Sources */,
 				486F5E4E1BA1CEE100BA2A57 /* WorkoutEventList.swift in Sources */,
 				486283AE1BA398A800547BE3 /* AppDelegate.swift in Sources */,
 				486F5E3C1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,

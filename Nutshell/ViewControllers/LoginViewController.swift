@@ -59,14 +59,25 @@ class LoginViewController: BaseUIViewController {
         
         appDelegate.API?.login(emailTextField.text!,
             password: passwordTextField.text!,
-            completion: { (_, _, result:(Alamofire.Result<AnyObject>)) -> (Void) in
+            completion: { (result:(Alamofire.Result<User>)) -> (Void) in
                 print("Login result: \(result)")
                 if ( result.isSuccess ) {
-                    print("login success!")
-                    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                    appDelegate.setupUIForLoginSuccess()
+                    if let user=result.value {
+                        print("login success! user: " + user.description)
+                        
+                        // Update the database with the current user info
+                        
+                        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                        appDelegate.setupUIForLoginSuccess()
+                        appDelegate.API?.getUserData(user.userid!, completion: { (result) -> (Void) in
+                            print("getUserData result: \(result)")
+                        })
+                    } else {
+                        // This should not happen- we should not succeed without a user!
+                        print("Fatal error: No user returned!")
+                    }
                 } else {
-                    print("login failed!")
+                    print("login failed! Error: " + result.error.debugDescription)
                 }
         })
     }

@@ -16,16 +16,27 @@
 import Foundation
 import UIKit
 import Alamofire
+import SwiftyJSON
+import CoreData
 
 /*
     Most of the service interface is exposed via the data classes. However, for login/logout, some set of service interface functions are needed. Much of the needed login code should be portable from Urchin.
 */
 
 class APIConnector {
+    // MARK: Properties
+    
+    /** ID of the currently logged-in user, or nil if nobody is logged in */
+    private(set) var currentUserId: String?
+
     // MARK: - Constants
     
     static let kSessionTokenDefaultKey = "SToken"
     static let kSessionIdHeader = "x-tidepool-session-token"
+
+    // Error domain and codes
+    static let kNutshellErrorDomain = "NutshellErrorDomain"
+    static let kNoSessionTokenErrorCode = -1
     
     // Dictionary of servers and their base URLs
     static let kServers = ["Production" :   "https://api.tidepool.io",
@@ -33,16 +44,30 @@ class APIConnector {
                            "Development" :  "https://devel-api.tidepool.io"]
     
     // Session token, acquired on login and saved in NSUserDefaults
-    var _sessionToken: (String?)
+    var _sessionToken: String?
+    var sessionToken: String? {
+        set(newToken) {
+            if ( newToken != nil ) {
+                NSUserDefaults.standardUserDefaults().setValue(newToken, forKey: APIConnector.kSessionTokenDefaultKey)
+            } else {
+                NSUserDefaults.standardUserDefaults().removeObjectForKey(APIConnector.kSessionTokenDefaultKey)
+            }
+            _sessionToken = newToken
+        }
+        get {
+            return _sessionToken
+        }
+    }
     
     // Base URL for API calls, set during initialization
-    var _baseUrl: (NSURL)
+    var baseUrl: (NSURL)
     
     // MARK: Initializaion
     
     // Required initializer
     required init(baseUrl: NSURL) {
-        _baseUrl = baseUrl
+        self.baseUrl = baseUrl
+        self.sessionToken = NSUserDefaults.standardUserDefaults().stringForKey(APIConnector.kSessionTokenDefaultKey)
     }
     
     
@@ -53,33 +78,62 @@ class APIConnector {
     
     /**
      * Logs in the user and obtains the session token for the session (stored internally)
-     */
-    func login(username: String,
-        password: String,
-        completion: (NSURLRequest?, NSURLResponse?, Result<AnyObject>) -> (Void)) {
-            let endpoint = "auth/login"
-            let base64LoginString = NSString(format: "%@:%@", username, password)
-                .dataUsingEncoding(NSUTF8StringEncoding)?
-                .base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
-            let headers = ["Authorization" : "Basic " + base64LoginString!]
-            
-            // Login
-            sendRequest(Method.POST, endpoint: endpoint, headers:headers) { (request, response, result) -> (Void) in
-                if let httpResponse:(NSHTTPURLResponse) = response as? NSHTTPURLResponse {
-                    // Look for the auth token
-                    self._sessionToken = httpResponse.allHeaderFields[APIConnector.kSessionIdHeader] as! String?
-                    print("Got session token: \(self._sessionToken)")
-                } else {
-                    // We did not get a session token
-                    print("Did not find a session token!")
-                }
+    */
+    func login(username: String, password: String, completion: (Result<User>) -> (Void)) {
+        // Set our endpoint for login
+        let endpoint = "auth/login"
+        
+        // Create the authorization string (user:pass base-64 encoded)
+        let base64LoginString = NSString(format: "%@:%@", username, password)
+            .dataUsingEncoding(NSUTF8StringEncoding)?
+            .base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+        
+        // Set our headers with the login string
+        let headers = ["Authorization" : "Basic " + base64LoginString!]
+        
+        // Send the request and deal with the response as JSON
+        sendRequest(Method.POST, endpoint: endpoint, headers:headers).responseJSON { (request, response, result) -> (Void) in
+            if ( result.isSuccess ) {
+                // Look for the auth token
+                self.sessionToken = response!.allHeaderFields[APIConnector.kSessionIdHeader] as! String?
+                var json = JSON(result.value!)
                 
-                completion(request, response, result)
+                // Create the User object
+                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                let entity = NSEntityDescription.entityForName("User", inManagedObjectContext: appDelegate.managedObjectContext)
+                let user = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: nil) as! User
+                
+                user.userid = json["userid"].string
+                user.username = json["username"].string
+                
+                self.currentUserId = user.userid
+                
+                completion(Result.Success(user))
+            } else {
+                completion(Result.Failure(nil, result.error!))
             }
+        }
     }
     
     func logout(completion: (NSError) -> (Void)) {
+        // Clear our session token
+        self.sessionToken = nil
+    }
+    
+    func getUserData(userId: String, completion: (Result<AnyObject>) -> (Void)) {
+        // Set our endpoint for the user data
+        let endpoint = "data/" + userId;
         
+        sendRequest(Method.GET, endpoint: endpoint).responseJSON { (request, response, result) -> Void in
+            if ( result.isSuccess ) {
+                let json = JSON(result.value!)
+                print("JSON:\n\(json)")
+                completion(result)
+            } else {
+                // Failure
+                completion(result)
+            }
+        }
     }
     
     /**
@@ -87,12 +141,12 @@ class APIConnector {
     Uses reachability to determine whether device is connected to a network.
     */
     class func isConnectedToNetwork() -> Bool {
-        return true;
+        return true
     }
     
     func clearSessionToken() -> Void {
-        NSUserDefaults.standardUserDefaults().removeObjectForKey(APIConnector.kSessionTokenDefaultKey);
-        _sessionToken = nil;
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(APIConnector.kSessionTokenDefaultKey)
+        sessionToken = nil
     }
 
     // MARK: - Internal methods
@@ -103,10 +157,9 @@ class APIConnector {
     func sendRequest(requestType: (Alamofire.Method)? = Method.GET,
         endpoint: (String),
         parameters: [String: AnyObject]? = nil,
-        headers: [String: String]? = nil,
-        completion: (NSURLRequest?, NSURLResponse?, Result<AnyObject>) -> (Void))
+        headers: [String: String]? = nil) -> (Request)
     {
-        let url = _baseUrl.URLByAppendingPathComponent(endpoint)
+        let url = baseUrl.URLByAppendingPathComponent(endpoint)
         
         // Get our API headers (the session token) and add any headers supplied by the caller
         var apiHeaders = getApiHeaders()
@@ -122,16 +175,13 @@ class APIConnector {
         }
         
         // Fire off the network request
-        Alamofire.request(requestType!, url, headers: apiHeaders, parameters:parameters).responseJSON {
-            (request, response, result) -> Void in
-            completion(request, response, result)
-        }
+        return Alamofire.request(requestType!, url, headers: apiHeaders, parameters:parameters)
     }
     
     func getApiHeaders() -> [String: String]? {
-        if ( _sessionToken != nil ) {
-            return [APIConnector.kSessionIdHeader : _sessionToken!]
+        if ( sessionToken != nil ) {
+            return [APIConnector.kSessionIdHeader : sessionToken!]
         }
-        return nil;
+        return nil
     }
  }
