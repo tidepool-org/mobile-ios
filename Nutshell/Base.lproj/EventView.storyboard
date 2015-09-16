@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="MlM-Oh-SBV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9046" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="MlM-Oh-SBV">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9035"/>
     </dependencies>
     <scenes>
         <!--EventList-->
@@ -123,11 +123,18 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="wb3-dF-d2O" secondAttribute="trailing" id="0Kg-lT-Eqx"/>
-                                                    <constraint firstAttribute="height" constant="114" id="bGT-FS-nJx"/>
+                                                    <constraint firstAttribute="height" constant="114" id="bGT-FS-nJx">
+                                                        <variation key="heightClass=compact" constant="0.0"/>
+                                                    </constraint>
                                                     <constraint firstAttribute="bottom" secondItem="wb3-dF-d2O" secondAttribute="bottom" id="cvz-gk-1gU"/>
                                                     <constraint firstItem="wb3-dF-d2O" firstAttribute="leading" secondItem="mIX-aw-qQf" secondAttribute="leading" id="ucL-lf-ucF"/>
                                                     <constraint firstItem="wb3-dF-d2O" firstAttribute="top" secondItem="mIX-aw-qQf" secondAttribute="top" id="wsM-UL-MLi"/>
                                                 </constraints>
+                                                <variation key="heightClass=compact-widthClass=regular">
+                                                    <mask key="subviews">
+                                                        <exclude reference="wb3-dF-d2O"/>
+                                                    </mask>
+                                                </variation>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="01k-k4-6OI" userLabel="EventDescriptionContainer">
                                                 <rect key="frame" x="0.0" y="114" width="320" height="86"/>
@@ -136,7 +143,9 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="200" id="5us-xD-HoR"/>
+                                            <constraint firstAttribute="height" constant="200" id="5us-xD-HoR">
+                                                <variation key="heightClass=compact" constant="86"/>
+                                            </constraint>
                                             <constraint firstItem="mIX-aw-qQf" firstAttribute="top" secondItem="zQo-Kx-sDE" secondAttribute="top" id="6ZG-Sf-eV6"/>
                                             <constraint firstAttribute="trailing" secondItem="01k-k4-6OI" secondAttribute="trailing" id="9b3-4B-dQc"/>
                                             <constraint firstItem="01k-k4-6OI" firstAttribute="leading" secondItem="zQo-Kx-sDE" secondAttribute="leading" id="Gah-jq-k3F"/>
@@ -144,14 +153,111 @@
                                             <constraint firstAttribute="trailing" secondItem="mIX-aw-qQf" secondAttribute="trailing" id="TBe-1N-zAs"/>
                                             <constraint firstAttribute="bottom" secondItem="01k-k4-6OI" secondAttribute="bottom" id="Zqq-jT-mPJ"/>
                                             <constraint firstItem="mIX-aw-qQf" firstAttribute="leading" secondItem="zQo-Kx-sDE" secondAttribute="leading" id="b5V-gh-dbP"/>
+                                            <constraint firstItem="01k-k4-6OI" firstAttribute="top" secondItem="zQo-Kx-sDE" secondAttribute="top" constant="114" id="faD-Q6-Lp2">
+                                                <variation key="heightClass=compact" constant="0.0"/>
+                                            </constraint>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
                                         </userDefinedRuntimeAttributes>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="Q81-r5-fSM"/>
+                                            </mask>
+                                        </variation>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="INU-ti-JXM" userLabel="GraphSection">
+                                        <rect key="frame" x="0.0" y="200" width="320" height="304"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cmJ-dI-KmZ" userLabel="MissingData">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCd-7V-eEl">
+                                                        <rect key="frame" x="41" y="105" width="239" height="103"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There is no data in here!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="azx-xE-oT0" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="239" height="37"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="37" id="O2U-ur-ofZ"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="advisoryText"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upload your data with the" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y1z-zk-JS3" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="47" width="239" height="30"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="30" id="3Ik-yO-z4I"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="advisorySubtext"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tidepool Uploader." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E2h-Ni-G2t" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="77" width="239" height="21"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="21" id="fXi-zT-0oL"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="greenLink"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </label>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstItem="E2h-Ni-G2t" firstAttribute="top" secondItem="Y1z-zk-JS3" secondAttribute="bottom" id="AIh-lq-c7E"/>
+                                                            <constraint firstItem="E2h-Ni-G2t" firstAttribute="leading" secondItem="TCd-7V-eEl" secondAttribute="leading" id="Fru-72-prk"/>
+                                                            <constraint firstItem="azx-xE-oT0" firstAttribute="top" secondItem="TCd-7V-eEl" secondAttribute="top" id="JcE-mx-geo"/>
+                                                            <constraint firstAttribute="trailing" secondItem="E2h-Ni-G2t" secondAttribute="trailing" id="PHZ-10-L14"/>
+                                                            <constraint firstItem="Y1z-zk-JS3" firstAttribute="top" secondItem="azx-xE-oT0" secondAttribute="bottom" constant="10" id="bIW-kr-YOy"/>
+                                                            <constraint firstAttribute="height" constant="103" id="cOb-YX-lso"/>
+                                                            <constraint firstItem="azx-xE-oT0" firstAttribute="leading" secondItem="TCd-7V-eEl" secondAttribute="leading" id="cXO-4g-4fY"/>
+                                                            <constraint firstItem="Y1z-zk-JS3" firstAttribute="leading" secondItem="TCd-7V-eEl" secondAttribute="leading" id="eUF-zQ-Kzh"/>
+                                                            <constraint firstItem="E2h-Ni-G2t" firstAttribute="top" secondItem="Y1z-zk-JS3" secondAttribute="bottom" constant="8" id="iAj-I9-ZOZ"/>
+                                                            <constraint firstAttribute="trailing" secondItem="Y1z-zk-JS3" secondAttribute="trailing" id="jbH-BZ-L3T"/>
+                                                            <constraint firstItem="E2h-Ni-G2t" firstAttribute="top" secondItem="azx-xE-oT0" secondAttribute="bottom" id="lSk-MG-KGO"/>
+                                                            <constraint firstAttribute="trailing" secondItem="azx-xE-oT0" secondAttribute="trailing" id="lWG-wc-rcA"/>
+                                                            <constraint firstAttribute="width" constant="239" id="r4e-Ew-MJr"/>
+                                                        </constraints>
+                                                        <variation key="default">
+                                                            <mask key="constraints">
+                                                                <exclude reference="iAj-I9-ZOZ"/>
+                                                                <exclude reference="lSk-MG-KGO"/>
+                                                            </mask>
+                                                        </variation>
+                                                    </view>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="TCd-7V-eEl" firstAttribute="centerX" secondItem="cmJ-dI-KmZ" secondAttribute="centerX" id="akE-ve-pno"/>
+                                                    <constraint firstItem="TCd-7V-eEl" firstAttribute="centerY" secondItem="cmJ-dI-KmZ" secondAttribute="centerY" constant="4" id="eyH-Mc-zZF"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="cmJ-dI-KmZ" firstAttribute="leading" secondItem="INU-ti-JXM" secondAttribute="leading" id="ODb-WH-99X"/>
+                                            <constraint firstItem="cmJ-dI-KmZ" firstAttribute="top" secondItem="INU-ti-JXM" secondAttribute="top" id="Wb5-A1-Qd7"/>
+                                            <constraint firstAttribute="bottom" secondItem="cmJ-dI-KmZ" secondAttribute="bottom" id="ZeQ-NE-Nk2"/>
+                                            <constraint firstAttribute="trailing" secondItem="cmJ-dI-KmZ" secondAttribute="trailing" id="vZs-7q-Irx"/>
+                                        </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" red="0.90196078430000004" green="0.0078431372550000003" blue="0.090196078430000007" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="INU-ti-JXM" secondAttribute="trailing" id="Gx6-wr-Qxk"/>
+                                    <constraint firstItem="INU-ti-JXM" firstAttribute="leading" secondItem="A21-yX-8hn" secondAttribute="leading" id="Xhj-6O-Sfw"/>
+                                    <constraint firstAttribute="bottom" secondItem="INU-ti-JXM" secondAttribute="bottom" id="dqF-ep-t6P"/>
+                                    <constraint firstItem="INU-ti-JXM" firstAttribute="top" secondItem="zQo-Kx-sDE" secondAttribute="bottom" id="ew1-kP-du1"/>
                                     <constraint firstItem="zQo-Kx-sDE" firstAttribute="top" secondItem="A21-yX-8hn" secondAttribute="top" id="hF0-Mw-B4X"/>
                                     <constraint firstAttribute="trailing" secondItem="zQo-Kx-sDE" secondAttribute="trailing" id="ieE-ho-hJu"/>
                                     <constraint firstItem="zQo-Kx-sDE" firstAttribute="leading" secondItem="A21-yX-8hn" secondAttribute="leading" id="nau-xA-SC5"/>
@@ -169,11 +275,16 @@
                     <navigationItem key="navigationItem" id="6wN-kQ-yx9">
                         <barButtonItem key="rightBarButtonItem" image="add-button.png" id="VKK-Ko-uQU"/>
                     </navigationItem>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="graphSectionView" destination="INU-ti-JXM" id="r4i-Yu-eBP"/>
+                        <outlet property="missingDataAdvisoryView" destination="cmJ-dI-KmZ" id="XsH-bq-zbD"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0lz-qm-Gfy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1803" y="852"/>
+            <point key="canvasLocation" x="1802.5" y="851.5"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PPE-fc-DuL">

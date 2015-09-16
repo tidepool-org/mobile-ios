@@ -544,8 +544,8 @@
 				486F5E221BA0DB7400BA2A57 /* DataModel */,
 				486F5DFE1B9F876300BA2A57 /* View Controllers */,
 				486F5E381BA0E51F00BA2A57 /* Extensions */,
+				48EC32341BA7C5F400A75103 /* Graph View */,
 				486F5DED1B9F86E800BA2A57 /* Resources and UI */,
-				48DDD3101BA78F8A007365FE /* BackgroundUIImage.swift */,
 			);
 			path = Nutshell;
 			sourceTree = "<group>";
@@ -641,6 +641,14 @@
 				486F5E771BA3891600BA2A57 /* NutUtils.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		48EC32341BA7C5F400A75103 /* Graph View */ = {
+			isa = PBXGroup;
+			children = (
+				48DDD3101BA78F8A007365FE /* BackgroundUIImage.swift */,
+			);
+			name = "Graph View";
 			sourceTree = "<group>";
 		};
 		8B1414A3E58F828463AFF25F /* Pods */ = {

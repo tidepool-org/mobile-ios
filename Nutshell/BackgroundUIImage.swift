@@ -17,299 +17,393 @@ public class GraphViews : NSObject {
     
     //// Drawing Methods
     
-    public class func drawGraphBackground(viewSize viewSize: CGSize) {
+    //    public class func drawGraphBackground(viewSize viewSize: CGSize) {
+    //        //// Drawing Methods
+    
+    public class func drawGraphBackground(viewWidth viewWidth: CGFloat = 642, viewHeight: CGFloat = 580) {
+        //// General Declarations
+        let context = UIGraphicsGetCurrentContext()
+        
         //// Color Declarations
-        let fillColor = UIColor(red: 0.949, green: 0.953, blue: 0.961, alpha: 1.000)
-        let fillColor2 = UIColor(red: 0.918, green: 0.937, blue: 0.941, alpha: 1.000)
-        let strokeColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
-        let textForeground = UIColor(red: 0.345, green: 0.349, blue: 0.357, alpha: 1.000)
-        let strokeColor2 = UIColor(red: 0.863, green: 0.882, blue: 0.886, alpha: 1.000)
-        let strokeColor3 = UIColor(red: 0.886, green: 0.894, blue: 0.906, alpha: 1.000)
+        let backgroundRightColor = UIColor(red: 0.949, green: 0.953, blue: 0.961, alpha: 1.000)
+        let backgroundLeftColor = UIColor(red: 0.918, green: 0.937, blue: 0.941, alpha: 1.000)
+        let horizontalLineColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
+        let axisTextColor = UIColor(red: 0.345, green: 0.349, blue: 0.357, alpha: 1.000)
+        let hourMarkerStrokeColor = UIColor(red: 0.863, green: 0.882, blue: 0.886, alpha: 1.000)
         
         //// Frames
-        let backgroundFrame = CGRectMake(0, 0, (viewSize.width + 12), (viewSize.height + 9))
+        let backgroundFrame = CGRectMake(0, 0, viewWidth, viewHeight)
+        
+        //// Subframes
+        let contents: CGRect = CGRectMake(backgroundFrame.minX, backgroundFrame.minY, backgroundFrame.width, backgroundFrame.height - 1)
         
         
         //// contents
-        //// Rectangle-70-Copy-45 Drawing
-        let rectangle70Copy45Path = UIBezierPath(rect: CGRectMake(backgroundFrame.minX + 326, backgroundFrame.minY + 55.61, 326, 541))
-        fillColor.setFill()
-        rectangle70Copy45Path.fill()
+        //// right-half-background Drawing
+        let righthalfbackgroundPath = UIBezierPath(rect: CGRectMake(contents.minX + floor(contents.width * 0.49844 - 0.5) + 1, contents.minY + floor(contents.height * 0.08981 + 0.5), floor(contents.width * 1.00000 - 0.5) - floor(contents.width * 0.49844 - 0.5), floor(contents.height * 1.00000 + 0.5) - floor(contents.height * 0.08981 + 0.5)))
+        backgroundRightColor.setFill()
+        righthalfbackgroundPath.fill()
         
         
-        //// Rectangle-70-Copy-46 Drawing
-        let rectangle70Copy46Path = UIBezierPath(rect: CGRectMake(backgroundFrame.minX, backgroundFrame.minY + 55.61, 326, 541))
-        fillColor2.setFill()
-        rectangle70Copy46Path.fill()
+        //// left-half-background Drawing
+        let lefthalfbackgroundPath = UIBezierPath(rect: CGRectMake(contents.minX + floor(contents.width * 0.00000 + 0.5), contents.minY + floor(contents.height * 0.08981 + 0.5), floor(contents.width * 0.50156 + 0.5) - floor(contents.width * 0.00000 + 0.5), floor(contents.height * 1.00000 + 0.5) - floor(contents.height * 0.08981 + 0.5)))
+        backgroundLeftColor.setFill()
+        lefthalfbackgroundPath.fill()
         
         
-        //// Line-Copy-139 Drawing
-        let lineCopy139Path = UIBezierPath()
-        lineCopy139Path.moveToPoint(CGPointMake(backgroundFrame.minX + 48.56, backgroundFrame.minY + 177.17))
-        lineCopy139Path.addLineToPoint(CGPointMake(backgroundFrame.minX + 646.27, backgroundFrame.minY + 177.17))
-        lineCopy139Path.miterLimit = 4;
+        //// line-at-180 Drawing
+        let lineat180Path = UIBezierPath()
+        lineat180Path.moveToPoint(CGPointMake(contents.minX + 0.07449 * contents.width, contents.minY + 0.29728 * contents.height))
+        lineat180Path.addLineToPoint(CGPointMake(contents.minX + 0.99122 * contents.width, contents.minY + 0.29728 * contents.height))
+        lineat180Path.miterLimit = 4;
         
-        lineCopy139Path.lineCapStyle = CGLineCap.Square;
+        lineat180Path.lineCapStyle = .Square;
         
-        lineCopy139Path.lineJoinStyle = CGLineJoin.Round;
+        lineat180Path.lineJoinStyle = .Round;
         
-        lineCopy139Path.usesEvenOddFillRule = true;
+        lineat180Path.usesEvenOddFillRule = true;
         
-        strokeColor.setStroke()
-        lineCopy139Path.lineWidth = 3
-        lineCopy139Path.stroke()
+        horizontalLineColor.setStroke()
+        lineat180Path.lineWidth = 3
+        CGContextSaveGState(context)
+        CGContextSetLineDash(context, 0, [3, 11], 2)
+        lineat180Path.stroke()
+        CGContextRestoreGState(context)
         
         
-        //// Line-Copy-140 Drawing
-        let lineCopy140Path = UIBezierPath()
-        lineCopy140Path.moveToPoint(CGPointMake(backgroundFrame.minX + 48.57, backgroundFrame.minY + 280.74))
-        lineCopy140Path.addLineToPoint(CGPointMake(backgroundFrame.minX + 646.27, backgroundFrame.minY + 280.74))
-        lineCopy140Path.miterLimit = 4;
+        //// line-at-80 Drawing
+        let lineat80Path = UIBezierPath()
+        lineat80Path.moveToPoint(CGPointMake(contents.minX + 0.07449 * contents.width, contents.minY + 0.47105 * contents.height))
+        lineat80Path.addLineToPoint(CGPointMake(contents.minX + 0.99122 * contents.width, contents.minY + 0.47105 * contents.height))
+        lineat80Path.miterLimit = 4;
         
-        lineCopy140Path.lineCapStyle = CGLineCap.Square;
+        lineat80Path.lineCapStyle = .Square;
         
-        lineCopy140Path.lineJoinStyle = CGLineJoin.Round;
+        lineat80Path.lineJoinStyle = .Round;
         
-        lineCopy140Path.usesEvenOddFillRule = true;
+        lineat80Path.usesEvenOddFillRule = true;
         
-        strokeColor.setStroke()
-        lineCopy140Path.lineWidth = 3
-        lineCopy140Path.stroke()
+        horizontalLineColor.setStroke()
+        lineat80Path.lineWidth = 3
+        CGContextSaveGState(context)
+        CGContextSetLineDash(context, 0, [3, 11], 2)
+        lineat80Path.stroke()
+        CGContextRestoreGState(context)
         
         
-        //// Label Drawing
-        let labelRect = CGRectMake(backgroundFrame.minX + 6.81, backgroundFrame.minY + 69, 35.25, 34)
-        let labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        labelStyle.alignment = NSTextAlignment.Left
+        //// y-axis-300-label Drawing
+        let yaxis300labelRect = CGRectMake(contents.minX + floor(contents.width * 0.00000 + 0.5), contents.minY + floor(contents.height * 0.11572 + 0.5), floor(contents.width * 0.05919 + 0.5) - floor(contents.width * 0.00000 + 0.5), floor(contents.height * 0.17271 + 0.5) - floor(contents.height * 0.11572 + 0.5))
+        let yaxis300labelTextContent = NSString(string: "300")
+        let yaxis300labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        yaxis300labelStyle.alignment = .Right
         
-        let labelFontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 20)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: labelStyle]
+        let yaxis300labelFontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans", size: 10)!, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: yaxis300labelStyle]
         
-        "300".drawInRect(labelRect, withAttributes: labelFontAttributes)
+        let yaxis300labelTextHeight: CGFloat = yaxis300labelTextContent.boundingRectWithSize(CGSizeMake(yaxis300labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: yaxis300labelFontAttributes, context: nil).size.height
+        CGContextSaveGState(context)
+        CGContextClipToRect(context, yaxis300labelRect);
+        yaxis300labelTextContent.drawInRect(CGRectMake(yaxis300labelRect.minX, yaxis300labelRect.minY + (yaxis300labelRect.height - yaxis300labelTextHeight) / 2, yaxis300labelRect.width, yaxis300labelTextHeight), withAttributes: yaxis300labelFontAttributes)
+        CGContextRestoreGState(context)
         
         
-        //// Label 2 Drawing
-        let label2Rect = CGRectMake(backgroundFrame.minX + 6.81, backgroundFrame.minY + 156, 35.25, 34)
-        let label2Style = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        label2Style.alignment = NSTextAlignment.Left
+        //// y-axis-180-label Drawing
+        let yaxis180labelRect = CGRectMake(contents.minX + floor(contents.width * 0.00000 + 0.5), contents.minY + floor(contents.height * 0.26943 + 0.5), floor(contents.width * 0.05919 + 0.5) - floor(contents.width * 0.00000 + 0.5), floor(contents.height * 0.32642 + 0.5) - floor(contents.height * 0.26943 + 0.5))
+        let yaxis180labelTextContent = NSString(string: "180")
+        let yaxis180labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        yaxis180labelStyle.alignment = .Right
         
-        let label2FontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 20)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: label2Style]
+        let yaxis180labelFontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans", size: 10)!, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: yaxis180labelStyle]
         
-        "180".drawInRect(label2Rect, withAttributes: label2FontAttributes)
+        let yaxis180labelTextHeight: CGFloat = yaxis180labelTextContent.boundingRectWithSize(CGSizeMake(yaxis180labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: yaxis180labelFontAttributes, context: nil).size.height
+        CGContextSaveGState(context)
+        CGContextClipToRect(context, yaxis180labelRect);
+        yaxis180labelTextContent.drawInRect(CGRectMake(yaxis180labelRect.minX, yaxis180labelRect.minY + (yaxis180labelRect.height - yaxis180labelTextHeight) / 2, yaxis180labelRect.width, yaxis180labelTextHeight), withAttributes: yaxis180labelFontAttributes)
+        CGContextRestoreGState(context)
         
         
-        //// Label 3 Drawing
-        let label3Rect = CGRectMake(backgroundFrame.minX + 14.81, backgroundFrame.minY + 260, 23.83, 33)
-        let label3Style = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        label3Style.alignment = NSTextAlignment.Left
+        //// y-axis-80-label Drawing
+        let yaxis80labelRect = CGRectMake(contents.minX + floor(contents.width * 0.00000 + 0.5), contents.minY + floor(contents.height * 0.44387 + 0.5), floor(contents.width * 0.05919 + 0.5) - floor(contents.width * 0.00000 + 0.5), floor(contents.height * 0.50086 + 0.5) - floor(contents.height * 0.44387 + 0.5))
+        let yaxis80labelTextContent = NSString(string: "80")
+        let yaxis80labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        yaxis80labelStyle.alignment = .Right
         
-        let label3FontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 20)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: label3Style]
+        let yaxis80labelFontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans", size: 10)!, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: yaxis80labelStyle]
         
-        "80".drawInRect(label3Rect, withAttributes: label3FontAttributes)
+        let yaxis80labelTextHeight: CGFloat = yaxis80labelTextContent.boundingRectWithSize(CGSizeMake(yaxis80labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: yaxis80labelFontAttributes, context: nil).size.height
+        CGContextSaveGState(context)
+        CGContextClipToRect(context, yaxis80labelRect);
+        yaxis80labelTextContent.drawInRect(CGRectMake(yaxis80labelRect.minX, yaxis80labelRect.minY + (yaxis80labelRect.height - yaxis80labelTextHeight) / 2, yaxis80labelRect.width, yaxis80labelTextHeight), withAttributes: yaxis80labelFontAttributes)
+        CGContextRestoreGState(context)
         
         
-        //// Label 4 Drawing
-        let label4Rect = CGRectMake(backgroundFrame.minX + 14.81, backgroundFrame.minY + 359, 23.83, 34)
-        let label4Style = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        label4Style.alignment = NSTextAlignment.Left
+        //// y-axis-40-label Drawing
+        let yaxis40labelRect = CGRectMake(contents.minX + floor(contents.width * 0.00000 + 0.5), contents.minY + floor(contents.height * 0.60276 + 0.5), floor(contents.width * 0.05919 + 0.5) - floor(contents.width * 0.00000 + 0.5), floor(contents.height * 0.65976 + 0.5) - floor(contents.height * 0.60276 + 0.5))
+        let yaxis40labelTextContent = NSString(string: "40")
+        let yaxis40labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        yaxis40labelStyle.alignment = .Right
         
-        let label4FontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 20)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: label4Style]
+        let yaxis40labelFontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans", size: 10)!, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: yaxis40labelStyle]
         
-        "40".drawInRect(label4Rect, withAttributes: label4FontAttributes)
+        let yaxis40labelTextHeight: CGFloat = yaxis40labelTextContent.boundingRectWithSize(CGSizeMake(yaxis40labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: yaxis40labelFontAttributes, context: nil).size.height
+        CGContextSaveGState(context)
+        CGContextClipToRect(context, yaxis40labelRect);
+        yaxis40labelTextContent.drawInRect(CGRectMake(yaxis40labelRect.minX, yaxis40labelRect.minY + (yaxis40labelRect.height - yaxis40labelTextHeight) / 2, yaxis40labelRect.width, yaxis40labelTextHeight), withAttributes: yaxis40labelFontAttributes)
+        CGContextRestoreGState(context)
         
         
-        //// Label 5 Drawing
-        let label5Rect = CGRectMake(backgroundFrame.minX + 92.81, backgroundFrame.minY, 11.42, 34)
-        let label5Style = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        label5Style.alignment = NSTextAlignment.Left
+        //// hour-5-label Drawing
+        let hour5labelRect = CGRectMake(contents.minX + floor(contents.width * 0.82087 + 0.5), contents.minY + floor(contents.height * 0.00000 + 0.5), floor(contents.width * 0.88941 + 0.5) - floor(contents.width * 0.82087 + 0.5), floor(contents.height * 0.05699 + 0.5) - floor(contents.height * 0.00000 + 0.5))
+        let hour5labelTextContent = NSString(string: "12 p")
+        let hour5labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        hour5labelStyle.alignment = .Center
         
-        let label5FontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 20)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: label5Style]
+        let hour5labelFontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans", size: 10)!, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hour5labelStyle]
         
-        "8".drawInRect(label5Rect, withAttributes: label5FontAttributes)
+        let hour5labelTextHeight: CGFloat = hour5labelTextContent.boundingRectWithSize(CGSizeMake(hour5labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: hour5labelFontAttributes, context: nil).size.height
+        CGContextSaveGState(context)
+        CGContextClipToRect(context, hour5labelRect);
+        hour5labelTextContent.drawInRect(CGRectMake(hour5labelRect.minX, hour5labelRect.minY + (hour5labelRect.height - hour5labelTextHeight) / 2, hour5labelRect.width, hour5labelTextHeight), withAttributes: hour5labelFontAttributes)
+        CGContextRestoreGState(context)
         
         
-        //// Label 6 Drawing
-        let label6Rect = CGRectMake(backgroundFrame.minX + 108.67, backgroundFrame.minY + 3, 9.01, 29)
-        let label6Style = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        label6Style.alignment = NSTextAlignment.Left
+        //// hour-4-label Drawing
+        let hour4labelRect = CGRectMake(contents.minX + floor(contents.width * 0.63084 + 0.5), contents.minY + floor(contents.height * 0.00000 + 0.5), floor(contents.width * 0.69938 + 0.5) - floor(contents.width * 0.63084 + 0.5), floor(contents.height * 0.05699 + 0.5) - floor(contents.height * 0.00000 + 0.5))
+        let hour4labelTextContent = NSString(string: "11 a")
+        let hour4labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        hour4labelStyle.alignment = .Center
         
-        let label6FontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 17)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: label6Style]
+        let hour4labelFontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans", size: 10)!, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hour4labelStyle]
         
-        "a".drawInRect(label6Rect, withAttributes: label6FontAttributes)
+        let hour4labelTextHeight: CGFloat = hour4labelTextContent.boundingRectWithSize(CGSizeMake(hour4labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: hour4labelFontAttributes, context: nil).size.height
+        CGContextSaveGState(context)
+        CGContextClipToRect(context, hour4labelRect);
+        hour4labelTextContent.drawInRect(CGRectMake(hour4labelRect.minX, hour4labelRect.minY + (hour4labelRect.height - hour4labelTextHeight) / 2, hour4labelRect.width, hour4labelTextHeight), withAttributes: hour4labelFontAttributes)
+        CGContextRestoreGState(context)
         
         
-        //// Label 7 Drawing
-        let label7Rect = CGRectMake(backgroundFrame.minX + 416.5, backgroundFrame.minY, 22.83, 34)
-        let label7Style = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        label7Style.alignment = NSTextAlignment.Left
+        //// hour-3-label Drawing
+        let hour3labelRect = CGRectMake(contents.minX + floor(contents.width * 0.46417 + 0.5), contents.minY + floor(contents.height * 0.00000 + 0.5), floor(contents.width * 0.53271 + 0.5) - floor(contents.width * 0.46417 + 0.5), floor(contents.height * 0.05699 + 0.5) - floor(contents.height * 0.00000 + 0.5))
+        let hour3labelTextContent = NSString(string: "10 a")
+        let hour3labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        hour3labelStyle.alignment = .Center
         
-        let label7FontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 20)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: label7Style]
+        let hour3labelFontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans", size: 10)!, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hour3labelStyle]
         
-        "11".drawInRect(label7Rect, withAttributes: label7FontAttributes)
+        let hour3labelTextHeight: CGFloat = hour3labelTextContent.boundingRectWithSize(CGSizeMake(hour3labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: hour3labelFontAttributes, context: nil).size.height
+        CGContextSaveGState(context)
+        CGContextClipToRect(context, hour3labelRect);
+        hour3labelTextContent.drawInRect(CGRectMake(hour3labelRect.minX, hour3labelRect.minY + (hour3labelRect.height - hour3labelTextHeight) / 2, hour3labelRect.width, hour3labelTextHeight), withAttributes: hour3labelFontAttributes)
+        CGContextRestoreGState(context)
         
         
-        //// Label 8 Drawing
-        let label8Rect = CGRectMake(backgroundFrame.minX + 443.79, backgroundFrame.minY + 3, 9.01, 29)
-        let label8Style = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        label8Style.alignment = NSTextAlignment.Left
+        //// hour-2-label Drawing
+        let hour2labelRect = CGRectMake(contents.minX + floor(contents.width * 0.29128 + 0.5), contents.minY + floor(contents.height * 0.00000 + 0.5), floor(contents.width * 0.35981 + 0.5) - floor(contents.width * 0.29128 + 0.5), floor(contents.height * 0.05699 + 0.5) - floor(contents.height * 0.00000 + 0.5))
+        let hour2labelTextContent = NSString(string: "9 a")
+        let hour2labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        hour2labelStyle.alignment = .Center
         
-        let label8FontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 17)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: label8Style]
+        let hour2labelFontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans", size: 10)!, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hour2labelStyle]
         
-        "a".drawInRect(label8Rect, withAttributes: label8FontAttributes)
+        let hour2labelTextHeight: CGFloat = hour2labelTextContent.boundingRectWithSize(CGSizeMake(hour2labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: hour2labelFontAttributes, context: nil).size.height
+        CGContextSaveGState(context)
+        CGContextClipToRect(context, hour2labelRect);
+        hour2labelTextContent.drawInRect(CGRectMake(hour2labelRect.minX, hour2labelRect.minY + (hour2labelRect.height - hour2labelTextHeight) / 2, hour2labelRect.width, hour2labelTextHeight), withAttributes: hour2labelFontAttributes)
+        CGContextRestoreGState(context)
         
         
-        //// Label 9 Drawing
-        let label9Rect = CGRectMake(backgroundFrame.minX + 540.5, backgroundFrame.minY, 22.83, 34)
-        let label9Style = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        label9Style.alignment = NSTextAlignment.Left
+        //// hour-1-label Drawing
+        let hour1labelRect = CGRectMake(contents.minX + floor(contents.width * 0.12773 + 0.5), contents.minY + floor(contents.height * 0.00000 + 0.5), floor(contents.width * 0.19626 + 0.5) - floor(contents.width * 0.12773 + 0.5), floor(contents.height * 0.05699 + 0.5) - floor(contents.height * 0.00000 + 0.5))
+        let hour1labelTextContent = NSString(string: "8 a")
+        let hour1labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        hour1labelStyle.alignment = .Center
         
-        let label9FontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 20)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: label9Style]
+        let hour1labelFontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans", size: 10)!, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hour1labelStyle]
         
-        "12".drawInRect(label9Rect, withAttributes: label9FontAttributes)
+        let hour1labelTextHeight: CGFloat = hour1labelTextContent.boundingRectWithSize(CGSizeMake(hour1labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: hour1labelFontAttributes, context: nil).size.height
+        CGContextSaveGState(context)
+        CGContextClipToRect(context, hour1labelRect);
+        hour1labelTextContent.drawInRect(CGRectMake(hour1labelRect.minX, hour1labelRect.minY + (hour1labelRect.height - hour1labelTextHeight) / 2, hour1labelRect.width, hour1labelTextHeight), withAttributes: hour1labelFontAttributes)
+        CGContextRestoreGState(context)
         
         
-        //// Label 10 Drawing
-        let label10Rect = CGRectMake(backgroundFrame.minX + 567.79, backgroundFrame.minY + 3, 10.01, 29)
-        let label10Style = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        label10Style.alignment = NSTextAlignment.Left
+        //// hour-5-marker Drawing
+        let hour5markerPath = UIBezierPath()
+        hour5markerPath.moveToPoint(CGPointMake(contents.minX + 0.85518 * contents.width, contents.minY + 0.06377 * contents.height))
+        hour5markerPath.addLineToPoint(CGPointMake(contents.minX + 0.85518 * contents.width, contents.minY + 0.09199 * contents.height))
+        hour5markerPath.miterLimit = 4;
         
-        let label10FontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 17)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: label10Style]
+        hour5markerPath.lineCapStyle = .Square;
         
-        "a".drawInRect(label10Rect, withAttributes: label10FontAttributes)
+        hour5markerPath.usesEvenOddFillRule = true;
         
+        hourMarkerStrokeColor.setStroke()
+        hour5markerPath.lineWidth = 1
+        hour5markerPath.stroke()
         
-        //// Label 11 Drawing
-        let label11Rect = CGRectMake(backgroundFrame.minX + 305.5, backgroundFrame.minY, 22.83, 34)
-        let label11Style = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        label11Style.alignment = NSTextAlignment.Left
         
-        let label11FontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 20)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: label11Style]
+        //// hour-4-marker Drawing
+        let hour4markerPath = UIBezierPath()
+        hour4markerPath.moveToPoint(CGPointMake(contents.minX + 0.66612 * contents.width, contents.minY + 0.06377 * contents.height))
+        hour4markerPath.addLineToPoint(CGPointMake(contents.minX + 0.66612 * contents.width, contents.minY + 0.09199 * contents.height))
+        hour4markerPath.miterLimit = 4;
         
-        "10".drawInRect(label11Rect, withAttributes: label11FontAttributes)
+        hour4markerPath.lineCapStyle = .Square;
         
+        hour4markerPath.usesEvenOddFillRule = true;
         
-        //// Label 12 Drawing
-        let label12Rect = CGRectMake(backgroundFrame.minX + 332.79, backgroundFrame.minY + 3, 9.01, 29)
-        let label12Style = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        label12Style.alignment = NSTextAlignment.Left
+        hourMarkerStrokeColor.setStroke()
+        hour4markerPath.lineWidth = 1
+        hour4markerPath.stroke()
         
-        let label12FontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 17)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: label12Style]
         
-        "a".drawInRect(label12Rect, withAttributes: label12FontAttributes)
+        //// hour-3-marker Drawing
+        let hour3markerPath = UIBezierPath()
+        hour3markerPath.moveToPoint(CGPointMake(contents.minX + 0.50049 * contents.width, contents.minY + 0.06718 * contents.height))
+        hour3markerPath.addLineToPoint(CGPointMake(contents.minX + 0.50049 * contents.width, contents.minY + 0.09539 * contents.height))
+        hour3markerPath.miterLimit = 4;
         
+        hour3markerPath.lineCapStyle = .Square;
         
-        //// Label 13 Drawing
-        let label13Rect = CGRectMake(backgroundFrame.minX + 199.81, backgroundFrame.minY, 11.42, 34)
-        let label13Style = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        label13Style.alignment = NSTextAlignment.Left
+        hour3markerPath.usesEvenOddFillRule = true;
         
-        let label13FontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 20)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: label13Style]
+        hourMarkerStrokeColor.setStroke()
+        hour3markerPath.lineWidth = 1
+        hour3markerPath.stroke()
         
-        "9".drawInRect(label13Rect, withAttributes: label13FontAttributes)
         
+        //// hour-2-marker Drawing
+        let hour2markerPath = UIBezierPath()
+        hour2markerPath.moveToPoint(CGPointMake(contents.minX + 0.32549 * contents.width, contents.minY + 0.06377 * contents.height))
+        hour2markerPath.addLineToPoint(CGPointMake(contents.minX + 0.32549 * contents.width, contents.minY + 0.09199 * contents.height))
+        hour2markerPath.miterLimit = 4;
         
-        //// Label 14 Drawing
-        let label14Rect = CGRectMake(backgroundFrame.minX + 215.67, backgroundFrame.minY + 3, 9.01, 29)
-        let label14Style = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        label14Style.alignment = NSTextAlignment.Left
+        hour2markerPath.lineCapStyle = .Square;
         
-        let label14FontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Light", size: 17)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: label14Style]
+        hour2markerPath.usesEvenOddFillRule = true;
         
-        "a".drawInRect(label14Rect, withAttributes: label14FontAttributes)
+        hourMarkerStrokeColor.setStroke()
+        hour2markerPath.lineWidth = 1
+        hour2markerPath.stroke()
         
         
-        //// Line-Copy-145 Drawing
-        let lineCopy145Path = UIBezierPath()
-        lineCopy145Path.moveToPoint(CGPointMake(backgroundFrame.minX + 105.25, backgroundFrame.minY + 38))
-        lineCopy145Path.addLineToPoint(CGPointMake(backgroundFrame.minX + 105.25, backgroundFrame.minY + 54.82))
-        lineCopy145Path.miterLimit = 4;
+        //// hour-1-marker Drawing
+        let hour1markerPath = UIBezierPath()
+        hour1markerPath.moveToPoint(CGPointMake(contents.minX + 0.16143 * contents.width, contents.minY + 0.06377 * contents.height))
+        hour1markerPath.addLineToPoint(CGPointMake(contents.minX + 0.16143 * contents.width, contents.minY + 0.09199 * contents.height))
+        hour1markerPath.miterLimit = 4;
         
-        lineCopy145Path.lineCapStyle = CGLineCap.Square;
+        hour1markerPath.lineCapStyle = .Square;
         
-        lineCopy145Path.usesEvenOddFillRule = true;
+        hour1markerPath.usesEvenOddFillRule = true;
         
-        strokeColor2.setStroke()
-        lineCopy145Path.lineWidth = 1
-        lineCopy145Path.stroke()
-        
-        
-        //// Line-Copy-146 Drawing
-        let lineCopy146Path = UIBezierPath()
-        lineCopy146Path.moveToPoint(CGPointMake(backgroundFrame.minX + 212.22, backgroundFrame.minY + 38))
-        lineCopy146Path.addLineToPoint(CGPointMake(backgroundFrame.minX + 212.22, backgroundFrame.minY + 54.82))
-        lineCopy146Path.miterLimit = 4;
-        
-        lineCopy146Path.lineCapStyle = CGLineCap.Square;
-        
-        lineCopy146Path.usesEvenOddFillRule = true;
-        
-        strokeColor2.setStroke()
-        lineCopy146Path.lineWidth = 1
-        lineCopy146Path.stroke()
-        
-        
-        //// Line-Copy-147 Drawing
-        let lineCopy147Path = UIBezierPath()
-        lineCopy147Path.moveToPoint(CGPointMake(backgroundFrame.minX + 326.32, backgroundFrame.minY + 40.04))
-        lineCopy147Path.addLineToPoint(CGPointMake(backgroundFrame.minX + 326.32, backgroundFrame.minY + 56.85))
-        lineCopy147Path.miterLimit = 4;
-        
-        lineCopy147Path.lineCapStyle = CGLineCap.Square;
-        
-        lineCopy147Path.usesEvenOddFillRule = true;
-        
-        strokeColor3.setStroke()
-        lineCopy147Path.lineWidth = 1
-        lineCopy147Path.stroke()
-        
-        
-        //// Line-Copy-148 Drawing
-        let lineCopy148Path = UIBezierPath()
-        lineCopy148Path.moveToPoint(CGPointMake(backgroundFrame.minX + 434.31, backgroundFrame.minY + 38))
-        lineCopy148Path.addLineToPoint(CGPointMake(backgroundFrame.minX + 434.31, backgroundFrame.minY + 54.82))
-        lineCopy148Path.miterLimit = 4;
-        
-        lineCopy148Path.lineCapStyle = CGLineCap.Square;
-        
-        lineCopy148Path.usesEvenOddFillRule = true;
-        
-        strokeColor3.setStroke()
-        lineCopy148Path.lineWidth = 1
-        lineCopy148Path.stroke()
-        
-        
-        //// Line-Copy-149 Drawing
-        let lineCopy149Path = UIBezierPath()
-        lineCopy149Path.moveToPoint(CGPointMake(backgroundFrame.minX + 557.58, backgroundFrame.minY + 38))
-        lineCopy149Path.addLineToPoint(CGPointMake(backgroundFrame.minX + 557.58, backgroundFrame.minY + 54.82))
-        lineCopy149Path.miterLimit = 4;
-        
-        lineCopy149Path.lineCapStyle = CGLineCap.Square;
-        
-        lineCopy149Path.usesEvenOddFillRule = true;
-        
-        strokeColor3.setStroke()
-        lineCopy149Path.lineWidth = 1
-        lineCopy149Path.stroke()
+        hourMarkerStrokeColor.setStroke()
+        hour1markerPath.lineWidth = 1
+        hour1markerPath.stroke()
     }
-    
-    //// Generated Images
-    
+
     public class func imageOfGraphBackground(viewSize viewSize: CGSize) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(652, 597), false, 0)
-        GraphViews.drawGraphBackground(viewSize: viewSize)
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(viewSize.width, viewSize.height), false, 0)
+        GraphViews.drawGraphBackground(viewWidth: viewSize.width, viewHeight: viewSize.height)
         
-        let imageOfGraphBackground = UIGraphicsGetImageFromCurrentImageContext()!
+        let imageOfGraphBackground = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
         return imageOfGraphBackground
     }
     
-}
 
-@objc protocol StyleKitSettableImage {
-    func setImage(image: UIImage!)
-}
+    public class func drawHealthEvent(eventWidth eventWidth: CGFloat, imageHeight: CGFloat) {
+        
+        //// Frames
+        let frame = CGRectMake(0, 0, eventWidth, imageHeight)
+        // TODO: make this a graph constant. Health event rects are drawn at the bottom of the screen with fixed height, and width corresponding to duration
+        let healthRectHeight: CGFloat = 18.0
+        
+        //// eventRectangle Drawing
+        let eventRectanglePath = UIBezierPath(rect: CGRectMake(0.0, frame.height - healthRectHeight, frame.width, healthRectHeight))
+        Styles.pinkColor.setFill()
+        eventRectanglePath.fill()
+        
+        
+        //// eventLine Drawing
+        let eventLinePath = UIBezierPath(rect: CGRectMake(floor(frame.width * 0.5 - 0.5) + 1.0, 0.0, 1.0, frame.height))
+        Styles.pinkColor.setFill()
+        eventLinePath.fill()
+    }
+    
+    public class func imageOfHealthEvent(duration: CGFloat, graphSize: CGSize) -> UIImage {
+        // TODO: maybe graphSize is set as part of this class? Then times could be passed in also as timeInterval values rather than fractions of the view width...
+        let healthEventToGraphBottomLeading: CGFloat = 5.0
+        let imageHeight = graphSize.height - healthEventToGraphBottomLeading;
+        let eventWidth = floor(duration * graphSize.width)
+        
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(eventWidth, imageHeight), false, 0)
+        GraphViews.drawHealthEvent(eventWidth: eventWidth, imageHeight: imageHeight)
+        
+        let imageOfHealthEvent = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return imageOfHealthEvent
+    }
+    
+    
+    public class func drawGlucoseData(glucoseReadings glucoseReadings: CGSize = CGSizeMake(46, 73)) {
+        //// General Declarations
+        let context = UIGraphicsGetCurrentContext()
+        
+        //// Color Declarations
+        let fillColor = UIColor(red: 0.533, green: 0.761, blue: 0.316, alpha: 1.000)
+        let textForeground = UIColor(red: 0.533, green: 0.761, blue: 0.316, alpha: 1.000)
+        
+        //// Frames
+        let frame = CGRectMake(19, 19, glucoseReadings.width, glucoseReadings.height)
+        
+        
+        //// smallCircleB Drawing
+        let smallCircleBPath = UIBezierPath(ovalInRect: CGRectMake(frame.minX + 37, frame.minY + 54, 9, 10))
+        fillColor.setFill()
+        smallCircleBPath.fill()
+        
+        
+        //// smallCircleA Drawing
+        let smallCircleAPath = UIBezierPath(ovalInRect: CGRectMake(frame.minX, frame.minY + 64, 9, 9))
+        fillColor.setFill()
+        smallCircleAPath.fill()
+        
+        
+        //// largeCircle Drawing
+        let largeCirclePath = UIBezierPath(ovalInRect: CGRectMake(frame.minX, frame.minY, 28, 29))
+        fillColor.setFill()
+        largeCirclePath.fill()
+        
+        
+        //// readingLabel Drawing
+        let readingLabelRect = CGRectMake(frame.minX + 2, frame.minY + 29, 26, 20)
+        let readingLabelTextContent = NSString(string: "98")
+        let readingLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        readingLabelStyle.alignment = .Center
+        
+        let readingLabelFontAttributes = [NSFontAttributeName: UIFont(name: "OpenSans-Bold", size: 20)!, NSForegroundColorAttributeName: textForeground, NSParagraphStyleAttributeName: readingLabelStyle]
+        
+        let readingLabelTextHeight: CGFloat = readingLabelTextContent.boundingRectWithSize(CGSizeMake(readingLabelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: readingLabelFontAttributes, context: nil).size.height
+        CGContextSaveGState(context)
+        CGContextClipToRect(context, readingLabelRect);
+        readingLabelTextContent.drawInRect(CGRectMake(readingLabelRect.minX, readingLabelRect.minY + (readingLabelRect.height - readingLabelTextHeight) / 2, readingLabelRect.width, readingLabelTextHeight), withAttributes: readingLabelFontAttributes)
+        CGContextRestoreGState(context)
+    }
+    
+    // Blood glucose level readings are draw as circles on the graph: large, labeled ones for manual readings, and small circles for those created from monitors. They are colored red, green, or purple, depending upon whether the values are below, within, or above target bounds.
+    // The imageView will cover the width of the graph view, assuming 6 hours, time offsets may be passed in or calculated here. An array of points, probably containing tuples like (reading, time, manualFlag), or (Float, Float, Bool) values is probably minimal. 
+    
+    public class func imageOfGlucoseData(glucoseReadings glucoseReadings: CGSize = CGSizeMake(46, 73)) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(CGSizeMake(96, 137), false, 0)
+        GraphViews.drawGlucoseData(glucoseReadings: glucoseReadings)
+        
+        let imageOfGlucoseData = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return imageOfGlucoseData
+    }
 
-@objc protocol StyleKitSettableSelectedImage {
-    func setSelectedImage(image: UIImage!)
+    
 }
