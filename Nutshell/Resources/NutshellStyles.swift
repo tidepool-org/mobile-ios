@@ -57,7 +57,7 @@ public class Styles: NSObject {
         // event detail view
         "healthkitEventSubtext": (smallBoldFont, pinkColor),
         // table views
-        "tableCellTitle": (mediumRegularFont, darkGreyColor),
+        "tableCellTitle": (mediumSemiboldFont, darkGreyColor),
         "tableCellSubtitle": (smallRegularFont, darkMediumGreyColor),
         // account configuration views
         "accountSettingItem": (mediumRegularFont, darkGreyColor),

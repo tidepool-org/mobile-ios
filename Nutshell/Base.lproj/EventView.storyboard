@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9035"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--EventList-->
@@ -20,7 +21,6 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
-                                <color key="backgroundColor" red="0.94901960780000005" green="0.95294117649999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
                                 </userDefinedRuntimeAttributes>
@@ -58,22 +58,108 @@
         <scene sceneID="ULr-NQ-tPV">
             <objects>
                 <tableViewController title="EventGroup" id="gjn-FB-qdd" customClass="EventGroupTableViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="zmj-7u-0MC" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" id="zmj-7u-0MC" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="eventItemCell" id="t6w-VC-MaZ" customClass="EventGroupTableViewCell" customModule="Nutshell" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="92" width="375" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="t6w-VC-MaZ" id="QIn-qj-9Hx">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="favoriteStarDeselected" translatesAutoresizingMaskIntoConstraints="NO" id="cV0-8T-Gwz">
+                                            <rect key="frame" x="20" y="10" width="18" height="18"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="18" id="TO4-LC-jUB"/>
+                                                <constraint firstAttribute="height" constant="18" id="ZPb-31-z4a"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d9p-x8-wr7" userLabel="titleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                            <rect key="frame" x="53" y="5" width="66" height="24"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="24" id="Vts-kJ-Vv0"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellTitle"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B5R-W3-L53" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                            <rect key="frame" x="53" y="53" width="66" height="24"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellSubtitle"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ThreeTacosDemoPic.png" translatesAutoresizingMaskIntoConstraints="NO" id="qHa-us-Md7">
+                                            <rect key="frame" x="303" y="8" width="64" height="64"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="64" id="FBM-qD-xXG"/>
+                                                <constraint firstAttribute="width" constant="64" id="bB1-UX-z1H"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hkV-fw-Ufw" userLabel="timeLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                            <rect key="frame" x="53" y="29" width="66" height="24"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellSubtitle"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="qHa-us-Md7" secondAttribute="trailing" constant="8" id="0XJ-Or-lXy"/>
+                                        <constraint firstAttribute="bottom" secondItem="qHa-us-Md7" secondAttribute="bottom" constant="8" id="4X3-D5-UTS"/>
+                                        <constraint firstItem="B5R-W3-L53" firstAttribute="height" secondItem="hkV-fw-Ufw" secondAttribute="height" id="6Ca-kk-N8g"/>
+                                        <constraint firstItem="qHa-us-Md7" firstAttribute="trailing" secondItem="QIn-qj-9Hx" secondAttribute="trailingMargin" constant="8" id="BVg-Nf-D2C"/>
+                                        <constraint firstItem="d9p-x8-wr7" firstAttribute="leading" secondItem="cV0-8T-Gwz" secondAttribute="trailing" constant="15" id="EHU-WF-HYC"/>
+                                        <constraint firstItem="B5R-W3-L53" firstAttribute="top" secondItem="hkV-fw-Ufw" secondAttribute="bottom" id="Ekv-i6-Oze"/>
+                                        <constraint firstAttribute="trailing" secondItem="qHa-us-Md7" secondAttribute="trailing" constant="8" id="I2n-fR-PnD"/>
+                                        <constraint firstItem="cV0-8T-Gwz" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leading" constant="20" id="K0A-uh-5Ok"/>
+                                        <constraint firstItem="cV0-8T-Gwz" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leadingMargin" constant="12" id="MXs-kH-AFK"/>
+                                        <constraint firstItem="hkV-fw-Ufw" firstAttribute="width" secondItem="d9p-x8-wr7" secondAttribute="width" id="OGU-nU-dIe"/>
+                                        <constraint firstItem="cV0-8T-Gwz" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="topMargin" constant="10" id="Q3x-lg-Xda"/>
+                                        <constraint firstItem="B5R-W3-L53" firstAttribute="width" secondItem="hkV-fw-Ufw" secondAttribute="width" id="QQT-hd-0Fh"/>
+                                        <constraint firstItem="qHa-us-Md7" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" constant="8" id="VFL-UX-BkH"/>
+                                        <constraint firstItem="qHa-us-Md7" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="d9p-x8-wr7" secondAttribute="trailing" constant="10" id="afq-Ci-MoC"/>
+                                        <constraint firstItem="qHa-us-Md7" firstAttribute="bottom" secondItem="QIn-qj-9Hx" secondAttribute="bottomMargin" constant="8" id="c9t-0A-Gmj"/>
+                                        <constraint firstItem="hkV-fw-Ufw" firstAttribute="height" secondItem="d9p-x8-wr7" secondAttribute="height" id="cMC-gN-cqj"/>
+                                        <constraint firstItem="hkV-fw-Ufw" firstAttribute="leading" secondItem="d9p-x8-wr7" secondAttribute="leading" id="d89-zi-cii"/>
+                                        <constraint firstItem="hkV-fw-Ufw" firstAttribute="top" secondItem="d9p-x8-wr7" secondAttribute="bottom" id="q3G-hI-BaG"/>
+                                        <constraint firstItem="qHa-us-Md7" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="topMargin" constant="8" id="rzV-Gf-7e0"/>
+                                        <constraint firstItem="d9p-x8-wr7" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" constant="5" id="trf-Lh-5Zj"/>
+                                        <constraint firstItem="cV0-8T-Gwz" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" constant="10" id="vlC-7w-ECx"/>
+                                        <constraint firstItem="B5R-W3-L53" firstAttribute="leading" secondItem="hkV-fw-Ufw" secondAttribute="leading" id="yVd-J0-9FG"/>
+                                    </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="MXs-kH-AFK"/>
+                                            <exclude reference="Q3x-lg-Xda"/>
+                                            <exclude reference="4X3-D5-UTS"/>
+                                            <exclude reference="BVg-Nf-D2C"/>
+                                            <exclude reference="I2n-fR-PnD"/>
+                                            <exclude reference="c9t-0A-Gmj"/>
+                                            <exclude reference="rzV-Gf-7e0"/>
+                                        </mask>
+                                    </variation>
                                 </tableViewCellContentView>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
+                                    <outlet property="favoriteStar" destination="cV0-8T-Gwz" id="2IF-Jp-kfX"/>
+                                    <outlet property="locationString" destination="B5R-W3-L53" id="D8M-8E-erF"/>
+                                    <outlet property="photoImageView" destination="qHa-us-Md7" id="2k2-Za-gKJ"/>
+                                    <outlet property="timeString" destination="hkV-fw-Ufw" id="jb8-JI-ydm"/>
+                                    <outlet property="titleString" destination="d9p-x8-wr7" id="8Lg-um-f95"/>
                                     <segue destination="S8b-Gx-dOJ" kind="show" identifier="EventItemDetailSegue" id="ZxF-XL-Bbb"/>
                                 </connections>
                             </tableViewCell>
@@ -312,6 +398,7 @@
     <resources>
         <image name="ThreeTacosDemoPic.png" width="1280" height="456"/>
         <image name="add-button.png" width="24" height="24"/>
+        <image name="favoriteStarDeselected" width="35" height="35"/>
         <image name="menu-button.png" width="22" height="15"/>
     </resources>
 </document>

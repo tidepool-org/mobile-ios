@@ -48,15 +48,18 @@ class EventGroupTableViewController: BaseUITableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("eventItemCell", forIndexPath: indexPath) as! EventGroupTableViewCell
-
+        
         // Configure the cell...
-       if (indexPath.item < eventGroup?.itemArray.count) {
-            let eventItem = eventGroup?.itemArray[indexPath.item]
-            // Configure the cell...
-            cell.textLabel?.text = eventItem!.subtext
-            cell.eventItem = eventItem
+        if (indexPath.item < eventGroup?.itemArray.count) {
+            if let eventItem = eventGroup?.itemArray[indexPath.item] {
+                // Configure the cell...
+                cell.titleString.text = eventItem.subtext
+                cell.timeString.text = "Home" // TODO: hookup!
+                cell.locationString.text = eventItem.location
+                cell.eventItem = eventItem
+            }
         }
-
+        
         return cell
     }
 

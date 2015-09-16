@@ -17,7 +17,7 @@ import UIKit
 
 // This intermediate class is used to enable UITableView views in storyboards to show backgrounds with NutshellStyles coloring.
 
-@IBDesignable class NutshellUITableViewCell: UITableViewCell {
+@IBDesignable class NutshellUITableViewCell: BaseUITableViewCell {
     
     @IBInspectable var usage: String = "" {
         didSet {
@@ -34,4 +34,5 @@ import UIKit
             self.textLabel?.textColor = textColor
         }
     }
+
 }
