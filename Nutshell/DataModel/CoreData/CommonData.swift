@@ -21,7 +21,10 @@ class CommonData: NSManagedObject {
                 case "basal":               newObject = Basal.fromJSON(json, moc: moc)
                 case "bolus":               newObject = Bolus.fromJSON(json, moc: moc)
                 case "cbg":                 newObject = ContinuousGlucose.fromJSON(json, moc: moc)
-                case "deviceMeta":          newObject = DeviceMetadata.fromJSON(json, moc: moc)
+                
+                // The documentation indicates "deviceMeta", but the actual JSON shows "deviceEvent"
+                case "deviceEvent", "deviceMeta": newObject = DeviceMetadata.fromJSON(json, moc: moc)
+                
                 case "food":                newObject = Food.fromJSON(json, moc: moc)
                 case "grabbag":             newObject = GrabBag.fromJSON(json, moc: moc)
                 case "bloodKetone":         newObject = BloodKetone.fromJSON(json, moc: moc)
