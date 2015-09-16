@@ -49,10 +49,10 @@ class DatabaseUtils {
         }
     }
     
-    class func getEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate) throws -> [CommonData]? {
+    class func getEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate) throws -> [CommonData] {
         let request = NSFetchRequest(entityName: "CommonData")
         request.predicate = NSPredicate(format: "(time >= %@) AND (time <= %@)", fromTime, toTime)
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
-        return try moc.executeFetchRequest(request) as? [CommonData]
+        return try moc.executeFetchRequest(request) as! [CommonData]
     }
 }
