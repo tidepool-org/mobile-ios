@@ -8,10 +8,19 @@
 
 import Foundation
 import CoreData
-
+import SwiftyJSON
 
 class Prime: DeviceMetadata {
+    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Prime? {
+        if let entityDescription = NSEntityDescription.entityForName("Prime", inManagedObjectContext: moc) {
+            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Prime
+            
+            me.primeTarget = json["primeTarget"].string
+            me.volume = NSDecimalNumber(string: json["volume"].string)
 
-// Insert code here to add functionality to your managed object subclass
-
+            return me
+        }
+        
+        return nil
+    }
 }

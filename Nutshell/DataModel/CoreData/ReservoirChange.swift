@@ -8,10 +8,18 @@
 
 import Foundation
 import CoreData
-
+import SwiftyJSON
 
 class ReservoirChange: DeviceMetadata {
-
-// Insert code here to add functionality to your managed object subclass
-
+    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> ReservoirChange? {
+        if let entityDescription = NSEntityDescription.entityForName("ReservoirChange", inManagedObjectContext: moc) {
+            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! ReservoirChange
+            
+            me.status = json["status"].string
+            
+            return me
+        }
+        
+        return nil
+    }
 }

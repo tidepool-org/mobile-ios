@@ -14,5 +14,15 @@ import CoreData
 
 extension Wizard {
 
+    @NSManaged var recommendedCarb: NSDecimalNumber?
+    @NSManaged var recommendedCorrection: NSDecimalNumber?
+    @NSManaged var recommendedNet: NSDecimalNumber?
+    @NSManaged var bgInput: NSDecimalNumber?
+    @NSManaged var carbInput: NSDecimalNumber?
+    @NSManaged var insulinOnBoard: NSDecimalNumber?
+    @NSManaged var insulinCarbRatio: NSDecimalNumber?
+    @NSManaged var insulinSensitivity: NSDecimalNumber?
+    @NSManaged var bgTargetJSON: String?
+    @NSManaged var bolus: String?
 
 }

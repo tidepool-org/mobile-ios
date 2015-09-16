@@ -96,19 +96,17 @@ class APIConnector {
             if ( result.isSuccess ) {
                 // Look for the auth token
                 self.sessionToken = response!.allHeaderFields[APIConnector.kSessionIdHeader] as! String?
-                var json = JSON(result.value!)
+                let json = JSON(result.value!)
                 
                 // Create the User object
                 let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                let entity = NSEntityDescription.entityForName("User", inManagedObjectContext: appDelegate.managedObjectContext)
-                let user = NSManagedObject(entity: entity!, insertIntoManagedObjectContext: nil) as! User
-                
-                user.userid = json["userid"].string
-                user.username = json["username"].string
-                
-                self.currentUserId = user.userid
-                
-                completion(Result.Success(user))
+                if let user = User.fromJSON(json, moc: appDelegate.managedObjectContext) {
+                    completion(Result.Success(user))
+                } else {
+                    completion(Result.Failure(nil, NSError(domain: APIConnector.kNutshellErrorDomain,
+                        code: -1,
+                        userInfo: ["description":"Could not create user from JSON", "result":result.value!])))
+                }
             } else {
                 completion(Result.Failure(nil, result.error!))
             }
@@ -120,17 +118,20 @@ class APIConnector {
         self.sessionToken = nil
     }
     
-    func getUserData(userId: String, completion: (Result<AnyObject>) -> (Void)) {
+    /** For now this method returns the result as a JSON object. The result set can be huge, and we want processing to
+     *  happen outside of this method until we have something a little less firehose-y.
+     */
+    func getUserData(userId: String, completion: (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user data
         let endpoint = "data/" + userId;
         
         sendRequest(Method.GET, endpoint: endpoint).responseJSON { (request, response, result) -> Void in
             if ( result.isSuccess ) {
-                
-                completion(result)
+                let json = JSON(result.value!)
+                completion(Result.Success(json))
             } else {
                 // Failure
-                completion(result)
+                completion(Result.Failure(nil, result.error!))
             }
         }
     }

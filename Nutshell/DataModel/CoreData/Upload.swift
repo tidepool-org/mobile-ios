@@ -8,10 +8,24 @@
 
 import Foundation
 import CoreData
-
+import SwiftyJSON
 
 class Upload: CommonData {
-
-// Insert code here to add functionality to your managed object subclass
-
+    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Upload? {
+        if let entityDescription = NSEntityDescription.entityForName("Upload", inManagedObjectContext: moc) {
+            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Upload
+            
+            me.timezone = json["timezone"].string
+            me.version = json["version"].string
+            me.byUser = json["byUser"].string
+            me.deviceTagsJSON = json["deviceTags"].string
+            me.deviceManufacturersJSON = json["deviceManufacturers"].string
+            me.deviceModel = json["deviceModel"].string
+            me.deviceSerialNumber = json["deviceSerialNumber"].string
+            
+            return me
+        }
+        
+        return nil
+    }
 }

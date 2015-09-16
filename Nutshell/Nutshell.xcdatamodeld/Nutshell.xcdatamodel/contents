@@ -76,7 +76,18 @@
         <attribute name="subType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Settings" representedClassName=".Settings" parentEntity="CommonData" syncable="YES"/>
+    <entity name="Settings" representedClassName=".Settings" parentEntity="CommonData" syncable="YES">
+        <attribute name="activeSchedule" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="basalSchedulesJSON" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bgTargetJSON" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bgTargetsJSON" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="carbRatioJSON" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="carbRatiosJSON" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="insulinSensitivitiesJSON" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="insulinSensitivityJSON" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="unitsBG" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="unitsCarb" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="Status" representedClassName=".Status" parentEntity="DeviceMetadata" syncable="YES">
         <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="reason" optional="YES" attributeType="String" syncable="YES"/>
@@ -89,7 +100,15 @@
         <attribute name="changeTimezone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="changeTo" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
-    <entity name="Upload" representedClassName=".Upload" parentEntity="CommonData" syncable="YES"/>
+    <entity name="Upload" representedClassName=".Upload" parentEntity="CommonData" syncable="YES">
+        <attribute name="byUser" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="deviceManufacturersJSON" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="deviceModel" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="deviceSerialNumber" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="deviceTagsJSON" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timezone" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="version" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="UrineKetone" representedClassName=".UrineKetone" parentEntity="CommonData" syncable="YES">
         <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -98,7 +117,18 @@
         <attribute name="userid" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="username" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Wizard" representedClassName=".Wizard" parentEntity="CommonData" syncable="YES"/>
+    <entity name="Wizard" representedClassName=".Wizard" parentEntity="CommonData" syncable="YES">
+        <attribute name="bgInput" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="bgTargetJSON" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="bolus" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="carbInput" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="insulinCarbRatio" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="insulinOnBoard" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="insulinSensitivity" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="recommendedCarb" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="recommendedCorrection" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="recommendedNet" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+    </entity>
     <elements>
         <element name="User" positionX="-63" positionY="-18" width="128" height="90"/>
         <element name="CommonData" positionX="-54" positionY="18" width="128" height="210"/>
@@ -110,9 +140,9 @@
         <element name="GrabBag" positionX="-9" positionY="45" width="128" height="60"/>
         <element name="BloodKetone" positionX="0" positionY="54" width="128" height="60"/>
         <element name="SelfMonitoringGlucose" positionX="9" positionY="63" width="128" height="75"/>
-        <element name="Settings" positionX="18" positionY="72" width="128" height="45"/>
-        <element name="Upload" positionX="27" positionY="81" width="128" height="45"/>
-        <element name="Wizard" positionX="36" positionY="90" width="128" height="45"/>
+        <element name="Settings" positionX="18" positionY="72" width="128" height="195"/>
+        <element name="Upload" positionX="27" positionY="81" width="128" height="150"/>
+        <element name="Wizard" positionX="36" positionY="90" width="128" height="195"/>
         <element name="Alarm" positionX="-9" positionY="81" width="128" height="75"/>
         <element name="Prime" positionX="0" positionY="90" width="128" height="75"/>
         <element name="ReservoirChange" positionX="9" positionY="99" width="128" height="60"/>

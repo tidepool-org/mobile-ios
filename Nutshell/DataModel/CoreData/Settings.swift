@@ -8,10 +8,27 @@
 
 import Foundation
 import CoreData
-
+import SwiftyJSON
 
 class Settings: CommonData {
-
-// Insert code here to add functionality to your managed object subclass
-
+    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Settings? {
+        if let entityDescription = NSEntityDescription.entityForName("Settings", inManagedObjectContext: moc) {
+            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Settings
+            
+            me.activeSchedule = json["activeSchedule"].string
+            me.unitsCarb = json["unitsCarb"].string
+            me.unitsBG = json["unitsBG"].string
+            me.basalSchedulesJSON = json["basalSchedules"].string
+            me.carbRatioJSON = json["carbRatio"].string
+            me.carbRatiosJSON = json["carbRatios"].string
+            me.insulinSensitivityJSON = json["insulinSensitivity"].string
+            me.insulinSensitivitiesJSON = json["insulinSensitivities"].string
+            me.bgTargetJSON = json["bgTarget"].string
+            me.bgTargetsJSON = json["bgTargets"].string
+            
+            return me
+        }
+        
+        return nil
+    }
 }

@@ -8,10 +8,20 @@
 
 import Foundation
 import CoreData
-
+import SwiftyJSON
 
 class ContinuousGlucose: CommonData {
 
-// Insert code here to add functionality to your managed object subclass
-
+    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> ContinuousGlucose? {
+        if let entityDescription = NSEntityDescription.entityForName("ContinuousGlucose", inManagedObjectContext: moc) {
+            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! ContinuousGlucose
+            
+            me.value = json["value"].string
+            me.isig = json["isig"].string
+            
+            return me
+        }
+        
+        return nil
+    }
 }

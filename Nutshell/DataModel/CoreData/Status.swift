@@ -8,10 +8,20 @@
 
 import Foundation
 import CoreData
-
+import SwiftyJSON
 
 class Status: DeviceMetadata {
-
-// Insert code here to add functionality to your managed object subclass
-
+    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Status? {
+        if let entityDescription = NSEntityDescription.entityForName("Status", inManagedObjectContext: moc) {
+            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Status
+            
+            me.status = json["status"].string
+            me.reason = json["reason"].string
+            me.duration = json["duration"].number
+            
+            return me
+        }
+        
+        return nil
+    }
 }

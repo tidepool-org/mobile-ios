@@ -14,5 +14,12 @@ import CoreData
 
 extension Upload {
 
+    @NSManaged var timezone: String?
+    @NSManaged var version: String?
+    @NSManaged var byUser: String?
+    @NSManaged var deviceTagsJSON: String?
+    @NSManaged var deviceManufacturersJSON: String?
+    @NSManaged var deviceModel: String?
+    @NSManaged var deviceSerialNumber: String?
 
 }

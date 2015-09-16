@@ -8,10 +8,17 @@
 
 import Foundation
 import CoreData
-
+import SwiftyJSON
 
 class BloodKetone: CommonData {
-
-// Insert code here to add functionality to your managed object subclass
-
+    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> BloodKetone? {
+        if let entityDescription = NSEntityDescription.entityForName("BloodKetone", inManagedObjectContext: moc) {
+            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! BloodKetone
+            
+            me.value = NSDecimalNumber(string: json["value"].string)
+            
+            return me
+        }
+        return nil
+    }
 }

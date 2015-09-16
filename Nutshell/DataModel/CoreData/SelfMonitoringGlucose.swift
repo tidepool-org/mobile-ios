@@ -8,10 +8,19 @@
 
 import Foundation
 import CoreData
-
+import SwiftyJSON
 
 class SelfMonitoringGlucose: CommonData {
-
-// Insert code here to add functionality to your managed object subclass
-
+    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> SelfMonitoringGlucose? {
+        if let entityDescription = NSEntityDescription.entityForName("SelfMonitoringGlucose", inManagedObjectContext: moc) {
+            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! SelfMonitoringGlucose
+            
+            me.subType = json["subType"].string
+            me.value = json["value"].string
+            
+            return me
+        }
+        
+        return nil
+    }
 }

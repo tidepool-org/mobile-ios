@@ -8,10 +8,22 @@
 
 import Foundation
 import CoreData
-
+import SwiftyJSON
 
 class Note: CommonData {
-
-// Insert code here to add functionality to your managed object subclass
-
+    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Note? {
+        if let entityDescription = NSEntityDescription.entityForName("Note", inManagedObjectContext: moc) {
+            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Note
+            
+            me.shortText = json["shortText"].string
+            me.text = json["text"].string
+            me.creatorId = json["creatorId"].string
+            me.reference = json["reference"].string
+            me.displayTime = NutUtils.dateFromJSON(json["displayTime"].string)
+            
+            return me
+        }
+        
+        return nil
+    }
 }

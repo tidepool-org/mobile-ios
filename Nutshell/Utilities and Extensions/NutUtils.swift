@@ -23,5 +23,23 @@ class NutUtils {
             boolToVoid(result)
         }
     }
+    
+    class func dateFromJSON(json: String?) -> NSDate? {
+        if let json = json {
+            return jsonDateFormatter.dateFromString(json)
+        }
+        return nil
+    }
 
+    /** Date formatter for JSON date strings */
+    class var jsonDateFormatter : NSDateFormatter {
+        struct Static {
+            static let instance: NSDateFormatter = {
+                let dateFormatter = NSDateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+                return dateFormatter
+                }()
+        }
+        return Static.instance
+    }
 }

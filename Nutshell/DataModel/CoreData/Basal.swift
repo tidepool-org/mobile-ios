@@ -8,10 +8,21 @@
 
 import Foundation
 import CoreData
-
+import SwiftyJSON
 
 class Basal: CommonData {
 
-// Insert code here to add functionality to your managed object subclass
-
+    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Basal? {
+        if let entityDescription = NSEntityDescription.entityForName("Basal", inManagedObjectContext: moc) {
+            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Basal
+            
+            me.deliveryType = json["deliveryType"].string
+            me.value = NSDecimalNumber(string: json["value"].string)
+            me.duration = json["duration"].number
+            me.insulin = json["insulin"].string
+            
+            return me
+        }
+        return nil
+    }
 }

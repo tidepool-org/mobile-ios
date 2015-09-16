@@ -14,5 +14,15 @@ import CoreData
 
 extension Settings {
 
+    @NSManaged var activeSchedule: String?
+    @NSManaged var unitsCarb: String?
+    @NSManaged var unitsBG: String?
+    @NSManaged var basalSchedulesJSON: String?
+    @NSManaged var carbRatioJSON: String?
+    @NSManaged var carbRatiosJSON: String?
+    @NSManaged var insulinSensitivityJSON: String?
+    @NSManaged var insulinSensitivitiesJSON: String?
+    @NSManaged var bgTargetJSON: String?
+    @NSManaged var bgTargetsJSON: String?
 
 }
