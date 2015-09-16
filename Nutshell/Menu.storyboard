@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="JIl-yM-Pcy">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9046" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="JIl-yM-Pcy">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9035"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="OpenSans-Regular.ttf">
@@ -304,18 +304,11 @@
                                             <constraint firstAttribute="bottom" secondItem="gfS-gJ-PPr" secondAttribute="bottom" constant="25" id="wmX-FZ-k3O"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f6j-vX-aYU" userLabel="bottomSettingsView">
-                                        <rect key="frame" x="0.0" y="230" width="320" height="274"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="274" id="6kC-Ku-yEm"/>
-                                        </constraints>
-                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kyg-UA-6DK" userLabel="glucoseSetView">
                                         <rect key="frame" x="0.0" y="230" width="320" height="274"/>
                                         <subviews>
                                             <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yct-Ki-QpA">
-                                                <rect key="frame" x="0.0" y="0.0" width="320" height="220"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="216"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="224" id="QUY-sd-ZXe"/>
                                                 </constraints>
@@ -380,6 +373,147 @@
                                             <constraint firstItem="yct-Ki-QpA" firstAttribute="top" secondItem="Kyg-UA-6DK" secondAttribute="top" id="oWM-PG-oTW"/>
                                             <constraint firstItem="yct-Ki-QpA" firstAttribute="leading" secondItem="Kyg-UA-6DK" secondAttribute="leading" id="wPo-PJ-nuf"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="ANa-Nn-PUg"/>
+                                            </mask>
+                                        </variation>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f6j-vX-aYU" userLabel="bottomSettingsView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="230" width="320" height="274"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DKr-vE-7fe" userLabel="logoutView">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="160"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wxV-gH-RAa" userLabel="line separator" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="158" width="320" height="1"/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="7EN-B2-q4R"/>
+                                                            <constraint firstAttribute="height" constant="1" id="oLb-r3-aJQ"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <variation key="default">
+                                                            <mask key="constraints">
+                                                                <exclude reference="7EN-B2-q4R"/>
+                                                            </mask>
+                                                        </variation>
+                                                    </view>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Logged in with" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="neJ-J2-eiz" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="15" y="28" width="290" height="25"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="25" id="o56-xz-BfM"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="accountSettingItem"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="john@doe.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qGX-Sz-6wG">
+                                                        <rect key="frame" x="15" y="63" width="290" height="21"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="21" id="hd9-r1-Ck1"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cpu-TM-zMz" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="15" y="99" width="62" height="36"/>
+                                                        <state key="normal" title="Log out"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="advisoryText"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="logOutTapped:" destination="oyN-O1-gVa" eventType="touchUpInside" id="JRY-L8-D9u"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="160" id="F32-te-Aj6"/>
+                                                    <constraint firstAttribute="trailing" secondItem="wxV-gH-RAa" secondAttribute="trailing" id="HdN-qP-xRk"/>
+                                                    <constraint firstItem="Cpu-TM-zMz" firstAttribute="leading" secondItem="DKr-vE-7fe" secondAttribute="leading" constant="15" id="Mcb-VS-ofN"/>
+                                                    <constraint firstItem="qGX-Sz-6wG" firstAttribute="top" secondItem="neJ-J2-eiz" secondAttribute="bottom" constant="10" id="VSO-N4-KT1"/>
+                                                    <constraint firstAttribute="trailing" secondItem="neJ-J2-eiz" secondAttribute="trailing" constant="15" id="ZHM-yL-Z01"/>
+                                                    <constraint firstItem="qGX-Sz-6wG" firstAttribute="top" secondItem="Cpu-TM-zMz" secondAttribute="bottom" constant="-30" id="aX9-tU-4Ms"/>
+                                                    <constraint firstItem="neJ-J2-eiz" firstAttribute="top" secondItem="DKr-vE-7fe" secondAttribute="top" constant="28" id="gI7-Qi-8XW"/>
+                                                    <constraint firstItem="Cpu-TM-zMz" firstAttribute="top" secondItem="qGX-Sz-6wG" secondAttribute="bottom" constant="15" id="gwN-J0-kDf"/>
+                                                    <constraint firstItem="qGX-Sz-6wG" firstAttribute="leading" secondItem="DKr-vE-7fe" secondAttribute="leading" constant="15" id="oDg-wh-HHG"/>
+                                                    <constraint firstAttribute="bottom" secondItem="wxV-gH-RAa" secondAttribute="bottom" constant="1" id="r5k-4p-5Ed"/>
+                                                    <constraint firstItem="wxV-gH-RAa" firstAttribute="leading" secondItem="DKr-vE-7fe" secondAttribute="leading" id="sXQ-2h-1ds"/>
+                                                    <constraint firstAttribute="trailing" secondItem="qGX-Sz-6wG" secondAttribute="trailing" constant="15" id="uHP-Hk-ZiD"/>
+                                                    <constraint firstItem="neJ-J2-eiz" firstAttribute="leading" secondItem="DKr-vE-7fe" secondAttribute="leading" constant="15" id="wVk-Gj-d9h"/>
+                                                </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="aX9-tU-4Ms"/>
+                                                    </mask>
+                                                </variation>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hvy-4B-HeO" userLabel="versionView">
+                                                <rect key="frame" x="0.0" y="160" width="320" height="65"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TE8-dR-dcg" userLabel="versionString" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="205" y="20" width="100" height="25"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="100" id="Dbx-oT-wCe"/>
+                                                            <constraint firstAttribute="height" constant="25" id="Qej-Ch-Aqx"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="accountSettingItemSmall"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cLM-cr-zzM" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="15" y="20" width="100" height="25"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="25" id="oTN-Zp-mb8"/>
+                                                            <constraint firstAttribute="width" constant="100" id="paC-IC-oXd"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="accountSettingItemSmall"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="cLM-cr-zzM" firstAttribute="centerY" secondItem="Hvy-4B-HeO" secondAttribute="centerY" id="Dq0-Vs-Ycy"/>
+                                                    <constraint firstItem="TE8-dR-dcg" firstAttribute="centerY" secondItem="Hvy-4B-HeO" secondAttribute="centerY" id="Lyh-Cu-33x"/>
+                                                    <constraint firstAttribute="trailing" secondItem="TE8-dR-dcg" secondAttribute="trailing" constant="15" id="Psn-eQ-rzf"/>
+                                                    <constraint firstItem="cLM-cr-zzM" firstAttribute="leading" secondItem="Hvy-4B-HeO" secondAttribute="leading" constant="15" id="dkS-KJ-cst"/>
+                                                    <constraint firstAttribute="height" constant="65" id="tRm-qP-cSc"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="Hvy-4B-HeO" firstAttribute="top" secondItem="DKr-vE-7fe" secondAttribute="bottom" id="4T1-jL-ebK"/>
+                                            <constraint firstAttribute="height" constant="274" id="6kC-Ku-yEm"/>
+                                            <constraint firstItem="DKr-vE-7fe" firstAttribute="leading" secondItem="f6j-vX-aYU" secondAttribute="leading" id="AVj-Ym-IQQ"/>
+                                            <constraint firstAttribute="trailing" secondItem="DKr-vE-7fe" secondAttribute="trailing" id="HiO-x4-zsc"/>
+                                            <constraint firstItem="Hvy-4B-HeO" firstAttribute="top" secondItem="f6j-vX-aYU" secondAttribute="top" id="Vhr-yg-z8C"/>
+                                            <constraint firstItem="DKr-vE-7fe" firstAttribute="top" secondItem="f6j-vX-aYU" secondAttribute="top" id="WqP-2j-C6X"/>
+                                            <constraint firstAttribute="trailing" secondItem="Hvy-4B-HeO" secondAttribute="trailing" id="pWB-mg-IdX"/>
+                                            <constraint firstItem="Hvy-4B-HeO" firstAttribute="leading" secondItem="f6j-vX-aYU" secondAttribute="leading" id="xrY-9d-ypq"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="Vhr-yg-z8C"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -414,6 +548,12 @@
                     <navigationItem key="navigationItem" title="Account settings" id="IFX-oI-VsI"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="bottomSettingsView" destination="f6j-vX-aYU" id="Ygh-NB-zHB"/>
+                        <outlet property="glucoseSettingsView" destination="Kyg-UA-6DK" id="2HG-gP-oem"/>
+                        <outlet property="loginAccount" destination="qGX-Sz-6wG" id="TmD-AD-7ok"/>
+                        <outlet property="versionString" destination="TE8-dR-dcg" id="QhH-ST-8gx"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w1B-J5-a6U" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

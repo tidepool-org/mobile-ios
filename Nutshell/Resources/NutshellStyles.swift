@@ -61,6 +61,7 @@ public class Styles: NSObject {
         "tableCellSubtitle": (smallRegularFont, darkMediumGreyColor),
         // account configuration views
         "accountSettingItem": (mediumRegularFont, darkGreyColor),
+        "accountSettingItemSmall": (mediumSmallRegularFont, darkGreyColor),
         "largeTargetValueInactive": (veryLargeSemiboldFont, mediumLightGreyColor),
         "largeTargetLow": (veryLargeSemiboldFont, peachColor),
         "largeTargetHigh": (veryLargeSemiboldFont, purpleColor),
@@ -76,6 +77,7 @@ public class Styles: NSObject {
     //
     class var smallRegularFont: UIFont { return UIFont(name: "OpenSans", size: 12.5)! }
     class var mediumRegularFont: UIFont { return UIFont(name: "OpenSans", size: 17.0)! }
+    class var mediumSmallRegularFont: UIFont { return UIFont(name: "OpenSans", size: 14.0)! }
     class var mediumButtonRegularFont: UIFont { return UIFont(name: "OpenSans", size: 15.0)! }
     class var largeRegularFont: UIFont { return UIFont(name: "OpenSans", size: 22.0)! }
 

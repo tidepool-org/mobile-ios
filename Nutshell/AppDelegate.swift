@@ -31,10 +31,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Set up the API connection
         API = APIConnector("Production")
+        // If we already have a token, no need to log in again....
+        if (API?.sessionToken != nil) {
+            setupUIForLoginSuccess()
+        }
         
         return true
     }
 
+    func logout() {
+        if let API = API {
+            API.logout() {
+                let sb = UIStoryboard(name: "Login", bundle: nil)
+                if let vc = sb.instantiateInitialViewController() {
+                    self.window?.rootViewController = vc
+                }
+            }
+        }
+    }
+    
     func setupUIForLoginSuccess() {
         // Upon login success, switch over to the EventView storyboard flow. This starts with a nav controller, and all other controllers are pushed/popped from that.
         let sb = UIStoryboard(name: "EventView", bundle: nil)
