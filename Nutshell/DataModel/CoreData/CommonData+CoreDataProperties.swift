@@ -14,6 +14,7 @@ import CoreData
 
 extension CommonData {
 
+    @NSManaged var type: NSString?
     @NSManaged var time: NSDate?
     @NSManaged var deviceId: String?
     @NSManaged var uploadId: String?

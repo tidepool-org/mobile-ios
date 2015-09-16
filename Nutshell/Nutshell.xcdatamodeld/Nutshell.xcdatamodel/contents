@@ -40,6 +40,7 @@
         <attribute name="previous" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="time" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
         <attribute name="timezoneOffset" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="type" attributeType="String" syncable="YES"/>
         <attribute name="units" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="uploadId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
     </entity>
@@ -136,7 +137,7 @@
         <element name="BloodKetone" positionX="0" positionY="54" width="128" height="60"/>
         <element name="Bolus" positionX="0" positionY="99" width="128" height="90"/>
         <element name="Calibration" positionX="27" positionY="117" width="128" height="60"/>
-        <element name="CommonData" positionX="-54" positionY="18" width="128" height="210"/>
+        <element name="CommonData" positionX="-54" positionY="18" width="128" height="225"/>
         <element name="ContinuousGlucose" positionX="9" positionY="63" width="128" height="75"/>
         <element name="DeviceMetadata" positionX="27" positionY="81" width="128" height="45"/>
         <element name="Food" positionX="-18" positionY="36" width="128" height="120"/>

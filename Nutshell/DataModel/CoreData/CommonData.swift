@@ -40,6 +40,7 @@ class CommonData: NSManagedObject {
             
             // If we got an object, set the common properties on it
             if let newObject = newObject {
+                newObject.type = type
                 newObject.time = NutUtils.dateFromJSON(json["time"].string)
                 newObject.deviceId = json["deviceId"].string
                 newObject.uploadId = json["uploadId"].string
