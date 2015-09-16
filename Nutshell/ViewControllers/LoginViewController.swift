@@ -70,7 +70,29 @@ class LoginViewController: BaseUIViewController {
                         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                         appDelegate.setupUIForLoginSuccess()
                         appDelegate.API?.getUserData(user.userid!, completion: { (result) -> (Void) in
-                            print("getUserData result: \(result)")
+                            if result.isSuccess {
+                                // First clear our all existing data from the database (we don't want a pile of duplicates)
+                                NutUtils.removeAllDatabaseEntries(appDelegate.managedObjectContext)
+                                
+                                // We get back an array of JSON objects. Iterate through the array and insert the objects
+                                // into the database
+                                if let json = result.value {
+                                    let moc = appDelegate.managedObjectContext
+                                    for (_, subJson) in json {
+                                        if let obj = CommonData.fromJSON(subJson, moc: moc) {
+                                            moc.insertObject(obj)
+                                            print("Inserted object: \(obj)")
+                                        }
+                                    }
+                                    
+                                    // Save the database
+                                    do {
+                                        try moc.save()
+                                    } catch let error as NSError {
+                                        print("Failed to save MOC: \(error)")
+                                    }
+                                }
+                            }
                         })
                     } else {
                         // This should not happen- we should not succeed without a user!

@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CoreData
 
 class NutUtils {
 
@@ -48,5 +49,29 @@ class NutUtils {
                 }()
         }
         return Static.instance
+    }
+    
+    class func removeAllDatabaseEntries(moc: NSManagedObjectContext) {
+        let entities = ["Activity", "Alarm", "Basal", "BloodKetone", "Bolus", "Calibration",
+        "ContinuousGlucose", "Food", "GrabBag", "Note", "Prime", "ReservoirChange", "SelfMonitoringGlucose",
+        "Settings", "Status", "TimeChange", "Upload", "UrineKetone", "Wizard"]
+        
+        for entity in entities {
+            do {
+                let request = NSFetchRequest(entityName: entity)
+                let myList = try moc.executeFetchRequest(request)
+                for obj: AnyObject in myList {
+                    moc.deleteObject(obj as! NSManagedObject)
+                }
+            } catch let error as NSError {
+                print("Failed to delete \(entity) items: \(error)")
+            }
+        }
+        
+        do {
+            try moc.save()
+        } catch let error as NSError {
+            print("Failed to save MOC: \(error)")
+        }
     }
 }
