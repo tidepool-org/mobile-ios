@@ -61,10 +61,15 @@ public class Styles: NSObject {
         "tableCellSubtitle": (smallRegularFont, darkMediumGreyColor),
         // account configuration views
         "accountSettingItem": (mediumRegularFont, darkGreyColor),
+        "accountSettingItemSmall": (mediumSmallRegularFont, darkGreyColor),
         "largeTargetValueInactive": (veryLargeSemiboldFont, mediumLightGreyColor),
         "largeTargetLow": (veryLargeSemiboldFont, peachColor),
         "largeTargetHigh": (veryLargeSemiboldFont, purpleColor),
         "darkBackgroundButton": (largeRegularFont, whiteColor),
+        // graph view
+        "advisoryText": (mediumSemiboldFont, darkGreyColor),
+        "advisorySubtext": (mediumRegularFont, lightDarkGreyColor),
+        "greenLink": (mediumRegularFont, lightGreenColor),
     ]
 
     //
@@ -72,6 +77,7 @@ public class Styles: NSObject {
     //
     class var smallRegularFont: UIFont { return UIFont(name: "OpenSans", size: 12.5)! }
     class var mediumRegularFont: UIFont { return UIFont(name: "OpenSans", size: 17.0)! }
+    class var mediumSmallRegularFont: UIFont { return UIFont(name: "OpenSans", size: 14.0)! }
     class var mediumButtonRegularFont: UIFont { return UIFont(name: "OpenSans", size: 15.0)! }
     class var largeRegularFont: UIFont { return UIFont(name: "OpenSans", size: 22.0)! }
 
@@ -133,6 +139,9 @@ public class Styles: NSObject {
     // Open Sans Semibold 17:   UILabel table cell title text
     // Open Sans Regular 17:    UILabel account settings item description
     class var darkGreyColor: UIColor { return UIColor(hex: 0x4a4a4a) }
+    
+    // Open Sans Regular 17:    UILabel event detail view, missing data upload text
+    class var lightDarkGreyColor: UIColor { return UIColor(hex: 0x5c5c5c) }
 
     // Open Sans Regular 15:    UIButton inactive login button text
     class var altDarkGreyColor: UIColor { return UIColor(hex: 0x4d4e4c) }
@@ -171,6 +180,9 @@ public class Styles: NSObject {
     class var purpleColor: UIColor { return UIColor(hex: 0xb29ac9) }
     // Open Sans Semibold 10:   custom graph glucose item text
     class var greenColor: UIColor { return UIColor(hex: 0x98ca63) }
+
+    // Open Sans Regular 17:   UILabel event detail view, missing data upload link text
+    class var lightGreenColor: UIColor { return UIColor(hex: 0x4cd964) }
 
     //
     // MARK: - Graph Colors

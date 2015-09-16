@@ -27,7 +27,7 @@ class APIConnector {
     // MARK: Properties
     
     /** ID of the currently logged-in user, or nil if nobody is logged in */
-    private(set) var currentUserId: String?
+    var currentUserId: String = ""
 
     // MARK: - Constants
     
@@ -102,6 +102,7 @@ class APIConnector {
                 let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                 if let user = User.fromJSON(json, moc: appDelegate.managedObjectContext) {
                     completion(Result.Success(user))
+                    self.currentUserId = username
                 } else {
                     completion(Result.Failure(nil, NSError(domain: APIConnector.kNutshellErrorDomain,
                         code: -1,
@@ -113,9 +114,11 @@ class APIConnector {
         }
     }
     
-    func logout(completion: (NSError) -> (Void)) {
+    func logout(completion: () -> (Void)) {
         // Clear our session token
         self.sessionToken = nil
+        currentUserId = ""
+        completion()
     }
     
     /** For now this method returns the result as a JSON object. The result set can be huge, and we want processing to
