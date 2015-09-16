@@ -115,9 +115,11 @@ class APIConnector {
     }
     
     func logout(completion: () -> (Void)) {
-        // Clear our session token
+        // Clear our session token and remove entries from the db
         self.sessionToken = nil
         currentUserId = ""
+        let ad = UIApplication.sharedApplication().delegate as! AppDelegate!
+        DatabaseUtils.clearDatabase(ad.managedObjectContext)
         completion()
     }
     
@@ -178,7 +180,7 @@ class APIConnector {
         }
         
         // Fire off the network request
-        return Alamofire.request(requestType!, url, headers: apiHeaders, parameters:parameters)
+        return Alamofire.request(requestType!, url, headers: apiHeaders, parameters:parameters).validate()
     }
     
     func getApiHeaders() -> [String: String]? {

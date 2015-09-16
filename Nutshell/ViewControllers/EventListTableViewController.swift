@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CoreData
 
 class EventListTableViewController: BaseUITableViewController {
 
@@ -54,6 +55,24 @@ class EventListTableViewController: BaseUITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Add a notification for when the database changes
+        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: ad.managedObjectContext)
+        
+        getEvents()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Stop observing notifications
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -64,6 +83,31 @@ class EventListTableViewController: BaseUITableViewController {
             let cell = sender as! EventListTableViewCell
             let eventGroupVC = segue.destinationViewController as! EventGroupTableViewController
             eventGroupVC.eventGroup = cell.eventGroup
+        }
+    }
+    
+    
+    func databaseChanged(note: NSNotification) {
+        print("EventList: Database Changed")
+        getEvents()
+    }
+    
+    func getEvents() {
+        // Get the last month's worth of events
+        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+        let cal = NSCalendar.currentCalendar()
+        let fromTime = cal.dateByAddingUnit(.Month, value: -1, toDate: NSDate(), options: NSCalendarOptions(rawValue: 0))!
+        let toTime = NSDate()
+        
+        do {
+            if let events = try DatabaseUtils.getEvents(ad.managedObjectContext, fromTime: fromTime, toTime: toTime) {
+//                for event in events {
+//                    print("Event: \(event)")
+//                }
+                print("\(events.count) events")
+            }
+        } catch let error as NSError {
+            print("Error: \(error)")
         }
     }
 }

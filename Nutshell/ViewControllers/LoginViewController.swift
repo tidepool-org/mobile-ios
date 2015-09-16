@@ -39,7 +39,7 @@ class LoginViewController: BaseUIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
         updateButtonStates()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -63,25 +63,30 @@ class LoginViewController: BaseUIViewController {
                 print("Login result: \(result)")
                 if ( result.isSuccess ) {
                     if let user=result.value {
-                        print("login success! user: " + user.description)
-                        
-                        // Update the database with the current user info
-                        
                         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                        let moc = appDelegate.managedObjectContext
+                        
+                        // Save the user in the database
+                        moc.insertObject(user)
+                        // Save the database
+                        do {
+                            try moc.save()
+                        } catch let error as NSError {
+                            print("Failed to save MOC: \(error)")
+                        }
+                        
+                        print("login success: \(user)")
                         appDelegate.setupUIForLoginSuccess()
+
+                        // Update the database with the current user info
                         appDelegate.API?.getUserData(user.userid!, completion: { (result) -> (Void) in
                             if result.isSuccess {
-                                // First clear our all existing data from the database (we don't want a pile of duplicates)
-                                NutUtils.removeAllDatabaseEntries(appDelegate.managedObjectContext)
-                                
                                 // We get back an array of JSON objects. Iterate through the array and insert the objects
                                 // into the database
                                 if let json = result.value {
-                                    let moc = appDelegate.managedObjectContext
                                     for (_, subJson) in json {
                                         if let obj = CommonData.fromJSON(subJson, moc: moc) {
                                             moc.insertObject(obj)
-                                            print("Inserted object: \(obj)")
                                         }
                                     }
                                     

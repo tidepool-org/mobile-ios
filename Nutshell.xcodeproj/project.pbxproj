@@ -149,6 +149,9 @@
 		0334CAAB1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
 		0334CAAC1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
 		0334CAAD1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
+		0334CAB11BAA165700013096 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAB01BAA165700013096 /* DatabaseUtils.swift */; };
+		0334CAB21BAA1B2E00013096 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAB01BAA165700013096 /* DatabaseUtils.swift */; };
+		0334CAB31BAA1B2F00013096 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAB01BAA165700013096 /* DatabaseUtils.swift */; };
 		4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */; };
 		4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */; };
 		4837CC691BA7394E00BA2CDE /* NutshellUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC681BA7394E00BA2CDE /* NutshellUIButton.swift */; };
@@ -294,6 +297,7 @@
 		0334CA9F1BA8DF5A00013096 /* WorkoutEventList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutEventList.swift; path = DataModel/WorkoutEventList.swift; sourceTree = "<group>"; };
 		0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bolus+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		0334CAA71BA8E22E00013096 /* Bolus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bolus.swift; sourceTree = "<group>"; };
+		0334CAB01BAA165700013096 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseUtils.swift; sourceTree = "<group>"; };
 		11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nutshell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUITextField.swift; path = Resources/NutshellUITextField.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUILabel.swift; path = Resources/NutshellUILabel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -639,6 +643,7 @@
 				48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */,
 				486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */,
 				486F5E771BA3891600BA2A57 /* NutUtils.swift */,
+				0334CAB01BAA165700013096 /* DatabaseUtils.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -867,6 +872,7 @@
 				4851C6951BA689FC00F8E0EE /* NutshellUITableView.swift in Sources */,
 				485922BD1B9CA13E0056E605 /* MenuTableViewController.swift in Sources */,
 				0334CA671BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
+				0334CAB11BAA165700013096 /* DatabaseUtils.swift in Sources */,
 				4851C6971BA68C0D00F8E0EE /* NutshellUITableViewCell.swift in Sources */,
 				0334CA791BA8DDFC00013096 /* TimeChange.swift in Sources */,
 				0334CAA31BA8DF5A00013096 /* WorkoutEventList.swift in Sources */,
@@ -966,6 +972,7 @@
 				0334CA4D1BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift in Sources */,
 				0334CA231BA8DDFC00013096 /* Basal.swift in Sources */,
 				0334CA741BA8DDFC00013096 /* Status.swift in Sources */,
+				0334CAB21BAA1B2E00013096 /* DatabaseUtils.swift in Sources */,
 				486F5E671BA1FE2A00BA2A57 /* BaseUIViewController.swift in Sources */,
 				0334CA1D1BA8DDFC00013096 /* Alarm.swift in Sources */,
 				0334CA201BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */,
@@ -1033,6 +1040,7 @@
 				0334CA4E1BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift in Sources */,
 				0334CA241BA8DDFC00013096 /* Basal.swift in Sources */,
 				0334CA751BA8DDFC00013096 /* Status.swift in Sources */,
+				0334CAB31BAA1B2F00013096 /* DatabaseUtils.swift in Sources */,
 				486F5E6A1BA2029200BA2A57 /* BaseUITableViewCell.swift in Sources */,
 				0334CA1E1BA8DDFC00013096 /* Alarm.swift in Sources */,
 				0334CA211BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */,
