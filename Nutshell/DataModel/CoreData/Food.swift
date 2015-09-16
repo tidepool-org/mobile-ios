@@ -15,9 +15,9 @@ class Food: CommonData {
         if let entityDescription = NSEntityDescription.entityForName("Food", inManagedObjectContext: moc) {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Food
             
-            me.carbs = NSDecimalNumber(string: json["carbs"].string)
-            me.protein = NSDecimalNumber(string: json["protein"].string)
-            me.fat = NSDecimalNumber(string: json["fat"].string)
+            me.carbs = NutUtils.decimalFromJSON(json["carbs"].string)
+            me.protein = NutUtils.decimalFromJSON(json["protein"].string)
+            me.fat = NutUtils.decimalFromJSON(json["fat"].string)
             me.location = json["location"].string
             me.name = json["name"].string
             

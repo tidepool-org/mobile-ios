@@ -18,10 +18,10 @@ class Activity: CommonData {
             
             me.subType = json["subType"].string
             me.duration = json["duration"].number
-            me.intensityMet = NSDecimalNumber(string: json["intensityMet"].string)
-            me.intensityBorg = NSDecimalNumber(string: json["intensityBorg"].string)
-            me.intensityHr = NSDecimalNumber(string: json["intensityHr"].string)
-            me.intensityWatts = NSDecimalNumber(string: json["intensityWatts"].string)
+            me.intensityMet = NutUtils.decimalFromJSON(json["intensityMet"].string)
+            me.intensityBorg = NutUtils.decimalFromJSON(json["intensityBorg"].string)
+            me.intensityHr = NutUtils.decimalFromJSON(json["intensityHr"].string)
+            me.intensityWatts = NutUtils.decimalFromJSON(json["intensityWatts"].string)
             me.location = json["location"].string
             
             return me

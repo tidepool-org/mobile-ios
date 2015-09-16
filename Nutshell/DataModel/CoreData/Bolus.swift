@@ -17,7 +17,7 @@ class Bolus: CommonData {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Bolus
             
             me.subType = json["subType"].string
-            me.value = NSDecimalNumber(string: json["value"].string)
+            me.value = NutUtils.decimalFromJSON(json["value"].string)
             me.insulin = json["insulin"].string
             
             return me

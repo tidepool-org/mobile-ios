@@ -30,6 +30,13 @@ class NutUtils {
         }
         return nil
     }
+    
+    class func decimalFromJSON(json: String?) -> NSDecimalNumber? {
+        if let json = json {
+            return NSDecimalNumber(string: json)
+        }
+        return nil
+    }
 
     /** Date formatter for JSON date strings */
     class var jsonDateFormatter : NSDateFormatter {

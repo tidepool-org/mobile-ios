@@ -16,7 +16,7 @@ class Prime: DeviceMetadata {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Prime
             
             me.primeTarget = json["primeTarget"].string
-            me.volume = NSDecimalNumber(string: json["volume"].string)
+            me.volume = NutUtils.decimalFromJSON(json["volume"].string)
 
             return me
         }

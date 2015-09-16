@@ -15,7 +15,7 @@ class Calibration: DeviceMetadata {
         if let entityDescription = NSEntityDescription.entityForName("Calibration", inManagedObjectContext: moc) {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Calibration
             
-            me.value = NSDecimalNumber(string: json["value"].string)
+            me.value = NutUtils.decimalFromJSON(json["value"].string)
             
             return me
         }

@@ -15,7 +15,7 @@ class BloodKetone: CommonData {
         if let entityDescription = NSEntityDescription.entityForName("BloodKetone", inManagedObjectContext: moc) {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! BloodKetone
             
-            me.value = NSDecimalNumber(string: json["value"].string)
+            me.value = NutUtils.decimalFromJSON(json["value"].string)
             
             return me
         }
