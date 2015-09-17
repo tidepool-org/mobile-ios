@@ -27,7 +27,21 @@ class APIConnector {
     // MARK: Properties
     
     /** ID of the currently logged-in user, or nil if nobody is logged in */
-    var currentUserId: String = ""
+    private var _currentUserId: String?
+    var currentUserId: String? {
+        get {
+            if (_currentUserId == nil) {
+                let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+                if let user = DatabaseUtils.getUser(ad.managedObjectContext) {
+                    _currentUserId = user.username
+                }
+            }
+            return _currentUserId
+        }
+        set {
+            _currentUserId = newValue
+        }
+    }
 
     // MARK: - Constants
     
@@ -44,7 +58,7 @@ class APIConnector {
                            "Development" :  "https://devel-api.tidepool.io"]
     
     // Session token, acquired on login and saved in NSUserDefaults
-    var _sessionToken: String?
+    private var _sessionToken: String?
     var sessionToken: String? {
         set(newToken) {
             if ( newToken != nil ) {
@@ -117,7 +131,7 @@ class APIConnector {
     func logout(completion: () -> (Void)) {
         // Clear our session token and remove entries from the db
         self.sessionToken = nil
-        currentUserId = ""
+        currentUserId = nil
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate!
         DatabaseUtils.clearDatabase(ad.managedObjectContext)
         completion()
