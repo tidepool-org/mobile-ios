@@ -25,6 +25,10 @@ class EventDetailViewController: BaseUIViewController {
     @IBOutlet weak var graphSectionView: UIView!
     @IBOutlet weak var missingDataAdvisoryView: UIView!
     
+    @IBOutlet weak var photoUIImageView: UIImageView!
+
+    @IBOutlet weak var missingPhotoView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

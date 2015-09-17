@@ -78,7 +78,7 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d9p-x8-wr7" userLabel="titleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="53" y="5" width="66" height="24"/>
+                                            <rect key="frame" x="53" y="5" width="50" height="24"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="24" id="Vts-kJ-Vv0"/>
                                             </constraints>
@@ -90,7 +90,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B5R-W3-L53" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="53" y="53" width="66" height="24"/>
+                                            <rect key="frame" x="53" y="53" width="50" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
@@ -106,7 +106,7 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hkV-fw-Ufw" userLabel="timeLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="53" y="29" width="66" height="24"/>
+                                            <rect key="frame" x="53" y="29" width="50" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
@@ -202,23 +202,97 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mIX-aw-qQf" userLabel="PhotoContainerView">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
                                                 <subviews>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ThreeTacosDemoPic.png" translatesAutoresizingMaskIntoConstraints="NO" id="wb3-dF-d2O">
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ThreeTacosDemoPic.png" translatesAutoresizingMaskIntoConstraints="NO" id="wb3-dF-d2O" userLabel="photoUIImageView">
                                                         <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
                                                     </imageView>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4KW-DR-0XO" userLabel="noPhotoView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7j5-nl-RvT">
+                                                                <rect key="frame" x="146" y="46" width="28" height="22"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="28" id="6Mq-Zy-duo">
+                                                                        <variation key="heightClass=compact" constant="0.0"/>
+                                                                    </constraint>
+                                                                    <constraint firstAttribute="height" id="X54-WF-bxk"/>
+                                                                    <constraint firstAttribute="height" constant="22" id="lOR-M5-OSF"/>
+                                                                    <constraint firstAttribute="width" constant="28" id="nbc-WC-Wjm"/>
+                                                                </constraints>
+                                                                <state key="normal" image="cameraIcon"/>
+                                                                <variation key="default">
+                                                                    <mask key="constraints">
+                                                                        <exclude reference="6Mq-Zy-duo"/>
+                                                                        <exclude reference="X54-WF-bxk"/>
+                                                                    </mask>
+                                                                </variation>
+                                                                <variation key="heightClass=compact">
+                                                                    <mask key="constraints">
+                                                                        <include reference="6Mq-Zy-duo"/>
+                                                                        <include reference="X54-WF-bxk"/>
+                                                                        <exclude reference="lOR-M5-OSF"/>
+                                                                        <exclude reference="nbc-WC-Wjm"/>
+                                                                    </mask>
+                                                                </variation>
+                                                            </button>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstItem="7j5-nl-RvT" firstAttribute="centerX" secondItem="4KW-DR-0XO" secondAttribute="centerX" id="FS1-Zo-ur7"/>
+                                                            <constraint firstItem="7j5-nl-RvT" firstAttribute="centerX" secondItem="4KW-DR-0XO" secondAttribute="centerX" id="WAe-l4-5cH"/>
+                                                            <constraint firstItem="7j5-nl-RvT" firstAttribute="centerX" secondItem="4KW-DR-0XO" secondAttribute="centerX" id="YCg-Ur-NCh"/>
+                                                            <constraint firstItem="7j5-nl-RvT" firstAttribute="top" secondItem="4KW-DR-0XO" secondAttribute="top" constant="-11" id="gkc-IF-plU"/>
+                                                            <constraint firstItem="7j5-nl-RvT" firstAttribute="centerY" secondItem="4KW-DR-0XO" secondAttribute="centerY" id="h5k-m0-2EX"/>
+                                                            <constraint firstItem="7j5-nl-RvT" firstAttribute="centerY" secondItem="4KW-DR-0XO" secondAttribute="centerY" id="of8-kP-vaO"/>
+                                                            <constraint firstItem="7j5-nl-RvT" firstAttribute="centerY" secondItem="4KW-DR-0XO" secondAttribute="centerY" id="rUN-D2-ewR"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightBackground"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <variation key="default">
+                                                            <mask key="constraints">
+                                                                <exclude reference="FS1-Zo-ur7"/>
+                                                                <exclude reference="WAe-l4-5cH"/>
+                                                                <exclude reference="gkc-IF-plU"/>
+                                                                <exclude reference="h5k-m0-2EX"/>
+                                                                <exclude reference="of8-kP-vaO"/>
+                                                            </mask>
+                                                        </variation>
+                                                        <variation key="heightClass=compact">
+                                                            <mask key="constraints">
+                                                                <exclude reference="FS1-Zo-ur7"/>
+                                                                <include reference="WAe-l4-5cH"/>
+                                                                <exclude reference="YCg-Ur-NCh"/>
+                                                                <exclude reference="gkc-IF-plU"/>
+                                                                <exclude reference="h5k-m0-2EX"/>
+                                                                <include reference="of8-kP-vaO"/>
+                                                                <exclude reference="rUN-D2-ewR"/>
+                                                            </mask>
+                                                        </variation>
+                                                        <variation key="heightClass=compact-widthClass=regular">
+                                                            <mask key="subviews">
+                                                                <exclude reference="7j5-nl-RvT"/>
+                                                            </mask>
+                                                        </variation>
+                                                    </view>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="wb3-dF-d2O" secondAttribute="trailing" id="0Kg-lT-Eqx"/>
+                                                    <constraint firstItem="4KW-DR-0XO" firstAttribute="top" secondItem="mIX-aw-qQf" secondAttribute="top" id="UlZ-jL-c5r"/>
+                                                    <constraint firstAttribute="bottom" secondItem="4KW-DR-0XO" secondAttribute="bottom" id="YQt-SI-qxS"/>
                                                     <constraint firstAttribute="height" constant="114" id="bGT-FS-nJx">
                                                         <variation key="heightClass=compact" constant="0.0"/>
                                                     </constraint>
                                                     <constraint firstAttribute="bottom" secondItem="wb3-dF-d2O" secondAttribute="bottom" id="cvz-gk-1gU"/>
+                                                    <constraint firstItem="4KW-DR-0XO" firstAttribute="leading" secondItem="mIX-aw-qQf" secondAttribute="leading" id="sDe-OP-56a"/>
                                                     <constraint firstItem="wb3-dF-d2O" firstAttribute="leading" secondItem="mIX-aw-qQf" secondAttribute="leading" id="ucL-lf-ucF"/>
                                                     <constraint firstItem="wb3-dF-d2O" firstAttribute="top" secondItem="mIX-aw-qQf" secondAttribute="top" id="wsM-UL-MLi"/>
+                                                    <constraint firstAttribute="trailing" secondItem="4KW-DR-0XO" secondAttribute="trailing" id="zAT-dF-Vf5"/>
                                                 </constraints>
                                                 <variation key="heightClass=compact-widthClass=regular">
                                                     <mask key="subviews">
                                                         <exclude reference="wb3-dF-d2O"/>
+                                                        <exclude reference="4KW-DR-0XO"/>
                                                     </mask>
                                                 </variation>
                                             </view>
@@ -249,6 +323,11 @@
                                         <variation key="default">
                                             <mask key="constraints">
                                                 <exclude reference="Q81-r5-fSM"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=compact-widthClass=regular">
+                                            <mask key="subviews">
+                                                <exclude reference="mIX-aw-qQf"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -298,7 +377,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                         </subviews>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         <constraints>
                                                             <constraint firstItem="E2h-Ni-G2t" firstAttribute="top" secondItem="Y1z-zk-JS3" secondAttribute="bottom" id="AIh-lq-c7E"/>
                                                             <constraint firstItem="E2h-Ni-G2t" firstAttribute="leading" secondItem="TCd-7V-eEl" secondAttribute="leading" id="Fru-72-prk"/>
@@ -366,6 +445,8 @@
                     <connections>
                         <outlet property="graphSectionView" destination="INU-ti-JXM" id="r4i-Yu-eBP"/>
                         <outlet property="missingDataAdvisoryView" destination="cmJ-dI-KmZ" id="XsH-bq-zbD"/>
+                        <outlet property="missingPhotoView" destination="4KW-DR-0XO" id="lC8-Fn-6Q9"/>
+                        <outlet property="photoUIImageView" destination="wb3-dF-d2O" id="fZg-NC-wTd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0lz-qm-Gfy" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -398,6 +479,7 @@
     <resources>
         <image name="ThreeTacosDemoPic.png" width="1280" height="456"/>
         <image name="add-button.png" width="24" height="24"/>
+        <image name="cameraIcon" width="56" height="44"/>
         <image name="favoriteStarDeselected" width="35" height="35"/>
         <image name="menu-button.png" width="22" height="15"/>
     </resources>

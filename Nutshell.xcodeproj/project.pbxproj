@@ -224,6 +224,7 @@
 		48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
 		48DF9B9B1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
 		48DF9B9C1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
+		48DF9B9E1BA9FADE00A505DD /* applejuicedemopic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48DF9B9D1BA9FADE00A505DD /* applejuicedemopic.png */; };
 		48EC32301BA7BDD700A75103 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
 		48EC32311BA7BDD800A75103 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
 		48EC32321BA7BDDE00A75103 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
@@ -357,6 +358,7 @@
 		48DDD30E1BA78057007365FE /* ThreeTacosDemoPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ThreeTacosDemoPic.png; sourceTree = "<group>"; };
 		48DDD3101BA78F8A007365FE /* BackgroundUIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundUIImage.swift; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
+		48DF9B9D1BA9FADE00A505DD /* applejuicedemopic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = applejuicedemopic.png; sourceTree = "<group>"; };
 		691EA93AF2D5DC902113C37D /* Pods-Nutshell.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.debug.xcconfig"; sourceTree = "<group>"; };
 		A08B5E3A2659E0859F53527E /* Pods-Nutshell.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -493,6 +495,7 @@
 		485922A51B9C982D0056E605 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				48DF9B9D1BA9FADE00A505DD /* applejuicedemopic.png */,
 				48DDD30E1BA78057007365FE /* ThreeTacosDemoPic.png */,
 				486F5E181BA0AA5D00BA2A57 /* checked@2x.png */,
 				486F5E191BA0AA5D00BA2A57 /* unchecked@2x.png */,
@@ -790,6 +793,7 @@
 				4859FCC31B9A4DE4000C1269 /* Assets.xcassets in Resources */,
 				486F5E1B1BA0AA5D00BA2A57 /* unchecked@2x.png in Resources */,
 				4859FCBE1B9A4DE4000C1269 /* EventView.storyboard in Resources */,
+				48DF9B9E1BA9FADE00A505DD /* applejuicedemopic.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

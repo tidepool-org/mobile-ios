@@ -52,11 +52,15 @@ class EventGroupTableViewController: BaseUITableViewController {
         // Configure the cell...
         if (indexPath.item < eventGroup?.itemArray.count) {
             if let eventItem = eventGroup?.itemArray[indexPath.item] {
-                // Configure the cell...
+                // TODO: Configure the cell for real!
                 cell.titleString.text = eventItem.subtext
-                cell.timeString.text = "Home" // TODO: hookup!
+                cell.timeString.text = "Home"
                 cell.locationString.text = eventItem.location
                 cell.eventItem = eventItem
+                // demo pic...
+                if (indexPath.row > 0) {
+                    cell.photoImageView.image = UIImage(named: "applejuicedemopic")
+                }
             }
         }
         
