@@ -100,12 +100,12 @@ class EventListTableViewController: BaseUITableViewController {
         let toTime = NSDate()
         
         do {
-            if let events = try DatabaseUtils.getEvents(ad.managedObjectContext, fromTime: fromTime, toTime: toTime) {
-//                for event in events {
-//                    print("Event: \(event)")
-//                }
-                print("\(events.count) events")
-            }
+            let events = try DatabaseUtils.getEvents(ad.managedObjectContext, fromTime: fromTime, toTime: toTime)
+//            for event in events {
+//                print("Event: \(event)")
+//            }
+            print("\(events.count) events")
+
         } catch let error as NSError {
             print("Error: \(error)")
         }
