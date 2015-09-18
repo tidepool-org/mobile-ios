@@ -12,7 +12,7 @@ import SwiftyJSON
 
 class CommonData: NSManagedObject {
     
-    class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> NSManagedObject? {
+    class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> CommonData? {
         // The type of object we create is based on the "type" field
         var newObject: CommonData? = nil
         if let type = json["type"].string {
@@ -40,6 +40,7 @@ class CommonData: NSManagedObject {
             
             // If we got an object, set the common properties on it
             if let newObject = newObject {
+                newObject.id = json["id"].string
                 newObject.type = type
                 newObject.time = NutUtils.dateFromJSON(json["time"].string)
                 newObject.deviceId = json["deviceId"].string

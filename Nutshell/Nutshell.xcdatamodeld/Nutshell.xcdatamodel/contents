@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9048" systemVersion="14F27" minimumToolsVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="8195" systemVersion="14F27" minimumToolsVersion="Automatic">
     <entity name="Activity" representedClassName=".Activity" parentEntity="CommonData" syncable="YES">
         <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="intensityBorg" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
@@ -35,6 +35,7 @@
         <attribute name="createdTime" optional="YES" attributeType="Date" indexed="YES" syncable="YES"/>
         <attribute name="deviceId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="deviceTime" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="id" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="modifiedTime" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="payload" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="previous" optional="YES" attributeType="String" syncable="YES"/>
@@ -137,7 +138,7 @@
         <element name="BloodKetone" positionX="0" positionY="54" width="128" height="60"/>
         <element name="Bolus" positionX="0" positionY="99" width="128" height="88"/>
         <element name="Calibration" positionX="27" positionY="117" width="128" height="60"/>
-        <element name="CommonData" positionX="-54" positionY="18" width="128" height="225"/>
+        <element name="CommonData" positionX="-54" positionY="18" width="128" height="240"/>
         <element name="ContinuousGlucose" positionX="9" positionY="63" width="128" height="73"/>
         <element name="DeviceMetadata" positionX="27" positionY="81" width="128" height="43"/>
         <element name="Food" positionX="-18" positionY="36" width="128" height="120"/>

@@ -67,13 +67,7 @@ class LoginViewController: BaseUIViewController {
                         let moc = appDelegate.managedObjectContext
                         
                         // Save the user in the database
-                        moc.insertObject(user)
-                        // Save the database
-                        do {
-                            try moc.save()
-                        } catch let error as NSError {
-                            print("Failed to save MOC: \(error)")
-                        }
+                        DatabaseUtils.updateUser(moc, user: user)
                         
                         print("login success: \(user)")
                         appDelegate.setupUIForLoginSuccess()
@@ -81,22 +75,9 @@ class LoginViewController: BaseUIViewController {
                         // Update the database with the current user info
                         appDelegate.API?.getUserData(user.userid!, completion: { (result) -> (Void) in
                             if result.isSuccess {
-                                // We get back an array of JSON objects. Iterate through the array and insert the objects
-                                // into the database
-                                if let json = result.value {
-                                    for (_, subJson) in json {
-                                        if let obj = CommonData.fromJSON(subJson, moc: moc) {
-                                            moc.insertObject(obj)
-                                        }
-                                    }
-                                    
-                                    // Save the database
-                                    do {
-                                        try moc.save()
-                                    } catch let error as NSError {
-                                        print("Failed to save MOC: \(error)")
-                                    }
-                                }
+                                DatabaseUtils.updateEvents(moc, eventsJSON: result.value!)
+                            } else {
+                                print("Failed to get events for user. Error: \(result.error!)")
                             }
                         })
                     } else {
