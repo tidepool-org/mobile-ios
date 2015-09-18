@@ -121,32 +121,48 @@ class DatabaseUtils {
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         return try moc.executeFetchRequest(request) as! [CommonData]
     }
-    
-    class func getAllFoodEvents(moc: NSManagedObjectContext) throws -> [Food] {
+
+    class func getSmbgAndBolusEvents(moc: NSManagedObjectContext) throws -> [CommonData] {
+        let request = NSFetchRequest(entityName: "CommonData")
+            request.predicate = NSPredicate(format: "(type == %@) OR (type == %@)", "smbg", "bolus")
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
+        return try moc.executeFetchRequest(request) as! [CommonData]
+    }
+
+    class func getFoodEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate) throws -> [Food] {
         let request = NSFetchRequest(entityName: "Food")
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         return try moc.executeFetchRequest(request) as! [Food]
     }
-
-    class func getAllBolusEvents(moc: NSManagedObjectContext) throws -> [Bolus] {
+    
+    class func getActivityEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate) throws -> [Activity] {
+        let request = NSFetchRequest(entityName: "Activity")
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
+        return try moc.executeFetchRequest(request) as! [Activity]
+    }
+    
+    class func getBolusEvents(moc: NSManagedObjectContext, fromTime: NSDate?, toTime: NSDate?) throws -> [Bolus] {
         let request = NSFetchRequest(entityName: "Bolus")
+        if let fromTime = fromTime, toTime = toTime {
+            request.predicate = NSPredicate(format: "(time >= %@) AND (time <= %@)", fromTime, toTime)
+        }
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         return try moc.executeFetchRequest(request) as! [Bolus]
     }
 
-    class func getAllSmbgEvents(moc: NSManagedObjectContext) throws -> [SelfMonitoringGlucose] {
+    class func getSmbgEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate) throws -> [SelfMonitoringGlucose] {
         let request = NSFetchRequest(entityName: "SelfMonitoringGlucose")
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         return try moc.executeFetchRequest(request) as! [SelfMonitoringGlucose]
     }
 
-    class func getAllCbgEvents(moc: NSManagedObjectContext) throws -> [ContinuousGlucose] {
+    class func getCbgEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate) throws -> [ContinuousGlucose] {
         let request = NSFetchRequest(entityName: "ContinuousGlucose")
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         return try moc.executeFetchRequest(request) as! [ContinuousGlucose]
     }
 
-    class func getAllBasalEvents(moc: NSManagedObjectContext) throws -> [Basal] {
+    class func getBasalEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate) throws -> [Basal] {
         let request = NSFetchRequest(entityName: "Basal")
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         return try moc.executeFetchRequest(request) as! [Basal]
