@@ -16,7 +16,7 @@ class SelfMonitoringGlucose: CommonData {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! SelfMonitoringGlucose
             
             me.subType = json["subType"].string
-            me.value = json["value"].string
+            me.value = json["value"].number
             
             return me
         }

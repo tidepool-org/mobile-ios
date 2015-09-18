@@ -17,7 +17,7 @@ class Basal: CommonData {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Basal
             
             me.deliveryType = json["deliveryType"].string
-            me.value = NutUtils.decimalFromJSON(json["value"].string)
+            me.value = json["rate"].number
             me.duration = json["duration"].number
             me.insulin = json["insulin"].string
             

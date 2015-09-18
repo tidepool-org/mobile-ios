@@ -95,20 +95,71 @@ class EventListTableViewController: BaseUITableViewController {
     func getEvents() {
         // Get the last month's worth of events
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-        let cal = NSCalendar.currentCalendar()
-        let fromTime = cal.dateByAddingUnit(.Month, value: -1, toDate: NSDate(), options: NSCalendarOptions(rawValue: 0))!
-        let toTime = NSDate()
         
-        do {
-            let events = try DatabaseUtils.getEvents(ad.managedObjectContext, fromTime: fromTime, toTime: toTime)
-//            for event in events {
-//                print("Event: \(event)")
-//            }
-            print("\(events.count) events")
+//        let cal = NSCalendar.currentCalendar()
+//        let fromTime = cal.dateByAddingUnit(.Month, value: -1, toDate: NSDate(), options: NSCalendarOptions(rawValue: 0))!
+//        let toTime = NSDate()
+        
+//        do {
+//            let events = try DatabaseUtils.getEvents(ad.managedObjectContext, fromTime: fromTime, toTime: toTime)
+//                for event in events {
+//                    if event.type == "SelfMonitoringGlucose" {
+//                        print("Event: \(event)")
+//                    }
+//                    print("Event: \(event)")
+//                }
+//            print("\(events.count) events")
+//
+//        } catch let error as NSError {
+//            print("Error: \(error)")
+//        }
 
+//        do {
+//            let cbgEvents = try DatabaseUtils.getAllCbgEvents(ad.managedObjectContext)
+//            for event in cbgEvents {
+//                print("Event type: \(event.type), time: \(event.time), isig: \(event.isig), value: \(event.value)")
+//            }
+//        } catch let error as NSError {
+//            print("Error: \(error)")
+//        }
+//        
+//        do {
+//            let basalEvents = try DatabaseUtils.getAllBasalEvents(ad.managedObjectContext)
+//            for event in basalEvents {
+//                print("Event type: \(event.type), time: \(event.time), duration: \(event.duration), value: \(event.value)")
+//            }
+//        } catch let error as NSError {
+//            print("Error: \(error)")
+//        }
+        
+
+//        do {
+//            let foodEvents = try DatabaseUtils.getAllFoodEvents(ad.managedObjectContext)
+//            for event in foodEvents {
+//                print("Event type: \(event.type), time: \(event.time), carbs: \(event.carbs), location: \(event.location), name: \(event.name)")
+//            }
+//        } catch let error as NSError {
+//            print("Error: \(error)")
+//        }
+//        
+//        do {
+//            let bolusEvents = try DatabaseUtils.getAllBolusEvents(ad.managedObjectContext)
+//            for event in bolusEvents {
+//                print("Event type: \(event.type), time: \(event.time), subType: \(event.subType), value: \(event.value), insulin: \(event.insulin)")
+//            }
+//        } catch let error as NSError {
+//            print("Error: \(error)")
+//        }
+//
+        do {
+            let smbgEvents = try DatabaseUtils.getAllSmbgEvents(ad.managedObjectContext)
+            for event in smbgEvents {
+                print("Event type: \(event.type), time: \(event.time), subType: \(event.subType), value: \(event.value)")
+            }
         } catch let error as NSError {
             print("Error: \(error)")
         }
+
     }
 }
 

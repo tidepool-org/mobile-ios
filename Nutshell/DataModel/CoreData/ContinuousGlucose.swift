@@ -16,7 +16,7 @@ class ContinuousGlucose: CommonData {
         if let entityDescription = NSEntityDescription.entityForName("ContinuousGlucose", inManagedObjectContext: moc) {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! ContinuousGlucose
             
-            me.value = json["value"].string
+            me.value = json["value"].number
             me.isig = json["isig"].string
             
             return me

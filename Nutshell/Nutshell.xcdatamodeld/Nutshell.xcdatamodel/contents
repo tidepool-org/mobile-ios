@@ -17,7 +17,7 @@
         <attribute name="deliveryType" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="insulin" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="value" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
     </entity>
     <entity name="BloodKetone" representedClassName=".BloodKetone" parentEntity="CommonData" syncable="YES">
         <attribute name="value" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
@@ -25,7 +25,7 @@
     <entity name="Bolus" representedClassName=".Bolus" parentEntity="CommonData" syncable="YES">
         <attribute name="insulin" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="subType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="value" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
     </entity>
     <entity name="Calibration" representedClassName=".Calibration" parentEntity="DeviceMetadata" syncable="YES">
         <attribute name="value" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
@@ -46,7 +46,7 @@
     </entity>
     <entity name="ContinuousGlucose" representedClassName=".ContinuousGlucose" parentEntity="CommonData" syncable="YES">
         <attribute name="isig" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
     </entity>
     <entity name="DeviceMetadata" representedClassName=".DeviceMetadata" parentEntity="CommonData" syncable="YES"/>
     <entity name="Food" representedClassName=".Food" parentEntity="CommonData" syncable="YES">
@@ -75,7 +75,7 @@
     </entity>
     <entity name="SelfMonitoringGlucose" representedClassName=".SelfMonitoringGlucose" parentEntity="CommonData" syncable="YES">
         <attribute name="subType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
     </entity>
     <entity name="Settings" representedClassName=".Settings" parentEntity="CommonData" syncable="YES">
         <attribute name="activeSchedule" optional="YES" attributeType="String" syncable="YES"/>
@@ -133,19 +133,19 @@
     <elements>
         <element name="Activity" positionX="-27" positionY="36" width="128" height="150"/>
         <element name="Alarm" positionX="-9" positionY="81" width="128" height="75"/>
-        <element name="Basal" positionX="-9" positionY="45" width="128" height="105"/>
+        <element name="Basal" positionX="-9" positionY="45" width="128" height="103"/>
         <element name="BloodKetone" positionX="0" positionY="54" width="128" height="60"/>
-        <element name="Bolus" positionX="0" positionY="99" width="128" height="90"/>
+        <element name="Bolus" positionX="0" positionY="99" width="128" height="88"/>
         <element name="Calibration" positionX="27" positionY="117" width="128" height="60"/>
         <element name="CommonData" positionX="-54" positionY="18" width="128" height="225"/>
-        <element name="ContinuousGlucose" positionX="9" positionY="63" width="128" height="75"/>
-        <element name="DeviceMetadata" positionX="27" positionY="81" width="128" height="45"/>
+        <element name="ContinuousGlucose" positionX="9" positionY="63" width="128" height="73"/>
+        <element name="DeviceMetadata" positionX="27" positionY="81" width="128" height="43"/>
         <element name="Food" positionX="-18" positionY="36" width="128" height="120"/>
         <element name="GrabBag" positionX="-9" positionY="45" width="128" height="60"/>
         <element name="Note" positionX="-9" positionY="90" width="128" height="120"/>
         <element name="Prime" positionX="0" positionY="90" width="128" height="75"/>
         <element name="ReservoirChange" positionX="9" positionY="99" width="128" height="60"/>
-        <element name="SelfMonitoringGlucose" positionX="9" positionY="63" width="128" height="75"/>
+        <element name="SelfMonitoringGlucose" positionX="9" positionY="63" width="128" height="73"/>
         <element name="Settings" positionX="18" positionY="72" width="128" height="195"/>
         <element name="Status" positionX="18" positionY="108" width="128" height="90"/>
         <element name="TimeChange" positionX="36" positionY="126" width="128" height="120"/>

@@ -2,7 +2,7 @@
 //  Bolus+CoreDataProperties.swift
 //  Nutshell
 //
-//  Created by Brian King on 9/15/15.
+//  Created by Larry Kenyon on 9/17/15.
 //  Copyright © 2015 Tidepool. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -14,8 +14,8 @@ import CoreData
 
 extension Bolus {
 
-    @NSManaged var subType: String?
-    @NSManaged var value: NSDecimalNumber?
     @NSManaged var insulin: String?
+    @NSManaged var subType: String?
+    @NSManaged var value: NSNumber?
 
 }

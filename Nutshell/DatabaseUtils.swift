@@ -55,4 +55,35 @@ class DatabaseUtils {
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         return try moc.executeFetchRequest(request) as! [CommonData]
     }
+    
+    class func getAllFoodEvents(moc: NSManagedObjectContext) throws -> [Food] {
+        let request = NSFetchRequest(entityName: "Food")
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
+        return try moc.executeFetchRequest(request) as! [Food]
+    }
+
+    class func getAllBolusEvents(moc: NSManagedObjectContext) throws -> [Bolus] {
+        let request = NSFetchRequest(entityName: "Bolus")
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
+        return try moc.executeFetchRequest(request) as! [Bolus]
+    }
+
+    class func getAllSmbgEvents(moc: NSManagedObjectContext) throws -> [SelfMonitoringGlucose] {
+        let request = NSFetchRequest(entityName: "SelfMonitoringGlucose")
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
+        return try moc.executeFetchRequest(request) as! [SelfMonitoringGlucose]
+    }
+
+    class func getAllCbgEvents(moc: NSManagedObjectContext) throws -> [ContinuousGlucose] {
+        let request = NSFetchRequest(entityName: "ContinuousGlucose")
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
+        return try moc.executeFetchRequest(request) as! [ContinuousGlucose]
+    }
+
+    class func getAllBasalEvents(moc: NSManagedObjectContext) throws -> [Basal] {
+        let request = NSFetchRequest(entityName: "Basal")
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
+        return try moc.executeFetchRequest(request) as! [Basal]
+    }
+
 }
