@@ -46,6 +46,9 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="add-button.png" id="AjV-8Q-vYz">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="addEventButtonHandler:" destination="1ND-G3-Xkn" id="DYf-oZ-hf8"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
@@ -190,26 +193,26 @@
                         <viewControllerLayoutGuide type="bottom" id="hG6-oc-20X"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="YxP-hy-3au">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A21-yX-8hn" userLabel="SceneContainer">
-                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zQo-Kx-sDE" userLabel="TopSection" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mIX-aw-qQf" userLabel="PhotoContainerView">
-                                                <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="114"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ThreeTacosDemoPic.png" translatesAutoresizingMaskIntoConstraints="NO" id="wb3-dF-d2O" userLabel="photoUIImageView">
-                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="114"/>
                                                     </imageView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4KW-DR-0XO" userLabel="noPhotoView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="114"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7j5-nl-RvT">
-                                                                <rect key="frame" x="146" y="46" width="28" height="22"/>
+                                                                <rect key="frame" x="174" y="46" width="28" height="22"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="28" id="6Mq-Zy-duo">
                                                                         <variation key="heightClass=compact" constant="0.0"/>
@@ -297,8 +300,65 @@
                                                 </variation>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="01k-k4-6OI" userLabel="EventDescriptionContainer">
-                                                <rect key="frame" x="0.0" y="114" width="320" height="86"/>
+                                                <rect key="frame" x="0.0" y="114" width="375" height="86"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event notes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JDK-S3-qTu" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="8" y="16" width="359" height="25"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="25" id="seA-lS-ewM"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="notesText"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tds-VB-aau" userLabel="dateViewContainer">
+                                                        <rect key="frame" x="8" y="49" width="359" height="29"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015    4:21 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GG6-wG-z1Y" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="114" y="6" width="131" height="17"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="dateAndLocation"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </label>
+                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="detailCalendarIcon" translatesAutoresizingMaskIntoConstraints="NO" id="L6A-Vy-9nh">
+                                                                <rect key="frame" x="94" y="9" width="10" height="12"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="10" id="AdE-HG-6Hq"/>
+                                                                    <constraint firstAttribute="height" constant="12" id="Apa-RI-nVI"/>
+                                                                </constraints>
+                                                            </imageView>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstItem="GG6-wG-z1Y" firstAttribute="centerY" secondItem="tds-VB-aau" secondAttribute="centerY" id="4mM-Cf-3XV"/>
+                                                            <constraint firstItem="GG6-wG-z1Y" firstAttribute="leading" secondItem="L6A-Vy-9nh" secondAttribute="trailing" constant="10" id="A5U-DE-r5V"/>
+                                                            <constraint firstItem="GG6-wG-z1Y" firstAttribute="centerX" secondItem="tds-VB-aau" secondAttribute="centerX" id="IDG-BO-wSZ"/>
+                                                            <constraint firstAttribute="height" constant="29" id="NOt-50-iD1"/>
+                                                            <constraint firstItem="L6A-Vy-9nh" firstAttribute="centerY" secondItem="GG6-wG-z1Y" secondAttribute="centerY" id="tJi-5L-IeD"/>
+                                                            <constraint firstItem="L6A-Vy-9nh" firstAttribute="centerY" secondItem="tds-VB-aau" secondAttribute="centerY" id="uWq-nk-Gwj"/>
+                                                        </constraints>
+                                                        <variation key="default">
+                                                            <mask key="constraints">
+                                                                <exclude reference="tJi-5L-IeD"/>
+                                                            </mask>
+                                                        </variation>
+                                                    </view>
+                                                </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="tds-VB-aau" firstAttribute="bottom" secondItem="01k-k4-6OI" secondAttribute="bottomMargin" id="ITm-Fk-7ow"/>
+                                                    <constraint firstItem="tds-VB-aau" firstAttribute="leading" secondItem="01k-k4-6OI" secondAttribute="leadingMargin" id="Ivr-4m-OXX"/>
+                                                    <constraint firstItem="tds-VB-aau" firstAttribute="trailing" secondItem="01k-k4-6OI" secondAttribute="trailingMargin" id="M5w-TA-wtD"/>
+                                                    <constraint firstItem="JDK-S3-qTu" firstAttribute="top" secondItem="01k-k4-6OI" secondAttribute="topMargin" constant="8" id="OJm-Mx-Br8"/>
+                                                    <constraint firstItem="JDK-S3-qTu" firstAttribute="leading" secondItem="01k-k4-6OI" secondAttribute="leadingMargin" id="RRO-fs-Ef7"/>
+                                                    <constraint firstItem="JDK-S3-qTu" firstAttribute="trailing" secondItem="01k-k4-6OI" secondAttribute="trailingMargin" id="ZyS-L1-brL"/>
+                                                </constraints>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -332,13 +392,13 @@
                                         </variation>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="INU-ti-JXM" userLabel="GraphSection">
-                                        <rect key="frame" x="0.0" y="200" width="320" height="304"/>
+                                        <rect key="frame" x="0.0" y="200" width="375" height="403"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cmJ-dI-KmZ" userLabel="MissingData">
-                                                <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="403"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCd-7V-eEl">
-                                                        <rect key="frame" x="41" y="105" width="239" height="103"/>
+                                                        <rect key="frame" x="68" y="154" width="239" height="103"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There is no data in here!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="azx-xE-oT0" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="239" height="37"/>
@@ -441,8 +501,10 @@
                         <barButtonItem key="rightBarButtonItem" image="add-button.png" id="VKK-Ko-uQU"/>
                     </navigationItem>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="eventDate" destination="GG6-wG-z1Y" id="duF-se-sfO"/>
+                        <outlet property="eventNotes" destination="JDK-S3-qTu" id="Vei-aT-26C"/>
                         <outlet property="graphSectionView" destination="INU-ti-JXM" id="r4i-Yu-eBP"/>
                         <outlet property="missingDataAdvisoryView" destination="cmJ-dI-KmZ" id="XsH-bq-zbD"/>
                         <outlet property="missingPhotoView" destination="4KW-DR-0XO" id="lC8-Fn-6Q9"/>
@@ -480,6 +542,7 @@
         <image name="ThreeTacosDemoPic.png" width="1280" height="456"/>
         <image name="add-button.png" width="24" height="24"/>
         <image name="cameraIcon" width="56" height="44"/>
+        <image name="detailCalendarIcon" width="21" height="23"/>
         <image name="favoriteStarDeselected" width="35" height="35"/>
         <image name="menu-button.png" width="22" height="15"/>
     </resources>

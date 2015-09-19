@@ -37,6 +37,8 @@ class EventListTableViewController: BaseUITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = "All events"
+        
         let nc = NSNotificationCenter.defaultCenter()
         // Note colon since processBigEvent takes a parameter
         nc.addObserver(self, selector:"updateEventList:", name: "EventListChanged", object: nil)
@@ -61,7 +63,7 @@ class EventListTableViewController: BaseUITableViewController {
         // Add a notification for when the database changes
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: ad.managedObjectContext)
-        
+
         getEvents()
     }
     
@@ -79,6 +81,7 @@ class EventListTableViewController: BaseUITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        super.prepareForSegue(segue, sender: sender)
         if(segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventGroupSegue {
             let cell = sender as! EventListTableViewCell
             let eventGroupVC = segue.destinationViewController as! EventGroupTableViewController
@@ -205,7 +208,17 @@ extension EventListTableViewController {
         return cell
     }
 
+    // MARK: - Nav bar button handlers
+
+    @IBAction func addEventButtonHandler(sender: UIBarButtonItem) {
+        self.navigationItem.title = ""
+        let sb = UIStoryboard(name: "AddEvent", bundle: nil)
+        let vc = sb.instantiateViewControllerWithIdentifier("AddEventViewController")
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     @IBAction func menuButtonHandler(sender: AnyObject) {
+        self.navigationItem.title = ""
         let sb = UIStoryboard(name: "Menu", bundle: nil)
         if let vc = sb.instantiateInitialViewController() {
             self.navigationController?.pushViewController(vc, animated: true)

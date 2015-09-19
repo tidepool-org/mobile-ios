@@ -217,6 +217,7 @@
 		486F5E6C1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E6B1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift */; };
 		486F5E6E1BA24C5C00BA2A57 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */; };
 		486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
+		4893ACB61BACC2E5006A658B /* AddEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4893ACB51BACC2E5006A658B /* AddEventViewController.swift */; };
 		48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
 		48DDD30B1BA76D12007365FE /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
 		48DDD30F1BA78057007365FE /* ThreeTacosDemoPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48DDD30E1BA78057007365FE /* ThreeTacosDemoPic.png */; };
@@ -355,6 +356,7 @@
 		486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventDetailViewController.swift; path = ViewControllers/EventDetailViewController.swift; sourceTree = "<group>"; };
 		486F5E751BA35CD800BA2A57 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		486F5E771BA3891600BA2A57 /* NutUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutUtils.swift; path = "Utilities and Extensions/NutUtils.swift"; sourceTree = "<group>"; };
+		4893ACB51BACC2E5006A658B /* AddEventViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddEventViewController.swift; path = ViewControllers/AddEventViewController.swift; sourceTree = "<group>"; };
 		48DDD30E1BA78057007365FE /* ThreeTacosDemoPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ThreeTacosDemoPic.png; sourceTree = "<group>"; };
 		48DDD3101BA78F8A007365FE /* BackgroundUIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundUIImage.swift; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
@@ -464,6 +466,7 @@
 			isa = PBXGroup;
 			children = (
 				4859229C1B9A61620056E605 /* AddEvent.storyboard */,
+				4893ACB51BACC2E5006A658B /* AddEventViewController.swift */,
 			);
 			name = AddEventViewControllers;
 			sourceTree = "<group>";
@@ -888,6 +891,7 @@
 				486283B41BA48B1500547BE3 /* EventViewStoryboardTypes.swift in Sources */,
 				0334CA6D1BA8DDFC00013096 /* Settings.swift in Sources */,
 				0334CA341BA8DDFC00013096 /* CommonData.swift in Sources */,
+				4893ACB61BACC2E5006A658B /* AddEventViewController.swift in Sources */,
 				486F5E091B9FB1C600BA2A57 /* NutshellStyles.swift in Sources */,
 				486F5E6C1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift in Sources */,
 				485922A41B9A639B0056E605 /* EventGroupTableViewController.swift in Sources */,

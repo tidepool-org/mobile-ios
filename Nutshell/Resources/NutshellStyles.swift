@@ -66,10 +66,14 @@ public class Styles: NSObject {
         "largeTargetLow": (veryLargeSemiboldFont, peachColor),
         "largeTargetHigh": (veryLargeSemiboldFont, purpleColor),
         "darkBackgroundButton": (largeRegularFont, whiteColor),
-        // graph view
+        // event detail view
+        "notesText": (UIFont(name: "OpenSans-Semibold", size: 16.0), whiteColor),
+        "dateAndLocation": (UIFont(name: "OpenSans-Semibold", size: 12.0), mediumGreyColor),
         "advisoryText": (mediumSemiboldFont, darkGreyColor),
         "advisorySubtext": (mediumRegularFont, lightDarkGreyColor),
         "greenLink": (mediumRegularFont, lightGreenColor),
+        // add event scenes
+        "eventTitleText": (navTitleBoldFont, whiteColor),
     ]
 
     //
@@ -86,6 +90,7 @@ public class Styles: NSObject {
     class var veryLargeSemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 25.5)! }
 
     class var smallBoldFont: UIFont { return UIFont(name: "OpenSans-Bold", size: 12.0)! }
+    class var navTitleBoldFont: UIFont { return UIFont(name: "OpenSans-Bold", size: 20.0)! }
 
     // Fonts for special graph view
     

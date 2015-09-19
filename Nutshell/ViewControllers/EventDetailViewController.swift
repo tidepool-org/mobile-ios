@@ -29,10 +29,20 @@ class EventDetailViewController: BaseUIViewController {
 
     @IBOutlet weak var missingPhotoView: UIView!
     
+    @IBOutlet weak var eventNotes: NutshellUILabel!
+    
+    @IBOutlet weak var eventDate: NutshellUILabel!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
+        if let eventItem = eventItem {
+            eventNotes.text = eventItem.subtext
+            let df = NSDateFormatter()
+            df.dateFormat = uniformDateFormat
+            eventDate.text = df.stringFromDate(eventItem.timestamp)
+        }
     }
 
     override func viewDidLayoutSubviews() {

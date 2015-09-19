@@ -107,6 +107,7 @@ class EventGroupTableViewController: BaseUITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        super.prepareForSegue(segue, sender: sender)
         if(segue.identifier) == "EventItemDetailSegue" {
             let cell = sender as! EventGroupTableViewCell
             let eventItemVC = segue.destinationViewController as! EventDetailViewController

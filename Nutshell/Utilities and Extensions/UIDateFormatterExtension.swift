@@ -29,7 +29,7 @@ Uniform date format will change NoteCell and Add/EditNoteVCs
 Regular date format for birthdays, diagnosis date, etc.
 */
 
-let uniformDateFormat: String = "EEEE M/d/yy h:mma"
+let uniformDateFormat: String = "MMM d, yyyy    h:mm a"
 let iso8601dateOne: String = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
 let iso8601dateTwo: String = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 let regularDateFormat: String = "yyyy-MM-dd"
