@@ -140,15 +140,15 @@ class EventListTableViewController: BaseUITableViewController {
 //        }
         
 
-//        do {
-//            let foodEvents = try DatabaseUtils.getAllFoodEvents(ad.managedObjectContext)
-//            for event in foodEvents {
-//                print("Event type: \(event.type), time: \(event.time), carbs: \(event.carbs), location: \(event.location), name: \(event.name)")
-//            }
-//        } catch let error as NSError {
-//            print("Error: \(error)")
-//        }
-//        
+        do {
+            let foodEvents = try DatabaseUtils.getAllFoodEvents(ad.managedObjectContext)
+            for event in foodEvents {
+                print("Event type: \(event.type), time: \(event.time), carbs: \(event.carbs), location: \(event.location), name: \(event.name)")
+            }
+        } catch let error as NSError {
+            print("Error: \(error)")
+        }
+        
         do {
             let mixedEvents = try DatabaseUtils.getSmbgAndBolusEvents(ad.managedObjectContext)
             for event in mixedEvents {

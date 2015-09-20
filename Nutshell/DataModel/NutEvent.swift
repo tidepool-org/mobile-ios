@@ -36,7 +36,7 @@ class NutEvent {
                 NutEventItem(subtext: "with 15 chips & salsa", timestamp: df.dateFromISOString("2015-07-29 04:55:27 +0000"), location: "home"),
                 NutEventItem(subtext: "after ballet", timestamp: df.dateFromISOString("2015-07-29 01:38:53 +0000"), location:"238 Garrett St"),
                 NutEventItem(subtext: "Apple Juice before", timestamp: df.dateFromISOString("2015-07-10 14:25:21 +0000"), location: "Golden Gate Park"),
-                NutEventItem(subtext: "and horchata", timestamp: df.dateFromISOString("2015-07-09 14:03:47 +0000"), location: "Golden Gate Park")])
+                NutEventItem(subtext: "and horchata", timestamp: NSDate(), location: "Golden Gate Park")])
         } else {
             return NutEvent(title: title, itemArray: [])
         }

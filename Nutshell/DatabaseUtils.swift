@@ -129,7 +129,7 @@ class DatabaseUtils {
         return try moc.executeFetchRequest(request) as! [CommonData]
     }
 
-    class func getFoodEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate) throws -> [Food] {
+    class func getAllFoodEvents(moc: NSManagedObjectContext) throws -> [Food] {
         let request = NSFetchRequest(entityName: "Food")
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         return try moc.executeFetchRequest(request) as! [Food]

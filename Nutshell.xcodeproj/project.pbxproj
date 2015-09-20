@@ -230,6 +230,13 @@
 		48EC32311BA7BDD800A75103 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
 		48EC32321BA7BDDE00A75103 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
 		48EC32331BA7BDDF00A75103 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
+		48ED0D341BADAF8B009D0D6F /* GraphUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */; };
+		48ED0D3C1BAF22CC009D0D6F /* addAnimation-01.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D361BAF22CC009D0D6F /* addAnimation-01.png */; };
+		48ED0D3D1BAF22CC009D0D6F /* addAnimation-02.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D371BAF22CC009D0D6F /* addAnimation-02.png */; };
+		48ED0D3E1BAF22CC009D0D6F /* addAnimation-03.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D381BAF22CC009D0D6F /* addAnimation-03.png */; };
+		48ED0D3F1BAF22CC009D0D6F /* addAnimation-04.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D391BAF22CC009D0D6F /* addAnimation-04.png */; };
+		48ED0D401BAF22CC009D0D6F /* addAnimation-05.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D3A1BAF22CC009D0D6F /* addAnimation-05.png */; };
+		48ED0D411BAF22CC009D0D6F /* addAnimation-06.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D3B1BAF22CC009D0D6F /* addAnimation-06.png */; };
 		949A33B350C643B74EB54D43 /* Pods_Nutshell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -361,6 +368,13 @@
 		48DDD3101BA78F8A007365FE /* BackgroundUIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundUIImage.swift; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
 		48DF9B9D1BA9FADE00A505DD /* applejuicedemopic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = applejuicedemopic.png; sourceTree = "<group>"; };
+		48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphUIView.swift; path = GraphView/GraphUIView.swift; sourceTree = "<group>"; };
+		48ED0D361BAF22CC009D0D6F /* addAnimation-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-01.png"; path = "Images/addAnimation/addAnimation-01.png"; sourceTree = "<group>"; };
+		48ED0D371BAF22CC009D0D6F /* addAnimation-02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-02.png"; path = "Images/addAnimation/addAnimation-02.png"; sourceTree = "<group>"; };
+		48ED0D381BAF22CC009D0D6F /* addAnimation-03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-03.png"; path = "Images/addAnimation/addAnimation-03.png"; sourceTree = "<group>"; };
+		48ED0D391BAF22CC009D0D6F /* addAnimation-04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-04.png"; path = "Images/addAnimation/addAnimation-04.png"; sourceTree = "<group>"; };
+		48ED0D3A1BAF22CC009D0D6F /* addAnimation-05.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-05.png"; path = "Images/addAnimation/addAnimation-05.png"; sourceTree = "<group>"; };
+		48ED0D3B1BAF22CC009D0D6F /* addAnimation-06.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-06.png"; path = "Images/addAnimation/addAnimation-06.png"; sourceTree = "<group>"; };
 		691EA93AF2D5DC902113C37D /* Pods-Nutshell.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.debug.xcconfig"; sourceTree = "<group>"; };
 		A08B5E3A2659E0859F53527E /* Pods-Nutshell.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -498,6 +512,7 @@
 		485922A51B9C982D0056E605 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				48ED0D351BAF221C009D0D6F /* AddAnimation */,
 				48DF9B9D1BA9FADE00A505DD /* applejuicedemopic.png */,
 				48DDD30E1BA78057007365FE /* ThreeTacosDemoPic.png */,
 				486F5E181BA0AA5D00BA2A57 /* checked@2x.png */,
@@ -658,8 +673,22 @@
 			isa = PBXGroup;
 			children = (
 				48DDD3101BA78F8A007365FE /* BackgroundUIImage.swift */,
+				48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */,
 			);
 			name = "Graph View";
+			sourceTree = "<group>";
+		};
+		48ED0D351BAF221C009D0D6F /* AddAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				48ED0D361BAF22CC009D0D6F /* addAnimation-01.png */,
+				48ED0D371BAF22CC009D0D6F /* addAnimation-02.png */,
+				48ED0D381BAF22CC009D0D6F /* addAnimation-03.png */,
+				48ED0D391BAF22CC009D0D6F /* addAnimation-04.png */,
+				48ED0D3A1BAF22CC009D0D6F /* addAnimation-05.png */,
+				48ED0D3B1BAF22CC009D0D6F /* addAnimation-06.png */,
+			);
+			name = AddAnimation;
 			sourceTree = "<group>";
 		};
 		8B1414A3E58F828463AFF25F /* Pods */ = {
@@ -779,6 +808,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				486F5DF21B9F874A00BA2A57 /* LaBelleAurore.ttf in Resources */,
+				48ED0D401BAF22CC009D0D6F /* addAnimation-05.png in Resources */,
 				4859229D1B9A61620056E605 /* AddEvent.storyboard in Resources */,
 				486F5E1A1BA0AA5D00BA2A57 /* checked@2x.png in Resources */,
 				485922A81B9C98420056E605 /* splash_logo@2x.png in Resources */,
@@ -791,10 +821,15 @@
 				486F5DF51B9F874A00BA2A57 /* OpenSans-Bold.ttf in Resources */,
 				4859229F1B9A61920056E605 /* Menu.storyboard in Resources */,
 				486F5DF81B9F874A00BA2A57 /* OpenSans-Regular.ttf in Resources */,
+				48ED0D3C1BAF22CC009D0D6F /* addAnimation-01.png in Resources */,
 				48DDD30F1BA78057007365FE /* ThreeTacosDemoPic.png in Resources */,
+				48ED0D3E1BAF22CC009D0D6F /* addAnimation-03.png in Resources */,
 				485922B01B9C9BAE0056E605 /* menu-button@2x.png in Resources */,
+				48ED0D411BAF22CC009D0D6F /* addAnimation-06.png in Resources */,
+				48ED0D3D1BAF22CC009D0D6F /* addAnimation-02.png in Resources */,
 				4859FCC31B9A4DE4000C1269 /* Assets.xcassets in Resources */,
 				486F5E1B1BA0AA5D00BA2A57 /* unchecked@2x.png in Resources */,
+				48ED0D3F1BAF22CC009D0D6F /* addAnimation-04.png in Resources */,
 				4859FCBE1B9A4DE4000C1269 /* EventView.storyboard in Resources */,
 				48DF9B9E1BA9FADE00A505DD /* applejuicedemopic.png in Resources */,
 			);
@@ -910,6 +945,7 @@
 				0334CA3A1BA8DDFC00013096 /* ContinuousGlucose.swift in Sources */,
 				486F5E441BA1CABF00BA2A57 /* NutEventList.swift in Sources */,
 				4837CC691BA7394E00BA2CDE /* NutshellUIButton.swift in Sources */,
+				48ED0D341BADAF8B009D0D6F /* GraphUIView.swift in Sources */,
 				0334CA761BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift in Sources */,
 				486F5E581BA1D0CC00BA2A57 /* InsulinInputs.swift in Sources */,
 				4859FCB91B9A4DE4000C1269 /* AppDelegate.swift in Sources */,

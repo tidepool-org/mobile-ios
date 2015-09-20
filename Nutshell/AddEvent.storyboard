@@ -6,10 +6,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--EventDetail-->
+        <!--AddEvent-->
         <scene sceneID="C4A-E2-qr2">
             <objects>
-                <viewController storyboardIdentifier="AddEventViewController" title="EventDetail" id="SME-si-pxR" customClass="AddEventViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddEventViewController" title="AddEvent" id="SME-si-pxR" customClass="AddEventViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="d9B-Ff-jeC"/>
                         <viewControllerLayoutGuide type="bottom" id="OI8-VU-Dvy"/>
@@ -272,13 +272,37 @@
                                     <constraint firstItem="kQc-5j-BRa" firstAttribute="top" secondItem="z3C-1B-9wl" secondAttribute="bottom" id="oM0-zg-0BP"/>
                                 </constraints>
                             </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ERS-0J-0ST" userLabel="SuccessView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addAnimation-01.png" translatesAutoresizingMaskIntoConstraints="NO" id="fZz-kg-ufq">
+                                        <rect key="frame" x="117" y="232" width="140" height="140"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="140" id="11I-pF-OBP"/>
+                                            <constraint firstAttribute="height" constant="140" id="FbI-tI-k0m"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="fZz-kg-ufq" firstAttribute="centerY" secondItem="ERS-0J-0ST" secondAttribute="centerY" id="984-Bq-hmG"/>
+                                    <constraint firstItem="fZz-kg-ufq" firstAttribute="centerX" secondItem="ERS-0J-0ST" secondAttribute="centerX" id="QdP-MI-Dea"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightBackground"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="l7D-lp-jvI" firstAttribute="top" secondItem="d9B-Ff-jeC" secondAttribute="bottom" id="AMv-vm-FWg"/>
+                            <constraint firstAttribute="trailing" secondItem="ERS-0J-0ST" secondAttribute="trailing" id="OeZ-Ji-c3r"/>
                             <constraint firstItem="OI8-VU-Dvy" firstAttribute="top" secondItem="l7D-lp-jvI" secondAttribute="bottom" id="TXF-Yz-Rhj"/>
                             <constraint firstItem="l7D-lp-jvI" firstAttribute="leading" secondItem="nnW-7Y-LY1" secondAttribute="leading" id="Xbe-pL-XBl"/>
                             <constraint firstAttribute="trailing" secondItem="l7D-lp-jvI" secondAttribute="trailing" id="b6r-Ek-cEl"/>
+                            <constraint firstItem="ERS-0J-0ST" firstAttribute="top" secondItem="d9B-Ff-jeC" secondAttribute="bottom" id="dPa-wU-D7M"/>
+                            <constraint firstItem="OI8-VU-Dvy" firstAttribute="top" secondItem="ERS-0J-0ST" secondAttribute="bottom" id="frC-5C-2hv"/>
+                            <constraint firstItem="ERS-0J-0ST" firstAttribute="leading" secondItem="nnW-7Y-LY1" secondAttribute="leading" id="tZy-fo-Ch7"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="kI8-Ma-QfU">
@@ -299,6 +323,8 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
+                        <outlet property="addSuccessImageView" destination="fZz-kg-ufq" id="eq7-ND-ZfO"/>
+                        <outlet property="addSuccessView" destination="ERS-0J-0ST" id="xh6-fA-eCB"/>
                         <outlet property="eventDate" destination="rfT-NA-lSd" id="lVN-DJ-ZRp"/>
                         <outlet property="missingPhotoView" destination="DRa-Wn-kLy" id="zoq-zz-3sV"/>
                         <outlet property="notesTextField" destination="xm6-dP-Mmd" id="1ub-b8-zwx"/>
@@ -334,6 +360,7 @@
     </scenes>
     <resources>
         <image name="ThreeTacosDemoPic.png" width="1280" height="456"/>
+        <image name="addAnimation-01.png" width="609" height="609"/>
         <image name="cameraIcon" width="56" height="44"/>
         <image name="detailCalendarIcon" width="21" height="23"/>
     </resources>
