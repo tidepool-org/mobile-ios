@@ -81,13 +81,13 @@ class EventListTableViewController: BaseUITableViewController {
 
         var nutEvents = [String: NutEvent]()
 
-        func addNewEvent(newEvent: Food) {
-            if let existingNutEvent = nutEvents[newEvent.name!] {
+        func addNewEvent(newEvent: Meal) {
+            if let existingNutEvent = nutEvents[newEvent.title!] {
                 existingNutEvent.addEvent(newEvent)
-                print("appending new event: \(newEvent.location)")
+                print("appending new event: \(newEvent.notes)")
                 existingNutEvent.printNutEvent()
             } else {
-                nutEvents[newEvent.name!] = NutEvent(firstEvent: newEvent)
+                nutEvents[newEvent.title!] = NutEvent(firstEvent: newEvent)
             }
         }
 
@@ -95,9 +95,9 @@ class EventListTableViewController: BaseUITableViewController {
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
 
         do {
-            let foodEvents = try DatabaseUtils.getAllFoodEvents(ad.managedObjectContext)
-            for event in foodEvents {
-                print("Event type: \(event.type), time: \(event.time), carbs: \(event.carbs), location: \(event.location), name: \(event.name)")
+            let mealEvents = try DatabaseUtils.getAllMealEvents(ad.managedObjectContext)
+            for event in mealEvents {
+                print("Event type: \(event.type), time: \(event.time), title: \(event.title), notes: \(event.notes), location: \(event.location)")
                 addNewEvent(event)
             }
         } catch let error as NSError {
@@ -107,90 +107,6 @@ class EventListTableViewController: BaseUITableViewController {
         sortedNutEvents = nutEvents.sort() { $0.1.mostRecent.compare($1.1.mostRecent) == NSComparisonResult.OrderedDescending }
         
         tableView.reloadData()
-    }
-    
-    func getEvents() {
-        // Get the last month's worth of events
-//        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-//
-//        let cal = NSCalendar.currentCalendar()
-//        let fromTime = cal.dateByAddingUnit(.Month, value: -1, toDate: NSDate(), options: NSCalendarOptions(rawValue: 0))!
-//        let toTime = NSDate()
-//        
-//        do {
-//            let events = try DatabaseUtils.getBolusEvents(ad.managedObjectContext, fromTime: fromTime, toTime: toTime)
-//                for event in events {
-//                    if event.type == "SelfMonitoringGlucose" {
-//                        print("Event: \(event)")
-//                    }
-//                    print("Event: \(event)")
-//                }
-//            print("\(events.count) events")
-//
-//        } catch let error as NSError {
-//            print("Error: \(error)")
-//        }
-
-//        do {
-//            let cbgEvents = try DatabaseUtils.getAllCbgEvents(ad.managedObjectContext)
-//            for event in cbgEvents {
-//                print("Event type: \(event.type), time: \(event.time), isig: \(event.isig), value: \(event.value)")
-//            }
-//        } catch let error as NSError {
-//            print("Error: \(error)")
-//        }
-//        
-//        do {
-//            let basalEvents = try DatabaseUtils.getAllBasalEvents(ad.managedObjectContext)
-//            for event in basalEvents {
-//                print("Event type: \(event.type), time: \(event.time), duration: \(event.duration), value: \(event.value)")
-//            }
-//        } catch let error as NSError {
-//            print("Error: \(error)")
-//        }
-        
-
-//        do {
-//            let foodEvents = try DatabaseUtils.getAllFoodEvents(ad.managedObjectContext)
-//            for event in foodEvents {
-//                print("Event type: \(event.type), time: \(event.time), carbs: \(event.carbs), location: \(event.location), name: \(event.name)")
-//            }
-//        } catch let error as NSError {
-//            print("Error: \(error)")
-//        }
-//        
-//        do {
-//            let mixedEvents = try DatabaseUtils.getSmbgAndBolusEvents(ad.managedObjectContext)
-//            for event in mixedEvents {
-//                print("Event type: \(event.type), time: \(event.time), type: \(event.type)")
-//                if (event.type == "bolus") {
-//                    if let bolusEvent = event as? Bolus {
-//                        print("Value: \(bolusEvent.value)")
-//                    }
-//                }
-//            }
-//        } catch let error as NSError {
-//            print("Error: \(error)")
-//        }
-
-//        do {
-//            let smbgEvents = try DatabaseUtils.getAllSmbgEvents(ad.managedObjectContext)
-//            for event in smbgEvents {
-//                print("Event type: \(event.type), time: \(event.time), subType: \(event.subType), value: \(event.value)")
-//            }
-//        } catch let error as NSError {
-//            print("Error: \(error)")
-//        }
-
-//        do {
-//            let activityEvents = try DatabaseUtils.getAllActivityEvents(ad.managedObjectContext)
-//            for event in activityEvents {
-//                print("Event type: \(event.type), time: \(event.time), subType: \(event.subType), duration: \(event.duration), location: \(event.location)")
-//            }
-//        } catch let error as NSError {
-//            print("Error: \(error)")
-//        }
-
     }
 }
 
@@ -212,7 +128,7 @@ extension EventListTableViewController {
             let tuple = self.sortedNutEvents[indexPath.item]
             let nutEvent = tuple.1
             // Configure the cell...
-            cell.textLabel?.text = nutEvent.title
+            cell.textLabel?.text = nutEvent.title + " (" + String(nutEvent.itemArray.count) + ")"
             cell.eventGroup = nutEvent
         }
         

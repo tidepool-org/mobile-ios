@@ -19,16 +19,19 @@ class NutEvent {
     
     var title: String
     var mostRecent: NSDate
-    var itemArray: [Food]
-    init(firstEvent: Food) {
-        self.title = firstEvent.name!
+    var itemArray: [NutMeal]
+    init(firstEvent: Meal) {
+        self.title = firstEvent.title!
         self.mostRecent = firstEvent.time!
-        self.itemArray = [firstEvent]
+        let firstItem = NutMeal(title: firstEvent.title!, notes: firstEvent.notes!, location: firstEvent.location!, photo: firstEvent.photo!, time: firstEvent.time!)
+        self.itemArray = [firstItem]
     }
     
-    func addEvent(newEvent: Food) {
-        if (newEvent.name == self.title) {
-            self.itemArray.append(newEvent)
+    func addEvent(newEvent: Meal) {
+        if (newEvent.title == self.title) {
+            let newItem = NutMeal(title: newEvent.title!, notes: newEvent.notes!, location: newEvent.location!, photo: newEvent.photo!, time: newEvent.time!)
+            
+            self.itemArray.append(newItem)
             mostRecent = newEvent.time!.laterDate(mostRecent)
         } else {
             print("attempting to add item with non-matching title to NutEvent!")
@@ -38,7 +41,7 @@ class NutEvent {
     func printNutEvent() {
         print("nut has \(itemArray.count) items")
         for item in itemArray {
-            print("item: \(item.name), \(item.location), \(item.time)")
+            print("item: \(item.notes), \(item.location), \(item.time)")
         }
     }
     
@@ -46,16 +49,4 @@ class NutEvent {
         return "NutEvent with title: \(title) and items \(itemArray)"
     }
 
-//    class func testNutEvent(title: String) -> NutEvent {
-//        if (title == "Three Tacos") {
-//            let df = NSDateFormatter()
-//            return NutEvent(title: title, itemArray: [
-//                NutEventItem(subtext: "with 15 chips & salsa", timestamp: df.dateFromISOString("2015-07-29 04:55:27 +0000"), location: "home"),
-//                NutEventItem(subtext: "after ballet", timestamp: df.dateFromISOString("2015-07-29 01:38:53 +0000"), location:"238 Garrett St"),
-//                NutEventItem(subtext: "Apple Juice before", timestamp: df.dateFromISOString("2015-07-10 14:25:21 +0000"), location: "Golden Gate Park"),
-//                NutEventItem(subtext: "and horchata", timestamp: NSDate(), location: "Golden Gate Park")])
-//        } else {
-//            return NutEvent(title: title, itemArray: [])
-//        }
-//    }
 }

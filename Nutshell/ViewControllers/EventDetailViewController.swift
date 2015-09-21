@@ -19,7 +19,7 @@ import UIKit
 
 class EventDetailViewController: BaseUIViewController {
 
-    var eventItem: Food?
+    var eventItem: NutMeal?
     var graphView: GraphUIView?
 
     @IBOutlet weak var graphSectionView: UIView!
@@ -38,10 +38,10 @@ class EventDetailViewController: BaseUIViewController {
         super.viewDidLoad()
         
         if let eventItem = eventItem {
-            eventNotes.text = eventItem.location
+            eventNotes.text = eventItem.notes
             let df = NSDateFormatter()
             df.dateFormat = uniformDateFormat
-            eventDate.text = df.stringFromDate(eventItem.time!)
+            eventDate.text = df.stringFromDate(eventItem.time)
         }
     }
 

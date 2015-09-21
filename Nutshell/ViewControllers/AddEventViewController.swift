@@ -72,24 +72,76 @@ class AddEventViewController: UIViewController {
     @IBAction func notesEditingDidBegin(sender: AnyObject) {
     }
     
-
-    @IBAction func saveButtonHandler(sender: AnyObject) {
-        print("Need to save to database here!")
-        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-        let moc = ad.managedObjectContext
-        if let entityDescription = NSEntityDescription.entityForName("Food", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Food
-            
-            // toss subtext in location for now...
-            me.location = notesTextField.text
-            me.name = titleTextField.text
-            me.type = "food"
-            me.time = eventTime // required!
+    private func addDemoData() {
+        
+        let demoMeals = [
+            ["Three tacos", "with 15 chips & salsa", "2015-07-29 04:55:27 +0000", "home"],
+            ["Three tacos", "after ballet", "2015-07-29 04:55:27 +0000", "238 Garrett St"],
+            ["Three tacos", "Apple Juice before", "2015-07-10 14:25:21 +0000", "Golden Gate Park"],
+            ["Three tacos", "and horchata", "2015-07-09 14:25:21 +0000", "Golden Gate Park"],
+            ["Workout", "running in park", "2015-07-08 14:25:21 +0000", ""],
+            ["", "Only notes for this one", "2015-07-07 14:25:21 +0000", ""],
+            ["CPK 5 cheese margarita", "", "2015-07-06 14:25:21 +0000", ""],
+            ["Bagel & cream cheese fruit", "", "2015-07-05 14:25:21 +0000", ""],
+            ["Birthday Party", "", "2015-07-04 14:25:21 +0000", ""],
+            ["Soccer Practice", "", "2015-07-03 14:25:21 +0000", ""],
+        ]
+        
+        func addMeal(me: Meal, event: [String], df: NSDateFormatter) {
+            me.title = event[0]
+            me.notes = event[1]
+            if (event[2] == "") {
+                me.time = NSDate()
+            } else {
+                me.time = df.dateFromISOString(event[2])
+            }
+            me.location = event[3]
+            me.photo = ""
+            me.type = "meal"
             me.id = NSUUID().UUIDString // required!
             let now = NSDate()
             me.createdTime = now
             me.modifiedTime = now
-            moc.insertObject(me)
+        }
+        
+        let df = NSDateFormatter()
+        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+        let moc = ad.managedObjectContext
+        if let entityDescription = NSEntityDescription.entityForName("Meal", inManagedObjectContext: moc) {
+            for event in demoMeals {
+                let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal
+                addMeal(me, event: event, df: df)
+                moc.insertObject(me)
+            }
+        }
+    }
+
+    @IBAction func saveButtonHandler(sender: AnyObject) {
+        
+        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+        let moc = ad.managedObjectContext
+        if let entityDescription = NSEntityDescription.entityForName("Meal", inManagedObjectContext: moc) {
+            
+            // This is a good place to splice in demo and test data. For now, entering "demo" as the title will result in us adding a set of demo events to the model, and "delete" will delete all food events.
+            if titleTextField.text == "demo" {
+                addDemoData()
+            } else if titleTextField.text == "delete" {
+                DatabaseUtils.deleteAllMealEvents(moc)
+            } else {
+                let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal
+                
+                me.location = ""
+                me.title = titleTextField.text
+                me.notes = notesTextField.text
+                me.photo = ""
+                me.type = "meal"
+                me.time = eventTime // required!
+                me.id = NSUUID().UUIDString // required!
+                let now = NSDate()
+                me.createdTime = now
+                me.modifiedTime = now
+                moc.insertObject(me)
+            }
             
             // Save the database
             do {
@@ -97,9 +149,9 @@ class AddEventViewController: UIViewController {
                 print("addEvent: Database saved!")
                 showSuccessView()
             } catch let error as NSError {
+                // TO DO: error message!
                 print("Failed to save MOC: \(error)")
             }
-            // TO DO: save event success or error message!
         }
     }
     

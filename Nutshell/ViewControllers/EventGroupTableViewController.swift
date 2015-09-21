@@ -46,17 +46,16 @@ class EventGroupTableViewController: BaseUITableViewController {
         return (eventGroup?.itemArray.count)!
     }
 
+    private static var cellDF = NSDateFormatter()
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCellWithIdentifier("eventItemCell", forIndexPath: indexPath) as! EventGroupTableViewCell
         
         // Configure the cell...
         if (indexPath.item < eventGroup?.itemArray.count) {
             if let eventItem = eventGroup?.itemArray[indexPath.item] {
-                // TODO: Configure the cell for real!
-                cell.titleString.text = eventItem.location
-                cell.timeString.text = "Home"
-                cell.locationString.text = eventItem.location
-                cell.eventItem = eventItem
+                cell.configureCell(eventItem)
                 // demo pic...
                 if (indexPath.row > 0) {
                     cell.photoImageView.image = UIImage(named: "applejuicedemopic")

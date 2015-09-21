@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="8195" systemVersion="14F27" minimumToolsVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9048" systemVersion="14F27" minimumToolsVersion="Automatic">
     <entity name="Activity" representedClassName=".Activity" parentEntity="CommonData" syncable="YES">
         <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="intensityBorg" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
@@ -59,6 +59,12 @@
     </entity>
     <entity name="GrabBag" representedClassName=".GrabBag" parentEntity="CommonData" syncable="YES">
         <attribute name="subType" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Meal" representedClassName=".Meal" parentEntity="CommonData" syncable="YES">
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="photo" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Note" representedClassName=".Note" parentEntity="CommonData" syncable="YES">
         <attribute name="creatorId" optional="YES" attributeType="String" syncable="YES"/>
@@ -131,6 +137,14 @@
         <attribute name="recommendedCorrection" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="recommendedNet" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
     </entity>
+    <entity name="Workout" representedClassName=".Workout" parentEntity="CommonData" syncable="YES">
+        <attribute name="appleHealthDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="calories" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="distance" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="source" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="subType" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Activity" positionX="-27" positionY="36" width="128" height="150"/>
         <element name="Alarm" positionX="-9" positionY="81" width="128" height="75"/>
@@ -140,7 +154,7 @@
         <element name="Calibration" positionX="27" positionY="117" width="128" height="60"/>
         <element name="CommonData" positionX="-54" positionY="18" width="128" height="240"/>
         <element name="ContinuousGlucose" positionX="9" positionY="63" width="128" height="73"/>
-        <element name="DeviceMetadata" positionX="27" positionY="81" width="128" height="43"/>
+        <element name="DeviceMetadata" positionX="27" positionY="81" width="128" height="45"/>
         <element name="Food" positionX="-18" positionY="36" width="128" height="120"/>
         <element name="GrabBag" positionX="-9" positionY="45" width="128" height="60"/>
         <element name="Note" positionX="-9" positionY="90" width="128" height="120"/>
@@ -154,5 +168,7 @@
         <element name="UrineKetone" positionX="45" positionY="144" width="128" height="60"/>
         <element name="User" positionX="-63" positionY="-18" width="128" height="90"/>
         <element name="Wizard" positionX="36" positionY="90" width="128" height="195"/>
+        <element name="Meal" positionX="0" positionY="117" width="128" height="105"/>
+        <element name="Workout" positionX="9" positionY="126" width="128" height="135"/>
     </elements>
 </model>

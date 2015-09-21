@@ -18,8 +18,8 @@ import UIKit
 
 class EventGroupTableViewCell: NutshellUITableViewCell {
 
-    var eventItem: Food?
-
+    var eventItem: NutMeal?
+    
     @IBOutlet weak var favoriteStar: UIImageView!
     @IBOutlet weak var titleString: UILabel!
     @IBOutlet weak var timeString: UILabel!
@@ -37,4 +37,24 @@ class EventGroupTableViewCell: NutshellUITableViewCell {
         // Configure the view for the selected state
     }
 
+    private var df: NSDateFormatter?
+    private func dateFormatter() -> NSDateFormatter {
+        if let df = self.df {
+            return df
+        } else {
+            let df = NSDateFormatter()
+            df.dateFormat = uniformDateFormat
+            self.df = df
+            return df
+        }
+    }
+    
+    func configureCell(eventItem: NutMeal) {
+        titleString.text = eventItem.notes
+        let df = NSDateFormatter()
+        df.dateFormat = uniformDateFormat
+        timeString.text = dateFormatter().stringFromDate(eventItem.time)
+        locationString.text = eventItem.location
+        self.eventItem = eventItem
+    }
 }

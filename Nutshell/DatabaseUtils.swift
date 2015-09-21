@@ -13,6 +13,7 @@ import SwiftyJSON
 class DatabaseUtils {
     
     /** Removes everything from the database. Do this on logout and / or after a successful login */
+    // TODO: add code to delete "meal" and "workout" items from the database once we upload them to the service so they are backed up.
     class func clearDatabase(moc: NSManagedObjectContext) {
         moc.performBlock { () -> Void in
             
@@ -122,50 +123,37 @@ class DatabaseUtils {
         return try moc.executeFetchRequest(request) as! [CommonData]
     }
 
-    class func getSmbgAndBolusEvents(moc: NSManagedObjectContext) throws -> [CommonData] {
+    class func getAllMealAndWorkoutEvents(moc: NSManagedObjectContext) throws -> [CommonData] {
         let request = NSFetchRequest(entityName: "CommonData")
-            request.predicate = NSPredicate(format: "(type == %@) OR (type == %@)", "smbg", "bolus")
+            request.predicate = NSPredicate(format: "(type == %@) OR (type == %@)", "meal", "workout")
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         return try moc.executeFetchRequest(request) as! [CommonData]
     }
 
-    class func getAllFoodEvents(moc: NSManagedObjectContext) throws -> [Food] {
-        let request = NSFetchRequest(entityName: "Food")
+    class func getAllMealEvents(moc: NSManagedObjectContext) throws -> [Meal] {
+        let request = NSFetchRequest(entityName: "Meal")
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
-        return try moc.executeFetchRequest(request) as! [Food]
+        return try moc.executeFetchRequest(request) as! [Meal]
     }
     
-    class func getActivityEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate) throws -> [Activity] {
-        let request = NSFetchRequest(entityName: "Activity")
-        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
-        return try moc.executeFetchRequest(request) as! [Activity]
-    }
-    
-    class func getBolusEvents(moc: NSManagedObjectContext, fromTime: NSDate?, toTime: NSDate?) throws -> [Bolus] {
-        let request = NSFetchRequest(entityName: "Bolus")
-        if let fromTime = fromTime, toTime = toTime {
-            request.predicate = NSPredicate(format: "(time >= %@) AND (time <= %@)", fromTime, toTime)
+    class func deleteAllMealEvents(moc: NSManagedObjectContext) {
+        moc.performBlock { () -> Void in
+            do {
+                let request = NSFetchRequest(entityName: "Meal")
+                let myList = try moc.executeFetchRequest(request)
+                for obj: AnyObject in myList {
+                    moc.deleteObject(obj as! NSManagedObject)
+                }
+            } catch let error as NSError {
+                print("Failed to delete meal items: \(error)")
+            }
+            
+            do {
+                try moc.save()
+            } catch let error as NSError {
+                print("clearDatabase: Failed to save MOC: \(error)")
+            }
         }
-        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
-        return try moc.executeFetchRequest(request) as! [Bolus]
-    }
-
-    class func getSmbgEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate) throws -> [SelfMonitoringGlucose] {
-        let request = NSFetchRequest(entityName: "SelfMonitoringGlucose")
-        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
-        return try moc.executeFetchRequest(request) as! [SelfMonitoringGlucose]
-    }
-
-    class func getCbgEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate) throws -> [ContinuousGlucose] {
-        let request = NSFetchRequest(entityName: "ContinuousGlucose")
-        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
-        return try moc.executeFetchRequest(request) as! [ContinuousGlucose]
-    }
-
-    class func getBasalEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate) throws -> [Basal] {
-        let request = NSFetchRequest(entityName: "Basal")
-        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
-        return try moc.executeFetchRequest(request) as! [Basal]
     }
 
 }
