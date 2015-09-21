@@ -18,7 +18,7 @@ import UIKit
 
 class EventGroupTableViewCell: NutshellUITableViewCell {
 
-    var eventItem: NutEventItem?
+    var eventItem: Food?
 
     @IBOutlet weak var favoriteStar: UIImageView!
     @IBOutlet weak var titleString: UILabel!

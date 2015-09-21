@@ -19,7 +19,7 @@ import UIKit
 
 class EventDetailViewController: BaseUIViewController {
 
-    var eventItem: NutEventItem?
+    var eventItem: Food?
     var graphView: GraphUIView?
 
     @IBOutlet weak var graphSectionView: UIView!
@@ -38,10 +38,10 @@ class EventDetailViewController: BaseUIViewController {
         super.viewDidLoad()
         
         if let eventItem = eventItem {
-            eventNotes.text = eventItem.subtext
+            eventNotes.text = eventItem.location
             let df = NSDateFormatter()
             df.dateFormat = uniformDateFormat
-            eventDate.text = df.stringFromDate(eventItem.timestamp)
+            eventDate.text = df.stringFromDate(eventItem.time!)
         }
     }
 
@@ -63,7 +63,7 @@ class EventDetailViewController: BaseUIViewController {
             
             // here we can get the frame of subviews of mySubView
             // and do useful things with that...
-            if let eventTime = eventItem?.timestamp {
+            if let eventTime = eventItem?.time {
                 graphView = GraphUIView(frame: graphSectionView.bounds)
                 graphView!.configureTimeFrame(eventTime, timeIntervalForView: 60*60*6)
                 graphSectionView.addSubview(graphView!)

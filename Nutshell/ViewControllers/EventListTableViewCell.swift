@@ -17,8 +17,6 @@ import UIKit
 
 class EventListTableViewCell: NutshellUITableViewCell {
 
-    var eventItem: NutEventItem?
-
     var eventGroup: NutEvent?
 
     override func awakeFromNib() {

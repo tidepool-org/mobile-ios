@@ -18,38 +18,19 @@ import CoreData
 
 class EventListTableViewController: BaseUITableViewController {
 
-    private var eventList: NSArray!
+    private var sortedNutEvents = [(String, NutEvent)]()
   
-    required init?(coder aDecoder: NSCoder) {
-        eventList = []
-        super.init(coder: aDecoder)
-    }
-
-    deinit {
-        let nc = NSNotificationCenter.defaultCenter()
-        nc.removeObserver(self, name: "EventListChanged", object: nil)
-    }
-
-    private func updateEventList(notification: NSNotification) {
-        self.eventList = EventListDB.testNutEventList();
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = "All events"
         
-        let nc = NSNotificationCenter.defaultCenter()
-        // Note colon since processBigEvent takes a parameter
-        nc.addObserver(self, selector:"updateEventList:", name: "EventListChanged", object: nil)
-
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
-        self.eventList = EventListDB.testNutEventList();
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -64,7 +45,7 @@ class EventListTableViewController: BaseUITableViewController {
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: ad.managedObjectContext)
 
-        getEvents()
+        getNutEvents()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -92,17 +73,46 @@ class EventListTableViewController: BaseUITableViewController {
     
     func databaseChanged(note: NSNotification) {
         print("EventList: Database Changed")
-        getEvents()
+        sortedNutEvents = [(String, NutEvent)]()
+        getNutEvents()
     }
     
     func getNutEvents() {
+
+        var nutEvents = [String: NutEvent]()
+
+        func addNewEvent(newEvent: Food) {
+            if let existingNutEvent = nutEvents[newEvent.name!] {
+                existingNutEvent.addEvent(newEvent)
+                print("appending new event: \(newEvent.location)")
+                existingNutEvent.printNutEvent()
+            } else {
+                nutEvents[newEvent.name!] = NutEvent(firstEvent: newEvent)
+            }
+        }
+
         // Get all Food and Activity events, chronologically. Create a dictionary of NutEvents, with 
+        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+
+        do {
+            let foodEvents = try DatabaseUtils.getAllFoodEvents(ad.managedObjectContext)
+            for event in foodEvents {
+                print("Event type: \(event.type), time: \(event.time), carbs: \(event.carbs), location: \(event.location), name: \(event.name)")
+                addNewEvent(event)
+            }
+        } catch let error as NSError {
+            print("Error: \(error)")
+        }
+        
+        sortedNutEvents = nutEvents.sort() { $0.1.mostRecent.compare($1.1.mostRecent) == NSComparisonResult.OrderedDescending }
+        
+        tableView.reloadData()
     }
     
     func getEvents() {
         // Get the last month's worth of events
-        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-//        
+//        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+//
 //        let cal = NSCalendar.currentCalendar()
 //        let fromTime = cal.dateByAddingUnit(.Month, value: -1, toDate: NSDate(), options: NSCalendarOptions(rawValue: 0))!
 //        let toTime = NSDate()
@@ -140,28 +150,28 @@ class EventListTableViewController: BaseUITableViewController {
 //        }
         
 
-        do {
-            let foodEvents = try DatabaseUtils.getAllFoodEvents(ad.managedObjectContext)
-            for event in foodEvents {
-                print("Event type: \(event.type), time: \(event.time), carbs: \(event.carbs), location: \(event.location), name: \(event.name)")
-            }
-        } catch let error as NSError {
-            print("Error: \(error)")
-        }
-        
-        do {
-            let mixedEvents = try DatabaseUtils.getSmbgAndBolusEvents(ad.managedObjectContext)
-            for event in mixedEvents {
-                print("Event type: \(event.type), time: \(event.time), type: \(event.type)")
-                if (event.type == "bolus") {
-                    if let bolusEvent = event as? Bolus {
-                        print("Value: \(bolusEvent.value)")
-                    }
-                }
-            }
-        } catch let error as NSError {
-            print("Error: \(error)")
-        }
+//        do {
+//            let foodEvents = try DatabaseUtils.getAllFoodEvents(ad.managedObjectContext)
+//            for event in foodEvents {
+//                print("Event type: \(event.type), time: \(event.time), carbs: \(event.carbs), location: \(event.location), name: \(event.name)")
+//            }
+//        } catch let error as NSError {
+//            print("Error: \(error)")
+//        }
+//        
+//        do {
+//            let mixedEvents = try DatabaseUtils.getSmbgAndBolusEvents(ad.managedObjectContext)
+//            for event in mixedEvents {
+//                print("Event type: \(event.type), time: \(event.time), type: \(event.type)")
+//                if (event.type == "bolus") {
+//                    if let bolusEvent = event as? Bolus {
+//                        print("Value: \(bolusEvent.value)")
+//                    }
+//                }
+//            }
+//        } catch let error as NSError {
+//            print("Error: \(error)")
+//        }
 
 //        do {
 //            let smbgEvents = try DatabaseUtils.getAllSmbgEvents(ad.managedObjectContext)
@@ -192,17 +202,18 @@ extension EventListTableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.eventList.count
+        return sortedNutEvents.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(EventViewStoryboard.TableViewCellIdentifiers.eventListCell, forIndexPath: indexPath) as! EventListTableViewCell
 
-        if (indexPath.item < self.eventList.count) {
-            let event = self.eventList[indexPath.item] as! NutEvent
+        if (indexPath.item < sortedNutEvents.count) {
+            let tuple = self.sortedNutEvents[indexPath.item]
+            let nutEvent = tuple.1
             // Configure the cell...
-            cell.textLabel?.text = event.title
-            cell.eventGroup = event
+            cell.textLabel?.text = nutEvent.title
+            cell.eventGroup = nutEvent
         }
         
         return cell

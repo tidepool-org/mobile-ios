@@ -53,7 +53,7 @@ class EventGroupTableViewController: BaseUITableViewController {
         if (indexPath.item < eventGroup?.itemArray.count) {
             if let eventItem = eventGroup?.itemArray[indexPath.item] {
                 // TODO: Configure the cell for real!
-                cell.titleString.text = eventItem.subtext
+                cell.titleString.text = eventItem.location
                 cell.timeString.text = "Home"
                 cell.locationString.text = eventItem.location
                 cell.eventItem = eventItem
