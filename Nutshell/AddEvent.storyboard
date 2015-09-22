@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l7D-lp-jvI" userLabel="SceneContainer">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l7D-lp-jvI" userLabel="SceneContainer">
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3C-1B-9wl" userLabel="TopSection" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
@@ -33,22 +33,42 @@
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DRa-Wn-kLy" userLabel="noPhotoView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="375" height="114"/>
                                                         <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ae-Bd-RPQ">
-                                                                <rect key="frame" x="173" y="64" width="28" height="22"/>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FMt-wV-58v" userLabel="photoIconContainerView">
+                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="114"/>
+                                                                <subviews>
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ae-Bd-RPQ">
+                                                                        <rect key="frame" x="174" y="66" width="28" height="22"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="28" id="MPa-za-epE"/>
+                                                                            <constraint firstAttribute="height" constant="22" id="TTU-xp-9Xw"/>
+                                                                            <constraint firstAttribute="width" constant="28" id="Vc8-xb-OSt"/>
+                                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="28" id="Xcn-4E-n2d"/>
+                                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="nfR-Yi-UZv"/>
+                                                                            <constraint firstAttribute="height" id="nyH-hC-tGB"/>
+                                                                        </constraints>
+                                                                        <state key="normal" image="cameraIcon"/>
+                                                                        <variation key="default">
+                                                                            <mask key="constraints">
+                                                                                <exclude reference="Vc8-xb-OSt"/>
+                                                                                <exclude reference="Xcn-4E-n2d"/>
+                                                                                <exclude reference="nfR-Yi-UZv"/>
+                                                                                <exclude reference="nyH-hC-tGB"/>
+                                                                            </mask>
+                                                                        </variation>
+                                                                    </button>
+                                                                </subviews>
+                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="width" constant="28" id="MPa-za-epE"/>
-                                                                    <constraint firstAttribute="height" constant="22" id="TTU-xp-9Xw"/>
-                                                                    <constraint firstAttribute="width" constant="28" id="Vc8-xb-OSt"/>
-                                                                    <constraint firstAttribute="height" id="nyH-hC-tGB"/>
+                                                                    <constraint firstItem="5Ae-Bd-RPQ" firstAttribute="centerY" secondItem="FMt-wV-58v" secondAttribute="centerY" constant="20" id="2Ap-57-XXw"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="5Ae-Bd-RPQ" secondAttribute="bottom" constant="26" id="YSk-JU-K5s"/>
+                                                                    <constraint firstItem="5Ae-Bd-RPQ" firstAttribute="centerX" secondItem="FMt-wV-58v" secondAttribute="centerX" id="n0J-zi-lmS"/>
                                                                 </constraints>
-                                                                <state key="normal" image="cameraIcon"/>
                                                                 <variation key="default">
                                                                     <mask key="constraints">
-                                                                        <exclude reference="Vc8-xb-OSt"/>
-                                                                        <exclude reference="nyH-hC-tGB"/>
+                                                                        <exclude reference="YSk-JU-K5s"/>
                                                                     </mask>
                                                                 </variation>
-                                                            </button>
+                                                            </view>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7qa-cl-hZk" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
                                                                 <rect key="frame" x="8" y="12" width="359" height="40"/>
                                                                 <constraints>
@@ -65,31 +85,17 @@
                                                         </subviews>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <constraints>
-                                                            <constraint firstItem="5Ae-Bd-RPQ" firstAttribute="centerX" secondItem="DRa-Wn-kLy" secondAttribute="centerX" id="7du-0H-mki"/>
+                                                            <constraint firstItem="FMt-wV-58v" firstAttribute="top" secondItem="DRa-Wn-kLy" secondAttribute="top" id="3ss-hQ-47H"/>
                                                             <constraint firstItem="7qa-cl-hZk" firstAttribute="top" secondItem="DRa-Wn-kLy" secondAttribute="topMargin" constant="4" id="GPW-Jw-UqW"/>
                                                             <constraint firstItem="7qa-cl-hZk" firstAttribute="leading" secondItem="DRa-Wn-kLy" secondAttribute="leadingMargin" id="HUj-jQ-5LC"/>
-                                                            <constraint firstItem="5Ae-Bd-RPQ" firstAttribute="centerY" secondItem="DRa-Wn-kLy" secondAttribute="centerY" id="Lkh-LD-WGT"/>
-                                                            <constraint firstItem="5Ae-Bd-RPQ" firstAttribute="centerX" secondItem="DRa-Wn-kLy" secondAttribute="centerX" id="dUA-Js-Id6"/>
-                                                            <constraint firstItem="5Ae-Bd-RPQ" firstAttribute="top" secondItem="7qa-cl-hZk" secondAttribute="bottom" constant="12" id="kT8-tn-ioB"/>
-                                                            <constraint firstItem="5Ae-Bd-RPQ" firstAttribute="centerX" secondItem="DRa-Wn-kLy" secondAttribute="centerX" id="lrh-R2-O6q"/>
-                                                            <constraint firstItem="5Ae-Bd-RPQ" firstAttribute="centerY" secondItem="DRa-Wn-kLy" secondAttribute="centerY" id="nfS-rq-lKu"/>
+                                                            <constraint firstAttribute="trailing" secondItem="FMt-wV-58v" secondAttribute="trailing" id="K1N-yz-7hg"/>
+                                                            <constraint firstAttribute="bottom" secondItem="FMt-wV-58v" secondAttribute="bottom" id="eSx-i3-tso"/>
+                                                            <constraint firstItem="FMt-wV-58v" firstAttribute="leading" secondItem="DRa-Wn-kLy" secondAttribute="leading" id="iLj-oe-QDd"/>
                                                             <constraint firstItem="7qa-cl-hZk" firstAttribute="trailing" secondItem="DRa-Wn-kLy" secondAttribute="trailingMargin" id="o3F-XR-NK7"/>
-                                                            <constraint firstItem="5Ae-Bd-RPQ" firstAttribute="top" secondItem="DRa-Wn-kLy" secondAttribute="top" constant="-11" id="r3W-gM-Lsu"/>
-                                                            <constraint firstItem="5Ae-Bd-RPQ" firstAttribute="centerY" secondItem="DRa-Wn-kLy" secondAttribute="centerY" id="vGB-nR-cDf"/>
                                                         </constraints>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightBackground"/>
                                                         </userDefinedRuntimeAttributes>
-                                                        <variation key="default">
-                                                            <mask key="constraints">
-                                                                <exclude reference="7du-0H-mki"/>
-                                                                <exclude reference="Lkh-LD-WGT"/>
-                                                                <exclude reference="lrh-R2-O6q"/>
-                                                                <exclude reference="nfS-rq-lKu"/>
-                                                                <exclude reference="r3W-gM-Lsu"/>
-                                                                <exclude reference="vGB-nR-cDf"/>
-                                                            </mask>
-                                                        </variation>
                                                     </view>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -193,10 +199,10 @@
                                             </mask>
                                         </variation>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kQc-5j-BRa" userLabel="BottomSection">
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kQc-5j-BRa" userLabel="BottomSection">
                                         <rect key="frame" x="0.0" y="200" width="375" height="447"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qaa-en-akI" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qaa-en-akI" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="393" width="375" height="54"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="54" id="Mak-8R-bDm"/>
@@ -229,10 +235,10 @@
                                     <constraint firstItem="kQc-5j-BRa" firstAttribute="top" secondItem="z3C-1B-9wl" secondAttribute="bottom" id="oM0-zg-0BP"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ERS-0J-0ST" userLabel="SuccessView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                            <view hidden="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ERS-0J-0ST" userLabel="SuccessView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addAnimation-01.png" translatesAutoresizingMaskIntoConstraints="NO" id="fZz-kg-ufq">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="addAnimation-01.png" translatesAutoresizingMaskIntoConstraints="NO" id="fZz-kg-ufq">
                                         <rect key="frame" x="117" y="254" width="140" height="140"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="140" id="11I-pF-OBP"/>
@@ -285,6 +291,8 @@
                         <outlet property="eventDate" destination="rfT-NA-lSd" id="lVN-DJ-ZRp"/>
                         <outlet property="missingPhotoView" destination="DRa-Wn-kLy" id="zoq-zz-3sV"/>
                         <outlet property="notesTextField" destination="xm6-dP-Mmd" id="1ub-b8-zwx"/>
+                        <outlet property="photoIconButton" destination="5Ae-Bd-RPQ" id="W6p-ZC-qfK"/>
+                        <outlet property="photoIconContainer" destination="FMt-wV-58v" id="fy9-EF-nZj"/>
                         <outlet property="photoUIImageView" destination="6vL-Qj-BIV" id="pGp-hK-C01"/>
                         <outlet property="saveButton" destination="Qaa-en-akI" id="bXG-gQ-fe1"/>
                         <outlet property="titleEventButton" destination="7qa-cl-hZk" id="RcA-8C-K5s"/>
@@ -293,7 +301,26 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OMD-8a-PXv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1231.5" y="849.5"/>
+            <point key="canvasLocation" x="1613.5" y="849.5"/>
+        </scene>
+        <!--UnusedNavController-->
+        <scene sceneID="LuJ-Pv-LGz">
+            <objects>
+                <navigationController title="UnusedNavController" automaticallyAdjustsScrollViewInsets="NO" id="3HY-Ig-Rwb" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="3C4-pl-add">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="SME-si-pxR" kind="relationship" relationship="rootViewController" id="QfJ-4a-w6J"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="K5m-jp-OL5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1117.5" y="849.5"/>
         </scene>
     </scenes>
     <resources>

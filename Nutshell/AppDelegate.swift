@@ -21,8 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var API: APIConnector?
-
+    static var testMode: Bool = false
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        AppDelegate.testMode = false
         
         // Override point for customization after application launch.
         UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor

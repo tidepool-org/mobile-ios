@@ -19,29 +19,77 @@ class GraphUIView: UIView {
     */
 
     private var startTime: NSDate?, endTime: NSDate?
-    private var viewTimeInterval = 0.0
+    private var viewTimeInterval: CGFloat = 0.0
     private var smgbData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var cbgData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var basalData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
+    private var mealData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
+
+    func dataFound() -> Bool {
+        return cbgData.count != 0 || bolusData.count != 0 || basalData.count != 0 || smgbData.count != 0
+    }
     
     func configureTimeFrame(fromTime: NSDate, toTime: NSDate) {
         startTime = fromTime
         endTime = toTime
-        viewTimeInterval = toTime.timeIntervalSinceDate(fromTime)
+        viewTimeInterval = CGFloat(toTime.timeIntervalSinceDate(fromTime))
+    
         // TODO: validate time interval is positive and reasonable
         
         self.loadDataForView()
+        self.graphData()
     }
-    
+
     func configureTimeFrame(centerTime: NSDate, timeIntervalForView: NSTimeInterval) {
         startTime = centerTime.dateByAddingTimeInterval(-timeIntervalForView/2)
         endTime = startTime?.dateByAddingTimeInterval(timeIntervalForView)
-        viewTimeInterval = timeIntervalForView
+        viewTimeInterval = CGFloat(timeIntervalForView)
         // TODO: validate time interval is positive and reasonable
         
         self.loadDataForView()
+        self.graphData()
     }
+
+    private func graphData() {
+        // At this point data should be loaded, and we just need to plot the data
+        // First generate the graph background
+        
+            let backgroundImage = GraphViews.imageOfGraphBackground(viewSize: self.frame.size)
+            let graphBackground = UIImageView(image: backgroundImage)
+            addSubview(graphBackground)
+        
+            let workoutImage = GraphViews.imageOfHealthEvent(0.15, graphSize:self.frame.size)
+            // need to offset the middle of this view precisely at the time offset of the event
+            // assume time start of 0, time width of the graph 6 hours, and time offset of 3 hours
+            let pixelsPerSecond = self.frame.size.width/viewTimeInterval
+            let eventOffsetTime: CGFloat = 3*60*60
+            var eventOffsetPixels = pixelsPerSecond * eventOffsetTime
+            // offset for width of the event bar: the middle of the bar is where the event line is!
+            eventOffsetPixels = floor(eventOffsetPixels - 0.5 * workoutImage.size.width)
+
+            let frame = CGRectMake(eventOffsetPixels, 0, workoutImage.size.width, workoutImage.size.height)
+            let healthEvent = UIImageView(frame: frame)
+            healthEvent.image = workoutImage
+            self.addSubview(healthEvent)
+    }
+
+    //
+    //            image = GraphViews.imageOfHealthEvent(0.15, graphSize:graphSectionView.frame.size)
+    //            // need to offset the middle of this view precisely at the time offset of the event
+    //            // assume time start of 0, time width of the graph 6 hours, and time offset of 3 hours
+    //            let graphTotalSecs: CGFloat = 6*60*60
+    //            let pixelsPerSecond = graphSectionView.frame.size.width/graphTotalSecs
+    //            let eventOffsetTime: CGFloat = 3*60*60
+    //            var eventOffsetPixels = pixelsPerSecond * eventOffsetTime
+    //            // offset for width of the event bar: the middle of the bar is where the event line is!
+    //            eventOffsetPixels = floor(eventOffsetPixels - 0.5 * image.size.width)
+    //
+    //            let frame = CGRectMake(eventOffsetPixels, 0, image.size.width, image.size.height)
+    //            let healthEvent = UIImageView(frame: frame)
+    //            healthEvent.image = image
+    //            graphBackground?.addSubview(healthEvent)
+    
 
     private func addSmbgEvent(event: SelfMonitoringGlucose, deltaTime: NSTimeInterval) {
         //print("Adding smbg event: \(event)")

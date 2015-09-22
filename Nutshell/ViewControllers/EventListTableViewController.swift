@@ -31,7 +31,10 @@ class EventListTableViewController: BaseUITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
 
-    }
+        // Add a notification for when the database changes
+        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: ad.managedObjectContext)
+   }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -42,17 +45,27 @@ class EventListTableViewController: BaseUITableViewController {
         super.viewWillAppear(animated)
         
         // Add a notification for when the database changes
-        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: ad.managedObjectContext)
+//        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: ad.managedObjectContext)
 
-        getNutEvents()
+        if sortedNutEvents.isEmpty {
+            getNutEvents()
+        }
+        
+        if AppDelegate.testMode {
+            // select random cell and push after delay?
+        }
+     }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
         // Stop observing notifications
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+//        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
 

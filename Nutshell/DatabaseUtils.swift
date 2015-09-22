@@ -145,23 +145,20 @@ class DatabaseUtils {
     }
     
     class func deleteAllMealEvents(moc: NSManagedObjectContext) {
-        moc.performBlock { () -> Void in
-            do {
-                let request = NSFetchRequest(entityName: "Meal")
-                let myList = try moc.executeFetchRequest(request)
-                for obj: AnyObject in myList {
-                    moc.deleteObject(obj as! NSManagedObject)
-                }
-            } catch let error as NSError {
-                print("Failed to delete meal items: \(error)")
+        do {
+            let request = NSFetchRequest(entityName: "Meal")
+            let myList = try moc.executeFetchRequest(request)
+            for obj: AnyObject in myList {
+                moc.deleteObject(obj as! NSManagedObject)
             }
-            
-            do {
-                try moc.save()
-            } catch let error as NSError {
-                print("clearDatabase: Failed to save MOC: \(error)")
-            }
+        } catch let error as NSError {
+            print("Failed to delete meal items: \(error)")
+        }
+        
+        do {
+            try moc.save()
+        } catch let error as NSError {
+            print("clearDatabase: Failed to save MOC: \(error)")
         }
     }
-
 }

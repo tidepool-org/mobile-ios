@@ -19,7 +19,6 @@
 		0334CA1F1BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EA1BA8DDFC00013096 /* Basal+CoreDataProperties.swift */; };
 		0334CA201BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EA1BA8DDFC00013096 /* Basal+CoreDataProperties.swift */; };
 		0334CA221BA8DDFC00013096 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
-		0334CA231BA8DDFC00013096 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
 		0334CA251BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EC1BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift */; };
 		0334CA261BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EC1BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift */; };
 		0334CA281BA8DDFC00013096 /* BloodKetone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9ED1BA8DDFC00013096 /* BloodKetone.swift */; };
@@ -104,6 +103,7 @@
 		4814FEC01BB0D7F000F66379 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489F3C481BB06EEA00C95FDC /* Meal.swift */; };
 		4814FEC11BB0D7FC00F66379 /* Workout+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489F3C4B1BB06F1200C95FDC /* Workout+CoreDataProperties.swift */; };
 		4814FEC21BB0D7FF00F66379 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489F3C4C1BB06F1200C95FDC /* Workout.swift */; };
+		4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
 		4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */; };
 		4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */; };
 		4837CC691BA7394E00BA2CDE /* NutshellUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC681BA7394E00BA2CDE /* NutshellUIButton.swift */; };
@@ -945,7 +945,6 @@
 				486F5E691BA2029200BA2A57 /* BaseUITableViewCell.swift in Sources */,
 				0334CA381BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift in Sources */,
 				0334CA4D1BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift in Sources */,
-				0334CA231BA8DDFC00013096 /* Basal.swift in Sources */,
 				0334CA741BA8DDFC00013096 /* Status.swift in Sources */,
 				0334CAB21BAA1B2E00013096 /* DatabaseUtils.swift in Sources */,
 				4814FEC21BB0D7FF00F66379 /* Workout.swift in Sources */,
@@ -959,6 +958,7 @@
 				0334CA5C1BA8DDFC00013096 /* Prime.swift in Sources */,
 				0334CAAC1BA8E22E00013096 /* Bolus.swift in Sources */,
 				0334CA2F1BA8DDFC00013096 /* Calibration.swift in Sources */,
+				4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */,
 				4814FEC11BB0D7FC00F66379 /* Workout+CoreDataProperties.swift in Sources */,
 				0334CA8C1BA8DDFC00013096 /* User.swift in Sources */,
 				0334CA681BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
