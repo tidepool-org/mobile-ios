@@ -89,7 +89,9 @@ class GraphUIView: UIView {
         if let startTime = startTime, endTime = endTime {
             let ad = UIApplication.sharedApplication().delegate as! AppDelegate
             do {
-                let events = try DatabaseUtils.getEvents(ad.managedObjectContext, fromTime: startTime, toTime: endTime)
+                let events = try DatabaseUtils.getEvents(ad.managedObjectContext,
+                    fromTime: startTime, toTime: endTime, objectTypes: ["smbg", "bolus", "cbg", "basal"])
+                    
                 print("\(events.count) events")
                 for event in events {
                     if let eventTime = event.time {

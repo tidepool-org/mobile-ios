@@ -116,9 +116,17 @@ class DatabaseUtils {
         }
     }
     
-    class func getEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate) throws -> [CommonData] {
+    class func getEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate, objectTypes: [String]? = nil) throws -> [CommonData] {
         let request = NSFetchRequest(entityName: "CommonData")
-        request.predicate = NSPredicate(format: "(time >= %@) AND (time <= %@)", fromTime, toTime)
+        
+        if let types = objectTypes {
+            // Return only objects of the requested types in the requested range
+            request.predicate = NSPredicate(format: "(type IN %@) AND (time >= %@) AND (time <= %@)", types, fromTime, toTime)
+        } else {
+            // Return all objects in the requested range
+            request.predicate = NSPredicate(format: "(time >= %@) AND (time <= %@)", fromTime, toTime)
+        }
+        
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
         return try moc.executeFetchRequest(request) as! [CommonData]
     }
