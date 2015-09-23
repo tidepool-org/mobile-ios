@@ -1,23 +1,70 @@
-//
-//  GraphUIView.swift
-//  Nutshell
-//
-//  Created by Larry Kenyon on 9/19/15.
-//  Copyright © 2015 Tidepool. All rights reserved.
-//
+/*
+* Copyright (c) 2015, Tidepool Project
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the associated License, which is identical to the BSD 2-Clause
+* License as published by the Open Source Initiative at opensource.org.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the License for more details.
+*
+* You should have received a copy of the License along with this program; if
+* not, you can obtain one from Tidepool Project at tidepool.org.
+*/
 
 import UIKit
 
 class GraphUIView: UIView {
 
-    /*
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect) {
-        // Drawing code
-    }
-    */
+    /// After init, call configure to create the graph.
+    ///
+    /// - parameter centerTime:
+    ///   The time at the center of the X axis of the graph.
+    ///
+    /// - parameter timeIntervalForView:
+    ///   The time span covered by the graph
+    
+    init(frame: CGRect, centerTime: NSDate, timeIntervalForView: NSTimeInterval) {
 
+        // TODO: validate time interval is positive and reasonable
+        self.startTime = centerTime.dateByAddingTimeInterval(-timeIntervalForView/2)
+        self.endTime = startTime?.dateByAddingTimeInterval(timeIntervalForView)
+        self.viewTimeInterval = CGFloat(timeIntervalForView)
+        self.graphViews = GraphViews(viewSize: frame.size, timeIntervalForView: viewTimeInterval)
+        
+        super.init(frame: frame)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    /// Graph set up
+    ///
+    /// Queries the core database for relevant events in the specified timeframe, and creates the graph view with that data.
+    
+    func configure() {
+        
+        self.loadDataForView()
+        self.graphData()
+    }
+    
+    /// Check for data points in graph
+    ///
+    /// A graph with no data points will consist of the graph background (labeled axes) and any nut events in the timeframe
+    ///
+    /// - returns: True if there were any cpg, bolus, basal or smgb events in the time frame of the graph
+    
+    func dataFound() -> Bool {
+        return cbgData.count != 0 || bolusData.count != 0 || basalData.count != 0 || smgbData.count != 0
+    }
+    
+    //
+    // MARK: - Private data
+    //
+
+    private var graphViews: GraphViews
     private var startTime: NSDate?, endTime: NSDate?
     private var viewTimeInterval: CGFloat = 0.0
     private var smgbData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
@@ -26,52 +73,35 @@ class GraphUIView: UIView {
     private var basalData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var mealData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
 
-    func dataFound() -> Bool {
-        return cbgData.count != 0 || bolusData.count != 0 || basalData.count != 0 || smgbData.count != 0
-    }
-    
-    func configureTimeFrame(fromTime: NSDate, toTime: NSDate) {
-        startTime = fromTime
-        endTime = toTime
-        viewTimeInterval = CGFloat(toTime.timeIntervalSinceDate(fromTime))
-    
-        // TODO: validate time interval is positive and reasonable
-        
-        self.loadDataForView()
-        self.graphData()
-    }
-
-    func configureTimeFrame(centerTime: NSDate, timeIntervalForView: NSTimeInterval) {
-        startTime = centerTime.dateByAddingTimeInterval(-timeIntervalForView/2)
-        endTime = startTime?.dateByAddingTimeInterval(timeIntervalForView)
-        viewTimeInterval = CGFloat(timeIntervalForView)
-        // TODO: validate time interval is positive and reasonable
-        
-        self.loadDataForView()
-        self.graphData()
-    }
+    //
+    // MARK: - Private funcs
+    //
 
     private func graphData() {
         // At this point data should be loaded, and we just need to plot the data
         // First generate the graph background
         
-            let backgroundImage = GraphViews.imageOfGraphBackground(viewSize: self.frame.size)
-            let graphBackground = UIImageView(image: backgroundImage)
-            addSubview(graphBackground)
+        let backgroundImage = graphViews.imageOfGraphBackground()
+        let graphBackground = UIImageView(image: backgroundImage)
+        addSubview(graphBackground)
         
-            let workoutImage = GraphViews.imageOfHealthEvent(0.15, graphSize:self.frame.size)
-            // need to offset the middle of this view precisely at the time offset of the event
-            // assume time start of 0, time width of the graph 6 hours, and time offset of 3 hours
-            let pixelsPerSecond = self.frame.size.width/viewTimeInterval
-            let eventOffsetTime: CGFloat = 3*60*60
-            var eventOffsetPixels = pixelsPerSecond * eventOffsetTime
-            // offset for width of the event bar: the middle of the bar is where the event line is!
-            eventOffsetPixels = floor(eventOffsetPixels - 0.5 * workoutImage.size.width)
-
-            let frame = CGRectMake(eventOffsetPixels, 0, workoutImage.size.width, workoutImage.size.height)
-            let healthEvent = UIImageView(frame: frame)
-            healthEvent.image = workoutImage
-            self.addSubview(healthEvent)
+        let cbgOverlayImage = graphViews.imageOfGlucoseData(cbgData)
+        let cbgOverlay = UIImageView(image:cbgOverlayImage)
+        addSubview(cbgOverlay)
+                
+        let workoutImage = graphViews.imageOfHealthEvent(60*60*1)
+        // need to offset the middle of this view precisely at the time offset of the event
+        // assume time start of 0, time width of the graph 6 hours, and time offset of 3 hours
+        let pixelsPerSecond = self.frame.size.width/viewTimeInterval
+        let eventOffsetTime: CGFloat = 3*60*60
+        var eventOffsetPixels = pixelsPerSecond * eventOffsetTime
+        // offset for width of the event bar: the middle of the bar is where the event line is!
+        eventOffsetPixels = floor(eventOffsetPixels - 0.5 * workoutImage.size.width)
+        
+        let frame = CGRectMake(eventOffsetPixels, 0, workoutImage.size.width, workoutImage.size.height)
+        let healthEvent = UIImageView(frame: frame)
+        healthEvent.image = workoutImage
+        self.addSubview(healthEvent)
     }
 
     //
@@ -90,6 +120,10 @@ class GraphUIView: UIView {
     //            healthEvent.image = image
     //            graphBackground?.addSubview(healthEvent)
     
+
+    //
+    // MARK: - Data query funcs
+    //
 
     private func addSmbgEvent(event: SelfMonitoringGlucose, deltaTime: NSTimeInterval) {
         //print("Adding smbg event: \(event)")

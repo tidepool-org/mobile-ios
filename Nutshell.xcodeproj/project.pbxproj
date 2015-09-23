@@ -161,7 +161,7 @@
 		489F3C501BB0AE1D00C95FDC /* NutMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */; };
 		48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
 		48DDD30F1BA78057007365FE /* ThreeTacosDemoPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48DDD30E1BA78057007365FE /* ThreeTacosDemoPic.png */; };
-		48DDD3111BA78F8A007365FE /* BackgroundUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DDD3101BA78F8A007365FE /* BackgroundUIImage.swift */; };
+		48DDD3111BA78F8A007365FE /* GraphViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DDD3101BA78F8A007365FE /* GraphViews.swift */; };
 		48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
 		48DF9B9B1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
 		48DF9B9E1BA9FADE00A505DD /* applejuicedemopic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48DF9B9D1BA9FADE00A505DD /* applejuicedemopic.png */; };
@@ -294,7 +294,7 @@
 		489F3C4C1BB06F1200C95FDC /* Workout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
 		489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutMeal.swift; path = DataModel/NutMeal.swift; sourceTree = "<group>"; };
 		48DDD30E1BA78057007365FE /* ThreeTacosDemoPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ThreeTacosDemoPic.png; sourceTree = "<group>"; };
-		48DDD3101BA78F8A007365FE /* BackgroundUIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundUIImage.swift; sourceTree = "<group>"; };
+		48DDD3101BA78F8A007365FE /* GraphViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphViews.swift; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
 		48DF9B9D1BA9FADE00A505DD /* applejuicedemopic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = applejuicedemopic.png; sourceTree = "<group>"; };
 		48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphUIView.swift; path = GraphView/GraphUIView.swift; sourceTree = "<group>"; };
@@ -586,8 +586,8 @@
 		48EC32341BA7C5F400A75103 /* Graph View */ = {
 			isa = PBXGroup;
 			children = (
-				48DDD3101BA78F8A007365FE /* BackgroundUIImage.swift */,
 				48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */,
+				48DDD3101BA78F8A007365FE /* GraphViews.swift */,
 			);
 			name = "Graph View";
 			sourceTree = "<group>";
@@ -869,7 +869,7 @@
 				486F5E3A1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
 				0334CA2E1BA8DDFC00013096 /* Calibration.swift in Sources */,
 				486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */,
-				48DDD3111BA78F8A007365FE /* BackgroundUIImage.swift in Sources */,
+				48DDD3111BA78F8A007365FE /* GraphViews.swift in Sources */,
 				0334CA731BA8DDFC00013096 /* Status.swift in Sources */,
 				489F3C4A1BB06EEA00C95FDC /* Meal.swift in Sources */,
 				485922A21B9A634E0056E605 /* EventListTableViewController.swift in Sources */,

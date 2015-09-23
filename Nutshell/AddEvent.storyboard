@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9046" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9046" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="3HY-Ig-Rwb">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9035"/>
@@ -18,8 +18,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l7D-lp-jvI" userLabel="SceneContainer">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l7D-lp-jvI" userLabel="SceneContainer">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3C-1B-9wl" userLabel="TopSection" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
@@ -199,11 +199,11 @@
                                             </mask>
                                         </variation>
                                     </view>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kQc-5j-BRa" userLabel="BottomSection">
-                                        <rect key="frame" x="0.0" y="200" width="375" height="447"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kQc-5j-BRa" userLabel="BottomSection">
+                                        <rect key="frame" x="0.0" y="200" width="375" height="403"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qaa-en-akI" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="393" width="375" height="54"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qaa-en-akI" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="349" width="375" height="54"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="54" id="Mak-8R-bDm"/>
                                                 </constraints>
@@ -235,11 +235,11 @@
                                     <constraint firstItem="kQc-5j-BRa" firstAttribute="top" secondItem="z3C-1B-9wl" secondAttribute="bottom" id="oM0-zg-0BP"/>
                                 </constraints>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ERS-0J-0ST" userLabel="SuccessView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ERS-0J-0ST" userLabel="SuccessView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="addAnimation-01.png" translatesAutoresizingMaskIntoConstraints="NO" id="fZz-kg-ufq">
-                                        <rect key="frame" x="117" y="254" width="140" height="140"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addAnimation-01.png" translatesAutoresizingMaskIntoConstraints="NO" id="fZz-kg-ufq">
+                                        <rect key="frame" x="117" y="232" width="140" height="140"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="140" id="11I-pF-OBP"/>
                                             <constraint firstAttribute="height" constant="140" id="FbI-tI-k0m"/>
@@ -279,7 +279,7 @@
                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventTitleText"/>
                             </userDefinedRuntimeAttributes>
                             <connections>
-                                <action selector="titleTextDidEnd:" destination="SME-si-pxR" eventType="editingDidEndOnExit" id="hWR-rX-30e"/>
+                                <action selector="titleEditingDidEnd:" destination="SME-si-pxR" eventType="editingDidEndOnExit" id="MY1-Tc-Lmo"/>
                             </connections>
                         </textField>
                     </navigationItem>

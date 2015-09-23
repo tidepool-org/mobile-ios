@@ -1,10 +1,17 @@
-//
-//  AddEventViewController.swift
-//  Nutshell
-//
-//  Created by Larry Kenyon on 9/18/15.
-//  Copyright © 2015 Tidepool. All rights reserved.
-//
+/*
+* Copyright (c) 2015, Tidepool Project
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the associated License, which is identical to the BSD 2-Clause
+* License as published by the Open Source Initiative at opensource.org.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the License for more details.
+*
+* You should have received a copy of the License along with this program; if
+* not, you can obtain one from Tidepool Project at tidepool.org.
+*/
 
 import UIKit
 import CoreData
@@ -57,12 +64,13 @@ class AddEventViewController: UIViewController {
         configureCameraImageViewUp(true)
     }
     
+    // Only the notes text edit field delegate is hooked up, not the title text edit field, so this is only called for notes.
     func textFieldDidBeginEditing(textField: UITextField) {
         notesTextField.becomeFirstResponder()
         notesTextField.selectAll(nil)
     }
     
-    @IBAction func titleTextDidEnd(sender: AnyObject) {
+    @IBAction func titleEditingDidEnd(sender: AnyObject) {
         updateSaveButtonState()
     }
     
@@ -148,7 +156,7 @@ class AddEventViewController: UIViewController {
         addSuccessImageView.startAnimating()
         addSuccessView.hidden = false
         
-        NutUtils.delay(1.5) {
+        NutUtils.delay(1.25) {
             self.navigationController?.popViewControllerAnimated(true)
         }
     }
@@ -174,16 +182,21 @@ class AddEventViewController: UIViewController {
     private func addDemoData() {
         
         let demoMeals = [
-            ["Three tacos", "with 15 chips & salsa", "2015-07-29 04:55:27 +0000", "home"],
-            ["Three tacos", "after ballet", "2015-07-29 04:55:27 +0000", "238 Garrett St"],
-            ["Three tacos", "Apple Juice before", "2015-07-10 14:25:21 +0000", "Golden Gate Park"],
+            ["Three tacos", "with 15 chips & salsa", "2015-08-20T10:03:21.000Z", "home"],
+            ["Three tacos", "after ballet", "2015-08-09T19:42:40.000Z", "238 Garrett St"],
+            ["Three tacos", "Apple Juice before", "2015-07-29 04:55:27 +0000", "Golden Gate Park"],
             ["Three tacos", "and horchata", "2015-07-09 14:25:21 +0000", "Golden Gate Park"],
-            ["Workout", "running in park", "2015-07-08 14:25:21 +0000", ""],
-            ["", "Only notes for this one", "2015-07-07 14:25:21 +0000", ""],
-            ["CPK 5 cheese margarita", "", "2015-07-06 14:25:21 +0000", ""],
-            ["Bagel & cream cheese fruit", "", "2015-07-05 14:25:21 +0000", ""],
+            ["Workout", "running in park", "2015-08-01T04:23:20.000Z", ""],
+            ["", "Only notes for this one", "2015-08-27 08:25:21 +0000", ""],
+            ["CPK 5 cheese margarita", "", "2015-08-27 12:25:21 +0000", ""],
+            ["Bagel & cream cheese fruit", "", "2015-08-27 16:25:21 +0000", ""],
             ["Birthday Party", "", "2015-07-04 14:25:21 +0000", ""],
             ["Soccer Practice", "", "2015-07-03 14:25:21 +0000", ""],
+            ["Meal on Aug 27", "08:25:21", "2015-08-28 08:25:21 +0000", ""],
+            ["Meal on Aug 27", "12:25:21", "2015-08-28 12:25:21 +0000", ""],
+            ["Meal on Aug 27", "16:25:21", "2015-08-28 16:25:21 +0000", ""],
+            ["Meal on Aug 27", "20:25:21", "2015-08-28 20:25:21 +0000", ""],
+            ["Meal on Aug 27", "00:25:21", "2015-08-29 00:25:21 +0000", ""],
         ]
         
         func addMeal(me: Meal, event: [String], df: NSDateFormatter) {

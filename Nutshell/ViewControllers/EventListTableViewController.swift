@@ -41,14 +41,13 @@ class EventListTableViewController: BaseUITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    private var viewIsForeground: Bool = false
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // Add a notification for when the database changes
-//        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: ad.managedObjectContext)
+        viewIsForeground = true
 
-        if sortedNutEvents.isEmpty {
+        if sortedNutEvents.isEmpty || eventListNeedsUpdate {
+            eventListNeedsUpdate = false
             getNutEvents()
         }
         
@@ -63,12 +62,9 @@ class EventListTableViewController: BaseUITableViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        // Stop observing notifications
-//        NSNotificationCenter.defaultCenter().removeObserver(self)
+        viewIsForeground = false
     }
     
-
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -83,11 +79,14 @@ class EventListTableViewController: BaseUITableViewController {
         }
     }
     
-    
+    private var eventListNeedsUpdate: Bool  = false
     func databaseChanged(note: NSNotification) {
         print("EventList: Database Changed")
-        sortedNutEvents = [(String, NutEvent)]()
-        getNutEvents()
+        if viewIsForeground {
+            getNutEvents()
+        } else {
+            eventListNeedsUpdate = true
+        }
     }
     
     func getNutEvents() {
@@ -104,7 +103,9 @@ class EventListTableViewController: BaseUITableViewController {
             }
         }
 
-        // Get all Food and Activity events, chronologically. Create a dictionary of NutEvents, with 
+        sortedNutEvents = [(String, NutEvent)]()
+        
+        // Get all Food and Activity events, chronologically; this will result in an unsorted dictionary of NutEvents, but the items within each NutEvent will be sorted. 
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
 
         do {
@@ -121,9 +122,28 @@ class EventListTableViewController: BaseUITableViewController {
         
         tableView.reloadData()
     }
+    
+    // MARK: - Nav bar button handlers
+    
+    @IBAction func addEventButtonHandler(sender: UIBarButtonItem) {
+        self.navigationItem.title = ""
+        let sb = UIStoryboard(name: "AddEvent", bundle: nil)
+        let vc = sb.instantiateViewControllerWithIdentifier("AddEventViewController")
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @IBAction func menuButtonHandler(sender: AnyObject) {
+        self.navigationItem.title = ""
+        let sb = UIStoryboard(name: "Menu", bundle: nil)
+        if let vc = sb.instantiateInitialViewController() {
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+
 }
 
 // MARK: - Table view data source
+
 extension EventListTableViewController {
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -148,22 +168,6 @@ extension EventListTableViewController {
         return cell
     }
 
-    // MARK: - Nav bar button handlers
-
-    @IBAction func addEventButtonHandler(sender: UIBarButtonItem) {
-        self.navigationItem.title = ""
-        let sb = UIStoryboard(name: "AddEvent", bundle: nil)
-        let vc = sb.instantiateViewControllerWithIdentifier("AddEventViewController")
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    @IBAction func menuButtonHandler(sender: AnyObject) {
-        self.navigationItem.title = ""
-        let sb = UIStoryboard(name: "Menu", bundle: nil)
-        if let vc = sb.instantiateInitialViewController() {
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-    }
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {

@@ -64,8 +64,8 @@ class EventDetailViewController: BaseUIViewController {
             // here we can get the frame of subviews of mySubView
             // and do useful things with that...
             if let eventTime = eventItem?.time {
-                graphView = GraphUIView(frame: graphSectionView.bounds)
-                graphView!.configureTimeFrame(eventTime, timeIntervalForView: 60*60*6)
+                graphView = GraphUIView.init(frame: graphSectionView.bounds, centerTime: eventTime, timeIntervalForView: 60*60*6)
+                graphView!.configure()
                 graphSectionView.addSubview(graphView!)
                 graphSectionView.sendSubviewToBack(graphView!)
                 
