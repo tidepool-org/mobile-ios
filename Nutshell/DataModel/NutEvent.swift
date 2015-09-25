@@ -21,18 +21,22 @@ class NutEvent {
     var mostRecent: NSDate
     var itemArray: [NutMeal]
     init(firstEvent: Meal) {
-        self.title = firstEvent.title!
-        self.mostRecent = firstEvent.time!
-        let firstItem = NutMeal(title: firstEvent.title!, notes: firstEvent.notes!, location: firstEvent.location!, photo: firstEvent.photo!, time: firstEvent.time!)
+        self.title = firstEvent.title != nil ? firstEvent.title! : ""
+        // TODO: should NutMeal also take optionals?
+        if firstEvent.time == nil {
+            print("ERROR: nil time leaked in for event \(self.title)")
+        }
+        self.mostRecent = firstEvent.time != nil ? firstEvent.time! : NSDate()
+        let firstItem = NutMeal(title: firstEvent.title, notes: firstEvent.notes, location: firstEvent.location, photo: firstEvent.photo, time: firstEvent.time)
         self.itemArray = [firstItem]
     }
     
     func addEvent(newEvent: Meal) {
         if (newEvent.title == self.title) {
-            let newItem = NutMeal(title: newEvent.title!, notes: newEvent.notes!, location: newEvent.location!, photo: newEvent.photo!, time: newEvent.time!)
+            let newItem = NutMeal(title: newEvent.title, notes: newEvent.notes, location: newEvent.location, photo: newEvent.photo, time: newEvent.time)
             
             self.itemArray.append(newItem)
-            mostRecent = newEvent.time!.laterDate(mostRecent)
+            mostRecent = newItem.time.laterDate(mostRecent)
         } else {
             print("attempting to add item with non-matching title to NutEvent!")
         }

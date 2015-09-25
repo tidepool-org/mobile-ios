@@ -40,9 +40,30 @@ class CommonData: NSManagedObject {
             
             // If we got an object, set the common properties on it
             if let newObject = newObject {
-                newObject.id = json["id"].string
+                
+                if let id = json["id"].string {
+                    newObject.id = id
+                } else {
+                     print("skipped record of type \(type) missing id")
+                    return nil
+                }
                 newObject.type = type
+                
+                if let timeString = json["time"].string {
+                    if let time = NutUtils.dateFromJSON(timeString) {
+                        newObject.time = time
+                    } else {
+                        print("skipped record of type \(type) with unknown time format: \(timeString)")
+                        return nil
+                    }
+                } else {
+                    print("skipped record of type \(type) with missing time field")
+                    return nil
+                }
+
                 newObject.time = NutUtils.dateFromJSON(json["time"].string)
+                
+                
                 newObject.deviceId = json["deviceId"].string
                 newObject.uploadId = json["uploadId"].string
                 newObject.previous = json["previous"].string

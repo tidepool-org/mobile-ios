@@ -16,7 +16,13 @@ class ContinuousGlucose: CommonData {
         if let entityDescription = NSEntityDescription.entityForName("ContinuousGlucose", inManagedObjectContext: moc) {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! ContinuousGlucose
             
-            me.value = json["value"].number
+            if let value = json["value"].number {
+                me.value = value
+            } else {
+                print("cbg record with missing value skipped")
+                return nil
+            }
+
             me.isig = json["isig"].string
             
             return me

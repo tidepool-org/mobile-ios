@@ -45,7 +45,7 @@ class AddEventViewController: UIViewController {
 
         saveButton.hidden = true
         let df = NSDateFormatter()
-        df.dateFormat = uniformDateFormat
+        df.dateFormat = Styles.uniformDateFormat
         eventDate.text = df.stringFromDate(eventTime)
     }
 
@@ -163,7 +163,6 @@ class AddEventViewController: UIViewController {
     
     // When the event has a title, the "Title this event" button disappears, and the photo icon is recentered in its container view. This is reversed if the title goes back to an empty string.     
     private func configureCameraImageViewUp(up: Bool) {
-        print("constraints: \(photoIconContainer.constraints)")
         for c in photoIconContainer.constraints {
             if c.firstAttribute == NSLayoutAttribute.CenterY {
                 c.constant = up ? 0.0 : 20.0
@@ -184,28 +183,23 @@ class AddEventViewController: UIViewController {
         let demoMeals = [
             ["Three tacos", "with 15 chips & salsa", "2015-08-20T10:03:21.000Z", "home"],
             ["Three tacos", "after ballet", "2015-08-09T19:42:40.000Z", "238 Garrett St"],
-            ["Three tacos", "Apple Juice before", "2015-07-29 04:55:27 +0000", "Golden Gate Park"],
-            ["Three tacos", "and horchata", "2015-07-09 14:25:21 +0000", "Golden Gate Park"],
-            ["Workout", "running in park", "2015-08-01T04:23:20.000Z", ""],
-            ["", "Only notes for this one", "2015-08-27 08:25:21 +0000", ""],
-            ["CPK 5 cheese margarita", "", "2015-08-27 12:25:21 +0000", ""],
-            ["Bagel & cream cheese fruit", "", "2015-08-27 16:25:21 +0000", ""],
-            ["Birthday Party", "", "2015-07-04 14:25:21 +0000", ""],
-            ["Soccer Practice", "", "2015-07-03 14:25:21 +0000", ""],
-            ["Meal on Aug 27", "08:25:21", "2015-08-28 08:25:21 +0000", ""],
-            ["Meal on Aug 27", "12:25:21", "2015-08-28 12:25:21 +0000", ""],
-            ["Meal on Aug 27", "16:25:21", "2015-08-28 16:25:21 +0000", ""],
-            ["Meal on Aug 27", "20:25:21", "2015-08-28 20:25:21 +0000", ""],
-            ["Meal on Aug 27", "00:25:21", "2015-08-29 00:25:21 +0000", ""],
+            ["Three tacos", "Apple Juice before", "2015-07-29T04:55:27.000Z", "Golden Gate Park"],
+            ["Three tacos", "and horchata", "2015-07-28T14:25:21.000Z", "Golden Gate Park"],
+            ["Workout", "running in park", "2015-07-27T04:23:20.000Z", ""],
+            ["", "Only notes for this one", "2015-07-27T08:25:21.000Z", ""],
+            ["CPK 5 cheese margarita", "", "2015-07-27T12:25:21.000Z", ""],
+            ["Bagel & cream cheese fruit", "", "2015-07-27T16:25:21.000Z", ""],
+            ["Birthday Party", "", "2015-07-26T14:25:21.000Z", ""],
+            ["Soccer Practice", "", "2015-07-25T14:25:21.000Z", ""],
         ]
         
-        func addMeal(me: Meal, event: [String], df: NSDateFormatter) {
+        func addMeal(me: Meal, event: [String]) {
             me.title = event[0]
             me.notes = event[1]
             if (event[2] == "") {
                 me.time = NSDate()
             } else {
-                me.time = df.dateFromISOString(event[2])
+                me.time = NutUtils.dateFromJSON(event[2])
             }
             me.location = event[3]
             me.photo = ""
@@ -216,13 +210,12 @@ class AddEventViewController: UIViewController {
             me.modifiedTime = now
         }
         
-        let df = NSDateFormatter()
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
         let moc = ad.managedObjectContext
         if let entityDescription = NSEntityDescription.entityForName("Meal", inManagedObjectContext: moc) {
             for event in demoMeals {
                 let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal
-                addMeal(me, event: event, df: df)
+                addMeal(me, event: event)
                 moc.insertObject(me)
             }
         }

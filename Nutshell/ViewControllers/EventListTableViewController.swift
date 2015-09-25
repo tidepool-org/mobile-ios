@@ -161,7 +161,11 @@ extension EventListTableViewController {
             let tuple = self.sortedNutEvents[indexPath.item]
             let nutEvent = tuple.1
             // Configure the cell...
-            cell.textLabel?.text = nutEvent.title + " (" + String(nutEvent.itemArray.count) + ")"
+            if nutEvent.itemArray.count > 1 {
+                cell.textLabel?.text = nutEvent.title + " (" + String(nutEvent.itemArray.count) + ")"
+            } else {
+                cell.textLabel?.text = nutEvent.title
+            }
             cell.eventGroup = nutEvent
         }
         

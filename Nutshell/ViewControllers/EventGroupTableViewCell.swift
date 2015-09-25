@@ -43,7 +43,7 @@ class EventGroupTableViewCell: NutshellUITableViewCell {
             return df
         } else {
             let df = NSDateFormatter()
-            df.dateFormat = uniformDateFormat
+            df.dateFormat = Styles.uniformDateFormat
             self.df = df
             return df
         }
@@ -52,7 +52,7 @@ class EventGroupTableViewCell: NutshellUITableViewCell {
     func configureCell(eventItem: NutMeal) {
         titleString.text = eventItem.notes
         let df = NSDateFormatter()
-        df.dateFormat = uniformDateFormat
+        df.dateFormat = Styles.uniformDateFormat
         timeString.text = dateFormatter().stringFromDate(eventItem.time)
         locationString.text = eventItem.location
         self.eventItem = eventItem

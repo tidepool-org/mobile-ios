@@ -29,9 +29,9 @@ class GraphUIView: UIView {
 
         // TODO: validate time interval is positive and reasonable
         self.startTime = centerTime.dateByAddingTimeInterval(-timeIntervalForView/2)
-        self.endTime = startTime?.dateByAddingTimeInterval(timeIntervalForView)
-        self.viewTimeInterval = CGFloat(timeIntervalForView)
-        self.graphViews = GraphViews(viewSize: frame.size, timeIntervalForView: viewTimeInterval)
+        self.endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
+        self.viewTimeInterval = timeIntervalForView
+        self.graphViews = GraphViews(viewSize: frame.size, timeIntervalForView: viewTimeInterval, startTime: startTime)
         
         super.init(frame: frame)
     }
@@ -57,7 +57,7 @@ class GraphUIView: UIView {
     /// - returns: True if there were any cpg, bolus, basal or smgb events in the time frame of the graph
     
     func dataFound() -> Bool {
-        return cbgData.count != 0 || bolusData.count != 0 || basalData.count != 0 || smgbData.count != 0
+        return cbgData.count != 0 || bolusData.count != 0 || basalData.count != 0 || smbgData.count != 0
     }
     
     //
@@ -65,13 +65,14 @@ class GraphUIView: UIView {
     //
 
     private var graphViews: GraphViews
-    private var startTime: NSDate?, endTime: NSDate?
-    private var viewTimeInterval: CGFloat = 0.0
-    private var smgbData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
+    private var startTime: NSDate, endTime: NSDate
+    private var viewTimeInterval: NSTimeInterval = 0.0
+    private var smbgData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var cbgData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
+    private var wizardData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var basalData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
-    private var mealData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
+    private var mealData: [NSTimeInterval] = []
 
     //
     // MARK: - Private funcs
@@ -84,42 +85,45 @@ class GraphUIView: UIView {
         let backgroundImage = graphViews.imageOfGraphBackground()
         let graphBackground = UIImageView(image: backgroundImage)
         addSubview(graphBackground)
-        
-        let cbgOverlayImage = graphViews.imageOfGlucoseData(cbgData)
-        let cbgOverlay = UIImageView(image:cbgOverlayImage)
-        addSubview(cbgOverlay)
-                
-        let workoutImage = graphViews.imageOfHealthEvent(60*60*1)
-        // need to offset the middle of this view precisely at the time offset of the event
-        // assume time start of 0, time width of the graph 6 hours, and time offset of 3 hours
-        let pixelsPerSecond = self.frame.size.width/viewTimeInterval
-        let eventOffsetTime: CGFloat = 3*60*60
-        var eventOffsetPixels = pixelsPerSecond * eventOffsetTime
-        // offset for width of the event bar: the middle of the bar is where the event line is!
-        eventOffsetPixels = floor(eventOffsetPixels - 0.5 * workoutImage.size.width)
-        
-        let frame = CGRectMake(eventOffsetPixels, 0, workoutImage.size.width, workoutImage.size.height)
-        let healthEvent = UIImageView(frame: frame)
-        healthEvent.image = workoutImage
-        self.addSubview(healthEvent)
-    }
-
-    //
-    //            image = GraphViews.imageOfHealthEvent(0.15, graphSize:graphSectionView.frame.size)
-    //            // need to offset the middle of this view precisely at the time offset of the event
-    //            // assume time start of 0, time width of the graph 6 hours, and time offset of 3 hours
-    //            let graphTotalSecs: CGFloat = 6*60*60
-    //            let pixelsPerSecond = graphSectionView.frame.size.width/graphTotalSecs
-    //            let eventOffsetTime: CGFloat = 3*60*60
-    //            var eventOffsetPixels = pixelsPerSecond * eventOffsetTime
-    //            // offset for width of the event bar: the middle of the bar is where the event line is!
-    //            eventOffsetPixels = floor(eventOffsetPixels - 0.5 * image.size.width)
-    //
-    //            let frame = CGRectMake(eventOffsetPixels, 0, image.size.width, image.size.height)
-    //            let healthEvent = UIImageView(frame: frame)
-    //            healthEvent.image = image
-    //            graphBackground?.addSubview(healthEvent)
     
+        if !mealData.isEmpty {
+            let mealOverlayImage = graphViews.imageOfMealData(mealData)
+            let mealOverlay = UIImageView(image:mealOverlayImage)
+            addSubview(mealOverlay)
+        }
+
+        if !cbgData.isEmpty {
+            let cbgOverlayImage = graphViews.imageOfCbgData(cbgData)
+            let cbgOverlay = UIImageView(image:cbgOverlayImage)
+            addSubview(cbgOverlay)
+        }
+ 
+        if !smbgData.isEmpty {
+            let smbgOverlayImage = graphViews.imageOfSmbgData(smbgData)
+            let smbgOverlay = UIImageView(image:smbgOverlayImage)
+            addSubview(smbgOverlay)
+        }
+ 
+        if !wizardData.isEmpty {
+            let wizardOverlayImage = graphViews.imageOfWizardData(wizardData)
+            let wizardOverlay = UIImageView(image:wizardOverlayImage)
+            addSubview(wizardOverlay)
+        }
+
+//        let workoutImage = graphViews.imageOfHealthEvent(60*60*1)
+//        // need to offset the middle of this view precisely at the time offset of the event
+//        // assume time start of 0, time width of the graph 6 hours, and time offset of 3 hours
+//        let pixelsPerSecond = self.frame.size.width/CGFloat(viewTimeInterval)
+//        let eventOffsetTime: CGFloat = 3*60*60
+//        var eventOffsetPixels = pixelsPerSecond * eventOffsetTime
+//        // offset for width of the event bar: the middle of the bar is where the event line is!
+//        eventOffsetPixels = floor(eventOffsetPixels - 0.5 * workoutImage.size.width)
+//        
+//        let frame = CGRectMake(eventOffsetPixels, 0, workoutImage.size.width, workoutImage.size.height)
+//        let healthEvent = UIImageView(frame: frame)
+//        healthEvent.image = workoutImage
+//        self.addSubview(healthEvent)
+    }
 
     //
     // MARK: - Data query funcs
@@ -128,7 +132,7 @@ class GraphUIView: UIView {
     private func addSmbgEvent(event: SelfMonitoringGlucose, deltaTime: NSTimeInterval) {
         //print("Adding smbg event: \(event)")
         if let value = event.value {
-            smgbData.append((timeOffset: deltaTime, value: value))
+            smbgData.append((timeOffset: deltaTime, value: value))
         } else {
             print("ignoring Smbg event with nil value")
         }
@@ -152,6 +156,15 @@ class GraphUIView: UIView {
         }
     }
 
+    private func addWizardEvent(event: Wizard, deltaTime: NSTimeInterval) {
+        //print("Adding Wizard event: \(event)")
+        if let value = event.carbInput {
+            wizardData.append((timeOffset: deltaTime, value: value))
+        } else {
+            print("ignoring Wizard event with nil carbInput value!")
+        }
+    }
+
     private func addBasalEvent(event: Basal, deltaTime: NSTimeInterval) {
         //print("Adding Basal event: \(event)")
         if let value = event.value {
@@ -163,46 +176,54 @@ class GraphUIView: UIView {
 
     private func loadDataForView() {
         // Reload all data, assuming time span has changed
-        smgbData = []
+        smbgData = []
         cbgData = []
         bolusData = []
         basalData = []
+        wizardData = []
+        mealData = []
         
-        if let startTime = startTime, endTime = endTime {
-            let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-            do {
-                let events = try DatabaseUtils.getEvents(ad.managedObjectContext,
-                    fromTime: startTime, toTime: endTime, objectTypes: ["smbg", "bolus", "cbg", "basal"])
-                    
-                print("\(events.count) events")
-                for event in events {
-                    if let eventTime = event.time {
-                        let deltaTime = eventTime.timeIntervalSinceDate(startTime)
-                        switch event.type as! String {
-                        case "smbg":
-                            if let smbgEvent = event as? SelfMonitoringGlucose {
-                                addSmbgEvent(smbgEvent, deltaTime: deltaTime)
-                            }
-                        case "bolus":
-                            if let bolusEvent = event as? Bolus {
-                                addBolusEvent(bolusEvent, deltaTime: deltaTime)
-                            }
-                        case "cbg":
-                            if let cbgEvent = event as? ContinuousGlucose {
-                                addCbgEvent(cbgEvent, deltaTime: deltaTime)
-                            }
-                        case "basal":
-                            if let basalEvent = event as? Basal {
-                                addBasalEvent(basalEvent, deltaTime: deltaTime)
-                            }
-                        default: print("Ignoring event of type: \(event.type)")
+        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+        do {
+            let events = try DatabaseUtils.getEvents(ad.managedObjectContext,
+            fromTime: startTime, toTime: endTime, objectTypes: ["smbg", "bolus", "cbg", "basal", "wizard", "meal"])
+            
+            print("\(events.count) events")
+            for event in events {
+                if let eventTime = event.time {
+                    let deltaTime = eventTime.timeIntervalSinceDate(startTime)
+                    switch event.type as! String {
+                    case "smbg":
+                        if let smbgEvent = event as? SelfMonitoringGlucose {
+                            addSmbgEvent(smbgEvent, deltaTime: deltaTime)
                         }
+                    case "bolus":
+                        if let bolusEvent = event as? Bolus {
+                            addBolusEvent(bolusEvent, deltaTime: deltaTime)
+                        }
+                    case "wizard":
+                        if let wizardEvent = event as? Wizard {
+                            addWizardEvent(wizardEvent, deltaTime: deltaTime)
+                        }
+                    case "cbg":
+                        if let cbgEvent = event as? ContinuousGlucose {
+                            addCbgEvent(cbgEvent, deltaTime: deltaTime)
+                        }
+                    case "basal":
+                        if let basalEvent = event as? Basal {
+                            addBasalEvent(basalEvent, deltaTime: deltaTime)
+                        }
+                    case "meal":
+                        if let _ = event as? Meal {
+                            mealData.append(deltaTime)
+                        }
+                    default: print("Ignoring event of type: \(event.type)")
                     }
                 }
-            } catch let error as NSError {
-                print("Error: \(error)")
             }
-            print("loaded \(smgbData.count) smgb events, \(cbgData.count) cbg events, \(bolusData.count) bolus events, and \(basalData.count) basal events")
+        } catch let error as NSError {
+            print("Error: \(error)")
         }
+        print("loaded \(smbgData.count) smbg events, \(cbgData.count) cbg events, \(bolusData.count) bolus events, and \(basalData.count) basal events")
     }
 }

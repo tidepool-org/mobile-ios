@@ -14,16 +14,11 @@ class Wizard: CommonData {
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Wizard? {
         if let entityDescription = NSEntityDescription.entityForName("Wizard", inManagedObjectContext: moc) {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Wizard
-            
-            me.recommendedCarb = NutUtils.decimalFromJSON(json["recommendedCarb"].string)
-            me.recommendedCorrection = NutUtils.decimalFromJSON(json["recommendedCorrection"].string)
-            me.recommendedNet = NutUtils.decimalFromJSON(json["recommendedNet"].string)
-            me.bgInput = NutUtils.decimalFromJSON(json["bgInput"].string)
-            me.carbInput = NutUtils.decimalFromJSON(json["carbInput"].string)
-            me.insulinOnBoard = NutUtils.decimalFromJSON(json["insulinOnBoard"].string)
-            me.insulinCarbRatio = NutUtils.decimalFromJSON(json["insulinCarbRatio"].string)
-            me.insulinSensitivity = NutUtils.decimalFromJSON(json["insulinSensitivity"].string)
-            me.bgTargetJSON = json["bgTarget"].string
+            me.bgInput = json["bgInput"].number
+            me.carbInput = json["carbInput"].number
+            me.insulinOnBoard = json["insulinOnBoard"].number
+            me.insulinCarbRatio = json["insulinCarbRatio"].number
+            me.insulinSensitivity = json["insulinSensitivity"].number
             me.bolus = json["bolus"].string
             
             return me

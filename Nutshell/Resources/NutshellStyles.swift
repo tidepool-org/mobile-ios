@@ -79,6 +79,9 @@ public class Styles: NSObject {
     //
     // MARK: - Fonts
     //
+    
+    static let uniformDateFormat: String = "MMM d, yyyy    h:mm a"
+
     static var smallRegularFont: UIFont { return UIFont(name: "OpenSans", size: 12.5)! }
     static var mediumRegularFont: UIFont { return UIFont(name: "OpenSans", size: 17.0)! }
     static var mediumSmallRegularFont: UIFont { return UIFont(name: "OpenSans", size: 14.0)! }
@@ -97,7 +100,7 @@ public class Styles: NSObject {
     static var verySmallRegularFont: UIFont { return UIFont(name: "OpenSans", size: 10.0)! }
     static var tinyRegularFont: UIFont { return UIFont(name: "OpenSans", size: 8.5)! }
     static var verySmallSemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 10.0)! }
-    static var veryTinySemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 4.5)! }
+    static var veryTinySemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 8.0)! }
 
     //
     // MARK: - Background Colors

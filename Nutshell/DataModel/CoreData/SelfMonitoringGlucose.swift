@@ -16,7 +16,22 @@ class SelfMonitoringGlucose: CommonData {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! SelfMonitoringGlucose
             
             me.subType = json["subType"].string
-            me.value = json["value"].number
+            
+            if let value = json["value"].number {
+                me.value = value
+            } else {
+                print("smbg record with missing value skipped")
+                return nil
+            }
+            
+            if let units = json["units"].string {
+                if units != "mmol/L" {
+                    print("smbg record with incorrect units skipped: \(units)")
+                    return nil
+                }
+            } else {
+                print("smbg record with no units field, assuming mmol/L - value: \(me.value)")
+            }
             
             return me
         }

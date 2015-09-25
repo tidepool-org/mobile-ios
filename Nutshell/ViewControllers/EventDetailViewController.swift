@@ -40,7 +40,7 @@ class EventDetailViewController: BaseUIViewController {
         if let eventItem = eventItem {
             eventNotes.text = eventItem.notes
             let df = NSDateFormatter()
-            df.dateFormat = uniformDateFormat
+            df.dateFormat = Styles.uniformDateFormat
             eventDate.text = df.stringFromDate(eventItem.time)
         }
     }
@@ -64,7 +64,9 @@ class EventDetailViewController: BaseUIViewController {
             // here we can get the frame of subviews of mySubView
             // and do useful things with that...
             if let eventTime = eventItem?.time {
-                graphView = GraphUIView.init(frame: graphSectionView.bounds, centerTime: eventTime, timeIntervalForView: 60*60*6)
+                // need about 60 pixels per hour... so divide by 60, and multiply by 60x60
+                let interval = NSTimeInterval(graphSectionView.bounds.width*60)
+                graphView = GraphUIView.init(frame: graphSectionView.bounds, centerTime: eventTime, timeIntervalForView: interval)
                 graphView!.configure()
                 graphSectionView.addSubview(graphView!)
                 graphSectionView.sendSubviewToBack(graphView!)
