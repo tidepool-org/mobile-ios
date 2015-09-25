@@ -79,6 +79,11 @@ public class GraphViews {
     private let kHourInSecs:NSTimeInterval = 3600.0
     private let k3HourInSecs:NSTimeInterval = 3*3600.0
     private let kWizardCircleDiameter: CGFloat = 27.0
+    private let kBolusRectWidth: CGFloat = 14.0
+    private let kBolusRectYOffset: CGFloat = 2.0
+    private let kBolusLabelToRectGap: CGFloat = 3.0
+    private let kBolusLabelRectWidth: CGFloat = 30.0
+    private let kBolusLabelRectHeight: CGFloat = 10.0
     
     //
     // MARK: - Interface
@@ -160,6 +165,36 @@ public class GraphViews {
         return imageData
     }
 
+    func imageOfBolusData(bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)]) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
+        drawBolusData(bolusData)
+        
+        let imageOfBolusData = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return imageOfBolusData
+    }
+
+    func imageOfBasalData(basalData: [(timeOffset: NSTimeInterval, value: NSNumber)]) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
+        drawBasalData(basalData)
+        
+        let imageOfBasalData = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return imageOfBasalData
+    }
+
+    func imageOfWorkoutData(workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval)]) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
+        drawWorkoutData(workoutData)
+        
+        let imageOfData = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return imageOfData
+    }
+
     func imageOfMealData(mealData: [NSTimeInterval]) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
         drawMealData(mealData)
@@ -168,20 +203,6 @@ public class GraphViews {
         UIGraphicsEndImageContext()
         
         return imageOfMealData
-    }
-
-    func imageOfHealthEvent(duration: NSTimeInterval) -> UIImage {
-        let healthEventToGraphBottomLeading: CGFloat = 5.0
-        let imageHeight = viewSize.height - healthEventToGraphBottomLeading;
-        let eventWidth = floor(CGFloat(duration) * viewPixelsPerSec)
-        
-        UIGraphicsBeginImageContextWithOptions(CGSizeMake(eventWidth, imageHeight), false, 0)
-        drawHealthEvent(eventWidth: eventWidth, imageHeight: imageHeight)
-        
-        let imageOfHealthEvent = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return imageOfHealthEvent
     }
 
     //
@@ -352,6 +373,28 @@ public class GraphViews {
         
     }
 
+    private func drawWorkoutData(workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval)]) {
+        
+        for item in workoutData {
+            let timeOffset = item.0
+            let workoutDuration = item.1
+            
+            //// eventLine Drawing
+            let centerX: CGFloat = floor(CGFloat(timeOffset) * viewPixelsPerSec)
+            let eventLinePath = UIBezierPath(rect: CGRect(x: centerX, y: 0.0, width: 1.0, height: viewSize.height))
+            Styles.pinkColor.setFill()
+            eventLinePath.fill()
+            
+            //// eventRectangle Drawing
+            let workoutRectWidth = floor(CGFloat(workoutDuration) * viewPixelsPerSec)
+            let workoutRect = CGRect(x: centerX - (workoutRectWidth/2), y:yTopOfWorkout, width: workoutRectWidth, height: yPixelsWorkout)
+            let eventRectanglePath = UIBezierPath(rect: workoutRect)
+            Styles.pinkColor.setFill()
+            eventRectanglePath.fill()
+            
+        }
+    }
+
     private func drawMealData(mealData: [NSTimeInterval]) {
         
         for timeOffset in mealData {
@@ -361,6 +404,113 @@ public class GraphViews {
             eventLinePath.fill()
         }
     }
+
+    private func drawBasalData(basalData: [(timeOffset: NSTimeInterval, value: NSNumber)]) {
+        
+        var evenRect = true
+        let basalBlueRectColor = Styles.blueColor
+        let basalLightBlueRectColor = Styles.lightBlueColor
+
+        // first figure out the range of data; only need to scale if we exceed this
+        var rangeMax = 2.0
+        for item in basalData {
+            let nextValue = item.1
+            if nextValue > rangeMax {
+                rangeMax = item.1.doubleValue
+            }
+        }
+        let yPixelsPerUnit = yPixelsBasal / CGFloat(rangeMax)
+
+        func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: NSNumber) {
+            let rectColor = evenRect ? basalLightBlueRectColor : basalBlueRectColor
+            evenRect = !evenRect
+
+            let rectLeft = floor(CGFloat(startTimeOffset) * viewPixelsPerSec)
+            let rectRight = floor(CGFloat(endTimeOffset) * viewPixelsPerSec)
+            let rectHeight = floor(yPixelsPerUnit * CGFloat(value))
+            let basalRect = CGRect(x: rectLeft, y: yBottomOfBasal - rectHeight, width: rectRight - rectLeft, height: rectHeight)
+
+            let basalValueRectPath = UIBezierPath(rect: basalRect)
+            rectColor.setFill()
+            basalValueRectPath.fill()
+        }
+
+        var startValue: CGFloat = 0.0
+        var startTimeOffset: NSTimeInterval = 0.0
+        
+        // draw the items, left to right. A zero value ends a rect, a new value ends any current rect and starts a new one.
+        for item in basalData {
+            // skip over values before starting time, but remember last value...
+            let itemTime = item.0
+            let itemValue = item.1
+            if itemTime < 0 {
+                startValue = CGFloat(itemValue)
+            } else if startValue == 0.0 {
+                if (itemValue > 0.0) {
+                    // just starting a rect, note the time...
+                    startTimeOffset = itemTime
+                    startValue = CGFloat(itemValue)
+                }
+            } else {
+                // got another value, draw the rect
+                drawBasalRect(startTimeOffset, endTimeOffset: itemTime, value: startValue)
+                // and start another rect...
+                startValue = CGFloat(itemValue)
+                startTimeOffset = itemTime
+            }
+        }
+        // finish off any rect we started...
+        if (startValue > 0.0) {
+            drawBasalRect(startTimeOffset, endTimeOffset: timeIntervalForView, value: startValue)
+        }
+        
+    }
+
+    private func drawBolusData(bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)]) {
+        
+        // first figure out the range of data; only need to scale if we exceed this
+        var rangeMax = 6.0
+        for item in bolusData {
+            if item.1 > rangeMax {
+                rangeMax = item.1.doubleValue
+            }
+        }
+ 
+        let yPixelsPerUnit = yPixelsBolus / CGFloat(rangeMax)
+
+        // draw the items, left to right, with label on left.
+        for item in bolusData {
+            let context = UIGraphicsGetCurrentContext()
+            
+            // Color Declarations
+            let bolusTextBlue = Styles.mediumBlueColor
+            let bolusBlueRectColor = Styles.blueColor
+            
+            // bolusValueRect Drawing
+            // Bolus rect is left-aligned to time start
+            let rectLeft = floor(CGFloat(item.0) * viewPixelsPerSec)
+            let rectHeight = floor(yPixelsPerUnit * CGFloat(item.1.doubleValue))
+            let bolusValueRectPath = UIBezierPath(rect: CGRect(x: rectLeft, y: yBottomOfBolus - rectHeight - kBolusRectYOffset, width: kBolusRectWidth, height: rectHeight))
+            bolusBlueRectColor.setFill()
+            bolusValueRectPath.fill()
+           
+            // bolusLabel Drawing
+            let bolusLabelRect = CGRect(x: rectLeft - kBolusLabelToRectGap - kBolusLabelRectWidth, y: yBottomOfBolus - kBolusLabelRectHeight, width: kBolusLabelRectWidth, height: kBolusLabelRectHeight)
+            let bolusLabelTextContent = String(item.1) + " u"
+            let bolusLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+            bolusLabelStyle.alignment = .Right
+            
+            let bolusLabelFontAttributes = [NSFontAttributeName: Styles.verySmallSemiboldFont, NSForegroundColorAttributeName: bolusTextBlue, NSParagraphStyleAttributeName: bolusLabelStyle]
+            
+            let bolusLabelTextHeight: CGFloat = bolusLabelTextContent.boundingRectWithSize(CGSizeMake(bolusLabelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: bolusLabelFontAttributes, context: nil).size.height
+            CGContextSaveGState(context)
+            CGContextClipToRect(context, bolusLabelRect);
+            bolusLabelTextContent.drawInRect(CGRectMake(bolusLabelRect.minX, bolusLabelRect.minY + bolusLabelRect.height - bolusLabelTextHeight, bolusLabelRect.width, bolusLabelTextHeight), withAttributes: bolusLabelFontAttributes)
+            CGContextRestoreGState(context)
+            
+        }
+
+}
 
     private func drawWizardData(wizardData: [(timeOffset: NSTimeInterval, value: NSNumber)]) {
         for item in wizardData {
@@ -393,24 +543,6 @@ public class GraphViews {
         }
     }
   
-    private func drawHealthEvent(eventWidth eventWidth: CGFloat, imageHeight: CGFloat) {
-        
-        //// Frames
-        let frame = CGRectMake(0, 0, eventWidth, imageHeight)
-        let healthRectHeight: CGFloat = 18.0
-        
-        //// eventRectangle Drawing
-        let eventRectanglePath = UIBezierPath(rect: CGRectMake(0.0, frame.height - healthRectHeight, frame.width, healthRectHeight))
-        Styles.pinkColor.setFill()
-        eventRectanglePath.fill()
-        
-        
-        //// eventLine Drawing
-        let eventLinePath = UIBezierPath(rect: CGRectMake(floor(frame.width * 0.5 - 0.5) + 1.0, 0.0, 1.0, frame.height))
-        Styles.pinkColor.setFill()
-        eventLinePath.fill()
-    }
-
     private func drawCbgData(cbgData: [(timeOffset: NSTimeInterval, value: NSNumber)]) {
         //// General Declarations
     

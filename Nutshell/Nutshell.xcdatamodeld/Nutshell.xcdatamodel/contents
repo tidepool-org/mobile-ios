@@ -138,8 +138,10 @@
         <attribute name="calories" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="distance" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="source" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="subType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
         <element name="Activity" positionX="-27" positionY="36" width="128" height="150"/>
@@ -165,6 +167,6 @@
         <element name="UrineKetone" positionX="45" positionY="144" width="128" height="60"/>
         <element name="User" positionX="-63" positionY="-18" width="128" height="90"/>
         <element name="Wizard" positionX="36" positionY="90" width="128" height="135"/>
-        <element name="Workout" positionX="9" positionY="126" width="128" height="135"/>
+        <element name="Workout" positionX="9" positionY="126" width="128" height="165"/>
     </elements>
 </model>

@@ -2,7 +2,7 @@
 //  Workout+CoreDataProperties.swift
 //  
 //
-//  Created by Larry Kenyon on 9/21/15.
+//  Created by Larry Kenyon on 9/25/15.
 //
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -14,11 +14,13 @@ import CoreData
 
 extension Workout {
 
-    @NSManaged var subType: String?
-    @NSManaged var duration: NSNumber?
+    @NSManaged var appleHealthDate: NSDate?
     @NSManaged var calories: NSNumber?
     @NSManaged var distance: NSNumber?
+    @NSManaged var duration: NSNumber?
     @NSManaged var source: String?
-    @NSManaged var appleHealthDate: NSDate?
+    @NSManaged var subType: String?
+    @NSManaged var title: String?
+    @NSManaged var notes: String?
 
 }

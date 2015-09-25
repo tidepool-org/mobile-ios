@@ -42,6 +42,11 @@ class NutEvent {
         }
     }
     
+    func sortEvents() {
+        itemArray = itemArray.sort() {
+            $0.time.compare($1.time) == NSComparisonResult.OrderedDescending }
+    }
+    
     func printNutEvent() {
         print("nut has \(itemArray.count) items")
         for item in itemArray {

@@ -72,6 +72,7 @@ class GraphUIView: UIView {
     private var bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var wizardData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var basalData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
+    private var workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval)] = []
     private var mealData: [NSTimeInterval] = []
 
     //
@@ -86,43 +87,48 @@ class GraphUIView: UIView {
         let graphBackground = UIImageView(image: backgroundImage)
         addSubview(graphBackground)
     
+        if !workoutData.isEmpty {
+            let overlayImage = graphViews.imageOfWorkoutData(workoutData)
+            let overlay = UIImageView(image:overlayImage)
+            addSubview(overlay)
+        }
+
         if !mealData.isEmpty {
-            let mealOverlayImage = graphViews.imageOfMealData(mealData)
-            let mealOverlay = UIImageView(image:mealOverlayImage)
-            addSubview(mealOverlay)
+            let overlayImage = graphViews.imageOfMealData(mealData)
+            let overlay = UIImageView(image:overlayImage)
+            addSubview(overlay)
         }
 
         if !cbgData.isEmpty {
-            let cbgOverlayImage = graphViews.imageOfCbgData(cbgData)
-            let cbgOverlay = UIImageView(image:cbgOverlayImage)
-            addSubview(cbgOverlay)
+            let overlayImage = graphViews.imageOfCbgData(cbgData)
+            let overlay = UIImageView(image:overlayImage)
+            addSubview(overlay)
         }
  
         if !smbgData.isEmpty {
             let smbgOverlayImage = graphViews.imageOfSmbgData(smbgData)
-            let smbgOverlay = UIImageView(image:smbgOverlayImage)
-            addSubview(smbgOverlay)
+            let overlay = UIImageView(image:smbgOverlayImage)
+            addSubview(overlay)
         }
  
         if !wizardData.isEmpty {
-            let wizardOverlayImage = graphViews.imageOfWizardData(wizardData)
-            let wizardOverlay = UIImageView(image:wizardOverlayImage)
-            addSubview(wizardOverlay)
+            let overlayImage = graphViews.imageOfWizardData(wizardData)
+            let overlay = UIImageView(image:overlayImage)
+            addSubview(overlay)
         }
 
-//        let workoutImage = graphViews.imageOfHealthEvent(60*60*1)
-//        // need to offset the middle of this view precisely at the time offset of the event
-//        // assume time start of 0, time width of the graph 6 hours, and time offset of 3 hours
-//        let pixelsPerSecond = self.frame.size.width/CGFloat(viewTimeInterval)
-//        let eventOffsetTime: CGFloat = 3*60*60
-//        var eventOffsetPixels = pixelsPerSecond * eventOffsetTime
-//        // offset for width of the event bar: the middle of the bar is where the event line is!
-//        eventOffsetPixels = floor(eventOffsetPixels - 0.5 * workoutImage.size.width)
-//        
-//        let frame = CGRectMake(eventOffsetPixels, 0, workoutImage.size.width, workoutImage.size.height)
-//        let healthEvent = UIImageView(frame: frame)
-//        healthEvent.image = workoutImage
-//        self.addSubview(healthEvent)
+        if !bolusData.isEmpty {
+            let overlayImage = graphViews.imageOfBolusData(bolusData)
+            let overlay = UIImageView(image:overlayImage)
+            addSubview(overlay)
+        }
+
+        if !basalData.isEmpty {
+            let overlayImage = graphViews.imageOfBasalData(basalData)
+            let overlay = UIImageView(image:overlayImage)
+            addSubview(overlay)
+        }
+
     }
 
     //
@@ -174,6 +180,15 @@ class GraphUIView: UIView {
         }
     }
 
+    private func addWorkoutEvent(event: Workout, deltaTime: NSTimeInterval) {
+        //print("Adding Workout event: \(event)")
+        if let duration = event.duration {
+            workoutData.append((timeOffset: deltaTime, duration: NSTimeInterval(duration)))
+        } else {
+            print("ignoring Workout event with nil duration")
+        }
+    }
+
     private func loadDataForView() {
         // Reload all data, assuming time span has changed
         smbgData = []
@@ -182,11 +197,12 @@ class GraphUIView: UIView {
         basalData = []
         wizardData = []
         mealData = []
+        workoutData = []
         
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
         do {
             let events = try DatabaseUtils.getEvents(ad.managedObjectContext,
-            fromTime: startTime, toTime: endTime, objectTypes: ["smbg", "bolus", "cbg", "basal", "wizard", "meal"])
+            fromTime: startTime, toTime: endTime, objectTypes: ["smbg", "bolus", "cbg", "wizard", "meal", "workout"])
             
             print("\(events.count) events")
             for event in events {
@@ -209,21 +225,47 @@ class GraphUIView: UIView {
                         if let cbgEvent = event as? ContinuousGlucose {
                             addCbgEvent(cbgEvent, deltaTime: deltaTime)
                         }
-                    case "basal":
-                        if let basalEvent = event as? Basal {
-                            addBasalEvent(basalEvent, deltaTime: deltaTime)
-                        }
                     case "meal":
                         if let _ = event as? Meal {
                             mealData.append(deltaTime)
                         }
+                    case "workout":
+                        if let workoutEvent = event as? Workout {
+                            addWorkoutEvent(workoutEvent, deltaTime: deltaTime)
+                        }
                     default: print("Ignoring event of type: \(event.type)")
+                        break
                     }
                 }
             }
         } catch let error as NSError {
             print("Error: \(error)")
         }
-        print("loaded \(smbgData.count) smbg events, \(cbgData.count) cbg events, \(bolusData.count) bolus events, and \(basalData.count) basal events")
+        
+        // since basal events have a duration, use a different query to start earlier in time
+        do {
+            let earlyStartTime = startTime.dateByAddingTimeInterval(-60*60*12)
+            let events = try DatabaseUtils.getEvents(ad.managedObjectContext,
+                fromTime: earlyStartTime, toTime: endTime, objectTypes: ["basal"])
+            
+            print("\(events.count) events")
+            for event in events {
+                if let eventTime = event.time {
+                    let deltaTime = eventTime.timeIntervalSinceDate(startTime)
+                    switch event.type as! String {
+                    case "basal":
+                        if let basalEvent = event as? Basal {
+                            addBasalEvent(basalEvent, deltaTime: deltaTime)
+                        }
+                    default:
+                        break
+                    }
+                }
+            }
+        } catch let error as NSError {
+            print("Error: \(error)")
+        }
+
+        print("loaded \(smbgData.count) smbg events, \(cbgData.count) cbg events, \(bolusData.count) bolus events, \(basalData.count) basal events, \(wizardData.count) wizard events, \(mealData.count) meal events, \(workoutData.count) workout events")
     }
 }

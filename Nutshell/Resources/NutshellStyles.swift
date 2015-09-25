@@ -160,9 +160,6 @@ public class Styles: NSObject {
     // Open Sans Semibold 25.5:   UILabel account settings, target level text inactive
     static var mediumLightGreyColor: UIColor { return UIColor(hex: 0xd0d3d4) }
 
-    // Open Sans Semibold 10:   custom graph insulin amount text
-    static var mediumBlueColor: UIColor { return UIColor(hex: 0x6db7d4) }
-
     // Over dark purple background
     // OpenSans Semibold 16:    UILabel event subtext
     static var mediumGreyColor: UIColor { return UIColor(hex: 0xb8b8b8) }
@@ -206,7 +203,9 @@ public class Styles: NSObject {
     // insulin bar
     static var lightBlueColor: UIColor { return UIColor(hex: 0xc5e5f1) }
     static var blueColor: UIColor { return UIColor(hex: 0x7aceef) }
-    //class var mediumBlueColor: UIColor { return UIColor(hex: 0x6db7d4) }
+    // Open Sans Semibold 10:   custom graph insulin amount text
+    static var mediumBlueColor: UIColor { return UIColor(hex: 0x6db7d4) }
+    
     
     // blood glucose data
     //static var peachColor: UIColor { return UIColor(hex: 0xf88d79) }

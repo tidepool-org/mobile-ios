@@ -107,10 +107,10 @@ class AddEventViewController: UIViewController {
             
             // This is a good place to splice in demo and test data. For now, entering "demo" as the title will result in us adding a set of demo events to the model, and "delete" will delete all food events.
             if titleTextField.text == "demo" {
-                DatabaseUtils.deleteAllMealEvents(moc)
+                DatabaseUtils.deleteAllNutEvents(moc)
                 addDemoData()
             } else if titleTextField.text == "nodemo" {
-                DatabaseUtils.deleteAllMealEvents(moc)
+                DatabaseUtils.deleteAllNutEvents(moc)
             } else {
                 let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal
                 
@@ -193,6 +193,11 @@ class AddEventViewController: UIViewController {
             ["Soccer Practice", "", "2015-07-25T14:25:21.000Z", ""],
         ]
         
+        let demoWorkouts = [
+            ["Runs", "regular 3 mile", "2015-07-28T12:25:21.000Z", "6000"],
+            ["Workout", "running in park", "2015-07-27T04:23:20.000Z", "2100"],
+        ]
+
         func addMeal(me: Meal, event: [String]) {
             me.title = event[0]
             me.notes = event[1]
@@ -210,6 +215,23 @@ class AddEventViewController: UIViewController {
             me.modifiedTime = now
         }
         
+        func addWorkout(we: Workout, event: [String]) {
+            we.title = event[0]
+            we.notes = event[1]
+            if (event[2] == "") {
+                we.time = NSDate().dateByAddingTimeInterval(-60*60)
+                we.duration = (-60*60)
+            } else {
+                we.time = NutUtils.dateFromJSON(event[2])
+                we.duration = NSTimeInterval(event[3])
+            }
+            we.type = "workout"
+            we.id = NSUUID().UUIDString // required!
+            let now = NSDate()
+            we.createdTime = now
+            we.modifiedTime = now
+        }
+
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
         let moc = ad.managedObjectContext
         if let entityDescription = NSEntityDescription.entityForName("Meal", inManagedObjectContext: moc) {
@@ -219,6 +241,14 @@ class AddEventViewController: UIViewController {
                 moc.insertObject(me)
             }
         }
+        if let entityDescription = NSEntityDescription.entityForName("Workout", inManagedObjectContext: moc) {
+            for event in demoWorkouts {
+                let we = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Workout
+                addWorkout(we, event: event)
+                moc.insertObject(we)
+            }
+        }
+
     }
 
 }

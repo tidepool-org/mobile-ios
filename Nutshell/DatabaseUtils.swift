@@ -127,24 +127,29 @@ class DatabaseUtils {
             request.predicate = NSPredicate(format: "(time >= %@) AND (time <= %@)", fromTime, toTime)
         }
         
-        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
         return try moc.executeFetchRequest(request) as! [CommonData]
     }
 
-    class func getAllMealAndWorkoutEvents(moc: NSManagedObjectContext) throws -> [CommonData] {
-        let request = NSFetchRequest(entityName: "CommonData")
-            request.predicate = NSPredicate(format: "(type == %@) OR (type == %@)", "meal", "workout")
-        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
-        return try moc.executeFetchRequest(request) as! [CommonData]
+    class func getAllWorkoutEvents(moc: NSManagedObjectContext) throws -> [Workout] {
+        let request = NSFetchRequest(entityName: "Workout")
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
+        return try moc.executeFetchRequest(request) as! [Workout]
     }
 
     class func getAllMealEvents(moc: NSManagedObjectContext) throws -> [Meal] {
         let request = NSFetchRequest(entityName: "Meal")
-        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: false)]
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
         return try moc.executeFetchRequest(request) as! [Meal]
     }
     
-    class func deleteAllMealEvents(moc: NSManagedObjectContext) {
+    class func getAllWizardEvents(moc: NSManagedObjectContext) throws -> [Wizard] {
+        let request = NSFetchRequest(entityName: "Wizard")
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
+        return try moc.executeFetchRequest(request) as! [Wizard]
+    }
+
+    class func deleteAllNutEvents(moc: NSManagedObjectContext) {
         do {
             let request = NSFetchRequest(entityName: "Meal")
             let myList = try moc.executeFetchRequest(request)
@@ -154,6 +159,17 @@ class DatabaseUtils {
         } catch let error as NSError {
             print("Failed to delete meal items: \(error)")
         }
+        
+        do {
+            let request = NSFetchRequest(entityName: "Workout")
+            let myList = try moc.executeFetchRequest(request)
+            for obj: AnyObject in myList {
+                moc.deleteObject(obj as! NSManagedObject)
+            }
+        } catch let error as NSError {
+            print("Failed to delete meal items: \(error)")
+        }
+
         
         do {
             try moc.save()
