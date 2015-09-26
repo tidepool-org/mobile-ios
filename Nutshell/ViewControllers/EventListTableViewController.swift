@@ -75,6 +75,7 @@ class EventListTableViewController: BaseUITableViewController {
         if(segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventGroupSegue {
             let cell = sender as! EventListTableViewCell
             let eventGroupVC = segue.destinationViewController as! EventGroupTableViewController
+            cell.eventGroup?.sortEvents()
             eventGroupVC.eventGroup = cell.eventGroup
         }
     }
@@ -105,7 +106,7 @@ class EventListTableViewController: BaseUITableViewController {
 
         sortedNutEvents = [(String, NutEvent)]()
         
-        // Get all Food and Activity events, chronologically; this will result in an unsorted dictionary of NutEvents, but the items within each NutEvent will be sorted. 
+        // Get all Food and Activity events, chronologically; this will result in an unsorted dictionary of NutEvents.
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
 
         do {

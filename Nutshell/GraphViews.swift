@@ -20,35 +20,7 @@ import CoreGraphics
 public class GraphViews {
 
     //
-    // MARK: - Graph parameters set at init time.
-    //
-
-    // These are based on an origin on the lower left. For plotting, the y value needs to be adjusted for origin on the upper left.
-    private var viewSize: CGSize
-    private var timeIntervalForView: NSTimeInterval
-    private var viewPixelsPerSec: CGFloat
-    private var startTime: NSDate
-    // Glucose readings go from 340(?) down to 0 in a section just below the header
-    private var yTopOfGlucose: CGFloat
-    private var yBottomOfGlucose: CGFloat
-    private var yPixelsGlucose: CGFloat
-    // Wizard readings overlap the bottom part of the glucose readings
-    private var yBottomOfWizard: CGFloat
-    // Bolus readings go in a section below glucose
-    private var yTopOfBolus: CGFloat
-    private var yBottomOfBolus: CGFloat
-    private var yPixelsBolus: CGFloat
-    // Basal readings go in a section below Bolus
-    private var yTopOfBasal: CGFloat
-    private var yBottomOfBasal: CGFloat
-    private var yPixelsBasal: CGFloat
-    // Workout durations go in a section below Basal
-    private var yTopOfWorkout: CGFloat
-    private var yBottomOfWorkout: CGFloat
-    private var yPixelsWorkout: CGFloat
-
-    //
-    // MARK: - Constants used to set graph parameters
+    // MARK: - Customization constants
     //
 
     private let kGraphHeaderHeight: CGFloat = 32.0
@@ -85,6 +57,41 @@ public class GraphViews {
     private let kBolusLabelRectWidth: CGFloat = 30.0
     private let kBolusLabelRectHeight: CGFloat = 10.0
     
+    // Some graph colors (TODO: add all graph colors here, based on Nutshell colors!)
+    private let hourMarkerStrokeColor = UIColor(hex: 0xe2e4e7)
+    private let axisTextColor = Styles.darkGreyColor
+    private let mealLineColor = Styles.darkPurpleColor
+    
+    
+
+    //
+    // MARK: - Graph vars based on view size and customization constants
+    //
+    
+    // These are based on an origin on the lower left. For plotting, the y value needs to be adjusted for origin on the upper left.
+    private var viewSize: CGSize
+    private var timeIntervalForView: NSTimeInterval
+    private var viewPixelsPerSec: CGFloat
+    private var startTime: NSDate
+    // Glucose readings go from 340(?) down to 0 in a section just below the header
+    private var yTopOfGlucose: CGFloat
+    private var yBottomOfGlucose: CGFloat
+    private var yPixelsGlucose: CGFloat
+    // Wizard readings overlap the bottom part of the glucose readings
+    private var yBottomOfWizard: CGFloat
+    // Bolus readings go in a section below glucose
+    private var yTopOfBolus: CGFloat
+    private var yBottomOfBolus: CGFloat
+    private var yPixelsBolus: CGFloat
+    // Basal readings go in a section below Bolus
+    private var yTopOfBasal: CGFloat
+    private var yBottomOfBasal: CGFloat
+    private var yPixelsBasal: CGFloat
+    // Workout durations go in a section below Basal
+    private var yTopOfWorkout: CGFloat
+    private var yBottomOfWorkout: CGFloat
+    private var yPixelsWorkout: CGFloat
+
     //
     // MARK: - Interface
     //
@@ -209,9 +216,6 @@ public class GraphViews {
     // MARK: - Private drawing methods
     //
 
-    private let hourMarkerStrokeColor = UIColor(hex: 0xe2e4e7)
-    private let axisTextColor = UIColor(hex: 0x281946)
-
     private func drawGraphBackground() {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()
@@ -263,9 +267,9 @@ public class GraphViews {
             yAxisLinePath.usesEvenOddFillRule = true;
             
             horizontalLineColor.setStroke()
-            yAxisLinePath.lineWidth = 3
+            yAxisLinePath.lineWidth = 1.5
             CGContextSaveGState(context)
-            CGContextSetLineDash(context, 0, [3, 11], 2)
+            CGContextSetLineDash(context, 0, [2, 5], 2)
             yAxisLinePath.stroke()
             CGContextRestoreGState(context)
         }
@@ -336,9 +340,11 @@ public class GraphViews {
             let hourlabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             hourlabelStyle.alignment = .Center
             
-            let labelFontAttributes = [NSFontAttributeName: Styles.verySmallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hourlabelStyle]
+            let labelAttrStr = NSMutableAttributedString(string: hourStr, attributes: [NSFontAttributeName: Styles.verySmallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hourlabelStyle])
+            // Make " a" extra small
+            labelAttrStr.addAttribute(NSFontAttributeName, value: Styles.tinyRegularFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
             
-            hourStr.drawInRect(labelRect, withAttributes: labelFontAttributes)
+            labelAttrStr.drawInRect(labelRect)
         }
         
         let df = NSDateFormatter()
@@ -400,7 +406,7 @@ public class GraphViews {
         for timeOffset in mealData {
             //// eventLine Drawing
             let eventLinePath = UIBezierPath(rect: CGRect(x: floor(CGFloat(timeOffset) * viewPixelsPerSec), y: 0.0, width: 1.0, height: viewSize.height))
-            axisTextColor.setFill()
+            mealLineColor.setFill()
             eventLinePath.fill()
         }
     }
@@ -487,8 +493,9 @@ public class GraphViews {
             let bolusBlueRectColor = Styles.blueColor
             
             // bolusValueRect Drawing
-            // Bolus rect is left-aligned to time start
-            let rectLeft = floor(CGFloat(item.0) * viewPixelsPerSec)
+            // Bolus rect is center-aligned to time start
+            // Carb circle should be centered at timeline
+            let rectLeft = floor((CGFloat(item.0) * viewPixelsPerSec) - (kBolusRectWidth/2))
             let rectHeight = floor(yPixelsPerUnit * CGFloat(item.1.doubleValue))
             let bolusValueRectPath = UIBezierPath(rect: CGRect(x: rectLeft, y: yBottomOfBolus - rectHeight - kBolusRectYOffset, width: kBolusRectWidth, height: rectHeight))
             bolusBlueRectColor.setFill()
@@ -517,14 +524,14 @@ public class GraphViews {
             
             let context = UIGraphicsGetCurrentContext()
             
-            //// wizardBolus
-            //// Oval-38-Copy-980 Drawing
-            let wizardRect = CGRect(x: floor(CGFloat(item.0) * viewPixelsPerSec), y: yBottomOfWizard - kWizardCircleDiameter, width: kWizardCircleDiameter, height: kWizardCircleDiameter)
+            // Carb circle should be centered at timeline
+            let offsetX = floor((CGFloat(item.0) * viewPixelsPerSec) - (kWizardCircleDiameter/2))
+            let wizardRect = CGRect(x: offsetX, y: yBottomOfWizard - kWizardCircleDiameter, width: kWizardCircleDiameter, height: kWizardCircleDiameter)
             let wizardOval = UIBezierPath(ovalInRect: wizardRect)
             Styles.goldColor.setFill()
             wizardOval.fill()
             
-            //// Label Drawing
+            // Label Drawing
             let labelRect = wizardRect
             let labelText = String(Int(item.1)) + " g"
             let labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
@@ -538,7 +545,6 @@ public class GraphViews {
             CGContextSaveGState(context)
             CGContextClipToRect(context, labelRect);
             labelAttrStr.drawInRect(CGRectMake(labelRect.minX, labelRect.minY + (labelRect.height - labelTextHeight) / 2, labelRect.width, labelTextHeight))
-//            labelTextContent.drawInRect(CGRectMake(labelRect.minX, labelRect.minY + (labelRect.height - labelTextHeight) / 2, labelRect.width, labelTextHeight), withAttributes: labelFontAttributes)
             CGContextRestoreGState(context)
         }
     }

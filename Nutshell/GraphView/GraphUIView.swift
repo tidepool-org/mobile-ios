@@ -57,7 +57,7 @@ class GraphUIView: UIView {
     /// - returns: True if there were any cpg, bolus, basal or smgb events in the time frame of the graph
     
     func dataFound() -> Bool {
-        return cbgData.count != 0 || bolusData.count != 0 || basalData.count != 0 || smbgData.count != 0
+        return cbgData.count != 0 || bolusData.count != 0 || basalData.count != 0 || smbgData.count != 0 || wizardData.count != 0
     }
     
     //
@@ -87,6 +87,10 @@ class GraphUIView: UIView {
         let graphBackground = UIImageView(image: backgroundImage)
         addSubview(graphBackground)
     
+        if !dataFound() {
+            return
+        }
+        
         if !workoutData.isEmpty {
             let overlayImage = graphViews.imageOfWorkoutData(workoutData)
             let overlay = UIImageView(image:overlayImage)
