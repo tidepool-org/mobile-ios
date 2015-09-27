@@ -56,9 +56,8 @@ class EventGroupTableViewController: BaseUITableViewController {
         if (indexPath.item < eventGroup?.itemArray.count) {
             if let eventItem = eventGroup?.itemArray[indexPath.item] {
                 cell.configureCell(eventItem)
-                // demo pic...
-                if (indexPath.row > 0) {
-                    cell.photoImageView.image = UIImage(named: "applejuicedemopic")
+                if eventItem.photo.characters.count > 0 {
+                    cell.photoImageView.image = UIImage(named: eventItem.photo)
                 }
             }
         }

@@ -279,9 +279,11 @@
                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventTitleText"/>
                             </userDefinedRuntimeAttributes>
                             <connections>
+                                <action selector="titleEditingDidBegin:" destination="SME-si-pxR" eventType="editingDidBegin" id="6Ni-Za-Z1j"/>
                                 <action selector="titleEditingDidEnd:" destination="SME-si-pxR" eventType="editingDidEndOnExit" id="MY1-Tc-Lmo"/>
                             </connections>
                         </textField>
+                        <barButtonItem key="rightBarButtonItem" id="2rg-LX-NOg"/>
                     </navigationItem>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
@@ -294,6 +296,7 @@
                         <outlet property="photoIconButton" destination="5Ae-Bd-RPQ" id="W6p-ZC-qfK"/>
                         <outlet property="photoIconContainer" destination="FMt-wV-58v" id="fy9-EF-nZj"/>
                         <outlet property="photoUIImageView" destination="6vL-Qj-BIV" id="pGp-hK-C01"/>
+                        <outlet property="rightBarItem" destination="2rg-LX-NOg" id="XoA-rU-caC"/>
                         <outlet property="saveButton" destination="Qaa-en-akI" id="bXG-gQ-fe1"/>
                         <outlet property="titleEventButton" destination="7qa-cl-hZk" id="RcA-8C-K5s"/>
                         <outlet property="titleTextField" destination="wce-9O-YVZ" id="I5i-d0-epS"/>

@@ -28,6 +28,7 @@ class AddEventViewController: UIViewController {
     @IBOutlet weak var titleTextField: NutshellUITextField!
     @IBOutlet weak var notesTextField: NutshellUITextField!
     
+    @IBOutlet weak var rightBarItem: UIBarButtonItem!
     @IBOutlet weak var eventDate: NutshellUILabel!
 
     @IBOutlet weak var saveButton: UIButton!
@@ -47,8 +48,10 @@ class AddEventViewController: UIViewController {
         let df = NSDateFormatter()
         df.dateFormat = Styles.uniformDateFormat
         eventDate.text = df.stringFromDate(eventTime)
+        // TODO: figure out why this is needed to center title!
+        rightBarItem.title = "            "
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -60,7 +63,6 @@ class AddEventViewController: UIViewController {
 
     @IBAction func titleEventButtonHandler(sender: NutshellUIButton) {
         titleTextField.becomeFirstResponder()
-        titleEventButton.hidden = true
         configureCameraImageViewUp(true)
     }
     
@@ -68,6 +70,11 @@ class AddEventViewController: UIViewController {
     func textFieldDidBeginEditing(textField: UITextField) {
         notesTextField.becomeFirstResponder()
         notesTextField.selectAll(nil)
+    }
+    
+    
+    @IBAction func titleEditingDidBegin(sender: AnyObject) {
+        configureCameraImageViewUp(true)
     }
     
     @IBAction func titleEditingDidEnd(sender: AnyObject) {
@@ -81,7 +88,6 @@ class AddEventViewController: UIViewController {
     
     private func updateSaveButtonState() {
         if titleTextField.text?.characters.count == 0 {
-            titleEventButton.hidden = false
             saveButton.hidden = true
             configureCameraImageViewUp(false)
         } else {
@@ -163,6 +169,9 @@ class AddEventViewController: UIViewController {
     
     // When the event has a title, the "Title this event" button disappears, and the photo icon is recentered in its container view. This is reversed if the title goes back to an empty string.     
     private func configureCameraImageViewUp(up: Bool) {
+        
+        titleEventButton.hidden = up
+        
         for c in photoIconContainer.constraints {
             if c.firstAttribute == NSLayoutAttribute.CenterY {
                 c.constant = up ? 0.0 : 20.0
@@ -181,23 +190,18 @@ class AddEventViewController: UIViewController {
     private func addDemoData() {
         
         let demoMeals = [
-            ["Three tacos", "with 15 chips & salsa", "2015-08-20T10:03:21.000Z", "home"],
-            ["Three tacos", "after ballet", "2015-08-09T19:42:40.000Z", "238 Garrett St"],
-            ["Three tacos", "Apple Juice before", "2015-07-29T04:55:27.000Z", "Golden Gate Park"],
-            ["Three tacos", "and horchata", "2015-07-28T14:25:21.000Z", "Golden Gate Park"],
-            ["Workout", "running in park", "2015-07-27T04:23:20.000Z", ""],
-            ["", "Only notes for this one", "2015-07-27T08:25:21.000Z", ""],
-            ["CPK 5 cheese margarita", "", "2015-07-27T12:25:21.000Z", ""],
-            ["Bagel & cream cheese fruit", "", "2015-07-27T16:25:21.000Z", ""],
-            ["Birthday Party", "", "2015-07-26T14:25:21.000Z", ""],
-            ["Soccer Practice", "", "2015-07-25T14:25:21.000Z", ""],
+            ["Three tacos", "with 15 chips & salsa", "2015-08-20T10:03:21.000Z", "home", "ThreeTacosDemoPic"],
+            ["Three tacos", "after ballet", "2015-08-09T19:42:40.000Z", "238 Garrett St", "applejuicedemopic"],
+            ["Three tacos", "Apple Juice before", "2015-07-29T04:55:27.000Z", "Golden Gate Park", "applejuicedemopic"],
+            ["Three tacos", "and horchata", "2015-07-28T14:25:21.000Z", "Golden Gate Park", "applejuicedemopic"],
+            ["Workout", "running in park", "2015-07-27T04:23:20.000Z", "", ""],
+            ["PE class", "some notes for this one", "2015-07-27T08:25:21.000Z", "", ""],
+            ["CPK 5 cheese margarita", "", "2015-07-27T12:25:21.000Z", "", ""],
+            ["Bagel & cream cheese fruit", "", "2015-07-27T16:25:21.000Z", "", ""],
+            ["Birthday Party", "", "2015-07-26T14:25:21.000Z", "", ""],
+            ["Soccer Practice", "", "2015-07-25T14:25:21.000Z", "", ""],
         ]
         
-        let demoWorkouts = [
-            ["Runs", "regular 3 mile", "2015-07-28T12:25:21.000Z", "6000"],
-            ["Workout", "running in park", "2015-07-27T04:23:20.000Z", "2100"],
-        ]
-
         func addMeal(me: Meal, event: [String]) {
             me.title = event[0]
             me.notes = event[1]
@@ -207,13 +211,18 @@ class AddEventViewController: UIViewController {
                 me.time = NutUtils.dateFromJSON(event[2])
             }
             me.location = event[3]
-            me.photo = ""
+            me.photo = event[4]
             me.type = "meal"
             me.id = NSUUID().UUIDString // required!
             let now = NSDate()
             me.createdTime = now
             me.modifiedTime = now
         }
+        
+        let demoWorkouts = [
+            ["Runs", "regular 3 mile", "2015-07-28T12:25:21.000Z", "6000"],
+            ["Workout", "running in park", "2015-07-27T04:23:20.000Z", "2100"],
+        ]
         
         func addWorkout(we: Workout, event: [String]) {
             we.title = event[0]

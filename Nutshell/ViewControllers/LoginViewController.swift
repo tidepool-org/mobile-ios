@@ -40,6 +40,17 @@ class LoginViewController: BaseUIViewController {
         updateButtonStates()
     }
     
+    override func shouldAutorotate() -> Bool {
+        if (UIDevice.currentDevice().orientation == UIDeviceOrientation.Portrait ||
+            UIDevice.currentDevice().orientation == UIDeviceOrientation.PortraitUpsideDown ||
+            UIDevice.currentDevice().orientation == UIDeviceOrientation.Unknown) {
+                return true
+        }
+        else {
+            return false
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -61,6 +72,7 @@ class LoginViewController: BaseUIViewController {
             password: passwordTextField.text!,
             completion: { (result:(Alamofire.Result<User>)) -> (Void) in
                 print("Login result: \(result)")
+                self.loginIndicator.stopAnimating()
                 if ( result.isSuccess ) {
                     if let user=result.value {
                         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -86,6 +98,8 @@ class LoginViewController: BaseUIViewController {
                     }
                 } else {
                     print("login failed! Error: " + result.error.debugDescription)
+                    self.emailTextField.text = ""
+                    self.passwordTextField.text = ""
                 }
         })
     }
