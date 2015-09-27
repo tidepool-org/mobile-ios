@@ -122,7 +122,11 @@ class AddEventViewController: UIViewController {
                 
                 me.location = ""
                 me.title = titleTextField.text
-                me.notes = notesTextField.text
+                var notes = notesTextField.text
+                if notesTextField.text == "Anything else to note?" {
+                    notes = ""
+                }
+                me.notes = notes
                 me.photo = ""
                 me.type = "meal"
                 me.time = eventTime // required!

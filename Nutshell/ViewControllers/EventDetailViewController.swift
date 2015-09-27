@@ -42,6 +42,16 @@ class EventDetailViewController: BaseUIViewController {
             let df = NSDateFormatter()
             df.dateFormat = Styles.uniformDateFormat
             eventDate.text = df.stringFromDate(eventItem.time)
+            if eventItem.photo.characters.count > 0 {
+                if let image = UIImage(named: eventItem.photo) {
+                    missingPhotoView.hidden = true
+                    photoUIImageView.hidden = false
+                    photoUIImageView.image = image
+                }
+            } else {
+                missingPhotoView.hidden = false
+                photoUIImageView.hidden = true
+            }
         }
     }
 
