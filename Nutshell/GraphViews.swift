@@ -24,7 +24,8 @@ public class GraphViews {
     //
 
     private let kGraphHeaderHeight: CGFloat = 32.0
-    // After removing a constant height for the header, the remaining graph vertical space is divided into four sections based on the following fractions (which should add to 1.0)
+    private let kGraphWizardHeight: CGFloat = 0.0
+    // After removing a constant height for the header and wizard values, the remaining graph vertical space is divided into four sections based on the following fractions (which should add to 1.0)
     private let kGraphFractionForGlucose: CGFloat = 180.0/266.0
     private let kGraphFractionForBolus: CGFloat = 42.0/266.0
     private let kGraphFractionForBasal: CGFloat = 28.0/266.0
@@ -40,30 +41,63 @@ public class GraphViews {
     private let kGraphYLabelXOrigin: CGFloat = 0.0
     private let kYAxisLineLeftMargin: CGFloat = 24.0
     private let kYAxisLineRightMargin: CGFloat = 10.0
+    // General constants
+    private let kHourInSecs:NSTimeInterval = 3600.0
+    private let k3HourInSecs:NSTimeInterval = 3*3600.0
 
-    // Some area-specific constants
+    //
+    // MARK: - Area-specific customization
+    //
+
+    // 
+    // Background
+    //
+    private let hourMarkerStrokeColor = UIColor(hex: 0xe2e4e7)
+    private let axisTextColor = Styles.darkGreyColor
+    private let mealLineColor = Styles.darkPurpleColor
+    // Colors
+    // TODO: add all graph colors here, based on Styles colors
+    private let backgroundRightColor = UIColor(red: 0.949, green: 0.953, blue: 0.961, alpha: 1.000)
+    private let backgroundLeftColor = UIColor(red: 0.918, green: 0.937, blue: 0.941, alpha: 1.000)
+    private let horizontalLineColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
+
+    //
+    // Blood glucose data (cbg and smbg)
+    //
     // NOTE: only supports minvalue==0 right now!
     private let kGlucoseMinValue: CGFloat = 0.0
     private let kGlucoseMaxValue: CGFloat = 340.0
     private let kGlucoseRange: CGFloat = 340.0
     private let kGlucoseConversionToMgDl: CGFloat = 18.0
     private let kSkipOverlappingValues = false
-    private let kHourInSecs:NSTimeInterval = 3600.0
-    private let k3HourInSecs:NSTimeInterval = 3*3600.0
+    // Colors
+    private let highColor = Styles.purpleColor
+    private let targetColor = Styles.greenColor
+    private let lowColor = Styles.peachColor
+
+    //
+    // Wizard and bolus data
+    //
     private let kWizardCircleDiameter: CGFloat = 27.0
     private let kBolusRectWidth: CGFloat = 14.0
     private let kBolusRectYOffset: CGFloat = 2.0
     private let kBolusLabelToRectGap: CGFloat = 3.0
     private let kBolusLabelRectWidth: CGFloat = 30.0
     private let kBolusLabelRectHeight: CGFloat = 10.0
+    private let kBolusMinScaleValue: CGFloat = 6.0
+    private let kBolusMaxScaleValue: CGFloat = 6.0 // above this values are clipped
+    // Colors
+    private let bolusTextBlue = Styles.mediumBlueColor
+    private let bolusBlueRectColor = Styles.blueColor
     
-    // Some graph colors (TODO: add all graph colors here, based on Nutshell colors!)
-    private let hourMarkerStrokeColor = UIColor(hex: 0xe2e4e7)
-    private let axisTextColor = Styles.darkGreyColor
-    private let mealLineColor = Styles.darkPurpleColor
+    //
+    // Basal data
+    //
+    private let basalBlueRectColor = Styles.blueColor
+    private let basalLightBlueRectColor = Styles.lightBlueColor
+    private let kBasalMinScaleValue: CGFloat = 2.0
+    private let kBasalMaxScaleValue: CGFloat = 2.0 // above this values are clipped
     
-    
-
     //
     // MARK: - Graph vars based on view size and customization constants
     //
@@ -102,15 +136,16 @@ public class GraphViews {
         self.startTime = startTime
         self.viewPixelsPerSec = viewSize.width/CGFloat(timeIntervalForView)
         
-        let graphHeight = viewSize.height - kGraphHeaderHeight
+        // The pie to divide is what's left over after removing constant height areas
+        let graphHeight = viewSize.height - kGraphHeaderHeight - kGraphWizardHeight
         
         // The largest section is for the glucose readings just below the header
         self.yTopOfGlucose = kGraphHeaderHeight
         self.yBottomOfGlucose = self.yTopOfGlucose + floor(kGraphFractionForGlucose * graphHeight) - kGraphWorkoutGlucoseOffset
         self.yPixelsGlucose = self.yBottomOfGlucose - self.yTopOfGlucose
         
-        // Wizard data sits above the bolus readings, overlapping the bottom of the glucose graph which should be empty of readings that low
-        self.yBottomOfWizard = self.yBottomOfGlucose
+        // Wizard data sits above the bolus readings, in a fixed space area, overlapping the bottom of the glucose graph which should be empty of readings that low.
+        self.yBottomOfWizard = self.yBottomOfGlucose + kGraphWizardHeight
 
         // Next down are the bolus readings
         self.yTopOfBolus = self.yBottomOfGlucose + kGraphWorkoutGlucoseOffset
@@ -126,7 +161,6 @@ public class GraphViews {
         self.yTopOfWorkout = yBottomOfBasal + kGraphWorkoutBasalOffset
         self.yBottomOfWorkout = self.yTopOfWorkout + floor(kGraphFractionForWorkout * graphHeight) - kGraphWorkoutBaseOffset
         self.yPixelsWorkout = self.yBottomOfWorkout - self.yTopOfWorkout
-
     }
 
     func imageOfGraphBackground() -> UIImage {
@@ -219,11 +253,6 @@ public class GraphViews {
     private func drawGraphBackground() {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()
-        
-        //// Color Declarations
-        let backgroundRightColor = UIColor(red: 0.949, green: 0.953, blue: 0.961, alpha: 1.000)
-        let backgroundLeftColor = UIColor(red: 0.918, green: 0.937, blue: 0.941, alpha: 1.000)
-        let horizontalLineColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
         
         //// Frames - use whole view for background
         let contents = CGRectMake(0, 0, viewSize.width, viewSize.height)
@@ -414,17 +443,19 @@ public class GraphViews {
     private func drawBasalData(basalData: [(timeOffset: NSTimeInterval, value: NSNumber)]) {
         
         var evenRect = true
-        let basalBlueRectColor = Styles.blueColor
-        let basalLightBlueRectColor = Styles.lightBlueColor
 
-        // first figure out the range of data; only need to scale if we exceed this
-        var rangeMax = 2.0
+           // first figure out the range of data; only need to scale if we exceed this
+        var rangeMax = CGFloat(kBasalMinScaleValue)
         for item in basalData {
-            let nextValue = item.1
+            let nextValue = CGFloat(item.1.doubleValue)
             if nextValue > rangeMax {
-                rangeMax = item.1.doubleValue
+                rangeMax = nextValue
             }
         }
+        if rangeMax > kBasalMaxScaleValue {
+            rangeMax = kBasalMaxScaleValue
+        }
+
         let yPixelsPerUnit = yPixelsBasal / CGFloat(rangeMax)
 
         func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: NSNumber) {
@@ -475,22 +506,22 @@ public class GraphViews {
     private func drawBolusData(bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)]) {
         
         // first figure out the range of data; only need to scale if we exceed this
-        var rangeMax = 6.0
+        var rangeMax = CGFloat(kBolusMinScaleValue)
         for item in bolusData {
-            if item.1 > rangeMax {
-                rangeMax = item.1.doubleValue
+            let nextValue = CGFloat(item.1.doubleValue)
+            if nextValue > rangeMax {
+                rangeMax = nextValue
             }
         }
- 
+        if rangeMax > kBolusMaxScaleValue {
+            rangeMax = kBolusMaxScaleValue
+        }
+        
         let yPixelsPerUnit = yPixelsBolus / CGFloat(rangeMax)
 
         // draw the items, left to right, with label on left.
         for item in bolusData {
             let context = UIGraphicsGetCurrentContext()
-            
-            // Color Declarations
-            let bolusTextBlue = Styles.mediumBlueColor
-            let bolusBlueRectColor = Styles.blueColor
             
             // bolusValueRect Drawing
             // Bolus rect is center-aligned to time start
@@ -555,9 +586,6 @@ public class GraphViews {
         let pixelsPerValue: CGFloat = yPixelsGlucose/kGlucoseRange
         let circleRadius: CGFloat = 2.5
         
-        let highColor = Styles.purpleColor
-        let targetColor = Styles.greenColor
-        let lowColor = Styles.peachColor
         let highBoundary: NSNumber = 180.0
         let lowBoundary: NSNumber = 90.0
         var lowValue: CGFloat = kGlucoseMaxValue
