@@ -587,7 +587,7 @@ public class GraphViews {
         let circleRadius: CGFloat = 2.5
         
         let highBoundary: NSNumber = 180.0
-        let lowBoundary: NSNumber = 90.0
+        let lowBoundary: NSNumber = 80.0
         var lowValue: CGFloat = kGlucoseMaxValue
         var highValue: CGFloat = kGlucoseMinValue
         var lastCircleDrawn = CGRectNull
@@ -631,7 +631,7 @@ public class GraphViews {
         let targetColor = Styles.greenColor
         let lowColor = Styles.peachColor
         let highBoundary: NSNumber = 180.0
-        let lowBoundary: NSNumber = 90.0
+        let lowBoundary: NSNumber = 80.0
         var lowValue: CGFloat = kGlucoseMaxValue
         var highValue: CGFloat = kGlucoseMinValue
 
