@@ -1117,7 +1117,7 @@
 				INFOPLIST_FILE = Nutshell/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.Nutshell;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dufflite.nutshell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1130,7 +1130,7 @@
 				INFOPLIST_FILE = Nutshell/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.Nutshell;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dufflite.nutshell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
