@@ -91,15 +91,17 @@ class DatabaseUtils {
                     // Remove existing object with the same ID
                     if let id=obj.id {
                         request.predicate = NSPredicate(format: "id = %@", id)
-                        do {
-                            let foundObjects = try bgMOC.executeFetchRequest(request) as! [NSManagedObject]
-                            for foundObject in foundObjects {
-                                bgMOC.deleteObject(foundObject)
-                            }
-                            bgMOC.insertObject(obj)
-                        } catch let error as NSError {
-                            print("updateEvents: Failed to replace existing event with ID \(id) error: \(error)")
-                        }
+                        bgMOC.insertObject(obj)
+
+//                        do {
+//                            let foundObjects = try bgMOC.executeFetchRequest(request) as! [NSManagedObject]
+//                            for foundObject in foundObjects {
+//                                bgMOC.deleteObject(foundObject)
+//                            }
+//                            bgMOC.insertObject(obj)
+//                        } catch let error as NSError {
+//                            print("updateEvents: Failed to replace existing event with ID \(id) error: \(error)")
+//                        }
                     } else {
                         print("udpateEvents: no ID found for object: \(obj), not inserting!")
                     }

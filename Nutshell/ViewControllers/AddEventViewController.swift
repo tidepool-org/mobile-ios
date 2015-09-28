@@ -130,7 +130,6 @@ class AddEventViewController: UIViewController {
                 me.photo = ""
                 me.type = "meal"
                 me.time = eventTime // required!
-                me.id = NSUUID().UUIDString // required!
                 let now = NSDate()
                 me.createdTime = now
                 me.modifiedTime = now
