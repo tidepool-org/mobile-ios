@@ -46,17 +46,22 @@ class EventGroupTableViewController: BaseUITableViewController {
         return (eventGroup?.itemArray.count)!
     }
 
+    private static var cellDF = NSDateFormatter()
+
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCellWithIdentifier("eventItemCell", forIndexPath: indexPath) as! EventGroupTableViewCell
-
+        
         // Configure the cell...
-       if (indexPath.item < eventGroup?.itemArray.count) {
-            let eventItem = eventGroup?.itemArray[indexPath.item]
-            // Configure the cell...
-            cell.textLabel?.text = eventItem!.subtext
-            cell.eventItem = eventItem
+        if (indexPath.item < eventGroup?.itemArray.count) {
+            if let eventItem = eventGroup?.itemArray[indexPath.item] {
+                cell.configureCell(eventItem)
+                if eventItem.photo.characters.count > 0 {
+                    cell.photoImageView.image = UIImage(named: eventItem.photo)
+                }
+            }
         }
-
+        
         return cell
     }
 
@@ -100,6 +105,7 @@ class EventGroupTableViewController: BaseUITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        super.prepareForSegue(segue, sender: sender)
         if(segue.identifier) == "EventItemDetailSegue" {
             let cell = sender as! EventGroupTableViewCell
             let eventItemVC = segue.destinationViewController as! EventDetailViewController

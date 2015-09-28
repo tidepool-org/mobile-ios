@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CoreData
 
 class NutUtils {
 
@@ -23,5 +24,41 @@ class NutUtils {
             boolToVoid(result)
         }
     }
+    
+    class func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
+    }
+    
+    class func dateFromJSON(json: String?) -> NSDate? {
+        if let json = json {
+            return jsonDateFormatter.dateFromString(json)
+        }
+        return nil
+    }
+    
+    class func decimalFromJSON(json: String?) -> NSDecimalNumber? {
+        if let json = json {
+            return NSDecimalNumber(string: json)
+        }
+        return nil
+    }
 
+    /** Date formatter for JSON date strings */
+    class var jsonDateFormatter : NSDateFormatter {
+        struct Static {
+            static let instance: NSDateFormatter = {
+                let dateFormatter = NSDateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+                dateFormatter.timeZone = NSTimeZone(name: "GMT")
+                return dateFormatter
+                }()
+        }
+        return Static.instance
+    }
+    
 }

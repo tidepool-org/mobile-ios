@@ -20,18 +20,38 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
+    var API: APIConnector?
+    static var testMode: Bool = false
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        AppDelegate.testMode = false
         
         // Override point for customization after application launch.
-        UINavigationBar.appearance().barTintColor = Styles.darkBackground
+        UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor
         UINavigationBar.appearance().tintColor = UIColor.whiteColor()
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName : UIColor.whiteColor()]
-
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: Styles.navTitleBoldFont]
+        
+        // Set up the API connection
+        API = APIConnector("Production")
+        // If we already have a token, no need to log in again....
+        if (API?.sessionToken != nil) {
+            setupUIForLoginSuccess()
+        }
+        
         return true
     }
 
+    func logout() {
+        if let API = API {
+            API.logout() {
+                let sb = UIStoryboard(name: "Login", bundle: nil)
+                if let vc = sb.instantiateInitialViewController() {
+                    self.window?.rootViewController = vc
+                }
+            }
+        }
+    }
+    
     func setupUIForLoginSuccess() {
         // Upon login success, switch over to the EventView storyboard flow. This starts with a nav controller, and all other controllers are pushed/popped from that.
         let sb = UIStoryboard(name: "EventView", bundle: nil)

@@ -18,7 +18,13 @@ import UIKit
 
 class EventGroupTableViewCell: NutshellUITableViewCell {
 
-    var eventItem: NutEventItem?
+    var eventItem: NutMeal?
+    
+    @IBOutlet weak var favoriteStar: UIImageView!
+    @IBOutlet weak var titleString: UILabel!
+    @IBOutlet weak var timeString: UILabel!
+    @IBOutlet weak var locationString: UILabel!
+    @IBOutlet weak var photoImageView: UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -31,4 +37,24 @@ class EventGroupTableViewCell: NutshellUITableViewCell {
         // Configure the view for the selected state
     }
 
+    private var df: NSDateFormatter?
+    private func dateFormatter() -> NSDateFormatter {
+        if let df = self.df {
+            return df
+        } else {
+            let df = NSDateFormatter()
+            df.dateFormat = Styles.uniformDateFormat
+            self.df = df
+            return df
+        }
+    }
+    
+    func configureCell(eventItem: NutMeal) {
+        titleString.text = eventItem.notes
+        let df = NSDateFormatter()
+        df.dateFormat = Styles.uniformDateFormat
+        timeString.text = dateFormatter().stringFromDate(eventItem.time)
+        locationString.text = eventItem.location
+        self.eventItem = eventItem
+    }
 }

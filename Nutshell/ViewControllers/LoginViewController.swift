@@ -14,11 +14,12 @@
 */
 
 import UIKit
+import Alamofire
 
 class LoginViewController: BaseUIViewController {
 
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var emailTextField: NutshellUITextField!
+    @IBOutlet weak var passwordTextField: NutshellUITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var loginIndicator: UIActivityIndicatorView!
     
@@ -38,7 +39,18 @@ class LoginViewController: BaseUIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
         updateButtonStates()
     }
-
+    
+    override func shouldAutorotate() -> Bool {
+        if (UIDevice.currentDevice().orientation == UIDeviceOrientation.Portrait ||
+            UIDevice.currentDevice().orientation == UIDeviceOrientation.PortraitUpsideDown ||
+            UIDevice.currentDevice().orientation == UIDeviceOrientation.Unknown) {
+                return true
+        }
+        else {
+            return false
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -54,16 +66,42 @@ class LoginViewController: BaseUIViewController {
     @IBAction func login_button_tapped(sender: AnyObject) {
         updateButtonStates()
         loginIndicator.startAnimating()
-        APIConnector.login(emailTextField.text!, password: passwordTextField.text!) { loginSuccessful in
-            self.loginIndicator.stopAnimating()
-            if (loginSuccessful) {
-                print("login success!")
-                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                appDelegate.setupUIForLoginSuccess()
-            } else {
-                print("login failed!")
-            }
-        }
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        appDelegate.API?.login(emailTextField.text!,
+            password: passwordTextField.text!,
+            completion: { (result:(Alamofire.Result<User>)) -> (Void) in
+                print("Login result: \(result)")
+                self.loginIndicator.stopAnimating()
+                if ( result.isSuccess ) {
+                    if let user=result.value {
+                        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                        let moc = appDelegate.managedObjectContext
+                        
+                        // Save the user in the database
+                        DatabaseUtils.updateUser(moc, user: user)
+                        
+                        print("login success: \(user)")
+                        appDelegate.setupUIForLoginSuccess()
+
+                        // Update the database with the current user info
+                        appDelegate.API?.getUserData(user.userid!, completion: { (result) -> (Void) in
+                            if result.isSuccess {
+                                DatabaseUtils.updateEvents(moc, eventsJSON: result.value!)
+                            } else {
+                                print("Failed to get events for user. Error: \(result.error!)")
+                            }
+                        })
+                    } else {
+                        // This should not happen- we should not succeed without a user!
+                        print("Fatal error: No user returned!")
+                    }
+                } else {
+                    print("login failed! Error: " + result.error.debugDescription)
+                    self.emailTextField.text = ""
+                    self.passwordTextField.text = ""
+                }
+        })
     }
     
     func textFieldDidChange() {
