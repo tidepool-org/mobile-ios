@@ -112,6 +112,7 @@ class EventGroupTableViewController: BaseUITableViewController {
             let cell = sender as! EventGroupTableViewCell
             let eventItemVC = segue.destinationViewController as! EventDetailViewController
             eventItemVC.eventItem = cell.eventItem
+            eventItemVC.eventGroup = eventGroup
             eventItemVC.title = self.title
         }
     }

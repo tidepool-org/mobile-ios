@@ -27,7 +27,6 @@ class GraphUIView: UIView {
     
     init(frame: CGRect, centerTime: NSDate, timeIntervalForView: NSTimeInterval) {
 
-        // TODO: validate time interval is positive and reasonable
         self.startTime = centerTime.dateByAddingTimeInterval(-timeIntervalForView/2)
         self.endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
         self.viewTimeInterval = timeIntervalForView
@@ -63,10 +62,11 @@ class GraphUIView: UIView {
     //
     // MARK: - Private data
     //
-
+    
+    var startTime: NSDate, endTime: NSDate
+    var viewTimeInterval: NSTimeInterval = 0.0
+    
     private var graphViews: GraphViews
-    private var startTime: NSDate, endTime: NSDate
-    private var viewTimeInterval: NSTimeInterval = 0.0
     private var smbgData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var cbgData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []

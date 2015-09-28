@@ -120,9 +120,9 @@ class AddEventViewController: UIViewController {
 
     @IBAction func saveButtonHandler(sender: AnyObject) {
         
-        if titleTextField.text == "autotest" {
-            AppDelegate.testMode = true
-            showSuccessView()
+        if titleTextField.text == "testmode" {
+            AppDelegate.testMode = !AppDelegate.testMode
+            self.navigationController?.popViewControllerAnimated(true)
             return
         }
         

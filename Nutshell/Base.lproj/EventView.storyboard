@@ -318,7 +318,7 @@
                                                             <constraint firstAttribute="height" constant="25" id="seA-lS-ewM"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="notesText"/>
@@ -365,22 +365,58 @@
                                                             </mask>
                                                         </variation>
                                                     </view>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C2x-sW-IMw" userLabel="Left arrow button">
+                                                        <rect key="frame" x="8" y="21" width="8" height="15"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="8" id="OEN-BA-e4v"/>
+                                                            <constraint firstAttribute="height" constant="15" id="WWo-oB-aup"/>
+                                                        </constraints>
+                                                        <state key="normal" image="leftArrow"/>
+                                                        <connections>
+                                                            <action selector="leftArrowButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="b9l-r8-e6C"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ZP-6f-dqF" userLabel="Right arrow button">
+                                                        <rect key="frame" x="359" y="21" width="8" height="15"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="15" id="Umx-Xa-eJM"/>
+                                                            <constraint firstAttribute="width" constant="8.5" id="gL3-cY-K9c"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button" image="rightArrow"/>
+                                                        <connections>
+                                                            <action selector="rightArrowButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="X9f-bq-SsC"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
+                                                    <constraint firstItem="C2x-sW-IMw" firstAttribute="centerY" secondItem="JDK-S3-qTu" secondAttribute="centerY" id="90h-QR-Z64"/>
+                                                    <constraint firstItem="C2x-sW-IMw" firstAttribute="top" secondItem="01k-k4-6OI" secondAttribute="topMargin" id="Bkl-zZ-7ce"/>
+                                                    <constraint firstItem="C2x-sW-IMw" firstAttribute="leading" secondItem="01k-k4-6OI" secondAttribute="leadingMargin" id="Gn4-vj-bDG"/>
                                                     <constraint firstItem="tds-VB-aau" firstAttribute="bottom" secondItem="01k-k4-6OI" secondAttribute="bottomMargin" id="ITm-Fk-7ow"/>
                                                     <constraint firstItem="tds-VB-aau" firstAttribute="leading" secondItem="01k-k4-6OI" secondAttribute="leadingMargin" id="Ivr-4m-OXX"/>
+                                                    <constraint firstItem="0ZP-6f-dqF" firstAttribute="centerY" secondItem="C2x-sW-IMw" secondAttribute="centerY" id="LqC-hb-uNG"/>
                                                     <constraint firstItem="tds-VB-aau" firstAttribute="trailing" secondItem="01k-k4-6OI" secondAttribute="trailingMargin" id="M5w-TA-wtD"/>
                                                     <constraint firstItem="JDK-S3-qTu" firstAttribute="top" secondItem="01k-k4-6OI" secondAttribute="topMargin" constant="8" id="OJm-Mx-Br8"/>
                                                     <constraint firstItem="JDK-S3-qTu" firstAttribute="leading" secondItem="01k-k4-6OI" secondAttribute="leadingMargin" id="RRO-fs-Ef7"/>
                                                     <constraint firstItem="JDK-S3-qTu" firstAttribute="trailing" secondItem="01k-k4-6OI" secondAttribute="trailingMargin" id="ZyS-L1-brL"/>
+                                                    <constraint firstItem="C2x-sW-IMw" firstAttribute="centerY" secondItem="01k-k4-6OI" secondAttribute="centerY" id="dk9-Vu-QL2"/>
+                                                    <constraint firstAttribute="trailingMargin" secondItem="0ZP-6f-dqF" secondAttribute="trailing" id="wDX-8O-jtF"/>
                                                 </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="Bkl-zZ-7ce"/>
+                                                        <exclude reference="dk9-Vu-QL2"/>
+                                                    </mask>
+                                                </variation>
                                                 <variation key="heightClass=compact">
                                                     <mask key="subviews">
                                                         <exclude reference="JDK-S3-qTu"/>
                                                     </mask>
                                                     <mask key="constraints">
                                                         <exclude reference="OJm-Mx-Br8"/>
+                                                        <exclude reference="Bkl-zZ-7ce"/>
+                                                        <include reference="dk9-Vu-QL2"/>
                                                     </mask>
                                                 </variation>
                                             </view>
@@ -530,9 +566,11 @@
                         <outlet property="eventDate" destination="GG6-wG-z1Y" id="duF-se-sfO"/>
                         <outlet property="eventNotes" destination="JDK-S3-qTu" id="Vei-aT-26C"/>
                         <outlet property="graphSectionView" destination="INU-ti-JXM" id="r4i-Yu-eBP"/>
+                        <outlet property="leftArrow" destination="C2x-sW-IMw" id="LH1-Wo-fuE"/>
                         <outlet property="missingDataAdvisoryView" destination="cmJ-dI-KmZ" id="XsH-bq-zbD"/>
                         <outlet property="missingPhotoView" destination="4KW-DR-0XO" id="lC8-Fn-6Q9"/>
                         <outlet property="photoUIImageView" destination="wb3-dF-d2O" id="fZg-NC-wTd"/>
+                        <outlet property="rightArrow" destination="0ZP-6f-dqF" id="Leh-ZP-aeZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0lz-qm-Gfy" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -568,6 +606,8 @@
         <image name="cameraIcon" width="56" height="44"/>
         <image name="detailCalendarIcon" width="21" height="23"/>
         <image name="favoriteStarDeselected" width="35" height="35"/>
+        <image name="leftArrow" width="17" height="30"/>
         <image name="menu-button.png" width="22" height="15"/>
+        <image name="rightArrow" width="17" height="30"/>
     </resources>
 </document>
