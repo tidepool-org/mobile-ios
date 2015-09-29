@@ -24,16 +24,17 @@ public class GraphViews {
     //
 
     private let kGraphHeaderHeight: CGFloat = 32.0
-    private let kGraphWizardHeight: CGFloat = 0.0
+    private let kGraphWizardHeight: CGFloat = 27.0
     // After removing a constant height for the header and wizard values, the remaining graph vertical space is divided into four sections based on the following fractions (which should add to 1.0)
     private let kGraphFractionForGlucose: CGFloat = 180.0/266.0
     private let kGraphFractionForBolus: CGFloat = 42.0/266.0
     private let kGraphFractionForBasal: CGFloat = 28.0/266.0
     private let kGraphFractionForWorkout: CGFloat = 16.0/266.0
     // Each section has some base offset as well
-    private let kGraphWorkoutGlucoseOffset: CGFloat = 2.0
-    private let kGraphWorkoutBolusOffset: CGFloat = 2.0
-    private let kGraphWorkoutBasalOffset: CGFloat = 2.0
+    private let kGraphGlucoseBaseOffset: CGFloat = 2.0
+    private let kGraphWizardBaseOffset: CGFloat = 2.0
+    private let kGraphBolusBaseOffset: CGFloat = 2.0
+    private let kGraphBasalBaseOffset: CGFloat = 2.0
     private let kGraphWorkoutBaseOffset: CGFloat = 2.0
     // Some margin constants
     private let kGraphYLabelHeight: CGFloat = 18.0
@@ -70,6 +71,8 @@ public class GraphViews {
     private let kGlucoseRange: CGFloat = 340.0
     private let kGlucoseConversionToMgDl: CGFloat = 18.0
     private let kSkipOverlappingValues = false
+    private let highBoundary: NSNumber = 180.0
+    private let lowBoundary: NSNumber = 80.0
     // Colors
     private let highColor = Styles.purpleColor
     private let targetColor = Styles.greenColor
@@ -80,12 +83,10 @@ public class GraphViews {
     //
     private let kWizardCircleDiameter: CGFloat = 27.0
     private let kBolusRectWidth: CGFloat = 14.0
-    private let kBolusRectYOffset: CGFloat = 2.0
-    private let kBolusLabelToRectGap: CGFloat = 3.0
+    private let kBolusLabelToRectGap: CGFloat = 0.0
     private let kBolusLabelRectWidth: CGFloat = 30.0
     private let kBolusLabelRectHeight: CGFloat = 10.0
-    private let kBolusMinScaleValue: CGFloat = 6.0
-    private let kBolusMaxScaleValue: CGFloat = 6.0 // above this values are clipped
+    private let kBolusMinScaleValue: CGFloat = 0.0
     // Colors
     private let bolusTextBlue = Styles.mediumBlueColor
     private let bolusBlueRectColor = Styles.blueColor
@@ -95,8 +96,7 @@ public class GraphViews {
     //
     private let basalBlueRectColor = Styles.blueColor
     private let basalLightBlueRectColor = Styles.lightBlueColor
-    private let kBasalMinScaleValue: CGFloat = 2.0
-    private let kBasalMaxScaleValue: CGFloat = 2.0 // above this values are clipped
+    private let kBasalMinScaleValue: CGFloat = 0.0
     
     //
     // MARK: - Graph vars based on view size and customization constants
@@ -136,29 +136,32 @@ public class GraphViews {
         self.startTime = startTime
         self.viewPixelsPerSec = viewSize.width/CGFloat(timeIntervalForView)
         
+        // Tweak: if height is less than 320 pixels, let the wizard circles drift up into the low area of the blood glucose data since that should be clear
+        let wizardHeight = viewSize.height < 320.0 ? 0.0 : kGraphWizardHeight
+        
         // The pie to divide is what's left over after removing constant height areas
-        let graphHeight = viewSize.height - kGraphHeaderHeight - kGraphWizardHeight
+        let graphHeight = viewSize.height - kGraphHeaderHeight - wizardHeight
         
         // The largest section is for the glucose readings just below the header
         self.yTopOfGlucose = kGraphHeaderHeight
-        self.yBottomOfGlucose = self.yTopOfGlucose + floor(kGraphFractionForGlucose * graphHeight) - kGraphWorkoutGlucoseOffset
+        self.yBottomOfGlucose = self.yTopOfGlucose + floor(kGraphFractionForGlucose * graphHeight) - kGraphGlucoseBaseOffset
         self.yPixelsGlucose = self.yBottomOfGlucose - self.yTopOfGlucose
         
         // Wizard data sits above the bolus readings, in a fixed space area, overlapping the bottom of the glucose graph which should be empty of readings that low.
-        self.yBottomOfWizard = self.yBottomOfGlucose + kGraphWizardHeight
+        self.yBottomOfWizard = self.yBottomOfGlucose + wizardHeight
 
         // Next down are the bolus readings
-        self.yTopOfBolus = self.yBottomOfGlucose + kGraphWorkoutGlucoseOffset
-        self.yBottomOfBolus = self.yTopOfBolus + floor(kGraphFractionForBolus * graphHeight) - kGraphWorkoutBolusOffset
+        self.yTopOfBolus = self.yBottomOfWizard + kGraphGlucoseBaseOffset
+        self.yBottomOfBolus = self.yTopOfBolus + floor(kGraphFractionForBolus * graphHeight) - kGraphBolusBaseOffset
         self.yPixelsBolus = self.yBottomOfBolus - self.yTopOfBolus
 
         // Basal values sit just below the bolus readings
-        self.yTopOfBasal = self.yBottomOfBolus + kGraphWorkoutBolusOffset
-        self.yBottomOfBasal = self.yTopOfBasal + floor(kGraphFractionForBasal * graphHeight) - kGraphWorkoutBasalOffset
+        self.yTopOfBasal = self.yBottomOfBolus + kGraphBolusBaseOffset
+        self.yBottomOfBasal = self.yTopOfBasal + floor(kGraphFractionForBasal * graphHeight) - kGraphBasalBaseOffset
         self.yPixelsBasal = self.yBottomOfBasal - self.yTopOfBasal
 
         // Workout durations go in the bottom section
-        self.yTopOfWorkout = yBottomOfBasal + kGraphWorkoutBasalOffset
+        self.yTopOfWorkout = yBottomOfBasal + kGraphBasalBaseOffset
         self.yBottomOfWorkout = self.yTopOfWorkout + floor(kGraphFractionForWorkout * graphHeight) - kGraphWorkoutBaseOffset
         self.yPixelsWorkout = self.yBottomOfWorkout - self.yTopOfWorkout
     }
@@ -444,19 +447,16 @@ public class GraphViews {
         
         var evenRect = true
 
-           // first figure out the range of data; only need to scale if we exceed this
-        var rangeMax = CGFloat(kBasalMinScaleValue)
+        // first figure out the range of data; scale rectangle to fill this
+        var rangeHi = CGFloat(kBasalMinScaleValue)
         for item in basalData {
             let nextValue = CGFloat(item.1.doubleValue)
-            if nextValue > rangeMax {
-                rangeMax = nextValue
+            if nextValue > rangeHi {
+                rangeHi = nextValue
             }
         }
-        if rangeMax > kBasalMaxScaleValue {
-            rangeMax = kBasalMaxScaleValue
-        }
 
-        let yPixelsPerUnit = yPixelsBasal / CGFloat(rangeMax)
+        let yPixelsPerUnit = yPixelsBasal / CGFloat(rangeHi)
 
         func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: NSNumber) {
             let rectColor = evenRect ? basalLightBlueRectColor : basalBlueRectColor
@@ -505,38 +505,39 @@ public class GraphViews {
 
     private func drawBolusData(bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)]) {
         
-        // first figure out the range of data; only need to scale if we exceed this
-        var rangeMax = CGFloat(kBolusMinScaleValue)
+        // first figure out the range of data; scale rectangle to fill this
+        var rangeHi = CGFloat(kBolusMinScaleValue)
         for item in bolusData {
             let nextValue = CGFloat(item.1.doubleValue)
-            if nextValue > rangeMax {
-                rangeMax = nextValue
+            if nextValue > rangeHi {
+                rangeHi = nextValue
             }
         }
-        if rangeMax > kBolusMaxScaleValue {
-            rangeMax = kBolusMaxScaleValue
-        }
         
-        let yPixelsPerUnit = yPixelsBolus / CGFloat(rangeMax)
+        // bolus vertical area is split into a colored rect below, and label on top
+        let yPixelsPerUnit = (yPixelsBolus - kBolusLabelRectHeight - kBolusLabelToRectGap) / CGFloat(rangeHi)
 
-        // draw the items, left to right, with label on left.
+        // draw the items, with label on top.
         for item in bolusData {
             let context = UIGraphicsGetCurrentContext()
             
             // bolusValueRect Drawing
             // Bolus rect is center-aligned to time start
             // Carb circle should be centered at timeline
-            let rectLeft = floor((CGFloat(item.0) * viewPixelsPerSec) - (kBolusRectWidth/2))
-            let rectHeight = floor(yPixelsPerUnit * CGFloat(item.1.doubleValue))
-            let bolusValueRectPath = UIBezierPath(rect: CGRect(x: rectLeft, y: yBottomOfBolus - rectHeight - kBolusRectYOffset, width: kBolusRectWidth, height: rectHeight))
+            var rectLeft = floor((CGFloat(item.0) * viewPixelsPerSec) - (kBolusRectWidth/2))
+            let bolusRectHeight = floor(yPixelsPerUnit * CGFloat(item.1.doubleValue))
+            let bolusValueRect = CGRect(x: rectLeft, y: yBottomOfBolus - bolusRectHeight, width: kBolusRectWidth, height: bolusRectHeight)
+            let bolusValueRectPath = UIBezierPath(rect: bolusValueRect)
             bolusBlueRectColor.setFill()
             bolusValueRectPath.fill()
            
             // bolusLabel Drawing
-            let bolusLabelRect = CGRect(x: rectLeft - kBolusLabelToRectGap - kBolusLabelRectWidth, y: yBottomOfBolus - kBolusLabelRectHeight, width: kBolusLabelRectWidth, height: kBolusLabelRectHeight)
-            let bolusLabelTextContent = String(item.1) + " u"
+            let rectCenter = rectLeft + (kBolusRectWidth/2.0)
+            rectLeft = floor(rectCenter - (kBolusLabelRectWidth/2.0))
+            let bolusLabelRect = CGRect(x: rectLeft, y: yBottomOfBolus - bolusRectHeight - kBolusLabelToRectGap - kBolusLabelRectHeight, width: kBolusLabelRectWidth, height: kBolusLabelRectHeight)
+            let bolusLabelTextContent = String(item.1)
             let bolusLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-            bolusLabelStyle.alignment = .Right
+            bolusLabelStyle.alignment = .Center
             
             let bolusLabelFontAttributes = [NSFontAttributeName: Styles.verySmallSemiboldFont, NSForegroundColorAttributeName: bolusTextBlue, NSParagraphStyleAttributeName: bolusLabelStyle]
             
@@ -545,7 +546,6 @@ public class GraphViews {
             CGContextClipToRect(context, bolusLabelRect);
             bolusLabelTextContent.drawInRect(CGRectMake(bolusLabelRect.minX, bolusLabelRect.minY + bolusLabelRect.height - bolusLabelTextHeight, bolusLabelRect.width, bolusLabelTextHeight), withAttributes: bolusLabelFontAttributes)
             CGContextRestoreGState(context)
-            
         }
 
 }
@@ -564,13 +564,11 @@ public class GraphViews {
             
             // Label Drawing
             let labelRect = wizardRect
-            let labelText = String(Int(item.1)) + " g"
+            let labelText = String(Int(item.1))
             let labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             labelStyle.alignment = .Center
             
             let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSFontAttributeName: Styles.verySmallSemiboldFont, NSForegroundColorAttributeName: Styles.altDarkGreyColor, NSParagraphStyleAttributeName: labelStyle])
-            // Make " g" extra small
-            labelAttrStr.addAttribute(NSFontAttributeName, value: Styles.veryTinySemiboldFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
             
             let labelTextHeight: CGFloat = labelAttrStr.boundingRectWithSize(CGSizeMake(labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).size.height
             CGContextSaveGState(context)
@@ -586,8 +584,6 @@ public class GraphViews {
         let pixelsPerValue: CGFloat = yPixelsGlucose/kGlucoseRange
         let circleRadius: CGFloat = 2.5
         
-        let highBoundary: NSNumber = 180.0
-        let lowBoundary: NSNumber = 80.0
         var lowValue: CGFloat = kGlucoseMaxValue
         var highValue: CGFloat = kGlucoseMinValue
         var lastCircleDrawn = CGRectNull
@@ -626,12 +622,6 @@ public class GraphViews {
         
         let pixelsPerValue: CGFloat = yPixelsGlucose/kGlucoseRange
         let circleRadius: CGFloat = 7.5
-        
-        let highColor = Styles.purpleColor
-        let targetColor = Styles.greenColor
-        let lowColor = Styles.peachColor
-        let highBoundary: NSNumber = 180.0
-        let lowBoundary: NSNumber = 80.0
         var lowValue: CGFloat = kGlucoseMaxValue
         var highValue: CGFloat = kGlucoseMinValue
 
@@ -640,6 +630,7 @@ public class GraphViews {
         for item in smbgData {
             let centerX: CGFloat = floor(CGFloat(item.0) * viewPixelsPerSec)
             var value = round(CGFloat(item.1) * kGlucoseConversionToMgDl)
+            let valueForLabel = value
             if value > kGlucoseMaxValue {
                 value = kGlucoseMaxValue
             }
@@ -653,12 +644,12 @@ public class GraphViews {
             let centerY: CGFloat = yTopOfGlucose + yPixelsGlucose - floor(value * pixelsPerValue)
             
             let circleColor = value < lowBoundary ? lowColor : value < highBoundary ? targetColor : highColor
-            let smallCirclePath = UIBezierPath(ovalInRect: CGRectMake(centerX-circleRadius, centerY-circleRadius, circleRadius*2, circleRadius*2))
+            let largeCirclePath = UIBezierPath(ovalInRect: CGRectMake(centerX-circleRadius, centerY-circleRadius, circleRadius*2, circleRadius*2))
             circleColor.setFill()
-            smallCirclePath.fill()
+            largeCirclePath.fill()
             
             let readingLabelRect = CGRectMake(centerX-18, centerY+circleRadius, 36, 20)
-            let intValue = Int(value)
+            let intValue = Int(valueForLabel)
             let readingLabelTextContent = String(intValue)
             let readingLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             readingLabelStyle.alignment = .Center
