@@ -48,6 +48,9 @@
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
                                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" secureTextEntry="YES"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="userDataEntry"/>
+                                                        </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="passwordEnterHandler:" destination="4G7-DP-gat" eventType="editingDidEndOnExit" id="Wse-nc-Bgd"/>
                                                         </connections>

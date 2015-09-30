@@ -44,12 +44,14 @@ public class Styles: NSObject {
         // menu and account settings
         "rowSeparator": mediumDarkGreyColor,
         "darkBackgroundButton": darkPurpleColor,
+        // add event scenes
+        "doneButton": darkPurpleColor,
     ]
 
     // This table is used for mapping usage to font and font color for UI elements including fonts (UITextField, UILabel, UIButton). An entry may appear here as well as in the basic color mapping table above to set both font attributes as well as background coloring.
     static var usageToFontWithColor = [
         // login & signup
-        "userDataEntry": (mediumRegularFont, brightBlueColor),
+        "userDataEntry": (mediumRegularFont, darkPurpleColor),
         "dataEntryErrorFeedback": (smallSemiboldFont, pinkColor),
         "brightLinkText": (mediumRegularFont, brightBlueColor),
         "inactiveLoginButton": (mediumButtonRegularFont, altDarkGreyColor),
@@ -74,6 +76,8 @@ public class Styles: NSObject {
         "greenLink": (mediumRegularFont, lightGreenColor),
         // add event scenes
         "eventTitleText": (navTitleBoldFont, whiteColor),
+        "doneButton": (largeRegularFont, whiteColor),
+
     ]
 
     //
