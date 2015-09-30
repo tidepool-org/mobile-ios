@@ -31,17 +31,17 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iHd-Hc-UkR" userLabel="LoginContainerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                        <rect key="frame" x="0.0" y="109" width="320" height="333"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="login_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="kJo-Zi-pFB" userLabel="LogoView">
-                                                <rect key="frame" x="106" y="80" width="109" height="115"/>
+                                                <rect key="frame" x="106" y="0.0" width="109" height="115"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="115" id="Ttd-7m-IJS"/>
                                                     <constraint firstAttribute="width" constant="109" id="l7b-vO-g9Q"/>
                                                 </constraints>
                                             </imageView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ucb-jq-HNI" userLabel="InputContainerView">
-                                                <rect key="frame" x="48" y="235" width="225" height="184"/>
+                                                <rect key="frame" x="48" y="155" width="225" height="184"/>
                                                 <subviews>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yzu-4v-Bis" userLabel="passwordTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="65" width="225" height="40"/>
@@ -135,88 +135,138 @@
                                                     </mask>
                                                 </variation>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PQA-rp-TeB" userLabel="BottomButtonContainerView">
-                                                <rect key="frame" x="0.0" y="514" width="320" height="54"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="REp-R0-dOl" userLabel="SignUpButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="160" height="54"/>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
-                                                        <state key="normal" title="sign up">
-                                                            <color key="titleColor" red="0.30196078431372547" green="0.30588235294117649" blue="0.29803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        </state>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="inactiveLoginButton"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zPr-G0-r47" userLabel="LogInButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="160" y="0.0" width="160" height="54"/>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="22"/>
-                                                        <state key="normal" title="log in"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="activeLoginButton"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                        <connections>
-                                                            <action selector="login_button_tapped:" destination="4G7-DP-gat" eventType="touchUpInside" id="SFd-0x-Gaz"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstItem="REp-R0-dOl" firstAttribute="leading" secondItem="PQA-rp-TeB" secondAttribute="leading" id="0I3-Zh-ejx"/>
-                                                    <constraint firstAttribute="height" constant="54" id="3tK-Ok-o21"/>
-                                                    <constraint firstAttribute="trailing" secondItem="zPr-G0-r47" secondAttribute="trailing" id="DyP-UD-HNL"/>
-                                                    <constraint firstAttribute="bottom" secondItem="REp-R0-dOl" secondAttribute="bottom" id="Q60-bI-5Nv"/>
-                                                    <constraint firstItem="zPr-G0-r47" firstAttribute="top" secondItem="PQA-rp-TeB" secondAttribute="top" id="VZQ-5X-Guh"/>
-                                                    <constraint firstItem="REp-R0-dOl" firstAttribute="trailing" secondItem="zPr-G0-r47" secondAttribute="leading" id="Z8W-Bc-Yia"/>
-                                                    <constraint firstAttribute="width" constant="320" id="gbp-Sh-rSw"/>
-                                                    <constraint firstItem="REp-R0-dOl" firstAttribute="leading" secondItem="PQA-rp-TeB" secondAttribute="leading" id="lXL-8a-g4i"/>
-                                                    <constraint firstAttribute="bottom" secondItem="zPr-G0-r47" secondAttribute="bottom" id="vMe-jg-csv"/>
-                                                    <constraint firstItem="zPr-G0-r47" firstAttribute="width" secondItem="REp-R0-dOl" secondAttribute="width" id="w3C-sf-XP4"/>
-                                                    <constraint firstItem="REp-R0-dOl" firstAttribute="top" secondItem="PQA-rp-TeB" secondAttribute="top" id="zvQ-cT-1A1"/>
-                                                </constraints>
-                                                <variation key="default">
-                                                    <mask key="constraints">
-                                                        <exclude reference="0I3-Zh-ejx"/>
-                                                    </mask>
-                                                </variation>
-                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="Ucb-jq-HNI" firstAttribute="centerX" secondItem="iHd-Hc-UkR" secondAttribute="centerX" id="Wbr-s1-P9t"/>
+                                            <constraint firstItem="Ucb-jq-HNI" firstAttribute="top" secondItem="kJo-Zi-pFB" secondAttribute="bottom" constant="40" id="XxF-kz-Tpz"/>
+                                            <constraint firstItem="kJo-Zi-pFB" firstAttribute="top" secondItem="iHd-Hc-UkR" secondAttribute="top" id="bZ7-dV-922"/>
+                                            <constraint firstAttribute="height" constant="333" id="eqp-BD-K3G"/>
+                                            <constraint firstItem="kJo-Zi-pFB" firstAttribute="centerX" secondItem="iHd-Hc-UkR" secondAttribute="centerX" id="uC1-T4-Rja"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x8Q-os-z1s" userLabel="ActivityContainer">
+                                        <rect key="frame" x="0.0" y="442" width="320" height="72"/>
+                                        <subviews>
                                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="75w-tb-LSw">
-                                                <rect key="frame" x="142" y="440" width="37" height="37"/>
+                                                <rect key="frame" x="142" y="18" width="37" height="37"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="37" id="XNE-ik-8GV"/>
+                                                    <constraint firstAttribute="width" constant="37" id="cqz-tT-OCn"/>
+                                                </constraints>
                                             </activityIndicatorView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="PQA-rp-TeB" firstAttribute="centerX" secondItem="Ucb-jq-HNI" secondAttribute="centerX" id="BdW-Lz-E8y"/>
-                                            <constraint firstItem="PQA-rp-TeB" firstAttribute="top" secondItem="Ucb-jq-HNI" secondAttribute="bottom" constant="95" id="Gzt-JR-GLe"/>
-                                            <constraint firstItem="Ucb-jq-HNI" firstAttribute="centerX" secondItem="iHd-Hc-UkR" secondAttribute="centerX" id="Wbr-s1-P9t"/>
-                                            <constraint firstItem="Ucb-jq-HNI" firstAttribute="top" secondItem="kJo-Zi-pFB" secondAttribute="bottom" constant="40" id="XxF-kz-Tpz"/>
-                                            <constraint firstItem="kJo-Zi-pFB" firstAttribute="top" secondItem="iHd-Hc-UkR" secondAttribute="top" constant="80" id="bZ7-dV-922"/>
-                                            <constraint firstItem="75w-tb-LSw" firstAttribute="centerX" secondItem="iHd-Hc-UkR" secondAttribute="centerX" id="knA-Iq-avV"/>
-                                            <constraint firstItem="PQA-rp-TeB" firstAttribute="top" secondItem="75w-tb-LSw" secondAttribute="bottom" constant="37" id="r9x-pM-JRc"/>
-                                            <constraint firstItem="kJo-Zi-pFB" firstAttribute="centerX" secondItem="iHd-Hc-UkR" secondAttribute="centerX" id="uC1-T4-Rja"/>
+                                            <constraint firstItem="75w-tb-LSw" firstAttribute="centerY" secondItem="x8Q-os-z1s" secondAttribute="centerY" id="2Cv-kI-P8Y"/>
+                                            <constraint firstItem="75w-tb-LSw" firstAttribute="centerX" secondItem="x8Q-os-z1s" secondAttribute="centerX" id="iuL-ve-6Tw"/>
                                         </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PQA-rp-TeB" userLabel="ButtonContainerView">
+                                        <rect key="frame" x="0.0" y="514" width="320" height="54"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="REp-R0-dOl" userLabel="SignUpButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="160" height="54"/>
+                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
+                                                <state key="normal" title="sign up">
+                                                    <color key="titleColor" red="0.30196078431372547" green="0.30588235294117649" blue="0.29803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="inactiveLoginButton"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zPr-G0-r47" userLabel="LogInButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="160" y="0.0" width="160" height="54"/>
+                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="22"/>
+                                                <state key="normal" title="log in"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="activeLoginButton"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="login_button_tapped:" destination="4G7-DP-gat" eventType="touchUpInside" id="SFd-0x-Gaz"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="REp-R0-dOl" firstAttribute="leading" secondItem="PQA-rp-TeB" secondAttribute="leading" id="0I3-Zh-ejx"/>
+                                            <constraint firstAttribute="height" constant="54" id="3tK-Ok-o21"/>
+                                            <constraint firstAttribute="trailing" secondItem="zPr-G0-r47" secondAttribute="trailing" id="DyP-UD-HNL"/>
+                                            <constraint firstAttribute="width" constant="320" id="Lak-xW-S4O"/>
+                                            <constraint firstAttribute="bottom" secondItem="REp-R0-dOl" secondAttribute="bottom" id="Q60-bI-5Nv"/>
+                                            <constraint firstItem="zPr-G0-r47" firstAttribute="top" secondItem="PQA-rp-TeB" secondAttribute="top" id="VZQ-5X-Guh"/>
+                                            <constraint firstItem="REp-R0-dOl" firstAttribute="trailing" secondItem="zPr-G0-r47" secondAttribute="leading" id="Z8W-Bc-Yia"/>
+                                            <constraint firstAttribute="width" constant="320" id="gbp-Sh-rSw"/>
+                                            <constraint firstItem="REp-R0-dOl" firstAttribute="leading" secondItem="PQA-rp-TeB" secondAttribute="leading" id="lXL-8a-g4i"/>
+                                            <constraint firstAttribute="bottom" secondItem="zPr-G0-r47" secondAttribute="bottom" id="vMe-jg-csv"/>
+                                            <constraint firstItem="zPr-G0-r47" firstAttribute="width" secondItem="REp-R0-dOl" secondAttribute="width" id="w3C-sf-XP4"/>
+                                            <constraint firstItem="REp-R0-dOl" firstAttribute="top" secondItem="PQA-rp-TeB" secondAttribute="top" id="zvQ-cT-1A1"/>
+                                        </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="Lak-xW-S4O"/>
+                                                <exclude reference="gbp-Sh-rSw"/>
+                                                <exclude reference="0I3-Zh-ejx"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <mask key="constraints">
+                                                <include reference="Lak-xW-S4O"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="iHd-Hc-UkR" firstAttribute="centerX" secondItem="zV2-Yb-tzp" secondAttribute="centerX" id="2FI-D6-FZj"/>
                                     <constraint firstAttribute="trailing" secondItem="iHd-Hc-UkR" secondAttribute="trailing" id="2wo-ID-Sui"/>
+                                    <constraint firstItem="PQA-rp-TeB" firstAttribute="top" secondItem="x8Q-os-z1s" secondAttribute="bottom" id="5tc-2H-M6n"/>
+                                    <constraint firstAttribute="trailing" secondItem="x8Q-os-z1s" secondAttribute="trailing" id="94D-H7-Bw4"/>
                                     <constraint firstItem="iHd-Hc-UkR" firstAttribute="leading" secondItem="zV2-Yb-tzp" secondAttribute="leading" id="CxV-zp-Odz"/>
-                                    <constraint firstItem="iHd-Hc-UkR" firstAttribute="top" secondItem="zV2-Yb-tzp" secondAttribute="top" id="SKq-u0-ePX"/>
-                                    <constraint firstAttribute="bottom" secondItem="iHd-Hc-UkR" secondAttribute="bottom" id="pJN-nq-60z"/>
-                                    <constraint firstItem="iHd-Hc-UkR" firstAttribute="centerY" secondItem="zV2-Yb-tzp" secondAttribute="centerY" id="qTh-J9-NUm"/>
+                                    <constraint firstAttribute="trailing" secondItem="PQA-rp-TeB" secondAttribute="trailing" id="PBw-EC-sDX"/>
+                                    <constraint firstItem="PQA-rp-TeB" firstAttribute="centerX" secondItem="zV2-Yb-tzp" secondAttribute="centerX" id="ZQJ-Hi-BaG"/>
+                                    <constraint firstAttribute="bottom" secondItem="PQA-rp-TeB" secondAttribute="bottom" id="asK-he-4gL"/>
+                                    <constraint firstItem="x8Q-os-z1s" firstAttribute="centerX" secondItem="zV2-Yb-tzp" secondAttribute="centerX" id="e1r-Bf-Onr"/>
+                                    <constraint firstItem="PQA-rp-TeB" firstAttribute="leading" secondItem="zV2-Yb-tzp" secondAttribute="leading" id="hQN-9x-RBy"/>
+                                    <constraint firstItem="PQA-rp-TeB" firstAttribute="top" secondItem="iHd-Hc-UkR" secondAttribute="bottom" constant="109" id="oi0-6N-Vkt"/>
+                                    <constraint firstItem="x8Q-os-z1s" firstAttribute="top" secondItem="iHd-Hc-UkR" secondAttribute="bottom" id="pc7-ya-mEk"/>
+                                    <constraint firstItem="iHd-Hc-UkR" firstAttribute="centerY" secondItem="zV2-Yb-tzp" secondAttribute="centerY" constant="-8.5" id="qTh-J9-NUm"/>
+                                    <constraint firstItem="x8Q-os-z1s" firstAttribute="leading" secondItem="zV2-Yb-tzp" secondAttribute="leading" id="xeZ-Rt-Sm1"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="ZQJ-Hi-BaG"/>
+                                        <exclude reference="oi0-6N-Vkt"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <mask key="constraints">
+                                        <exclude reference="PBw-EC-sDX"/>
+                                        <include reference="ZQJ-Hi-BaG"/>
+                                        <exclude reference="asK-he-4gL"/>
+                                        <exclude reference="hQN-9x-RBy"/>
+                                        <include reference="oi0-6N-Vkt"/>
+                                    </mask>
+                                </variation>
                             </view>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="zV2-Yb-tzp" secondAttribute="trailing" constant="-16" id="J27-C5-10f"/>
+                            <constraint firstItem="zV2-Yb-tzp" firstAttribute="leading" secondItem="lik-Jb-UNr" secondAttribute="leading" id="SRE-9d-gk6"/>
                             <constraint firstItem="zV2-Yb-tzp" firstAttribute="top" secondItem="lik-Jb-UNr" secondAttribute="topMargin" id="UpW-YU-KqM"/>
                             <constraint firstItem="zV2-Yb-tzp" firstAttribute="leading" secondItem="lik-Jb-UNr" secondAttribute="leadingMargin" constant="-16" id="Uza-nX-Obr"/>
                             <constraint firstItem="cJz-jh-nmi" firstAttribute="top" secondItem="zV2-Yb-tzp" secondAttribute="bottom" id="u2F-sm-h1a"/>
+                            <constraint firstAttribute="trailing" secondItem="zV2-Yb-tzp" secondAttribute="trailing" id="vKK-Ec-3pS"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
                         </userDefinedRuntimeAttributes>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="J27-C5-10f"/>
+                                <exclude reference="Uza-nX-Obr"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="JwL-W6-1O1"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
