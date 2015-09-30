@@ -1129,7 +1129,7 @@
 			baseConfigurationReference = A08B5E3A2659E0859F53527E /* Pods-Nutshell.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Tidepool Project (75U4X84TEG)";
 				INFOPLIST_FILE = Nutshell/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
