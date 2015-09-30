@@ -58,6 +58,8 @@ class EventGroupTableViewController: BaseUITableViewController {
                 cell.configureCell(eventItem)
                 if eventItem.photo.characters.count > 0 {
                     cell.photoImageView.image = UIImage(named: eventItem.photo)
+                } else {
+                    cell.photoImageView.image = nil
                 }
             }
         }
