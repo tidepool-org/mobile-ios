@@ -132,43 +132,28 @@
                                                             <outlet property="delegate" destination="SME-si-pxR" id="Lxp-gw-Nmz"/>
                                                         </connections>
                                                     </textField>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vy5-Oy-IaF" userLabel="dateViewContainer" customClass="UIControl">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vy5-Oy-IaF" userLabel="dateViewContainer">
                                                         <rect key="frame" x="8" y="49" width="304" height="29"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015    4:21 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rfT-NA-lSd" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="87" y="6" width="131" height="17"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                                <nil key="highlightedColor"/>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="46b-yv-1Vz" userLabel="dateButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="304" height="29"/>
+                                                                <state key="normal" title="Aug 28, 2015    4:21 PM"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="dateAndLocation"/>
                                                                 </userDefinedRuntimeAttributes>
-                                                            </label>
-                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="detailCalendarIcon" translatesAutoresizingMaskIntoConstraints="NO" id="k9v-kF-HFA">
-                                                                <rect key="frame" x="67" y="9" width="10" height="12"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="10" id="MJX-xN-m8E"/>
-                                                                    <constraint firstAttribute="height" constant="12" id="k86-TH-IQh"/>
-                                                                </constraints>
-                                                            </imageView>
+                                                                <connections>
+                                                                    <action selector="dateButtonHandler:" destination="SME-si-pxR" eventType="touchUpInside" id="dN9-MU-eIp"/>
+                                                                </connections>
+                                                            </button>
                                                         </subviews>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         <constraints>
-                                                            <constraint firstItem="rfT-NA-lSd" firstAttribute="centerX" secondItem="Vy5-Oy-IaF" secondAttribute="centerX" id="GFt-Y7-tsp"/>
+                                                            <constraint firstAttribute="trailing" secondItem="46b-yv-1Vz" secondAttribute="trailing" id="3G3-c6-sdL"/>
                                                             <constraint firstAttribute="height" constant="29" id="Iz1-AC-0u7"/>
-                                                            <constraint firstItem="rfT-NA-lSd" firstAttribute="leading" secondItem="k9v-kF-HFA" secondAttribute="trailing" constant="10" id="hG2-DO-YJa"/>
-                                                            <constraint firstItem="k9v-kF-HFA" firstAttribute="centerY" secondItem="Vy5-Oy-IaF" secondAttribute="centerY" id="hcj-fq-mGW"/>
-                                                            <constraint firstItem="rfT-NA-lSd" firstAttribute="centerY" secondItem="Vy5-Oy-IaF" secondAttribute="centerY" id="tvj-hY-HEx"/>
-                                                            <constraint firstItem="k9v-kF-HFA" firstAttribute="centerY" secondItem="rfT-NA-lSd" secondAttribute="centerY" id="y1K-La-rKK"/>
+                                                            <constraint firstItem="46b-yv-1Vz" firstAttribute="leading" secondItem="Vy5-Oy-IaF" secondAttribute="leading" id="O5o-g6-NcW"/>
+                                                            <constraint firstAttribute="bottom" secondItem="46b-yv-1Vz" secondAttribute="bottom" id="PT6-Eg-Tne"/>
+                                                            <constraint firstItem="46b-yv-1Vz" firstAttribute="top" secondItem="Vy5-Oy-IaF" secondAttribute="top" id="thS-2r-CNe"/>
                                                         </constraints>
-                                                        <variation key="default">
-                                                            <mask key="constraints">
-                                                                <exclude reference="y1K-La-rKK"/>
-                                                            </mask>
-                                                        </variation>
-                                                        <connections>
-                                                            <action selector="dateViewButtonHandler:" destination="SME-si-pxR" eventType="touchUpInside" id="O3a-Hd-J4k"/>
-                                                        </connections>
                                                     </view>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -379,9 +364,9 @@
                     <connections>
                         <outlet property="addSuccessImageView" destination="fZz-kg-ufq" id="eq7-ND-ZfO"/>
                         <outlet property="addSuccessView" destination="ERS-0J-0ST" id="xh6-fA-eCB"/>
+                        <outlet property="dateButton" destination="46b-yv-1Vz" id="ZT7-QB-kUX"/>
                         <outlet property="datePicker" destination="lUA-mD-exU" id="sac-6G-ul5"/>
                         <outlet property="datePickerView" destination="8Dr-UO-zNy" id="tCT-1s-jex"/>
-                        <outlet property="eventDate" destination="rfT-NA-lSd" id="lVN-DJ-ZRp"/>
                         <outlet property="missingPhotoView" destination="DRa-Wn-kLy" id="zoq-zz-3sV"/>
                         <outlet property="notesTextField" destination="xm6-dP-Mmd" id="1ub-b8-zwx"/>
                         <outlet property="photoIconButton" destination="5Ae-Bd-RPQ" id="W6p-ZC-qfK"/>
@@ -421,6 +406,5 @@
         <image name="ThreeTacosDemoPic.png" width="1280" height="456"/>
         <image name="addAnimation-01.png" width="609" height="609"/>
         <image name="cameraIcon" width="56" height="44"/>
-        <image name="detailCalendarIcon" width="21" height="23"/>
     </resources>
 </document>

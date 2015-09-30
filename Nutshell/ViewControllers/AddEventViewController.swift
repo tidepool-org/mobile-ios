@@ -37,6 +37,7 @@ class AddEventViewController: UIViewController {
     
     @IBOutlet weak var datePickerView: UIView!
     @IBOutlet weak var datePicker: UIDatePicker!
+    @IBOutlet weak var dateButton: NutshellUIButton!
 
     private var eventTime = NSDate()
 
@@ -194,13 +195,13 @@ class AddEventViewController: UIViewController {
     private func configureDateView() {
         let df = NSDateFormatter()
         df.dateFormat = Styles.uniformDateFormat
-        eventDate.text = df.stringFromDate(eventTime)
+        dateButton.setTitle(df.stringFromDate(eventTime), forState: UIControlState.Normal)
         datePickerView.hidden = true
     }
     
-    @IBAction func dateViewButtonHandler(sender: AnyObject) {
+    @IBAction func dateButtonHandler(sender: AnyObject) {
         // user tapped on date, bring up date picker
-        datePickerView.hidden = false
+        datePickerView.hidden = !datePickerView.hidden
     }
     
     @IBAction func cancelDatePickButtonHandler(sender: AnyObject) {

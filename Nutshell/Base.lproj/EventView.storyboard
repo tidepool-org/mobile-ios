@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9035"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -91,6 +92,9 @@
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellTitle"/>
                                             </userDefinedRuntimeAttributes>
+                                            <variation key="heightClass=compact" misplaced="YES">
+                                                <rect key="frame" x="53" y="5" width="66" height="24"/>
+                                            </variation>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B5R-W3-L53" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                             <rect key="frame" x="53" y="53" width="50" height="24"/>
@@ -100,6 +104,9 @@
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellSubtitle"/>
                                             </userDefinedRuntimeAttributes>
+                                            <variation key="heightClass=compact" misplaced="YES">
+                                                <rect key="frame" x="53" y="53" width="66" height="24"/>
+                                            </variation>
                                         </label>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ThreeTacosDemoPic.png" translatesAutoresizingMaskIntoConstraints="NO" id="qHa-us-Md7">
                                             <rect key="frame" x="303" y="8" width="64" height="64"/>
@@ -116,6 +123,9 @@
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellSubtitle"/>
                                             </userDefinedRuntimeAttributes>
+                                            <variation key="heightClass=compact" misplaced="YES">
+                                                <rect key="frame" x="53" y="29" width="66" height="24"/>
+                                            </variation>
                                         </label>
                                     </subviews>
                                     <constraints>
@@ -325,6 +335,9 @@
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="dateAndLocation"/>
                                                                 </userDefinedRuntimeAttributes>
+                                                                <variation key="heightClass=compact" misplaced="YES">
+                                                                    <rect key="frame" x="89" y="4" width="181" height="21"/>
+                                                                </variation>
                                                             </label>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="detailCalendarIcon" translatesAutoresizingMaskIntoConstraints="NO" id="L6A-Vy-9nh">
                                                                 <rect key="frame" x="94" y="9" width="10" height="12"/>
@@ -332,6 +345,9 @@
                                                                     <constraint firstAttribute="width" constant="10" id="AdE-HG-6Hq"/>
                                                                     <constraint firstAttribute="height" constant="12" id="Apa-RI-nVI"/>
                                                                 </constraints>
+                                                                <variation key="heightClass=compact" misplaced="YES">
+                                                                    <rect key="frame" x="69" y="9" width="10" height="12"/>
+                                                                </variation>
                                                             </imageView>
                                                         </subviews>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -359,12 +375,10 @@
                                                     <constraint firstItem="JDK-S3-qTu" firstAttribute="leading" secondItem="01k-k4-6OI" secondAttribute="leadingMargin" id="RRO-fs-Ef7"/>
                                                     <constraint firstItem="JDK-S3-qTu" firstAttribute="trailing" secondItem="01k-k4-6OI" secondAttribute="trailingMargin" id="ZyS-L1-brL"/>
                                                 </constraints>
-                                                <variation key="default">
+                                                <variation key="heightClass=compact">
                                                     <mask key="subviews">
                                                         <exclude reference="JDK-S3-qTu"/>
                                                     </mask>
-                                                </variation>
-                                                <variation key="heightClass=compact">
                                                     <mask key="constraints">
                                                         <exclude reference="OJm-Mx-Br8"/>
                                                     </mask>
