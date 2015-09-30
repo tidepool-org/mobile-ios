@@ -34,6 +34,9 @@ class AddEventViewController: UIViewController {
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var addSuccessView: NutshellUIView!
     @IBOutlet weak var addSuccessImageView: UIImageView!
+    
+    @IBOutlet weak var datePickerView: UIView!
+    @IBOutlet weak var datePicker: UIDatePicker!
 
     private var eventTime = NSDate()
 
@@ -45,9 +48,7 @@ class AddEventViewController: UIViewController {
         super.viewDidLoad()
 
         saveButton.hidden = true
-        let df = NSDateFormatter()
-        df.dateFormat = Styles.uniformDateFormat
-        eventDate.text = df.stringFromDate(eventTime)
+        configureDateView()
         // TODO: figure out why this is needed to center title!
         rightBarItem.title = "            "
     }
@@ -186,6 +187,30 @@ class AddEventViewController: UIViewController {
         }
     }
 
+    //
+    // MARK: - Date picking
+    //
+    
+    private func configureDateView() {
+        let df = NSDateFormatter()
+        df.dateFormat = Styles.uniformDateFormat
+        eventDate.text = df.stringFromDate(eventTime)
+        datePickerView.hidden = true
+    }
+    
+    @IBAction func dateViewButtonHandler(sender: AnyObject) {
+        // user tapped on date, bring up date picker
+        datePickerView.hidden = false
+    }
+    
+    @IBAction func cancelDatePickButtonHandler(sender: AnyObject) {
+        configureDateView()
+    }
+    
+    @IBAction func donelDatePickButtonHandler(sender: AnyObject) {
+        eventTime = datePicker.date
+        configureDateView()
+    }
     //
     // MARK: - Test code!
     //

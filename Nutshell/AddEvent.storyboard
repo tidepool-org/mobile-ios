@@ -4,6 +4,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9035"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--AddEvent-->
@@ -15,29 +16,29 @@
                         <viewControllerLayoutGuide type="bottom" id="OI8-VU-Dvy"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="nnW-7Y-LY1">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l7D-lp-jvI" userLabel="SceneContainer">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3C-1B-9wl" userLabel="TopSection" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tb3-uz-j9r" userLabel="PhotoContainerView">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="114"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ThreeTacosDemoPic.png" translatesAutoresizingMaskIntoConstraints="NO" id="6vL-Qj-BIV" userLabel="photoUIImageView">
-                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="114"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
                                                     </imageView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DRa-Wn-kLy" userLabel="noPhotoView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="114"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FMt-wV-58v" userLabel="photoIconContainerView">
-                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="114"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ae-Bd-RPQ">
-                                                                        <rect key="frame" x="174" y="66" width="28" height="22"/>
+                                                                        <rect key="frame" x="146" y="66" width="28" height="22"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="28" id="MPa-za-epE"/>
                                                                             <constraint firstAttribute="height" constant="22" id="TTU-xp-9Xw"/>
@@ -70,7 +71,7 @@
                                                                 </variation>
                                                             </view>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7qa-cl-hZk" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="8" y="12" width="359" height="40"/>
+                                                                <rect key="frame" x="8" y="12" width="304" height="40"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="40" id="CQ2-wU-yX4"/>
                                                                 </constraints>
@@ -112,10 +113,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZUa-D3-aAM" userLabel="EventDescriptionContainer">
-                                                <rect key="frame" x="0.0" y="114" width="375" height="86"/>
+                                                <rect key="frame" x="0.0" y="114" width="320" height="86"/>
                                                 <subviews>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Anything else to note?" borderStyle="line" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xm6-dP-Mmd" userLabel="notesTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="8" y="16" width="359" height="25"/>
+                                                        <rect key="frame" x="8" y="16" width="304" height="25"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="25" id="VSN-wb-oi1"/>
                                                         </constraints>
@@ -131,11 +132,11 @@
                                                             <outlet property="delegate" destination="SME-si-pxR" id="Lxp-gw-Nmz"/>
                                                         </connections>
                                                     </textField>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vy5-Oy-IaF" userLabel="dateViewContainer">
-                                                        <rect key="frame" x="8" y="49" width="359" height="29"/>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vy5-Oy-IaF" userLabel="dateViewContainer" customClass="UIControl">
+                                                        <rect key="frame" x="8" y="49" width="304" height="29"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015    4:21 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rfT-NA-lSd" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="114" y="6" width="131" height="17"/>
+                                                                <rect key="frame" x="87" y="6" width="131" height="17"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 <nil key="highlightedColor"/>
@@ -144,7 +145,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="detailCalendarIcon" translatesAutoresizingMaskIntoConstraints="NO" id="k9v-kF-HFA">
-                                                                <rect key="frame" x="94" y="9" width="10" height="12"/>
+                                                                <rect key="frame" x="67" y="9" width="10" height="12"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="10" id="MJX-xN-m8E"/>
                                                                     <constraint firstAttribute="height" constant="12" id="k86-TH-IQh"/>
@@ -165,6 +166,9 @@
                                                                 <exclude reference="y1K-La-rKK"/>
                                                             </mask>
                                                         </variation>
+                                                        <connections>
+                                                            <action selector="dateViewButtonHandler:" destination="SME-si-pxR" eventType="touchUpInside" id="O3a-Hd-J4k"/>
+                                                        </connections>
                                                     </view>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -200,10 +204,10 @@
                                         </variation>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kQc-5j-BRa" userLabel="BottomSection">
-                                        <rect key="frame" x="0.0" y="200" width="375" height="403"/>
+                                        <rect key="frame" x="0.0" y="200" width="320" height="304"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qaa-en-akI" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="349" width="375" height="54"/>
+                                                <rect key="frame" x="0.0" y="250" width="320" height="54"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="54" id="Mak-8R-bDm"/>
                                                 </constraints>
@@ -215,11 +219,96 @@
                                                     <action selector="saveButtonHandler:" destination="SME-si-pxR" eventType="touchUpInside" id="I3h-fC-J4J"/>
                                                 </connections>
                                             </button>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Dr-UO-zNy" userLabel="DatePickView">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="61W-wr-1d0" userLabel="Picker container">
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="250"/>
+                                                        <subviews>
+                                                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="lUA-mD-exU">
+                                                                <rect key="frame" x="0.0" y="17" width="320" height="216"/>
+                                                                <date key="date" timeIntervalSinceReferenceDate="465285901.60249501">
+                                                                    <!--2015-09-30 06:05:01 +0000-->
+                                                                </date>
+                                                            </datePicker>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstItem="lUA-mD-exU" firstAttribute="centerY" secondItem="61W-wr-1d0" secondAttribute="centerY" id="NYT-fe-xN3"/>
+                                                            <constraint firstAttribute="trailing" secondItem="lUA-mD-exU" secondAttribute="trailing" id="dTg-kx-WHf"/>
+                                                            <constraint firstItem="lUA-mD-exU" firstAttribute="leading" secondItem="61W-wr-1d0" secondAttribute="leading" id="geH-ZG-zQu"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sUB-Hn-1OM" userLabel="Cancel Button" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="250" width="160" height="54"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="54" id="8xs-Di-0DJ"/>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="54" id="Pka-Zy-ydr"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Cancel"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="activeLoginButton"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <variation key="default">
+                                                            <mask key="constraints">
+                                                                <exclude reference="Pka-Zy-ydr"/>
+                                                            </mask>
+                                                        </variation>
+                                                        <connections>
+                                                            <action selector="cancelDatePickButtonHandler:" destination="SME-si-pxR" eventType="touchUpInside" id="otq-tq-flf"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h6k-KL-gxn" userLabel="Done Button" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="160" y="250" width="160" height="54"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="54" id="bZG-eJ-zI4"/>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="54" id="l9a-vC-ECO"/>
+                                                            <constraint firstAttribute="height" constant="54" id="pqY-oZ-h1R"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Done"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="doneButton"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <variation key="default">
+                                                            <mask key="constraints">
+                                                                <exclude reference="bZG-eJ-zI4"/>
+                                                                <exclude reference="l9a-vC-ECO"/>
+                                                            </mask>
+                                                        </variation>
+                                                        <connections>
+                                                            <action selector="donelDatePickButtonHandler:" destination="SME-si-pxR" eventType="touchUpInside" id="oRG-21-A1Y"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="sUB-Hn-1OM" firstAttribute="width" secondItem="8Dr-UO-zNy" secondAttribute="width" multiplier="0.5" id="0e2-JY-do7"/>
+                                                    <constraint firstAttribute="trailing" secondItem="61W-wr-1d0" secondAttribute="trailing" id="0t4-gY-4mW"/>
+                                                    <constraint firstItem="61W-wr-1d0" firstAttribute="leading" secondItem="8Dr-UO-zNy" secondAttribute="leading" id="9ML-KJ-fGh"/>
+                                                    <constraint firstItem="sUB-Hn-1OM" firstAttribute="top" secondItem="h6k-KL-gxn" secondAttribute="bottom" constant="71" id="IAR-7J-d2V"/>
+                                                    <constraint firstItem="61W-wr-1d0" firstAttribute="bottom" secondItem="sUB-Hn-1OM" secondAttribute="top" id="JfZ-cx-GvS"/>
+                                                    <constraint firstItem="sUB-Hn-1OM" firstAttribute="leading" secondItem="8Dr-UO-zNy" secondAttribute="leading" id="MOW-YX-muK"/>
+                                                    <constraint firstAttribute="bottom" secondItem="sUB-Hn-1OM" secondAttribute="bottom" id="XHk-dn-dO7"/>
+                                                    <constraint firstAttribute="trailing" secondItem="h6k-KL-gxn" secondAttribute="trailing" id="e4l-pd-GOv"/>
+                                                    <constraint firstItem="h6k-KL-gxn" firstAttribute="width" secondItem="sUB-Hn-1OM" secondAttribute="width" id="fEv-z1-iVt"/>
+                                                    <constraint firstItem="61W-wr-1d0" firstAttribute="top" secondItem="8Dr-UO-zNy" secondAttribute="top" id="oVr-5o-POK"/>
+                                                    <constraint firstAttribute="bottom" secondItem="h6k-KL-gxn" secondAttribute="bottom" id="qHz-tD-9xf"/>
+                                                </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="IAR-7J-d2V"/>
+                                                    </mask>
+                                                </variation>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
+                                            <constraint firstItem="8Dr-UO-zNy" firstAttribute="leading" secondItem="kQc-5j-BRa" secondAttribute="leading" id="1Li-aO-l2u"/>
                                             <constraint firstAttribute="trailing" secondItem="Qaa-en-akI" secondAttribute="trailing" id="2mr-Ud-gOz"/>
+                                            <constraint firstItem="8Dr-UO-zNy" firstAttribute="top" secondItem="kQc-5j-BRa" secondAttribute="top" id="8iO-D9-VLo"/>
+                                            <constraint firstAttribute="bottom" secondItem="8Dr-UO-zNy" secondAttribute="bottom" id="fzF-ft-72s"/>
                                             <constraint firstItem="Qaa-en-akI" firstAttribute="leading" secondItem="kQc-5j-BRa" secondAttribute="leading" id="olH-Qf-UGE"/>
+                                            <constraint firstAttribute="trailing" secondItem="8Dr-UO-zNy" secondAttribute="trailing" id="wms-FU-nuh"/>
                                             <constraint firstAttribute="bottom" secondItem="Qaa-en-akI" secondAttribute="bottom" id="xbl-KC-fTX"/>
                                         </constraints>
                                     </view>
@@ -236,10 +325,10 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ERS-0J-0ST" userLabel="SuccessView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addAnimation-01.png" translatesAutoresizingMaskIntoConstraints="NO" id="fZz-kg-ufq">
-                                        <rect key="frame" x="117" y="232" width="140" height="140"/>
+                                        <rect key="frame" x="90" y="182" width="140" height="140"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="140" id="11I-pF-OBP"/>
                                             <constraint firstAttribute="height" constant="140" id="FbI-tI-k0m"/>
@@ -271,7 +360,7 @@
                     <navigationItem key="navigationItem" id="kI8-Ma-QfU">
                         <nil key="title"/>
                         <textField key="titleView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" id="wce-9O-YVZ" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                            <rect key="frame" x="61" y="7" width="254" height="30"/>
+                            <rect key="frame" x="33" y="7" width="254" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <textInputTraits key="textInputTraits"/>
@@ -286,10 +375,12 @@
                         <barButtonItem key="rightBarButtonItem" id="2rg-LX-NOg"/>
                     </navigationItem>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="addSuccessImageView" destination="fZz-kg-ufq" id="eq7-ND-ZfO"/>
                         <outlet property="addSuccessView" destination="ERS-0J-0ST" id="xh6-fA-eCB"/>
+                        <outlet property="datePicker" destination="lUA-mD-exU" id="sac-6G-ul5"/>
+                        <outlet property="datePickerView" destination="8Dr-UO-zNy" id="tCT-1s-jex"/>
                         <outlet property="eventDate" destination="rfT-NA-lSd" id="lVN-DJ-ZRp"/>
                         <outlet property="missingPhotoView" destination="DRa-Wn-kLy" id="zoq-zz-3sV"/>
                         <outlet property="notesTextField" destination="xm6-dP-Mmd" id="1ub-b8-zwx"/>
@@ -304,7 +395,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OMD-8a-PXv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1613.5" y="849.5"/>
+            <point key="canvasLocation" x="1613" y="849"/>
         </scene>
         <!--UnusedNavController-->
         <scene sceneID="LuJ-Pv-LGz">
