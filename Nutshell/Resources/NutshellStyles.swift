@@ -83,56 +83,114 @@ public class Styles: NSObject {
     //
     // MARK: - Fonts
     //
+
+    //// Cache
+    
+    private struct FontCache {
+        static let smallRegularFont: UIFont = UIFont(name: "OpenSans", size: 12.5)!
+        static let mediumRegularFont: UIFont = UIFont(name: "OpenSans", size: 17.0)!
+        static let mediumSmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 14.0)!
+        static let mediumButtonRegularFont: UIFont = UIFont(name: "OpenSans", size: 15.0)!
+        static let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 22.0)!
+        
+        static let smallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 11.0)!
+        static let mediumSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 17.0)!
+        static let veryLargeSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 25.5)!
+        
+        static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.0)!
+        static let navTitleBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 20.0)!
+        
+        // Fonts for special graph view
+        
+        static let verySmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 10.0)!
+        static let tinyRegularFont: UIFont = UIFont(name: "OpenSans", size: 8.5)!
+        static let verySmallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 10.0)!
+        static let veryTinySemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 8.0)!
+    }
     
     static let uniformDateFormat: String = "MMM d, yyyy    h:mm a"
 
-    static var smallRegularFont: UIFont { return UIFont(name: "OpenSans", size: 12.5)! }
-    static var mediumRegularFont: UIFont { return UIFont(name: "OpenSans", size: 17.0)! }
-    static var mediumSmallRegularFont: UIFont { return UIFont(name: "OpenSans", size: 14.0)! }
-    static var mediumButtonRegularFont: UIFont { return UIFont(name: "OpenSans", size: 15.0)! }
-    static var largeRegularFont: UIFont { return UIFont(name: "OpenSans", size: 22.0)! }
+    public class var smallRegularFont: UIFont { return FontCache.smallRegularFont }
+    public class var mediumRegularFont: UIFont { return FontCache.mediumRegularFont }
+    public class var mediumSmallRegularFont: UIFont { return FontCache.mediumSmallRegularFont }
+    public class var mediumButtonRegularFont: UIFont { return FontCache.mediumButtonRegularFont }
+    public class var largeRegularFont: UIFont { return FontCache.largeRegularFont }
 
-    static var smallSemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 11.0)! }
-    static var mediumSemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 17.0)! }
-    static var veryLargeSemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 25.5)! }
+    public class var smallSemiboldFont: UIFont { return FontCache.smallSemiboldFont }
+    public class var mediumSemiboldFont: UIFont { return FontCache.mediumSemiboldFont }
+    public class var veryLargeSemiboldFont: UIFont { return FontCache.veryLargeSemiboldFont }
 
-    static var smallBoldFont: UIFont { return UIFont(name: "OpenSans-Bold", size: 12.0)! }
-    static var navTitleBoldFont: UIFont { return UIFont(name: "OpenSans-Bold", size: 20.0)! }
+    public class var smallBoldFont: UIFont { return FontCache.smallBoldFont }
+    public class var navTitleBoldFont: UIFont { return FontCache.navTitleBoldFont }
 
     // Fonts for special graph view
     
-    static var verySmallRegularFont: UIFont { return UIFont(name: "OpenSans", size: 10.0)! }
-    static var tinyRegularFont: UIFont { return UIFont(name: "OpenSans", size: 8.5)! }
-    static var verySmallSemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 10.0)! }
-    static var veryTinySemiboldFont: UIFont { return UIFont(name: "OpenSans-Semibold", size: 8.0)! }
+    public class var verySmallRegularFont: UIFont { return FontCache.verySmallRegularFont }
+    public class var tinyRegularFont: UIFont { return FontCache.tinyRegularFont }
+    public class var verySmallSemiboldFont: UIFont { return FontCache.verySmallSemiboldFont }
+    public class var veryTinySemiboldFont: UIFont { return FontCache.veryTinySemiboldFont }
 
     //
     // MARK: - Background Colors
     //
+
+    //// Cache
     
+    private struct ColorCache {
+        static let darkPurpleColor: UIColor = UIColor(hex: 0x281946)
+        static let brightBlueColor: UIColor = UIColor(hex: 0x627cff) 
+        static let lightGreyColor: UIColor = UIColor(hex: 0xeaeff0) 
+        static let veryLightGreyColor: UIColor = UIColor(hex: 0xf2f3f5) 
+        static let greyColor: UIColor = UIColor(hex: 0xd0d3d4) 
+        static let redColor: UIColor = UIColor(hex: 0xf66f56) 
+        static let pinkColor: UIColor = UIColor(hex: 0xf58fc7)
+        static let lightPurpleColor: UIColor = UIColor(hex: 0xafbcfa)
+        static let purpleColor: UIColor = UIColor(hex: 0xb29ac9)
+        static let darkGreyColor: UIColor = UIColor(hex: 0x4a4a4a)
+        static let lightDarkGreyColor: UIColor = UIColor(hex: 0x5c5c5c) 
+        static let altDarkGreyColor: UIColor = UIColor(hex: 0x4d4e4c) 
+        static let darkMediumGreyColor: UIColor = UIColor(hex: 0x8e8e8e) 
+        static let mediumLightGreyColor: UIColor = UIColor(hex: 0xd0d3d4) 
+        static let mediumGreyColor: UIColor = UIColor(hex: 0xb8b8b8) 
+        static let whiteColor: UIColor = UIColor(hex: 0xffffff) 
+        static let peachColor: UIColor = UIColor(hex: 0xf88d79) 
+        static let greenColor: UIColor = UIColor(hex: 0x98ca63) 
+        static let lightGreenColor: UIColor = UIColor(hex: 0x4cd964) 
+        static let lightBlueColor: UIColor = UIColor(hex: 0xc5e5f1) 
+        static let blueColor: UIColor = UIColor(hex: 0x7aceef) 
+        static let mediumBlueColor: UIColor = UIColor(hex: 0x6db7d4) 
+        static let goldColor: UIColor = UIColor(hex: 0xffd382) 
+        static let lineColor: UIColor = UIColor(hex: 0x281946) 
+        static let goldStarColor: UIColor = UIColor(hex: 0xf8ad04) 
+        static let greyStarColor: UIColor = UIColor(hex: 0xd0d3d4) 
+        static let mediumDarkGreyColor: UIColor = UIColor(hex: 0x979797) 
+        static let lessOpaqueDarkPurple: UIColor  = UIColor(hex: 0x281946, opacity: 0.43) 
+        static let moreOpaqueDarkPurple: UIColor  = UIColor(hex: 0x281946, opacity: 0.54) 
+    }
+
     // Nav bar:     header
     // Button:      done button in account settings
     // View:        splash screen
-    static var darkPurpleColor: UIColor { return UIColor(hex: 0x281946) }
+    public class var darkPurpleColor: UIColor { return ColorCache.darkPurpleColor }
 
     // Table cell:  selected event
     // Button:      signup/login active, cancel for account settings,
     // View:        event title area in event detail
-    static var brightBlueColor: UIColor { return UIColor(hex: 0x627cff) }
+     public class var brightBlueColor: UIColor { return ColorCache.brightBlueColor }
     
     // View:        graph data left side
-    static var lightGreyColor: UIColor { return UIColor(hex: 0xeaeff0) }
+     public class var lightGreyColor: UIColor { return ColorCache.lightGreyColor }
     
     // Table cell:  event tables
     // Table background
     // View:        graph data right side
-    static var veryLightGreyColor: UIColor { return UIColor(hex: 0xf2f3f5) }
+     public class var veryLightGreyColor: UIColor { return ColorCache.veryLightGreyColor }
     
     // Needed?
-    static var greyColor: UIColor { return UIColor(hex: 0xd0d3d4) }
+     public class var greyColor: UIColor { return ColorCache.greyColor }
     
     // Table cell delete swipe background
-    static var redColor: UIColor { return UIColor(hex: 0xf66f56) }
+     public class var redColor: UIColor { return ColorCache.redColor }
 
     //
     // MARK: - Text Colors
@@ -140,102 +198,102 @@ public class Styles: NSObject {
     
     // Open Sans Semibold 11:   UILabel login error text
     // Open Sans Bold 12:       UILabel event subtext for Apple Healthkit info
-    static var pinkColor: UIColor { return UIColor(hex: 0xf58fc7) }
+    public class var pinkColor: UIColor { return ColorCache.pinkColor }
 
     // Open Sans Regular 17:    UILabel? login default text over white background
-    static var lightPurpleColor: UIColor { return UIColor(hex: 0xafbcfa) }
+     public class var lightPurpleColor: UIColor { return ColorCache.lightPurpleColor }
 
     // Over light grey background
     // Open Sans Regular 10:    custom graph axis text
     // Open Sans Regular 8.5:    custom graph axis text
     // Open Sans Semibold 17:   UILabel table cell title text
     // Open Sans Regular 17:    UILabel account settings item description
-    static var darkGreyColor: UIColor { return UIColor(hex: 0x4a4a4a) }
+     public class var darkGreyColor: UIColor { return ColorCache.darkGreyColor }
     
     // Open Sans Regular 17:    UILabel event detail view, missing data upload text
-    static var lightDarkGreyColor: UIColor { return UIColor(hex: 0x5c5c5c) }
+     public class var lightDarkGreyColor: UIColor { return ColorCache.lightDarkGreyColor }
 
     // Open Sans Regular 15:    UIButton inactive login button text
-    static var altDarkGreyColor: UIColor { return UIColor(hex: 0x4d4e4c) }
+     public class var altDarkGreyColor: UIColor { return ColorCache.altDarkGreyColor }
 
     // Open Sans Regular 12.5:    UILabel table cell subtext
-    static var darkMediumGreyColor: UIColor { return UIColor(hex: 0x8e8e8e) }
+     public class var darkMediumGreyColor: UIColor { return ColorCache.darkMediumGreyColor }
 
     // Open Sans Semibold 25.5:   UILabel account settings, target level text inactive
-    static var mediumLightGreyColor: UIColor { return UIColor(hex: 0xd0d3d4) }
+     public class var mediumLightGreyColor: UIColor { return ColorCache.mediumLightGreyColor }
 
     // Over dark purple background
     // OpenSans Semibold 16:    UILabel event subtext
-    static var mediumGreyColor: UIColor { return UIColor(hex: 0xb8b8b8) }
+     public class var mediumGreyColor: UIColor { return ColorCache.mediumGreyColor }
 
     // Open Sans Regular 20:    (Appearance) nav bar title, UILabel event title,
     // Open Sans Semibold 16:   UILabel event subtext
     // Open Sans Semibold 17:   UILabel table row item delete text, title text in highlighted row
     // Open Sans Regular 15:    UIButton active login, sign up button text
-    static var whiteColor: UIColor { return UIColor(hex: 0xffffff) }
+     public class var whiteColor: UIColor { return ColorCache.whiteColor }
     // Open Sans Regular 17:    UITextField sign up text entries
-    //class var brightBlueColor: UIColor { return UIColor(hex: 0x627cff) }
+    //class var brightBlueColor: UIColor { return brightBlueColor }
     
     // Open Sans Semibold 10:   custom graph carb amount text
     // Open Sans Semibold 4.5:    custom graph carb amount text
-    //class var darkPurpleColor: UIColor { return UIColor(hex: 0x281946) }
+    //class var darkPurpleColor: UIColor { return ColorCache.darkPurpleColor }
 
     // target low and high, blood glucose graph
     // Open Sans Semibold 10:   custom graph blood glucose item text
     // Open Sans Semibold 25.5:   UILabel account settings, low level active
-    static var peachColor: UIColor { return UIColor(hex: 0xf88d79) }
+     public class var peachColor: UIColor { return ColorCache.peachColor }
     // Open Sans Semibold 10:   custom graph blood glucose item text
     // Open Sans Semibold 25.5:   UILabel account settings, high level active
-    static var purpleColor: UIColor { return UIColor(hex: 0xb29ac9) }
+     public class var purpleColor: UIColor { return ColorCache.purpleColor }
     // Open Sans Semibold 10:   custom graph glucose item text
-    static var greenColor: UIColor { return UIColor(hex: 0x98ca63) }
+     public class var greenColor: UIColor { return ColorCache.greenColor }
 
     // Open Sans Regular 17:   UILabel event detail view, missing data upload link text
-    static var lightGreenColor: UIColor { return UIColor(hex: 0x4cd964) }
+     public class var lightGreenColor: UIColor { return ColorCache.lightGreenColor }
 
     //
     // MARK: - Graph Colors
     //
     
     // background, left side/right side
-    //static var lightGreyColor: UIColor { return UIColor(hex: 0xeaeff0) }
-    //static var veryLightGreyColor: UIColor { return UIColor(hex: 0xf2f3f5) }
+    // public class var lightGreyColor: UIColor { return lightGreyColor }
+    // public class var veryLightGreyColor: UIColor { return veryLightGreyColor }
     
     // axis text
-    //static var darkGreyColor: UIColor { return UIColor(hex: 0x4a4a4a) }
+    // public class var darkGreyColor: UIColor { return darkGreyColor }
     
     // insulin bar
-    static var lightBlueColor: UIColor { return UIColor(hex: 0xc5e5f1) }
-    static var blueColor: UIColor { return UIColor(hex: 0x7aceef) }
+     public class var lightBlueColor: UIColor { return ColorCache.lightBlueColor }
+     public class var blueColor: UIColor { return ColorCache.blueColor }
     // Open Sans Semibold 10:   custom graph insulin amount text
-    static var mediumBlueColor: UIColor { return UIColor(hex: 0x6db7d4) }
+     public class var mediumBlueColor: UIColor { return ColorCache.mediumBlueColor }
     
     
     // blood glucose data
-    //static var peachColor: UIColor { return UIColor(hex: 0xf88d79) }
-    //static var purpleColor: UIColor { return UIColor(hex: 0xb29ac9) }
-    //static var greenColor: UIColor { return UIColor(hex: 0x98ca63) }
+    // public class var peachColor: UIColor { return peachColor }
+    // public class var purpleColor: UIColor { return purpleColor }
+    // public class var greenColor: UIColor { return greenColor }
     
     // event carb amount circle and vertical line
-    static var goldColor: UIColor { return UIColor(hex: 0xffd382) }
-    static var lineColor: UIColor { return UIColor(hex: 0x281946) }
+     public class var goldColor: UIColor { return ColorCache.goldColor }
+     public class var lineColor: UIColor { return ColorCache.lineColor }
     
     // health event bar
-    //static var pinkColor: UIColor { return UIColor(hex: 0xf58fc7) }
+    // public class var pinkColor: UIColor { return pinkColor }
 
     //
     // MARK: - Misc Colors
     //
     
     // Icon:    favorite star colors
-    static var goldStarColor: UIColor { return UIColor(hex: 0xf8ad04) }
-    static var greyStarColor: UIColor { return UIColor(hex: 0xd0d3d4) }
+     public class var goldStarColor: UIColor { return ColorCache.goldStarColor }
+     public class var greyStarColor: UIColor { return ColorCache.greyStarColor }
 
     // View:    table row line separator
-    static var mediumDarkGreyColor: UIColor { return UIColor(hex: 0x979797) }
+     public class var mediumDarkGreyColor: UIColor { return ColorCache.mediumDarkGreyColor }
 
     // View:    transparency - screen overlays top and bottom
-    static var lessOpaqueDarkPurple: UIColor  { return UIColor(hex: 0x281946, opacity: 0.43) }
-    static var moreOpaqueDarkPurple: UIColor  { return UIColor(hex: 0x281946, opacity: 0.54) }
+     public class var lessOpaqueDarkPurple: UIColor  { return ColorCache.lessOpaqueDarkPurple }
+     public class var moreOpaqueDarkPurple: UIColor  { return ColorCache.moreOpaqueDarkPurple }
 
 }
