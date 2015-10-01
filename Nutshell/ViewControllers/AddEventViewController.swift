@@ -39,7 +39,11 @@ class AddEventViewController: UIViewController {
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var dateButton: NutshellUIButton!
 
+    @IBOutlet weak var locationTextField: UITextField!
+    
     private var eventTime = NSDate()
+    private var placeholderNoteString = "Anything else to note?"
+    private var placeholderLocationString = "Note location here!"
 
     //
     // MARK: - UIViewController overrides
@@ -52,6 +56,8 @@ class AddEventViewController: UIViewController {
         configureDateView()
         // TODO: figure out why this is needed to center title!
         rightBarItem.title = "            "
+        notesTextField.text = placeholderNoteString
+        locationTextField.text = placeholderLocationString
     }
     
     override func didReceiveMemoryWarning() {
@@ -68,13 +74,6 @@ class AddEventViewController: UIViewController {
         configureCameraImageViewUp(true)
     }
     
-    // Only the notes text edit field delegate is hooked up, not the title text edit field, so this is only called for notes.
-    func textFieldDidBeginEditing(textField: UITextField) {
-        notesTextField.becomeFirstResponder()
-        notesTextField.selectAll(nil)
-    }
-    
-    
     @IBAction func titleEditingDidBegin(sender: AnyObject) {
         configureCameraImageViewUp(true)
     }
@@ -83,9 +82,31 @@ class AddEventViewController: UIViewController {
         updateSaveButtonState()
     }
     
+    @IBAction func notesEditingDidBegin(sender: AnyObject) {
+        if notesTextField.text == placeholderNoteString {
+            notesTextField.text = ""
+        }
+    }
+
     @IBAction func notesEditingDidEnd(sender: AnyObject) {
         updateSaveButtonState()
         notesTextField.resignFirstResponder()
+        if notesTextField.text == "" {
+            notesTextField.text = placeholderNoteString
+        }
+    }
+
+    @IBAction func locationEditingDidBegin(sender: AnyObject) {
+        if locationTextField.text == placeholderLocationString {
+            locationTextField.text = ""
+        }
+    }
+    
+    @IBAction func locationEditingDidEnd(sender: AnyObject) {
+        locationTextField.resignFirstResponder()
+        if locationTextField.text == "" {
+            locationTextField.text = placeholderLocationString
+        }
     }
     
     private func updateSaveButtonState() {
@@ -96,10 +117,7 @@ class AddEventViewController: UIViewController {
             saveButton.hidden = false
         }
     }
-    
-    @IBAction func notesEditingDidBegin(sender: AnyObject) {
-    }
-    
+
     @IBAction func saveButtonHandler(sender: AnyObject) {
         
         if titleTextField.text == "autotest" {
@@ -122,10 +140,15 @@ class AddEventViewController: UIViewController {
             } else {
                 let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal
                 
-                me.location = ""
+                var location = locationTextField.text
+                if location == placeholderLocationString {
+                    location = ""
+                }
+                me.location = location
+                
                 me.title = titleTextField.text
                 var notes = notesTextField.text
-                if notesTextField.text == "Anything else to note?" {
+                if notes == placeholderNoteString {
                     notes = ""
                 }
                 me.notes = notes
