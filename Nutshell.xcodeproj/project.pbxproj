@@ -104,6 +104,7 @@
 		4814FEC11BB0D7FC00F66379 /* Workout+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489F3C4B1BB06F1200C95FDC /* Workout+CoreDataProperties.swift */; };
 		4814FEC21BB0D7FF00F66379 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489F3C4C1BB06F1200C95FDC /* Workout.swift */; };
 		4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
+		482B4E571BBDAFFF00835CAC /* EventDetailGraphCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482B4E561BBDAFFF00835CAC /* EventDetailGraphCollectionCell.swift */; };
 		4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */; };
 		4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */; };
 		4837CC691BA7394E00BA2CDE /* NutshellUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC681BA7394E00BA2CDE /* NutshellUIButton.swift */; };
@@ -238,6 +239,7 @@
 		33D967222B6D1D56CDE3B479 /* Pods-NutshellTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NutshellTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests.debug.xcconfig"; sourceTree = "<group>"; };
 		39056528E4E50304C2030C72 /* Pods-NutshellTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NutshellTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests.release.xcconfig"; sourceTree = "<group>"; };
 		4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/Pods-Nutshell/SwiftyJSON.framework"; sourceTree = "<group>"; };
+		482B4E561BBDAFFF00835CAC /* EventDetailGraphCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventDetailGraphCollectionCell.swift; path = ViewControllers/EventDetailGraphCollectionCell.swift; sourceTree = "<group>"; };
 		4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUITextField.swift; path = Resources/NutshellUITextField.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUILabel.swift; path = Resources/NutshellUILabel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4837CC681BA7394E00BA2CDE /* NutshellUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUIButton.swift; path = Resources/NutshellUIButton.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -435,6 +437,7 @@
 				486F5E5F1BA1EBE100BA2A57 /* EventListTableViewCell.swift */,
 				486F5E6B1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift */,
 				486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */,
+				482B4E561BBDAFFF00835CAC /* EventDetailGraphCollectionCell.swift */,
 			);
 			name = EventViewControllers;
 			sourceTree = "<group>";
@@ -860,6 +863,7 @@
 				486283B41BA48B1500547BE3 /* EventViewStoryboardTypes.swift in Sources */,
 				0334CA6D1BA8DDFC00013096 /* Settings.swift in Sources */,
 				0334CA341BA8DDFC00013096 /* CommonData.swift in Sources */,
+				482B4E571BBDAFFF00835CAC /* EventDetailGraphCollectionCell.swift in Sources */,
 				4893ACB61BACC2E5006A658B /* AddEventViewController.swift in Sources */,
 				486F5E091B9FB1C600BA2A57 /* NutshellStyles.swift in Sources */,
 				489F3C4E1BB06F1200C95FDC /* Workout.swift in Sources */,
