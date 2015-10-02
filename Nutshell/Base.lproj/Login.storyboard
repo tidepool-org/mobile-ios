@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9046" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4G7-DP-gat">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9052" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4G7-DP-gat">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9035"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9040"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -27,7 +27,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zV2-Yb-tzp" userLabel="LoginScrollView" customClass="UIScrollView">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zV2-Yb-tzp" userLabel="LoginScene">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iHd-Hc-UkR" userLabel="LoginContainerView">
@@ -154,6 +154,9 @@
                                                     <constraint firstAttribute="height" constant="37" id="XNE-ik-8GV"/>
                                                     <constraint firstAttribute="width" constant="37" id="cqz-tT-OCn"/>
                                                 </constraints>
+                                                <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
+                                                    <rect key="frame" x="142" y="37" width="37" height="37"/>
+                                                </variation>
                                             </activityIndicatorView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -220,7 +223,7 @@
                                 <constraints>
                                     <constraint firstItem="iHd-Hc-UkR" firstAttribute="centerX" secondItem="zV2-Yb-tzp" secondAttribute="centerX" id="2FI-D6-FZj"/>
                                     <constraint firstAttribute="trailing" secondItem="iHd-Hc-UkR" secondAttribute="trailing" id="2wo-ID-Sui"/>
-                                    <constraint firstItem="PQA-rp-TeB" firstAttribute="top" secondItem="x8Q-os-z1s" secondAttribute="bottom" id="5tc-2H-M6n"/>
+                                    <constraint firstItem="PQA-rp-TeB" firstAttribute="top" secondItem="x8Q-os-z1s" secondAttribute="bottom" priority="750" id="5tc-2H-M6n"/>
                                     <constraint firstAttribute="trailing" secondItem="x8Q-os-z1s" secondAttribute="trailing" id="94D-H7-Bw4"/>
                                     <constraint firstItem="iHd-Hc-UkR" firstAttribute="leading" secondItem="zV2-Yb-tzp" secondAttribute="leading" id="CxV-zp-Odz"/>
                                     <constraint firstAttribute="trailing" secondItem="PQA-rp-TeB" secondAttribute="trailing" id="PBw-EC-sDX"/>
@@ -235,6 +238,7 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="e1r-Bf-Onr"/>
                                         <exclude reference="ZQJ-Hi-BaG"/>
                                         <exclude reference="oi0-6N-Vkt"/>
                                     </mask>

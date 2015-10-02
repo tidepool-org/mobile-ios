@@ -45,8 +45,8 @@ class GraphUIView: UIView {
     
     func configure() {
         
-        self.loadDataForView()
-        self.graphData()
+        loadDataForView()
+        graphData()
     }
     
     /// Check for data points in graph
