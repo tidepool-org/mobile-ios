@@ -22,8 +22,11 @@ class EventDetailViewController: BaseUIViewController {
     var eventItem: NutMeal?
     var eventGroup: NutEvent?
 
-    var graphView: GraphUIView?
-    private var graphCenterTime: NSDate?
+    var graphCollectionView: UICollectionView?
+    private var graphCenterTime: NSDate = NSDate()
+    private var graphViewTimeInterval: NSTimeInterval = 0.0
+    private let graphCellsInCollection = 7
+    private let graphCenterCellInCollection = 3
     
     @IBOutlet weak var graphSectionView: UIView!
     @IBOutlet weak var missingDataAdvisoryView: UIView!
@@ -63,40 +66,54 @@ class EventDetailViewController: BaseUIViewController {
                 photoUIImageView.hidden = true
             }
             configureArrows()
+            // set up graph area later when we know size of view
         }
     }
     
     private func deleteGraphView() {
-        if (graphView != nil) {
-            graphView?.removeFromSuperview();
-            graphView = nil;
+        if (graphCollectionView != nil) {
+            graphCollectionView?.removeFromSuperview();
+            graphCollectionView = nil;
         }
     }
     
+    private let collectCellReuseID = "graphViewCell"
     private func configureGraphViewIfNil() {
-        if (graphView == nil) {
+        if (graphCollectionView == nil) {
             
             // self.view's direct subviews are laid out.
             // force my subview to layout its subviews:
             graphSectionView.setNeedsLayout()
             graphSectionView.layoutIfNeeded()
             
-            if let eventTime = graphCenterTime {
-                // need about 60 pixels per hour... so divide by 60, and multiply by 60x60
-                let interval = NSTimeInterval(graphSectionView.bounds.width*60)
-                graphView = GraphUIView.init(frame: graphSectionView.bounds, centerTime: eventTime, timeIntervalForView: interval)
-                graphView!.configure()
-                graphSectionView.addSubview(graphView!)
-                graphSectionView.sendSubviewToBack(graphView!)
-                
-                missingDataAdvisoryView.hidden = (graphView?.dataFound())!
+            let flow = UICollectionViewFlowLayout()
+            flow.itemSize = graphSectionView.bounds.size
+            flow.scrollDirection = UICollectionViewScrollDirection.Horizontal
+            graphCollectionView = UICollectionView(frame: graphSectionView.bounds, collectionViewLayout: flow)
+            if let graphCollectionView = graphCollectionView {
+                graphCollectionView.backgroundColor = UIColor.whiteColor()
+                graphCollectionView.showsHorizontalScrollIndicator = false
+                graphCollectionView.showsVerticalScrollIndicator = false
+                graphCollectionView.dataSource = self
+                graphCollectionView.delegate = self
+                graphCollectionView.pagingEnabled = true
+                graphCollectionView.registerClass(EventDetailGraphCollectionCell.self, forCellWithReuseIdentifier: collectCellReuseID)
+                // event is in the center cell, see cellForItemAtIndexPath below...
+                graphCollectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: graphCenterCellInCollection, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: false)
+
+                graphSectionView.addSubview(graphCollectionView)
+                graphSectionView.sendSubviewToBack(graphCollectionView)
             }
-        }    }
+
+            // need about 60 pixels per hour...
+             graphViewTimeInterval = NSTimeInterval(graphSectionView.bounds.width*60/* *60/60 */)
+        }
+    }
     
     override func viewDidLayoutSubviews() {
         
-        if (graphView != nil) {
-            if (graphView!.frame.size != graphSectionView.frame.size) {
+        if (graphCollectionView != nil) {
+            if (graphCollectionView!.frame.size != graphSectionView.frame.size) {
                 deleteGraphView()
             }
         }
@@ -148,31 +165,9 @@ class EventDetailViewController: BaseUIViewController {
     
     // MARK: - Button handlers
 
-    // TEMP for testing...
-    private func scrollInTime(scrollTime: NSTimeInterval) {
-        
-        if graphView != nil {
-            graphView!.removeFromSuperview();
-            graphView = nil;
-         }
-        
-        if graphCenterTime != nil {
-            graphCenterTime = NSDate(timeInterval: scrollTime, sinceDate: graphCenterTime!)
-            // need about 60 pixels per hour... so divide by 60, and multiply by 60x60
-            let interval = NSTimeInterval(graphSectionView.bounds.width*60)
-            graphView = GraphUIView.init(frame: graphSectionView.bounds, centerTime: graphCenterTime!, timeIntervalForView: interval)
-            graphView!.configure()
-            graphSectionView.addSubview(graphView!)
-            graphSectionView.sendSubviewToBack(graphView!)
-            
-            missingDataAdvisoryView.hidden = (graphView?.dataFound())!
-        }
-        
-    }
-    
     @IBAction func leftArrowButtonHandler(sender: AnyObject) {
         if AppDelegate.testMode {
-            scrollInTime(-60*60*3)
+            //
         } else {
             let leftAndRight = leftAndRightItems()
             self.eventItem = leftAndRight.0
@@ -182,22 +177,51 @@ class EventDetailViewController: BaseUIViewController {
 
     @IBAction func rightArrowButtonHandler(sender: AnyObject) {
         if AppDelegate.testMode {
-            scrollInTime(60*60*3)
+            //
         } else {
             let leftAndRight = leftAndRightItems()
             self.eventItem = leftAndRight.1
             reloadForNewEvent()
         }
     }
+}
+
+extension EventDetailViewController: UICollectionViewDataSource {
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return graphCellsInCollection
     }
-    */
+    
+    func collectionView(collectionView: UICollectionView,
+        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(collectCellReuseID, forIndexPath: indexPath) as! EventDetailGraphCollectionCell
+            
+            // index determines center time...
+            var cellCenterTime = graphCenterTime
+            let collectionOffset = indexPath.row - graphCenterCellInCollection
+            
+            if collectionOffset != 0 {
+                cellCenterTime = NSDate(timeInterval: graphViewTimeInterval*Double(collectionOffset), sinceDate: graphCenterTime)
+            }
+            if cell.configureCell(cellCenterTime, timeInterval: graphViewTimeInterval) {
+                // TODO: really want to scan the entire width to see if any of the time span has data...
+                missingDataAdvisoryView.hidden = true;
+            }
+            
+            return cell
+    }
+}
 
+extension EventDetailViewController: UICollectionViewDelegate {
+    
+}
+
+extension EventDetailViewController: UICollectionViewDelegateFlowLayout {
+   
+    func collectionView(collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat
+    {
+        return 0.0
+    }
 }

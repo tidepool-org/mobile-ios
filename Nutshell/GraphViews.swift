@@ -364,9 +364,9 @@ public class GraphViews {
         func drawHourLabel(hourStr: String, topCenter: CGPoint) {
     
             // Don't draw labels too close to margins
-            if topCenter.x < 20.0 || topCenter.x > (viewSize.width - 20) {
-                return
-            }
+//            if topCenter.x < 20.0 || topCenter.x > (viewSize.width - 20) {
+//                return
+//            }
             
             let labelRect = CGRectMake(topCenter.x - 16.0, topCenter.y, 32.0, 18.0)
             let hourlabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
@@ -437,7 +437,8 @@ public class GraphViews {
         
         for timeOffset in mealData {
             //// eventLine Drawing
-            let eventLinePath = UIBezierPath(rect: CGRect(x: floor(CGFloat(timeOffset) * viewPixelsPerSec), y: 0.0, width: 1.0, height: viewSize.height))
+            let rect = CGRect(x: floor(CGFloat(timeOffset) * viewPixelsPerSec), y: 0.0, width: 1.0, height: viewSize.height)
+            let eventLinePath = UIBezierPath(rect: rect)
             mealLineColor.setFill()
             eventLinePath.fill()
         }
