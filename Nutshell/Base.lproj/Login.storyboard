@@ -55,6 +55,14 @@
                                                             <action selector="passwordEnterHandler:" destination="4G7-DP-gat" eventType="editingDidEndOnExit" id="Wse-nc-Bgd"/>
                                                         </connections>
                                                     </textField>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5xY-dl-Isf" userLabel="rememberMeLargeHitArea" customClass="UIControl">
+                                                        <rect key="frame" x="-6" y="114" width="30" height="30"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="30" id="Bh3-da-B3T"/>
+                                                            <constraint firstAttribute="height" constant="30" id="DJC-MT-Edl"/>
+                                                        </constraints>
+                                                    </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UDq-QX-Q5y" userLabel="rememberButton">
                                                         <rect key="frame" x="0.0" y="120" width="18" height="18"/>
                                                         <constraints>
@@ -68,7 +76,7 @@
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="remember me" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iby-0V-DJ8" userLabel="remember me label" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="26" y="118" width="114" height="23"/>
+                                                        <rect key="frame" x="26" y="117" width="114" height="24"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="23" id="LXv-EE-eR4"/>
                                                         </constraints>
@@ -77,9 +85,14 @@
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightLinkText"/>
                                                         </userDefinedRuntimeAttributes>
+                                                        <variation key="default">
+                                                            <mask key="constraints">
+                                                                <exclude reference="LXv-EE-eR4"/>
+                                                            </mask>
+                                                        </variation>
                                                     </label>
                                                     <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kFz-1S-09L">
-                                                        <rect key="frame" x="0.0" y="153" width="159" height="23"/>
+                                                        <rect key="frame" x="0.0" y="153" width="159" height="24"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="23" id="WAr-Me-tLW"/>
                                                         </constraints>
@@ -95,6 +108,11 @@
                                                             </fragment>
                                                         </attributedString>
                                                         <nil key="highlightedColor"/>
+                                                        <variation key="default">
+                                                            <mask key="constraints">
+                                                                <exclude reference="WAr-Me-tLW"/>
+                                                            </mask>
+                                                        </variation>
                                                     </label>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6dr-nu-GmC" userLabel="emailTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="225" height="40"/>
@@ -109,29 +127,46 @@
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="userDataEntry"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </textField>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wrong email or password!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bJV-Wt-zLG" userLabel="errorFeedbackLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="1" y="44" width="139" height="15"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="dataEntryErrorFeedback"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="1Br-Rh-Zwu"/>
                                                     <constraint firstItem="yzu-4v-Bis" firstAttribute="height" secondItem="6dr-nu-GmC" secondAttribute="height" id="3ev-wD-ZNt"/>
                                                     <constraint firstItem="6dr-nu-GmC" firstAttribute="top" secondItem="Ucb-jq-HNI" secondAttribute="top" id="6jY-I5-pmM"/>
+                                                    <constraint firstItem="5xY-dl-Isf" firstAttribute="centerY" secondItem="UDq-QX-Q5y" secondAttribute="centerY" id="7Me-g2-Htf"/>
                                                     <constraint firstAttribute="height" constant="184" id="7Zu-c6-ssH"/>
                                                     <constraint firstItem="yzu-4v-Bis" firstAttribute="width" secondItem="6dr-nu-GmC" secondAttribute="width" id="8hQ-Qu-tlz"/>
                                                     <constraint firstAttribute="trailing" secondItem="6dr-nu-GmC" secondAttribute="trailing" id="9Hv-7i-pZK"/>
                                                     <constraint firstItem="yzu-4v-Bis" firstAttribute="centerX" secondItem="6dr-nu-GmC" secondAttribute="centerX" id="L1p-aj-bov"/>
                                                     <constraint firstItem="6dr-nu-GmC" firstAttribute="leading" secondItem="Ucb-jq-HNI" secondAttribute="leading" id="SMt-wc-Kts"/>
+                                                    <constraint firstItem="bJV-Wt-zLG" firstAttribute="top" secondItem="6dr-nu-GmC" secondAttribute="bottom" constant="4" id="V4x-VL-2JN"/>
                                                     <constraint firstItem="iby-0V-DJ8" firstAttribute="centerY" secondItem="UDq-QX-Q5y" secondAttribute="centerY" id="YWL-je-H9m"/>
                                                     <constraint firstItem="yzu-4v-Bis" firstAttribute="top" secondItem="6dr-nu-GmC" secondAttribute="bottom" constant="25" id="Z6v-RX-0sR"/>
+                                                    <constraint firstItem="bJV-Wt-zLG" firstAttribute="leading" secondItem="6dr-nu-GmC" secondAttribute="leading" constant="1" id="bLN-kX-ZOw"/>
                                                     <constraint firstItem="UDq-QX-Q5y" firstAttribute="top" secondItem="yzu-4v-Bis" secondAttribute="bottom" constant="15" id="eIG-en-ae5"/>
                                                     <constraint firstItem="UDq-QX-Q5y" firstAttribute="bottom" secondItem="kFz-1S-09L" secondAttribute="top" constant="-15" id="fzb-R3-qeC"/>
                                                     <constraint firstItem="kFz-1S-09L" firstAttribute="leading" secondItem="UDq-QX-Q5y" secondAttribute="leading" id="jbt-AM-wVb"/>
                                                     <constraint firstItem="UDq-QX-Q5y" firstAttribute="leading" secondItem="yzu-4v-Bis" secondAttribute="leading" id="kDO-KU-ZBf"/>
+                                                    <constraint firstItem="5xY-dl-Isf" firstAttribute="centerX" secondItem="UDq-QX-Q5y" secondAttribute="centerX" id="lXa-fa-XFz"/>
+                                                    <constraint firstItem="yzu-4v-Bis" firstAttribute="centerX" secondItem="5xY-dl-Isf" secondAttribute="centerX" id="m5y-HB-sqe"/>
                                                     <constraint firstItem="iby-0V-DJ8" firstAttribute="leading" secondItem="UDq-QX-Q5y" secondAttribute="trailing" constant="8" id="p4k-Nm-4Ti"/>
                                                     <constraint firstAttribute="height" constant="184" id="wRn-4n-iI4"/>
+                                                    <constraint firstItem="yzu-4v-Bis" firstAttribute="centerY" secondItem="5xY-dl-Isf" secondAttribute="centerY" id="zPr-Gz-kCY"/>
                                                 </constraints>
                                                 <variation key="default">
                                                     <mask key="constraints">
                                                         <exclude reference="7Zu-c6-ssH"/>
+                                                        <exclude reference="m5y-HB-sqe"/>
+                                                        <exclude reference="zPr-Gz-kCY"/>
                                                     </mask>
                                                 </variation>
                                             </view>
@@ -277,9 +312,11 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="emailTextField" destination="6dr-nu-GmC" id="Qie-KQ-RVg"/>
+                        <outlet property="errorFeedbackLabel" destination="bJV-Wt-zLG" id="qUT-hb-Azt"/>
                         <outlet property="loginButton" destination="zPr-G0-r47" id="eY9-IV-5A5"/>
                         <outlet property="loginIndicator" destination="75w-tb-LSw" id="dfD-21-TW1"/>
                         <outlet property="passwordTextField" destination="yzu-4v-Bis" id="CbM-8W-WV7"/>
+                        <outlet property="rememberMeButton" destination="UDq-QX-Q5y" id="9ky-le-JoI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H67-J5-4Gu" userLabel="First Responder" sceneMemberID="firstResponder"/>

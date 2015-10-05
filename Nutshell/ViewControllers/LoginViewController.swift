@@ -22,6 +22,8 @@ class LoginViewController: BaseUIViewController {
     @IBOutlet weak var passwordTextField: NutshellUITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var loginIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var rememberMeButton: UIButton!
+    @IBOutlet weak var errorFeedbackLabel: NutshellUILabel!
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -41,14 +43,7 @@ class LoginViewController: BaseUIViewController {
     }
     
     override func shouldAutorotate() -> Bool {
-        if (UIDevice.currentDevice().orientation == UIDeviceOrientation.Portrait ||
-            UIDevice.currentDevice().orientation == UIDeviceOrientation.PortraitUpsideDown ||
-            UIDevice.currentDevice().orientation == UIDeviceOrientation.Unknown) {
-                return true
-        }
-        else {
             return false
-        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -61,6 +56,7 @@ class LoginViewController: BaseUIViewController {
     }
 
     @IBAction func rememberMeButtonTapped(sender: AnyObject) {
+        rememberMeButton.selected = !rememberMeButton.selected
     }
     
     @IBAction func login_button_tapped(sender: AnyObject) {
@@ -69,7 +65,7 @@ class LoginViewController: BaseUIViewController {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
         appDelegate.API?.login(emailTextField.text!,
-            password: passwordTextField.text!,
+            password: passwordTextField.text!, remember: rememberMeButton.selected,
             completion: { (result:(Alamofire.Result<User>)) -> (Void) in
                 print("Login result: \(result)")
                 self.loginIndicator.stopAnimating()
@@ -98,7 +94,7 @@ class LoginViewController: BaseUIViewController {
                     }
                 } else {
                     print("login failed! Error: " + result.error.debugDescription)
-                    self.emailTextField.text = ""
+                    self.errorFeedbackLabel.hidden = false
                     self.passwordTextField.text = ""
                 }
         })
@@ -109,6 +105,7 @@ class LoginViewController: BaseUIViewController {
     }
 
     private func updateButtonStates() {
+        errorFeedbackLabel.hidden = true
         // login button
         if (emailTextField.text != "" && passwordTextField.text != "") {
             loginButton.enabled = true

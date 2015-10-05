@@ -58,10 +58,11 @@ class APIConnector {
                            "Development" :  "https://devel-api.tidepool.io"]
     
     // Session token, acquired on login and saved in NSUserDefaults
+    private var _rememberToken = false
     private var _sessionToken: String?
     var sessionToken: String? {
         set(newToken) {
-            if ( newToken != nil ) {
+            if ( newToken != nil  && _rememberToken) {
                 NSUserDefaults.standardUserDefaults().setValue(newToken, forKey: APIConnector.kSessionTokenDefaultKey)
             } else {
                 NSUserDefaults.standardUserDefaults().removeObjectForKey(APIConnector.kSessionTokenDefaultKey)
@@ -74,7 +75,7 @@ class APIConnector {
     }
     
     // Base URL for API calls, set during initialization
-    var baseUrl: (NSURL)
+    var baseUrl: NSURL
     
     // MARK: Initializaion
     
@@ -93,9 +94,10 @@ class APIConnector {
     /**
      * Logs in the user and obtains the session token for the session (stored internally)
     */
-    func login(username: String, password: String, completion: (Result<User>) -> (Void)) {
+    func login(username: String, password: String, remember: Bool, completion: (Result<User>) -> (Void)) {
         // Set our endpoint for login
         let endpoint = "auth/login"
+        _rememberToken = remember
         
         // Create the authorization string (user:pass base-64 encoded)
         let base64LoginString = NSString(format: "%@:%@", username, password)
