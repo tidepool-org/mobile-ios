@@ -81,11 +81,6 @@ class EventDetailViewController: BaseUIViewController {
     private func configureGraphViewIfNil() {
         if (graphCollectionView == nil) {
             
-            // self.view's direct subviews are laid out.
-            // force my subview to layout its subviews:
-            graphSectionView.setNeedsLayout()
-            graphSectionView.layoutIfNeeded()
-            
             let flow = UICollectionViewFlowLayout()
             flow.itemSize = graphSectionView.bounds.size
             flow.scrollDirection = UICollectionViewScrollDirection.Horizontal
@@ -113,6 +108,10 @@ class EventDetailViewController: BaseUIViewController {
     override func viewDidLayoutSubviews() {
         
         if (graphCollectionView != nil) {
+            // self.view's direct subviews are laid out.
+            // force my subview to layout its subviews:
+            graphSectionView.setNeedsLayout()
+            graphSectionView.layoutIfNeeded()
             if (graphCollectionView!.frame.size != graphSectionView.frame.size) {
                 deleteGraphView()
             }
@@ -154,12 +153,12 @@ class EventDetailViewController: BaseUIViewController {
     
     private func configureArrows() {
         if !AppDelegate.testMode {
-            leftArrow.hidden = true
-            rightArrow.hidden = true
+//            leftArrow.hidden = true
+//            rightArrow.hidden = true
             
-//            let leftAndRight = leftAndRightItems()
-//            leftArrow.hidden = leftAndRight.0?.time == eventItem?.time
-//            rightArrow.hidden = leftAndRight.1?.time == eventItem?.time
+            let leftAndRight = leftAndRightItems()
+            leftArrow.hidden = leftAndRight.0?.time == eventItem?.time
+            rightArrow.hidden = leftAndRight.1?.time == eventItem?.time
         }
     }
     
