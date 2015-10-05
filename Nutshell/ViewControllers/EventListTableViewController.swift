@@ -157,17 +157,11 @@ extension EventListTableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(EventViewStoryboard.TableViewCellIdentifiers.eventListCell, forIndexPath: indexPath) as! EventListTableViewCell
-
+        
         if (indexPath.item < sortedNutEvents.count) {
             let tuple = self.sortedNutEvents[indexPath.item]
             let nutEvent = tuple.1
-            // Configure the cell...
-            if nutEvent.itemArray.count > 1 {
-                cell.textLabel?.text = nutEvent.title + " (" + String(nutEvent.itemArray.count) + ")"
-            } else {
-                cell.textLabel?.text = nutEvent.title
-            }
-            cell.eventGroup = nutEvent
+            cell.configureCell(nutEvent)
         }
         
         return cell

@@ -61,4 +61,16 @@ class NutUtils {
         return Static.instance
     }
     
+    /** Date formatter for date strings in the UI */
+    class var dateFormatter : NSDateFormatter {
+        struct Static {
+            static let instance: NSDateFormatter = {
+                let df = NSDateFormatter()
+                df.dateFormat = Styles.uniformDateFormat
+                return df
+            }()
+        }
+        return Static.instance
+    }
+    
 }

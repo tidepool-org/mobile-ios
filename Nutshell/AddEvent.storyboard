@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9046" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="3HY-Ig-Rwb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9052" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="3HY-Ig-Rwb">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9035"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9040"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
@@ -138,27 +138,31 @@
                                                         </connections>
                                                     </textField>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="46b-yv-1Vz" userLabel="dateButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="182" y="49" width="130" height="29"/>
+                                                        <rect key="frame" x="174" y="49" width="138" height="29"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="29" id="Gzq-0W-irf"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
-                                                        <state key="normal" title="Aug 28, 2015    4:21 PM"/>
+                                                        <state key="normal" title="Aug 28, 2015    4:21 PM" image="detailCalendarIcon"/>
                                                         <connections>
                                                             <action selector="dateButtonHandler:" destination="SME-si-pxR" eventType="touchUpInside" id="dN9-MU-eIp"/>
                                                         </connections>
                                                     </button>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Add location here" textAlignment="center" adjustsFontSizeToFit="NO" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="jDb-K4-G48" userLabel="locationTextView">
-                                                        <rect key="frame" x="8" y="50" width="130" height="30"/>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="detailLocationIcon" translatesAutoresizingMaskIntoConstraints="NO" id="M3f-yE-v4s">
+                                                        <rect key="frame" x="8" y="57" width="9" height="14"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="14" id="3u8-ms-sAM"/>
+                                                            <constraint firstAttribute="width" constant="9" id="gSf-f3-XDB"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Add location here" adjustsFontSizeToFit="NO" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="jDb-K4-G48" userLabel="locationTextView">
+                                                        <rect key="frame" x="25" y="49" width="139" height="30"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="30" id="BhZ-I4-nlG"/>
                                                         </constraints>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <textInputTraits key="textInputTraits"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="dateAndLocation"/>
-                                                        </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="locationEditingDidBegin:" destination="SME-si-pxR" eventType="editingDidBegin" id="Fb8-oL-pjd"/>
                                                             <action selector="locationEditingDidEnd:" destination="SME-si-pxR" eventType="editingDidEndOnExit" id="A0v-RB-lxZ"/>
@@ -168,16 +172,19 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
+                                                    <constraint firstItem="46b-yv-1Vz" firstAttribute="leading" secondItem="jDb-K4-G48" secondAttribute="trailing" constant="10" id="3Mi-jm-cQ1"/>
                                                     <constraint firstItem="jDb-K4-G48" firstAttribute="width" secondItem="46b-yv-1Vz" secondAttribute="width" id="7KU-dZ-K7Z"/>
                                                     <constraint firstItem="xm6-dP-Mmd" firstAttribute="leading" secondItem="ZUa-D3-aAM" secondAttribute="leadingMargin" id="8He-fI-OK8"/>
-                                                    <constraint firstAttribute="bottomMargin" secondItem="jDb-K4-G48" secondAttribute="bottom" constant="-2" id="921-GQ-tcV"/>
+                                                    <constraint firstAttribute="bottomMargin" secondItem="jDb-K4-G48" secondAttribute="bottom" constant="-1" id="921-GQ-tcV"/>
                                                     <constraint firstAttribute="trailingMargin" secondItem="46b-yv-1Vz" secondAttribute="trailing" id="BJ7-QF-Bno"/>
                                                     <constraint firstAttribute="trailingMargin" secondItem="xm6-dP-Mmd" secondAttribute="trailing" id="LIj-ei-mAm"/>
                                                     <constraint firstItem="xm6-dP-Mmd" firstAttribute="top" secondItem="ZUa-D3-aAM" secondAttribute="topMargin" constant="8" id="LWy-DD-ari"/>
                                                     <constraint firstAttribute="bottom" secondItem="46b-yv-1Vz" secondAttribute="bottom" id="Ndu-31-TvY"/>
                                                     <constraint firstAttribute="trailing" secondItem="46b-yv-1Vz" secondAttribute="trailing" id="UD0-O0-I7a"/>
-                                                    <constraint firstItem="jDb-K4-G48" firstAttribute="leading" secondItem="ZUa-D3-aAM" secondAttribute="leadingMargin" id="hPP-dg-XbU"/>
+                                                    <constraint firstItem="M3f-yE-v4s" firstAttribute="centerY" secondItem="jDb-K4-G48" secondAttribute="centerY" id="dG7-vb-Tpd"/>
+                                                    <constraint firstItem="jDb-K4-G48" firstAttribute="leading" secondItem="ZUa-D3-aAM" secondAttribute="leadingMargin" constant="17" id="hPP-dg-XbU"/>
                                                     <constraint firstAttribute="bottomMargin" secondItem="46b-yv-1Vz" secondAttribute="bottom" id="mDy-5o-dyz"/>
+                                                    <constraint firstItem="M3f-yE-v4s" firstAttribute="trailing" secondItem="jDb-K4-G48" secondAttribute="leading" constant="-8" id="vfx-96-DZC"/>
                                                 </constraints>
                                                 <variation key="default">
                                                     <mask key="constraints">
@@ -427,5 +434,7 @@
         <image name="ThreeTacosDemoPic.png" width="1280" height="456"/>
         <image name="addAnimation-01.png" width="609" height="609"/>
         <image name="cameraIcon" width="56" height="44"/>
+        <image name="detailCalendarIcon" width="18" height="11"/>
+        <image name="detailLocationIcon" width="9" height="14"/>
     </resources>
 </document>
