@@ -31,7 +31,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iHd-Hc-UkR" userLabel="LoginContainerView">
-                                        <rect key="frame" x="0.0" y="109" width="320" height="333"/>
+                                        <rect key="frame" x="0.0" y="118" width="320" height="333"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="login_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="kJo-Zi-pFB" userLabel="LogoView">
                                                 <rect key="frame" x="106" y="0.0" width="109" height="115"/>
@@ -41,10 +41,10 @@
                                                 </constraints>
                                             </imageView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ucb-jq-HNI" userLabel="InputContainerView">
-                                                <rect key="frame" x="48" y="155" width="225" height="184"/>
+                                                <rect key="frame" x="38" y="155" width="245" height="180"/>
                                                 <subviews>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yzu-4v-Bis" userLabel="passwordTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="65" width="225" height="40"/>
+                                                        <rect key="frame" x="10" y="65" width="225" height="40"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
                                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" secureTextEntry="YES"/>
@@ -56,15 +56,18 @@
                                                         </connections>
                                                     </textField>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5xY-dl-Isf" userLabel="rememberMeLargeHitArea" customClass="UIControl">
-                                                        <rect key="frame" x="-6" y="114" width="30" height="30"/>
+                                                        <rect key="frame" x="4" y="114" width="30" height="30"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="30" id="Bh3-da-B3T"/>
                                                             <constraint firstAttribute="height" constant="30" id="DJC-MT-Edl"/>
                                                         </constraints>
+                                                        <connections>
+                                                            <action selector="rememberMeButtonTapped:" destination="4G7-DP-gat" eventType="touchUpInside" id="tp0-Jx-qRn"/>
+                                                        </connections>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UDq-QX-Q5y" userLabel="rememberButton">
-                                                        <rect key="frame" x="0.0" y="120" width="18" height="18"/>
+                                                        <rect key="frame" x="10" y="120" width="18" height="18"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="18" id="6qT-GJ-2lM"/>
                                                             <constraint firstAttribute="height" constant="18" id="eV3-GJ-D1a"/>
@@ -76,7 +79,7 @@
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="remember me" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iby-0V-DJ8" userLabel="remember me label" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="26" y="117" width="114" height="24"/>
+                                                        <rect key="frame" x="36" y="117" width="114" height="24"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="23" id="LXv-EE-eR4"/>
                                                         </constraints>
@@ -92,7 +95,7 @@
                                                         </variation>
                                                     </label>
                                                     <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kFz-1S-09L">
-                                                        <rect key="frame" x="0.0" y="153" width="159" height="24"/>
+                                                        <rect key="frame" x="10" y="153" width="159" height="24"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="23" id="WAr-Me-tLW"/>
                                                         </constraints>
@@ -115,7 +118,7 @@
                                                         </variation>
                                                     </label>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6dr-nu-GmC" userLabel="emailTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="225" height="40"/>
+                                                        <rect key="frame" x="10" y="0.0" width="225" height="40"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="40" id="9M7-hN-ci0"/>
@@ -126,9 +129,13 @@
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="userDataEntry"/>
                                                         </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="emailEnterHandler:" destination="4G7-DP-gat" eventType="editingDidEndOnExit" id="6mi-Ua-2c5"/>
+                                                            <outlet property="delegate" destination="4G7-DP-gat" id="WY2-ls-rtx"/>
+                                                        </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wrong email or password!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bJV-Wt-zLG" userLabel="errorFeedbackLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="1" y="44" width="139" height="15"/>
+                                                        <rect key="frame" x="11" y="44" width="139" height="15"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -139,15 +146,15 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="225" id="1Br-Rh-Zwu"/>
+                                                    <constraint firstAttribute="width" constant="245" id="1Br-Rh-Zwu"/>
                                                     <constraint firstItem="yzu-4v-Bis" firstAttribute="height" secondItem="6dr-nu-GmC" secondAttribute="height" id="3ev-wD-ZNt"/>
                                                     <constraint firstItem="6dr-nu-GmC" firstAttribute="top" secondItem="Ucb-jq-HNI" secondAttribute="top" id="6jY-I5-pmM"/>
                                                     <constraint firstItem="5xY-dl-Isf" firstAttribute="centerY" secondItem="UDq-QX-Q5y" secondAttribute="centerY" id="7Me-g2-Htf"/>
                                                     <constraint firstAttribute="height" constant="184" id="7Zu-c6-ssH"/>
                                                     <constraint firstItem="yzu-4v-Bis" firstAttribute="width" secondItem="6dr-nu-GmC" secondAttribute="width" id="8hQ-Qu-tlz"/>
-                                                    <constraint firstAttribute="trailing" secondItem="6dr-nu-GmC" secondAttribute="trailing" id="9Hv-7i-pZK"/>
+                                                    <constraint firstAttribute="trailing" secondItem="6dr-nu-GmC" secondAttribute="trailing" constant="10" id="9Hv-7i-pZK"/>
                                                     <constraint firstItem="yzu-4v-Bis" firstAttribute="centerX" secondItem="6dr-nu-GmC" secondAttribute="centerX" id="L1p-aj-bov"/>
-                                                    <constraint firstItem="6dr-nu-GmC" firstAttribute="leading" secondItem="Ucb-jq-HNI" secondAttribute="leading" id="SMt-wc-Kts"/>
+                                                    <constraint firstItem="6dr-nu-GmC" firstAttribute="leading" secondItem="Ucb-jq-HNI" secondAttribute="leading" constant="10" id="SMt-wc-Kts"/>
                                                     <constraint firstItem="bJV-Wt-zLG" firstAttribute="top" secondItem="6dr-nu-GmC" secondAttribute="bottom" constant="4" id="V4x-VL-2JN"/>
                                                     <constraint firstItem="iby-0V-DJ8" firstAttribute="centerY" secondItem="UDq-QX-Q5y" secondAttribute="centerY" id="YWL-je-H9m"/>
                                                     <constraint firstItem="yzu-4v-Bis" firstAttribute="top" secondItem="6dr-nu-GmC" secondAttribute="bottom" constant="25" id="Z6v-RX-0sR"/>
@@ -159,7 +166,7 @@
                                                     <constraint firstItem="5xY-dl-Isf" firstAttribute="centerX" secondItem="UDq-QX-Q5y" secondAttribute="centerX" id="lXa-fa-XFz"/>
                                                     <constraint firstItem="yzu-4v-Bis" firstAttribute="centerX" secondItem="5xY-dl-Isf" secondAttribute="centerX" id="m5y-HB-sqe"/>
                                                     <constraint firstItem="iby-0V-DJ8" firstAttribute="leading" secondItem="UDq-QX-Q5y" secondAttribute="trailing" constant="8" id="p4k-Nm-4Ti"/>
-                                                    <constraint firstAttribute="height" constant="184" id="wRn-4n-iI4"/>
+                                                    <constraint firstAttribute="height" constant="180" id="wRn-4n-iI4"/>
                                                     <constraint firstItem="yzu-4v-Bis" firstAttribute="centerY" secondItem="5xY-dl-Isf" secondAttribute="centerY" id="zPr-Gz-kCY"/>
                                                 </constraints>
                                                 <variation key="default">
@@ -181,10 +188,10 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x8Q-os-z1s" userLabel="ActivityContainer">
-                                        <rect key="frame" x="0.0" y="442" width="320" height="72"/>
+                                        <rect key="frame" x="0.0" y="451" width="320" height="63"/>
                                         <subviews>
                                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="75w-tb-LSw">
-                                                <rect key="frame" x="142" y="18" width="37" height="37"/>
+                                                <rect key="frame" x="142" y="13" width="37" height="37"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="37" id="XNE-ik-8GV"/>
                                                     <constraint firstAttribute="width" constant="37" id="cqz-tT-OCn"/>
@@ -268,7 +275,7 @@
                                     <constraint firstItem="PQA-rp-TeB" firstAttribute="leading" secondItem="zV2-Yb-tzp" secondAttribute="leading" id="hQN-9x-RBy"/>
                                     <constraint firstItem="PQA-rp-TeB" firstAttribute="top" secondItem="iHd-Hc-UkR" secondAttribute="bottom" constant="109" id="oi0-6N-Vkt"/>
                                     <constraint firstItem="x8Q-os-z1s" firstAttribute="top" secondItem="iHd-Hc-UkR" secondAttribute="bottom" id="pc7-ya-mEk"/>
-                                    <constraint firstItem="iHd-Hc-UkR" firstAttribute="centerY" secondItem="zV2-Yb-tzp" secondAttribute="centerY" constant="-8.5" id="qTh-J9-NUm"/>
+                                    <constraint firstItem="iHd-Hc-UkR" firstAttribute="centerY" secondItem="zV2-Yb-tzp" secondAttribute="centerY" id="qTh-J9-NUm"/>
                                     <constraint firstItem="x8Q-os-z1s" firstAttribute="leading" secondItem="zV2-Yb-tzp" secondAttribute="leading" id="xeZ-Rt-Sm1"/>
                                 </constraints>
                                 <variation key="default">
@@ -313,6 +320,8 @@
                     <connections>
                         <outlet property="emailTextField" destination="6dr-nu-GmC" id="Qie-KQ-RVg"/>
                         <outlet property="errorFeedbackLabel" destination="bJV-Wt-zLG" id="qUT-hb-Azt"/>
+                        <outlet property="logInEntryContainer" destination="iHd-Hc-UkR" id="1uh-hC-C2o"/>
+                        <outlet property="logInScene" destination="zV2-Yb-tzp" id="qWX-g4-d9v"/>
                         <outlet property="loginButton" destination="zPr-G0-r47" id="eY9-IV-5A5"/>
                         <outlet property="loginIndicator" destination="75w-tb-LSw" id="dfD-21-TW1"/>
                         <outlet property="passwordTextField" destination="yzu-4v-Bis" id="CbM-8W-WV7"/>

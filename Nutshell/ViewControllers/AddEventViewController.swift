@@ -71,10 +71,12 @@ class AddEventViewController: UIViewController {
 
     @IBAction func titleEventButtonHandler(sender: NutshellUIButton) {
         titleTextField.becomeFirstResponder()
+        hideDateIfOpen()
         configureCameraImageViewUp(true)
     }
     
     @IBAction func titleEditingDidBegin(sender: AnyObject) {
+        hideDateIfOpen()
         configureCameraImageViewUp(true)
     }
     
@@ -83,6 +85,7 @@ class AddEventViewController: UIViewController {
     }
     
     @IBAction func notesEditingDidBegin(sender: AnyObject) {
+        hideDateIfOpen()
         if notesTextField.text == placeholderNoteString {
             notesTextField.text = ""
         }
@@ -97,6 +100,7 @@ class AddEventViewController: UIViewController {
     }
 
     @IBAction func locationEditingDidBegin(sender: AnyObject) {
+        hideDateIfOpen()
         if locationTextField.text == placeholderLocationString {
             locationTextField.text = ""
         }
@@ -215,10 +219,15 @@ class AddEventViewController: UIViewController {
     // MARK: - Date picking
     //
     
+    private func hideDateIfOpen() {
+        if !datePickerView.hidden {
+            configureDateView()
+        }
+    }
+    
     private func configureDateView() {
-        let df = NSDateFormatter()
-        df.dateFormat = Styles.uniformDateFormat
-        dateButton.setTitle(df.stringFromDate(eventTime), forState: UIControlState.Normal)
+    
+        dateButton.setTitle(NutUtils.dateFormatter.stringFromDate(eventTime), forState: UIControlState.Normal)
         datePickerView.hidden = true
     }
     

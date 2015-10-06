@@ -18,6 +18,8 @@ import Alamofire
 
 class LoginViewController: BaseUIViewController {
 
+    @IBOutlet weak var logInScene: UIView!
+    @IBOutlet weak var logInEntryContainer: UIView!
     @IBOutlet weak var emailTextField: NutshellUITextField!
     @IBOutlet weak var passwordTextField: NutshellUITextField!
     @IBOutlet weak var loginButton: UIButton!
@@ -37,20 +39,33 @@ class LoginViewController: BaseUIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+
+        notificationCenter.addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
         updateButtonStates()
+        
+        notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
+    //
+    // MARK: - Button and text field handlers
+    //
+
     @IBAction func passwordEnterHandler(sender: AnyObject) {
         passwordTextField.resignFirstResponder()
     }
 
+    @IBAction func emailEnterHandler(sender: AnyObject) {
+        passwordTextField.becomeFirstResponder()
+    }
+    
     @IBAction func rememberMeButtonTapped(sender: AnyObject) {
         rememberMeButton.selected = !rememberMeButton.selected
     }
@@ -111,6 +126,43 @@ class LoginViewController: BaseUIViewController {
             loginButton.setTitleColor(UIColor.lightGrayColor(), forState:UIControlState.Normal)
         }
     }
+
+    //
+    // MARK: - View handling for keyboard
+    //
+
+    private var viewAdjustAnimationTime: Float = 0.25
+    private func adjustLogInView(centerOffset: CGFloat) {
+        
+        for c in logInScene.constraints {
+            if c.firstAttribute == NSLayoutAttribute.CenterY {
+                c.constant = -centerOffset
+                break
+            }
+        }
+        UIView.animateWithDuration(NSTimeInterval(viewAdjustAnimationTime)) {
+            self.logInScene.layoutIfNeeded()
+        }
+    }
+   
+    // UIKeyboardWillShowNotification
+    func keyboardWillShow(notification: NSNotification) {
+        // make space for the keyboard if needed
+        let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! Float
+        let loginViewDistanceToBottom = logInScene.frame.height - logInEntryContainer.frame.origin.y - logInEntryContainer.frame.size.height
+        let additionalKeyboardRoom = keyboardFrame.height - loginViewDistanceToBottom
+        if (additionalKeyboardRoom > 0) {
+            self.adjustLogInView(additionalKeyboardRoom)
+        }
+    }
+    
+    // UIKeyboardWillHideNotification
+    func keyboardWillHide(notification: NSNotification) {
+        // reposition login view if needed
+        self.adjustLogInView(0.0)
+    }
+
     /*
     // MARK: - Navigation
 

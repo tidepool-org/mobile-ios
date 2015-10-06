@@ -32,14 +32,11 @@ class EventDetailViewController: BaseUIViewController {
     @IBOutlet weak var missingDataAdvisoryView: UIView!
     
     @IBOutlet weak var photoUIImageView: UIImageView!
-
     @IBOutlet weak var missingPhotoView: UIView!
     
     @IBOutlet weak var eventNotes: NutshellUILabel!
-    
     @IBOutlet weak var eventDate: NutshellUILabel!
     @IBOutlet weak var leftArrow: UIButton!
-    
     @IBOutlet weak var rightArrow: UIButton!
     
     override func viewDidLoad() {
@@ -50,10 +47,7 @@ class EventDetailViewController: BaseUIViewController {
     private func configureDetailView() {
         if let eventItem = eventItem {
             eventNotes.text = eventItem.notes
-            let df = NSDateFormatter()
-            df.dateFormat = Styles.uniformDateFormat
-            eventDate.text = df.stringFromDate(eventItem.time)
-            print("timezone is \(df.timeZone)")
+            eventDate.text = NutUtils.dateFormatter.stringFromDate(eventItem.time)
             graphCenterTime = eventItem.time
             if eventItem.photo.characters.count > 0 {
                 if let image = UIImage(named: eventItem.photo) {
@@ -153,9 +147,9 @@ class EventDetailViewController: BaseUIViewController {
     
     private func configureArrows() {
         if !AppDelegate.testMode {
-//            leftArrow.hidden = true
-//            rightArrow.hidden = true
-            
+            leftArrow.hidden = true
+            rightArrow.hidden = true
+        } else {
             let leftAndRight = leftAndRightItems()
             leftArrow.hidden = leftAndRight.0?.time == eventItem?.time
             rightArrow.hidden = leftAndRight.1?.time == eventItem?.time
@@ -165,24 +159,17 @@ class EventDetailViewController: BaseUIViewController {
     // MARK: - Button handlers
 
     @IBAction func leftArrowButtonHandler(sender: AnyObject) {
-        if AppDelegate.testMode {
-            //
-        } else {
-            let leftAndRight = leftAndRightItems()
-            self.eventItem = leftAndRight.0
-            reloadForNewEvent()
-        }
+        let leftAndRight = leftAndRightItems()
+        self.eventItem = leftAndRight.0
+        reloadForNewEvent()
     }
 
     @IBAction func rightArrowButtonHandler(sender: AnyObject) {
-        if AppDelegate.testMode {
-            //
-        } else {
-            let leftAndRight = leftAndRightItems()
-            self.eventItem = leftAndRight.1
-            reloadForNewEvent()
-        }
+    let leftAndRight = leftAndRightItems()
+    self.eventItem = leftAndRight.1
+    reloadForNewEvent()
     }
+    
 }
 
 extension EventDetailViewController: UICollectionViewDataSource {

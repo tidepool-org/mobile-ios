@@ -58,7 +58,7 @@ class APIConnector {
                            "Development" :  "https://devel-api.tidepool.io"]
     
     // Session token, acquired on login and saved in NSUserDefaults
-    private var _rememberToken = false
+    private var _rememberToken = true
     private var _sessionToken: String?
     var sessionToken: String? {
         set(newToken) {

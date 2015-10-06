@@ -184,9 +184,7 @@
                             <outlet property="delegate" destination="gjn-FB-qdd" id="YSA-il-3Z4"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="gpn-pI-6nu">
-                        <barButtonItem key="rightBarButtonItem" image="add-button.png" id="l4y-4d-XHJ"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="gpn-pI-6nu"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Y8-e3-eGs" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -202,26 +200,26 @@
                         <viewControllerLayoutGuide type="bottom" id="hG6-oc-20X"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="YxP-hy-3au">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A21-yX-8hn" userLabel="SceneContainer">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zQo-Kx-sDE" userLabel="TopSection" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="200"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mIX-aw-qQf" userLabel="PhotoContainerView">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="114"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ThreeTacosDemoPic.png" translatesAutoresizingMaskIntoConstraints="NO" id="wb3-dF-d2O" userLabel="photoUIImageView">
-                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="114"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
                                                     </imageView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4KW-DR-0XO" userLabel="noPhotoView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="114"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="114"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7j5-nl-RvT">
-                                                                <rect key="frame" x="174" y="46" width="28" height="22"/>
+                                                                <rect key="frame" x="146" y="46" width="28" height="22"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="28" id="6Mq-Zy-duo">
                                                                         <variation key="heightClass=compact" constant="0.0"/>
@@ -309,10 +307,10 @@
                                                 </variation>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="01k-k4-6OI" userLabel="EventDescriptionContainer">
-                                                <rect key="frame" x="0.0" y="114" width="375" height="86"/>
+                                                <rect key="frame" x="0.0" y="114" width="320" height="86"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event notes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JDK-S3-qTu" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="8" y="16" width="359" height="25"/>
+                                                        <rect key="frame" x="8" y="16" width="304" height="25"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="25" id="seA-lS-ewM"/>
                                                         </constraints>
@@ -324,10 +322,10 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tds-VB-aau" userLabel="dateViewContainer">
-                                                        <rect key="frame" x="8" y="49" width="359" height="29"/>
+                                                        <rect key="frame" x="8" y="49" width="304" height="29"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015    4:21 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GG6-wG-z1Y" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="115" y="6" width="130" height="17"/>
+                                                                <rect key="frame" x="87" y="6" width="130" height="17"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -339,7 +337,7 @@
                                                                 </variation>
                                                             </label>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="detailCalendarIcon" translatesAutoresizingMaskIntoConstraints="NO" id="L6A-Vy-9nh">
-                                                                <rect key="frame" x="95" y="9" width="10" height="12"/>
+                                                                <rect key="frame" x="67" y="9" width="10" height="12"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="10" id="AdE-HG-6Hq"/>
                                                                     <constraint firstAttribute="height" constant="12" id="Apa-RI-nVI"/>
@@ -387,7 +385,7 @@
                                                         </connections>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ZP-6f-dqF" userLabel="Right arrow button">
-                                                        <rect key="frame" x="359" y="21" width="8" height="15"/>
+                                                        <rect key="frame" x="304" y="21" width="8" height="15"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="15" id="Umx-Xa-eJM"/>
                                                             <constraint firstAttribute="width" constant="8.5" id="gL3-cY-K9c"/>
@@ -398,7 +396,7 @@
                                                         </connections>
                                                     </button>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pku-UL-5b5" userLabel="RightArrowBigButtonView" customClass="UIControl">
-                                                        <rect key="frame" x="348" y="9" width="30" height="40"/>
+                                                        <rect key="frame" x="293" y="9" width="30" height="40"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="40" id="5Bg-WR-J8d"/>
@@ -479,13 +477,13 @@
                                         </variation>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="INU-ti-JXM" userLabel="GraphSection">
-                                        <rect key="frame" x="0.0" y="200" width="375" height="403"/>
+                                        <rect key="frame" x="0.0" y="200" width="320" height="304"/>
                                         <subviews>
                                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cmJ-dI-KmZ" userLabel="MissingData">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="403"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="304"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCd-7V-eEl">
-                                                        <rect key="frame" x="68" y="154" width="239" height="103"/>
+                                                        <rect key="frame" x="41" y="105" width="239" height="103"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There is no data in here!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="azx-xE-oT0" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="239" height="37"/>
@@ -584,11 +582,9 @@
                             <constraint firstAttribute="trailing" secondItem="A21-yX-8hn" secondAttribute="trailing" id="vzS-Bi-2Z3"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="6wN-kQ-yx9">
-                        <barButtonItem key="rightBarButtonItem" image="add-button.png" id="VKK-Ko-uQU"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="6wN-kQ-yx9"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="eventDate" destination="GG6-wG-z1Y" id="duF-se-sfO"/>
                         <outlet property="eventNotes" destination="JDK-S3-qTu" id="Vei-aT-26C"/>
@@ -602,7 +598,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0lz-qm-Gfy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1802.5" y="851.5"/>
+            <point key="canvasLocation" x="1809" y="853"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="PPE-fc-DuL">

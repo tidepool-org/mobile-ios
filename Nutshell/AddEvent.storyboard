@@ -121,7 +121,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZUa-D3-aAM" userLabel="EventDescriptionContainer">
                                                 <rect key="frame" x="0.0" y="114" width="320" height="86"/>
                                                 <subviews>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Anything else to note?" borderStyle="line" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xm6-dP-Mmd" userLabel="notesTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Anything else to note?" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xm6-dP-Mmd" userLabel="notesTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="8" y="16" width="304" height="25"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="25" id="VSN-wb-oi1"/>
@@ -137,61 +137,85 @@
                                                             <action selector="notesEditingDidEnd:" destination="SME-si-pxR" eventType="editingDidEnd" id="XVL-4p-9oY"/>
                                                         </connections>
                                                     </textField>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="46b-yv-1Vz" userLabel="dateButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="174" y="49" width="138" height="29"/>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qZU-KG-RT1" userLabel="bottomLineContainer">
+                                                        <rect key="frame" x="0.0" y="56" width="320" height="30"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="46b-yv-1Vz" userLabel="dateButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="165" y="1" width="155" height="29"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="29" id="Gzq-0W-irf"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
+                                                                <state key="normal" title="Aug 28, 2015    4:21 PM" image="detailCalendarIcon"/>
+                                                                <connections>
+                                                                    <action selector="dateButtonHandler:" destination="SME-si-pxR" eventType="touchUpInside" id="dN9-MU-eIp"/>
+                                                                </connections>
+                                                            </button>
+                                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Et-Mb-q3F" userLabel="locationContainerView">
+                                                                <rect key="frame" x="0.0" y="0.0" width="160" height="30"/>
+                                                                <subviews>
+                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="detailLocationIcon" translatesAutoresizingMaskIntoConstraints="NO" id="M3f-yE-v4s">
+                                                                        <rect key="frame" x="20" y="8" width="9" height="14"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="14" id="3u8-ms-sAM"/>
+                                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="9" id="5oL-gU-hli"/>
+                                                                            <constraint firstAttribute="width" constant="9" id="gSf-f3-XDB"/>
+                                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="14" id="mTE-Rl-MyF"/>
+                                                                        </constraints>
+                                                                        <variation key="default">
+                                                                            <mask key="constraints">
+                                                                                <exclude reference="5oL-gU-hli"/>
+                                                                                <exclude reference="mTE-Rl-MyF"/>
+                                                                            </mask>
+                                                                        </variation>
+                                                                    </imageView>
+                                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Add location here" adjustsFontSizeToFit="NO" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="jDb-K4-G48" userLabel="locationTextView">
+                                                                        <rect key="frame" x="37" y="0.0" width="103" height="30"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="30" id="BhZ-I4-nlG"/>
+                                                                        </constraints>
+                                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
+                                                                        <textInputTraits key="textInputTraits"/>
+                                                                        <connections>
+                                                                            <action selector="locationEditingDidBegin:" destination="SME-si-pxR" eventType="editingDidBegin" id="Fb8-oL-pjd"/>
+                                                                            <action selector="locationEditingDidEnd:" destination="SME-si-pxR" eventType="editingDidEndOnExit" id="A0v-RB-lxZ"/>
+                                                                            <action selector="locationEditingDidEnd:" destination="SME-si-pxR" eventType="editingDidEnd" id="E4G-CF-m9b"/>
+                                                                        </connections>
+                                                                    </textField>
+                                                                </subviews>
+                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                                <constraints>
+                                                                    <constraint firstItem="M3f-yE-v4s" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="5Et-Mb-q3F" secondAttribute="leading" constant="8" id="0Pb-Cz-33k"/>
+                                                                    <constraint firstItem="jDb-K4-G48" firstAttribute="centerX" secondItem="5Et-Mb-q3F" secondAttribute="centerX" constant="8" id="4r4-7a-Fte"/>
+                                                                    <constraint firstItem="jDb-K4-G48" firstAttribute="leading" secondItem="M3f-yE-v4s" secondAttribute="trailing" constant="8" id="E8X-A3-hPJ"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="jDb-K4-G48" secondAttribute="bottom" id="EO3-oB-IIT"/>
+                                                                    <constraint firstItem="M3f-yE-v4s" firstAttribute="centerY" secondItem="jDb-K4-G48" secondAttribute="centerY" id="I4E-te-vOM"/>
+                                                                </constraints>
+                                                            </view>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="height" constant="29" id="Gzq-0W-irf"/>
+                                                            <constraint firstItem="5Et-Mb-q3F" firstAttribute="leading" secondItem="qZU-KG-RT1" secondAttribute="leading" id="8ez-DV-icy"/>
+                                                            <constraint firstAttribute="trailing" secondItem="46b-yv-1Vz" secondAttribute="trailing" id="E0S-T1-uL4"/>
+                                                            <constraint firstItem="5Et-Mb-q3F" firstAttribute="top" secondItem="qZU-KG-RT1" secondAttribute="top" id="Pdb-7j-0aH"/>
+                                                            <constraint firstAttribute="bottom" secondItem="46b-yv-1Vz" secondAttribute="bottom" id="bqZ-oj-bgW"/>
+                                                            <constraint firstItem="5Et-Mb-q3F" firstAttribute="width" secondItem="qZU-KG-RT1" secondAttribute="width" multiplier="0.5" id="l9x-He-kUH"/>
+                                                            <constraint firstAttribute="height" constant="30" id="mgm-eO-yE2"/>
+                                                            <constraint firstItem="46b-yv-1Vz" firstAttribute="width" secondItem="qZU-KG-RT1" secondAttribute="width" multiplier="0.5" constant="-5" id="sll-Mg-TLc"/>
+                                                            <constraint firstAttribute="bottom" secondItem="5Et-Mb-q3F" secondAttribute="bottom" id="uNd-f5-v4j"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
-                                                        <state key="normal" title="Aug 28, 2015    4:21 PM" image="detailCalendarIcon"/>
-                                                        <connections>
-                                                            <action selector="dateButtonHandler:" destination="SME-si-pxR" eventType="touchUpInside" id="dN9-MU-eIp"/>
-                                                        </connections>
-                                                    </button>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="detailLocationIcon" translatesAutoresizingMaskIntoConstraints="NO" id="M3f-yE-v4s">
-                                                        <rect key="frame" x="8" y="57" width="9" height="14"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="14" id="3u8-ms-sAM"/>
-                                                            <constraint firstAttribute="width" constant="9" id="gSf-f3-XDB"/>
-                                                        </constraints>
-                                                    </imageView>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Add location here" adjustsFontSizeToFit="NO" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="jDb-K4-G48" userLabel="locationTextView">
-                                                        <rect key="frame" x="25" y="49" width="139" height="30"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="30" id="BhZ-I4-nlG"/>
-                                                        </constraints>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
-                                                        <textInputTraits key="textInputTraits"/>
-                                                        <connections>
-                                                            <action selector="locationEditingDidBegin:" destination="SME-si-pxR" eventType="editingDidBegin" id="Fb8-oL-pjd"/>
-                                                            <action selector="locationEditingDidEnd:" destination="SME-si-pxR" eventType="editingDidEndOnExit" id="A0v-RB-lxZ"/>
-                                                            <action selector="locationEditingDidEnd:" destination="SME-si-pxR" eventType="editingDidEnd" id="E4G-CF-m9b"/>
-                                                        </connections>
-                                                    </textField>
+                                                    </view>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstItem="46b-yv-1Vz" firstAttribute="leading" secondItem="jDb-K4-G48" secondAttribute="trailing" constant="10" id="3Mi-jm-cQ1"/>
-                                                    <constraint firstItem="jDb-K4-G48" firstAttribute="width" secondItem="46b-yv-1Vz" secondAttribute="width" id="7KU-dZ-K7Z"/>
                                                     <constraint firstItem="xm6-dP-Mmd" firstAttribute="leading" secondItem="ZUa-D3-aAM" secondAttribute="leadingMargin" id="8He-fI-OK8"/>
-                                                    <constraint firstAttribute="bottomMargin" secondItem="jDb-K4-G48" secondAttribute="bottom" constant="-1" id="921-GQ-tcV"/>
-                                                    <constraint firstAttribute="trailingMargin" secondItem="46b-yv-1Vz" secondAttribute="trailing" id="BJ7-QF-Bno"/>
+                                                    <constraint firstItem="qZU-KG-RT1" firstAttribute="leading" secondItem="ZUa-D3-aAM" secondAttribute="leading" id="B5l-5h-yIc"/>
                                                     <constraint firstAttribute="trailingMargin" secondItem="xm6-dP-Mmd" secondAttribute="trailing" id="LIj-ei-mAm"/>
                                                     <constraint firstItem="xm6-dP-Mmd" firstAttribute="top" secondItem="ZUa-D3-aAM" secondAttribute="topMargin" constant="8" id="LWy-DD-ari"/>
-                                                    <constraint firstAttribute="bottom" secondItem="46b-yv-1Vz" secondAttribute="bottom" id="Ndu-31-TvY"/>
-                                                    <constraint firstAttribute="trailing" secondItem="46b-yv-1Vz" secondAttribute="trailing" id="UD0-O0-I7a"/>
-                                                    <constraint firstItem="M3f-yE-v4s" firstAttribute="centerY" secondItem="jDb-K4-G48" secondAttribute="centerY" id="dG7-vb-Tpd"/>
-                                                    <constraint firstItem="jDb-K4-G48" firstAttribute="leading" secondItem="ZUa-D3-aAM" secondAttribute="leadingMargin" constant="17" id="hPP-dg-XbU"/>
-                                                    <constraint firstAttribute="bottomMargin" secondItem="46b-yv-1Vz" secondAttribute="bottom" id="mDy-5o-dyz"/>
-                                                    <constraint firstItem="M3f-yE-v4s" firstAttribute="trailing" secondItem="jDb-K4-G48" secondAttribute="leading" constant="-8" id="vfx-96-DZC"/>
+                                                    <constraint firstAttribute="bottom" secondItem="qZU-KG-RT1" secondAttribute="bottom" id="clq-c2-T8m"/>
+                                                    <constraint firstAttribute="trailing" secondItem="qZU-KG-RT1" secondAttribute="trailing" id="li1-tq-fP0"/>
                                                 </constraints>
-                                                <variation key="default">
-                                                    <mask key="constraints">
-                                                        <exclude reference="Ndu-31-TvY"/>
-                                                        <exclude reference="UD0-O0-I7a"/>
-                                                    </mask>
-                                                </variation>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -382,6 +406,7 @@
                             <connections>
                                 <action selector="titleEditingDidBegin:" destination="SME-si-pxR" eventType="editingDidBegin" id="6Ni-Za-Z1j"/>
                                 <action selector="titleEditingDidEnd:" destination="SME-si-pxR" eventType="editingDidEndOnExit" id="MY1-Tc-Lmo"/>
+                                <action selector="titleEditingDidEnd:" destination="SME-si-pxR" eventType="editingDidEnd" id="Nzn-CO-roh"/>
                             </connections>
                         </textField>
                         <barButtonItem key="rightBarButtonItem" id="2rg-LX-NOg"/>
@@ -408,7 +433,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OMD-8a-PXv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1613" y="849"/>
+            <point key="canvasLocation" x="1568" y="783"/>
         </scene>
         <!--UnusedNavController-->
         <scene sceneID="LuJ-Pv-LGz">

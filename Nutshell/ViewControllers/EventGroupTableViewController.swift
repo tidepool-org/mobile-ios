@@ -46,8 +46,6 @@ class EventGroupTableViewController: BaseUITableViewController {
         return (eventGroup?.itemArray.count)!
     }
 
-    private static var cellDF = NSDateFormatter()
-
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("eventItemCell", forIndexPath: indexPath) as! EventGroupTableViewCell
