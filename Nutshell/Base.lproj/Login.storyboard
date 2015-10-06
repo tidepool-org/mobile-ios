@@ -72,8 +72,8 @@
                                                             <constraint firstAttribute="width" constant="18" id="6qT-GJ-2lM"/>
                                                             <constraint firstAttribute="height" constant="18" id="eV3-GJ-D1a"/>
                                                         </constraints>
-                                                        <state key="normal" image="unchecked.png"/>
-                                                        <state key="selected" image="checked.png"/>
+                                                        <state key="normal" image="checkboxUnchecked"/>
+                                                        <state key="selected" image="checkboxChecked"/>
                                                         <connections>
                                                             <action selector="rememberMeButtonTapped:" destination="4G7-DP-gat" eventType="touchUpInside" id="xMc-DV-JSe"/>
                                                         </connections>
@@ -334,8 +334,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="checked.png" width="20" height="20"/>
+        <image name="checkboxChecked" width="20" height="20"/>
+        <image name="checkboxUnchecked" width="20" height="20"/>
         <image name="login_logo.png" width="109" height="115"/>
-        <image name="unchecked.png" width="20" height="20"/>
     </resources>
 </document>

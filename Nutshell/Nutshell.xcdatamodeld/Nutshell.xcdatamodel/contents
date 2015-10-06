@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9048" systemVersion="14F27" minimumToolsVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9053" systemVersion="14F27" minimumToolsVersion="Automatic">
     <entity name="Activity" representedClassName=".Activity" parentEntity="CommonData" syncable="YES">
         <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="intensityBorg" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
@@ -50,6 +50,10 @@
         <attribute name="value" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
     </entity>
     <entity name="DeviceMetadata" representedClassName=".DeviceMetadata" parentEntity="CommonData" syncable="YES"/>
+    <entity name="EventItem" representedClassName=".EventItem" parentEntity="CommonData" syncable="YES">
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="Food" representedClassName=".Food" parentEntity="CommonData" syncable="YES">
         <attribute name="carbs" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="fat" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
@@ -60,7 +64,7 @@
     <entity name="GrabBag" representedClassName=".GrabBag" parentEntity="CommonData" syncable="YES">
         <attribute name="subType" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Meal" representedClassName=".Meal" parentEntity="NutEvent" syncable="YES">
+    <entity name="Meal" representedClassName=".Meal" parentEntity="EventItem" syncable="YES">
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="photo" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
@@ -70,10 +74,6 @@
         <attribute name="reference" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="shortText" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
-    </entity>
-    <entity name="NutEvent" parentEntity="CommonData" syncable="YES">
-        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="title" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Prime" representedClassName=".Prime" parentEntity="DeviceMetadata" syncable="YES">
         <attribute name="primeTarget" optional="YES" attributeType="String" syncable="YES"/>
@@ -135,7 +135,7 @@
         <attribute name="insulinOnBoard" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="insulinSensitivity" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
     </entity>
-    <entity name="Workout" representedClassName=".Workout" parentEntity="NutEvent" syncable="YES">
+    <entity name="Workout" representedClassName=".Workout" parentEntity="EventItem" syncable="YES">
         <attribute name="appleHealthDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="calories" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="distance" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -157,6 +157,7 @@
         <element name="GrabBag" positionX="-9" positionY="45" width="128" height="60"/>
         <element name="Meal" positionX="0" positionY="117" width="128" height="75"/>
         <element name="Note" positionX="-9" positionY="90" width="128" height="120"/>
+        <element name="EventItem" positionX="-9" positionY="117" width="128" height="75"/>
         <element name="Prime" positionX="0" positionY="90" width="128" height="75"/>
         <element name="ReservoirChange" positionX="9" positionY="99" width="128" height="60"/>
         <element name="SelfMonitoringGlucose" positionX="9" positionY="63" width="128" height="73"/>
@@ -168,6 +169,5 @@
         <element name="User" positionX="-63" positionY="-18" width="128" height="90"/>
         <element name="Wizard" positionX="36" positionY="90" width="128" height="135"/>
         <element name="Workout" positionX="9" positionY="126" width="128" height="135"/>
-        <element name="NutEvent" positionX="-9" positionY="117" width="128" height="75"/>
     </elements>
 </model>

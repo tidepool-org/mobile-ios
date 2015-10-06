@@ -210,7 +210,7 @@ class AddEventViewController: UIViewController {
                 break
             }
         }
-        UIView.animateWithDuration(0.5) {
+        UIView.animateWithDuration(0.25) {
             self.photoIconContainer.layoutIfNeeded()
         }
     }
@@ -255,12 +255,9 @@ class AddEventViewController: UIViewController {
             ["Three tacos", "after ballet", "2015-08-09T19:42:40.000Z", "238 Garrett St", "applejuicedemopic"],
             ["Three tacos", "Apple Juice before", "2015-07-29T04:55:27.000Z", "Golden Gate Park", "applejuicedemopic"],
             ["Three tacos", "and horchata", "2015-07-28T14:25:21.000Z", "Golden Gate Park", "applejuicedemopic"],
-            ["Workout", "running in park", "2015-07-27T04:23:20.000Z", "", ""],
-            ["PE class", "some notes for this one", "2015-07-27T08:25:21.000Z", "", ""],
             ["CPK 5 cheese margarita", "", "2015-07-27T12:25:21.000Z", "", ""],
             ["Bagel & cream cheese fruit", "", "2015-07-27T16:25:21.000Z", "", ""],
             ["Birthday Party", "", "2015-07-26T14:25:21.000Z", "", ""],
-            ["Soccer Practice", "", "2015-07-25T14:25:21.000Z", "", ""],
         ]
         
         func addMeal(me: Meal, event: [String]) {
@@ -283,6 +280,8 @@ class AddEventViewController: UIViewController {
         let demoWorkouts = [
             ["Runs", "regular 3 mile", "2015-07-28T12:25:21.000Z", "6000"],
             ["Workout", "running in park", "2015-07-27T04:23:20.000Z", "2100"],
+            ["PE class", "some notes for this one", "2015-07-27T08:25:21.000Z", "3600"],
+            ["Soccer Practice", "", "2015-07-25T14:25:21.000Z", "4800"],
         ]
         
         func addWorkout(we: Workout, event: [String]) {

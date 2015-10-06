@@ -133,6 +133,12 @@ class DatabaseUtils {
         return try moc.executeFetchRequest(request) as! [CommonData]
     }
 
+    class func getAllNutEvents(moc: NSManagedObjectContext) throws -> [EventItem] {
+        let request = NSFetchRequest(entityName: "EventItem")
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
+        return try moc.executeFetchRequest(request) as! [EventItem]
+    }
+
     class func getAllWorkoutEvents(moc: NSManagedObjectContext) throws -> [Workout] {
         let request = NSFetchRequest(entityName: "Workout")
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
@@ -169,7 +175,7 @@ class DatabaseUtils {
                 moc.deleteObject(obj as! NSManagedObject)
             }
         } catch let error as NSError {
-            print("Failed to delete meal items: \(error)")
+            print("Failed to delete workout items: \(error)")
         }
 
         

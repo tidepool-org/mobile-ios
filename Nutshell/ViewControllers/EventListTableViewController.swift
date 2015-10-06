@@ -94,7 +94,7 @@ class EventListTableViewController: BaseUITableViewController {
 
         var nutEvents = [String: NutEvent]()
 
-        func addNewEvent(newEvent: Meal) {
+        func addNewEvent(newEvent: EventItem) {
             if let existingNutEvent = nutEvents[newEvent.title!] {
                 existingNutEvent.addEvent(newEvent)
                 print("appending new event: \(newEvent.notes)")
@@ -110,9 +110,9 @@ class EventListTableViewController: BaseUITableViewController {
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
 
         do {
-            let mealEvents = try DatabaseUtils.getAllMealEvents(ad.managedObjectContext)
-            for event in mealEvents {
-                print("Event type: \(event.type), time: \(event.time), title: \(event.title), notes: \(event.notes), location: \(event.location)")
+            let nutEvents = try DatabaseUtils.getAllNutEvents(ad.managedObjectContext)
+            for event in nutEvents {
+                print("Event type: \(event.type), time: \(event.time), title: \(event.title), notes: \(event.notes)")
                 addNewEvent(event)
             }
         } catch let error as NSError {

@@ -1,5 +1,5 @@
 //
-//  Meal+CoreDataProperties.swift
+//  EventItem+CoreDataProperties.swift
 //  
 //
 //  Created by Larry Kenyon on 10/6/15.
@@ -12,9 +12,9 @@
 import Foundation
 import CoreData
 
-extension Meal {
+extension EventItem {
 
-    @NSManaged var location: String?
-    @NSManaged var photo: String?
+    @NSManaged var notes: String?
+    @NSManaged var title: String?
 
 }

@@ -2,7 +2,7 @@
 //  Workout+CoreDataProperties.swift
 //  
 //
-//  Created by Larry Kenyon on 9/25/15.
+//  Created by Larry Kenyon on 10/6/15.
 //
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -20,7 +20,5 @@ extension Workout {
     @NSManaged var duration: NSNumber?
     @NSManaged var source: String?
     @NSManaged var subType: String?
-    @NSManaged var title: String?
-    @NSManaged var notes: String?
 
 }

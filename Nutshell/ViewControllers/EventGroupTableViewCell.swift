@@ -18,7 +18,7 @@ import UIKit
 
 class EventGroupTableViewCell: NutshellUITableViewCell {
 
-    var eventItem: NutMeal?
+    var eventItem: NutEventItem?
     
     @IBOutlet weak var favoriteStar: UIImageView!
     @IBOutlet weak var titleString: UILabel!
@@ -37,10 +37,17 @@ class EventGroupTableViewCell: NutshellUITableViewCell {
         // Configure the view for the selected state
     }
 
-    func configureCell(eventItem: NutMeal) {
+    func configureCell(eventItem: NutEventItem) {
         titleString.text = eventItem.notes
         timeString.text = NutUtils.dateFormatter.stringFromDate(eventItem.time)
-        locationString.text = eventItem.location
         self.eventItem = eventItem
+        if let meal = eventItem as? NutMeal {
+            locationString.text = meal.location
+            if meal.photo.characters.count > 0 {
+                photoImageView.image = UIImage(named: meal.photo)
+            } else {
+                photoImageView.image = nil
+            }
+        }
     }
 }

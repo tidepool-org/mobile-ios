@@ -19,24 +19,32 @@ class NutEvent {
     
     var title: String
     var mostRecent: NSDate
-    var itemArray: [NutMeal]
-    init(firstEvent: Meal) {
-        self.title = firstEvent.title != nil ? firstEvent.title! : ""
-        // TODO: should NutMeal also take optionals?
-        if firstEvent.time == nil {
-            print("ERROR: nil time leaked in for event \(self.title)")
+    var itemArray: [NutEventItem]
+    init(firstEvent: EventItem) {
+        self.title = firstEvent.title!
+        self.mostRecent = firstEvent.time!
+        if let meal = firstEvent as? Meal {
+            let firstItem = NutMeal(title: meal.title, notes: meal.notes, location: meal.location, photo: meal.photo, time: meal.time)
+            self.itemArray = [firstItem]
+        } else if let workout = firstEvent as? Workout {
+            let firstItem = NutWorkout(title: workout.title, notes: workout.notes, distance: workout.distance, duration: workout.duration, time: workout.time)
+            self.itemArray = [firstItem]
+        } else {
+            self.itemArray = []
         }
-        self.mostRecent = firstEvent.time != nil ? firstEvent.time! : NSDate()
-        let firstItem = NutMeal(title: firstEvent.title, notes: firstEvent.notes, location: firstEvent.location, photo: firstEvent.photo, time: firstEvent.time)
-        self.itemArray = [firstItem]
     }
     
-    func addEvent(newEvent: Meal) {
+    func addEvent(newEvent: EventItem) {
         if (newEvent.title == self.title) {
-            let newItem = NutMeal(title: newEvent.title, notes: newEvent.notes, location: newEvent.location, photo: newEvent.photo, time: newEvent.time)
-            
-            self.itemArray.append(newItem)
-            mostRecent = newItem.time.laterDate(mostRecent)
+            if let meal = newEvent as? Meal {
+                let newItem = NutMeal(title: meal.title, notes: meal.notes, location: meal.location, photo: meal.photo, time: meal.time)
+                self.itemArray.append(newItem)
+                mostRecent = newItem.time.laterDate(mostRecent)
+            } else if let workout = newEvent as? Workout {
+                let newItem = NutWorkout(title: workout.title, notes: workout.notes, distance: workout.distance, duration: workout.duration, time: workout.time)
+                self.itemArray.append(newItem)
+                mostRecent = newItem.time.laterDate(mostRecent)
+            }
         } else {
             print("attempting to add item with non-matching title to NutEvent!")
         }
@@ -50,7 +58,7 @@ class NutEvent {
     func printNutEvent() {
         print("nut has \(itemArray.count) items")
         for item in itemArray {
-            print("item: \(item.notes), \(item.location), \(item.time)")
+            print("item: \(item.notes), \(item.time)")
         }
     }
     

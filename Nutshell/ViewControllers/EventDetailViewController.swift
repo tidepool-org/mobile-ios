@@ -19,7 +19,7 @@ import UIKit
 
 class EventDetailViewController: BaseUIViewController {
 
-    var eventItem: NutMeal?
+    var eventItem: NutEventItem?
     var eventGroup: NutEvent?
 
     var graphCollectionView: UICollectionView?
@@ -49,15 +49,16 @@ class EventDetailViewController: BaseUIViewController {
             eventNotes.text = eventItem.notes
             eventDate.text = NutUtils.dateFormatter.stringFromDate(eventItem.time)
             graphCenterTime = eventItem.time
-            if eventItem.photo.characters.count > 0 {
-                if let image = UIImage(named: eventItem.photo) {
-                    missingPhotoView.hidden = true
-                    photoUIImageView.hidden = false
-                    photoUIImageView.image = image
+            missingPhotoView.hidden = false
+            photoUIImageView.hidden = true
+            if let meal = eventItem as? NutMeal {
+                if meal.photo.characters.count > 0 {
+                    if let image = UIImage(named: meal.photo) {
+                        missingPhotoView.hidden = true
+                        photoUIImageView.hidden = false
+                        photoUIImageView.image = image
+                    }
                 }
-            } else {
-                missingPhotoView.hidden = false
-                photoUIImageView.hidden = true
             }
             configureArrows()
             // set up graph area later when we know size of view
@@ -127,7 +128,7 @@ class EventDetailViewController: BaseUIViewController {
         configureGraphViewIfNil()
     }
     
-    private func leftAndRightItems() -> (NutMeal?, NutMeal?) {
+    private func leftAndRightItems() -> (NutEventItem?, NutEventItem?) {
         var result = (eventItem, eventItem)
         var sawCurrentItem = false
         if let eventItem = eventItem {
