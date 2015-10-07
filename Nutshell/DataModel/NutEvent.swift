@@ -20,6 +20,7 @@ class NutEvent {
     var title: String
     var mostRecent: NSDate
     var itemArray: [NutEventItem]
+
     init(firstEvent: EventItem) {
         self.title = firstEvent.title!
         self.mostRecent = firstEvent.time!
@@ -32,6 +33,12 @@ class NutEvent {
         } else {
             self.itemArray = []
         }
+    }
+    
+    init() {
+        self.title = ""
+        self.mostRecent = NSDate()
+        self.itemArray = []
     }
     
     func addEvent(newEvent: EventItem) {

@@ -17,7 +17,7 @@ import UIKit
 
 class EventGroupTableViewController: BaseUITableViewController {
 
-    var eventGroup: NutEvent?
+    var eventGroup = NutEvent()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +28,7 @@ class EventGroupTableViewController: BaseUITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        self.title = eventGroup?.title
+        self.title = eventGroup.title
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,7 +43,7 @@ class EventGroupTableViewController: BaseUITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (eventGroup?.itemArray.count)!
+        return eventGroup.itemArray.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -51,10 +51,9 @@ class EventGroupTableViewController: BaseUITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("eventItemCell", forIndexPath: indexPath) as! EventGroupTableViewCell
         
         // Configure the cell...
-        if (indexPath.item < eventGroup?.itemArray.count) {
-            if let eventItem = eventGroup?.itemArray[indexPath.item] {
-                cell.configureCell(eventItem)
-            }
+        if indexPath.item < eventGroup.itemArray.count {
+            let eventItem = eventGroup.itemArray[indexPath.item]
+            cell.configureCell(eventItem)
         }
         
         return cell
@@ -101,13 +100,47 @@ class EventGroupTableViewController: BaseUITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepareForSegue(segue, sender: sender)
-        if(segue.identifier) == "EventItemDetailSegue" {
+        if segue.identifier == "EventItemDetailSegue" {
             let cell = sender as! EventGroupTableViewCell
             let eventItemVC = segue.destinationViewController as! EventDetailViewController
             eventItemVC.eventItem = cell.eventItem
             eventItemVC.eventGroup = eventGroup
             eventItemVC.title = self.title
+        } else if segue.identifier == "EventItemAddSegue" {
+            let addEventVC = segue.destinationViewController as! AddEventViewController
+            // adding events from group table, pass along title so it can be reused and new event added...
+            addEventVC.eventTitleString = eventGroup.title
         }
     }
 
+
+    @IBAction func groupTableDoneHandler(segue: UIStoryboardSegue) {
+        print("done")
+        // at this point I need to grab the new event, maybe check for the same title...
+        if segue.identifier == "unwindDoneFromAdd" {
+            if let addEventVC = segue.sourceViewController as? AddEventViewController {
+                if let newEvent = addEventVC.newMealEvent {
+                    if newEvent.title == eventGroup.title {
+                        eventGroup.addEvent(newEvent)
+                        eventGroup.sortEvents()
+                        tableView.reloadData()
+                    } else {
+                        print("new event added with a different title!")
+//                        self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+                    }
+                }
+            }
+        }
+    }
+    
+    @IBAction func groupTableCancelHandler(segue: UIStoryboardSegue) {
+        print("cancel")
+    }
+
+    @IBAction func addedNewEvent(segue: UIStoryboardSegue) {
+        print("addedNewEvent")
+    }
+    
 }
+
+

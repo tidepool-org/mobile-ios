@@ -18,6 +18,9 @@ import CoreData
 
 class AddEventViewController: UIViewController {
 
+    var eventTitleString: String = ""
+    var newMealEvent: Meal?
+    
     @IBOutlet weak var photoUIImageView: UIImageView!
     
     @IBOutlet weak var titleEventButton: NutshellUIButton!
@@ -58,6 +61,9 @@ class AddEventViewController: UIViewController {
         rightBarItem.title = "            "
         notesTextField.text = placeholderNoteString
         locationTextField.text = placeholderLocationString
+        // title may be passed in...
+        titleTextField.text = eventTitleString
+        updateSaveButtonState()
     }
     
     override func didReceiveMemoryWarning() {
@@ -119,6 +125,7 @@ class AddEventViewController: UIViewController {
             configureCameraImageViewUp(false)
         } else {
             saveButton.hidden = false
+            configureCameraImageViewUp(true)
         }
     }
 
@@ -126,7 +133,8 @@ class AddEventViewController: UIViewController {
         
         if titleTextField.text == "testmode" {
             AppDelegate.testMode = !AppDelegate.testMode
-            self.navigationController?.popViewControllerAnimated(true)
+            //self.performSegueWithIdentifier("unwindCancelFromAdd", sender: self)
+            self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
             return
         }
         
@@ -163,6 +171,7 @@ class AddEventViewController: UIViewController {
                 me.createdTime = now
                 me.modifiedTime = now
                 moc.insertObject(me)
+                newMealEvent = me
             }
             
             // Save the database
@@ -173,6 +182,7 @@ class AddEventViewController: UIViewController {
             } catch let error as NSError {
                 // TO DO: error message!
                 print("Failed to save MOC: \(error)")
+                newMealEvent = nil
             }
         }
     }
@@ -195,7 +205,11 @@ class AddEventViewController: UIViewController {
         addSuccessView.hidden = false
         
         NutUtils.delay(1.25) {
-            self.navigationController?.popViewControllerAnimated(true)
+            if (self.eventTitleString != "") && (self.newMealEvent?.title == self.eventTitleString) {
+                self.performSegueWithIdentifier("unwindDoneFromAdd", sender: self)
+            } else {
+                self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+            }
         }
     }
     

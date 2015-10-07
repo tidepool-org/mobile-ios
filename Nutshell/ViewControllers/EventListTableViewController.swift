@@ -76,10 +76,14 @@ class EventListTableViewController: BaseUITableViewController {
             let cell = sender as! EventListTableViewCell
             let eventGroupVC = segue.destinationViewController as! EventGroupTableViewController
             cell.eventGroup?.sortEvents()
-            eventGroupVC.eventGroup = cell.eventGroup
+            eventGroupVC.eventGroup = cell.eventGroup!
         }
     }
     
+    @IBAction func addedSomeNewEvent(segue: UIStoryboardSegue) {
+        print("addedSomeNewEvent")
+    }
+
     private var eventListNeedsUpdate: Bool  = false
     func databaseChanged(note: NSNotification) {
         print("EventList: Database Changed")
@@ -126,12 +130,12 @@ class EventListTableViewController: BaseUITableViewController {
     
     // MARK: - Nav bar button handlers
     
-    @IBAction func addEventButtonHandler(sender: UIBarButtonItem) {
-        self.navigationItem.title = ""
-        let sb = UIStoryboard(name: "AddEvent", bundle: nil)
-        let vc = sb.instantiateViewControllerWithIdentifier("AddEventViewController")
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
+//    @IBAction func addEventButtonHandler(sender: UIBarButtonItem) {
+//        self.navigationItem.title = ""
+//        let sb = UIStoryboard(name: "AddEvent", bundle: nil)
+//        let vc = sb.instantiateViewControllerWithIdentifier("AddEventViewController")
+//        self.navigationController?.pushViewController(vc, animated: true)
+//    }
     
     @IBAction func menuButtonHandler(sender: AnyObject) {
         self.navigationItem.title = ""
