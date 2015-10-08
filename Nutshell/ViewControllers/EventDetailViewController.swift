@@ -66,27 +66,10 @@ class EventDetailViewController: BaseUIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if let eventItem = eventItem {
-            eventTime = eventItem.time
-        }
-        configureDetailView()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    //
-    // MARK: - configuration
-    //
-
-    private func configureDetailView() {
-        
-        if let eventItem = eventItem {
             viewExistingEvent = true
             titleTextField.text = eventItem.title
             notesTextField.text = eventItem.notes
-            graphCenterTime = eventTime
+            eventTime = eventItem.time
             missingPhotoView.hidden = false
             photoUIImageView.hidden = true
             configureCameraImageViewUp(true)
@@ -95,7 +78,7 @@ class EventDetailViewController: BaseUIViewController {
             } else {
                 notesTextField.text = placeholderNoteString
             }
-
+            
             if let mealItem = eventItem as? NutMeal {
                 if mealItem.location.characters.count > 0 {
                     locationTextField.text = mealItem.location
@@ -113,9 +96,7 @@ class EventDetailViewController: BaseUIViewController {
                 // TODO: show other workout-specific items
                 locationContainerView.hidden = true
             }
-            configureArrows()
-            // set up graph area later when we know size of view
-        } else  {
+        }  else  {
             leftArrow.hidden = true
             rightArrow.hidden = true
             notesTextField.text = placeholderNoteString
@@ -123,11 +104,29 @@ class EventDetailViewController: BaseUIViewController {
             // title may be passed in...
             titleTextField.text = eventTitleString
             missingDataAdvisoryView.hidden = true
-            
+        }
+
+        configureDetailView()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    //
+    // MARK: - configuration
+    //
+
+    private func configureDetailView() {
+        
+        if viewExistingEvent {
+            graphCenterTime = eventTime
+            configureArrows()
+            // set up graph area later when we know size of view
         }
         configureDateView()
         updateSaveButtonState()
-        
     }
     
     //
