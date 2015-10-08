@@ -18,6 +18,7 @@ import UIKit
 class EventGroupTableViewController: BaseUITableViewController {
 
     var eventGroup = NutEvent()
+    @IBOutlet weak var titleTextField: NutshellUITextField!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +29,7 @@ class EventGroupTableViewController: BaseUITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        self.title = eventGroup.title
+        self.titleTextField.text = eventGroup.title
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -46,7 +47,47 @@ class EventGroupTableViewController: BaseUITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    //
+    // MARK: - Title editing
+    //
+
+    @IBAction func titleEditingDidBegin(sender: AnyObject) {
+    }
+    
+    @IBAction func titleEditingDidEnd(sender: AnyObject) {
+        titleTextField.resignFirstResponder()
+        if let newTitle = titleTextField.text {
+            if newTitle == "" {
+                titleTextField.text = eventGroup.title
+            } else if eventGroup.title != titleTextField.text {
+                eventGroup.title = newTitle
+                let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+                let moc = ad.managedObjectContext
+                for eventItem in eventGroup.itemArray {
+                    eventItem.title = newTitle
+                    if let mealItem = eventItem as? NutMeal {
+                        mealItem.meal.title = newTitle
+                        moc.refreshObject(mealItem.meal, mergeChanges: true)
+                    } else if let workoutItem = eventItem as? NutWorkout {
+                        workoutItem.workout.title = newTitle
+                        moc.refreshObject(workoutItem.workout, mergeChanges: true)
+                    }
+                }
+                // Save the database
+                do {
+                    try moc.save()
+                    print("EventGroup: Database saved!")
+                } catch let error as NSError {
+                    // TO DO: error message!
+                    print("Failed to save MOC: \(error)")
+                }
+            }
+        }
+    }
+
+    //
     // MARK: - Table view data source
+    //
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1

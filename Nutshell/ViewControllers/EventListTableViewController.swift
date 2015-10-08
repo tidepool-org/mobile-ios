@@ -94,7 +94,7 @@ class EventListTableViewController: BaseUITableViewController {
 
     private var eventListNeedsUpdate: Bool  = false
     func databaseChanged(note: NSNotification) {
-        print("EventList: Database Changed")
+        print("EventList: Database Change Notification")
         if viewIsForeground {
             getNutEvents()
         } else {

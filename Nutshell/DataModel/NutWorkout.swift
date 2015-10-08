@@ -12,10 +12,12 @@ class NutWorkout: NutEventItem {
     
     var distance: NSNumber
     var duration: NSTimeInterval
+    var workout: Workout
     
-    init(title: String?, notes: String?, distance: NSNumber?, duration: NSNumber?, time: NSDate?) {
+    init(workout: Workout, title: String?, notes: String?, distance: NSNumber?, duration: NSNumber?, time: NSDate?) {
         self.distance = distance != nil ? distance! : 0.0
         self.duration = NSTimeInterval(duration != nil ? duration! : 0.0)
+        self.workout = workout
         super.init(title: title, notes: notes, time: time)
     }
 }

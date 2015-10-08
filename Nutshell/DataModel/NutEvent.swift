@@ -25,10 +25,10 @@ class NutEvent {
         self.title = firstEvent.title!
         self.mostRecent = firstEvent.time!
         if let meal = firstEvent as? Meal {
-            let firstItem = NutMeal(title: meal.title, notes: meal.notes, location: meal.location, photo: meal.photo, time: meal.time)
+            let firstItem = NutMeal(meal: meal, title: meal.title, notes: meal.notes, location: meal.location, photo: meal.photo, time: meal.time)
             self.itemArray = [firstItem]
         } else if let workout = firstEvent as? Workout {
-            let firstItem = NutWorkout(title: workout.title, notes: workout.notes, distance: workout.distance, duration: workout.duration, time: workout.time)
+            let firstItem = NutWorkout(workout: workout, title: workout.title, notes: workout.notes, distance: workout.distance, duration: workout.duration, time: workout.time)
             self.itemArray = [firstItem]
         } else {
             self.itemArray = []
@@ -44,11 +44,11 @@ class NutEvent {
     func addEvent(newEvent: EventItem) {
         if (newEvent.title == self.title) {
             if let meal = newEvent as? Meal {
-                let newItem = NutMeal(title: meal.title, notes: meal.notes, location: meal.location, photo: meal.photo, time: meal.time)
+                let newItem = NutMeal(meal: meal, title: meal.title, notes: meal.notes, location: meal.location, photo: meal.photo, time: meal.time)
                 self.itemArray.append(newItem)
                 mostRecent = newItem.time.laterDate(mostRecent)
             } else if let workout = newEvent as? Workout {
-                let newItem = NutWorkout(title: workout.title, notes: workout.notes, distance: workout.distance, duration: workout.duration, time: workout.time)
+                let newItem = NutWorkout(workout: workout, title: workout.title, notes: workout.notes, distance: workout.distance, duration: workout.duration, time: workout.time)
                 self.itemArray.append(newItem)
                 mostRecent = newItem.time.laterDate(mostRecent)
             }

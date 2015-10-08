@@ -323,45 +323,37 @@ class EventDetailViewController: BaseUIViewController {
     private func updateCurrentEvent() {
         
         if let mealItem = eventItem as? NutMeal {
-            // find the item...
+           
             let ad = UIApplication.sharedApplication().delegate as! AppDelegate
             let moc = ad.managedObjectContext
-           
+
+            let event = mealItem.meal
+            event.title = titleTextField.text
+            event.time = eventTime
+            event.notes = notesTextField.text
+            event.location = locationTextField.text
+            event.modifiedTime = NSDate()
+            moc.refreshObject(event, mergeChanges: true)
+            
+            mealItem.title = titleTextField.text!
+            mealItem.time = eventTime
+            mealItem.notes = notesTextField.text!
+            mealItem.location = locationTextField.text!
+            // note event changed as "new" event
+            newMealEvent = event
+
+            // Save the database
             do {
-                let events = try DatabaseUtils.getMealItem(moc, atTime: mealItem.time, title: mealItem.title)
-                if events.count == 1 {
-                    let event = events[0]
-                    event.title = titleTextField.text
-                    event.time = eventTime
-                    event.notes = notesTextField.text
-                    event.location = locationTextField.text
-                    event.modifiedTime = NSDate()
-                    moc.refreshObject(event, mergeChanges: true)
-                    
-                    mealItem.title = titleTextField.text!
-                    mealItem.time = eventTime
-                    mealItem.notes = notesTextField.text!
-                    mealItem.location = locationTextField.text!
-                    newMealEvent = event
-
-                    // Save the database
-                    do {
-                        try moc.save()
-                        print("addEvent: Database saved!")
-                    } catch let error as NSError {
-                        // TO DO: error message!
-                        print("Failed to save MOC: \(error)")
-                        newMealEvent = nil
-                    }
-
-                    // reload current view, save button should disappear and on exit the new event should trigger caller to update...
-                    reloadForNewEvent()
-                } else {
-                    print("error: item count is \(events.count)")
-                }
+                try moc.save()
+                print("addEvent: Database saved!")
             } catch let error as NSError {
-                print("Error: \(error)")
+                // TO DO: error message!
+                print("Failed to save MOC: \(error)")
+                newMealEvent = nil
             }
+
+            // reload current view, save button should disappear and on exit the new event should trigger caller to update...
+            reloadForNewEvent()
          }
     }
     
