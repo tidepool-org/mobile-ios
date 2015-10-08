@@ -477,7 +477,6 @@
                                             <constraint firstItem="9Qx-V0-1Du" firstAttribute="top" secondItem="N6h-aH-agu" secondAttribute="bottom" id="k8M-XJ-57T"/>
                                             <constraint firstAttribute="trailing" secondItem="N6h-aH-agu" secondAttribute="trailing" id="kI7-hr-bEz"/>
                                             <constraint firstAttribute="trailing" secondItem="9Qx-V0-1Du" secondAttribute="trailing" id="qHt-9B-5Yu"/>
-                                            <constraint firstAttribute="width" constant="375" id="vbe-WG-z12"/>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>

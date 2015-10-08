@@ -154,7 +154,8 @@ public class Styles: NSObject {
         static let mediumGreyColor: UIColor = UIColor(hex: 0xb8b8b8) 
         static let whiteColor: UIColor = UIColor(hex: 0xffffff) 
         static let peachColor: UIColor = UIColor(hex: 0xf88d79) 
-        static let greenColor: UIColor = UIColor(hex: 0x98ca63) 
+        static let peachDeleteColor: UIColor = UIColor(hex: 0xf66f56)
+        static let greenColor: UIColor = UIColor(hex: 0x98ca63)
         static let lightGreenColor: UIColor = UIColor(hex: 0x4cd964) 
         static let lightBlueColor: UIColor = UIColor(hex: 0xc5e5f1) 
         static let blueColor: UIColor = UIColor(hex: 0x7aceef) 
@@ -242,6 +243,8 @@ public class Styles: NSObject {
     // Open Sans Semibold 10:   custom graph blood glucose item text
     // Open Sans Semibold 25.5:   UILabel account settings, low level active
      public class var peachColor: UIColor { return ColorCache.peachColor }
+    // Row cell delete button...
+     public class var peachDeleteColor: UIColor { return ColorCache.peachDeleteColor }
     // Open Sans Semibold 10:   custom graph blood glucose item text
     // Open Sans Semibold 25.5:   UILabel account settings, high level active
      public class var purpleColor: UIColor { return ColorCache.purpleColor }

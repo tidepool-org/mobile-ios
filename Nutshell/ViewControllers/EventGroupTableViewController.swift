@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CoreData
 
 class EventGroupTableViewController: BaseUITableViewController {
 
@@ -48,6 +49,21 @@ class EventGroupTableViewController: BaseUITableViewController {
     }
 
     //
+    // MARK: - Shared utils
+    //
+
+    private func databaseSave(moc: NSManagedObjectContext) {
+        // Save the database
+        do {
+            try moc.save()
+            print("EventGroup: Database saved!")
+        } catch let error as NSError {
+            // TO DO: error message!
+            print("Failed to save MOC: \(error)")
+        }
+    }
+    
+    //
     // MARK: - Title editing
     //
 
@@ -73,14 +89,7 @@ class EventGroupTableViewController: BaseUITableViewController {
                         moc.refreshObject(workoutItem.workout, mergeChanges: true)
                     }
                 }
-                // Save the database
-                do {
-                    try moc.save()
-                    print("EventGroup: Database saved!")
-                } catch let error as NSError {
-                    // TO DO: error message!
-                    print("Failed to save MOC: \(error)")
-                }
+                databaseSave(moc)
             }
         }
     }
@@ -109,26 +118,42 @@ class EventGroupTableViewController: BaseUITableViewController {
         
         return cell
     }
+    
+    override func tableView(tableView: UITableView,
+        editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+            let rowAction = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: "delete") {_,indexPath in
 
-    /*
+                // Delete the row from the data source
+                let eventItem = self.eventGroup.itemArray.removeAtIndex(indexPath.item)
+                let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+                let moc = ad.managedObjectContext
+                if let mealItem = eventItem as? NutMeal {
+                    moc.deleteObject(mealItem.meal)
+                } else if let workoutItem = eventItem as? NutWorkout {
+                    moc.deleteObject(workoutItem.workout)
+                }
+                self.databaseSave(moc)
+                // Now delete the row...
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                if self.eventGroup.itemArray.count == 0 {
+                    self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+                }
+                return
+            }
+            rowAction.backgroundColor = Styles.peachDeleteColor
+            return [rowAction]
+    }
+
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-    */
 
-    /*
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        print("commitEditingStyle forRowAtIndexPath")
     }
-    */
 
     /*
     // Override to support rearranging the table view.
