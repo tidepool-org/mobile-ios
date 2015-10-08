@@ -30,6 +30,16 @@ class EventGroupTableViewController: BaseUITableViewController {
         
         self.title = eventGroup.title
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if eventGroup.itemArray.count == 0 {
+            self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+            return
+        }
+        eventGroup.sortEvents()
+        tableView.reloadData()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -107,38 +117,19 @@ class EventGroupTableViewController: BaseUITableViewController {
             eventItemVC.eventGroup = eventGroup
             eventItemVC.title = self.title
         } else if segue.identifier == "EventItemAddSegue" {
-            let addEventVC = segue.destinationViewController as! AddEventViewController
-            // adding events from group table, pass along title so it can be reused and new event added...
-            addEventVC.eventTitleString = eventGroup.title
+            let eventItemVC = segue.destinationViewController as! EventDetailViewController
+            // no existing item to pass along...
+            eventItemVC.eventGroup = eventGroup
+            eventItemVC.eventTitleString = eventGroup.title
         }
     }
 
-
-    @IBAction func groupTableDoneHandler(segue: UIStoryboardSegue) {
-        print("done")
-        // at this point I need to grab the new event, maybe check for the same title...
-        if segue.identifier == "unwindDoneFromAdd" {
-            if let addEventVC = segue.sourceViewController as? AddEventViewController {
-                if let newEvent = addEventVC.newMealEvent {
-                    if newEvent.title == eventGroup.title {
-                        eventGroup.addEvent(newEvent)
-                        eventGroup.sortEvents()
-                        tableView.reloadData()
-                    } else {
-                        print("new event added with a different title!")
-//                        self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
-                    }
-                }
-            }
-        }
-    }
-    
-    @IBAction func groupTableCancelHandler(segue: UIStoryboardSegue) {
-        print("cancel")
+    @IBAction func done(segue: UIStoryboardSegue) {
+        print("unwind segue to eventGroup done")
     }
 
-    @IBAction func addedNewEvent(segue: UIStoryboardSegue) {
-        print("addedNewEvent")
+    @IBAction func cancel(segue: UIStoryboardSegue) {
+        print("unwind segue to eventGroup cancel")
     }
     
 }

@@ -33,9 +33,14 @@ import UIKit
             self.font = font
             self.textColor = textColor
         }
+        if usage == "userDataEntry" {
+            paddingLeft = 20.0
+        } else {
+            paddingLeft = 0.0
+        }
     }
     
-    let paddingLeft: CGFloat = 20
+    var paddingLeft: CGFloat = 0.0
     
     override func textRectForBounds(bounds: CGRect) -> CGRect {
         return self.newBounds(bounds)

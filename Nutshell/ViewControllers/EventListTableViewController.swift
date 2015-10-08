@@ -80,8 +80,16 @@ class EventListTableViewController: BaseUITableViewController {
         }
     }
     
-    @IBAction func addedSomeNewEvent(segue: UIStoryboardSegue) {
-        print("addedSomeNewEvent")
+    @IBAction func nutEventChanged(segue: UIStoryboardSegue) {
+        print("unwind segue to eventList addedSomeNewEvent")
+    }
+
+    @IBAction func done(segue: UIStoryboardSegue) {
+        print("unwind segue to eventList done!")
+    }
+
+    @IBAction func cancel(segue: UIStoryboardSegue) {
+        print("unwind segue to eventList cancel")
     }
 
     private var eventListNeedsUpdate: Bool  = false
@@ -128,15 +136,6 @@ class EventListTableViewController: BaseUITableViewController {
         tableView.reloadData()
     }
     
-    // MARK: - Nav bar button handlers
-    
-//    @IBAction func addEventButtonHandler(sender: UIBarButtonItem) {
-//        self.navigationItem.title = ""
-//        let sb = UIStoryboard(name: "AddEvent", bundle: nil)
-//        let vc = sb.instantiateViewControllerWithIdentifier("AddEventViewController")
-//        self.navigationController?.pushViewController(vc, animated: true)
-//    }
-    
     @IBAction func menuButtonHandler(sender: AnyObject) {
         self.navigationItem.title = ""
         let sb = UIStoryboard(name: "Menu", bundle: nil)
@@ -144,7 +143,6 @@ class EventListTableViewController: BaseUITableViewController {
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
-
 }
 
 // MARK: - Table view data source

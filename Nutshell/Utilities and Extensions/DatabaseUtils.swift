@@ -133,6 +133,12 @@ class DatabaseUtils {
         return try moc.executeFetchRequest(request) as! [CommonData]
     }
 
+    class func getMealItem(moc: NSManagedObjectContext, atTime: NSDate, title: String) throws -> [Meal] {
+        let request = NSFetchRequest(entityName: "EventItem")
+        request.predicate = NSPredicate(format: "(title == %@) AND  (time == %@)", title, atTime)
+        return try moc.executeFetchRequest(request) as! [Meal]
+    }
+
     class func getAllNutEvents(moc: NSManagedObjectContext) throws -> [EventItem] {
         let request = NSFetchRequest(entityName: "EventItem")
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
