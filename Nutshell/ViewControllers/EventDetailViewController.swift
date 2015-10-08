@@ -65,6 +65,9 @@ class EventDetailViewController: BaseUIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let eventItem = eventItem {
+            eventTime = eventItem.time
+        }
         configureDetailView()
     }
 
@@ -83,8 +86,7 @@ class EventDetailViewController: BaseUIViewController {
             viewExistingEvent = true
             titleTextField.text = eventItem.title
             notesTextField.text = eventItem.notes
-            eventTime = eventItem.time
-            graphCenterTime = eventItem.time
+            graphCenterTime = eventTime
             missingPhotoView.hidden = false
             photoUIImageView.hidden = true
             configureCameraImageViewUp(true)
@@ -186,10 +188,12 @@ class EventDetailViewController: BaseUIViewController {
     // MARK: - Deal with layout changes
     //
 
-    private func reloadForNewEvent() {
+    private func reloadView() {
         configureDetailView()
-        deleteGraphView()
-        configureGraphViewIfNil()
+        if viewExistingEvent {
+            deleteGraphView()
+            configureGraphViewIfNil()
+        }
     }
     
     private func leftAndRightItems() -> (NutEventItem?, NutEventItem?) {
@@ -228,13 +232,13 @@ class EventDetailViewController: BaseUIViewController {
     @IBAction func leftArrowButtonHandler(sender: AnyObject) {
         let leftAndRight = leftAndRightItems()
         self.eventItem = leftAndRight.0
-        reloadForNewEvent()
+        reloadView()
     }
 
     @IBAction func rightArrowButtonHandler(sender: AnyObject) {
-    let leftAndRight = leftAndRightItems()
-    self.eventItem = leftAndRight.1
-    reloadForNewEvent()
+        let leftAndRight = leftAndRightItems()
+        self.eventItem = leftAndRight.1
+        reloadView()
     }
     
     @IBAction func titleEventButtonHandler(sender: NutshellUIButton) {
@@ -353,7 +357,7 @@ class EventDetailViewController: BaseUIViewController {
             }
 
             // reload current view, save button should disappear and on exit the new event should trigger caller to update...
-            reloadForNewEvent()
+            reloadView()
          }
     }
     
@@ -516,8 +520,8 @@ class EventDetailViewController: BaseUIViewController {
     
     @IBAction func doneDatePickButtonHandler(sender: AnyObject) {
         eventTime = datePicker.date
-        configureDateView()
-        updateSaveButtonState()
+        // make sure graph reflects current date
+        reloadView()
     }
     
     //
