@@ -503,6 +503,11 @@ class EventDetailViewController: BaseUIViewController {
     @IBAction func dateButtonHandler(sender: AnyObject) {
         // user tapped on date, bring up date picker
         datePickerView.hidden = !datePickerView.hidden
+        if !datePickerView.hidden {
+            titleTextField.resignFirstResponder()
+            notesTextField.resignFirstResponder()
+            locationTextField.resignFirstResponder()
+        }
     }
     
     @IBAction func cancelDatePickButtonHandler(sender: AnyObject) {
