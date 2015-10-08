@@ -35,7 +35,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         API = APIConnector("Production")
         // If we already have a token, no need to log in again....
         if (API?.sessionToken != nil) {
-            setupUIForLoginSuccess()
+            API?.refreshToken({ (succeeded) -> (Void) in
+                if ( succeeded ) {
+                    self.setupUIForLoginSuccess()
+                } else {
+                    NSLog("Refresh token failed, need to log in normally")
+                }
+            });
         }
         
         return true
@@ -72,6 +78,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        // Refresh the auth token
+        API?.refreshToken({ (succeeded) -> (Void) in
+            if ( !succeeded ) {
+                // We need to log the user out and have them log in again
+                self.logout()
+            }
+        })
     }
 
     func applicationDidBecomeActive(application: UIApplication) {

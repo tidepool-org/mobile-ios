@@ -139,6 +139,30 @@ class APIConnector {
         completion()
     }
     
+    func refreshToken(completion: (succeeded: Bool) -> (Void)) {
+        
+        let endpoint = "/auth/login"
+        
+        if ( self.sessionToken == nil ) {
+            // We don't have a session token to refresh.
+            completion(succeeded: false)
+            return
+        }
+        
+        // Post the request.
+        self.sendRequest(Method.GET, endpoint:endpoint).responseJSON { (request, response, result) -> Void in
+            if ( result.isSuccess ) {
+                NSLog("Session token updated")
+                self.sessionToken = response!.allHeaderFields[APIConnector.kSessionIdHeader] as! String?
+                completion(succeeded: true)
+            } else {
+                NSLog("Session token update failed: \(result)")
+                completion(succeeded: false)
+            }
+        }
+    }
+    
+    
     /** For now this method returns the result as a JSON object. The result set can be huge, and we want processing to
      *  happen outside of this method until we have something a little less firehose-y.
      */
