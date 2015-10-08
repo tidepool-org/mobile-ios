@@ -410,9 +410,9 @@ class EventDetailViewController: BaseUIViewController {
             do {
                 try moc.save()
                 print("addEvent: Database saved!")
-                if let eventGroup = eventGroup {
-                    if eventGroup.title == (newMealEvent?.title)! {
-                        eventGroup.addEvent(newMealEvent!)
+                if let eventGroup = eventGroup, newMealEvent = newMealEvent {
+                    if eventGroup.title == newMealEvent.title {
+                        eventGroup.addEvent(newMealEvent)
                     }
                 }
                 showSuccessView()
