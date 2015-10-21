@@ -181,6 +181,7 @@
 		48ED0D3F1BAF22CC009D0D6F /* addAnimation-04.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D391BAF22CC009D0D6F /* addAnimation-04.png */; };
 		48ED0D401BAF22CC009D0D6F /* addAnimation-05.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D3A1BAF22CC009D0D6F /* addAnimation-05.png */; };
 		48ED0D411BAF22CC009D0D6F /* addAnimation-06.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D3B1BAF22CC009D0D6F /* addAnimation-06.png */; };
+		48EDC2C61BD6B403003049D9 /* EventAddOrEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EDC2C51BD6B403003049D9 /* EventAddOrEditViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		949A33B350C643B74EB54D43 /* Pods_Nutshell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -309,6 +310,7 @@
 		48ED0D391BAF22CC009D0D6F /* addAnimation-04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-04.png"; path = "Images/addAnimation/addAnimation-04.png"; sourceTree = "<group>"; };
 		48ED0D3A1BAF22CC009D0D6F /* addAnimation-05.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-05.png"; path = "Images/addAnimation/addAnimation-05.png"; sourceTree = "<group>"; };
 		48ED0D3B1BAF22CC009D0D6F /* addAnimation-06.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-06.png"; path = "Images/addAnimation/addAnimation-06.png"; sourceTree = "<group>"; };
+		48EDC2C51BD6B403003049D9 /* EventAddOrEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventAddOrEditViewController.swift; path = ViewControllers/EventAddOrEditViewController.swift; sourceTree = "<group>"; };
 		5A3109656497A8086C86BD31 /* Pods_NutshellTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NutshellTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		691EA93AF2D5DC902113C37D /* Pods-Nutshell.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.debug.xcconfig"; sourceTree = "<group>"; };
 		A08B5E3A2659E0859F53527E /* Pods-Nutshell.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.release.xcconfig"; sourceTree = "<group>"; };
@@ -432,6 +434,7 @@
 				485922A31B9A639B0056E605 /* EventGroupTableViewController.swift */,
 				486F5E5F1BA1EBE100BA2A57 /* EventListTableViewCell.swift */,
 				486F5E6B1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift */,
+				48EDC2C51BD6B403003049D9 /* EventAddOrEditViewController.swift */,
 				486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */,
 				482B4E561BBDAFFF00835CAC /* EventDetailGraphCollectionCell.swift */,
 			);
@@ -847,6 +850,7 @@
 				4851C6971BA68C0D00F8E0EE /* NutshellUITableViewCell.swift in Sources */,
 				0334CA791BA8DDFC00013096 /* TimeChange.swift in Sources */,
 				48B127A21BC444D300061483 /* GraphViews.swift in Sources */,
+				48EDC2C61BD6B403003049D9 /* EventAddOrEditViewController.swift in Sources */,
 				4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */,
 				0334CAA81BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */,
 				0334CAAB1BA8E22E00013096 /* Bolus.swift in Sources */,

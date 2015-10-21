@@ -37,7 +37,8 @@ public class Styles: NSObject {
         "brightBackground": brightBlueColor,
         "darkBackground": darkPurpleColor,
         "lightBackground": veryLightGreyColor,
-        // login & signup
+        "whiteBackground": whiteColor,
+       // login & signup
         "activeLoginButton": brightBlueColor,
         "inactiveLoginButton": veryLightGreyColor,
         "userDataEntry": whiteColor,
@@ -59,8 +60,12 @@ public class Styles: NSObject {
         // event detail view
         "healthkitEventSubtext": (smallBoldFont, pinkColor),
         // table views
+        "tableHeaderTitle": (veryLargeSemiboldFont, whiteColor),
+        "tableHeaderLocation": (smallSemiboldFont, whiteColor),
+        "tableHeaderCount": (smallBoldFont, whiteColor),
         "tableCellTitle": (mediumSemiboldFont, darkGreyColor),
         "tableCellSubtitle": (smallRegularFont, darkMediumGreyColor),
+        "tableCellLocationDate": (smallRegularFont, whiteColor),
         // account configuration views
         "accountSettingItem": (mediumRegularFont, darkGreyColor),
         "accountSettingItemSmall": (mediumSmallRegularFont, darkGreyColor),
@@ -97,7 +102,7 @@ public class Styles: NSObject {
         static let mediumSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 17.0)!
         static let veryLargeSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 25.5)!
         
-        static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.0)!
+        static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.5)!
         static let navTitleBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 20.0)!
         
         // Fonts for special graph view

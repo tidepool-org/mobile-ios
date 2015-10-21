@@ -21,6 +21,11 @@ class EventGroupTableViewController: BaseUITableViewController {
     var eventGroup = NutEvent()
     @IBOutlet weak var titleTextField: NutshellUITextField!
 
+    @IBOutlet weak var tableHeaderTitle: NutshellUILabel!
+    @IBOutlet weak var tableHeaderLocation: NutshellUILabel!
+    @IBOutlet weak var tableHeaderCount: NutshellUILabel!
+    @IBOutlet weak var headerView: NutshellUIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -30,7 +35,10 @@ class EventGroupTableViewController: BaseUITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         
-        self.titleTextField.text = eventGroup.title
+        title = ""
+        tableHeaderTitle.text = eventGroup.title
+        tableHeaderLocation.text = eventGroup.location
+        tableHeaderCount.text = "x " + String("\(eventGroup.itemArray.count)")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -64,39 +72,90 @@ class EventGroupTableViewController: BaseUITableViewController {
     }
     
     //
-    // MARK: - Title editing
+    // MARK: - Button handling
     //
-
-    @IBAction func titleEditingDidBegin(sender: AnyObject) {
-    }
     
-    @IBAction func titleEditingDidEnd(sender: AnyObject) {
-        titleTextField.resignFirstResponder()
-        if let newTitle = titleTextField.text {
-            if newTitle == "" {
-                titleTextField.text = eventGroup.title
-            } else if eventGroup.title != titleTextField.text {
-                eventGroup.title = newTitle
-                let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-                let moc = ad.managedObjectContext
-                for eventItem in eventGroup.itemArray {
-                    eventItem.title = newTitle
-                    if let mealItem = eventItem as? NutMeal {
-                        mealItem.meal.title = newTitle
-                        moc.refreshObject(mealItem.meal, mergeChanges: true)
-                    } else if let workoutItem = eventItem as? NutWorkout {
-                        workoutItem.workout.title = newTitle
-                        moc.refreshObject(workoutItem.workout, mergeChanges: true)
-                    }
-                }
-                databaseSave(moc)
-            }
+    
+    @IBAction func disclosureTouchDownHandler(sender: AnyObject) {
+    }
+
+//    @IBAction func titleEditingDidBegin(sender: AnyObject) {
+//    }
+//    
+//    @IBAction func titleEditingDidEnd(sender: AnyObject) {
+//        titleTextField.resignFirstResponder()
+//        if let newTitle = titleTextField.text {
+//            if newTitle == "" {
+//                titleTextField.text = eventGroup.title
+//            } else if eventGroup.title != titleTextField.text {
+//                eventGroup.title = newTitle
+//                let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+//                let moc = ad.managedObjectContext
+//                for eventItem in eventGroup.itemArray {
+//                    eventItem.title = newTitle
+//                    if let mealItem = eventItem as? NutMeal {
+//                        mealItem.meal.title = newTitle
+//                        moc.refreshObject(mealItem.meal, mergeChanges: true)
+//                    } else if let workoutItem = eventItem as? NutWorkout {
+//                        workoutItem.workout.title = newTitle
+//                        moc.refreshObject(workoutItem.workout, mergeChanges: true)
+//                    }
+//                }
+//                databaseSave(moc)
+//            }
+//        }
+//    }
+    
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        super.prepareForSegue(segue, sender: sender)
+        if segue.identifier == "EventItemDetailSegue" {
+            let cell = sender as! EventGroupTableViewCell
+            let eventItemVC = segue.destinationViewController as! EventDetailViewController
+            eventItemVC.eventItem = cell.eventItem
+            eventItemVC.eventGroup = eventGroup
+            eventItemVC.title = self.title
+        } else if segue.identifier == "EventItemAddSegue" {
+            let eventItemVC = segue.destinationViewController as! EventAddOrEditViewController
+            // no existing item to pass along...
+            eventItemVC.eventGroup = eventGroup
         }
     }
+    
+    @IBAction func done(segue: UIStoryboardSegue) {
+        print("unwind segue to eventGroup done")
+    }
+    
+    @IBAction func cancel(segue: UIStoryboardSegue) {
+        print("unwind segue to eventGroup cancel")
+    }
+    
+}
 
-    //
-    // MARK: - Table view data source
-    //
+// MARK: - Table view delegate
+
+//extension EventGroupTableViewController {
+//    
+//    override func tableView(tableView: UITableView,
+//        viewForHeaderInSection section: Int) -> UIView? {
+//            
+//            return headerView
+//    }
+//
+//    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//            return 95.0
+//    }
+//    
+//}
+
+//
+// MARK: - Table view data source
+//
+
+extension EventGroupTableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -170,34 +229,5 @@ class EventGroupTableViewController: BaseUITableViewController {
     }
     */
 
-    // MARK: - Navigation
-
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        super.prepareForSegue(segue, sender: sender)
-        if segue.identifier == "EventItemDetailSegue" {
-            let cell = sender as! EventGroupTableViewCell
-            let eventItemVC = segue.destinationViewController as! EventDetailViewController
-            eventItemVC.eventItem = cell.eventItem
-            eventItemVC.eventGroup = eventGroup
-            eventItemVC.title = self.title
-        } else if segue.identifier == "EventItemAddSegue" {
-            let eventItemVC = segue.destinationViewController as! EventDetailViewController
-            // no existing item to pass along...
-            eventItemVC.eventGroup = eventGroup
-            eventItemVC.eventTitleString = eventGroup.title
-        }
-    }
-
-    @IBAction func done(segue: UIStoryboardSegue) {
-        print("unwind segue to eventGroup done")
-    }
-
-    @IBAction func cancel(segue: UIStoryboardSegue) {
-        print("unwind segue to eventGroup cancel")
-    }
-    
 }
-
 

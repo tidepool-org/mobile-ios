@@ -23,7 +23,6 @@ class EventGroupTableViewCell: NutshellUITableViewCell {
     @IBOutlet weak var favoriteStar: UIImageView!
     @IBOutlet weak var titleString: UILabel!
     @IBOutlet weak var timeString: UILabel!
-    @IBOutlet weak var locationString: UILabel!
     @IBOutlet weak var photoImageView: UIImageView!
 
     override func awakeFromNib() {
@@ -41,13 +40,12 @@ class EventGroupTableViewCell: NutshellUITableViewCell {
         titleString.text = eventItem.notes
         timeString.text = NutUtils.dateFormatter.stringFromDate(eventItem.time)
         self.eventItem = eventItem
-        if let meal = eventItem as? NutMeal {
-            locationString.text = meal.location
-            if meal.photo.characters.count > 0 {
-                photoImageView.image = UIImage(named: meal.photo)
-            } else {
-                photoImageView.image = nil
-            }
-        }
+//        if let meal = eventItem as? NutMeal {
+//            if meal.photo.characters.count > 0 {
+//                photoImageView.image = UIImage(named: meal.photo)
+//            } else {
+//                photoImageView.image = nil
+//            }
+//        }
     }
 }

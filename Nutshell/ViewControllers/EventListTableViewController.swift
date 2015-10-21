@@ -145,6 +145,19 @@ class EventListTableViewController: BaseUITableViewController {
     }
 }
 
+// MARK: - Table view delegate
+
+extension EventListTableViewController {
+    
+    override func tableView(tableView: UITableView,
+        viewForHeaderInSection section: Int) -> UIView? {
+           
+            let headerView = UIView(frame: CGRect(x:0, y:0, width: tableView.bounds.width, height: 40.0))
+            return headerView
+    }
+    
+}
+
 // MARK: - Table view data source
 
 extension EventListTableViewController {

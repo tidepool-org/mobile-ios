@@ -18,14 +18,19 @@ import Foundation
 class NutEvent {
     
     var title: String
+    var location: String
     var mostRecent: NSDate
     var itemArray: [NutEventItem]
 
     init(firstEvent: EventItem) {
         self.title = firstEvent.title!
+        self.location = ""
         self.mostRecent = firstEvent.time!
         if let meal = firstEvent as? Meal {
             let firstItem = NutMeal(meal: meal, title: meal.title, notes: meal.notes, location: meal.location, photo: meal.photo, time: meal.time)
+            if let loc = meal.location {
+                self.location = loc
+            }
             self.itemArray = [firstItem]
         } else if let workout = firstEvent as? Workout {
             let firstItem = NutWorkout(workout: workout, title: workout.title, notes: workout.notes, distance: workout.distance, duration: workout.duration, time: workout.time)
@@ -37,6 +42,7 @@ class NutEvent {
     
     init() {
         self.title = ""
+        self.location = ""
         self.mostRecent = NSDate()
         self.itemArray = []
     }
