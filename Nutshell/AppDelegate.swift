@@ -43,6 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     NSLog("Refresh token failed, need to log in normally")
                 }
             });
+        } else {
+            logout()
         }
         
         return true

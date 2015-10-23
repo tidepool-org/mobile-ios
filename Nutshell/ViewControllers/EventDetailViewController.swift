@@ -39,22 +39,85 @@ class EventDetailViewController: BaseUIViewController {
 
     @IBOutlet weak var rightBarItem: UIBarButtonItem!
     
-    @IBOutlet weak var dateButton: NutshellUIButton!
+    @IBOutlet weak var dateLabel: NutshellUILabel!
     @IBOutlet weak var locationContainerView: UIView!
     @IBOutlet weak var locationTextField: UITextField!
     
     private var eventTime = NSDate()
     private var placeholderNoteString = "Anything else to note?"
     private var placeholderLocationString = "Note location here!"
-    
+
+    //
+    // MARK: - Base methods
+    //
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureDetailView()
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    //
+    // MARK: - Navigation
+    //
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        super.prepareForSegue(segue, sender: sender)
+        if segue.identifier == "EventItemEditSegue" {
+            let eventItemVC = segue.destinationViewController as! EventAddOrEditViewController
+            eventItemVC.eventItem = eventItem
+            eventItemVC.eventGroup = eventGroup
+        } else if segue.identifier == "EventItemAddSegue" {
+            let eventItemVC = segue.destinationViewController as! EventAddOrEditViewController
+            // no existing item to pass along...
+            eventItemVC.eventGroup = eventGroup
+        }
+    }
+    
+    @IBAction func done(segue: UIStoryboardSegue) {
+        print("unwind segue to eventDetail done")
+        reloadView()
+    }
+    
+    @IBAction func cancel(segue: UIStoryboardSegue) {
+        print("unwind segue to eventDetail cancel")
+    }
+
+    @IBAction func backButtonHandler(sender: AnyObject) {
+        // If either title or location have changed, we need to exit back to list...
+        if let eventGroup = eventGroup, eventItem = eventItem {
+            if eventItem.title != eventGroup.title {
+                self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+                return
+            } else if let mealItem = eventItem as? NutMeal {
+                // TODO: would be nice if workout had a location as well!
+                if mealItem.location != eventGroup.location {
+                    self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+                    return
+                }
+            }
+        }
+        self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
+    }
+    
+    //
+    // MARK: - Configuration
+    //
+    
+    private func configureDetailView() {
         if let eventItem = eventItem {
             viewExistingEvent = true
             titleLabel.text = eventItem.title
             notesLabel.text = eventItem.notes
             eventTime = eventItem.time
             photoUIImageView.hidden = true
+            dateLabel.text = NutUtils.dateFormatter.stringFromDate(eventTime)
             
             if let mealItem = eventItem as? NutMeal {
                 if mealItem.location.characters.count > 0 {
@@ -81,14 +144,9 @@ class EventDetailViewController: BaseUIViewController {
         graphCenterTime = eventTime
         // set up graph area later when we know size of view
     }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
+
     //
-    // MARK: - graph view
+    // MARK: - Graph view
     //
     
     private func deleteGraphView() {
@@ -145,13 +203,12 @@ class EventDetailViewController: BaseUIViewController {
     // MARK: - Deal with layout changes
     //
     
-    //    private func reloadView() {
-    //        configureDetailView()
-    //        if viewExistingEvent {
-    //            deleteGraphView()
-    //            configureGraphViewIfNil()
-    //        }
-    //    }
+    private func reloadView() {
+        configureDetailView()
+        deleteGraphView()
+        configureGraphViewIfNil()
+    }
+    
     //
     //    private func leftAndRightItems() -> (NutEventItem?, NutEventItem?) {
     //        var result = (eventItem, eventItem)

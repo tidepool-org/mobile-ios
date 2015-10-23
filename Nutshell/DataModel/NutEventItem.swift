@@ -25,4 +25,11 @@ class NutEventItem {
             print("ERROR: nil time leaked in for event \(self.title)")
         }
     }
+    
 }
+
+func != (left: NutEventItem, right: NutEventItem) -> Bool {
+    // TODO: if we had an id, we could just check that!
+    return ((left.notes != right.notes) || (left.time != right.time))
+}
+

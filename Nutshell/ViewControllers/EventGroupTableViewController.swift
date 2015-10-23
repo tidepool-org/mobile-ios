@@ -57,21 +57,6 @@ class EventGroupTableViewController: BaseUITableViewController {
     }
 
     //
-    // MARK: - Shared utils
-    //
-
-    private func databaseSave(moc: NSManagedObjectContext) {
-        // Save the database
-        do {
-            try moc.save()
-            print("EventGroup: Database saved!")
-        } catch let error as NSError {
-            // TO DO: error message!
-            print("Failed to save MOC: \(error)")
-        }
-    }
-    
-    //
     // MARK: - Button handling
     //
     
@@ -101,12 +86,14 @@ class EventGroupTableViewController: BaseUITableViewController {
 //                        moc.refreshObject(workoutItem.workout, mergeChanges: true)
 //                    }
 //                }
-//                databaseSave(moc)
+//                DatabaseUtils.databaseSave(moc)
 //            }
 //        }
 //    }
     
+    //
     // MARK: - Navigation
+    // 
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
@@ -124,7 +111,11 @@ class EventGroupTableViewController: BaseUITableViewController {
             eventItemVC.eventGroup = eventGroup
         }
     }
-    
+
+    @IBAction func nutGroupChanged(segue: UIStoryboardSegue) {
+        print("unwind segue to eventGroup")
+    }
+
     @IBAction func done(segue: UIStoryboardSegue) {
         print("unwind segue to eventGroup done")
     }
@@ -191,7 +182,7 @@ extension EventGroupTableViewController {
                 } else if let workoutItem = eventItem as? NutWorkout {
                     moc.deleteObject(workoutItem.workout)
                 }
-                self.databaseSave(moc)
+                DatabaseUtils.databaseSave(moc)
                 // Now delete the row...
                 tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
                 if self.eventGroup.itemArray.count == 0 {

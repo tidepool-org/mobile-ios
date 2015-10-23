@@ -53,13 +53,20 @@ class EventAddOrEditViewController: BaseUIViewController {
     private var placeholderNotesString = "Anything else to note?"
     private var noteHintString = "Sides, dessert, anything else?"
     private var placeholderLocationString = "Place"
-    
+
+    //
+    // MARK: - Base methods
+    //
+
     override func viewDidLoad() {
         super.viewDidLoad()
         var saveButtonTitle = "Save"
         if let eventItem = eventItem {
             viewExistingEvent = true
             eventTime = eventItem.time
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "backButtonHandler:")
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonHandler:")
+            navigationItem.rightBarButtonItem?.enabled = true
         }  else  {
             locationTextField.text = placeholderLocationString
             saveButtonTitle = "Save and eat!"
@@ -68,6 +75,7 @@ class EventAddOrEditViewController: BaseUIViewController {
         configureInfoSection()
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
     }
@@ -151,11 +159,10 @@ class EventAddOrEditViewController: BaseUIViewController {
         if viewExistingEvent {
             saveButton.hidden = !existingEventChanged()
         } else {
-            if titleTextField.text?.characters.count == 0 {
+            if titleTextField.text?.characters.count == 0 ||  titleTextField.text == placeholderTitleString {
                 saveButton.hidden = true
             } else {
                 saveButton.hidden = false
-                //configureCameraImageViewUp(true)
             }
         }
     }
@@ -163,20 +170,18 @@ class EventAddOrEditViewController: BaseUIViewController {
     // When the keyboard is up, the save button moves up
     private var viewAdjustAnimationTime: Float = 0.25
     private func configureSaveViewPosition(bottomOffset: CGFloat) {
-        if !saveButton.hidden {
-            for c in sceneContainer.constraints {
-                if c.firstAttribute == NSLayoutAttribute.Bottom {
-                    if let secondItem = c.secondItem {
-                        if secondItem as! NSObject == saveButton {
-                            c.constant = bottomOffset
-                            break
-                        }
+        for c in sceneContainer.constraints {
+            if c.firstAttribute == NSLayoutAttribute.Bottom {
+                if let secondItem = c.secondItem {
+                    if secondItem as! NSObject == saveButton {
+                        c.constant = bottomOffset
+                        break
                     }
                 }
             }
-            UIView.animateWithDuration(NSTimeInterval(viewAdjustAnimationTime)) {
-                self.saveButton.layoutIfNeeded()
-            }
+        }
+        UIView.animateWithDuration(NSTimeInterval(viewAdjustAnimationTime)) {
+            self.saveButton.layoutIfNeeded()
         }
     }
 
@@ -214,24 +219,44 @@ class EventAddOrEditViewController: BaseUIViewController {
     // MARK: - Button and text field handlers
     //
     
+    func textFieldDidChange() {
+        updateSaveButtonState()
+    }
+    
     @IBAction func titleEditingDidBegin(sender: AnyObject) {
         hideDateIfOpen()
         configureTitleHint()
+        if titleTextField.text == placeholderTitleString {
+            titleTextField.text = ""
+        }
     }
     
     @IBAction func titleEditingDidEnd(sender: AnyObject) {
         updateSaveButtonState()
         configureTitleHint()
+        if titleTextField.text == "" {
+            titleTextField.text = placeholderTitleString
+        }
     }
     
     @IBAction func notesEditingDidBegin(sender: AnyObject) {
         hideDateIfOpen()
         configureNotesHint()
+        if notesTextField.text == placeholderNotesString {
+            notesTextField.text = ""
+        }
     }
     
     @IBAction func notesEditingDidEnd(sender: AnyObject) {
         updateSaveButtonState()
         configureNotesHint()
+        if notesTextField.text == "" {
+            notesTextField.text = placeholderNotesString
+        }
+    }
+    
+    @IBAction func locationButtonHandler(sender: AnyObject) {
+        locationTextField.becomeFirstResponder()
     }
     
     @IBAction func locationEditingDidBegin(sender: AnyObject) {
@@ -312,7 +337,7 @@ class EventAddOrEditViewController: BaseUIViewController {
         if viewExistingEvent {
             updateCurrentEvent()
             // TODO: need unwind segue to detail view...
-            self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
+            self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
             return
         }
         
@@ -363,7 +388,7 @@ class EventAddOrEditViewController: BaseUIViewController {
                 try moc.save()
                 print("addEvent: Database saved!")
                 if let eventGroup = eventGroup, newMealEvent = newMealEvent {
-                    if eventGroup.title == newMealEvent.title {
+                    if eventGroup.title == newMealEvent.title && eventGroup.location == newMealEvent.location {
                         eventGroup.addEvent(newMealEvent)
                     }
                 }
@@ -377,7 +402,7 @@ class EventAddOrEditViewController: BaseUIViewController {
     }
     
     @IBAction func backButtonHandler(sender: AnyObject) {
-        // this is a cancel for the role of addEvent
+        // this is a cancel for the role of addEvent and editEvent
         // for viewEvent, we need to check whether the title has changed
         if viewExistingEvent {
             if let newMealEvent = newMealEvent, eventGroup = eventGroup {
@@ -385,11 +410,42 @@ class EventAddOrEditViewController: BaseUIViewController {
                     self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
                     return
                 }
+            } else {
+                // cancel of edit
+                // TODO: put up a dialog to confirm if anything has changed!
+                self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
+            }
+        } else {
+            // cancel of add
+            // TODO: put up a dialog to confirm if anything has changed!
+            self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
+        }
+    }
+
+    @IBAction func deleteButtonHandler(sender: AnyObject) {
+        // this is a delete for the role of editEvent
+        // TODO: use dialog to confirm delete with user!
+        if let eventItem = eventItem, eventGroup = eventGroup {
+            let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+            let moc = ad.managedObjectContext
+            if let mealItem = eventItem as? NutMeal {
+                moc.deleteObject(mealItem.meal)
+            } else if let workoutItem = eventItem as? NutWorkout {
+                moc.deleteObject(workoutItem.workout)
+            }
+            DatabaseUtils.databaseSave(moc)
+            
+            // now remove it from the group
+            eventGroup.itemArray = eventGroup.itemArray.filter() {
+                $0 != eventItem
+            }
+            // segue back to group or list, depending...
+            if eventGroup.itemArray.isEmpty {
+                self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+            } else {
+                self.performSegueWithIdentifier("unwindSequeToEventGroup", sender: self)
             }
         }
-        // just a normal cancel
-        // TODO: put up a dialog to confirm if anything has changed!
-        self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
     }
     
     //
@@ -444,6 +500,8 @@ class EventAddOrEditViewController: BaseUIViewController {
     
     @IBAction func doneDatePickButtonHandler(sender: AnyObject) {
         eventTime = datePicker.date
+        configureDateView()
+        updateSaveButtonState()
     }
     
     //
@@ -519,9 +577,6 @@ class EventAddOrEditViewController: BaseUIViewController {
                 moc.insertObject(we)
             }
         }
-        
     }
-    
 }
-
 

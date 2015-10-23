@@ -63,6 +63,11 @@ public class Styles: NSObject {
         "tableHeaderTitle": (veryLargeSemiboldFont, whiteColor),
         "tableHeaderLocation": (smallSemiboldFont, whiteColor),
         "tableHeaderCount": (smallBoldFont, whiteColor),
+        "searchPlaceholder": (mediumLightFont, blackColor),
+        "tableListCellTitle": (mediumSemiboldFont, altDarkGreyColor),
+        "tableListCellLocation": (smallSemiboldFont, altDarkGreyColor),
+        "tableListCellDate": (verySmallRegularFont, altDarkGreyColor),
+        "tableListCellRepeatCount": (smallBoldFont, altDarkGreyColor),
         "tableCellTitle": (mediumSemiboldFont, darkGreyColor),
         "tableCellSubtitle": (smallRegularFont, darkMediumGreyColor),
         "tableCellLocationDate": (smallRegularFont, whiteColor),
@@ -75,7 +80,7 @@ public class Styles: NSObject {
         "darkBackgroundButton": (largeRegularFont, whiteColor),
         // event detail view
         "notesText": (UIFont(name: "OpenSans-Semibold", size: 16.0), whiteColor),
-        "dateAndLocation": (UIFont(name: "OpenSans", size: 12.0), mediumGreyColor),
+        "dateAndLocation": (UIFont(name: "OpenSans", size: 12.0), whiteColor),
         "advisoryText": (mediumSemiboldFont, darkGreyColor),
         "advisorySubtext": (mediumRegularFont, lightDarkGreyColor),
         "greenLink": (mediumRegularFont, lightGreenColor),
@@ -105,6 +110,8 @@ public class Styles: NSObject {
         static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.5)!
         static let navTitleBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 20.0)!
         
+        static let mediumLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 17.0)!
+        
         // Fonts for special graph view
         
         static let verySmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 10.0)!
@@ -127,6 +134,8 @@ public class Styles: NSObject {
 
     public class var smallBoldFont: UIFont { return FontCache.smallBoldFont }
     public class var navTitleBoldFont: UIFont { return FontCache.navTitleBoldFont }
+
+    public class var mediumLightFont: UIFont { return FontCache.mediumLightFont }
 
     // Fonts for special graph view
     
@@ -158,7 +167,8 @@ public class Styles: NSObject {
         static let mediumLightGreyColor: UIColor = UIColor(hex: 0xd0d3d4) 
         static let mediumGreyColor: UIColor = UIColor(hex: 0xb8b8b8) 
         static let whiteColor: UIColor = UIColor(hex: 0xffffff) 
-        static let peachColor: UIColor = UIColor(hex: 0xf88d79) 
+        static let blackColor: UIColor = UIColor(hex: 0x000000)
+        static let peachColor: UIColor = UIColor(hex: 0xf88d79)
         static let peachDeleteColor: UIColor = UIColor(hex: 0xf66f56)
         static let greenColor: UIColor = UIColor(hex: 0x98ca63)
         static let lightGreenColor: UIColor = UIColor(hex: 0x4cd964) 
@@ -239,7 +249,10 @@ public class Styles: NSObject {
      public class var whiteColor: UIColor { return ColorCache.whiteColor }
     // Open Sans Regular 17:    UITextField sign up text entries
     //class var brightBlueColor: UIColor { return brightBlueColor }
-    
+
+    // Open Sans Light 17:      Search placeholder text
+    public class var blackColor: UIColor { return ColorCache.blackColor }
+
     // Open Sans Semibold 10:   custom graph carb amount text
     // Open Sans Semibold 4.5:    custom graph carb amount text
     //class var darkPurpleColor: UIColor { return ColorCache.darkPurpleColor }

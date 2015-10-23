@@ -41,6 +41,17 @@ class DatabaseUtils {
         }
     }
 
+    class func databaseSave(moc: NSManagedObjectContext) {
+        // Save the database
+        do {
+            try moc.save()
+            print("EventGroup: Database saved!")
+        } catch let error as NSError {
+            // TO DO: error message!
+            print("Failed to save MOC: \(error)")
+        }
+    }
+
     class func getUser(moc: NSManagedObjectContext) -> User? {
         let request = NSFetchRequest(entityName: "User")
         do {

@@ -19,6 +19,10 @@ class EventListTableViewCell: NutshellUITableViewCell {
 
     var eventGroup: NutEvent?
 
+    @IBOutlet weak var titleLabel: NutshellUILabel!
+    @IBOutlet weak var locationLabel: NutshellUILabel!
+    @IBOutlet weak var dateLabel: NutshellUILabel!
+    @IBOutlet weak var repeatCountLabel: NutshellUILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -31,18 +35,23 @@ class EventListTableViewCell: NutshellUITableViewCell {
     }
 
     func configureCell(nutEvent: NutEvent) {
-        let titleLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        titleLabelStyle.alignment = .Left
-        titleLabelStyle.lineBreakMode = .ByTruncatingMiddle
-        let titleAttrStr = NSMutableAttributedString(string: nutEvent.title, attributes: [NSFontAttributeName: Styles.mediumSemiboldFont, NSForegroundColorAttributeName: Styles.altDarkGreyColor, NSParagraphStyleAttributeName: titleLabelStyle])
-        
-        // Append an item count in small font if there are more than one of these
-        if nutEvent.itemArray.count > 1 {
-            let suffixStr = " (" + String(nutEvent.itemArray.count) + ")"
-            let suffixAttrStr = NSAttributedString(string: suffixStr, attributes: [NSFontAttributeName: Styles.smallRegularFont, NSForegroundColorAttributeName: Styles.altDarkGreyColor, NSParagraphStyleAttributeName: titleLabelStyle])
-            titleAttrStr.appendAttributedString(suffixAttrStr)
-        }
-        textLabel?.attributedText = titleAttrStr
+        titleLabel.text = nutEvent.title
+        locationLabel.text = nutEvent.location
+        dateLabel.text = NutUtils.dateFormatter.stringFromDate(nutEvent.mostRecent)
+        repeatCountLabel.text = "x " + String(nutEvent.itemArray.count)
         eventGroup = nutEvent
+        
+       
+//        let titleLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+//        titleLabelStyle.alignment = .Left
+//        titleLabelStyle.lineBreakMode = .ByTruncatingMiddle
+//        let titleAttrStr = NSMutableAttributedString(string: nutEvent.title, attributes: [NSFontAttributeName: Styles.mediumSemiboldFont, NSForegroundColorAttributeName: Styles.altDarkGreyColor, NSParagraphStyleAttributeName: titleLabelStyle])
+//        
+//        // Append an item count in small font if there are more than one of these
+//        if nutEvent.itemArray.count > 1 {
+//            let suffixStr = " (" + String(nutEvent.itemArray.count) + ")"
+//            let suffixAttrStr = NSAttributedString(string: suffixStr, attributes: [NSFontAttributeName: Styles.smallRegularFont, NSForegroundColorAttributeName: Styles.altDarkGreyColor, NSParagraphStyleAttributeName: titleLabelStyle])
+//            titleAttrStr.appendAttributedString(suffixAttrStr)
+//        }
     }
 }

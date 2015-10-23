@@ -182,6 +182,7 @@
 		48ED0D401BAF22CC009D0D6F /* addAnimation-05.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D3A1BAF22CC009D0D6F /* addAnimation-05.png */; };
 		48ED0D411BAF22CC009D0D6F /* addAnimation-06.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D3B1BAF22CC009D0D6F /* addAnimation-06.png */; };
 		48EDC2C61BD6B403003049D9 /* EventAddOrEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EDC2C51BD6B403003049D9 /* EventAddOrEditViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		48EDC2C91BD99141003049D9 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */; settings = {ASSET_TAGS = (); }; };
 		949A33B350C643B74EB54D43 /* Pods_Nutshell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -311,6 +312,7 @@
 		48ED0D3A1BAF22CC009D0D6F /* addAnimation-05.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-05.png"; path = "Images/addAnimation/addAnimation-05.png"; sourceTree = "<group>"; };
 		48ED0D3B1BAF22CC009D0D6F /* addAnimation-06.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-06.png"; path = "Images/addAnimation/addAnimation-06.png"; sourceTree = "<group>"; };
 		48EDC2C51BD6B403003049D9 /* EventAddOrEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventAddOrEditViewController.swift; path = ViewControllers/EventAddOrEditViewController.swift; sourceTree = "<group>"; };
+		48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		5A3109656497A8086C86BD31 /* Pods_NutshellTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NutshellTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		691EA93AF2D5DC902113C37D /* Pods-Nutshell.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.debug.xcconfig"; sourceTree = "<group>"; };
 		A08B5E3A2659E0859F53527E /* Pods-Nutshell.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.release.xcconfig"; sourceTree = "<group>"; };
@@ -544,6 +546,7 @@
 			children = (
 				486F5DEE1B9F874A00BA2A57 /* LaBelleAurore.ttf */,
 				486F5DEF1B9F874A00BA2A57 /* OpenSans-Bold.ttf */,
+				48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */,
 				486F5DF01B9F874A00BA2A57 /* OpenSans-Regular.ttf */,
 				486F5DF11B9F874A00BA2A57 /* OpenSans-Semibold.ttf */,
 			);
@@ -720,6 +723,7 @@
 				4859FCC31B9A4DE4000C1269 /* Assets.xcassets in Resources */,
 				48ED0D3F1BAF22CC009D0D6F /* addAnimation-04.png in Resources */,
 				4859FCBE1B9A4DE4000C1269 /* EventView.storyboard in Resources */,
+				48EDC2C91BD99141003049D9 /* OpenSans-Light.ttf in Resources */,
 				48B127A81BC444FE00061483 /* applejuicedemopic.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
