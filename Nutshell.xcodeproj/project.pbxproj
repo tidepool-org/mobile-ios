@@ -105,10 +105,8 @@
 		4837CC6B1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */; };
 		483E3C361B9F4A6300DA49E7 /* BaseUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */; };
 		483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */; };
-		483E3C3B1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C3A1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift */; };
 		4851C6921BA6281800F8E0EE /* NutshellUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851C6911BA6281800F8E0EE /* NutshellUIView.swift */; };
 		4851C6951BA689FC00F8E0EE /* NutshellUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851C6941BA689FC00F8E0EE /* NutshellUITableView.swift */; };
-		4851C6971BA68C0D00F8E0EE /* NutshellUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851C6961BA68C0D00F8E0EE /* NutshellUITableViewCell.swift */; };
 		485420211BC44D290020CFE1 /* Workout+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854201B1BC44D290020CFE1 /* Workout+CoreDataProperties.swift */; };
 		485420221BC44D290020CFE1 /* Workout+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854201B1BC44D290020CFE1 /* Workout+CoreDataProperties.swift */; };
 		485420231BC44D290020CFE1 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854201C1BC44D290020CFE1 /* Workout.swift */; };
@@ -149,8 +147,6 @@
 		486F5E3A1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */; };
 		486F5E3B1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */; };
 		486F5E601BA1EBE100BA2A57 /* EventListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E5F1BA1EBE100BA2A57 /* EventListTableViewCell.swift */; };
-		486F5E671BA1FE2A00BA2A57 /* BaseUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */; };
-		486F5E691BA2029200BA2A57 /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C3A1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift */; };
 		486F5E6C1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E6B1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift */; };
 		486F5E6E1BA24C5C00BA2A57 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */; };
 		486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
@@ -169,6 +165,8 @@
 		48B127AD1BC444FE00061483 /* ThreeTacosDemoPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */; };
 		48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
+		48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
+		48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */; settings = {ASSET_TAGS = (); }; };
 		48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
 		48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
 		48DF9B9B1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
@@ -181,8 +179,8 @@
 		48ED0D3F1BAF22CC009D0D6F /* addAnimation-04.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D391BAF22CC009D0D6F /* addAnimation-04.png */; };
 		48ED0D401BAF22CC009D0D6F /* addAnimation-05.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D3A1BAF22CC009D0D6F /* addAnimation-05.png */; };
 		48ED0D411BAF22CC009D0D6F /* addAnimation-06.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D3B1BAF22CC009D0D6F /* addAnimation-06.png */; };
-		48EDC2C61BD6B403003049D9 /* EventAddOrEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EDC2C51BD6B403003049D9 /* EventAddOrEditViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		48EDC2C91BD99141003049D9 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */; settings = {ASSET_TAGS = (); }; };
+		48EDC2C61BD6B403003049D9 /* EventAddOrEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EDC2C51BD6B403003049D9 /* EventAddOrEditViewController.swift */; };
+		48EDC2C91BD99141003049D9 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */; };
 		949A33B350C643B74EB54D43 /* Pods_Nutshell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -253,11 +251,9 @@
 		4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuAccountSettingsViewController.swift; path = ViewControllers/MenuAccountSettingsViewController.swift; sourceTree = "<group>"; };
 		483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUIViewController.swift; path = ViewControllers/BaseUIViewController.swift; sourceTree = "<group>"; };
 		483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewController.swift; path = ViewControllers/BaseUITableViewController.swift; sourceTree = "<group>"; };
-		483E3C3A1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
 		4851C6911BA6281800F8E0EE /* NutshellUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUIView.swift; path = Resources/NutshellUIView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4851C6931BA628A500F8E0EE /* UIDesignNotes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = UIDesignNotes.rtf; path = Resources/UIDesignNotes.rtf; sourceTree = "<group>"; };
 		4851C6941BA689FC00F8E0EE /* NutshellUITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUITableView.swift; path = Resources/NutshellUITableView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
-		4851C6961BA68C0D00F8E0EE /* NutshellUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUITableViewCell.swift; path = Resources/NutshellUITableViewCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4854201B1BC44D290020CFE1 /* Workout+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Workout+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		4854201C1BC44D290020CFE1 /* Workout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
 		4854201D1BC44D290020CFE1 /* Meal+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Meal+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -303,6 +299,8 @@
 		48B127A41BC444FE00061483 /* applejuicedemopic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = applejuicedemopic.png; path = Images/applejuicedemopic.png; sourceTree = "<group>"; };
 		48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ThreeTacosDemoPic.png; path = Images/ThreeTacosDemoPic.png; sourceTree = "<group>"; };
 		48B127B01BC4466E00061483 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseUtils.swift; path = "Utilities and Extensions/DatabaseUtils.swift"; sourceTree = "<group>"; };
+		48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
+		48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutShellUIViewWithHighlight.swift; path = Resources/NutShellUIViewWithHighlight.swift; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
 		48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphUIView.swift; path = GraphView/GraphUIView.swift; sourceTree = "<group>"; };
 		48ED0D361BAF22CC009D0D6F /* addAnimation-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-01.png"; path = "Images/addAnimation/addAnimation-01.png"; sourceTree = "<group>"; };
@@ -420,9 +418,9 @@
 		483E3C371B9F4A7400DA49E7 /* BaseViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */,
 				483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */,
 				483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */,
-				483E3C3A1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift */,
 			);
 			name = BaseViewControllers;
 			sourceTree = "<group>";
@@ -518,7 +516,7 @@
 				486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */,
 				4851C6911BA6281800F8E0EE /* NutshellUIView.swift */,
 				4851C6941BA689FC00F8E0EE /* NutshellUITableView.swift */,
-				4851C6961BA68C0D00F8E0EE /* NutshellUITableViewCell.swift */,
+				48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */,
 				4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */,
 				4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */,
 				4837CC681BA7394E00BA2CDE /* NutshellUIButton.swift */,
@@ -851,7 +849,6 @@
 				485922BD1B9CA13E0056E605 /* MenuTableViewController.swift in Sources */,
 				485420211BC44D290020CFE1 /* Workout+CoreDataProperties.swift in Sources */,
 				0334CA671BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
-				4851C6971BA68C0D00F8E0EE /* NutshellUITableViewCell.swift in Sources */,
 				0334CA791BA8DDFC00013096 /* TimeChange.swift in Sources */,
 				48B127A21BC444D300061483 /* GraphViews.swift in Sources */,
 				48EDC2C61BD6B403003049D9 /* EventAddOrEditViewController.swift in Sources */,
@@ -906,7 +903,6 @@
 				0334CA1C1BA8DDFC00013096 /* Alarm.swift in Sources */,
 				0334CA911BA8DDFC00013096 /* Wizard.swift in Sources */,
 				0334CA2B1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */,
-				483E3C3B1B9F4C9B00DA49E7 /* BaseUITableViewCell.swift in Sources */,
 				0334CA251BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */,
 				48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */,
 				0334CA311BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,
@@ -921,8 +917,10 @@
 				0334CA7F1BA8DDFC00013096 /* Upload.swift in Sources */,
 				486F5E601BA1EBE100BA2A57 /* EventListTableViewCell.swift in Sources */,
 				0334CA5B1BA8DDFC00013096 /* Prime.swift in Sources */,
+				48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */,
 				4851C6921BA6281800F8E0EE /* NutshellUIView.swift in Sources */,
 				4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */,
+				48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */,
 				4854202B1BC44D290020CFE1 /* EventItem.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -951,13 +949,11 @@
 				0334CA861BA8DDFC00013096 /* UrineKetone.swift in Sources */,
 				0334CA591BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,
 				48EC32321BA7BDDE00A75103 /* NutUtils.swift in Sources */,
-				486F5E691BA2029200BA2A57 /* BaseUITableViewCell.swift in Sources */,
 				485420261BC44D290020CFE1 /* Meal+CoreDataProperties.swift in Sources */,
 				0334CA381BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift in Sources */,
 				48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */,
 				0334CA4D1BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift in Sources */,
 				0334CA741BA8DDFC00013096 /* Status.swift in Sources */,
-				486F5E671BA1FE2A00BA2A57 /* BaseUIViewController.swift in Sources */,
 				0334CA1D1BA8DDFC00013096 /* Alarm.swift in Sources */,
 				0334CA201BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */,
 				0334CA471BA8DDFC00013096 /* Food.swift in Sources */,

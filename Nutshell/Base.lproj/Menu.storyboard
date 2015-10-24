@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9052" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="JIl-yM-Pcy">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="JIl-yM-Pcy">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9040"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="OpenSans-Regular.ttf">
@@ -22,7 +22,7 @@
                         <sections>
                             <tableViewSection id="Gbb-pa-gca">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="wfb-RT-chM" detailTextLabel="EvE-Tk-dpp" rowHeight="44" style="IBUITableViewCellStyleValue1" id="YSG-nm-Fht" customClass="NutshellUITableViewCell" customModule="Nutshell" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="wfb-RT-chM" detailTextLabel="EvE-Tk-dpp" rowHeight="44" style="IBUITableViewCellStyleValue1" id="YSG-nm-Fht" customClass="BaseUITableViewCell" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YSG-nm-Fht" id="mBs-8N-1rf">
@@ -45,14 +45,11 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
-                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <segue destination="oyN-O1-gVa" kind="show" id="17f-B3-en7"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="rTs-Kw-48x" detailTextLabel="GwE-fR-wJd" rowHeight="44" style="IBUITableViewCellStyleValue1" id="XCa-48-dmt" customClass="NutshellUITableViewCell" customModule="Nutshell" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="rTs-Kw-48x" detailTextLabel="GwE-fR-wJd" rowHeight="44" style="IBUITableViewCellStyleValue1" id="XCa-48-dmt" customClass="BaseUITableViewCell" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XCa-48-dmt" id="5mw-Uw-Wy0">
@@ -75,14 +72,11 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
-                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <segue destination="bSK-AS-S9d" kind="show" id="F08-ia-PPn"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="3tE-Kr-Gc5" detailTextLabel="PUh-Uf-XSC" rowHeight="44" style="IBUITableViewCellStyleValue1" id="IlQ-K5-YXb" customClass="NutshellUITableViewCell" customModule="Nutshell" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="3tE-Kr-Gc5" detailTextLabel="PUh-Uf-XSC" rowHeight="44" style="IBUITableViewCellStyleValue1" id="IlQ-K5-YXb" customClass="BaseUITableViewCell" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="88" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IlQ-K5-YXb" id="Tg0-G9-V1E">
@@ -105,11 +99,8 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
-                                        </userDefinedRuntimeAttributes>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="e5j-dX-yYj" detailTextLabel="skT-WK-ZIG" rowHeight="44" style="IBUITableViewCellStyleValue1" id="qc0-WR-S23" customClass="NutshellUITableViewCell" customModule="Nutshell" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="e5j-dX-yYj" detailTextLabel="skT-WK-ZIG" rowHeight="44" style="IBUITableViewCellStyleValue1" id="qc0-WR-S23" customClass="BaseUITableViewCell" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="132" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="qc0-WR-S23" id="3Bm-XS-kuf">
@@ -132,9 +123,6 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
-                                        </userDefinedRuntimeAttributes>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -172,7 +160,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zwM-df-sqj" userLabel="TopSection">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Link to Apple Health" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYG-OH-7fw" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Link to Apple Health" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TYG-OH-7fw" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                 <rect key="frame" x="15" y="25" width="160" height="24"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -181,7 +169,7 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="accountSettingItem"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KOc-Mc-Piq">
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KOc-Mc-Piq">
                                                 <rect key="frame" x="256" y="22" width="51" height="31"/>
                                             </switch>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TnD-BA-jmY" userLabel="line separator" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
@@ -216,7 +204,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cjW-Dg-N3a" userLabel="MiddleSection">
                                         <rect key="frame" x="0.0" y="70" width="320" height="160"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="My blood glucose target range is between:" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fzi-0G-3Ka" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My blood glucose target range is between:" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fzi-0G-3Ka" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                 <rect key="frame" x="15" y="25" width="290" height="47"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -228,8 +216,8 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gfS-gJ-PPr">
                                                 <rect key="frame" x="15" y="90" width="105" height="45"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="80" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OIc-4w-5OY" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="105" height="45"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="80" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OIc-4w-5OY" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="38" y="5" width="30" height="35"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -240,6 +228,8 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
+                                                    <constraint firstItem="OIc-4w-5OY" firstAttribute="centerX" secondItem="gfS-gJ-PPr" secondAttribute="centerX" id="P0C-Y0-e3w"/>
+                                                    <constraint firstItem="OIc-4w-5OY" firstAttribute="centerY" secondItem="gfS-gJ-PPr" secondAttribute="centerY" id="bdg-fs-9i8"/>
                                                     <constraint firstAttribute="height" constant="45" id="czA-xv-xHS"/>
                                                     <constraint firstAttribute="width" constant="105" id="kBw-3f-hLS"/>
                                                 </constraints>
@@ -260,8 +250,8 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UMh-Dz-XlP">
                                                 <rect key="frame" x="200" y="90" width="105" height="45"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="180" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qJm-Xd-jTV" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="105" height="45"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="180" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qJm-Xd-jTV" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="31" y="5" width="44" height="35"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -273,7 +263,9 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="105" id="Dhk-t0-99C"/>
+                                                    <constraint firstItem="qJm-Xd-jTV" firstAttribute="centerY" secondItem="UMh-Dz-XlP" secondAttribute="centerY" id="WYL-RI-0kZ"/>
                                                     <constraint firstAttribute="height" constant="45" id="hv6-EI-n4K"/>
+                                                    <constraint firstItem="qJm-Xd-jTV" firstAttribute="centerX" secondItem="UMh-Dz-XlP" secondAttribute="centerX" id="kvB-tG-7Nr"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3qz-Be-ISM" userLabel="line separator" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
@@ -334,7 +326,7 @@
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
                                                         <state key="normal" title="Cancel"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="activeLoginButton"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightBackgroundButton"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </button>
                                                 </subviews>
@@ -422,7 +414,7 @@
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cpu-TM-zMz" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cpu-TM-zMz" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="15" y="99" width="62" height="36"/>
                                                         <state key="normal" title="Log out"/>
                                                         <userDefinedRuntimeAttributes>

@@ -41,10 +41,9 @@ class EventDetailViewController: BaseUIViewController {
     
     @IBOutlet weak var dateLabel: NutshellUILabel!
     @IBOutlet weak var locationContainerView: UIView!
-    @IBOutlet weak var locationTextField: UITextField!
+    @IBOutlet weak var locationLabel: NutshellUILabel!
     
     private var eventTime = NSDate()
-    private var placeholderNoteString = "Anything else to note?"
     private var placeholderLocationString = "Note location here!"
 
     //
@@ -121,7 +120,7 @@ class EventDetailViewController: BaseUIViewController {
             
             if let mealItem = eventItem as? NutMeal {
                 if mealItem.location.characters.count > 0 {
-                    locationTextField.text = mealItem.location
+                    locationLabel.text = mealItem.location
                 } else {
                     locationContainerView.hidden = true
                 }
@@ -135,10 +134,6 @@ class EventDetailViewController: BaseUIViewController {
                 // TODO: show other workout-specific items
                 locationContainerView.hidden = true
             }
-        }  else  {
-            locationTextField.text = placeholderLocationString
-            // title may be passed in...
-            missingDataAdvisoryView.hidden = true
         }
         
         graphCenterTime = eventTime

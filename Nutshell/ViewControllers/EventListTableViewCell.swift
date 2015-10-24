@@ -15,7 +15,7 @@
 
 import UIKit
 
-class EventListTableViewCell: NutshellUITableViewCell {
+class EventListTableViewCell: BaseUITableViewCell {
 
     var eventGroup: NutEvent?
 
@@ -23,6 +23,7 @@ class EventListTableViewCell: NutshellUITableViewCell {
     @IBOutlet weak var locationLabel: NutshellUILabel!
     @IBOutlet weak var dateLabel: NutshellUILabel!
     @IBOutlet weak var repeatCountLabel: NutshellUILabel!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -32,6 +33,16 @@ class EventListTableViewCell: NutshellUITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+
+    override func setHighlighted(highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated:animated)
+        
+        // Configure the view for the highlighted state
+        titleLabel.highlighted = highlighted
+        locationLabel.highlighted = highlighted
+        dateLabel.highlighted = highlighted
+        repeatCountLabel.highlighted = highlighted
     }
 
     func configureCell(nutEvent: NutEvent) {

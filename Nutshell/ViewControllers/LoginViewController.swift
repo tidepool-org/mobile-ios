@@ -60,6 +60,9 @@ class LoginViewController: BaseUIViewController {
 
     @IBAction func passwordEnterHandler(sender: AnyObject) {
         passwordTextField.resignFirstResponder()
+        if (loginButton.enabled) {
+            login_button_tapped(self)
+        }
     }
 
     @IBAction func emailEnterHandler(sender: AnyObject) {

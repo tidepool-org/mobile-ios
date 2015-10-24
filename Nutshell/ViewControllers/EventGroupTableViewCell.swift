@@ -16,13 +16,13 @@
 
 import UIKit
 
-class EventGroupTableViewCell: NutshellUITableViewCell {
+class EventGroupTableViewCell: BaseUITableViewCell {
 
     var eventItem: NutEventItem?
     
     @IBOutlet weak var favoriteStar: UIImageView!
-    @IBOutlet weak var titleString: UILabel!
-    @IBOutlet weak var timeString: UILabel!
+    @IBOutlet weak var titleString: NutshellUILabel!
+    @IBOutlet weak var timeString: NutshellUILabel!
     @IBOutlet weak var photoImageView: UIImageView!
 
     override func awakeFromNib() {
@@ -34,6 +34,14 @@ class EventGroupTableViewCell: NutshellUITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+
+    override func setHighlighted(highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated:animated)
+        
+        // Configure the view for the highlighted state
+        titleString.highlighted = highlighted
+        timeString.highlighted = highlighted
     }
 
     func configureCell(eventItem: NutEventItem) {

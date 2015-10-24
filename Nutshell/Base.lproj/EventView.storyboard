@@ -9,7 +9,6 @@
     <customFonts key="customFonts">
         <mutableArray key="OpenSans-Regular.ttf">
             <string>OpenSans</string>
-            <string>OpenSans</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -59,35 +58,39 @@
                             </userDefinedRuntimeAttributes>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="eventListCell" id="YKP-WE-Q77" customClass="EventListTableViewCell" customModule="Nutshell" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="eventListCell" id="YKP-WE-Q77" customClass="EventListTableViewCell" customModule="Nutshell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="142" width="375" height="102"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YKP-WE-Q77" id="29e-nl-eJe">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="102"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K4X-aq-FZ1" userLabel="backgroundView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="101"/>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K4X-aq-FZ1" userLabel="backgroundView" customClass="NutShellUIViewWithHighlight" customModule="Nutshell" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="102"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="separatorLine" translatesAutoresizingMaskIntoConstraints="NO" id="I0c-ll-RBd" userLabel="separatorImageView">
+                                                    <rect key="frame" x="0.0" y="101" width="375" height="1"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="1" id="K3a-4e-haz"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
-                                            </userDefinedRuntimeAttributes>
-                                        </view>
-                                        <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CHH-Rf-UjL" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="100" width="375" height="2"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="2" id="O9U-hm-Jbz"/>
+                                                <constraint firstAttribute="trailing" secondItem="I0c-ll-RBd" secondAttribute="trailing" id="QNW-bF-bQR"/>
+                                                <constraint firstAttribute="bottom" secondItem="I0c-ll-RBd" secondAttribute="bottom" id="QSc-bk-soo"/>
+                                                <constraint firstItem="I0c-ll-RBd" firstAttribute="leading" secondItem="K4X-aq-FZ1" secondAttribute="leading" id="Sej-e4-tfX"/>
                                             </constraints>
                                             <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="normalBackground" value="lightBackground"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="highlightedBackground" value="brightBackground"/>
                                             </userDefinedRuntimeAttributes>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tacos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ohg-Qf-hKk" userLabel="titleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                             <rect key="frame" x="26" y="17" width="46" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellTitle"/>
                                             </userDefinedRuntimeAttributes>
@@ -96,7 +99,7 @@
                                             <rect key="frame" x="26" y="66" width="98" height="14"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellDate"/>
                                             </userDefinedRuntimeAttributes>
@@ -105,7 +108,7 @@
                                             <rect key="frame" x="316" y="20" width="18" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellRepeatCount"/>
                                             </userDefinedRuntimeAttributes>
@@ -122,7 +125,7 @@
                                             <rect key="frame" x="26" y="45" width="53" height="15"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellLocation"/>
                                             </userDefinedRuntimeAttributes>
@@ -136,22 +139,18 @@
                                         <constraint firstAttribute="trailing" secondItem="K4X-aq-FZ1" secondAttribute="trailing" id="FtF-H8-v6b"/>
                                         <constraint firstAttribute="bottom" secondItem="K4X-aq-FZ1" secondAttribute="bottom" id="G18-yR-RTa"/>
                                         <constraint firstItem="v7l-kJ-wNL" firstAttribute="leading" secondItem="Whe-Pt-KZq" secondAttribute="trailing" constant="12" id="GzK-AE-paL"/>
-                                        <constraint firstItem="CHH-Rf-UjL" firstAttribute="leading" secondItem="29e-nl-eJe" secondAttribute="leading" id="HtV-pF-cLC"/>
                                         <constraint firstItem="oUx-3c-Ssy" firstAttribute="top" secondItem="Ohg-Qf-hKk" secondAttribute="bottom" constant="4" id="Py0-2e-AEc"/>
                                         <constraint firstItem="vOf-EN-zSX" firstAttribute="top" secondItem="oUx-3c-Ssy" secondAttribute="bottom" constant="6" id="QOh-z2-2M2"/>
                                         <constraint firstItem="Ohg-Qf-hKk" firstAttribute="leading" secondItem="29e-nl-eJe" secondAttribute="leading" constant="26" id="UZa-nk-O2d"/>
-                                        <constraint firstAttribute="bottom" secondItem="CHH-Rf-UjL" secondAttribute="bottom" id="Yfd-bi-seR"/>
                                         <constraint firstAttribute="trailing" secondItem="v7l-kJ-wNL" secondAttribute="trailing" constant="20" id="ZtG-bh-c1p"/>
-                                        <constraint firstAttribute="trailing" secondItem="CHH-Rf-UjL" secondAttribute="trailing" id="aWS-Dp-zvb"/>
                                         <constraint firstItem="K4X-aq-FZ1" firstAttribute="leading" secondItem="29e-nl-eJe" secondAttribute="leading" id="ao0-ni-aH6"/>
                                         <constraint firstItem="Whe-Pt-KZq" firstAttribute="centerY" secondItem="v7l-kJ-wNL" secondAttribute="centerY" id="ikb-qO-IPg"/>
                                         <constraint firstItem="v7l-kJ-wNL" firstAttribute="top" secondItem="29e-nl-eJe" secondAttribute="top" constant="18" id="sN7-AR-rSV"/>
+                                        <constraint firstItem="oUx-3c-Ssy" firstAttribute="width" relation="lessThanOrEqual" secondItem="29e-nl-eJe" secondAttribute="width" constant="-52" id="wIH-Jk-voI"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
-                                </userDefinedRuntimeAttributes>
                                 <connections>
+                                    <outlet property="cellBackgroundView" destination="K4X-aq-FZ1" id="1KA-PJ-ZUt"/>
                                     <outlet property="dateLabel" destination="vOf-EN-zSX" id="9Qa-jB-BdL"/>
                                     <outlet property="locationLabel" destination="oUx-3c-Ssy" id="ziR-KQ-QWM"/>
                                     <outlet property="repeatCountLabel" destination="Whe-Pt-KZq" id="Au8-Xf-1Bi"/>
@@ -192,7 +191,7 @@
         <scene sceneID="ULr-NQ-tPV">
             <objects>
                 <tableViewController title="EventGroup" id="gjn-FB-qdd" customClass="EventGroupTableViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" id="zmj-7u-0MC" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" id="zmj-7u-0MC" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -258,18 +257,39 @@
                             </userDefinedRuntimeAttributes>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="eventItemCell" id="t6w-VC-MaZ" customClass="EventGroupTableViewCell" customModule="Nutshell" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="eventItemCell" id="t6w-VC-MaZ" customClass="EventGroupTableViewCell" customModule="Nutshell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="187" width="375" height="80"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="t6w-VC-MaZ" id="QIn-qj-9Hx">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8B8-Re-ww8" userLabel="backgroundView" customClass="NutShellUIViewWithHighlight" customModule="Nutshell" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="separatorLine" translatesAutoresizingMaskIntoConstraints="NO" id="PH5-2u-P04" userLabel="separatorImageView">
+                                                    <rect key="frame" x="0.0" y="79" width="375" height="1"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="1" id="Va6-5V-0hS"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstItem="PH5-2u-P04" firstAttribute="leading" secondItem="8B8-Re-ww8" secondAttribute="leading" id="3oB-Yc-v6A"/>
+                                                <constraint firstAttribute="trailing" secondItem="PH5-2u-P04" secondAttribute="trailing" id="O3x-sm-Ame"/>
+                                                <constraint firstAttribute="bottom" secondItem="PH5-2u-P04" secondAttribute="bottom" id="hNv-8j-D1V"/>
+                                            </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="normalBackground" value="lightBackground"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="highlightedBackground" value="brightBackground"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Diet coke and 10 chips" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d9p-x8-wr7" userLabel="titleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                             <rect key="frame" x="24" y="16" width="183" height="24"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellTitle"/>
                                             </userDefinedRuntimeAttributes>
@@ -277,8 +297,8 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hkV-fw-Ufw" userLabel="timeLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                             <rect key="frame" x="24" y="48" width="29" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellSubtitle"/>
                                             </userDefinedRuntimeAttributes>
@@ -297,17 +317,19 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="d9p-x8-wr7" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leadingMargin" constant="16" id="4j8-WY-WEl"/>
+                                        <constraint firstItem="8B8-Re-ww8" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leading" id="Ihl-Hi-c1S"/>
+                                        <constraint firstItem="8B8-Re-ww8" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" id="MOI-L0-Joe"/>
+                                        <constraint firstAttribute="bottom" secondItem="8B8-Re-ww8" secondAttribute="bottom" id="Vmk-bk-kbb"/>
                                         <constraint firstItem="P6c-tV-ffU" firstAttribute="centerY" secondItem="d9p-x8-wr7" secondAttribute="centerY" id="bLs-OO-9Zb"/>
                                         <constraint firstItem="hkV-fw-Ufw" firstAttribute="leading" secondItem="d9p-x8-wr7" secondAttribute="leading" id="d89-zi-cii"/>
+                                        <constraint firstAttribute="trailing" secondItem="8B8-Re-ww8" secondAttribute="trailing" id="hXj-3W-0Gm"/>
                                         <constraint firstAttribute="trailing" secondItem="P6c-tV-ffU" secondAttribute="trailing" constant="24" id="hz8-7P-l1p"/>
                                         <constraint firstItem="hkV-fw-Ufw" firstAttribute="top" secondItem="d9p-x8-wr7" secondAttribute="bottom" constant="8" id="tbi-2f-7Ga"/>
                                         <constraint firstItem="d9p-x8-wr7" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" constant="16" id="trf-Lh-5Zj"/>
                                     </constraints>
                                 </tableViewCellContentView>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
-                                </userDefinedRuntimeAttributes>
                                 <connections>
+                                    <outlet property="cellBackgroundView" destination="8B8-Re-ww8" id="rDl-Uj-Hr7"/>
                                     <outlet property="timeString" destination="hkV-fw-Ufw" id="jb8-JI-ydm"/>
                                     <outlet property="titleString" destination="d9p-x8-wr7" id="8Lg-um-f95"/>
                                     <segue destination="S8b-Gx-dOJ" kind="show" identifier="EventItemDetailSegue" id="vDO-8u-VmA"/>
@@ -399,7 +421,7 @@
                                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="notesText"/>
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015    4:21 PM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bxw-YN-kxC" userLabel="eventDate" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015    4:21 PM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bxw-YN-kxC" userLabel="eventDateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="98" width="375" height="17"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -412,28 +434,37 @@
                                                                 <rect key="frame" x="15" y="123" width="338" height="29"/>
                                                                 <subviews>
                                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeSmallIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Uth-HJ-dCg">
-                                                                        <rect key="frame" x="96" y="6" width="11" height="18"/>
+                                                                        <rect key="frame" x="93" y="6" width="11" height="18"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="11" id="9Gb-eL-ky8"/>
                                                                             <constraint firstAttribute="height" constant="18" id="tgm-Vs-gOI"/>
                                                                         </constraints>
                                                                     </imageView>
-                                                                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Location of this event" adjustsFontSizeToFit="NO" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="2V1-up-IBM" userLabel="locationTextView" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                                        <rect key="frame" x="115" y="6" width="124" height="17"/>
-                                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
-                                                                        <textInputTraits key="textInputTraits"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015    4:21 PM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPo-2j-cHI" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                                        <rect key="frame" x="112" y="6" width="130" height="17"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="130" id="jjz-cz-S11"/>
+                                                                        </constraints>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                                        <nil key="highlightedColor"/>
                                                                         <userDefinedRuntimeAttributes>
                                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="dateAndLocation"/>
                                                                         </userDefinedRuntimeAttributes>
-                                                                    </textField>
+                                                                        <variation key="default">
+                                                                            <mask key="constraints">
+                                                                                <exclude reference="jjz-cz-S11"/>
+                                                                            </mask>
+                                                                        </variation>
+                                                                    </label>
                                                                 </subviews>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                 <constraints>
-                                                                    <constraint firstItem="2V1-up-IBM" firstAttribute="leading" secondItem="Uth-HJ-dCg" secondAttribute="trailing" constant="8" id="0SM-d8-PiV"/>
-                                                                    <constraint firstItem="2V1-up-IBM" firstAttribute="centerX" secondItem="UkV-Ct-zaJ" secondAttribute="centerX" constant="8" id="Lyh-bw-hc1"/>
-                                                                    <constraint firstItem="2V1-up-IBM" firstAttribute="centerY" secondItem="UkV-Ct-zaJ" secondAttribute="centerY" id="Mg5-sZ-4Ir"/>
+                                                                    <constraint firstItem="dPo-2j-cHI" firstAttribute="leading" secondItem="Uth-HJ-dCg" secondAttribute="trailing" constant="8" id="CjP-jc-lwW"/>
+                                                                    <constraint firstItem="dPo-2j-cHI" firstAttribute="centerX" secondItem="UkV-Ct-zaJ" secondAttribute="centerX" constant="8" id="IGt-j2-JAo"/>
+                                                                    <constraint firstItem="dPo-2j-cHI" firstAttribute="width" relation="lessThanOrEqual" secondItem="UkV-Ct-zaJ" secondAttribute="width" id="cAN-P8-Cdy"/>
                                                                     <constraint firstItem="Uth-HJ-dCg" firstAttribute="centerY" secondItem="UkV-Ct-zaJ" secondAttribute="centerY" id="odp-kc-Ey8"/>
+                                                                    <constraint firstItem="dPo-2j-cHI" firstAttribute="centerY" secondItem="UkV-Ct-zaJ" secondAttribute="centerY" id="yhX-Qc-C65"/>
                                                                 </constraints>
                                                             </view>
                                                         </subviews>
@@ -457,9 +488,6 @@
                                                             <constraint firstItem="U73-Nl-2gk" firstAttribute="top" secondItem="z3U-KK-eno" secondAttribute="top" constant="24" id="t7h-qt-iQG"/>
                                                             <constraint firstItem="au5-2w-K1j" firstAttribute="top" secondItem="U73-Nl-2gk" secondAttribute="bottom" constant="8" id="ti9-U4-tTf"/>
                                                         </constraints>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
-                                                        </userDefinedRuntimeAttributes>
                                                     </view>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -686,7 +714,7 @@
                         <outlet property="dateLabel" destination="bxw-YN-kxC" id="h0k-0A-P6h"/>
                         <outlet property="graphSectionView" destination="INU-ti-JXM" id="r4i-Yu-eBP"/>
                         <outlet property="locationContainerView" destination="UkV-Ct-zaJ" id="QjZ-R5-nrw"/>
-                        <outlet property="locationTextField" destination="2V1-up-IBM" id="9xb-BP-ub9"/>
+                        <outlet property="locationLabel" destination="dPo-2j-cHI" id="7HA-Vl-c5X"/>
                         <outlet property="missingDataAdvisoryView" destination="cmJ-dI-KmZ" id="XsH-bq-zbD"/>
                         <outlet property="notesLabel" destination="au5-2w-K1j" id="heW-2E-xn2"/>
                         <outlet property="photoUIImageView" destination="let-xp-dUr" id="oDy-7z-aYX"/>
@@ -859,8 +887,11 @@
                                                             </mask>
                                                         </variation>
                                                     </button>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Place" adjustsFontSizeToFit="NO" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="b5b-5h-R2Q" userLabel="locationTextView" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="49" y="35" width="35" height="18"/>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Place" textAlignment="center" adjustsFontSizeToFit="NO" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="b5b-5h-R2Q" userLabel="locationTextView" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="16" y="34" width="100" height="18"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Zrg-ax-gG8"/>
+                                                        </constraints>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
@@ -899,7 +930,7 @@
                                                     <constraint firstItem="aaa-jg-7gn" firstAttribute="top" secondItem="D0q-NY-j3z" secondAttribute="top" id="6fu-os-HPz"/>
                                                     <constraint firstItem="DPt-Sa-D9K" firstAttribute="top" secondItem="D0q-NY-j3z" secondAttribute="top" id="Ihg-HW-ksD"/>
                                                     <constraint firstAttribute="height" constant="100" id="PrQ-nx-xMn"/>
-                                                    <constraint firstItem="b5b-5h-R2Q" firstAttribute="top" secondItem="dPf-QW-Qby" secondAttribute="bottom" constant="5" id="aAM-wa-lnT"/>
+                                                    <constraint firstItem="b5b-5h-R2Q" firstAttribute="top" secondItem="dPf-QW-Qby" secondAttribute="bottom" constant="4" id="aAM-wa-lnT"/>
                                                     <constraint firstItem="OOd-y1-fQU" firstAttribute="top" secondItem="7bq-Jj-vtF" secondAttribute="bottom" constant="5" id="aG2-el-12U"/>
                                                     <constraint firstItem="dPf-QW-Qby" firstAttribute="centerX" secondItem="D0q-NY-j3z" secondAttribute="centerX" multiplier="0.35" id="bRf-Mg-Ze1"/>
                                                     <constraint firstItem="b5b-5h-R2Q" firstAttribute="width" relation="lessThanOrEqual" secondItem="D0q-NY-j3z" secondAttribute="width" multiplier="0.33" id="cXn-OO-Ru2"/>
@@ -936,7 +967,7 @@
                                         </constraints>
                                         <state key="normal" title="Save"/>
                                         <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="activeLoginButton"/>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightBackgroundButton"/>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="saveButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="mTW-P2-R3G"/>
@@ -970,7 +1001,7 @@
                                                 </constraints>
                                                 <state key="normal" title="Cancel"/>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="activeLoginButton"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightBackgroundButton"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <variation key="default">
                                                     <mask key="constraints">
@@ -988,7 +1019,7 @@
                                                 </constraints>
                                                 <state key="normal" title="Done"/>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="doneButton"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackgroundButton"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="doneDatePickButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="eq1-ju-h3a"/>
@@ -1126,6 +1157,6 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Zwr-CU-iYy"/>
+        <segue reference="Zkp-nN-ILj"/>
     </inferredMetricsTieBreakers>
 </document>

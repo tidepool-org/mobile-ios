@@ -17,6 +17,8 @@ import UIKit
 
 class BaseUITableViewCell: UITableViewCell {
 
+    @IBOutlet weak var cellBackgroundView: NutShellUIViewWithHighlight!
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -26,6 +28,14 @@ class BaseUITableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+
+    override func setHighlighted(highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated:animated)
+        
+        if cellBackgroundView != nil {
+            cellBackgroundView.setHighlighted(highlighted)
+        }
     }
 
 }

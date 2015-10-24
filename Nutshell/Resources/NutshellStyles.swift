@@ -39,8 +39,8 @@ public class Styles: NSObject {
         "lightBackground": veryLightGreyColor,
         "whiteBackground": whiteColor,
        // login & signup
-        "activeLoginButton": brightBlueColor,
-        "inactiveLoginButton": veryLightGreyColor,
+        "brightBackgroundButton": brightBlueColor,
+        "inactiveButton": veryLightGreyColor,
         "userDataEntry": whiteColor,
         // menu and account settings
         "rowSeparator": mediumDarkGreyColor,
@@ -55,8 +55,8 @@ public class Styles: NSObject {
         "userDataEntry": (mediumRegularFont, darkPurpleColor),
         "dataEntryErrorFeedback": (smallSemiboldFont, pinkColor),
         "brightLinkText": (mediumRegularFont, brightBlueColor),
-        "inactiveLoginButton": (mediumButtonRegularFont, altDarkGreyColor),
-        "activeLoginButton": (largeRegularFont, whiteColor),
+        "inactiveButton": (largeRegularFont, altDarkGreyColor),
+        "brightBackgroundButton": (largeRegularFont, whiteColor),
         // event detail view
         "healthkitEventSubtext": (smallBoldFont, pinkColor),
         // table views
@@ -90,6 +90,21 @@ public class Styles: NSObject {
 
     ]
 
+    class func backgroundImageofSize(size: CGSize, style: String) -> UIImage? {
+        if let backColor = Styles.usageToBackgroundColor[style] {
+            UIGraphicsBeginImageContextWithOptions(size, false, 0)
+            // draw background
+            let rectanglePath = UIBezierPath(rect: CGRectMake(0, 0, size.width, size.height))
+            backColor.setFill()
+            rectanglePath.fill()
+            let backgroundImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return backgroundImage
+        } else {
+            return nil
+        }
+    }
+
     //
     // MARK: - Fonts
     //
@@ -101,7 +116,7 @@ public class Styles: NSObject {
         static let mediumRegularFont: UIFont = UIFont(name: "OpenSans", size: 17.0)!
         static let mediumSmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 14.0)!
         static let mediumButtonRegularFont: UIFont = UIFont(name: "OpenSans", size: 15.0)!
-        static let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 22.0)!
+        static let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 20.0)!
         
         static let smallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 11.0)!
         static let mediumSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 17.0)!
@@ -167,6 +182,7 @@ public class Styles: NSObject {
         static let mediumLightGreyColor: UIColor = UIColor(hex: 0xd0d3d4) 
         static let mediumGreyColor: UIColor = UIColor(hex: 0xb8b8b8) 
         static let whiteColor: UIColor = UIColor(hex: 0xffffff) 
+        static let dimmedWhiteColor: UIColor = UIColor(hex: 0xffffff, opacity: 0.30)
         static let blackColor: UIColor = UIColor(hex: 0x000000)
         static let peachColor: UIColor = UIColor(hex: 0xf88d79)
         static let peachDeleteColor: UIColor = UIColor(hex: 0xf66f56)
@@ -247,6 +263,8 @@ public class Styles: NSObject {
     // Open Sans Semibold 17:   UILabel table row item delete text, title text in highlighted row
     // Open Sans Regular 15:    UIButton active login, sign up button text
      public class var whiteColor: UIColor { return ColorCache.whiteColor }
+     public class var dimmedWhiteColor: UIColor { return ColorCache.dimmedWhiteColor }
+    
     // Open Sans Regular 17:    UITextField sign up text entries
     //class var brightBlueColor: UIColor { return brightBlueColor }
 
