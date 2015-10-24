@@ -58,6 +58,11 @@ class LoginViewController: BaseUIViewController {
     // MARK: - Button and text field handlers
     //
 
+    @IBAction func tapOutsideFieldHandler(sender: AnyObject) {
+        passwordTextField.resignFirstResponder()
+        emailTextField.resignFirstResponder()
+    }
+    
     @IBAction func passwordEnterHandler(sender: AnyObject) {
         passwordTextField.resignFirstResponder()
         if (loginButton.enabled) {

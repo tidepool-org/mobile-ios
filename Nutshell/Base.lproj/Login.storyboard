@@ -27,10 +27,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zV2-Yb-tzp" userLabel="LoginScene">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zV2-Yb-tzp" userLabel="LoginScene" customClass="UIControl">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iHd-Hc-UkR" userLabel="LoginContainerView">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iHd-Hc-UkR" userLabel="LoginContainerView" customClass="UIControl">
                                         <rect key="frame" x="0.0" y="118" width="320" height="333"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="login_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="kJo-Zi-pFB" userLabel="LogoView">
@@ -186,6 +186,9 @@
                                             <constraint firstAttribute="height" constant="333" id="eqp-BD-K3G"/>
                                             <constraint firstItem="kJo-Zi-pFB" firstAttribute="centerX" secondItem="iHd-Hc-UkR" secondAttribute="centerX" id="uC1-T4-Rja"/>
                                         </constraints>
+                                        <connections>
+                                            <action selector="tapOutsideFieldHandler:" destination="4G7-DP-gat" eventType="touchUpInside" id="XrQ-P2-AoD"/>
+                                        </connections>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x8Q-os-z1s" userLabel="ActivityContainer">
                                         <rect key="frame" x="0.0" y="451" width="320" height="63"/>
@@ -294,6 +297,9 @@
                                         <include reference="oi0-6N-Vkt"/>
                                     </mask>
                                 </variation>
+                                <connections>
+                                    <action selector="tapOutsideFieldHandler:" destination="4G7-DP-gat" eventType="touchUpInside" id="fmu-mi-qyh"/>
+                                </connections>
                             </view>
                         </subviews>
                         <constraints>
