@@ -18,8 +18,13 @@ import CoreData
 
 class EventListTableViewController: BaseUITableViewController {
 
+    @IBOutlet weak var searchTextField: NutshellUITextField!
+    @IBOutlet weak var searchPlaceholderLabel: NutshellUILabel!
+    
     private var sortedNutEvents = [(String, NutEvent)]()
-  
+    private var filteredNutEvents = [(String, NutEvent)]()
+    private var filterString = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,7 +38,9 @@ class EventListTableViewController: BaseUITableViewController {
 
         // Add a notification for when the database changes
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: ad.managedObjectContext)
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: ad.managedObjectContext)
+        notificationCenter.addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
    }
 
     override func didReceiveMemoryWarning() {
@@ -107,16 +114,19 @@ class EventListTableViewController: BaseUITableViewController {
         var nutEvents = [String: NutEvent]()
 
         func addNewEvent(newEvent: EventItem) {
-            if let existingNutEvent = nutEvents[newEvent.title!] {
+            let newEventId = newEvent.nutEventIdString()
+            if let existingNutEvent = nutEvents[newEventId] {
                 existingNutEvent.addEvent(newEvent)
                 print("appending new event: \(newEvent.notes)")
                 existingNutEvent.printNutEvent()
             } else {
-                nutEvents[newEvent.title!] = NutEvent(firstEvent: newEvent)
+                nutEvents[newEventId] = NutEvent(firstEvent: newEvent)
             }
         }
 
         sortedNutEvents = [(String, NutEvent)]()
+        filteredNutEvents = [(String, NutEvent)]()
+        filterString = ""
         
         // Get all Food and Activity events, chronologically; this will result in an unsorted dictionary of NutEvents.
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -132,8 +142,7 @@ class EventListTableViewController: BaseUITableViewController {
         }
         
         sortedNutEvents = nutEvents.sort() { $0.1.mostRecent.compare($1.1.mostRecent) == NSComparisonResult.OrderedDescending }
-        
-        tableView.reloadData()
+        updateFilteredAndReload()
     }
     
     @IBAction func menuButtonHandler(sender: AnyObject) {
@@ -142,6 +151,64 @@ class EventListTableViewController: BaseUITableViewController {
         if let vc = sb.instantiateInitialViewController() {
             self.navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    
+    // MARK: - Search
+    
+    func textFieldDidChange() {
+        updateFilteredAndReload()
+    }
+
+    @IBAction func searchEditingDidEnd(sender: AnyObject) {
+        configureSearchUI()
+    }
+    
+    @IBAction func searchEditingDidBegin(sender: AnyObject) {
+        configureSearchUI()
+    }
+    
+    private func searchMode() -> Bool {
+        var searchMode = false
+        if searchTextField.isFirstResponder() {
+            searchMode = true
+        } else if let searchText = searchTextField.text {
+            if !searchText.isEmpty {
+                searchMode = true
+            }
+        }
+        return searchMode
+    }
+    
+    private func configureSearchUI() {
+        let searchOn = searchMode()
+        searchPlaceholderLabel.hidden = searchOn
+        self.title = searchOn ? "Matching events" : "All events"
+    }
+
+    private func updateFilteredAndReload() {
+        if !searchMode() {
+            filteredNutEvents = sortedNutEvents
+            filterString = ""
+        }
+        if let searchText = searchTextField.text {
+            if !searchText.isEmpty {
+                if searchText.localizedCaseInsensitiveContainsString(filterString) {
+                    // if the search is just getting longer, no need to check already filtered out items
+                    filteredNutEvents = filteredNutEvents.filter() {
+                        $1.containsSearchString(searchText)
+                    }
+                } else {
+                    filteredNutEvents = sortedNutEvents.filter() {
+                        $1.containsSearchString(searchText)
+                    }
+                }
+                filterString = searchText
+            } else {
+                filteredNutEvents = sortedNutEvents
+                filterString = ""
+            }
+        }
+        tableView.reloadData()
     }
 }
 
@@ -154,14 +221,14 @@ extension EventListTableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sortedNutEvents.count
+        return filteredNutEvents.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(EventViewStoryboard.TableViewCellIdentifiers.eventListCell, forIndexPath: indexPath) as! EventListTableViewCell
         
-        if (indexPath.item < sortedNutEvents.count) {
-            let tuple = self.sortedNutEvents[indexPath.item]
+        if (indexPath.item < filteredNutEvents.count) {
+            let tuple = self.filteredNutEvents[indexPath.item]
             let nutEvent = tuple.1
             cell.configureCell(nutEvent)
         }

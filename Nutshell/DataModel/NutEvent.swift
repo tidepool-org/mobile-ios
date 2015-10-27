@@ -48,7 +48,7 @@ class NutEvent {
     }
     
     func addEvent(newEvent: EventItem) {
-        if (newEvent.title == self.title) {
+        if (newEvent.nutEventIdString() == self.nutEventIdString()) {
             if let meal = newEvent as? Meal {
                 let newItem = NutMeal(meal: meal, title: meal.title, notes: meal.notes, location: meal.location, photo: meal.photo, time: meal.time)
                 self.itemArray.append(newItem)
@@ -59,7 +59,7 @@ class NutEvent {
                 mostRecent = newItem.time.laterDate(mostRecent)
             }
         } else {
-            print("attempting to add item with non-matching title to NutEvent!")
+            print("attempting to add item with non-matching title and location to NutEvent!")
         }
     }
     
@@ -67,7 +67,30 @@ class NutEvent {
         itemArray = itemArray.sort() {
             $0.time.compare($1.time) == NSComparisonResult.OrderedDescending }
     }
-    
+
+    func nutEventIdString() -> String {
+        // TODO: this will alias:
+        //  title: "My NutEvent at Home", loc: "" with
+        //  title: "My NutEvent at ", loc: "Home"
+        // But for now consider this a feature...
+        return title + location
+    }
+
+    func containsSearchString(searchString: String) -> Bool {
+        if title.localizedCaseInsensitiveContainsString(searchString) {
+            return true
+        }
+        if location.localizedCaseInsensitiveContainsString(searchString) {
+            return true
+        }
+        for nutItem in itemArray {
+            if nutItem.containsSearchString(searchString) {
+                return true
+            }
+        }
+        return false;
+    }
+
     func printNutEvent() {
         print("nut has \(itemArray.count) items")
         for item in itemArray {

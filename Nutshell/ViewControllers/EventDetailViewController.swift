@@ -91,15 +91,9 @@ class EventDetailViewController: BaseUIViewController {
     @IBAction func backButtonHandler(sender: AnyObject) {
         // If either title or location have changed, we need to exit back to list...
         if let eventGroup = eventGroup, eventItem = eventItem {
-            if eventItem.title != eventGroup.title {
+            if eventItem.nutEventIdString() != eventGroup.nutEventIdString() {
                 self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
                 return
-            } else if let mealItem = eventItem as? NutMeal {
-                // TODO: would be nice if workout had a location as well!
-                if mealItem.location != eventGroup.location {
-                    self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
-                    return
-                }
             }
         }
         self.performSegueWithIdentifier("unwindSegueToDone", sender: self)

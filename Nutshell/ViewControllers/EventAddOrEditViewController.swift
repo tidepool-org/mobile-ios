@@ -50,7 +50,7 @@ class EventAddOrEditViewController: BaseUIViewController {
     private var eventTime = NSDate()
     private var placeholderTitleString = "Meal name"
     private var titleHintString = "Simple and repeatable"
-    private var placeholderNotesString = "Anything else to note?"
+    private var placeholderNotesString = "Notes"
     private var noteHintString = "Sides, dessert, anything else?"
     private var placeholderLocationString = "Place"
 
@@ -336,7 +336,6 @@ class EventAddOrEditViewController: BaseUIViewController {
         
         if viewExistingEvent {
             updateCurrentEvent()
-            // TODO: need unwind segue to detail view...
             self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
             return
         }
@@ -405,16 +404,9 @@ class EventAddOrEditViewController: BaseUIViewController {
         // this is a cancel for the role of addEvent and editEvent
         // for viewEvent, we need to check whether the title has changed
         if viewExistingEvent {
-            if let newMealEvent = newMealEvent, eventGroup = eventGroup {
-                if eventGroup.title != newMealEvent.title || newMealEvent.location != eventGroup.location {
-                    self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
-                    return
-                }
-            } else {
-                // cancel of edit
-                // TODO: put up a dialog to confirm if anything has changed!
-                self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
-            }
+            // cancel of edit
+            // TODO: put up a dialog to confirm if anything has changed!
+            self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
         } else {
             // cancel of add
             // TODO: put up a dialog to confirm if anything has changed!
@@ -471,7 +463,7 @@ class EventAddOrEditViewController: BaseUIViewController {
         
         NutUtils.delay(1.25) {
             if let newMealEvent = self.newMealEvent, eventGroup = self.eventGroup {
-                if newMealEvent.title != eventGroup.title || newMealEvent.location != eventGroup.location {
+                if newMealEvent.nutEventIdString() != eventGroup.nutEventIdString() {
                     self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
                     return
                 }

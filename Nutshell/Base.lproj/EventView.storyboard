@@ -30,11 +30,28 @@
                                     </constraints>
                                 </imageView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lJt-NT-ava" userLabel="searchButton">
-                                    <rect key="frame" x="14" y="14" width="21" height="22"/>
+                                    <rect key="frame" x="14" y="15" width="22" height="21"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="21.5" id="dao-Dv-fMx"/>
+                                        <constraint firstAttribute="height" constant="21" id="oX7-KT-TO1"/>
+                                    </constraints>
                                     <state key="normal" image="searchIcon"/>
                                 </button>
-                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X2v-ZC-Ki5" userLabel="searchPlaceholder" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                    <rect key="frame" x="49" y="13" width="52" height="24"/>
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TJv-Lt-lpn" userLabel="searchTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
+                                    <rect key="frame" x="50" y="0.0" width="317" height="50"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="usage" value="searchText"/>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="searchEditingDidBegin:" destination="1ND-G3-Xkn" eventType="editingDidBegin" id="Z7S-Um-Zht"/>
+                                        <action selector="searchEditingDidEnd:" destination="1ND-G3-Xkn" eventType="editingDidEndOnExit" id="BV3-53-YsE"/>
+                                        <action selector="searchEditingDidEnd:" destination="1ND-G3-Xkn" eventType="editingDidEnd" id="Jrs-QC-EmR"/>
+                                    </connections>
+                                </textField>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X2v-ZC-Ki5" userLabel="searchPlaceholder" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                    <rect key="frame" x="50" y="0.0" width="52" height="50"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
@@ -45,12 +62,17 @@
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
+                                <constraint firstItem="TJv-Lt-lpn" firstAttribute="leading" secondItem="lJt-NT-ava" secondAttribute="trailing" constant="14" id="AXq-y9-3Gu"/>
+                                <constraint firstItem="TJv-Lt-lpn" firstAttribute="height" secondItem="C19-th-FcL" secondAttribute="height" id="DCX-rk-nlt"/>
                                 <constraint firstItem="X2v-ZC-Ki5" firstAttribute="centerY" secondItem="C19-th-FcL" secondAttribute="centerY" id="Eyg-Km-wBY"/>
+                                <constraint firstItem="TJv-Lt-lpn" firstAttribute="centerY" secondItem="C19-th-FcL" secondAttribute="centerY" id="GUF-fF-Bda"/>
                                 <constraint firstItem="m3G-Yl-CAS" firstAttribute="leading" secondItem="C19-th-FcL" secondAttribute="leading" id="HZx-xd-wAt"/>
+                                <constraint firstAttribute="trailing" secondItem="TJv-Lt-lpn" secondAttribute="trailing" constant="8" id="Kb2-ts-dcQ"/>
                                 <constraint firstItem="X2v-ZC-Ki5" firstAttribute="leading" secondItem="lJt-NT-ava" secondAttribute="trailing" constant="14" id="Rqg-zK-c0r"/>
                                 <constraint firstItem="lJt-NT-ava" firstAttribute="leading" secondItem="C19-th-FcL" secondAttribute="leading" constant="14" id="ZQZ-gN-4Q7"/>
                                 <constraint firstAttribute="bottom" secondItem="m3G-Yl-CAS" secondAttribute="bottom" id="gko-tr-gew"/>
                                 <constraint firstAttribute="trailing" secondItem="m3G-Yl-CAS" secondAttribute="trailing" id="jes-EV-MOE"/>
+                                <constraint firstItem="X2v-ZC-Ki5" firstAttribute="height" secondItem="C19-th-FcL" secondAttribute="height" id="lvi-3J-Ue2"/>
                                 <constraint firstItem="lJt-NT-ava" firstAttribute="centerY" secondItem="C19-th-FcL" secondAttribute="centerY" id="soV-1L-mbd"/>
                             </constraints>
                             <userDefinedRuntimeAttributes>
@@ -113,7 +135,7 @@
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellRepeatCount"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v7l-kJ-wNL" userLabel="disclosureButton">
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v7l-kJ-wNL" userLabel="disclosureButton">
                                             <rect key="frame" x="346" y="18" width="9" height="22"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="9" id="MNf-kU-h33"/>
@@ -182,6 +204,10 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <connections>
+                        <outlet property="searchPlaceholderLabel" destination="X2v-ZC-Ki5" id="b9t-hB-XXW"/>
+                        <outlet property="searchTextField" destination="TJv-Lt-lpn" id="zp7-V0-eTK"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cLB-76-o91" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -303,7 +329,7 @@
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellSubtitle"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P6c-tV-ffU" userLabel="rightDiscloseButton">
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P6c-tV-ffU" userLabel="rightDiscloseButton">
                                             <rect key="frame" x="342" y="21" width="9" height="15"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="9" id="O4T-WA-EP1"/>
@@ -1157,6 +1183,6 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Zkp-nN-ILj"/>
+        <segue reference="Zwr-CU-iYy"/>
     </inferredMetricsTieBreakers>
 </document>

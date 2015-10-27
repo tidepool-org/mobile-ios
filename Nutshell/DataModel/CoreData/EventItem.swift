@@ -11,7 +11,8 @@ import CoreData
 
 
 class EventItem: CommonData {
-
-// Insert code here to add functionality to your managed object subclass
-
+    // override for eventItems that have location too!
+    func nutEventIdString() -> String {
+        return title != nil ? title! : ""
+    }
 }

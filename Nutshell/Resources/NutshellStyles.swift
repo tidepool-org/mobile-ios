@@ -64,6 +64,7 @@ public class Styles: NSObject {
         "tableHeaderLocation": (smallSemiboldFont, whiteColor),
         "tableHeaderCount": (smallBoldFont, whiteColor),
         "searchPlaceholder": (mediumLightFont, blackColor),
+        "searchText": (largeRegularFont, blackColor),
         "tableListCellTitle": (mediumSemiboldFont, altDarkGreyColor),
         "tableListCellLocation": (smallSemiboldFont, altDarkGreyColor),
         "tableListCellDate": (verySmallRegularFont, altDarkGreyColor),

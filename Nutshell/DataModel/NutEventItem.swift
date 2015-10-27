@@ -11,11 +11,13 @@ import Foundation
 class NutEventItem {
     
     var title: String
+    var location: String
     var notes: String
     var time: NSDate
     
     init(title: String?, notes: String?, time: NSDate?) {
         self.title = title != nil ? title! : ""
+        self.location = ""
         self.notes = notes != nil ? notes! : ""
         
         if time != nil {
@@ -26,6 +28,20 @@ class NutEventItem {
         }
     }
     
+    func nutEventIdString() -> String {
+        // TODO: this will alias:
+        //  title: "My NutEvent at Home", loc: "" with
+        //  title: "My NutEvent at ", loc: "Home"
+        // But for now consider this a feature...
+        return title + location
+    }
+    
+    func containsSearchString(searchString: String) -> Bool {
+        if notes.localizedCaseInsensitiveContainsString(searchString) {
+            return true
+        }
+        return false;
+    }
 }
 
 func != (left: NutEventItem, right: NutEventItem) -> Bool {

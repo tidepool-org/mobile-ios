@@ -12,6 +12,12 @@ import CoreData
 
 class Meal: EventItem {
 
-// Insert code here to add functionality to your managed object subclass
+    // override for eventItems that have location too!
+    override func nutEventIdString() -> String {
+        if let title = title,  location = location {
+            return title + location
+        }
+        return super.nutEventIdString()
+    }
 
 }
