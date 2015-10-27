@@ -13,11 +13,11 @@
  * not, you can obtain one from Tidepool Project at tidepool.org.
  */
 
-/* NSLocalizedString("discardAlertOkay", comment:"Discard") */
+/* NSLocalizedString("saveButtonTitle", comment:"Save") */
 
 
 /*
-   Discard alert text: when trash button is used to discard an item
+    Discard alert text: for edit and add item
  */
 
 "discardMealAlertTitle" = "Discard meal?";
@@ -25,3 +25,10 @@
 "closeMealAlertMessage" = "If you close this meal, your meal will be lost.";
 "discardAlertCancel" = "Cancel";
 "discardAlertOkay" = "Discard";
+
+/*
+    Add/edit event view controller
+ */
+
+"saveButtonTitle" = "Save";
+"saveAndEatButtonTitle" = "Save and eat!";

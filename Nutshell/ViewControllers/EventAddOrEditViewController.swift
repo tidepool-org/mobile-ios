@@ -48,11 +48,6 @@ class EventAddOrEditViewController: BaseUIViewController {
     @IBOutlet weak var date2Label: NutshellUILabel!
     
     private var eventTime = NSDate()
-    private var placeholderTitleString = "Meal name"
-    private var titleHintString = "Simple and repeatable"
-    private var placeholderNotesString = "Notes"
-    private var noteHintString = "Sides, dessert, anything else?"
-    private var placeholderLocationString = "Place"
 
     //
     // MARK: - Base methods
@@ -60,7 +55,7 @@ class EventAddOrEditViewController: BaseUIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        var saveButtonTitle = "Save"
+        var saveButtonTitle = NSLocalizedString("saveButtonTitle", comment:"Save")
         if let eventItem = eventItem {
             viewExistingEvent = true
             eventTime = eventItem.time
@@ -68,12 +63,14 @@ class EventAddOrEditViewController: BaseUIViewController {
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonHandler:")
             navigationItem.rightBarButtonItem?.enabled = true
         }  else  {
-            locationTextField.text = placeholderLocationString
-            saveButtonTitle = "Save and eat!"
+            locationTextField.text = Styles.placeholderLocationString
+            saveButtonTitle = NSLocalizedString("saveAndEatButtonTitle", comment:"Save and eat!")
         }
         saveButton.setTitle(saveButtonTitle, forState: UIControlState.Normal)
         configureInfoSection()
-
+        titleHintLabel.text = Styles.titleHintString
+        notesHintLabel.text = Styles.noteHintString
+        
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
@@ -95,8 +92,8 @@ class EventAddOrEditViewController: BaseUIViewController {
     //
     
     private func configureInfoSection() {
-        var titleText = placeholderTitleString
-        var notesText = placeholderNotesString
+        var titleText = Styles.placeholderTitleString
+        var notesText = Styles.placeholderNotesString
         
         if let eventItem = eventItem {
             if eventItem.title.characters.count > 0 {
@@ -110,7 +107,7 @@ class EventAddOrEditViewController: BaseUIViewController {
                 if mealItem.location.characters.count > 0 {
                     locationTextField.text = mealItem.location
                 } else {
-                    locationTextField.text = placeholderLocationString
+                    locationTextField.text = Styles.placeholderLocationString
                 }
 //                if mealItem.photo.characters.count > 0 {
 //                    if let image = UIImage(named: mealItem.photo) {
@@ -140,7 +137,7 @@ class EventAddOrEditViewController: BaseUIViewController {
         if isBeingEdited {
             titleHintLabel.hidden = false
         } else {
-            let titleIsSet = titleTextField.text != "" && titleTextField.text != placeholderTitleString
+            let titleIsSet = titleTextField.text != "" && titleTextField.text != Styles.placeholderTitleString
             titleHintLabel.hidden = titleIsSet
         }
     }
@@ -150,7 +147,7 @@ class EventAddOrEditViewController: BaseUIViewController {
         if isBeingEdited {
             notesHintLabel.hidden = false
         } else {
-            let notesIsSet = notesTextField.text != "" && notesTextField.text != placeholderNotesString
+            let notesIsSet = notesTextField.text != "" && notesTextField.text != Styles.placeholderNotesString
             notesHintLabel.hidden = notesIsSet
         }
     }
@@ -159,7 +156,7 @@ class EventAddOrEditViewController: BaseUIViewController {
         if viewExistingEvent {
             saveButton.hidden = !existingEventChanged()
         } else {
-            if !newEventChanged() || titleTextField.text?.characters.count == 0 ||  titleTextField.text == placeholderTitleString {
+            if !newEventChanged() || titleTextField.text?.characters.count == 0 ||  titleTextField.text == Styles.placeholderTitleString {
                 saveButton.hidden = true
             } else {
                 saveButton.hidden = false
@@ -233,7 +230,7 @@ class EventAddOrEditViewController: BaseUIViewController {
     @IBAction func titleEditingDidBegin(sender: AnyObject) {
         hideDateIfOpen()
         configureTitleHint()
-        if titleTextField.text == placeholderTitleString {
+        if titleTextField.text == Styles.placeholderTitleString {
             titleTextField.text = ""
         }
     }
@@ -242,14 +239,14 @@ class EventAddOrEditViewController: BaseUIViewController {
         updateSaveButtonState()
         configureTitleHint()
         if titleTextField.text == "" {
-            titleTextField.text = placeholderTitleString
+            titleTextField.text = Styles.placeholderTitleString
         }
     }
     
     @IBAction func notesEditingDidBegin(sender: AnyObject) {
         hideDateIfOpen()
         configureNotesHint()
-        if notesTextField.text == placeholderNotesString {
+        if notesTextField.text == Styles.placeholderNotesString {
             notesTextField.text = ""
         }
     }
@@ -258,7 +255,7 @@ class EventAddOrEditViewController: BaseUIViewController {
         updateSaveButtonState()
         configureNotesHint()
         if notesTextField.text == "" {
-            notesTextField.text = placeholderNotesString
+            notesTextField.text = Styles.placeholderNotesString
         }
     }
     
@@ -268,7 +265,7 @@ class EventAddOrEditViewController: BaseUIViewController {
     
     @IBAction func locationEditingDidBegin(sender: AnyObject) {
         hideDateIfOpen()
-        if locationTextField.text == placeholderLocationString {
+        if locationTextField.text == Styles.placeholderLocationString {
             locationTextField.text = ""
         }
     }
@@ -277,7 +274,7 @@ class EventAddOrEditViewController: BaseUIViewController {
         updateSaveButtonState()
         locationTextField.resignFirstResponder()
         if locationTextField.text == "" {
-            locationTextField.text = placeholderLocationString
+            locationTextField.text = Styles.placeholderLocationString
         }
     }
 
@@ -290,14 +287,14 @@ class EventAddOrEditViewController: BaseUIViewController {
                 return true
             }
         } else {
-            if titleTextField.text != placeholderTitleString {
+            if titleTextField.text != Styles.placeholderTitleString {
                 return true
             }
-            if locationTextField.text != placeholderLocationString {
+            if locationTextField.text != Styles.placeholderLocationString {
                 return true
             }
         }
-        if notesTextField.text != placeholderNotesString {
+        if notesTextField.text != Styles.placeholderNotesString {
             return true
         }
         return false
@@ -327,25 +324,48 @@ class EventAddOrEditViewController: BaseUIViewController {
         return false
     }
     
+    private func filteredLocationText() -> String {
+        var location = ""
+        if let locationText = locationTextField.text {
+            if locationText != Styles.placeholderLocationString {
+                location = locationText
+            }
+        }
+        return location
+    }
+
+    private func filteredNotesText() -> String {
+        var notes = ""
+        if let notesText = notesTextField.text {
+            if notesText != Styles.placeholderNotesString {
+                notes =  notesText
+            }
+        }
+        return notes
+    }
+
     private func updateCurrentEvent() {
         
         if let mealItem = eventItem as? NutMeal {
             
+            let location = filteredLocationText()
+            let notes = filteredNotesText()
+
             let ad = UIApplication.sharedApplication().delegate as! AppDelegate
             let moc = ad.managedObjectContext
             
             let event = mealItem.meal
             event.title = titleTextField.text
             event.time = eventTime
-            event.notes = notesTextField.text
-            event.location = locationTextField.text
+            event.notes = notes
+            event.location = location
             event.modifiedTime = NSDate()
             moc.refreshObject(event, mergeChanges: true)
             
             mealItem.title = titleTextField.text!
             mealItem.time = eventTime
-            mealItem.notes = notesTextField.text!
-            mealItem.location = locationTextField.text!
+            mealItem.notes = notes
+            mealItem.location = location
             // note event changed as "new" event
             newMealEvent = event
             
@@ -389,17 +409,11 @@ class EventAddOrEditViewController: BaseUIViewController {
             } else {
                 let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal
                 
-                var location = locationTextField.text
-                if location == placeholderLocationString {
-                    location = ""
-                }
+                let location = filteredLocationText()
+                let notes = filteredNotesText()
+
                 me.location = location
-                
                 me.title = titleTextField.text
-                var notes = notesTextField.text
-                if notes == placeholderNotesString {
-                    notes = ""
-                }
                 me.notes = notes
                 me.photo = ""
                 me.type = "meal"

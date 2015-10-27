@@ -52,7 +52,8 @@ class EventListTableViewController: BaseUITableViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         viewIsForeground = true
-
+        configureSearchUI()
+        
         if sortedNutEvents.isEmpty || eventListNeedsUpdate {
             eventListNeedsUpdate = false
             getNutEvents()

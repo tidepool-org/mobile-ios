@@ -127,7 +127,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="x 4" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Whe-Pt-KZq" userLabel="repeatCountLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="316" y="20" width="18" height="18"/>
+                                            <rect key="frame" x="313" y="20" width="18" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -160,7 +160,7 @@
                                         <constraint firstItem="vOf-EN-zSX" firstAttribute="leading" secondItem="29e-nl-eJe" secondAttribute="leading" constant="26" id="FVs-eH-ZxM"/>
                                         <constraint firstAttribute="trailing" secondItem="K4X-aq-FZ1" secondAttribute="trailing" id="FtF-H8-v6b"/>
                                         <constraint firstAttribute="bottom" secondItem="K4X-aq-FZ1" secondAttribute="bottom" id="G18-yR-RTa"/>
-                                        <constraint firstItem="v7l-kJ-wNL" firstAttribute="leading" secondItem="Whe-Pt-KZq" secondAttribute="trailing" constant="12" id="GzK-AE-paL"/>
+                                        <constraint firstItem="v7l-kJ-wNL" firstAttribute="leading" secondItem="Whe-Pt-KZq" secondAttribute="trailing" constant="15" id="GzK-AE-paL"/>
                                         <constraint firstItem="oUx-3c-Ssy" firstAttribute="top" secondItem="Ohg-Qf-hKk" secondAttribute="bottom" constant="4" id="Py0-2e-AEc"/>
                                         <constraint firstItem="vOf-EN-zSX" firstAttribute="top" secondItem="oUx-3c-Ssy" secondAttribute="bottom" constant="6" id="QOh-z2-2M2"/>
                                         <constraint firstItem="Ohg-Qf-hKk" firstAttribute="leading" secondItem="29e-nl-eJe" secondAttribute="leading" constant="26" id="UZa-nk-O2d"/>
@@ -197,7 +197,7 @@
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="add-button" id="AjV-8Q-vYz">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="tintColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="wuR-Cf-1Tk" kind="show" id="Zwr-CU-iYy"/>
                             </connections>
@@ -373,7 +373,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="gpn-pI-6nu">
                         <barButtonItem key="rightBarButtonItem" image="add-button" id="vyH-a6-VEj">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="wuR-Cf-1Tk" kind="show" identifier="EventItemAddSegue" id="Zkp-nN-ILj"/>
                             </connections>
@@ -1167,7 +1167,7 @@
     </scenes>
     <resources>
         <image name="ThreeTacosDemoPic.png" width="1280" height="456"/>
-        <image name="add-button" width="24" height="24"/>
+        <image name="add-button" width="23" height="23"/>
         <image name="backArrow" width="12" height="21"/>
         <image name="blankTabIcon" width="24" height="24"/>
         <image name="calendarIcon" width="15" height="17"/>

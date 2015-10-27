@@ -121,7 +121,7 @@ public class Styles: NSObject {
         static let mediumButtonRegularFont: UIFont = UIFont(name: "OpenSans", size: 15.0)!
         static let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 20.0)!
         
-        static let smallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 11.0)!
+        static let smallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 12.5)!
         static let mediumSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 17.0)!
         static let veryLargeSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 25.5)!
         
@@ -342,4 +342,14 @@ public class Styles: NSObject {
      public class var lessOpaqueDarkPurple: UIColor  { return ColorCache.lessOpaqueDarkPurple }
      public class var moreOpaqueDarkPurple: UIColor  { return ColorCache.moreOpaqueDarkPurple }
 
+    //
+    // MARK: - Strings
+    //
+    
+    public class var placeholderTitleString: String { return "Meal name" }
+    public class var titleHintString: String { return "Simple and repeatable" }
+    public class var placeholderNotesString: String { return "Notes" }
+    public class var noteHintString: String { return "Sides, dessert, anything else?" }
+    public class var placeholderLocationString: String { return "Place" }
+    
 }
