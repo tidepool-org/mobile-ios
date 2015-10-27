@@ -69,6 +69,7 @@ class EventListTableViewController: BaseUITableViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+        searchTextField.resignFirstResponder()
         viewIsForeground = false
     }
     

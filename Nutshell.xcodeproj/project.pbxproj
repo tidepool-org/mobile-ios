@@ -167,6 +167,8 @@
 		48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
 		48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */; settings = {ASSET_TAGS = (); }; };
+		48D056921BDFDD16009D1591 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48D056951BDFDD16009D1591 /* Localizable.strings */; };
+		48D056931BDFDD16009D1591 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48D056951BDFDD16009D1591 /* Localizable.strings */; };
 		48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
 		48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
 		48DF9B9B1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
@@ -301,6 +303,7 @@
 		48B127B01BC4466E00061483 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseUtils.swift; path = "Utilities and Extensions/DatabaseUtils.swift"; sourceTree = "<group>"; };
 		48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
 		48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutShellUIViewWithHighlight.swift; path = Resources/NutShellUIViewWithHighlight.swift; sourceTree = "<group>"; };
+		48D056961BDFDD20009D1591 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
 		48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphUIView.swift; path = GraphView/GraphUIView.swift; sourceTree = "<group>"; };
 		48ED0D361BAF22CC009D0D6F /* addAnimation-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-01.png"; path = "Images/addAnimation/addAnimation-01.png"; sourceTree = "<group>"; };
@@ -512,6 +515,7 @@
 		486F5DED1B9F86E800BA2A57 /* Resources and UI */ = {
 			isa = PBXGroup;
 			children = (
+				48D056951BDFDD16009D1591 /* Localizable.strings */,
 				4851C6931BA628A500F8E0EE /* UIDesignNotes.rtf */,
 				486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */,
 				4851C6911BA6281800F8E0EE /* NutshellUIView.swift */,
@@ -723,6 +727,7 @@
 				4859FCBE1B9A4DE4000C1269 /* EventView.storyboard in Resources */,
 				48EDC2C91BD99141003049D9 /* OpenSans-Light.ttf in Resources */,
 				48B127A81BC444FE00061483 /* applejuicedemopic.png in Resources */,
+				48D056921BDFDD16009D1591 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -735,6 +740,7 @@
 				486F5E161BA0908900BA2A57 /* login_logo@2x.png in Resources */,
 				4854202D1BC4790D0020CFE1 /* Assets.xcassets in Resources */,
 				48B127A91BC444FE00061483 /* applejuicedemopic.png in Resources */,
+				48D056931BDFDD16009D1591 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1036,6 +1042,15 @@
 				48B1279C1BC4449400061483 /* Base */,
 			);
 			name = Menu.storyboard;
+			sourceTree = "<group>";
+		};
+		48D056951BDFDD16009D1591 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				48D056961BDFDD20009D1591 /* en */,
+			);
+			name = Localizable.strings;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

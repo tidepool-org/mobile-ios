@@ -53,16 +53,5 @@ class EventListTableViewCell: BaseUITableViewCell {
         eventGroup = nutEvent
         
        
-//        let titleLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-//        titleLabelStyle.alignment = .Left
-//        titleLabelStyle.lineBreakMode = .ByTruncatingMiddle
-//        let titleAttrStr = NSMutableAttributedString(string: nutEvent.title, attributes: [NSFontAttributeName: Styles.mediumSemiboldFont, NSForegroundColorAttributeName: Styles.altDarkGreyColor, NSParagraphStyleAttributeName: titleLabelStyle])
-//        
-//        // Append an item count in small font if there are more than one of these
-//        if nutEvent.itemArray.count > 1 {
-//            let suffixStr = " (" + String(nutEvent.itemArray.count) + ")"
-//            let suffixAttrStr = NSAttributedString(string: suffixStr, attributes: [NSFontAttributeName: Styles.smallRegularFont, NSForegroundColorAttributeName: Styles.altDarkGreyColor, NSParagraphStyleAttributeName: titleLabelStyle])
-//            titleAttrStr.appendAttributedString(suffixAttrStr)
-//        }
     }
 }

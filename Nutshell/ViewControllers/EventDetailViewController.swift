@@ -110,7 +110,7 @@ class EventDetailViewController: BaseUIViewController {
             notesLabel.text = eventItem.notes
             eventTime = eventItem.time
             photoUIImageView.hidden = true
-            dateLabel.text = NutUtils.standardUIDateString(eventTime)
+            dateLabel.text = NutUtils.standardUIDateString(eventTime, relative: true)
             
             if let mealItem = eventItem as? NutMeal {
                 if mealItem.location.characters.count > 0 {

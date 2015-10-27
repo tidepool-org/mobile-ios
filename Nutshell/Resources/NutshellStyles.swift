@@ -38,7 +38,7 @@ public class Styles: NSObject {
         "darkBackground": darkPurpleColor,
         "lightBackground": veryLightGreyColor,
         "whiteBackground": whiteColor,
-       // login & signup
+        // login & signup
         "brightBackgroundButton": brightBlueColor,
         "inactiveButton": veryLightGreyColor,
         "userDataEntry": whiteColor,
@@ -46,6 +46,7 @@ public class Styles: NSObject {
         "rowSeparator": mediumDarkGreyColor,
         "darkBackgroundButton": darkPurpleColor,
         // add event scenes
+        "saveButton": brightBlueColor,
         "doneButton": darkPurpleColor,
     ]
 
@@ -72,6 +73,7 @@ public class Styles: NSObject {
         "tableCellTitle": (mediumSemiboldFont, darkGreyColor),
         "tableCellSubtitle": (smallRegularFont, darkMediumGreyColor),
         "tableCellLocationDate": (smallRegularFont, whiteColor),
+        "saveButton": (mediumBoldFont, whiteColor),
         // account configuration views
         "accountSettingItem": (mediumRegularFont, darkGreyColor),
         "accountSettingItemSmall": (mediumSmallRegularFont, darkGreyColor),
@@ -86,7 +88,7 @@ public class Styles: NSObject {
         "advisorySubtext": (mediumRegularFont, lightDarkGreyColor),
         "greenLink": (mediumRegularFont, lightGreenColor),
         // add event scenes
-        "eventTitleText": (navTitleBoldFont, whiteColor),
+        "eventTitleText": (mediumLargeBoldFont, whiteColor),
         "doneButton": (largeRegularFont, whiteColor),
 
     ]
@@ -124,6 +126,8 @@ public class Styles: NSObject {
         static let veryLargeSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 25.5)!
         
         static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.5)!
+        static let mediumBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 16.0)!
+        static let mediumLargeBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 17.5)!
         static let navTitleBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 20.0)!
         
         static let mediumLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 17.0)!
@@ -149,6 +153,8 @@ public class Styles: NSObject {
     public class var veryLargeSemiboldFont: UIFont { return FontCache.veryLargeSemiboldFont }
 
     public class var smallBoldFont: UIFont { return FontCache.smallBoldFont }
+    public class var mediumBoldFont: UIFont { return FontCache.mediumBoldFont }
+    public class var mediumLargeBoldFont: UIFont { return FontCache.mediumLargeBoldFont }
     public class var navTitleBoldFont: UIFont { return FontCache.navTitleBoldFont }
 
     public class var mediumLightFont: UIFont { return FontCache.mediumLightFont }

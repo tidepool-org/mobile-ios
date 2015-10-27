@@ -159,7 +159,7 @@ class EventAddOrEditViewController: BaseUIViewController {
         if viewExistingEvent {
             saveButton.hidden = !existingEventChanged()
         } else {
-            if titleTextField.text?.characters.count == 0 ||  titleTextField.text == placeholderTitleString {
+            if !newEventChanged() || titleTextField.text?.characters.count == 0 ||  titleTextField.text == placeholderTitleString {
                 saveButton.hidden = true
             } else {
                 saveButton.hidden = false
@@ -191,12 +191,19 @@ class EventAddOrEditViewController: BaseUIViewController {
         }
     }
     
+    // Bold all but last suffixCnt characters of string (Note: assumes date format!
+    private func boldFirstPartOfDateString(dateStr: String, suffixCnt: Int) -> NSAttributedString {
+        let attrStr = NSMutableAttributedString(string: dateStr, attributes: [NSFontAttributeName: Styles.smallBoldFont, NSForegroundColorAttributeName: Styles.whiteColor])
+         attrStr.addAttribute(NSFontAttributeName, value: Styles.smallRegularFont, range: NSRange(location: attrStr.length - suffixCnt, length: suffixCnt))
+        return attrStr
+    }
+    
     private func configureDateView() {
         let df = NSDateFormatter()
         df.dateFormat = "MMM d, yyyy"
-        date1Label.text = df.stringFromDate(eventTime)
+        date1Label.attributedText = boldFirstPartOfDateString(df.stringFromDate(eventTime), suffixCnt: 6)
         df.dateFormat = "h:mm a"
-        date2Label.text = df.stringFromDate(eventTime)
+        date2Label.attributedText = boldFirstPartOfDateString(df.stringFromDate(eventTime), suffixCnt: 2)
         datePicker.date = eventTime
         datePickerView.hidden = true
     }
@@ -273,24 +280,46 @@ class EventAddOrEditViewController: BaseUIViewController {
             locationTextField.text = placeholderLocationString
         }
     }
-    
+
+    private func newEventChanged() -> Bool {
+        if let eventGroup = eventGroup {
+            if titleTextField.text != eventGroup.title {
+                return true
+            }
+            if locationTextField.text != eventGroup.location {
+                return true
+            }
+        } else {
+            if titleTextField.text != placeholderTitleString {
+                return true
+            }
+            if locationTextField.text != placeholderLocationString {
+                return true
+            }
+        }
+        if notesTextField.text != placeholderNotesString {
+            return true
+        }
+        return false
+    }
+
     private func existingEventChanged() -> Bool {
         if let eventItem = eventItem {
             if eventItem.title != titleTextField.text {
-                print("title changed, enabling save")
+                NSLog("title changed, enabling save")
                 return true
             }
             if eventItem.notes != notesTextField.text {
-                print("notes changed, enabling save")
+                NSLog("notes changed, enabling save")
                 return true
             }
             if eventItem.time != eventTime {
-                print("event time changed, enabling save")
+                NSLog("event time changed, enabling save")
                 return true
             }
             if let meal = eventItem as? NutMeal {
                 if meal.location != locationTextField.text {
-                    print("location changed, enabling save")
+                    NSLog("location changed, enabling save")
                     return true
                 }
             }
@@ -323,10 +352,10 @@ class EventAddOrEditViewController: BaseUIViewController {
             // Save the database
             do {
                 try moc.save()
-                print("addEvent: Database saved!")
+                NSLog("addEvent: Database saved!")
             } catch let error as NSError {
                 // TO DO: error message!
-                print("Failed to save MOC: \(error)")
+                NSLog("Failed to save MOC: \(error)")
                 newMealEvent = nil
             }
         }
@@ -385,7 +414,7 @@ class EventAddOrEditViewController: BaseUIViewController {
             // Save the database
             do {
                 try moc.save()
-                print("addEvent: Database saved!")
+                NSLog("addEvent: Database saved!")
                 if let eventGroup = eventGroup, newMealEvent = newMealEvent {
                     if eventGroup.title == newMealEvent.title && eventGroup.location == newMealEvent.location {
                         eventGroup.addEvent(newMealEvent)
@@ -394,10 +423,23 @@ class EventAddOrEditViewController: BaseUIViewController {
                 showSuccessView()
             } catch let error as NSError {
                 // TO DO: error message!
-                print("Failed to save MOC: \(error)")
+                NSLog("Failed to save MOC: \(error)")
                 newMealEvent = nil
             }
         }
+    }
+    
+    private func alertOnCancelAndReturn() {
+        // use dialog to confirm cancel with user!
+        let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), message: NSLocalizedString("closeMealAlertMessage", comment:"If you close this meal, your meal will be lost."), preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+            return
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+            self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     @IBAction func backButtonHandler(sender: AnyObject) {
@@ -405,38 +447,56 @@ class EventAddOrEditViewController: BaseUIViewController {
         // for viewEvent, we need to check whether the title has changed
         if viewExistingEvent {
             // cancel of edit
-            // TODO: put up a dialog to confirm if anything has changed!
-            self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
+            if existingEventChanged() {
+                alertOnCancelAndReturn()
+            } else {
+                self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
+            }
         } else {
             // cancel of add
-            // TODO: put up a dialog to confirm if anything has changed!
-            self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
+            if newEventChanged() {
+                alertOnCancelAndReturn()
+            } else {
+                self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
+            }
         }
     }
 
+    private func deleteItemAndReturn(eventItem: NutEventItem, eventGroup: NutEvent) {
+        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+        let moc = ad.managedObjectContext
+        if let mealItem = eventItem as? NutMeal {
+            moc.deleteObject(mealItem.meal)
+        } else if let workoutItem = eventItem as? NutWorkout {
+            moc.deleteObject(workoutItem.workout)
+        }
+        DatabaseUtils.databaseSave(moc)
+        
+        // now remove it from the group
+        eventGroup.itemArray = eventGroup.itemArray.filter() {
+            $0 != eventItem
+        }
+        // segue back to group or list, depending...
+        if eventGroup.itemArray.isEmpty {
+            self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+        } else {
+            self.performSegueWithIdentifier("unwindSequeToEventGroup", sender: self)
+        }
+    }
+    
     @IBAction func deleteButtonHandler(sender: AnyObject) {
         // this is a delete for the role of editEvent
-        // TODO: use dialog to confirm delete with user!
         if let eventItem = eventItem, eventGroup = eventGroup {
-            let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-            let moc = ad.managedObjectContext
-            if let mealItem = eventItem as? NutMeal {
-                moc.deleteObject(mealItem.meal)
-            } else if let workoutItem = eventItem as? NutWorkout {
-                moc.deleteObject(workoutItem.workout)
-            }
-            DatabaseUtils.databaseSave(moc)
-            
-            // now remove it from the group
-            eventGroup.itemArray = eventGroup.itemArray.filter() {
-                $0 != eventItem
-            }
-            // segue back to group or list, depending...
-            if eventGroup.itemArray.isEmpty {
-                self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
-            } else {
-                self.performSegueWithIdentifier("unwindSequeToEventGroup", sender: self)
-            }
+            // use dialog to confirm delete with user!
+            let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), message: NSLocalizedString("discardMealAlertMessage", comment:"If you discard this meal, your meal will be lost."), preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+                return
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+                self.deleteItemAndReturn(eventItem, eventGroup: eventGroup)
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
         }
     }
     
