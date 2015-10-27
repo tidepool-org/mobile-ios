@@ -182,15 +182,14 @@ class EventListTableViewController: BaseUITableViewController {
     private func configureSearchUI() {
         let searchOn = searchMode()
         searchPlaceholderLabel.hidden = searchOn
-        self.title = searchOn ? "Matching events" : "All events"
+        self.title = searchOn && !filterString.isEmpty ? "Matching events" : "All events"
     }
 
     private func updateFilteredAndReload() {
         if !searchMode() {
             filteredNutEvents = sortedNutEvents
             filterString = ""
-        }
-        if let searchText = searchTextField.text {
+        } else if let searchText = searchTextField.text {
             if !searchText.isEmpty {
                 if searchText.localizedCaseInsensitiveContainsString(filterString) {
                     // if the search is just getting longer, no need to check already filtered out items
@@ -207,6 +206,8 @@ class EventListTableViewController: BaseUITableViewController {
                 filteredNutEvents = sortedNutEvents
                 filterString = ""
             }
+            // Do this last, after filterString is configured
+            configureSearchUI()
         }
         tableView.reloadData()
     }
