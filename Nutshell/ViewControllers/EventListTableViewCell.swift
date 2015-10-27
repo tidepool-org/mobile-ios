@@ -48,7 +48,7 @@ class EventListTableViewCell: BaseUITableViewCell {
     func configureCell(nutEvent: NutEvent) {
         titleLabel.text = nutEvent.title
         locationLabel.text = nutEvent.location
-        dateLabel.text = NutUtils.dateFormatter.stringFromDate(nutEvent.mostRecent)
+        dateLabel.text = NutUtils.standardUIDateString(nutEvent.mostRecent, relative: true)
         repeatCountLabel.text = "x " + String(nutEvent.itemArray.count)
         eventGroup = nutEvent
         

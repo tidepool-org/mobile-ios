@@ -46,7 +46,7 @@ class EventGroupTableViewCell: BaseUITableViewCell {
 
     func configureCell(eventItem: NutEventItem) {
         titleString.text = eventItem.notes
-        timeString.text = NutUtils.dateFormatter.stringFromDate(eventItem.time)
+        timeString.text = NutUtils.standardUIDateString(eventItem.time, relative: true)
         self.eventItem = eventItem
 //        if let meal = eventItem as? NutMeal {
 //            if meal.photo.characters.count > 0 {
