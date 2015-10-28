@@ -254,7 +254,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SxI-OJ-qN3" userLabel="tableHeaderLocation" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                    <rect key="frame" x="24" y="56" width="327" height="15"/>
+                                    <rect key="frame" x="24" y="61" width="327" height="15"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
@@ -274,7 +274,7 @@
                                 <constraint firstAttribute="trailing" secondItem="SxI-OJ-qN3" secondAttribute="trailing" constant="24" id="SaS-II-ObC"/>
                                 <constraint firstAttribute="trailing" secondItem="dEk-QE-WZE" secondAttribute="trailing" constant="24" id="fxg-Ne-kEH"/>
                                 <constraint firstItem="Ptv-E0-A66" firstAttribute="top" secondItem="lmp-xJ-VzY" secondAttribute="top" constant="20" id="g0z-ZM-8w0"/>
-                                <constraint firstAttribute="bottom" secondItem="SxI-OJ-qN3" secondAttribute="bottom" constant="24" id="sTu-9S-ZtH"/>
+                                <constraint firstAttribute="bottom" secondItem="SxI-OJ-qN3" secondAttribute="bottom" constant="19" id="sTu-9S-ZtH"/>
                                 <constraint firstItem="SxI-OJ-qN3" firstAttribute="leading" secondItem="lmp-xJ-VzY" secondAttribute="leading" constant="24" id="t8n-e4-Dij"/>
                                 <constraint firstItem="Hcc-lE-4JU" firstAttribute="leading" secondItem="lmp-xJ-VzY" secondAttribute="leading" id="xRS-YG-prd"/>
                             </constraints>
@@ -321,7 +321,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hkV-fw-Ufw" userLabel="timeLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="24" y="48" width="29" height="18"/>
+                                            <rect key="frame" x="24" y="41" width="29" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -330,7 +330,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P6c-tV-ffU" userLabel="rightDiscloseButton">
-                                            <rect key="frame" x="342" y="21" width="9" height="15"/>
+                                            <rect key="frame" x="339" y="21" width="9" height="15"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="9" id="O4T-WA-EP1"/>
                                                 <constraint firstAttribute="height" constant="15" id="f77-WW-Dth"/>
@@ -349,8 +349,8 @@
                                         <constraint firstItem="P6c-tV-ffU" firstAttribute="centerY" secondItem="d9p-x8-wr7" secondAttribute="centerY" id="bLs-OO-9Zb"/>
                                         <constraint firstItem="hkV-fw-Ufw" firstAttribute="leading" secondItem="d9p-x8-wr7" secondAttribute="leading" id="d89-zi-cii"/>
                                         <constraint firstAttribute="trailing" secondItem="8B8-Re-ww8" secondAttribute="trailing" id="hXj-3W-0Gm"/>
-                                        <constraint firstAttribute="trailing" secondItem="P6c-tV-ffU" secondAttribute="trailing" constant="24" id="hz8-7P-l1p"/>
-                                        <constraint firstItem="hkV-fw-Ufw" firstAttribute="top" secondItem="d9p-x8-wr7" secondAttribute="bottom" constant="8" id="tbi-2f-7Ga"/>
+                                        <constraint firstAttribute="trailing" secondItem="P6c-tV-ffU" secondAttribute="trailing" constant="27" id="hz8-7P-l1p"/>
+                                        <constraint firstItem="hkV-fw-Ufw" firstAttribute="top" secondItem="d9p-x8-wr7" secondAttribute="bottom" constant="1" id="tbi-2f-7Ga"/>
                                         <constraint firstItem="d9p-x8-wr7" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" constant="16" id="trf-Lh-5Zj"/>
                                     </constraints>
                                 </tableViewCellContentView>
@@ -1183,6 +1183,6 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Zwr-CU-iYy"/>
+        <segue reference="Zkp-nN-ILj"/>
     </inferredMetricsTieBreakers>
 </document>
