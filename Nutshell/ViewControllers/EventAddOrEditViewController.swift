@@ -17,7 +17,7 @@
 import UIKit
 import CoreData
 
-class EventAddOrEditViewController: BaseUIViewController {
+class EventAddOrEditViewController: BaseUIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
     var eventItem: NutEventItem?
     var eventGroup: NutEvent?
@@ -512,6 +512,21 @@ class EventAddOrEditViewController: BaseUIViewController {
             }))
             self.presentViewController(alert, animated: true, completion: nil)
         }
+    }
+    
+    @IBAction func photoButtonHandler(sender: AnyObject) {
+            let pickerC = UIImagePickerController()
+            pickerC.delegate = self
+            self.presentViewController(pickerC, animated: true, completion: nil)
+    }
+    
+    // 
+    // MARK: - UIImagePickerControllerDelegate
+    //
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        print(info)
     }
     
     //

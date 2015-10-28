@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="MlM-Oh-SBV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="MlM-Oh-SBV">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
@@ -118,7 +118,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yesterday at 4:21 pm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vOf-EN-zSX" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="26" y="66" width="98" height="14"/>
+                                            <rect key="frame" x="26" y="69" width="98" height="14"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -126,7 +126,7 @@
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellDate"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="x 4" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Whe-Pt-KZq" userLabel="repeatCountLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="x 4" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Whe-Pt-KZq" userLabel="repeatCountLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                             <rect key="frame" x="313" y="20" width="18" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -144,7 +144,7 @@
                                             <state key="normal" image="rightDisclosureArrow"/>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="El Farolito" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oUx-3c-Ssy" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="26" y="45" width="53" height="15"/>
+                                            <rect key="frame" x="26" y="45" width="60" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -165,6 +165,7 @@
                                         <constraint firstItem="vOf-EN-zSX" firstAttribute="top" secondItem="oUx-3c-Ssy" secondAttribute="bottom" constant="6" id="QOh-z2-2M2"/>
                                         <constraint firstItem="Ohg-Qf-hKk" firstAttribute="leading" secondItem="29e-nl-eJe" secondAttribute="leading" constant="26" id="UZa-nk-O2d"/>
                                         <constraint firstAttribute="trailing" secondItem="v7l-kJ-wNL" secondAttribute="trailing" constant="20" id="ZtG-bh-c1p"/>
+                                        <constraint firstItem="Whe-Pt-KZq" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ohg-Qf-hKk" secondAttribute="trailing" constant="8" id="a13-zC-okK"/>
                                         <constraint firstItem="K4X-aq-FZ1" firstAttribute="leading" secondItem="29e-nl-eJe" secondAttribute="leading" id="ao0-ni-aH6"/>
                                         <constraint firstItem="Whe-Pt-KZq" firstAttribute="centerY" secondItem="v7l-kJ-wNL" secondAttribute="centerY" id="ikb-qO-IPg"/>
                                         <constraint firstItem="v7l-kJ-wNL" firstAttribute="top" secondItem="29e-nl-eJe" secondAttribute="top" constant="18" id="sN7-AR-rSV"/>
@@ -254,7 +255,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SxI-OJ-qN3" userLabel="tableHeaderLocation" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                    <rect key="frame" x="24" y="61" width="327" height="15"/>
+                                    <rect key="frame" x="24" y="58" width="327" height="18"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
@@ -343,6 +344,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="d9p-x8-wr7" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leadingMargin" constant="16" id="4j8-WY-WEl"/>
+                                        <constraint firstItem="P6c-tV-ffU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="d9p-x8-wr7" secondAttribute="trailing" constant="8" id="Gsk-aI-jHx"/>
                                         <constraint firstItem="8B8-Re-ww8" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leading" id="Ihl-Hi-c1S"/>
                                         <constraint firstItem="8B8-Re-ww8" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" id="MOI-L0-Joe"/>
                                         <constraint firstAttribute="bottom" secondItem="8B8-Re-ww8" secondAttribute="bottom" id="Vmk-bk-kbb"/>
@@ -430,7 +432,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </view>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title of this event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U73-Nl-2gk" userLabel="eventTitleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="24" width="375" height="28"/>
+                                                                <rect key="frame" x="16" y="17" width="343" height="24"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -439,7 +441,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notes for this event" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="au5-2w-K1j" userLabel="eventNotesLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="8" y="60" width="359" height="22"/>
+                                                                <rect key="frame" x="16" y="50" width="343" height="22"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -448,7 +450,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015    4:21 PM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bxw-YN-kxC" userLabel="eventDateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="98" width="375" height="17"/>
+                                                                <rect key="frame" x="16" y="77" width="343" height="18"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -457,17 +459,17 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UkV-Ct-zaJ" userLabel="eventLocation">
-                                                                <rect key="frame" x="15" y="123" width="338" height="29"/>
+                                                                <rect key="frame" x="16" y="100" width="343" height="52"/>
                                                                 <subviews>
                                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeSmallIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Uth-HJ-dCg">
-                                                                        <rect key="frame" x="93" y="6" width="11" height="18"/>
+                                                                        <rect key="frame" x="117" y="17" width="11" height="18"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="11" id="9Gb-eL-ky8"/>
                                                                             <constraint firstAttribute="height" constant="18" id="tgm-Vs-gOI"/>
                                                                         </constraints>
                                                                     </imageView>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015    4:21 PM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPo-2j-cHI" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                        <rect key="frame" x="112" y="6" width="130" height="17"/>
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Some Location" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPo-2j-cHI" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                                        <rect key="frame" x="136" y="17" width="87" height="18"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="130" id="jjz-cz-S11"/>
                                                                         </constraints>
@@ -497,22 +499,22 @@
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         <constraints>
                                                             <constraint firstItem="L5t-um-0Ba" firstAttribute="top" secondItem="z3U-KK-eno" secondAttribute="top" id="6KG-8I-fcT"/>
-                                                            <constraint firstAttribute="trailing" secondItem="au5-2w-K1j" secondAttribute="trailing" constant="8" id="6gc-EB-QXM"/>
+                                                            <constraint firstAttribute="trailing" secondItem="au5-2w-K1j" secondAttribute="trailing" constant="16" id="6gc-EB-QXM"/>
+                                                            <constraint firstItem="U73-Nl-2gk" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" constant="16" id="7ND-xj-Tb2"/>
                                                             <constraint firstAttribute="trailing" secondItem="L5t-um-0Ba" secondAttribute="trailing" id="7pH-cd-tVD"/>
-                                                            <constraint firstAttribute="trailing" secondItem="U73-Nl-2gk" secondAttribute="trailing" id="FRS-7y-IgX"/>
-                                                            <constraint firstItem="UkV-Ct-zaJ" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" constant="15" id="HJE-f2-bMc"/>
-                                                            <constraint firstAttribute="trailing" secondItem="UkV-Ct-zaJ" secondAttribute="trailing" constant="22" id="JXu-tR-pcs"/>
-                                                            <constraint firstItem="au5-2w-K1j" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" constant="8" id="M9l-Cc-4l3"/>
-                                                            <constraint firstItem="bxw-YN-kxC" firstAttribute="top" secondItem="au5-2w-K1j" secondAttribute="bottom" constant="16" id="RcX-UO-vta"/>
+                                                            <constraint firstAttribute="trailing" secondItem="U73-Nl-2gk" secondAttribute="trailing" constant="16" id="CSZ-Uk-M84"/>
+                                                            <constraint firstItem="U73-Nl-2gk" firstAttribute="top" secondItem="z3U-KK-eno" secondAttribute="top" constant="17" id="Cy6-mI-9Ff"/>
+                                                            <constraint firstItem="UkV-Ct-zaJ" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" constant="16" id="HJE-f2-bMc"/>
+                                                            <constraint firstAttribute="trailing" secondItem="UkV-Ct-zaJ" secondAttribute="trailing" constant="16" id="JXu-tR-pcs"/>
+                                                            <constraint firstItem="au5-2w-K1j" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" constant="16" id="M9l-Cc-4l3"/>
+                                                            <constraint firstItem="bxw-YN-kxC" firstAttribute="top" secondItem="au5-2w-K1j" secondAttribute="bottom" constant="5" id="RcX-UO-vta"/>
                                                             <constraint firstAttribute="bottom" secondItem="UkV-Ct-zaJ" secondAttribute="bottom" constant="8" id="TcN-9R-yyY"/>
                                                             <constraint firstAttribute="bottom" secondItem="L5t-um-0Ba" secondAttribute="bottom" id="UHN-FF-Km7"/>
-                                                            <constraint firstItem="bxw-YN-kxC" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" id="ZPe-qv-ad7"/>
-                                                            <constraint firstAttribute="trailing" secondItem="bxw-YN-kxC" secondAttribute="trailing" id="cHh-9p-98e"/>
-                                                            <constraint firstItem="UkV-Ct-zaJ" firstAttribute="top" secondItem="bxw-YN-kxC" secondAttribute="bottom" constant="8" id="fE1-1Y-51a"/>
+                                                            <constraint firstItem="bxw-YN-kxC" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" constant="16" id="ZPe-qv-ad7"/>
+                                                            <constraint firstAttribute="trailing" secondItem="bxw-YN-kxC" secondAttribute="trailing" constant="16" id="cHh-9p-98e"/>
+                                                            <constraint firstItem="UkV-Ct-zaJ" firstAttribute="top" secondItem="bxw-YN-kxC" secondAttribute="bottom" constant="5" id="fE1-1Y-51a"/>
                                                             <constraint firstItem="L5t-um-0Ba" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" id="gFi-KL-Ucl"/>
-                                                            <constraint firstItem="U73-Nl-2gk" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" id="jge-Yc-gXk"/>
-                                                            <constraint firstItem="U73-Nl-2gk" firstAttribute="top" secondItem="z3U-KK-eno" secondAttribute="top" constant="24" id="t7h-qt-iQG"/>
-                                                            <constraint firstItem="au5-2w-K1j" firstAttribute="top" secondItem="U73-Nl-2gk" secondAttribute="bottom" constant="8" id="ti9-U4-tTf"/>
+                                                            <constraint firstItem="au5-2w-K1j" firstAttribute="top" secondItem="U73-Nl-2gk" secondAttribute="bottom" constant="9" id="i7D-He-5lY"/>
                                                         </constraints>
                                                     </view>
                                                 </subviews>
@@ -810,7 +812,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="158"/>
                                                 <subviews>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Meal name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EOZ-el-4r9" userLabel="titleTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="8" y="16" width="359" height="28"/>
+                                                        <rect key="frame" x="8" y="16" width="359" height="24"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
@@ -824,7 +826,7 @@
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Simple and repeatable" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2gd-CX-jRH" userLabel="titleHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="122" y="46" width="131" height="18"/>
+                                                        <rect key="frame" x="122" y="42" width="131" height="18"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -833,7 +835,7 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Notes" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HNf-3W-C8L" userLabel="notesTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="8" y="78" width="359" height="28"/>
+                                                        <rect key="frame" x="8" y="74" width="359" height="24"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -847,7 +849,7 @@
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sides, dessert, anything else?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QY4-ef-Zcn" userLabel="notesHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="103" y="108" width="169" height="18"/>
+                                                        <rect key="frame" x="103" y="100" width="169" height="18"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -912,6 +914,9 @@
                                                                 <exclude reference="Qxp-Oy-NMQ"/>
                                                             </mask>
                                                         </variation>
+                                                        <connections>
+                                                            <action selector="photoButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="gFC-Aj-TFh"/>
+                                                        </connections>
                                                     </button>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Place" textAlignment="center" adjustsFontSizeToFit="NO" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="b5b-5h-R2Q" userLabel="locationTextView" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="16" y="30" width="100" height="18"/>
@@ -1183,6 +1188,6 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Zkp-nN-ILj"/>
+        <segue reference="Shc-Yg-1xe"/>
     </inferredMetricsTieBreakers>
 </document>

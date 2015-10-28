@@ -83,7 +83,7 @@ public class Styles: NSObject {
         "darkBackgroundButton": (largeRegularFont, whiteColor),
         // event detail view
         "notesText": (UIFont(name: "OpenSans-Semibold", size: 16.0), whiteColor),
-        "dateAndLocation": (UIFont(name: "OpenSans", size: 12.0), whiteColor),
+        "dateAndLocation": (UIFont(name: "OpenSans", size: 12.5), whiteColor),
         "advisoryText": (mediumSemiboldFont, darkGreyColor),
         "advisorySubtext": (mediumRegularFont, lightDarkGreyColor),
         "greenLink": (mediumRegularFont, lightGreenColor),
