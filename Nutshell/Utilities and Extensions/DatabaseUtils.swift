@@ -87,6 +87,7 @@ class DatabaseUtils {
         }
     }
     
+    
     class func updateEvents(moc: NSManagedObjectContext, eventsJSON: JSON) {
         // We get back an array of JSON objects. Iterate through the array and insert the objects
         // into the database, removing any existing objects we may have.
@@ -97,6 +98,7 @@ class DatabaseUtils {
             bgMOC.persistentStoreCoordinator = moc.persistentStoreCoordinator;
             
             let request = NSFetchRequest(entityName: "CommonData")
+            var eventCounter = 0
             for (_, subJson) in eventsJSON {
                 if let obj = CommonData.fromJSON(subJson, moc: bgMOC) {
                     // Remove existing object with the same ID
@@ -104,6 +106,18 @@ class DatabaseUtils {
                         request.predicate = NSPredicate(format: "id = %@", id)
                         bgMOC.insertObject(obj)
 
+                        eventCounter++
+                        if eventCounter > 1000 {
+                            eventCounter = 0
+                            // Save the database every 1000 events for now, until we can have more sophisticated incremental fetch
+                            do {
+                                try bgMOC.save()
+                                print("updateEvents: Database saved after 1000 events added!")
+                            } catch let error as NSError {
+                                print("Failed to save MOC: \(error)")
+                                break
+                            }
+                        }
 //                        do {
 //                            let foundObjects = try bgMOC.executeFetchRequest(request) as! [NSManagedObject]
 //                            for foundObject in foundObjects {
