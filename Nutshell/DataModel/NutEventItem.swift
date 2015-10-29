@@ -14,6 +14,7 @@ class NutEventItem {
     var location: String
     var notes: String
     var time: NSDate
+    var nutCracked: Bool = false
     
     init(title: String?, notes: String?, time: NSDate?) {
         self.title = title != nil ? title! : ""

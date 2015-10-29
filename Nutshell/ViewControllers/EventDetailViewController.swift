@@ -36,12 +36,12 @@ class EventDetailViewController: BaseUIViewController {
 
     @IBOutlet weak var titleLabel: NutshellUILabel!
     @IBOutlet weak var notesLabel: NutshellUILabel!
-
-    @IBOutlet weak var rightBarItem: UIBarButtonItem!
     
     @IBOutlet weak var dateLabel: NutshellUILabel!
     @IBOutlet weak var locationContainerView: UIView!
     @IBOutlet weak var locationLabel: NutshellUILabel!
+    
+    @IBOutlet weak var nutCrackedButton: NutshellUIButton!
     
     private var eventTime = NSDate()
     private var placeholderLocationString = "Note location here!"
@@ -68,14 +68,16 @@ class EventDetailViewController: BaseUIViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepareForSegue(segue, sender: sender)
-        if segue.identifier == "EventItemEditSegue" {
+        if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemEditSegue {
             let eventItemVC = segue.destinationViewController as! EventAddOrEditViewController
             eventItemVC.eventItem = eventItem
             eventItemVC.eventGroup = eventGroup
-        } else if segue.identifier == "EventItemAddSegue" {
+        } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
             let eventItemVC = segue.destinationViewController as! EventAddOrEditViewController
             // no existing item to pass along...
             eventItemVC.eventGroup = eventGroup
+        } else {
+            NSLog("Unknown segue from eventDetail \(segue.identifier)")
         }
     }
     
@@ -88,6 +90,10 @@ class EventDetailViewController: BaseUIViewController {
         print("unwind segue to eventDetail cancel")
     }
 
+    //
+    // MARK: - Button handlers
+    //
+
     @IBAction func backButtonHandler(sender: AnyObject) {
         // If either title or location have changed, we need to exit back to list...
         if let eventGroup = eventGroup, eventItem = eventItem {
@@ -97,6 +103,14 @@ class EventDetailViewController: BaseUIViewController {
             }
         }
         self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
+    }
+    
+    @IBAction func nutCrackedButtonHandler(sender: AnyObject) {
+        nutCrackedButton.selected = !nutCrackedButton.selected
+        // TODO: need to actually save this change in database!
+        if let eventItem = eventItem {
+            eventItem.nutCracked = nutCrackedButton.selected
+        }
     }
     
     @IBAction func photoOverlayTouchHandler(sender: AnyObject) {
@@ -120,15 +134,18 @@ class EventDetailViewController: BaseUIViewController {
             titleLabel.text = eventItem.title
             notesLabel.text = eventItem.notes
             eventTime = eventItem.time
+            nutCrackedButton.selected = eventItem.nutCracked
             photoUIImageView.hidden = true
             dateLabel.text = NutUtils.standardUIDateString(eventTime, relative: true)
             
+            locationContainerView.hidden = true
+            if eventItem.location.characters.count > 0 {
+                locationLabel.text = eventItem.location
+                locationContainerView.hidden = false
+            }
+
             if let mealItem = eventItem as? NutMeal {
-                if mealItem.location.characters.count > 0 {
-                    locationLabel.text = mealItem.location
-                } else {
-                    locationContainerView.hidden = true
-                }
+                photoUIImageView.hidden = true
                 if mealItem.photo.characters.count > 0 {
                     if let image = UIImage(named: mealItem.photo) {
                         photoUIImageView.hidden = false
@@ -137,7 +154,6 @@ class EventDetailViewController: BaseUIViewController {
                 }
             } else {
                 // TODO: show other workout-specific items
-                locationContainerView.hidden = true
             }
         }
         

@@ -20,7 +20,7 @@ class EventGroupTableViewCell: BaseUITableViewCell {
 
     var eventItem: NutEventItem?
     
-    @IBOutlet weak var favoriteStar: UIImageView!
+    @IBOutlet weak var favoriteStarContainer: UIView!
     @IBOutlet weak var titleString: NutshellUILabel!
     @IBOutlet weak var timeString: NutshellUILabel!
     @IBOutlet weak var photoImageView: UIImageView!
@@ -33,7 +33,6 @@ class EventGroupTableViewCell: BaseUITableViewCell {
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
     }
 
     override func setHighlighted(highlighted: Bool, animated: Bool) {
@@ -44,10 +43,24 @@ class EventGroupTableViewCell: BaseUITableViewCell {
         timeString.highlighted = highlighted
     }
 
+    private var starViewContainerWidth: CGFloat = 53.0
     func configureCell(eventItem: NutEventItem) {
         titleString.text = eventItem.notes
         timeString.text = NutUtils.standardUIDateString(eventItem.time, relative: true)
         self.eventItem = eventItem
+
+        // Configure the view for the selected state
+        // hide star container when unselected
+        for c in favoriteStarContainer.constraints {
+            if c.firstAttribute == NSLayoutAttribute.Width {
+                if c.constant != 0.0 {
+                    starViewContainerWidth = c.constant
+                }
+                c.constant = eventItem.nutCracked ? starViewContainerWidth : 0.0
+                break
+            }
+        }
+
 //        if let meal = eventItem as? NutMeal {
 //            if meal.photo.characters.count > 0 {
 //                photoImageView.image = UIImage(named: meal.photo)

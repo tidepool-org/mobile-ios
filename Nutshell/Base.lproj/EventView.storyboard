@@ -8,8 +8,17 @@
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
+        <mutableArray key="OpenSans-Bold.ttf">
+            <string>OpenSans-Bold</string>
+        </mutableArray>
         <mutableArray key="OpenSans-Regular.ttf">
             <string>OpenSans</string>
+            <string>OpenSans</string>
+        </mutableArray>
+        <mutableArray key="OpenSans-Semibold.ttf">
+            <string>OpenSans-Semibold</string>
+            <string>OpenSans-Semibold</string>
+            <string>OpenSans-Semibold</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -201,7 +210,7 @@
                         <barButtonItem key="rightBarButtonItem" image="add-button" id="AjV-8Q-vYz">
                             <color key="tintColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <segue destination="wuR-Cf-1Tk" kind="presentation" modalTransitionStyle="coverVertical" id="Zwr-CU-iYy"/>
+                                <segue destination="wuR-Cf-1Tk" kind="presentation" identifier="EventItemAddSegue" modalTransitionStyle="coverVertical" id="Zwr-CU-iYy"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -239,8 +248,8 @@
                                 </view>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="This is the title" textAlignment="natural" lineBreakMode="middleTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ptv-E0-A66" userLabel="tableHeaderTitle" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                     <rect key="frame" x="24" y="20" width="180" height="35"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="25.5"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderTitle"/>
@@ -248,7 +257,7 @@
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="x 4" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dEk-QE-WZE" userLabel="tableHeaderCount" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                     <rect key="frame" x="212" y="24" width="139" height="27"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="12.5"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                     <userDefinedRuntimeAttributes>
@@ -257,8 +266,8 @@
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SxI-OJ-qN3" userLabel="tableHeaderLocation" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                     <rect key="frame" x="24" y="58" width="327" height="18"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="12.5"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <nil key="highlightedColor"/>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderLocation"/>
@@ -313,24 +322,58 @@
                                                 <userDefinedRuntimeAttribute type="string" keyPath="highlightedBackground" value="brightBackground"/>
                                             </userDefinedRuntimeAttributes>
                                         </view>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Diet coke and 10 chips" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d9p-x8-wr7" userLabel="titleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="24" y="16" width="183" height="24"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellTitle"/>
-                                            </userDefinedRuntimeAttributes>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hkV-fw-Ufw" userLabel="timeLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="24" y="41" width="29" height="18"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellSubtitle"/>
-                                            </userDefinedRuntimeAttributes>
-                                        </label>
+                                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jqM-zX-wXB" userLabel="nutCrackedIndicatorContainer">
+                                            <rect key="frame" x="27" y="0.0" width="53" height="80"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="starLarge" translatesAutoresizingMaskIntoConstraints="NO" id="X4c-xD-fGj">
+                                                    <rect key="frame" x="0.0" y="22" width="38" height="36"/>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstItem="X4c-xD-fGj" firstAttribute="leading" secondItem="jqM-zX-wXB" secondAttribute="leading" id="8xU-Fb-5UU"/>
+                                                <constraint firstItem="X4c-xD-fGj" firstAttribute="centerY" secondItem="jqM-zX-wXB" secondAttribute="centerY" id="Dkm-HI-kN8"/>
+                                                <constraint firstItem="X4c-xD-fGj" firstAttribute="centerX" secondItem="jqM-zX-wXB" secondAttribute="centerX" id="ece-Xg-6fn"/>
+                                                <constraint firstAttribute="width" constant="53" id="lnA-md-ehd"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="ece-Xg-6fn"/>
+                                                </mask>
+                                            </variation>
+                                        </view>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Kz-P0-XJZ" userLabel="titleAndTimeContainer">
+                                            <rect key="frame" x="80" y="0.0" width="251" height="80"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Diet coke and 10 chips" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d9p-x8-wr7" userLabel="titleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="19" width="251" height="18"/>
+                                                    <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="10"/>
+                                                    <color key="textColor" red="0.29019607843137252" green="0.29019607843137252" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellTitle"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hkV-fw-Ufw" userLabel="timeLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="43" width="251" height="14"/>
+                                                    <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
+                                                    <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.55686274509803924" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellSubtitle"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="hkV-fw-Ufw" secondAttribute="trailing" id="9an-sD-zav"/>
+                                                <constraint firstItem="d9p-x8-wr7" firstAttribute="leading" secondItem="3Kz-P0-XJZ" secondAttribute="leading" id="Gas-ft-ohx"/>
+                                                <constraint firstItem="hkV-fw-Ufw" firstAttribute="leading" secondItem="3Kz-P0-XJZ" secondAttribute="leading" id="Xd4-Or-8jX"/>
+                                                <constraint firstItem="d9p-x8-wr7" firstAttribute="top" secondItem="3Kz-P0-XJZ" secondAttribute="top" constant="19" id="gtG-qV-9lt"/>
+                                                <constraint firstAttribute="trailing" secondItem="d9p-x8-wr7" secondAttribute="trailing" id="u5E-Wf-P6R"/>
+                                                <constraint firstItem="hkV-fw-Ufw" firstAttribute="top" secondItem="d9p-x8-wr7" secondAttribute="bottom" constant="6" id="uAz-jA-S8Q"/>
+                                            </constraints>
+                                        </view>
                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P6c-tV-ffU" userLabel="rightDiscloseButton">
                                             <rect key="frame" x="339" y="21" width="9" height="15"/>
                                             <constraints>
@@ -344,21 +387,30 @@
                                         </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="d9p-x8-wr7" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leadingMargin" constant="16" id="4j8-WY-WEl"/>
-                                        <constraint firstItem="P6c-tV-ffU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="d9p-x8-wr7" secondAttribute="trailing" constant="8" id="Gsk-aI-jHx"/>
+                                        <constraint firstAttribute="bottom" secondItem="jqM-zX-wXB" secondAttribute="bottom" id="EhT-P4-ADH"/>
                                         <constraint firstItem="8B8-Re-ww8" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leading" id="Ihl-Hi-c1S"/>
+                                        <constraint firstItem="jqM-zX-wXB" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" id="J1z-IS-bnK"/>
+                                        <constraint firstItem="P6c-tV-ffU" firstAttribute="leading" secondItem="3Kz-P0-XJZ" secondAttribute="trailing" constant="8" id="LDx-80-46c"/>
                                         <constraint firstItem="8B8-Re-ww8" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" id="MOI-L0-Joe"/>
+                                        <constraint firstItem="P6c-tV-ffU" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="topMargin" constant="13" id="Qoo-yO-dFo"/>
                                         <constraint firstAttribute="bottom" secondItem="8B8-Re-ww8" secondAttribute="bottom" id="Vmk-bk-kbb"/>
-                                        <constraint firstItem="P6c-tV-ffU" firstAttribute="centerY" secondItem="d9p-x8-wr7" secondAttribute="centerY" id="bLs-OO-9Zb"/>
-                                        <constraint firstItem="hkV-fw-Ufw" firstAttribute="leading" secondItem="d9p-x8-wr7" secondAttribute="leading" id="d89-zi-cii"/>
+                                        <constraint firstItem="3Kz-P0-XJZ" firstAttribute="height" secondItem="QIn-qj-9Hx" secondAttribute="height" id="du3-Vb-m64"/>
                                         <constraint firstAttribute="trailing" secondItem="8B8-Re-ww8" secondAttribute="trailing" id="hXj-3W-0Gm"/>
+                                        <constraint firstItem="jqM-zX-wXB" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leading" constant="27" id="hhv-dd-AiA"/>
                                         <constraint firstAttribute="trailing" secondItem="P6c-tV-ffU" secondAttribute="trailing" constant="27" id="hz8-7P-l1p"/>
-                                        <constraint firstItem="hkV-fw-Ufw" firstAttribute="top" secondItem="d9p-x8-wr7" secondAttribute="bottom" constant="1" id="tbi-2f-7Ga"/>
-                                        <constraint firstItem="d9p-x8-wr7" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" constant="16" id="trf-Lh-5Zj"/>
+                                        <constraint firstItem="3Kz-P0-XJZ" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leadingMargin" constant="50" id="jTy-Ni-imh"/>
+                                        <constraint firstItem="3Kz-P0-XJZ" firstAttribute="leading" secondItem="jqM-zX-wXB" secondAttribute="trailing" id="pf1-9W-qQM"/>
+                                        <constraint firstItem="3Kz-P0-XJZ" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" id="vcj-KM-5oh"/>
                                     </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="jTy-Ni-imh"/>
+                                        </mask>
+                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="cellBackgroundView" destination="8B8-Re-ww8" id="rDl-Uj-Hr7"/>
+                                    <outlet property="favoriteStarContainer" destination="jqM-zX-wXB" id="Xuw-m9-t72"/>
                                     <outlet property="timeString" destination="hkV-fw-Ufw" id="jb8-JI-ydm"/>
                                     <outlet property="titleString" destination="d9p-x8-wr7" id="8Lg-um-f95"/>
                                     <segue destination="S8b-Gx-dOJ" kind="show" identifier="EventItemDetailSegue" id="vDO-8u-VmA"/>
@@ -386,7 +438,7 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderCount"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="wuR-Cf-1Tk" kind="presentation" id="iXa-mi-JQf"/>
+                                    <segue destination="wuR-Cf-1Tk" kind="presentation" identifier="EventItemAddSegue" id="iXa-mi-JQf"/>
                                 </connections>
                             </button>
                         </barButtonItem>
@@ -605,9 +657,13 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="188" height="58"/>
                                                         <inset key="titleEdgeInsets" minX="25" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                         <state key="normal" title="Nut cracked?" image="starNormal"/>
+                                                        <state key="selected" title="Success!" image="starHighlighted"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderCount"/>
                                                         </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="nutCrackedButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="mlG-03-kmc"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -784,8 +840,8 @@
                         <outlet property="locationLabel" destination="dPo-2j-cHI" id="7HA-Vl-c5X"/>
                         <outlet property="missingDataAdvisoryView" destination="cmJ-dI-KmZ" id="XsH-bq-zbD"/>
                         <outlet property="notesLabel" destination="au5-2w-K1j" id="heW-2E-xn2"/>
+                        <outlet property="nutCrackedButton" destination="12g-bz-WJr" id="uC8-1Y-8UB"/>
                         <outlet property="photoUIImageView" destination="let-xp-dUr" id="oDy-7z-aYX"/>
-                        <outlet property="rightBarItem" destination="Zsb-VV-ZcJ" id="5Zb-T0-Keh"/>
                         <outlet property="titleLabel" destination="U73-Nl-2gk" id="oeo-FR-liY"/>
                         <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSegueToCancel" unwindAction="cancel:" id="kPJ-Hz-YIi"/>
                         <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSegueToDone" unwindAction="done:" id="220-gi-taE"/>
@@ -1328,10 +1384,12 @@
         <image name="searchIcon" width="21" height="21"/>
         <image name="separatorLine" width="100" height="2"/>
         <image name="smallAdd" width="18" height="18"/>
+        <image name="starHighlighted" width="27" height="27"/>
+        <image name="starLarge" width="38" height="36"/>
         <image name="starNormal" width="27" height="27"/>
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="iXa-mi-JQf"/>
+        <segue reference="O7R-3f-w0O"/>
     </inferredMetricsTieBreakers>
 </document>

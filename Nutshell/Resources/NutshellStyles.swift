@@ -70,8 +70,8 @@ public class Styles: NSObject {
         "tableListCellLocation": (smallSemiboldFont, altDarkGreyColor),
         "tableListCellDate": (verySmallRegularFont, altDarkGreyColor),
         "tableListCellRepeatCount": (smallBoldFont, altDarkGreyColor),
-        "tableCellTitle": (mediumSemiboldFont, darkGreyColor),
-        "tableCellSubtitle": (smallRegularFont, darkMediumGreyColor),
+        "tableCellTitle": (smallSemiboldFont, darkGreyColor),
+        "tableCellSubtitle": (verySmallRegularFont, darkMediumGreyColor),
         "tableCellLocationDate": (smallRegularFont, whiteColor),
         "saveButton": (mediumBoldFont, whiteColor),
         // account configuration views
@@ -116,6 +116,7 @@ public class Styles: NSObject {
     //// Cache
     
     private struct FontCache {
+        static let verySmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 10.0)!
         static let smallRegularFont: UIFont = UIFont(name: "OpenSans", size: 12.5)!
         static let mediumRegularFont: UIFont = UIFont(name: "OpenSans", size: 17.0)!
         static let mediumSmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 14.0)!
@@ -135,7 +136,6 @@ public class Styles: NSObject {
         
         // Fonts for special graph view
         
-        static let verySmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 10.0)!
         static let tinyRegularFont: UIFont = UIFont(name: "OpenSans", size: 8.5)!
         static let verySmallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 10.0)!
         static let veryTinySemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 8.0)!

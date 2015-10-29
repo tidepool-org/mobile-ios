@@ -29,13 +29,8 @@ class EventGroupTableViewController: BaseUITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        
         title = ""
+
         tableHeaderTitle.text = eventGroup.title
         tableHeaderLocation.text = eventGroup.location
         tableHeaderCount.text = "x " + String("\(eventGroup.itemArray.count)")
@@ -63,33 +58,6 @@ class EventGroupTableViewController: BaseUITableViewController {
     
     @IBAction func disclosureTouchDownHandler(sender: AnyObject) {
     }
-
-//    @IBAction func titleEditingDidBegin(sender: AnyObject) {
-//    }
-//    
-//    @IBAction func titleEditingDidEnd(sender: AnyObject) {
-//        titleTextField.resignFirstResponder()
-//        if let newTitle = titleTextField.text {
-//            if newTitle == "" {
-//                titleTextField.text = eventGroup.title
-//            } else if eventGroup.title != titleTextField.text {
-//                eventGroup.title = newTitle
-//                let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-//                let moc = ad.managedObjectContext
-//                for eventItem in eventGroup.itemArray {
-//                    eventItem.title = newTitle
-//                    if let mealItem = eventItem as? NutMeal {
-//                        mealItem.meal.title = newTitle
-//                        moc.refreshObject(mealItem.meal, mergeChanges: true)
-//                    } else if let workoutItem = eventItem as? NutWorkout {
-//                        workoutItem.workout.title = newTitle
-//                        moc.refreshObject(workoutItem.workout, mergeChanges: true)
-//                    }
-//                }
-//                DatabaseUtils.databaseSave(moc)
-//            }
-//        }
-//    }
     
     //
     // MARK: - Navigation
@@ -99,16 +67,18 @@ class EventGroupTableViewController: BaseUITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepareForSegue(segue, sender: sender)
-        if segue.identifier == "EventItemDetailSegue" {
+        if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue {
             let cell = sender as! EventGroupTableViewCell
             let eventItemVC = segue.destinationViewController as! EventDetailViewController
             eventItemVC.eventItem = cell.eventItem
             eventItemVC.eventGroup = eventGroup
             eventItemVC.title = self.title
-        } else if segue.identifier == "EventItemAddSegue" {
+        } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
             let eventItemVC = segue.destinationViewController as! EventAddOrEditViewController
             // no existing item to pass along...
             eventItemVC.eventGroup = eventGroup
+        } else {
+            NSLog("Unknown segue from eventGroup \(segue.identifier)")
         }
     }
 

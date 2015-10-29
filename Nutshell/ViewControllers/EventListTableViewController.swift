@@ -86,6 +86,8 @@ class EventListTableViewController: BaseUITableViewController {
             let eventGroupVC = segue.destinationViewController as! EventGroupTableViewController
             cell.eventGroup?.sortEvents()
             eventGroupVC.eventGroup = cell.eventGroup!
+        } else {
+            NSLog("Unprepped segue from eventList \(segue.identifier)")
         }
     }
     
