@@ -165,13 +165,14 @@
 		48B127AD1BC444FE00061483 /* ThreeTacosDemoPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */; };
 		48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
-		48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
-		48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */; settings = {ASSET_TAGS = (); }; };
+		48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */; };
+		48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */; };
 		48D056921BDFDD16009D1591 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48D056951BDFDD16009D1591 /* Localizable.strings */; };
 		48D056931BDFDD16009D1591 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48D056951BDFDD16009D1591 /* Localizable.strings */; };
 		48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
 		48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
 		48DF9B9B1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
+		48E490BF1BE198BF004F33E4 /* ShowPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E490BE1BE198BF004F33E4 /* ShowPhotoViewController.swift */; };
 		48EC32301BA7BDD700A75103 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
 		48EC32321BA7BDDE00A75103 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
 		48ED0D341BADAF8B009D0D6F /* GraphUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */; };
@@ -305,6 +306,7 @@
 		48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutShellUIViewWithHighlight.swift; path = Resources/NutShellUIViewWithHighlight.swift; sourceTree = "<group>"; };
 		48D056961BDFDD20009D1591 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
+		48E490BE1BE198BF004F33E4 /* ShowPhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShowPhotoViewController.swift; path = ViewControllers/ShowPhotoViewController.swift; sourceTree = "<group>"; };
 		48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphUIView.swift; path = GraphView/GraphUIView.swift; sourceTree = "<group>"; };
 		48ED0D361BAF22CC009D0D6F /* addAnimation-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-01.png"; path = "Images/addAnimation/addAnimation-01.png"; sourceTree = "<group>"; };
 		48ED0D371BAF22CC009D0D6F /* addAnimation-02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-02.png"; path = "Images/addAnimation/addAnimation-02.png"; sourceTree = "<group>"; };
@@ -440,6 +442,7 @@
 				48EDC2C51BD6B403003049D9 /* EventAddOrEditViewController.swift */,
 				486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */,
 				482B4E561BBDAFFF00835CAC /* EventDetailGraphCollectionCell.swift */,
+				48E490BE1BE198BF004F33E4 /* ShowPhotoViewController.swift */,
 			);
 			name = EventViewControllers;
 			sourceTree = "<group>";
@@ -876,6 +879,7 @@
 				486F5E3A1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
 				0334CA2E1BA8DDFC00013096 /* Calibration.swift in Sources */,
 				485420271BC44D290020CFE1 /* Meal.swift in Sources */,
+				48E490BF1BE198BF004F33E4 /* ShowPhotoViewController.swift in Sources */,
 				486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */,
 				0334CA731BA8DDFC00013096 /* Status.swift in Sources */,
 				485922A21B9A634E0056E605 /* EventListTableViewController.swift in Sources */,

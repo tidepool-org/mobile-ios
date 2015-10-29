@@ -99,6 +99,17 @@ class EventDetailViewController: BaseUIViewController {
         self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
     }
     
+    @IBAction func photoOverlayTouchHandler(sender: AnyObject) {
+        if let mealItem = eventItem as? NutMeal {
+            if !mealItem.photo.isEmpty {
+                let storyboard = UIStoryboard(name: "EventView", bundle: nil)
+                let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
+                photoVC.imageUrl = mealItem.photo
+                self.navigationController?.pushViewController(photoVC, animated: true)
+            }
+        }
+    }
+    
     //
     // MARK: - Configuration
     //

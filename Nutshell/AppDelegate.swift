@@ -36,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         API = APIConnector("Production")
         // If we already have a token, no need to log in again....
         if (API?.sessionToken != nil) {
+            print("attempting to refresh token...")
             API?.refreshToken({ (succeeded) -> (Void) in
                 if ( succeeded ) {
                     self.setupUIForLoginSuccess()
