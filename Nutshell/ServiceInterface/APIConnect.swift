@@ -108,7 +108,9 @@ class APIConnector {
         let headers = ["Authorization" : "Basic " + base64LoginString!]
         
         // Send the request and deal with the response as JSON
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         sendRequest(Method.POST, endpoint: endpoint, headers:headers).responseJSON { (request, response, result) -> (Void) in
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if ( result.isSuccess ) {
                 // Look for the auth token
                 self.sessionToken = response!.allHeaderFields[APIConnector.kSessionIdHeader] as! String?
@@ -150,7 +152,9 @@ class APIConnector {
         }
         
         // Post the request.
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         self.sendRequest(Method.GET, endpoint:endpoint).responseJSON { (request, response, result) -> Void in
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if ( result.isSuccess ) {
                 NSLog("Session token updated")
                 self.sessionToken = response!.allHeaderFields[APIConnector.kSessionIdHeader] as! String?
@@ -170,7 +174,9 @@ class APIConnector {
         // Set our endpoint for the user data
         let endpoint = "data/" + userId;
         
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         sendRequest(Method.GET, endpoint: endpoint).responseJSON { (request, response, result) -> Void in
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if ( result.isSuccess ) {
                 let json = JSON(result.value!)
                 completion(Result.Success(json))
@@ -199,7 +205,7 @@ class APIConnector {
     /**
      * Sends a request to the specified endpoint
     */
-    func sendRequest(requestType: (Alamofire.Method)? = Method.GET,
+    private func sendRequest(requestType: (Alamofire.Method)? = Method.GET,
         endpoint: (String),
         parameters: [String: AnyObject]? = nil,
         headers: [String: String]? = nil) -> (Request)
