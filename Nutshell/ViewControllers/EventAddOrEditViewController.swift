@@ -33,8 +33,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     @IBOutlet weak var photoIconButton: UIButton!
     @IBOutlet weak var calendarIconButton: UIButton!
     
-    @IBOutlet weak var rightBarItem: UIBarButtonItem!
-    
+    @IBOutlet weak var headerForModalView: NutshellUIView!
     @IBOutlet weak var sceneContainer: UIView!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var addSuccessView: NutshellUIView!
@@ -59,9 +58,13 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if let eventItem = eventItem {
             viewExistingEvent = true
             eventTime = eventItem.time
-            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Cancel, target: self, action: "backButtonHandler:")
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonHandler:")
-            navigationItem.rightBarButtonItem?.enabled = true
+            // hide modal header when used as a nav view
+            for c in headerForModalView.constraints {
+                if c.firstAttribute == NSLayoutAttribute.Height {
+                    c.constant = 0.0
+                    break
+                }
+            }
         }  else  {
             locationTextField.text = Styles.placeholderLocationString
             saveButtonTitle = NSLocalizedString("saveAndEatButtonTitle", comment:"Save and eat!")

@@ -201,7 +201,7 @@
                         <barButtonItem key="rightBarButtonItem" image="add-button" id="AjV-8Q-vYz">
                             <color key="tintColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <segue destination="wuR-Cf-1Tk" kind="show" id="Zwr-CU-iYy"/>
+                                <segue destination="wuR-Cf-1Tk" kind="presentation" modalTransitionStyle="coverVertical" id="Zwr-CU-iYy"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -378,7 +378,7 @@
                         <barButtonItem key="rightBarButtonItem" image="add-button" id="vyH-a6-VEj">
                             <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <segue destination="wuR-Cf-1Tk" kind="show" identifier="EventItemAddSegue" id="Zkp-nN-ILj"/>
+                                <segue destination="wuR-Cf-1Tk" kind="presentation" identifier="EventItemAddSegue" id="Zkp-nN-ILj"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -620,7 +620,7 @@
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderCount"/>
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
-                                                            <segue destination="wuR-Cf-1Tk" kind="show" identifier="EventItemAddSegue" id="Shc-Yg-1xe"/>
+                                                            <segue destination="wuR-Cf-1Tk" kind="presentation" identifier="EventItemAddSegue" id="Shc-Yg-1xe"/>
                                                         </connections>
                                                     </button>
                                                 </subviews>
@@ -800,11 +800,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VYf-c6-XQd" userLabel="ImageContainerView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VYf-c6-XQd" userLabel="ImageContainerView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bFI-8C-DET" userLabel="photoImageView">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bFI-8C-DET" userLabel="photoImageView">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -871,7 +871,7 @@
         <!--EventAddEdit-->
         <scene sceneID="YaE-9z-Fc2">
             <objects>
-                <viewController title="EventAddEdit" id="wuR-Cf-1Tk" customClass="EventAddOrEditViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="EventAddEdit" modalPresentationStyle="currentContext" id="wuR-Cf-1Tk" customClass="EventAddOrEditViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LRX-qB-1sq"/>
                         <viewControllerLayoutGuide type="bottom" id="gjY-8v-S58"/>
@@ -880,8 +880,44 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jig-6N-30U" userLabel="HeaderView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="375" height="44"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pPw-PK-xkH" userLabel="cancelButton">
+                                        <rect key="frame" x="16" y="10" width="24" height="24"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <state key="normal" image="xIcon"/>
+                                        <connections>
+                                            <action selector="backButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="h0z-dt-0f5"/>
+                                        </connections>
+                                    </button>
+                                    <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SdC-fO-FOS" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="43" width="375" height="1"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="Up2-Nf-NxY"/>
+                                            <constraint firstAttribute="height" constant="1" id="Vtw-iO-Jjm"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="whiteBackground"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="pPw-PK-xkH" firstAttribute="leading" secondItem="Jig-6N-30U" secondAttribute="leading" constant="16" id="FaT-Ha-rjh"/>
+                                    <constraint firstItem="pPw-PK-xkH" firstAttribute="centerY" secondItem="Jig-6N-30U" secondAttribute="centerY" id="Qoa-LX-hFU"/>
+                                    <constraint firstAttribute="trailing" secondItem="SdC-fO-FOS" secondAttribute="trailing" id="SER-93-jZe"/>
+                                    <constraint firstItem="SdC-fO-FOS" firstAttribute="leading" secondItem="Jig-6N-30U" secondAttribute="leading" id="fhL-KX-QiH"/>
+                                    <constraint firstAttribute="bottom" secondItem="SdC-fO-FOS" secondAttribute="bottom" id="vod-XX-5LW"/>
+                                    <constraint firstAttribute="height" constant="44" id="z2e-Mi-k3u"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EJp-jb-Txw" userLabel="SceneContainer" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SRG-kl-8Sj" userLabel="TopSection" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="258"/>
@@ -1080,7 +1116,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="abX-6z-1bd" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="553" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="509" width="375" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="fC6-V9-BbU"/>
                                         </constraints>
@@ -1093,13 +1129,13 @@
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T6Z-E3-yFO" userLabel="DatePickView">
-                                        <rect key="frame" x="0.0" y="258" width="375" height="345"/>
+                                        <rect key="frame" x="0.0" y="258" width="375" height="301"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aQ0-cw-Q59" userLabel="Picker container">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="291"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="247"/>
                                                 <subviews>
                                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="7ie-Xi-2LD">
-                                                        <rect key="frame" x="0.0" y="38" width="375" height="216"/>
+                                                        <rect key="frame" x="0.0" y="16" width="375" height="216"/>
                                                         <date key="date" timeIntervalSinceReferenceDate="465285901.60249501">
                                                             <!--2015-09-30 06:05:01 +0000-->
                                                         </date>
@@ -1113,7 +1149,7 @@
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IUh-yf-NAt" userLabel="Cancel Button" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="291" width="188" height="54"/>
+                                                <rect key="frame" x="0.0" y="247" width="188" height="54"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="54" id="2zZ-gM-jpT"/>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="54" id="HUM-OG-dS0"/>
@@ -1132,7 +1168,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WOu-JH-N7W" userLabel="Done Button" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="187" y="291" width="188" height="54"/>
+                                                <rect key="frame" x="187" y="247" width="188" height="54"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="54" id="Gfb-9I-8e5"/>
                                                 </constraints>
@@ -1198,26 +1234,37 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="EJp-jb-Txw" firstAttribute="top" secondItem="Jig-6N-30U" secondAttribute="bottom" id="0bW-Um-SE5"/>
                             <constraint firstAttribute="trailing" secondItem="EJp-jb-Txw" secondAttribute="trailing" id="8Zc-VD-oQS"/>
                             <constraint firstItem="EJp-jb-Txw" firstAttribute="top" secondItem="LRX-qB-1sq" secondAttribute="bottom" id="AlH-yK-Qjo"/>
+                            <constraint firstItem="Jig-6N-30U" firstAttribute="leading" secondItem="bVV-Kv-f31" secondAttribute="leading" id="OfP-si-S7q"/>
                             <constraint firstItem="gjY-8v-S58" firstAttribute="top" secondItem="EJp-jb-Txw" secondAttribute="bottom" id="Stq-Oe-pMC"/>
                             <constraint firstAttribute="trailing" secondItem="ejO-cF-P6G" secondAttribute="trailing" id="ZFH-8P-sRe"/>
                             <constraint firstItem="EJp-jb-Txw" firstAttribute="leading" secondItem="bVV-Kv-f31" secondAttribute="leading" id="feX-8o-7et"/>
                             <constraint firstItem="gjY-8v-S58" firstAttribute="top" secondItem="ejO-cF-P6G" secondAttribute="bottom" id="ikm-oP-X1a"/>
+                            <constraint firstItem="Jig-6N-30U" firstAttribute="top" secondItem="LRX-qB-1sq" secondAttribute="bottom" id="kRw-X2-UBJ"/>
+                            <constraint firstItem="gjY-8v-S58" firstAttribute="top" secondItem="Jig-6N-30U" secondAttribute="bottom" constant="269" id="ptE-4W-gC8"/>
                             <constraint firstItem="ejO-cF-P6G" firstAttribute="top" secondItem="LRX-qB-1sq" secondAttribute="bottom" id="rBk-Bo-Gjg"/>
                             <constraint firstItem="ejO-cF-P6G" firstAttribute="leading" secondItem="bVV-Kv-f31" secondAttribute="leading" id="uUt-Rn-uvQ"/>
+                            <constraint firstAttribute="trailing" secondItem="Jig-6N-30U" secondAttribute="trailing" id="wQc-Yj-pct"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="AlH-yK-Qjo"/>
+                                <exclude reference="ptE-4W-gC8"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="GKN-2i-hZi">
                         <nil key="title"/>
-                        <barButtonItem key="leftBarButtonItem" image="xIcon" id="4CD-3U-tiG">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="4CD-3U-tiG">
                             <connections>
                                 <action selector="backButtonHandler:" destination="wuR-Cf-1Tk" id="Rj3-PD-WNi"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" enabled="NO" image="blankTabIcon" id="gyM-z8-o6g">
+                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="gyM-z8-o6g">
                             <connections>
                                 <action selector="deleteButtonHandler:" destination="wuR-Cf-1Tk" id="EEc-ms-dl8"/>
                             </connections>
@@ -1236,12 +1283,12 @@
                         <outlet property="date2Label" destination="OOd-y1-fQU" id="y4o-Jn-NPM"/>
                         <outlet property="datePicker" destination="7ie-Xi-2LD" id="Hvb-Nw-fD8"/>
                         <outlet property="datePickerView" destination="T6Z-E3-yFO" id="bvP-tK-PdQ"/>
+                        <outlet property="headerForModalView" destination="Jig-6N-30U" id="BZ4-lu-5o9"/>
                         <outlet property="locationTextField" destination="b5b-5h-R2Q" id="egJ-t5-SMt"/>
                         <outlet property="notesHintLabel" destination="QY4-ef-Zcn" id="8BT-yT-3Mn"/>
                         <outlet property="notesTextField" destination="HNf-3W-C8L" id="ock-Fe-od4"/>
                         <outlet property="photoIconButton" destination="DPt-Sa-D9K" id="6wy-W5-ZSi"/>
                         <outlet property="placeIconButton" destination="dPf-QW-Qby" id="jyh-jM-s2o"/>
-                        <outlet property="rightBarItem" destination="gyM-z8-o6g" id="99A-W9-JIH"/>
                         <outlet property="saveButton" destination="abX-6z-1bd" id="4hf-9R-A0x"/>
                         <outlet property="sceneContainer" destination="EJp-jb-Txw" id="iYn-B6-o7W"/>
                         <outlet property="titleHintLabel" destination="2gd-CX-jRH" id="aCz-il-Zk0"/>
@@ -1262,7 +1309,6 @@
         <image name="ThreeTacosDemoPic.png" width="1280" height="456"/>
         <image name="add-button" width="23" height="23"/>
         <image name="backArrow" width="12" height="21"/>
-        <image name="blankTabIcon" width="24" height="24"/>
         <image name="calendarIcon" width="15" height="17"/>
         <image name="cameraIcon" width="23" height="18"/>
         <image name="leftArrow" width="17" height="30"/>
