@@ -375,11 +375,20 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="gpn-pI-6nu">
-                        <barButtonItem key="rightBarButtonItem" image="add-button" id="vyH-a6-VEj">
-                            <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <segue destination="wuR-Cf-1Tk" kind="presentation" identifier="EventItemAddSegue" id="Zkp-nN-ILj"/>
-                            </connections>
+                        <barButtonItem key="rightBarButtonItem" id="nuU-mo-i9I">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="oEI-d2-hWo" userLabel="EatAgain" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="266" y="11" width="93" height="22"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <inset key="titleEdgeInsets" minX="-52" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="75" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Eat again" image="smallAdd"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderCount"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <segue destination="wuR-Cf-1Tk" kind="presentation" id="iXa-mi-JQf"/>
+                                </connections>
+                            </button>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
@@ -1323,6 +1332,6 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Shc-Yg-1xe"/>
+        <segue reference="iXa-mi-JQf"/>
     </inferredMetricsTieBreakers>
 </document>
