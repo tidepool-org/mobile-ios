@@ -24,6 +24,7 @@ class EventGroupTableViewCell: BaseUITableViewCell {
     @IBOutlet weak var titleString: NutshellUILabel!
     @IBOutlet weak var timeString: NutshellUILabel!
     @IBOutlet weak var photoImageView: UIImageView!
+    @IBOutlet weak var photoContainerView: UIView!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -61,12 +62,12 @@ class EventGroupTableViewCell: BaseUITableViewCell {
             }
         }
 
-//        if let meal = eventItem as? NutMeal {
-//            if meal.photo.characters.count > 0 {
-//                photoImageView.image = UIImage(named: meal.photo)
-//            } else {
-//                photoImageView.image = nil
-//            }
-//        }
+        photoContainerView.hidden = true
+        if let meal = eventItem as? NutMeal {
+            if meal.photo.characters.count > 0 {
+                photoImageView.image = UIImage(named: meal.photo)
+                photoContainerView.hidden = false
+            }
+        }
     }
 }

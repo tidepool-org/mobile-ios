@@ -46,6 +46,10 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     @IBOutlet weak var date1Label: NutshellUILabel!
     @IBOutlet weak var date2Label: NutshellUILabel!
     
+    @IBOutlet weak var picture1Image: UIImageView!
+    @IBOutlet weak var picture2Image: UIImageView!
+    @IBOutlet weak var picture3Image: UIImageView!
+    
     private var eventTime = NSDate()
 
     //
@@ -89,9 +93,19 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     //
-    // MARK: - configuration
+    // MARK: - Navigation
+    //
+
+    @IBAction func done(segue: UIStoryboardSegue) {
+        print("unwind segue to eventAddOrEdit done")
+        // reconfigure in case a photo was deleted
+        configureInfoSection()
+    }
+
+    //
+    // MARK: - Configuration
     //
     
     private func configureInfoSection() {
@@ -106,19 +120,22 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 notesText = eventItem.notes
             }
             
+            picture1Image.hidden = true
+            picture2Image.hidden = true
+            picture3Image.hidden = true
+           
             if let mealItem = eventItem as? NutMeal {
                 if mealItem.location.characters.count > 0 {
                     locationTextField.text = mealItem.location
                 } else {
                     locationTextField.text = Styles.placeholderLocationString
                 }
-//                if mealItem.photo.characters.count > 0 {
-//                    if let image = UIImage(named: mealItem.photo) {
-//                        missingPhotoView.hidden = true
-//                        photoUIImageView.hidden = false
-//                        photoUIImageView.image = image
-//                    }
-//                }
+                if mealItem.photo.characters.count > 0 {
+                    if let image = UIImage(named: mealItem.photo) {
+                        picture1Image.image = image
+                        picture1Image.hidden = false
+                    }
+                }
             } else {
                 // TODO: show other workout-specific items
             }
@@ -225,6 +242,18 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     //
     // MARK: - Button and text field handlers
     //
+    
+    @IBAction func picture1ButtonHandler(sender: AnyObject) {
+        if let mealItem = eventItem as? NutMeal {
+            if !mealItem.photo.isEmpty {
+                let storyboard = UIStoryboard(name: "EventView", bundle: nil)
+                let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
+                photoVC.imageUrl = mealItem.photo
+                photoVC.editAllowed = true
+                self.navigationController?.pushViewController(photoVC, animated: true)
+            }
+        }
+    }
     
     func textFieldDidChange() {
         updateSaveButtonState()

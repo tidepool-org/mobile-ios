@@ -25,7 +25,7 @@ class EventGroupTableViewController: BaseUITableViewController {
     @IBOutlet weak var tableHeaderLocation: NutshellUILabel!
     @IBOutlet weak var tableHeaderCount: NutshellUILabel!
     @IBOutlet weak var headerView: NutshellUIView!
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -93,24 +93,29 @@ class EventGroupTableViewController: BaseUITableViewController {
     @IBAction func cancel(segue: UIStoryboardSegue) {
         print("unwind segue to eventGroup cancel")
     }
-    
 }
 
-// MARK: - Table view delegate
-
-//extension EventGroupTableViewController {
-//    
-//    override func tableView(tableView: UITableView,
-//        viewForHeaderInSection section: Int) -> UIView? {
-//            
-//            return headerView
-//    }
 //
-//    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//            return 95.0
-//    }
-//    
-//}
+// MARK: - Table view delegate
+//
+
+
+extension EventGroupTableViewController {
+
+    private func itemAtIndexPathHasPhoto(indexPath: NSIndexPath) -> Bool {
+        if indexPath.item < eventGroup.itemArray.count {
+            let eventItem = eventGroup.itemArray[indexPath.item]
+            if let mealItem = eventItem as? NutMeal {
+                return !mealItem.photo.isEmpty
+            }
+        }
+        return false
+    }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return itemAtIndexPathHasPhoto(indexPath) ? 164: 80.0
+    }
+}
 
 //
 // MARK: - Table view data source

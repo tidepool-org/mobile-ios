@@ -10,6 +10,8 @@ import UIKit
 
 class ShowPhotoViewController: UIViewController {
 
+    var editAllowed = false
+    
     @IBOutlet weak var photoImageView: UIImageView!
     var imageUrl: String = ""
     
