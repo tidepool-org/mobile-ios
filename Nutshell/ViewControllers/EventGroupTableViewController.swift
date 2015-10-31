@@ -113,7 +113,7 @@ extension EventGroupTableViewController {
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return itemAtIndexPathHasPhoto(indexPath) ? 164: 80.0
+        return itemAtIndexPathHasPhoto(indexPath) ? 164.0 : 80.0
     }
 }
 

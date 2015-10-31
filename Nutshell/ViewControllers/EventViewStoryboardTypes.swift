@@ -31,6 +31,7 @@ struct EventViewStoryboard {
         static let EventGroupSegue = "EventGroupSegue"
         static let EventItemAddSegue = "EventItemAddSegue"
         static let EventItemEditSegue = "EventItemEditSegue"
+        static let UnwindSegueFromShowPhoto = "UnwindSegueFromShowPhoto"
     }
 }
 

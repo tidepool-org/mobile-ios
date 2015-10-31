@@ -16,6 +16,7 @@
 
 import UIKit
 import CoreData
+import Photos
 
 class EventAddOrEditViewController: BaseUIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
@@ -51,6 +52,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     @IBOutlet weak var picture3Image: UIImageView!
     
     private var eventTime = NSDate()
+    private var picture1ImageURL = ""
 
     //
     // MARK: - Base methods
@@ -100,8 +102,16 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
 
     @IBAction func done(segue: UIStoryboardSegue) {
         print("unwind segue to eventAddOrEdit done")
-        // reconfigure in case a photo was deleted
-        configureInfoSection()
+        // Deal with possible delete/edit of photo from viewer...
+        // TODO: multi-photo support!
+        if segue.identifier == EventViewStoryboard.SegueIdentifiers.UnwindSegueFromShowPhoto {
+            if let photoVC = segue.sourceViewController as? ShowPhotoViewController {
+                if picture1ImageURL != photoVC.imageUrl {
+                    picture1ImageURL = photoVC.imageUrl
+                    configurePhotos()
+                }
+            }
+        }
     }
 
     //
@@ -125,19 +135,16 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             picture3Image.hidden = true
            
             if let mealItem = eventItem as? NutMeal {
-                if mealItem.location.characters.count > 0 {
+                if !mealItem.location.isEmpty {
                     locationTextField.text = mealItem.location
                 } else {
                     locationTextField.text = Styles.placeholderLocationString
                 }
-                if mealItem.photo.characters.count > 0 {
-                    if let image = UIImage(named: mealItem.photo) {
-                        picture1Image.image = image
-                        picture1Image.hidden = false
-                    }
+                if !mealItem.photo.isEmpty {
+                    picture1ImageURL = mealItem.photo
                 }
             } else {
-                // TODO: show other workout-specific items
+                // TODO: workout support! Add workout-specific items...
             }
         } else if let eventGroup = eventGroup {
                 titleText = eventGroup.title
@@ -149,6 +156,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         configureTitleHint()
         configureNotesHint()
         configureDateView()
+        configurePhotos()
         updateSaveButtonState()
     }
     
@@ -172,6 +180,15 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
 
+    private func configurePhotos() {
+        if picture1ImageURL.isEmpty {
+            picture1Image.hidden = true
+        } else {
+            picture1Image.hidden = false
+            NutUtils.loadImage(picture1ImageURL, imageView: picture1Image)
+        }
+    }
+    
     private func updateSaveButtonState() {
         if viewExistingEvent {
             saveButton.hidden = !existingEventChanged()
@@ -243,18 +260,6 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     // MARK: - Button and text field handlers
     //
     
-    @IBAction func picture1ButtonHandler(sender: AnyObject) {
-        if let mealItem = eventItem as? NutMeal {
-            if !mealItem.photo.isEmpty {
-                let storyboard = UIStoryboard(name: "EventView", bundle: nil)
-                let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
-                photoVC.imageUrl = mealItem.photo
-                photoVC.editAllowed = true
-                self.navigationController?.pushViewController(photoVC, animated: true)
-            }
-        }
-    }
-    
     func textFieldDidChange() {
         updateSaveButtonState()
     }
@@ -310,6 +315,114 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
 
+    @IBAction func saveButtonHandler(sender: AnyObject) {
+        
+        if viewExistingEvent {
+            updateCurrentEvent()
+            self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
+            return
+        } else {
+            updateNewEvent()
+        }
+        
+    }
+
+    @IBAction func backButtonHandler(sender: AnyObject) {
+        // this is a cancel for the role of addEvent and editEvent
+        // for viewEvent, we need to check whether the title has changed
+        if viewExistingEvent {
+            // cancel of edit
+            if existingEventChanged() {
+                alertOnCancelAndReturn()
+            } else {
+                self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
+            }
+        } else {
+            // cancel of add
+            if newEventChanged() {
+                alertOnCancelAndReturn()
+            } else {
+                self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
+            }
+        }
+    }
+    
+    @IBAction func deleteButtonHandler(sender: AnyObject) {
+        // this is a delete for the role of editEvent
+        if let eventItem = eventItem, eventGroup = eventGroup {
+            // use dialog to confirm delete with user!
+            let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), message: NSLocalizedString("discardMealAlertMessage", comment:"If you discard this meal, your meal will be lost."), preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+                return
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+                self.deleteItemAndReturn(eventItem, eventGroup: eventGroup)
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+    }
+    
+    @IBAction func picture1ButtonHandler(sender: AnyObject) {
+        if !picture1ImageURL.isEmpty {
+            let storyboard = UIStoryboard(name: "EventView", bundle: nil)
+            let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
+            photoVC.imageUrl = picture1ImageURL
+            photoVC.editAllowed = true
+            self.navigationController?.pushViewController(photoVC, animated: true)
+        }
+    }
+    
+    @IBAction func photoButtonHandler(sender: AnyObject) {
+        let pickerC = UIImagePickerController()
+        pickerC.delegate = self
+        self.presentViewController(pickerC, animated: true, completion: nil)
+    }
+
+    //
+    // MARK: - UIImagePickerControllerDelegate
+    //
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        print(info)
+        
+        if let mealItem = eventItem as? NutMeal {
+            if !mealItem.photo.isEmpty {
+                // TODO: multi-photo support! If there are already 3 photos, probably shouldn't allow adding another anyway!
+            }
+            if let photoUrl = info[UIImagePickerControllerReferenceURL] as? NSURL {
+                picture1ImageURL = photoUrl.absoluteString
+                updateSaveButtonState()
+                //configurePhotos()
+
+                if let nsurl = NSURL(string:picture1ImageURL) {
+                    let fetchResult = PHAsset.fetchAssetsWithALAssetURLs([nsurl], options: nil)
+                    if let asset = fetchResult.firstObject as? PHAsset {
+                        let targetSize = picture1Image.frame.size
+                        let options = PHImageRequestOptions()
+                        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: targetSize, contentMode: PHImageContentMode.AspectFit, options: options) {
+                            (result, info) in
+                            if let result = result {
+                                self.picture1Image.hidden = false
+                                self.picture1Image.image = result
+                            }
+                        }
+                    }
+                }
+                
+//                if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+//                    picture1Image.image = image
+//                    picture1Image.hidden = false
+//                }
+            }
+        }
+    }
+    
+    //
+    // MARK: - Event updating
+    //
+
     private func newEventChanged() -> Bool {
         if let eventGroup = eventGroup {
             if titleTextField.text != eventGroup.title {
@@ -328,6 +441,9 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
         if notesTextField.text != Styles.placeholderNotesString {
             return true
+        }
+        if !picture1ImageURL.isEmpty {
+                return true
         }
         return false
     }
@@ -351,8 +467,12 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                     NSLog("location changed, enabling save")
                     return true
                 }
-            }
-        }
+                if meal.photo != picture1ImageURL {
+                NSLog("photo changed, enabling save")
+                   return true
+                }
+           }
+       }
         return false
     }
     
@@ -378,6 +498,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
 
     private func updateCurrentEvent() {
         
+        // TODO: workout support! Allow editing workout items as well!
         if let mealItem = eventItem as? NutMeal {
             
             let location = filteredLocationText()
@@ -392,12 +513,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             event.notes = notes
             event.location = location
             event.modifiedTime = NSDate()
+            event.photo = picture1ImageURL
             moc.refreshObject(event, mergeChanges: true)
             
             mealItem.title = titleTextField.text!
             mealItem.time = eventTime
             mealItem.notes = notes
             mealItem.location = location
+            mealItem.photo = picture1ImageURL
             // note event changed as "new" event
             newMealEvent = event
             
@@ -412,15 +535,8 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             }
         }
     }
-    
-    @IBAction func saveButtonHandler(sender: AnyObject) {
-        
-        if viewExistingEvent {
-            updateCurrentEvent()
-            self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
-            return
-        }
-        
+
+    private func updateNewEvent() {
         if titleTextField.text == "testmode" {
             AppDelegate.testMode = !AppDelegate.testMode
             self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
@@ -443,11 +559,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 
                 let location = filteredLocationText()
                 let notes = filteredNotesText()
-
+                
                 me.location = location
                 me.title = titleTextField.text
                 me.notes = notes
-                me.photo = ""
+                me.photo = picture1ImageURL
                 me.type = "meal"
                 me.time = eventTime // required!
                 let now = NSDate()
@@ -474,39 +590,6 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             }
         }
     }
-    
-    private func alertOnCancelAndReturn() {
-        // use dialog to confirm cancel with user!
-        let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), message: NSLocalizedString("closeMealAlertMessage", comment:"If you close this meal, your meal will be lost."), preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
-            return
-        }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
-            self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
-            self.dismissViewControllerAnimated(true, completion: nil)
-        }))
-        self.presentViewController(alert, animated: true, completion: nil)
-    }
-    
-    @IBAction func backButtonHandler(sender: AnyObject) {
-        // this is a cancel for the role of addEvent and editEvent
-        // for viewEvent, we need to check whether the title has changed
-        if viewExistingEvent {
-            // cancel of edit
-            if existingEventChanged() {
-                alertOnCancelAndReturn()
-            } else {
-                self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
-            }
-        } else {
-            // cancel of add
-            if newEventChanged() {
-                alertOnCancelAndReturn()
-            } else {
-                self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
-            }
-        }
-    }
 
     private func deleteItemAndReturn(eventItem: NutEventItem, eventGroup: NutEvent) {
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -530,35 +613,21 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
     
-    @IBAction func deleteButtonHandler(sender: AnyObject) {
-        // this is a delete for the role of editEvent
-        if let eventItem = eventItem, eventGroup = eventGroup {
-            // use dialog to confirm delete with user!
-            let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), message: NSLocalizedString("discardMealAlertMessage", comment:"If you discard this meal, your meal will be lost."), preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
-                return
-            }))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
-                self.deleteItemAndReturn(eventItem, eventGroup: eventGroup)
-                self.dismissViewControllerAnimated(true, completion: nil)
-            }))
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
-    }
-    
-    @IBAction func photoButtonHandler(sender: AnyObject) {
-            let pickerC = UIImagePickerController()
-            pickerC.delegate = self
-            self.presentViewController(pickerC, animated: true, completion: nil)
-    }
-    
-    // 
-    // MARK: - UIImagePickerControllerDelegate
+    //
+    // MARK: - Alerts
     //
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        self.dismissViewControllerAnimated(true, completion: nil)
-        print(info)
+    private func alertOnCancelAndReturn() {
+        // use dialog to confirm cancel with user!
+        let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), message: NSLocalizedString("closeMealAlertMessage", comment:"If you close this meal, your meal will be lost."), preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+            return
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+            self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
+            self.dismissViewControllerAnimated(true, completion: nil)
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     //

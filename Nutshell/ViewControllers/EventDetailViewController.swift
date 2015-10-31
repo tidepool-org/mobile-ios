@@ -146,14 +146,11 @@ class EventDetailViewController: BaseUIViewController {
 
             if let mealItem = eventItem as? NutMeal {
                 photoUIImageView.hidden = true
-                if mealItem.photo.characters.count > 0 {
-                    if let image = UIImage(named: mealItem.photo) {
-                        photoUIImageView.hidden = false
-                        photoUIImageView.image = image
-                    }
+                if !mealItem.photo.isEmpty {
+                    NutUtils.loadImage(mealItem.photo, imageView: photoUIImageView)
                 }
             } else {
-                // TODO: show other workout-specific items
+                // TODO: workout support! Show other workout-specific items
             }
         }
         

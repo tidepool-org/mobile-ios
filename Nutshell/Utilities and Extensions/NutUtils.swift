@@ -15,6 +15,7 @@
 
 import UIKit
 import CoreData
+import Photos
 
 class NutUtils {
 
@@ -34,6 +35,28 @@ class NutUtils {
             dispatch_get_main_queue(), closure)
     }
     
+    class func loadImage(url: String, imageView: UIImageView) {
+        if let image = UIImage(named: url) {
+            imageView.image = image
+            imageView.hidden = false
+        } else {
+            if let nsurl = NSURL(string:url) {
+                let fetchResult = PHAsset.fetchAssetsWithALAssetURLs([nsurl], options: nil)
+                if let asset = fetchResult.firstObject as? PHAsset {
+                    let targetSize = imageView.frame.size
+                    let options = PHImageRequestOptions()
+                    PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: targetSize, contentMode: PHImageContentMode.AspectFit, options: options) {
+                        (result, info) in
+                        if let result = result {
+                            imageView.hidden = false
+                            imageView.image = result
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     class func dateFromJSON(json: String?) -> NSDate? {
         if let json = json {
             return jsonDateFormatter.dateFromString(json)

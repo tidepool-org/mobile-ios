@@ -19,7 +19,6 @@
 
 import UIKit
 
-// TODO: change this file to return strings useful for nutshell...
 // ------------ Date Formatter ------------
 
 /*

@@ -21,9 +21,7 @@ class ShowPhotoViewController: UIViewController {
         // Do any additional setup after loading the view.
 
         if !imageUrl.isEmpty {
-            if let image = UIImage(named: imageUrl) {
-                photoImageView.image = image
-            }
+            NutUtils.loadImage(imageUrl, imageView: photoImageView)
         }
     }
 
@@ -35,7 +33,7 @@ class ShowPhotoViewController: UIViewController {
     @IBAction func backButtonHandler(sender: AnyObject) {
         
         photoImageView.hidden = true
-        self.performSegueWithIdentifier("unwindSequeToDone", sender: self)
+        self.performSegueWithIdentifier(EventViewStoryboard.SegueIdentifiers.UnwindSegueFromShowPhoto, sender: self)
     }
     
     /*

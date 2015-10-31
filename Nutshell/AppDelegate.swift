@@ -35,6 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set up the API connection
         API = APIConnector("Production")
         // If we already have a token, no need to log in again....
+        // TODO: verify we need to do this even if there is no network connection!
         if (API?.sessionToken != nil) {
             print("attempting to refresh token...")
             API?.refreshToken({ (succeeded) -> (Void) in
@@ -42,6 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     self.setupUIForLoginSuccess()
                 } else {
                     NSLog("Refresh token failed, need to log in normally")
+                    self.setupUIForLogin()
                 }
             });
         } else {
@@ -51,13 +53,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    func setupUIForLogin() {
+        let sb = UIStoryboard(name: "Login", bundle: nil)
+        if let vc = sb.instantiateInitialViewController() {
+            self.window?.rootViewController = vc
+        }
+    }
+    
     func logout() {
         if let API = API {
             API.logout() {
-                let sb = UIStoryboard(name: "Login", bundle: nil)
-                if let vc = sb.instantiateInitialViewController() {
-                    self.window?.rootViewController = vc
-                }
+                self.setupUIForLogin()
             }
         }
     }
