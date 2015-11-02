@@ -19,6 +19,10 @@ import CoreGraphics
 
 public class GraphViews {
 
+    // Note: This is somewhat obscure, but caller needs to know to provide data on end of view time to avoid collection view overlap discontinuities. Calculated at init time.
+    var timeExtensionForDataFetch: NSTimeInterval = 0.0
+    private let kLargestGraphItemWidth: CGFloat = 30.0
+    
     //
     // MARK: - Customization constants
     //
@@ -135,6 +139,9 @@ public class GraphViews {
         self.startTime = startTime
         self.viewPixelsPerSec = viewSize.width/CGFloat(timeIntervalForView)
         
+        // calculate the extra time we need data fetched for at the end of the graph time span so we draw the beginnings of next graph items
+        timeExtensionForDataFetch = NSTimeInterval(kLargestGraphItemWidth/viewPixelsPerSec)
+
         // Tweak: if height is less than 320 pixels, let the wizard circles drift up into the low area of the blood glucose data since that should be clear
         let wizardHeight = viewSize.height < 320.0 ? 0.0 : kGraphWizardHeight
         

@@ -31,7 +31,6 @@ class GraphUIView: UIView {
         self.endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
         self.viewTimeInterval = timeIntervalForView
         self.graphViews = GraphViews(viewSize: frame.size, timeIntervalForView: viewTimeInterval, startTime: startTime)
-        
         super.init(frame: frame)
     }
 
@@ -205,8 +204,12 @@ class GraphUIView: UIView {
         
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
         do {
+            // we actually need to finish drawing events that end slightly before our start time, and start drawing events that happen slightly after our timeframe so that this graph will overlap a graph of the following time chunk without discontinuities.
+            let earlyStartTime = startTime.dateByAddingTimeInterval(-graphViews.timeExtensionForDataFetch)
+            let lateEndTime = endTime.dateByAddingTimeInterval(graphViews.timeExtensionForDataFetch)
+
             let events = try DatabaseUtils.getEvents(ad.managedObjectContext,
-            fromTime: startTime, toTime: endTime, objectTypes: ["smbg", "bolus", "cbg", "wizard", "meal", "workout"])
+            fromTime: earlyStartTime, toTime: lateEndTime, objectTypes: ["smbg", "bolus", "cbg", "wizard", "meal", "workout"])
             
             print("\(events.count) events")
             for event in events {
