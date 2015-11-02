@@ -36,3 +36,10 @@
 
 "saveButtonTitle" = "Save";
 "saveAndEatButtonTitle" = "Save and eat!";
+
+/*
+ Login view controller
+ */
+
+"loginErrUserOrPassword" = "Wrong email or password!";
+"loginErrOffline" = "The Internet connection appears to be offline!";

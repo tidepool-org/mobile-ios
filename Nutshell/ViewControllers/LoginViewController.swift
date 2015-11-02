@@ -113,6 +113,15 @@ class LoginViewController: BaseUIViewController {
                     }
                 } else {
                     print("login failed! Error: " + result.error.debugDescription)
+                    var errorText = NSLocalizedString("loginErrUserOrPassword", comment: "Wrong email or password!")
+                    if let error = result.error as? NSError {
+                        print("NSError: \(error)")
+                        if error.code == -1009 {
+                            errorText = NSLocalizedString("loginErrOffline", comment: "The Internet connection appears to be offline!")
+                        }
+                        // TODO: handle network offline!
+                    }
+                    self.errorFeedbackLabel.text = errorText
                     self.errorFeedbackLabel.hidden = false
                     self.passwordTextField.text = ""
                 }
