@@ -147,23 +147,30 @@ extension EventGroupTableViewController {
     override func tableView(tableView: UITableView,
         editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
             let rowAction = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: "delete") {_,indexPath in
-
-                // Delete the row from the data source
-                let eventItem = self.eventGroup.itemArray.removeAtIndex(indexPath.item)
-                let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-                let moc = ad.managedObjectContext
-                if let mealItem = eventItem as? NutMeal {
-                    moc.deleteObject(mealItem.meal)
-                } else if let workoutItem = eventItem as? NutWorkout {
-                    moc.deleteObject(workoutItem.workout)
-                }
-                DatabaseUtils.databaseSave(moc)
-                // Now delete the row...
-                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-                if self.eventGroup.itemArray.count == 0 {
-                    self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
-                }
-                return
+                // use dialog to confirm delete with user!
+                let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), message: NSLocalizedString("discardMealAlertMessage", comment:"If you discard this meal, your meal will be lost."), preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+                    return
+                }))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+                    // Delete the row from the data source
+                    let eventItem = self.eventGroup.itemArray.removeAtIndex(indexPath.item)
+                    let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+                    let moc = ad.managedObjectContext
+                    if let mealItem = eventItem as? NutMeal {
+                        moc.deleteObject(mealItem.meal)
+                    } else if let workoutItem = eventItem as? NutWorkout {
+                        moc.deleteObject(workoutItem.workout)
+                    }
+                    DatabaseUtils.databaseSave(moc)
+                    // Now delete the row...
+                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                    if self.eventGroup.itemArray.count == 0 {
+                        self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+                    }
+                    return
+                }))
+                self.presentViewController(alert, animated: true, completion: nil)
             }
             rowAction.backgroundColor = Styles.peachDeleteColor
             return [rowAction]
@@ -171,8 +178,8 @@ extension EventGroupTableViewController {
 
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+        // Remove support for delete at this point...
+        return false
     }
 
     // Override to support editing the table view.

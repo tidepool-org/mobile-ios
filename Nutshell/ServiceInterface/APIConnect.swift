@@ -161,6 +161,10 @@ class APIConnector {
                 completion(succeeded: true)
             } else {
                 NSLog("Session token update failed: \(result)")
+                if let error = result.error as? NSError {
+                    print("NSError: \(error)")
+                    // TODO: handle network offline!
+                }
                 completion(succeeded: false)
             }
         }

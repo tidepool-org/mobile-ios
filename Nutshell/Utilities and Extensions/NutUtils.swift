@@ -43,7 +43,10 @@ class NutUtils {
             if let nsurl = NSURL(string:url) {
                 let fetchResult = PHAsset.fetchAssetsWithALAssetURLs([nsurl], options: nil)
                 if let asset = fetchResult.firstObject as? PHAsset {
-                    let targetSize = imageView.frame.size
+                    var targetSize = imageView.frame.size
+                    // bump up resolution...
+                    targetSize.height *= 2.0
+                    targetSize.width *= 2.0
                     let options = PHImageRequestOptions()
                     PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: targetSize, contentMode: PHImageContentMode.AspectFit, options: options) {
                         (result, info) in

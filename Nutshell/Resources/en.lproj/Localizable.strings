@@ -20,8 +20,12 @@
     Discard alert text: for edit and add item
  */
 
+"discardPhotoAlertTitle" = "Discard photo?";
+"discardPhotoAlertMessage" = "If you discard this photo, your photo will be lost.";
 "discardMealAlertTitle" = "Discard meal?";
 "discardMealAlertMessage" = "If you discard this meal, your meal will be lost.";
+"discardEditsAlertTitle" = "Discard changes?";
+"discardEditsAlertMessage" = "If you press discard, your changes to this meal will be lost.";
 "closeMealAlertMessage" = "If you close this meal, your meal will be lost.";
 "discardAlertCancel" = "Cancel";
 "discardAlertOkay" = "Discard";

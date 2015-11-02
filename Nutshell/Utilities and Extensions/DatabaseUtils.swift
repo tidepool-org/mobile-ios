@@ -15,6 +15,7 @@ class DatabaseUtils {
     /** Removes everything from the database. Do this on logout and / or after a successful login */
     // TODO: add code to delete "meal" and "workout" items from the database once we upload them to the service so they are backed up.
     class func clearDatabase(moc: NSManagedObjectContext) {
+        NSLog("***Clearing database!***")
         moc.performBlock { () -> Void in
             
             let entities = ["Activity", "Alarm", "Basal", "BloodKetone", "Bolus", "Calibration",

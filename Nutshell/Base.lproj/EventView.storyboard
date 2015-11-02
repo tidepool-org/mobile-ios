@@ -50,7 +50,7 @@
                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TJv-Lt-lpn" userLabel="searchTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
                                     <rect key="frame" x="50" y="0.0" width="317" height="50"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <textInputTraits key="textInputTraits"/>
+                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="string" keyPath="usage" value="searchText"/>
                                     </userDefinedRuntimeAttributes>
@@ -384,7 +384,7 @@
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dKd-IQ-rN4" userLabel="photoContainer">
                                             <rect key="frame" x="27" y="69" width="227" height="79"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="W2N-rU-bPK">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="W2N-rU-bPK">
                                                     <rect key="frame" x="0.0" y="0.0" width="227" height="79"/>
                                                 </imageView>
                                             </subviews>
@@ -486,7 +486,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CGM-yQ-ne9" userLabel="TopSection" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="188"/>
                                         <subviews>
-                                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ThreeTacosDemoPic.png" translatesAutoresizingMaskIntoConstraints="NO" id="let-xp-dUr" userLabel="photoUIImageView">
+                                            <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ThreeTacosDemoPic.png" translatesAutoresizingMaskIntoConstraints="NO" id="let-xp-dUr" userLabel="photoUIImageView">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="188"/>
                                             </imageView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3U-KK-eno" userLabel="photoOverlayView" customClass="UIControl">
@@ -877,7 +877,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VYf-c6-XQd" userLabel="ImageContainerView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bFI-8C-DET" userLabel="photoImageView">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bFI-8C-DET" userLabel="photoImageView">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                     </imageView>
                                 </subviews>
@@ -1154,13 +1154,13 @@
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7J5-hH-SWO">
                                                         <rect key="frame" x="283" y="40" width="22" height="22"/>
                                                     </imageView>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HLo-MG-ejk" userLabel="pic1Container">
+                                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HLo-MG-ejk" userLabel="pic1Container">
                                                         <rect key="frame" x="283" y="35" width="22" height="22"/>
                                                         <subviews>
                                                             <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="miniPicBackground" translatesAutoresizingMaskIntoConstraints="NO" id="N28-Ub-Lig" userLabel="pic1Background">
                                                                 <rect key="frame" x="0.0" y="0.0" width="22" height="22"/>
                                                             </imageView>
-                                                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QKq-ZG-6wA" userLabel="pic1Image">
+                                                            <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QKq-ZG-6wA" userLabel="pic1Image">
                                                                 <rect key="frame" x="1" y="1" width="20" height="20"/>
                                                             </imageView>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dQ3-lG-eOk">
@@ -1184,13 +1184,13 @@
                                                             <constraint firstItem="QKq-ZG-6wA" firstAttribute="height" secondItem="HLo-MG-ejk" secondAttribute="height" constant="-2" id="zBG-yf-D5y"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qsd-yF-K8c" userLabel="pic2Container">
+                                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qsd-yF-K8c" userLabel="pic2Container">
                                                         <rect key="frame" x="308" y="35" width="22" height="22"/>
                                                         <subviews>
                                                             <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="miniPicBackground" translatesAutoresizingMaskIntoConstraints="NO" id="vO0-IH-YIT" userLabel="pic2Background">
                                                                 <rect key="frame" x="0.0" y="0.0" width="22" height="22"/>
                                                             </imageView>
-                                                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HwP-cS-yq6" userLabel="pic2Image">
+                                                            <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HwP-cS-yq6" userLabel="pic2Image">
                                                                 <rect key="frame" x="1" y="1" width="20" height="20"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="22" id="9Uc-Rh-6vF"/>
@@ -1218,13 +1218,13 @@
                                                             <constraint firstAttribute="width" constant="22" id="phV-vH-Qjx"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hwh-Qu-UlE" userLabel="pic3Container">
+                                                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hwh-Qu-UlE" userLabel="pic3Container">
                                                         <rect key="frame" x="333" y="35" width="22" height="22"/>
                                                         <subviews>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="miniPicBackground" translatesAutoresizingMaskIntoConstraints="NO" id="tbd-m7-2nq" userLabel="pic3Background">
                                                                 <rect key="frame" x="0.0" y="0.0" width="22" height="22"/>
                                                             </imageView>
-                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="G8X-oe-aUq" userLabel="pic3Image">
+                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="G8X-oe-aUq" userLabel="pic3Image">
                                                                 <rect key="frame" x="1" y="1" width="20" height="20"/>
                                                             </imageView>
                                                         </subviews>

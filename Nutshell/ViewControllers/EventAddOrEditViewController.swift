@@ -333,14 +333,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if viewExistingEvent {
             // cancel of edit
             if existingEventChanged() {
-                alertOnCancelAndReturn()
+                alertOnCancelAndReturn(NSLocalizedString("discardEditsAlertTitle", comment:"Discard changes?"), alertMessage: NSLocalizedString("discardEditsAlertMessage", comment:"If you press discard, your changes to this meal will be lost."))
             } else {
                 self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
             }
         } else {
             // cancel of add
             if newEventChanged() {
-                alertOnCancelAndReturn()
+                alertOnCancelAndReturn(NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), alertMessage: NSLocalizedString("closeMealAlertMessage", comment:"If you close this meal, your meal will be lost."))
             } else {
                 self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
             }
@@ -350,16 +350,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     @IBAction func deleteButtonHandler(sender: AnyObject) {
         // this is a delete for the role of editEvent
         if let eventItem = eventItem, eventGroup = eventGroup {
-            // use dialog to confirm delete with user!
-            let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), message: NSLocalizedString("discardMealAlertMessage", comment:"If you discard this meal, your meal will be lost."), preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
-                return
-            }))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
-                self.deleteItemAndReturn(eventItem, eventGroup: eventGroup)
-                self.dismissViewControllerAnimated(true, completion: nil)
-            }))
-            self.presentViewController(alert, animated: true, completion: nil)
+            alertOnDeleteAndReturn(eventItem, nutEvent: eventGroup)
         }
     }
     
@@ -387,35 +378,12 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         self.dismissViewControllerAnimated(true, completion: nil)
         print(info)
         
-        if let mealItem = eventItem as? NutMeal {
-            if !mealItem.photo.isEmpty {
-                // TODO: multi-photo support! If there are already 3 photos, probably shouldn't allow adding another anyway!
-            }
-            if let photoUrl = info[UIImagePickerControllerReferenceURL] as? NSURL {
-                picture1ImageURL = photoUrl.absoluteString
-                updateSaveButtonState()
-                //configurePhotos()
-
-                if let nsurl = NSURL(string:picture1ImageURL) {
-                    let fetchResult = PHAsset.fetchAssetsWithALAssetURLs([nsurl], options: nil)
-                    if let asset = fetchResult.firstObject as? PHAsset {
-                        let targetSize = picture1Image.frame.size
-                        let options = PHImageRequestOptions()
-                        PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: targetSize, contentMode: PHImageContentMode.AspectFit, options: options) {
-                            (result, info) in
-                            if let result = result {
-                                self.picture1Image.hidden = false
-                                self.picture1Image.image = result
-                            }
-                        }
-                    }
-                }
-                
-//                if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-//                    picture1Image.image = image
-//                    picture1Image.hidden = false
-//                }
-            }
+        // TODO: multi-photo support!
+        if let photoUrl = info[UIImagePickerControllerReferenceURL] as? NSURL {
+            picture1ImageURL = photoUrl.absoluteString
+            updateSaveButtonState()
+            configurePhotos()
+            
         }
     }
     
@@ -549,10 +517,10 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if let entityDescription = NSEntityDescription.entityForName("Meal", inManagedObjectContext: moc) {
             
             // This is a good place to splice in demo and test data. For now, entering "demo" as the title will result in us adding a set of demo events to the model, and "delete" will delete all food events.
-            if titleTextField.text == "demo" {
+            if titleTextField.text!.localizedCaseInsensitiveCompare("demo") == NSComparisonResult.OrderedSame {
                 DatabaseUtils.deleteAllNutEvents(moc)
                 addDemoData()
-            } else if titleTextField.text == "nodemo" {
+            } else if titleTextField.text!.localizedCaseInsensitiveCompare("nodemo") == NSComparisonResult.OrderedSame {
                 DatabaseUtils.deleteAllNutEvents(moc)
             } else {
                 let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal
@@ -617,9 +585,9 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     // MARK: - Alerts
     //
     
-    private func alertOnCancelAndReturn() {
+    private func alertOnCancelAndReturn(alertTitle: String, alertMessage: String) {
         // use dialog to confirm cancel with user!
-        let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), message: NSLocalizedString("closeMealAlertMessage", comment:"If you close this meal, your meal will be lost."), preferredStyle: .Alert)
+        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .Alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
             return
         }))
@@ -630,6 +598,18 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
+    private func alertOnDeleteAndReturn(nutItem: NutEventItem, nutEvent: NutEvent) {
+        // use dialog to confirm delete with user!
+        let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), message: NSLocalizedString("discardMealAlertMessage", comment:"If you discard this meal, your meal will be lost."), preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+            return
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+            self.deleteItemAndReturn(nutItem, eventGroup: nutEvent)
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+
     //
     // MARK: - Misc private funcs
     //

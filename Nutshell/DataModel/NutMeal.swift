@@ -14,7 +14,7 @@ class NutMeal: NutEventItem {
     var meal: Meal
     
     init(meal: Meal, title: String?, notes: String?, location: String?, photo: String?, time: NSDate?) {
-        self.photo = photo != nil ? photo! : ""
+        self.photo = photo ?? ""
         self.meal = meal
         super.init(title: title, notes: notes, time: time)
         if location != nil {

@@ -22,6 +22,9 @@ class ShowPhotoViewController: UIViewController {
 
         if !imageUrl.isEmpty {
             NutUtils.loadImage(imageUrl, imageView: photoImageView)
+            if editAllowed {
+                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonHandler:")
+            }
         }
     }
 
@@ -31,11 +34,25 @@ class ShowPhotoViewController: UIViewController {
     }
     
     @IBAction func backButtonHandler(sender: AnyObject) {
-        
         photoImageView.hidden = true
         self.performSegueWithIdentifier(EventViewStoryboard.SegueIdentifiers.UnwindSegueFromShowPhoto, sender: self)
     }
-    
+
+    @IBAction func deleteButtonHandler(sender: AnyObject) {
+        // setting url to an empty string sets up the EventAddOrEditVC to delete the photo when edits are saved...
+        // use dialog to confirm delete with user!
+        let alert = UIAlertController(title: NSLocalizedString("discardPhotoAlertTitle", comment:"Discard photo?"), message: NSLocalizedString("discardPhotoAlertMessage", comment:"If you discard this photo, your photo will be lost."), preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+            return
+        }))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+            self.imageUrl = ""
+            self.backButtonHandler(sender)
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
+       
+    }
+
     /*
     // MARK: - Navigation
 
