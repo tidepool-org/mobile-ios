@@ -77,6 +77,11 @@ class EventGroupTableViewController: BaseUITableViewController {
             let eventItemVC = segue.destinationViewController as! EventAddOrEditViewController
             // no existing item to pass along...
             eventItemVC.eventGroup = eventGroup
+        } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.PhotoDisplaySegue {
+            let showPhotoVC = segue.destinationViewController as! ShowPhotoViewController
+            if let showPhotoButton = sender as? EventGroupTableCellButton {
+                showPhotoVC.imageUrl = showPhotoButton.photoUrl
+            }
         } else {
             NSLog("Unknown segue from eventGroup \(segue.identifier)")
         }

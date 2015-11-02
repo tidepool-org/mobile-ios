@@ -16,9 +16,14 @@
 
 import UIKit
 
+class EventGroupTableCellButton: UIButton {
+    var photoUrl = ""
+}
+
 class EventGroupTableViewCell: BaseUITableViewCell {
 
     var eventItem: NutEventItem?
+    @IBOutlet weak var showPhotoButton: EventGroupTableCellButton!
     
     @IBOutlet weak var favoriteStarContainer: UIView!
     @IBOutlet weak var titleString: NutshellUILabel!
@@ -67,6 +72,7 @@ class EventGroupTableViewCell: BaseUITableViewCell {
             if !meal.photo.isEmpty {
                 NutUtils.loadImage(meal.photo, imageView: photoImageView)
                 photoContainerView.hidden = false
+                showPhotoButton.photoUrl = meal.photo
             }
         }
     }

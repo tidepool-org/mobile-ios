@@ -11,9 +11,9 @@ import UIKit
 class ShowPhotoViewController: UIViewController {
 
     var editAllowed = false
+    var imageUrl: String = ""
     
     @IBOutlet weak var photoImageView: UIImageView!
-    var imageUrl: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()

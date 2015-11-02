@@ -387,15 +387,25 @@
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="W2N-rU-bPK">
                                                     <rect key="frame" x="0.0" y="0.0" width="227" height="79"/>
                                                 </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sGH-ND-vz1" userLabel="EventGroupButton" customClass="EventGroupTableCellButton" customModule="Nutshell" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="0.0" width="227" height="79"/>
+                                                    <connections>
+                                                        <segue destination="PfN-dS-BM0" kind="show" identifier="PhotoDisplaySegue" id="Rt6-EB-gq6"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
+                                                <constraint firstItem="sGH-ND-vz1" firstAttribute="top" secondItem="dKd-IQ-rN4" secondAttribute="top" id="Hkf-GD-qka"/>
                                                 <constraint firstItem="W2N-rU-bPK" firstAttribute="centerY" secondItem="dKd-IQ-rN4" secondAttribute="centerY" id="K41-Jh-9wz"/>
+                                                <constraint firstAttribute="bottom" secondItem="sGH-ND-vz1" secondAttribute="bottom" id="KcF-bi-g7b"/>
+                                                <constraint firstAttribute="trailing" secondItem="sGH-ND-vz1" secondAttribute="trailing" id="Kf3-nd-T9T"/>
                                                 <constraint firstItem="W2N-rU-bPK" firstAttribute="height" secondItem="dKd-IQ-rN4" secondAttribute="height" id="M1e-dX-U1P"/>
                                                 <constraint firstItem="W2N-rU-bPK" firstAttribute="centerX" secondItem="dKd-IQ-rN4" secondAttribute="centerX" id="MIg-Fn-vIE"/>
                                                 <constraint firstAttribute="height" constant="79" id="MwT-Mv-Tjq"/>
                                                 <constraint firstAttribute="width" constant="227" id="NcC-xM-MES"/>
                                                 <constraint firstItem="W2N-rU-bPK" firstAttribute="width" secondItem="dKd-IQ-rN4" secondAttribute="width" id="mnp-SA-q5C"/>
+                                                <constraint firstItem="sGH-ND-vz1" firstAttribute="leading" secondItem="dKd-IQ-rN4" secondAttribute="leading" id="sdk-nW-n6a"/>
                                             </constraints>
                                         </view>
                                     </subviews>
@@ -420,6 +430,7 @@
                                     <outlet property="favoriteStarContainer" destination="jqM-zX-wXB" id="Xuw-m9-t72"/>
                                     <outlet property="photoContainerView" destination="dKd-IQ-rN4" id="63B-Q5-CxN"/>
                                     <outlet property="photoImageView" destination="W2N-rU-bPK" id="xg3-gw-4VA"/>
+                                    <outlet property="showPhotoButton" destination="sGH-ND-vz1" id="BCJ-2F-Z95"/>
                                     <outlet property="timeString" destination="hkV-fw-Ufw" id="jb8-JI-ydm"/>
                                     <outlet property="titleString" destination="d9p-x8-wr7" id="8Lg-um-f95"/>
                                     <segue destination="S8b-Gx-dOJ" kind="show" identifier="EventItemDetailSegue" id="vDO-8u-VmA"/>
@@ -874,10 +885,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VYf-c6-XQd" userLabel="ImageContainerView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VYf-c6-XQd" userLabel="ImageContainerView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="bFI-8C-DET" userLabel="photoImageView">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bFI-8C-DET" userLabel="photoImageView">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                     </imageView>
                                 </subviews>
