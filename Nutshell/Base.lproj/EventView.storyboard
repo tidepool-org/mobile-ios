@@ -90,17 +90,17 @@
                             </userDefinedRuntimeAttributes>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="eventListCell" id="YKP-WE-Q77" customClass="EventListTableViewCell" customModule="Nutshell" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="142" width="375" height="102"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="eventListCell" rowHeight="0.0" id="YKP-WE-Q77" customClass="EventListTableViewCell" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="142" width="375" height="0.0"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="YKP-WE-Q77" id="29e-nl-eJe">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="102"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="YKP-WE-Q77" id="29e-nl-eJe">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K4X-aq-FZ1" userLabel="backgroundView" customClass="NutShellUIViewWithHighlight" customModule="Nutshell" customModuleProvider="target">
+                                        <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K4X-aq-FZ1" userLabel="backgroundView" customClass="NutShellUIViewWithHighlight" customModule="Nutshell" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="102"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="separatorLine" translatesAutoresizingMaskIntoConstraints="NO" id="I0c-ll-RBd" userLabel="separatorImageView">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="separatorLine" translatesAutoresizingMaskIntoConstraints="NO" id="I0c-ll-RBd" userLabel="separatorImageView">
                                                     <rect key="frame" x="0.0" y="101" width="375" height="1"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="1" id="K3a-4e-haz"/>
@@ -118,8 +118,8 @@
                                                 <userDefinedRuntimeAttribute type="string" keyPath="highlightedBackground" value="brightBackground"/>
                                             </userDefinedRuntimeAttributes>
                                         </view>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tacos" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ohg-Qf-hKk" userLabel="titleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="26" y="17" width="46" height="24"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" ambiguous="YES" misplaced="YES" text="Tacos" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ohg-Qf-hKk" userLabel="titleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                            <rect key="frame" x="26" y="9" width="46" height="40"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -127,8 +127,17 @@
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellTitle"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yesterday at 4:21 pm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vOf-EN-zSX" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="26" y="69" width="98" height="14"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" text="El Farolito" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oUx-3c-Ssy" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                            <rect key="frame" x="26" y="53" width="60" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellLocation"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" text="Yesterday at 4:21 pm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vOf-EN-zSX" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                            <rect key="frame" x="26" y="77" width="98" height="14"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -136,7 +145,7 @@
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellDate"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="x 4" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Whe-Pt-KZq" userLabel="repeatCountLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" ambiguous="YES" text="x 4" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Whe-Pt-KZq" userLabel="repeatCountLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                             <rect key="frame" x="313" y="20" width="18" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -145,7 +154,7 @@
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellRepeatCount"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v7l-kJ-wNL" userLabel="disclosureButton">
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v7l-kJ-wNL" userLabel="disclosureButton">
                                             <rect key="frame" x="346" y="18" width="9" height="22"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="9" id="MNf-kU-h33"/>
@@ -153,26 +162,20 @@
                                             </constraints>
                                             <state key="normal" image="rightDisclosureArrow"/>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="El Farolito" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oUx-3c-Ssy" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="26" y="45" width="60" height="18"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellLocation"/>
-                                            </userDefinedRuntimeAttributes>
-                                        </label>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="oUx-3c-Ssy" firstAttribute="leading" secondItem="29e-nl-eJe" secondAttribute="leading" constant="26" id="3Ev-8s-6E1"/>
                                         <constraint firstItem="K4X-aq-FZ1" firstAttribute="top" secondItem="29e-nl-eJe" secondAttribute="top" id="3K6-F7-T32"/>
-                                        <constraint firstItem="Ohg-Qf-hKk" firstAttribute="centerY" secondItem="v7l-kJ-wNL" secondAttribute="centerY" id="99N-a7-7qx"/>
+                                        <constraint firstAttribute="right" relation="greaterThanOrEqual" secondItem="oUx-3c-Ssy" secondAttribute="right" constant="20" id="3LT-le-ghI"/>
+                                        <constraint firstAttribute="bottom" secondItem="vOf-EN-zSX" secondAttribute="bottom" constant="12" id="CBX-U1-N2k"/>
                                         <constraint firstItem="vOf-EN-zSX" firstAttribute="leading" secondItem="29e-nl-eJe" secondAttribute="leading" constant="26" id="FVs-eH-ZxM"/>
                                         <constraint firstAttribute="trailing" secondItem="K4X-aq-FZ1" secondAttribute="trailing" id="FtF-H8-v6b"/>
                                         <constraint firstAttribute="bottom" secondItem="K4X-aq-FZ1" secondAttribute="bottom" id="G18-yR-RTa"/>
                                         <constraint firstItem="v7l-kJ-wNL" firstAttribute="leading" secondItem="Whe-Pt-KZq" secondAttribute="trailing" constant="15" id="GzK-AE-paL"/>
+                                        <constraint firstItem="Ohg-Qf-hKk" firstAttribute="top" secondItem="29e-nl-eJe" secondAttribute="top" constant="9" id="Hrk-Z9-SPv"/>
                                         <constraint firstItem="oUx-3c-Ssy" firstAttribute="top" secondItem="Ohg-Qf-hKk" secondAttribute="bottom" constant="4" id="Py0-2e-AEc"/>
                                         <constraint firstItem="vOf-EN-zSX" firstAttribute="top" secondItem="oUx-3c-Ssy" secondAttribute="bottom" constant="6" id="QOh-z2-2M2"/>
+                                        <constraint firstAttribute="right" relation="greaterThanOrEqual" secondItem="vOf-EN-zSX" secondAttribute="right" constant="20" id="Rtf-cV-WXL"/>
                                         <constraint firstItem="Ohg-Qf-hKk" firstAttribute="leading" secondItem="29e-nl-eJe" secondAttribute="leading" constant="26" id="UZa-nk-O2d"/>
                                         <constraint firstAttribute="trailing" secondItem="v7l-kJ-wNL" secondAttribute="trailing" constant="20" id="ZtG-bh-c1p"/>
                                         <constraint firstItem="Whe-Pt-KZq" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ohg-Qf-hKk" secondAttribute="trailing" constant="8" id="a13-zC-okK"/>
@@ -181,6 +184,11 @@
                                         <constraint firstItem="v7l-kJ-wNL" firstAttribute="top" secondItem="29e-nl-eJe" secondAttribute="top" constant="18" id="sN7-AR-rSV"/>
                                         <constraint firstItem="oUx-3c-Ssy" firstAttribute="width" relation="lessThanOrEqual" secondItem="29e-nl-eJe" secondAttribute="width" constant="-52" id="wIH-Jk-voI"/>
                                     </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="wIH-Jk-voI"/>
+                                        </mask>
+                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="cellBackgroundView" destination="K4X-aq-FZ1" id="1KA-PJ-ZUt"/>

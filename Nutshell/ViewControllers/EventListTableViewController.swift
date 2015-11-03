@@ -41,7 +41,9 @@ class EventListTableViewController: BaseUITableViewController {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: ad.managedObjectContext)
         notificationCenter.addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
-   }
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 102.0
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -217,7 +219,25 @@ class EventListTableViewController: BaseUITableViewController {
     }
 }
 
+//
+// MARK: - Table view delegate
+//
+
+extension EventListTableViewController {
+    
+    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath: NSIndexPath) -> CGFloat {
+        return 102.0;
+    }
+
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath: NSIndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension;
+    }
+
+}
+
+//
 // MARK: - Table view data source
+//
 
 extension EventListTableViewController {
     
