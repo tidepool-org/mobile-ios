@@ -50,6 +50,7 @@ class EventGroupTableViewCell: BaseUITableViewCell {
     }
 
     private var starViewContainerWidth: CGFloat = 53.0
+    private var photoContainerHeight: CGFloat = 79.0
     func configureCell(eventItem: NutEventItem) {
         titleString.text = eventItem.notes
         timeString.text = NutUtils.standardUIDateString(eventItem.time, relative: true)
@@ -75,5 +76,15 @@ class EventGroupTableViewCell: BaseUITableViewCell {
                 showPhotoButton.photoUrl = meal.photo
             }
         }
+        for c in photoContainerView.constraints {
+            if c.firstAttribute == NSLayoutAttribute.Height {
+                if c.constant != 0.0 {
+                    photoContainerHeight = c.constant
+                }
+                c.constant = photoContainerView.hidden ? 0.0 : photoContainerHeight
+                break
+            }
+        }
+        photoContainerView.layoutIfNeeded()
     }
 }
