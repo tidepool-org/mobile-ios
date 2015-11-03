@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9052" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4G7-DP-gat">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="4G7-DP-gat">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9040"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -135,7 +135,7 @@
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wrong email or password!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bJV-Wt-zLG" userLabel="errorFeedbackLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="11" y="44" width="139" height="15"/>
+                                                        <rect key="frame" x="11" y="44" width="157" height="18"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -200,7 +200,7 @@
                                                     <constraint firstAttribute="width" constant="37" id="cqz-tT-OCn"/>
                                                 </constraints>
                                                 <variation key="heightClass=regular-widthClass=regular" misplaced="YES">
-                                                    <rect key="frame" x="142" y="37" width="37" height="37"/>
+                                                    <rect key="frame" x="366" y="37" width="37" height="37"/>
                                                 </variation>
                                             </activityIndicatorView>
                                         </subviews>
@@ -234,32 +234,103 @@
                                                     <action selector="login_button_tapped:" destination="4G7-DP-gat" eventType="touchUpInside" id="SFd-0x-Gaz"/>
                                                 </connections>
                                             </button>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GSv-5F-Tfx" userLabel="lineBelowLogin" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="384" y="53" width="384" height="1"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="tQv-q8-AbG"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="tQv-q8-AbG"/>
+                                                    </mask>
+                                                </variation>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W9m-55-frX" userLabel="lineToRIghtOfLogin" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="160" y="0.0" width="160" height="1"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="1" id="dO9-xk-rdJ"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="dO9-xk-rdJ"/>
+                                                    </mask>
+                                                </variation>
+                                                <variation key="heightClass=regular-widthClass=regular">
+                                                    <mask key="constraints">
+                                                        <include reference="dO9-xk-rdJ"/>
+                                                    </mask>
+                                                </variation>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qfe-gY-ZtS" userLabel="lineAboveLogin" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="160" y="0.0" width="160" height="1"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="isp-fV-VBu"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="REp-R0-dOl" firstAttribute="leading" secondItem="PQA-rp-TeB" secondAttribute="leading" id="0I3-Zh-ejx"/>
+                                            <constraint firstItem="W9m-55-frX" firstAttribute="trailing" secondItem="zPr-G0-r47" secondAttribute="trailing" id="3oN-nn-xmh"/>
                                             <constraint firstAttribute="height" constant="54" id="3tK-Ok-o21"/>
                                             <constraint firstAttribute="trailing" secondItem="zPr-G0-r47" secondAttribute="trailing" id="DyP-UD-HNL"/>
                                             <constraint firstAttribute="width" constant="320" id="Lak-xW-S4O"/>
+                                            <constraint firstItem="qfe-gY-ZtS" firstAttribute="top" secondItem="zPr-G0-r47" secondAttribute="top" id="MAf-y8-J2J"/>
                                             <constraint firstAttribute="bottom" secondItem="REp-R0-dOl" secondAttribute="bottom" id="Q60-bI-5Nv"/>
                                             <constraint firstItem="zPr-G0-r47" firstAttribute="top" secondItem="PQA-rp-TeB" secondAttribute="top" id="VZQ-5X-Guh"/>
                                             <constraint firstItem="REp-R0-dOl" firstAttribute="trailing" secondItem="zPr-G0-r47" secondAttribute="leading" id="Z8W-Bc-Yia"/>
+                                            <constraint firstItem="GSv-5F-Tfx" firstAttribute="bottom" secondItem="zPr-G0-r47" secondAttribute="bottom" id="ZUj-fR-Tbz"/>
+                                            <constraint firstItem="GSv-5F-Tfx" firstAttribute="leading" secondItem="zPr-G0-r47" secondAttribute="leading" id="c14-tf-Ge7"/>
+                                            <constraint firstItem="qfe-gY-ZtS" firstAttribute="leading" secondItem="zPr-G0-r47" secondAttribute="leading" id="euM-sj-Oru"/>
                                             <constraint firstAttribute="width" constant="320" id="gbp-Sh-rSw"/>
                                             <constraint firstItem="REp-R0-dOl" firstAttribute="leading" secondItem="PQA-rp-TeB" secondAttribute="leading" id="lXL-8a-g4i"/>
+                                            <constraint firstItem="W9m-55-frX" firstAttribute="bottom" secondItem="zPr-G0-r47" secondAttribute="bottom" id="nLL-fA-58j"/>
+                                            <constraint firstItem="W9m-55-frX" firstAttribute="top" secondItem="zPr-G0-r47" secondAttribute="top" id="qXx-ae-1Ug"/>
+                                            <constraint firstItem="qfe-gY-ZtS" firstAttribute="trailing" secondItem="zPr-G0-r47" secondAttribute="trailing" id="sXa-jT-jo0"/>
                                             <constraint firstAttribute="bottom" secondItem="zPr-G0-r47" secondAttribute="bottom" id="vMe-jg-csv"/>
                                             <constraint firstItem="zPr-G0-r47" firstAttribute="width" secondItem="REp-R0-dOl" secondAttribute="width" id="w3C-sf-XP4"/>
+                                            <constraint firstItem="GSv-5F-Tfx" firstAttribute="trailing" secondItem="zPr-G0-r47" secondAttribute="trailing" id="yO1-yl-hCs"/>
                                             <constraint firstItem="REp-R0-dOl" firstAttribute="top" secondItem="PQA-rp-TeB" secondAttribute="top" id="zvQ-cT-1A1"/>
                                         </constraints>
                                         <variation key="default">
+                                            <mask key="subviews">
+                                                <exclude reference="GSv-5F-Tfx"/>
+                                                <exclude reference="W9m-55-frX"/>
+                                            </mask>
                                             <mask key="constraints">
                                                 <exclude reference="Lak-xW-S4O"/>
                                                 <exclude reference="gbp-Sh-rSw"/>
                                                 <exclude reference="0I3-Zh-ejx"/>
+                                                <exclude reference="3oN-nn-xmh"/>
+                                                <exclude reference="nLL-fA-58j"/>
+                                                <exclude reference="qXx-ae-1Ug"/>
+                                                <exclude reference="ZUj-fR-Tbz"/>
+                                                <exclude reference="c14-tf-Ge7"/>
+                                                <exclude reference="yO1-yl-hCs"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=regular-widthClass=regular">
+                                            <mask key="subviews">
+                                                <include reference="GSv-5F-Tfx"/>
+                                                <include reference="W9m-55-frX"/>
+                                            </mask>
                                             <mask key="constraints">
                                                 <include reference="Lak-xW-S4O"/>
+                                                <include reference="3oN-nn-xmh"/>
+                                                <include reference="nLL-fA-58j"/>
+                                                <include reference="qXx-ae-1Ug"/>
                                             </mask>
                                         </variation>
                                     </view>
