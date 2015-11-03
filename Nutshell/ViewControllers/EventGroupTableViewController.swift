@@ -25,7 +25,8 @@ class EventGroupTableViewController: BaseUITableViewController {
     @IBOutlet weak var tableHeaderLocation: NutshellUILabel!
     @IBOutlet weak var tableHeaderCount: NutshellUILabel!
     @IBOutlet weak var headerView: NutshellUIView!
-        
+    @IBOutlet weak var innerHeaderView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -42,6 +43,18 @@ class EventGroupTableViewController: BaseUITableViewController {
             self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
             return
         }
+        
+        // Workaround: iOS currently doesn't resize table headers dynamically
+        if let headerView = headerView {
+            headerView.setNeedsLayout()
+            headerView.layoutIfNeeded()
+            let height = ceil(innerHeaderView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height)
+            var frame = headerView.frame
+            frame.size.height = height
+            headerView.frame = frame
+            tableView.tableHeaderView = headerView
+        }
+        
         eventGroup.sortEvents()
         tableView.reloadData()
     }
