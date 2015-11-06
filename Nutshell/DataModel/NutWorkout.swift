@@ -12,12 +12,36 @@ class NutWorkout: NutEventItem {
     
     var distance: NSNumber
     var duration: NSTimeInterval
-    var workout: Workout
     
-    init(workout: Workout, title: String?, notes: String?, distance: NSNumber?, duration: NSNumber?, time: NSDate?) {
-        self.distance = distance ?? 0.0
-        self.duration = NSTimeInterval(duration ?? 0.0)
-        self.workout = workout
-        super.init(title: title, notes: notes, time: time)
+    init(workout: Workout) {
+        self.distance = workout.distance ?? 0.0
+        self.duration = NSTimeInterval(workout.duration ?? 0.0)
+        super.init(eventItem: workout)
+    }
+
+    //
+    // MARK: - Overrides
+    //
+    
+    override func copyChanges() {
+        if let workout = eventItem as? Workout {
+            workout.distance = distance
+            workout.duration = duration
+        }
+        super.copyChanges()
+    }
+    
+    override func changed() -> Bool {
+        if let workout = eventItem as? Workout {
+            let currentDistance = workout.distance ?? 0.0
+            if distance != currentDistance {
+                return true
+            }
+            let currentDuration = workout.duration ?? 0.0
+            if duration != currentDuration {
+                return true
+            }
+        }
+        return super.changed()
     }
 }

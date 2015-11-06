@@ -248,6 +248,7 @@
 		39056528E4E50304C2030C72 /* Pods-NutshellTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NutshellTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests.release.xcconfig"; sourceTree = "<group>"; };
 		4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/Pods-Nutshell/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		482B4E561BBDAFFF00835CAC /* EventDetailGraphCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventDetailGraphCollectionCell.swift; path = ViewControllers/EventDetailGraphCollectionCell.swift; sourceTree = "<group>"; };
+		483475B11BE9CE2E00EE9106 /* Nutshell_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v2.xcdatamodel; sourceTree = "<group>"; };
 		4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUITextField.swift; path = Resources/NutshellUITextField.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUILabel.swift; path = Resources/NutshellUILabel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4837CC681BA7394E00BA2CDE /* NutshellUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUIButton.swift; path = Resources/NutshellUIButton.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -1235,9 +1236,10 @@
 		4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				483475B11BE9CE2E00EE9106 /* Nutshell_v2.xcdatamodel */,
 				4859FCC01B9A4DE4000C1269 /* Nutshell.xcdatamodel */,
 			);
-			currentVersion = 4859FCC01B9A4DE4000C1269 /* Nutshell.xcdatamodel */;
+			currentVersion = 483475B11BE9CE2E00EE9106 /* Nutshell_v2.xcdatamodel */;
 			path = Nutshell.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

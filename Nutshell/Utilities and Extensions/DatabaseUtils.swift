@@ -42,14 +42,16 @@ class DatabaseUtils {
         }
     }
 
-    class func databaseSave(moc: NSManagedObjectContext) {
+    class func databaseSave(moc: NSManagedObjectContext) -> Bool {
         // Save the database
         do {
             try moc.save()
             print("EventGroup: Database saved!")
+            return true
         } catch let error as NSError {
             // TO DO: error message!
             print("Failed to save MOC: \(error)")
+            return false
         }
     }
 

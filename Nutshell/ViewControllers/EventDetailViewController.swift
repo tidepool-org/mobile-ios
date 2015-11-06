@@ -107,9 +107,10 @@ class EventDetailViewController: BaseUIViewController {
     
     @IBAction func nutCrackedButtonHandler(sender: AnyObject) {
         nutCrackedButton.selected = !nutCrackedButton.selected
-        // TODO: need to actually save this change in database!
-        if let eventItem = eventItem {
+         if let eventItem = eventItem {
             eventItem.nutCracked = nutCrackedButton.selected
+            // Save changes to database
+            eventItem.saveChanges()
         }
     }
     

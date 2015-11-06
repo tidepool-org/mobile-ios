@@ -11,14 +11,54 @@ import Foundation
 class NutMeal: NutEventItem {
     
     var photo: String
-    var meal: Meal
+    var photo2: String
+    var photo3: String
     
-    init(meal: Meal, title: String?, notes: String?, location: String?, photo: String?, time: NSDate?) {
-        self.photo = photo ?? ""
-        self.meal = meal
-        super.init(title: title, notes: notes, time: time)
-        if location != nil {
-            self.location = location!
+    init(meal: Meal) {
+        self.photo = meal.photo ?? ""
+        self.photo2 = meal.photo2 ?? ""
+        self.photo3 = meal.photo3 ?? ""
+        super.init(eventItem: meal)
+        // do this last because we've moved location up to NutEventItem
+        if meal.location != nil {
+            self.location = meal.location!
         }
     }
+
+    //
+    // MARK: - Overrides
+    //
+
+    override func copyChanges() {
+        if let meal = eventItem as? Meal {
+            meal.location = location
+            meal.photo = photo
+            meal.photo2 = photo2
+            meal.photo3 = photo3
+        }
+        super.copyChanges()
+    }
+    
+    override func changed() -> Bool {
+        if let meal = eventItem as? Meal {
+            let currentLocation = meal.location ?? ""
+            if location != currentLocation {
+                return true
+            }
+            var currentPhoto = meal.photo ?? ""
+            if photo != currentPhoto {
+                return true
+            }
+            currentPhoto = meal.photo2 ?? ""
+            if photo2 != currentPhoto {
+                return true
+            }
+            currentPhoto = meal.photo3 ?? ""
+            if photo3 != currentPhoto {
+                return true
+            }
+        }
+        return super.changed()
+    }
+
 }

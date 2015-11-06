@@ -14,6 +14,8 @@
 */
 
 import Foundation
+import UIKit
+import CoreData
 
 class NutEvent {
     
@@ -27,13 +29,13 @@ class NutEvent {
         self.location = ""
         self.mostRecent = firstEvent.time!
         if let meal = firstEvent as? Meal {
-            let firstItem = NutMeal(meal: meal, title: meal.title, notes: meal.notes, location: meal.location, photo: meal.photo, time: meal.time)
+            let firstItem = NutMeal(meal: meal)
             if let loc = meal.location {
                 self.location = loc
             }
             self.itemArray = [firstItem]
         } else if let workout = firstEvent as? Workout {
-            let firstItem = NutWorkout(workout: workout, title: workout.title, notes: workout.notes, distance: workout.distance, duration: workout.duration, time: workout.time)
+            let firstItem = NutWorkout(workout: workout)
             self.itemArray = [firstItem]
         } else {
             self.itemArray = []
@@ -50,17 +52,41 @@ class NutEvent {
     func addEvent(newEvent: EventItem) {
         if (newEvent.nutEventIdString() == self.nutEventIdString()) {
             if let meal = newEvent as? Meal {
-                let newItem = NutMeal(meal: meal, title: meal.title, notes: meal.notes, location: meal.location, photo: meal.photo, time: meal.time)
+                let newItem = NutMeal(meal: meal)
                 self.itemArray.append(newItem)
                 mostRecent = newItem.time.laterDate(mostRecent)
             } else if let workout = newEvent as? Workout {
-                let newItem = NutWorkout(workout: workout, title: workout.title, notes: workout.notes, distance: workout.distance, duration: workout.duration, time: workout.time)
+                let newItem = NutWorkout(workout: workout)
                 self.itemArray.append(newItem)
                 mostRecent = newItem.time.laterDate(mostRecent)
             }
         } else {
             print("attempting to add item with non-matching title and location to NutEvent!")
         }
+    }
+    
+    class func createMealEvent(title: String, notes: String, location: String, photo: String, photo2: String, photo3: String, time: NSDate) -> EventItem? {
+        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+        let moc = ad.managedObjectContext
+        if let entityDescription = NSEntityDescription.entityForName("Meal", inManagedObjectContext: moc) {
+            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal
+            me.title = title
+            me.notes = notes
+            me.location = location
+            me.photo = photo
+            me.photo2 = photo2
+            me.photo3 = photo3
+            me.time = time
+            me.type = "meal"
+            let now = NSDate()
+            me.createdTime = now
+            me.modifiedTime = now
+            moc.insertObject(me)
+            if DatabaseUtils.databaseSave(moc) {
+                return me
+            }
+        }
+        return nil
     }
     
     func sortEvents() {

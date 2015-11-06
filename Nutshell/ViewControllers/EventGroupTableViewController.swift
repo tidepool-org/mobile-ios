@@ -176,19 +176,14 @@ extension EventGroupTableViewController {
                 }))
                 alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
                     // Delete the row from the data source
-                    let eventItem = self.eventGroup.itemArray.removeAtIndex(indexPath.item)
-                    let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-                    let moc = ad.managedObjectContext
-                    if let mealItem = eventItem as? NutMeal {
-                        moc.deleteObject(mealItem.meal)
-                    } else if let workoutItem = eventItem as? NutWorkout {
-                        moc.deleteObject(workoutItem.workout)
-                    }
-                    DatabaseUtils.databaseSave(moc)
-                    // Now delete the row...
-                    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-                    if self.eventGroup.itemArray.count == 0 {
-                        self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+                    let eventItem = self.eventGroup.itemArray[indexPath.item]
+                    if eventItem.deleteItem() {
+                        // Delete the row...
+                        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+                        self.eventGroup.itemArray.removeAtIndex(indexPath.item)
+                        if self.eventGroup.itemArray.count == 0 {
+                            self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+                        }
                     }
                     return
                 }))

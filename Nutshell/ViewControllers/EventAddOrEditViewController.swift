@@ -22,7 +22,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     
     var eventItem: NutEventItem?
     var eventGroup: NutEvent?
-    var newMealEvent: Meal?
+    var newEventItem: EventItem?
     private var viewExistingEvent = false
     
     @IBOutlet weak var titleTextField: NutshellUITextField!
@@ -392,20 +392,15 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     //
 
     private func newEventChanged() -> Bool {
-        if let eventGroup = eventGroup {
-            if titleTextField.text != eventGroup.title {
-                return true
-            }
-            if locationTextField.text != eventGroup.location {
-                return true
-            }
-        } else {
-            if titleTextField.text != Styles.placeholderTitleString {
-                return true
-            }
-            if locationTextField.text != Styles.placeholderLocationString {
-                return true
-            }
+        if let _ = eventGroup {
+            // for "eat again" new events, we already have a title and location from the NutEvent, so consider this "changed"
+            return true
+        }
+        if titleTextField.text != Styles.placeholderTitleString {
+            return true
+        }
+        if locationTextField.text != Styles.placeholderLocationString {
+            return true
         }
         if notesTextField.text != Styles.placeholderNotesString {
             return true
@@ -472,113 +467,72 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             let location = filteredLocationText()
             let notes = filteredNotesText()
 
-            let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-            let moc = ad.managedObjectContext
-            
-            let event = mealItem.meal
-            event.title = titleTextField.text
-            event.time = eventTime
-            event.notes = notes
-            event.location = location
-            event.modifiedTime = NSDate()
-            event.photo = picture1ImageURL
-            moc.refreshObject(event, mergeChanges: true)
-            
             mealItem.title = titleTextField.text!
             mealItem.time = eventTime
             mealItem.notes = notes
             mealItem.location = location
             mealItem.photo = picture1ImageURL
-            // note event changed as "new" event
-            newMealEvent = event
             
-            // Save the database
-            do {
-                try moc.save()
-                NSLog("addEvent: Database saved!")
-            } catch let error as NSError {
-                // TO DO: error message!
-                NSLog("Failed to save MOC: \(error)")
-                newMealEvent = nil
+             // Save the database
+            if mealItem.saveChanges() {
+                // note event changed as "new" event
+                newEventItem = mealItem.eventItem
+            } else {
+                newEventItem = nil
             }
         }
     }
 
     private func updateNewEvent() {
-        if titleTextField.text == "testmode" {
+        if titleTextField.text!.localizedCaseInsensitiveCompare("testmode") == NSComparisonResult.OrderedSame  {
             AppDelegate.testMode = !AppDelegate.testMode
             self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
             return
         }
-        
+
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate
         let moc = ad.managedObjectContext
+        // This is a good place to splice in demo and test data. For now, entering "demo" as the title will result in us adding a set of demo events to the model, and "delete" will delete all food events.
+        if titleTextField.text!.localizedCaseInsensitiveCompare("demo") == NSComparisonResult.OrderedSame {
+            DatabaseUtils.deleteAllNutEvents(moc)
+            addDemoData()
+            return
+        } else if titleTextField.text!.localizedCaseInsensitiveCompare("nodemo") == NSComparisonResult.OrderedSame {
+            DatabaseUtils.deleteAllNutEvents(moc)
+            return
+        }
         
-        if let entityDescription = NSEntityDescription.entityForName("Meal", inManagedObjectContext: moc) {
-            
-            // This is a good place to splice in demo and test data. For now, entering "demo" as the title will result in us adding a set of demo events to the model, and "delete" will delete all food events.
-            if titleTextField.text!.localizedCaseInsensitiveCompare("demo") == NSComparisonResult.OrderedSame {
-                DatabaseUtils.deleteAllNutEvents(moc)
-                addDemoData()
-            } else if titleTextField.text!.localizedCaseInsensitiveCompare("nodemo") == NSComparisonResult.OrderedSame {
-                DatabaseUtils.deleteAllNutEvents(moc)
-            } else {
-                let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal
-                
-                let location = filteredLocationText()
-                let notes = filteredNotesText()
-                
-                me.location = location
-                me.title = titleTextField.text
-                me.notes = notes
-                me.photo = picture1ImageURL
-                me.type = "meal"
-                me.time = eventTime // required!
-                let now = NSDate()
-                me.createdTime = now
-                me.modifiedTime = now
-                moc.insertObject(me)
-                newMealEvent = me
-            }
-            
-            // Save the database
-            do {
-                try moc.save()
-                NSLog("addEvent: Database saved!")
-                if let eventGroup = eventGroup, newMealEvent = newMealEvent {
-                    if eventGroup.title == newMealEvent.title && eventGroup.location == newMealEvent.location {
-                        eventGroup.addEvent(newMealEvent)
-                    }
+        newEventItem = NutEvent.createMealEvent(titleTextField.text!, notes: filteredNotesText(), location: filteredLocationText(), photo: picture1ImageURL, photo2: "", photo3: "", time: eventTime)
+        
+        if newEventItem != nil {
+            // For "eat again" events, add to same event group if appropriate
+            if let eventGroup = eventGroup, newEventItem = newEventItem {
+                if newEventItem.nutEventIdString() == eventGroup.nutEventIdString() {
+                    eventGroup.addEvent(newEventItem)
                 }
-                showSuccessView()
-            } catch let error as NSError {
-                // TO DO: error message!
-                NSLog("Failed to save MOC: \(error)")
-                newMealEvent = nil
             }
+            showSuccessView()
+        } else {
+            // TODO: handle internal error...
+            NSLog("Error: Failed to save new event!")
         }
     }
 
     private func deleteItemAndReturn(eventItem: NutEventItem, eventGroup: NutEvent) {
-        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-        let moc = ad.managedObjectContext
-        if let mealItem = eventItem as? NutMeal {
-            moc.deleteObject(mealItem.meal)
-        } else if let workoutItem = eventItem as? NutWorkout {
-            moc.deleteObject(workoutItem.workout)
+        if eventItem.deleteItem() {
+            // now remove it from the group
+            eventGroup.itemArray = eventGroup.itemArray.filter() {
+                $0 != eventItem
+            }
+            // segue back to group or list, depending...
+            if eventGroup.itemArray.isEmpty {
+                self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+            } else {
+                self.performSegueWithIdentifier("unwindSequeToEventGroup", sender: self)
+            }
         }
-        DatabaseUtils.databaseSave(moc)
-        
-        // now remove it from the group
-        eventGroup.itemArray = eventGroup.itemArray.filter() {
-            $0 != eventItem
-        }
-        // segue back to group or list, depending...
-        if eventGroup.itemArray.isEmpty {
-            self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
-        } else {
-            self.performSegueWithIdentifier("unwindSequeToEventGroup", sender: self)
-        }
+        // TODO: handle delete error?
+        NSLog("Error: Failed to delete item!")
     }
     
     //
@@ -632,8 +586,8 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         addSuccessView.hidden = false
         
         NutUtils.delay(1.25) {
-            if let newMealEvent = self.newMealEvent, eventGroup = self.eventGroup {
-                if newMealEvent.nutEventIdString() != eventGroup.nutEventIdString() {
+            if let newEventItem = self.newEventItem, eventGroup = self.eventGroup {
+                if newEventItem.nutEventIdString() != eventGroup.nutEventIdString() {
                     self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
                     return
                 }
@@ -739,6 +693,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 moc.insertObject(we)
             }
         }
+        DatabaseUtils.databaseSave(moc)
     }
 }
 
