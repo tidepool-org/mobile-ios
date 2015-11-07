@@ -26,6 +26,8 @@ class LoginViewController: BaseUIViewController {
     @IBOutlet weak var loginIndicator: UIActivityIndicatorView!
     @IBOutlet weak var rememberMeButton: UIButton!
     @IBOutlet weak var errorFeedbackLabel: NutshellUILabel!
+    @IBOutlet weak var forgotPasswordLabel: NutshellUILabel!
+    
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -44,9 +46,25 @@ class LoginViewController: BaseUIViewController {
         notificationCenter.addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
         updateButtonStates()
         
+        // forgot password text needs an underline...
+        if let forgotText = forgotPasswordLabel.text {
+            let forgotStr = NSAttributedString(string: forgotText, attributes:[NSFontAttributeName: forgotPasswordLabel.font, NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue])
+            forgotPasswordLabel.attributedText = forgotStr
+        }
+        
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
 
+        // Tap all four corners to bring up server selection action sheet
+        let width: CGFloat = 100
+        let height: CGFloat = width
+        corners.append(CGRect(x: 0, y: 0, width: width, height: height))
+        corners.append(CGRect(x: self.view.frame.width - width, y: 0, width: width, height: height))
+        corners.append(CGRect(x: 0, y: self.view.frame.height - height, width: width, height: height))
+        corners.append(CGRect(x: self.view.frame.width - width, y: self.view.frame.height - height, width: width, height: height))
+        for (var i = 0; i < corners.count; i++) {
+            cornersBool.append(false)
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -178,6 +196,57 @@ class LoginViewController: BaseUIViewController {
     func keyboardWillHide(notification: NSNotification) {
         // reposition login view if needed
         self.adjustLogInView(0.0)
+    }
+
+    // MARK: - Debug Config
+    
+    private var corners: [CGRect] = []
+    private var cornersBool: [Bool] = []
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if let touch = touches.first {
+            
+            let touchLocation = touch.locationInView(self.view)
+            
+            var i = 0
+            for corner in corners {
+                let viewFrame = self.view.convertRect(corner, fromView: self.view)
+                
+                if CGRectContainsPoint(viewFrame, touchLocation) {
+                    cornersBool[i] = true
+                    self.checkCorners()
+                    return
+                }
+                
+                i++
+            }
+        }
+    }
+
+    func checkCorners() {
+        for cornerBool in cornersBool {
+            if (!cornerBool) {
+                return
+            }
+        }
+        
+        showServerActionSheet()
+    }
+    
+    func showServerActionSheet() {
+        for (var i = 0; i < corners.count; i++) {
+            cornersBool[i] = false
+        }
+        
+        let actionSheet = UIAlertController(title: "Server" + " (" + APIConnector.currentService! + ")", message: "", preferredStyle: .ActionSheet)
+        for server in APIConnector.kServers {
+            actionSheet.addAction(UIAlertAction(title: server.0, style: .Default, handler: { Void in
+                let serverName = server.0
+                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                appDelegate.switchToServer(serverName)
+            }))
+        }
+        self.presentViewController(actionSheet, animated: true, completion: nil)
     }
 
     /*

@@ -46,16 +46,12 @@ class APIConnector {
     // MARK: - Constants
     
     static let kSessionTokenDefaultKey = "SToken"
+    static let kCurrentServiceDefaultKey = "SCurrentService"
     static let kSessionIdHeader = "x-tidepool-session-token"
 
     // Error domain and codes
     static let kNutshellErrorDomain = "NutshellErrorDomain"
     static let kNoSessionTokenErrorCode = -1
-    
-    // Dictionary of servers and their base URLs
-    static let kServers = ["Production" :   "https://api.tidepool.io",
-                           "Staging" :      "https://staging-api.tidepool.io",
-                           "Development" :  "https://devel-api.tidepool.io"]
     
     // Session token, acquired on login and saved in NSUserDefaults
     private var _rememberToken = true
@@ -74,21 +70,50 @@ class APIConnector {
         }
     }
     
+    // Dictionary of servers and their base URLs
+    static let kServers = [
+        "Production" :   "https://api.tidepool.io",
+        "Staging" :      "https://staging-api.tidepool.io",
+        "Development" :  "https://devel-api.tidepool.io",
+    ]
+    static let kDefaultServerName = "Production"
+
+    static var _currentService: String?
+    static var currentService: String? {
+        set(newService) {
+            if newService == nil {
+                NSUserDefaults.standardUserDefaults().removeObjectForKey(APIConnector.kCurrentServiceDefaultKey)
+                _currentService = nil
+            } else {
+                if APIConnector.kServers[newService!] != nil {
+                    NSUserDefaults.standardUserDefaults().setValue(newService, forKey: APIConnector.kCurrentServiceDefaultKey)
+                    _currentService = newService
+                }
+            }
+        }
+        get {
+            if _currentService == nil {
+                if let service = NSUserDefaults.standardUserDefaults().stringForKey(APIConnector.kCurrentServiceDefaultKey) {
+                    _currentService = service
+                }
+            }
+            if _currentService == nil || APIConnector.kServers[_currentService!] == nil {
+                _currentService = APIConnector.kDefaultServerName
+            }
+            return _currentService
+        }
+    }
+    
     // Base URL for API calls, set during initialization
     var baseUrl: NSURL
     
     // MARK: Initializaion
     
     // Required initializer
-    required init(baseUrl: NSURL) {
-        self.baseUrl = baseUrl
+    init() {
+        self.baseUrl = NSURL(string:APIConnector.kServers[APIConnector.currentService!]!)!
         self.sessionToken = NSUserDefaults.standardUserDefaults().stringForKey(APIConnector.kSessionTokenDefaultKey)
-    }
-    
-    
-    // Convenience initializer using the server name
-    convenience init(_ server: String = "Production") {
-        self.init(baseUrl: NSURL(string:APIConnector.kServers[server]!)!)
+        NSLog("Using service: \(self.baseUrl)")
     }
     
     /**

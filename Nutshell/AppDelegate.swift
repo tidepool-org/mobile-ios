@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: Styles.navTitleBoldFont]
         
         // Set up the API connection
-        API = APIConnector("Production")
+        API = APIConnector()
         // If we already have a token, no need to log in again....
         // TODO: verify we need to do this even if there is no network connection!
         if (API?.sessionToken != nil) {
@@ -53,6 +53,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    func switchToServer(serverName: String) {
+        if (APIConnector.currentService != serverName) {
+            APIConnector.currentService = serverName
+            // refresh connector since there is a new service...
+            API = APIConnector()
+            NSLog("Switched to \(serverName) server")
+        }
+    }
+    
     func setupUIForLogin() {
         let sb = UIStoryboard(name: "Login", bundle: nil)
         if let vc = sb.instantiateInitialViewController() {

@@ -496,9 +496,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if titleTextField.text!.localizedCaseInsensitiveCompare("demo") == NSComparisonResult.OrderedSame {
             DatabaseUtils.deleteAllNutEvents(moc)
             addDemoData()
+            self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
             return
         } else if titleTextField.text!.localizedCaseInsensitiveCompare("nodemo") == NSComparisonResult.OrderedSame {
             DatabaseUtils.deleteAllNutEvents(moc)
+            self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
             return
         }
         
@@ -627,13 +629,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     private func addDemoData() {
         
         let demoMeals = [
-            ["Three tacos", "with 15 chips & salsa", "2015-08-20T10:03:21.000Z", "home", "ThreeTacosDemoPic"],
+            ["Three tacos", "with 15 chips & salsa", "2015-08-20T10:03:21.000Z", "238 Garrett St", "ThreeTacosDemoPic"],
             ["Three tacos", "after ballet", "2015-08-09T19:42:40.000Z", "238 Garrett St", "applejuicedemopic"],
-            ["Three tacos", "Apple Juice before", "2015-07-29T04:55:27.000Z", "Golden Gate Park", "applejuicedemopic"],
-            ["Three tacos", "and horchata", "2015-07-28T14:25:21.000Z", "Golden Gate Park", "applejuicedemopic"],
+            ["Three tacos", "Apple Juice before", "2015-07-29T04:55:27.000Z", "238 Garrett St", "applejuicedemopic"],
+            ["Three tacos", "and horchata", "2015-07-28T14:25:21.000Z", "238 Garrett St", "applejuicedemopic"],
             ["CPK 5 cheese margarita", "", "2015-07-27T12:25:21.000Z", "", ""],
             ["Bagel & cream cheese fruit", "", "2015-07-27T16:25:21.000Z", "", ""],
             ["Birthday Party", "", "2015-07-26T14:25:21.000Z", "", ""],
+            ["This is a meal with a very long title that should wrap onto multiple lines in most devices", "And these are notes about this meal, which are also very long and should certainly wrap as well. It might be more usual to see long notes!", "2015-07-26T14:25:21.000Z", "This is a long place name, something like Taco Place at 238 Garrett St, San Francisco, California", ""],
         ]
         
         func addMeal(me: Meal, event: [String]) {

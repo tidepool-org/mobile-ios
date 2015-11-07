@@ -28,6 +28,7 @@ import UIKit
     private func updateStyling() {
         if let image = Styles.backgroundImageofSize(self.bounds.size, style: usage) {
             self.setBackgroundImage(image, forState: UIControlState.Normal)
+            self.setBackgroundImage(image, forState: UIControlState.Disabled)
         }
         // Really shouldn't know about actual colors here, but shortcut to put in a reversed background color when button is pressed. Note this only supports 2 background colors!
         let reversedUsage = usage == "darkBackgroundButton" ? "brightBackgroundButton" : "darkBackgroundButton"

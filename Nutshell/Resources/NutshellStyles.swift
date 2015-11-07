@@ -40,7 +40,7 @@ public class Styles: NSObject {
         "whiteBackground": whiteColor,
         // login & signup
         "brightBackgroundButton": brightBlueColor,
-        "inactiveButton": veryLightGreyColor,
+        "inactiveButton": darkPurpleColor,
         "userDataEntry": whiteColor,
         // menu and account settings
         "rowSeparator": mediumDarkGreyColor,
@@ -54,9 +54,9 @@ public class Styles: NSObject {
     static var usageToFontWithColor = [
         // login & signup
         "userDataEntry": (mediumRegularFont, darkPurpleColor),
-        "dataEntryErrorFeedback": (smallSemiboldFont, pinkColor),
+        "dataEntryErrorFeedback": (smallSemiboldFont, redErrorColor),
         "brightLinkText": (mediumRegularFont, brightBlueColor),
-        "inactiveButton": (largeRegularFont, altDarkGreyColor),
+        "inactiveButton": (largeRegularFont, whiteColor),
         "brightBackgroundButton": (largeRegularFont, whiteColor),
         // event detail view
         "healthkitEventSubtext": (smallBoldFont, pinkColor),
@@ -180,6 +180,7 @@ public class Styles: NSObject {
         static let veryLightGreyColor: UIColor = UIColor(hex: 0xf2f3f5) 
         static let greyColor: UIColor = UIColor(hex: 0xd0d3d4) 
         static let redColor: UIColor = UIColor(hex: 0xf66f56) 
+        static let redErrorColor: UIColor = UIColor(hex: 0xff354e)
         static let pinkColor: UIColor = UIColor(hex: 0xf58fc7)
         static let lightPurpleColor: UIColor = UIColor(hex: 0xafbcfa)
         static let purpleColor: UIColor = UIColor(hex: 0xb29ac9)
@@ -203,7 +204,7 @@ public class Styles: NSObject {
         static let lineColor: UIColor = UIColor(hex: 0x281946) 
         static let goldStarColor: UIColor = UIColor(hex: 0xf8ad04) 
         static let greyStarColor: UIColor = UIColor(hex: 0xd0d3d4) 
-        static let mediumDarkGreyColor: UIColor = UIColor(hex: 0x979797) 
+        static let mediumDarkGreyColor: UIColor = UIColor(hex: 0x979797, opacity: 0.5)
         static let lessOpaqueDarkPurple: UIColor  = UIColor(hex: 0x281946, opacity: 0.43) 
         static let moreOpaqueDarkPurple: UIColor  = UIColor(hex: 0x281946, opacity: 0.54) 
     }
@@ -239,6 +240,9 @@ public class Styles: NSObject {
     // Open Sans Semibold 11:   UILabel login error text
     // Open Sans Bold 12:       UILabel event subtext for Apple Healthkit info
     public class var pinkColor: UIColor { return ColorCache.pinkColor }
+
+    // Open Sans Semibold 12.5  Login error text
+    public class var redErrorColor: UIColor { return ColorCache.redErrorColor }
 
     // Open Sans Regular 17:    UILabel? login default text over white background
      public class var lightPurpleColor: UIColor { return ColorCache.lightPurpleColor }

@@ -22,7 +22,8 @@ class MenuAccountSettingsViewController: UIViewController {
         glucoseSettingsView.hidden = true;
         bottomSettingsView.hidden = false;
         
-        versionString.text = UIApplication.appVersion()
+        versionString.text = UIApplication.appVersion() + " on " + APIConnector.currentService!
+        
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         loginAccount.text = appDelegate.API?.currentUserId
     }
