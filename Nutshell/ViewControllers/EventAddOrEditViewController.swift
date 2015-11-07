@@ -426,7 +426,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 return true
             }
             if let meal = eventItem as? NutMeal {
-                if meal.location != locationTextField.text {
+                if meal.location != locationTextField.text && locationTextField.text != Styles.placeholderLocationString {
                     NSLog("location changed, enabling save")
                     return true
                 }
@@ -477,6 +477,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             if mealItem.saveChanges() {
                 // note event changed as "new" event
                 newEventItem = mealItem.eventItem
+                updateItemAndGroupForNewEventItem()
             } else {
                 newEventItem = nil
             }
@@ -507,12 +508,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         newEventItem = NutEvent.createMealEvent(titleTextField.text!, notes: filteredNotesText(), location: filteredLocationText(), photo: picture1ImageURL, photo2: "", photo3: "", time: eventTime)
         
         if newEventItem != nil {
-            // For "eat again" events, add to same event group if appropriate
-            if let eventGroup = eventGroup, newEventItem = newEventItem {
-                if newEventItem.nutEventIdString() == eventGroup.nutEventIdString() {
-                    eventGroup.addEvent(newEventItem)
-                }
-            }
+            updateItemAndGroupForNewEventItem()
             showSuccessView()
         } else {
             // TODO: handle internal error...
@@ -520,6 +516,27 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
 
+    private func updateItemAndGroupForNewEventItem() {
+        // Update eventGroup and eventItem based on new event created, for return values to calling VC
+        if let eventGroup = eventGroup, newEventItem = newEventItem {
+            if newEventItem.nutEventIdString() == eventGroup.nutEventIdString() {
+                if let currentItem = eventItem {
+                    // if we're editing an existing item...
+                    if currentItem.nutEventIdString() == eventGroup.nutEventIdString() {
+                        // if title/location haven't changed, we're done...
+                        return
+                    }
+                }
+                self.eventItem = eventGroup.addEvent(newEventItem)
+            } else {
+                // eventGroup is no longer valid, create a new one!
+                self.eventGroup = NutEvent(firstEvent: newEventItem)
+                self.eventItem = self.eventGroup?.itemArray[0]
+            }
+        }
+        
+    }
+    
     private func deleteItemAndReturn(eventItem: NutEventItem, eventGroup: NutEvent) {
         if eventItem.deleteItem() {
             // now remove it from the group

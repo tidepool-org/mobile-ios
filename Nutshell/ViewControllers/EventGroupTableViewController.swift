@@ -39,7 +39,7 @@ class EventGroupTableViewController: BaseUITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if eventGroup.itemArray.count == 0 {
+        if eventGroup.itemArray.count <= 1 {
             self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
             return
         }
@@ -106,6 +106,16 @@ class EventGroupTableViewController: BaseUITableViewController {
 
     @IBAction func done(segue: UIStoryboardSegue) {
         print("unwind segue to eventGroup done")
+        // update group in case it has changed!
+        if let eventDetailVC = segue.sourceViewController as? EventDetailViewController {
+            if let group = eventDetailVC.eventGroup {
+                self.eventGroup = group
+            }
+        } else if let eventAddOrEditVC = segue.sourceViewController as? EventAddOrEditViewController {
+            if let group = eventAddOrEditVC.eventGroup {
+                self.eventGroup = group
+            }
+        }
     }
     
     @IBAction func cancel(segue: UIStoryboardSegue) {
@@ -137,6 +147,7 @@ extension EventGroupTableViewController {
     override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return itemAtIndexPathHasPhoto(indexPath) ? 164.0 : 80.0
     }
+    
 }
 
 //

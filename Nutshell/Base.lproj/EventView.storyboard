@@ -128,7 +128,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" text="El Farolito" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oUx-3c-Ssy" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="26" y="44" width="60" height="18"/>
+                                            <rect key="frame" x="26" y="43" width="60" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -137,7 +137,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Yesterday at 4:21 pm" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vOf-EN-zSX" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="26" y="68" width="98" height="22"/>
+                                            <rect key="frame" x="26" y="67" width="98" height="23"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -196,7 +196,6 @@
                                     <outlet property="locationLabel" destination="oUx-3c-Ssy" id="ziR-KQ-QWM"/>
                                     <outlet property="repeatCountLabel" destination="Whe-Pt-KZq" id="Au8-Xf-1Bi"/>
                                     <outlet property="titleLabel" destination="Ohg-Qf-hKk" id="cGP-Vw-Cfh"/>
-                                    <segue destination="gjn-FB-qdd" kind="show" identifier="EventGroupSegue" id="clS-Qu-a7b"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -226,6 +225,8 @@
                     <connections>
                         <outlet property="searchPlaceholderLabel" destination="X2v-ZC-Ki5" id="b9t-hB-XXW"/>
                         <outlet property="searchTextField" destination="TJv-Lt-lpn" id="zp7-V0-eTK"/>
+                        <segue destination="S8b-Gx-dOJ" kind="show" identifier="EventItemDetailSegue" id="2AV-5j-70h"/>
+                        <segue destination="gjn-FB-qdd" kind="show" identifier="EventGroupSegue" id="61l-J1-JJS"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cLB-76-o91" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1523,5 +1524,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Zwr-CU-iYy"/>
+        <segue reference="2AV-5j-70h"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -69,25 +69,34 @@ class EventDetailViewController: BaseUIViewController {
         // Pass the selected object to the new view controller.
         super.prepareForSegue(segue, sender: sender)
         if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemEditSegue {
-            let eventItemVC = segue.destinationViewController as! EventAddOrEditViewController
-            eventItemVC.eventItem = eventItem
-            eventItemVC.eventGroup = eventGroup
+            // "Edit" case
+            let eventEditVC = segue.destinationViewController as! EventAddOrEditViewController
+            eventEditVC.eventItem = eventItem
+            eventEditVC.eventGroup = eventGroup
         } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
-            let eventItemVC = segue.destinationViewController as! EventAddOrEditViewController
+            // "Eat again" case...
+            let eventAddVC = segue.destinationViewController as! EventAddOrEditViewController
             // no existing item to pass along...
-            eventItemVC.eventGroup = eventGroup
+            eventAddVC.eventGroup = eventGroup
         } else {
             NSLog("Unknown segue from eventDetail \(segue.identifier)")
         }
     }
     
     @IBAction func done(segue: UIStoryboardSegue) {
-        print("unwind segue to eventDetail done")
-        reloadView()
-    }
+        NSLog("unwind segue to eventDetail done")
+        if let eventAddOrEditVC = segue.sourceViewController as? EventAddOrEditViewController {
+            // update group and item!
+            if let group = eventAddOrEditVC.eventGroup, item = eventAddOrEditVC.eventItem {
+                self.eventGroup = group
+                self.eventItem = item
+            }
+            reloadView()
+        }
+     }
     
     @IBAction func cancel(segue: UIStoryboardSegue) {
-        print("unwind segue to eventDetail cancel")
+        NSLog("unwind segue to eventDetail cancel")
     }
 
     //
@@ -95,13 +104,6 @@ class EventDetailViewController: BaseUIViewController {
     //
 
     @IBAction func backButtonHandler(sender: AnyObject) {
-        // If either title or location have changed, we need to exit back to list...
-        if let eventGroup = eventGroup, eventItem = eventItem {
-            if eventItem.nutEventIdString() != eventGroup.nutEventIdString() {
-                self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
-                return
-            }
-        }
         self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
     }
     

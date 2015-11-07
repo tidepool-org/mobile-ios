@@ -49,20 +49,22 @@ class NutEvent {
         self.itemArray = []
     }
     
-    func addEvent(newEvent: EventItem) {
+    func addEvent(newEvent: EventItem) -> NutEventItem? {
+        var newItem: NutEventItem? = nil
         if (newEvent.nutEventIdString() == self.nutEventIdString()) {
             if let meal = newEvent as? Meal {
-                let newItem = NutMeal(meal: meal)
-                self.itemArray.append(newItem)
-                mostRecent = newItem.time.laterDate(mostRecent)
+                newItem = NutMeal(meal: meal)
+                self.itemArray.append(newItem!)
+                mostRecent = newItem!.time.laterDate(mostRecent)
             } else if let workout = newEvent as? Workout {
-                let newItem = NutWorkout(workout: workout)
-                self.itemArray.append(newItem)
-                mostRecent = newItem.time.laterDate(mostRecent)
+                newItem = NutWorkout(workout: workout)
+                self.itemArray.append(newItem!)
+                mostRecent = newItem!.time.laterDate(mostRecent)
             }
         } else {
             print("attempting to add item with non-matching title and location to NutEvent!")
         }
+        return newItem
     }
     
     class func createMealEvent(title: String, notes: String, location: String, photo: String, photo2: String, photo3: String, time: NSDate) -> EventItem? {

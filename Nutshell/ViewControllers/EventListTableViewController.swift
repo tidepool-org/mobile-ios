@@ -81,11 +81,16 @@ class EventListTableViewController: BaseUITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepareForSegue(segue, sender: sender)
-        if(segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventGroupSegue {
+        if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventGroupSegue {
             let cell = sender as! EventListTableViewCell
             let eventGroupVC = segue.destinationViewController as! EventGroupTableViewController
-            cell.eventGroup?.sortEvents()
             eventGroupVC.eventGroup = cell.eventGroup!
+        } else if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue {
+            let cell = sender as! EventListTableViewCell
+            let eventDetailVC = segue.destinationViewController as! EventDetailViewController
+            let group = cell.eventGroup!
+            eventDetailVC.eventGroup = group
+            eventDetailVC.eventItem = group.itemArray[0]
         } else {
             NSLog("Unprepped segue from eventList \(segue.identifier)")
         }
@@ -229,6 +234,18 @@ extension EventListTableViewController {
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath: NSIndexPath) -> CGFloat {
         return UITableViewAutomaticDimension;
+    }
+
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        let tuple = self.filteredNutEvents[indexPath.item]
+        let nutEvent = tuple.1
+        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        if nutEvent.itemArray.count == 1 {
+            self.performSegueWithIdentifier(EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue, sender: cell)
+        } else if nutEvent.itemArray.count > 1 {
+            self.performSegueWithIdentifier(EventViewStoryboard.SegueIdentifiers.EventGroupSegue, sender: cell)
+        }
     }
 
 }
