@@ -61,18 +61,18 @@ public class Styles: NSObject {
         // event detail view
         "healthkitEventSubtext": (smallBoldFont, pinkColor),
         // table views
-        "tableHeaderTitle": (veryLargeSemiboldFont, whiteColor),
+        "tableHeaderTitle": (mediumSemiboldFont, whiteColor),
         "tableHeaderLocation": (smallSemiboldFont, whiteColor),
         "tableHeaderCount": (smallBoldFont, whiteColor),
         "searchPlaceholder": (mediumLightFont, blackColor),
         "searchText": (largeRegularFont, blackColor),
         "tableListCellTitle": (mediumSemiboldFont, altDarkGreyColor),
         "tableListCellLocation": (smallSemiboldFont, altDarkGreyColor),
-        "tableListCellDate": (verySmallRegularFont, altDarkGreyColor),
+        "tableListCellDate": (smallRegularFont, altDarkGreyColor),
         "tableListCellRepeatCount": (smallBoldFont, altDarkGreyColor),
-        "tableCellTitle": (smallSemiboldFont, darkGreyColor),
-        "tableCellSubtitle": (verySmallRegularFont, darkMediumGreyColor),
-        "tableCellLocationDate": (smallRegularFont, whiteColor),
+        "tableCellTitle": (mediumSemiboldFont, darkGreyColor),
+        "tableCellSubtitle": (smallRegularFont, darkMediumGreyColor),
+        "tableCellLocationDate": (mediumSmallRegularFont, whiteColor),
         "saveButton": (mediumBoldFont, whiteColor),
         // account configuration views
         "accountSettingItem": (mediumRegularFont, darkGreyColor),
@@ -125,6 +125,7 @@ public class Styles: NSObject {
         
         static let smallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 12.5)!
         static let mediumSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 17.0)!
+        static let mediumSmallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 14.0)!
         static let veryLargeSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 25.5)!
         
         static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.5)!
@@ -151,6 +152,7 @@ public class Styles: NSObject {
 
     public class var smallSemiboldFont: UIFont { return FontCache.smallSemiboldFont }
     public class var mediumSemiboldFont: UIFont { return FontCache.mediumSemiboldFont }
+    public class var mediumSmallSemiboldFont: UIFont { return FontCache.mediumSmallSemiboldFont }
     public class var veryLargeSemiboldFont: UIFont { return FontCache.veryLargeSemiboldFont }
 
     public class var smallBoldFont: UIFont { return FontCache.smallBoldFont }
@@ -355,6 +357,6 @@ public class Styles: NSObject {
     public class var titleHintString: String { return "Simple and repeatable" }
     public class var placeholderNotesString: String { return "Notes" }
     public class var noteHintString: String { return "Sides, dessert, anything else?" }
-    public class var placeholderLocationString: String { return "Place" }
+    public class var placeholderLocationString: String { return "Location" }
     
 }

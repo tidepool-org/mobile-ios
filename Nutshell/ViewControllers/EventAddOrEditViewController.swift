@@ -232,12 +232,16 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         return attrStr
     }
     
-    private func configureDateView() {
+    private func updateDateLabels() {
         let df = NSDateFormatter()
         df.dateFormat = "MMM d, yyyy"
         date1Label.attributedText = boldFirstPartOfDateString(df.stringFromDate(eventTime), suffixCnt: 6)
         df.dateFormat = "h:mm a"
         date2Label.attributedText = boldFirstPartOfDateString(df.stringFromDate(eventTime), suffixCnt: 2)
+    }
+
+    private func configureDateView() {
+        updateDateLabels()
         datePicker.date = eventTime
         datePickerView.hidden = true
     }
@@ -619,6 +623,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     // MARK: - Date picking
     //
     
+    private var savedTime: NSDate?
     @IBAction func dateButtonHandler(sender: AnyObject) {
         // user tapped on date, bring up date picker
         datePickerView.hidden = !datePickerView.hidden
@@ -626,10 +631,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             titleTextField.resignFirstResponder()
             notesTextField.resignFirstResponder()
             locationTextField.resignFirstResponder()
+            savedTime = eventTime
         }
     }
     
     @IBAction func cancelDatePickButtonHandler(sender: AnyObject) {
+        if let savedTime = savedTime {
+            eventTime = savedTime
+        }
         configureDateView()
     }
     
@@ -639,6 +648,10 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         updateSaveButtonState()
     }
     
+    @IBAction func datePickerValueChanged(sender: AnyObject) {
+        eventTime = datePicker.date
+        updateDateLabels()
+    }
     //
     // MARK: - Test code!
     //
