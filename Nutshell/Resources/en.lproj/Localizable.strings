@@ -31,6 +31,13 @@
 "discardAlertOkay" = "Discard";
 
 /*
+    Event detail view controller
+ */
+
+"successButtonTitle" = "Success!";
+"nutCrackedButtonTitle" = "Nut cracked?";
+
+/*
     Add/edit event view controller
  */
 
@@ -38,7 +45,7 @@
 "saveAndEatButtonTitle" = "Save and eat!";
 
 /*
- Login view controller
+    Login view controller
  */
 
 "loginErrUserOrPassword" = "Wrong email or password!";

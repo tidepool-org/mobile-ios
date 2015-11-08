@@ -571,7 +571,7 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <view clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UkV-Ct-zaJ" userLabel="eventLocation">
-                                                        <rect key="frame" x="16" y="103" width="343" height="85"/>
+                                                        <rect key="frame" x="16" y="102" width="343" height="85"/>
                                                         <subviews>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeSmallIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Uth-HJ-dCg">
                                                                 <rect key="frame" x="115" y="33" width="11" height="18"/>
@@ -663,7 +663,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                             <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Jd-1i-UWb" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="187" width="375" height="1"/>
+                                                <rect key="frame" x="0.0" y="186" width="375" height="1"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="jEY-io-Yfh"/>
@@ -702,16 +702,18 @@
                                         </variation>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Qx-V0-1Du" userLabel="EventDescriptionContainer" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="188" width="375" height="58"/>
+                                        <rect key="frame" x="0.0" y="187" width="375" height="58"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yYZ-tt-QM6" userLabel="successView">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yYZ-tt-QM6" userLabel="successView" customClass="UIControl">
                                                 <rect key="frame" x="0.0" y="0.0" width="188" height="58"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="12g-bz-WJr" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="188" height="58"/>
-                                                        <inset key="titleEdgeInsets" minX="25" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                                        <state key="normal" title="Nut cracked?" image="starNormal"/>
-                                                        <state key="selected" title="Success!" image="starHighlighted"/>
+                                                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="12g-bz-WJr" userLabel="nutCrackedButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="27" y="0.0" width="40" height="58"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="40" id="gsa-PI-0xn"/>
+                                                        </constraints>
+                                                        <state key="normal" image="starNormal"/>
+                                                        <state key="selected" image="starHighlighted"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderCount"/>
                                                         </userDefinedRuntimeAttributes>
@@ -719,14 +721,36 @@
                                                             <action selector="nutCrackedButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="mlG-03-kmc"/>
                                                         </connections>
                                                     </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nut cracked?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c32-24-Hp7" userLabel="nutCrackedLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="75" y="0.0" width="113" height="58"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderCount"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
                                                 </subviews>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="bottom" secondItem="12g-bz-WJr" secondAttribute="bottom" id="1yQ-To-7Bc"/>
                                                     <constraint firstItem="12g-bz-WJr" firstAttribute="leading" secondItem="yYZ-tt-QM6" secondAttribute="leading" id="9Cd-Ly-w49"/>
                                                     <constraint firstAttribute="trailing" secondItem="12g-bz-WJr" secondAttribute="trailing" id="RkX-VL-rtq"/>
+                                                    <constraint firstItem="c32-24-Hp7" firstAttribute="top" secondItem="yYZ-tt-QM6" secondAttribute="top" id="SCA-Mr-9w8"/>
+                                                    <constraint firstAttribute="bottom" secondItem="c32-24-Hp7" secondAttribute="bottom" id="ekr-kN-RwG"/>
+                                                    <constraint firstItem="12g-bz-WJr" firstAttribute="centerX" secondItem="yYZ-tt-QM6" secondAttribute="centerX" multiplier="0.5" id="huJ-4b-Q1E"/>
+                                                    <constraint firstItem="c32-24-Hp7" firstAttribute="leading" secondItem="12g-bz-WJr" secondAttribute="trailing" constant="8" id="i9m-UQ-W3Z"/>
                                                     <constraint firstItem="12g-bz-WJr" firstAttribute="top" secondItem="yYZ-tt-QM6" secondAttribute="top" id="te0-zS-2IP"/>
+                                                    <constraint firstAttribute="trailing" secondItem="c32-24-Hp7" secondAttribute="trailing" id="yTh-kW-afu"/>
                                                 </constraints>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="9Cd-Ly-w49"/>
+                                                        <exclude reference="RkX-VL-rtq"/>
+                                                    </mask>
+                                                </variation>
+                                                <connections>
+                                                    <action selector="nutCrackedButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="nik-ZE-4F6"/>
+                                                </connections>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9LU-DB-mib" userLabel="eatAgainView">
                                                 <rect key="frame" x="188" y="0.0" width="187" height="58"/>
@@ -769,13 +793,13 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="INU-ti-JXM" userLabel="GraphSection">
-                                        <rect key="frame" x="0.0" y="246" width="375" height="357"/>
+                                        <rect key="frame" x="0.0" y="245" width="375" height="358"/>
                                         <subviews>
                                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cmJ-dI-KmZ" userLabel="MissingData">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="357"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="358"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCd-7V-eEl">
-                                                        <rect key="frame" x="68" y="131" width="239" height="103"/>
+                                                        <rect key="frame" x="68" y="132" width="239" height="103"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There is no data in here!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="azx-xE-oT0" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="239" height="37"/>
@@ -895,6 +919,7 @@
                         <outlet property="missingDataAdvisoryView" destination="cmJ-dI-KmZ" id="XsH-bq-zbD"/>
                         <outlet property="notesLabel" destination="au5-2w-K1j" id="heW-2E-xn2"/>
                         <outlet property="nutCrackedButton" destination="12g-bz-WJr" id="uC8-1Y-8UB"/>
+                        <outlet property="nutCrackedLabel" destination="c32-24-Hp7" id="3xk-a1-qBU"/>
                         <outlet property="photoUIImageView" destination="let-xp-dUr" id="oDy-7z-aYX"/>
                         <outlet property="titleLabel" destination="U73-Nl-2gk" id="oeo-FR-liY"/>
                         <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSegueToCancel" unwindAction="cancel:" id="kPJ-Hz-YIi"/>
@@ -947,7 +972,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Meal Photo" id="7I3-GC-bFg">
-                        <barButtonItem key="leftBarButtonItem" image="leftArrow" id="X4b-wT-mIV">
+                        <barButtonItem key="leftBarButtonItem" image="backArrow" id="X4b-wT-mIV">
                             <connections>
                                 <action selector="backButtonHandler:" destination="PfN-dS-BM0" id="pDK-Os-Efq"/>
                             </connections>
@@ -1069,7 +1094,7 @@
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Simple and repeatable" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2gd-CX-jRH" userLabel="titleHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="114" y="42" width="147" height="19.5"/>
+                                                        <rect key="frame" x="114" y="42" width="147" height="20"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -1078,7 +1103,7 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Notes" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HNf-3W-C8L" userLabel="notesTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="12" y="75" width="351" height="24"/>
+                                                        <rect key="frame" x="12" y="76" width="351" height="24"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -1092,7 +1117,7 @@
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sides, dessert, anything else?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QY4-ef-Zcn" userLabel="notesHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="93" y="101" width="189.5" height="19.5"/>
+                                                        <rect key="frame" x="93" y="102" width="190" height="20"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -1138,7 +1163,7 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xAO-cS-MZQ" userLabel="calendarButtonLargeHitArea">
                                                         <rect key="frame" x="145" y="0.0" width="84" height="70"/>
                                                         <connections>
-                                                            <action selector="deleteButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="cia-EF-mrx"/>
+                                                            <action selector="dateButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="Ib0-nW-2TQ"/>
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aaa-jg-7gn" userLabel="calendarButton">
@@ -1156,6 +1181,9 @@
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WCf-7M-VhS" userLabel="photoButtonLargeHitArea">
                                                         <rect key="frame" x="283" y="0.0" width="72" height="35"/>
+                                                        <connections>
+                                                            <action selector="photoButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="dL7-wi-kWq"/>
+                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DPt-Sa-D9K" userLabel="photoButton">
                                                         <rect key="frame" x="304" y="0.0" width="30" height="30"/>
@@ -1354,9 +1382,9 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="abX-6z-1bd" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="509" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="505" width="375" height="54"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="fC6-V9-BbU"/>
+                                            <constraint firstAttribute="height" constant="54" id="fC6-V9-BbU"/>
                                         </constraints>
                                         <state key="normal" title="Save"/>
                                         <userDefinedRuntimeAttributes>
@@ -1552,10 +1580,9 @@
     <resources>
         <image name="ThreeTacosDemoPic.png" width="1280" height="456"/>
         <image name="add-button" width="23" height="23"/>
-        <image name="backArrow" width="12" height="21"/>
+        <image name="backArrow" width="13" height="22"/>
         <image name="calendarIcon" width="15" height="17"/>
         <image name="cameraIcon" width="23" height="18"/>
-        <image name="leftArrow" width="17" height="30"/>
         <image name="menu-button" width="22" height="15"/>
         <image name="miniPicBackground" width="22" height="22"/>
         <image name="placeIcon" width="13" height="22"/>
@@ -1572,7 +1599,7 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="vDO-8u-VmA"/>
         <segue reference="iXa-mi-JQf"/>
+        <segue reference="vDO-8u-VmA"/>
     </inferredMetricsTieBreakers>
 </document>

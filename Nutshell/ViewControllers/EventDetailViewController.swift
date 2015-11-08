@@ -42,6 +42,7 @@ class EventDetailViewController: BaseUIViewController {
     @IBOutlet weak var locationLabel: NutshellUILabel!
     
     @IBOutlet weak var nutCrackedButton: NutshellUIButton!
+    @IBOutlet weak var nutCrackedLabel: NutshellUILabel!
     
     private var eventTime = NSDate()
     private var placeholderLocationString = "Note location here!"
@@ -53,6 +54,8 @@ class EventDetailViewController: BaseUIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureDetailView()
+        // We use a custom back button so we can redirect back when the event has changed. This tweaks the arrow positioning to match the iOS back arrow position
+        self.navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsetsMake(0.0, -8.0, -1.0, 0.0)
     }
     
     override func didReceiveMemoryWarning() {
@@ -107,12 +110,21 @@ class EventDetailViewController: BaseUIViewController {
         self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
     }
     
+    private func configureNutCracked() {
+        if let eventItem = eventItem {
+            nutCrackedLabel.text = eventItem.nutCracked ? NSLocalizedString("successButtonTitle", comment:"Success!") : NSLocalizedString("nutCrackedButtonTitle", comment:"Nut cracked?")
+            nutCrackedButton.selected = eventItem.nutCracked
+        }
+    }
+    
     @IBAction func nutCrackedButtonHandler(sender: AnyObject) {
         nutCrackedButton.selected = !nutCrackedButton.selected
-         if let eventItem = eventItem {
+
+        if let eventItem = eventItem {
             eventItem.nutCracked = nutCrackedButton.selected
             // Save changes to database
             eventItem.saveChanges()
+            configureNutCracked()
         }
     }
     
@@ -137,7 +149,7 @@ class EventDetailViewController: BaseUIViewController {
             titleLabel.text = eventItem.title
             notesLabel.text = eventItem.notes
             eventTime = eventItem.time
-            nutCrackedButton.selected = eventItem.nutCracked
+            configureNutCracked()
             photoUIImageView.hidden = true
             dateLabel.text = NutUtils.standardUIDateString(eventTime, relative: true)
             
