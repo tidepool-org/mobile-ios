@@ -130,10 +130,11 @@ class EventDetailViewController: BaseUIViewController {
     
     @IBAction func photoOverlayTouchHandler(sender: AnyObject) {
         if let mealItem = eventItem as? NutMeal {
-            if !mealItem.photo.isEmpty {
+            let firstPhotoUrl = mealItem.firstPictureUrl()
+            if !firstPhotoUrl.isEmpty {
                 let storyboard = UIStoryboard(name: "EventView", bundle: nil)
                 let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
-                photoVC.imageUrl = mealItem.photo
+                photoVC.imageUrl = firstPhotoUrl
                 self.navigationController?.pushViewController(photoVC, animated: true)
             }
         }
@@ -161,8 +162,9 @@ class EventDetailViewController: BaseUIViewController {
 
             if let mealItem = eventItem as? NutMeal {
                 photoUIImageView.hidden = true
-                if !mealItem.photo.isEmpty {
-                    NutUtils.loadImage(mealItem.photo, imageView: photoUIImageView)
+                let photoUrl = mealItem.firstPictureUrl()
+                if !photoUrl.isEmpty {
+                    NutUtils.loadImage(photoUrl, imageView: photoUIImageView)
                 }
             } else {
                 // TODO: workout support! Show other workout-specific items

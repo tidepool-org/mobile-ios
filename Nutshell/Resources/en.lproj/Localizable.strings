@@ -30,6 +30,10 @@
 "discardAlertCancel" = "Cancel";
 "discardAlertOkay" = "Discard";
 
+"photoSlotsFullTitle" = "No empty photo slot";
+"photoSlotsFullMessage" = "Three photos are supported. Please discard one before adding a new photo.";
+"notifyAlertOkay" = "OK";
+
 /*
     Event detail view controller
  */

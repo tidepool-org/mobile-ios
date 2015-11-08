@@ -72,7 +72,6 @@ public class Styles: NSObject {
         "tableListCellRepeatCount": (smallBoldFont, altDarkGreyColor),
         "tableCellTitle": (mediumSemiboldFont, darkGreyColor),
         "tableCellSubtitle": (smallRegularFont, darkMediumGreyColor),
-        "tableCellLocationDate": (mediumSmallRegularFont, whiteColor),
         "saveButton": (mediumBoldFont, whiteColor),
         // account configuration views
         "accountSettingItem": (mediumRegularFont, darkGreyColor),
@@ -90,6 +89,8 @@ public class Styles: NSObject {
         "greenLink": (mediumRegularFont, lightGreenColor),
         // add event scenes
         "eventTitleText": (mediumLargeBoldFont, whiteColor),
+        "eventNotesText": (mediumSmallRegularFont, whiteColor),
+        "eventLocationDateHint": (smallRegularFont, whiteColor),
         "doneButton": (largeRegularFont, whiteColor),
 
     ]
@@ -119,8 +120,7 @@ public class Styles: NSObject {
         static let verySmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 10.0)!
         static let smallRegularFont: UIFont = UIFont(name: "OpenSans", size: 12.5)!
         static let mediumRegularFont: UIFont = UIFont(name: "OpenSans", size: 17.0)!
-        static let mediumSmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 14.0)!
-        static let mediumButtonRegularFont: UIFont = UIFont(name: "OpenSans", size: 15.0)!
+        static let mediumSmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 15.0)!
         static let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 20.0)!
         
         static let smallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 12.5)!
@@ -147,7 +147,6 @@ public class Styles: NSObject {
     public class var smallRegularFont: UIFont { return FontCache.smallRegularFont }
     public class var mediumRegularFont: UIFont { return FontCache.mediumRegularFont }
     public class var mediumSmallRegularFont: UIFont { return FontCache.mediumSmallRegularFont }
-    public class var mediumButtonRegularFont: UIFont { return FontCache.mediumButtonRegularFont }
     public class var largeRegularFont: UIFont { return FontCache.largeRegularFont }
 
     public class var smallSemiboldFont: UIFont { return FontCache.smallSemiboldFont }

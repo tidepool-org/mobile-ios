@@ -98,6 +98,11 @@ class NutEventItem {
         eventItem.nutCracked = nutCracked
         eventItem.time = time
     }
+    
+    func firstPictureUrl() -> String {
+        return ""
+    }
+
 }
 
 func != (left: NutEventItem, right: NutEventItem) -> Bool {

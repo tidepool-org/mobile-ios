@@ -53,6 +53,9 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     
     private var eventTime = NSDate()
     private var picture1ImageURL = ""
+    private var picture2ImageURL = ""
+    private var picture3ImageURL = ""
+    private var editingPictureItem: Int = 0
 
     //
     // MARK: - Base methods
@@ -103,14 +106,16 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     @IBAction func done(segue: UIStoryboardSegue) {
         print("unwind segue to eventAddOrEdit done")
         // Deal with possible delete/edit of photo from viewer...
-        // TODO: multi-photo support!
         if segue.identifier == EventViewStoryboard.SegueIdentifiers.UnwindSegueFromShowPhoto {
             if let photoVC = segue.sourceViewController as? ShowPhotoViewController {
-                if picture1ImageURL != photoVC.imageUrl {
-                    picture1ImageURL = photoVC.imageUrl
+                let picture = itemToPicture(editingPictureItem)
+                if picture.0 != photoVC.imageUrl {
+                    updatePictureUrl(editingPictureItem, url: photoVC.imageUrl)
                     configurePhotos()
+                    updateSaveButtonState()
                 }
             }
+            editingPictureItem = 0
         }
     }
 
@@ -142,6 +147,12 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 }
                 if !mealItem.photo.isEmpty {
                     picture1ImageURL = mealItem.photo
+                }
+                if !mealItem.photo2.isEmpty {
+                    picture2ImageURL = mealItem.photo2
+                }
+                if !mealItem.photo3.isEmpty {
+                    picture3ImageURL = mealItem.photo3
                 }
             } else {
                 // TODO: workout support! Add workout-specific items...
@@ -181,11 +192,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     }
 
     private func configurePhotos() {
-        if picture1ImageURL.isEmpty {
-            picture1Image.hidden = true
-        } else {
-            picture1Image.hidden = false
-            NutUtils.loadImage(picture1ImageURL, imageView: picture1Image)
+        for item in 1...3 {
+            let picture = itemToPicture(item)
+            if picture.0.isEmpty {
+                picture.1.hidden = true
+            } else {
+                picture.1.hidden = false
+                NutUtils.loadImage(picture.0, imageView: picture.1)
+            }
         }
     }
     
@@ -264,6 +278,10 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     // MARK: - Button and text field handlers
     //
     
+    @IBAction func titleTextLargeHitAreaButton(sender: AnyObject) {
+        titleTextField.becomeFirstResponder()
+    }
+    
     func textFieldDidChange() {
         updateSaveButtonState()
     }
@@ -283,7 +301,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             titleTextField.text = Styles.placeholderTitleString
         }
     }
-    
+
+    @IBAction func notesTextLargeHitAreaButton(sender: AnyObject) {
+        notesTextField.becomeFirstResponder()
+    }
+
     @IBAction func notesEditingDidBegin(sender: AnyObject) {
         hideDateIfOpen()
         configureNotesHint()
@@ -358,20 +380,76 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
     
-    @IBAction func picture1ButtonHandler(sender: AnyObject) {
-        if !picture1ImageURL.isEmpty {
+    private func firstEmptyPictureItem() -> Int {
+        var itemNum = 0
+        if picture1ImageURL.isEmpty {
+            itemNum = 1
+        } else if picture2ImageURL.isEmpty {
+            itemNum = 2
+        } else if picture3ImageURL.isEmpty {
+            itemNum = 3
+        }
+        return itemNum
+    }
+    
+    private func itemToPicture(itemNum: Int) -> (String, UIImageView) {
+        switch itemNum {
+        case 1:
+            return (picture1ImageURL, picture1Image)
+        case 2:
+            return (picture2ImageURL, picture2Image)
+        case 3:
+            return (picture3ImageURL, picture3Image)
+        default:
+            return ("", picture1Image)
+        }
+    }
+    
+    private func updatePictureUrl(itemNum: Int, url: String) {
+        switch itemNum {
+        case 1:
+            picture1ImageURL = url
+        case 2:
+            picture2ImageURL = url
+        case 3:
+            picture3ImageURL = url
+        default:
+            break
+        }
+    }
+    
+    private func showPicture(itemNum: Int) {
+        let pictureUrl = itemToPicture(itemNum).0
+        if !pictureUrl.isEmpty {
             let storyboard = UIStoryboard(name: "EventView", bundle: nil)
             let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
-            photoVC.imageUrl = picture1ImageURL
+            photoVC.imageUrl = pictureUrl
             photoVC.editAllowed = true
+            editingPictureItem = itemNum
             self.navigationController?.pushViewController(photoVC, animated: true)
         }
     }
     
+    @IBAction func picture1ButtonHandler(sender: AnyObject) {
+        showPicture(1)
+    }
+    
+    @IBAction func picture2ButtonHandler(sender: AnyObject) {
+        showPicture(2)
+    }
+
+    @IBAction func picture3ButtonHandler(sender: AnyObject) {
+        showPicture(3)
+    }
+
     @IBAction func photoButtonHandler(sender: AnyObject) {
-        let pickerC = UIImagePickerController()
-        pickerC.delegate = self
-        self.presentViewController(pickerC, animated: true, completion: nil)
+        if firstEmptyPictureItem() == 0 {
+            simpleInfoAlert(NSLocalizedString("photoSlotsFullTitle", comment:"No empty photo slot"), alertMessage: NSLocalizedString("photoSlotsFullMessage", comment:"Three photos are supported. Please discard one before adding a new photo."))
+        } else {
+            let pickerC = UIImagePickerController()
+            pickerC.delegate = self
+            self.presentViewController(pickerC, animated: true, completion: nil)
+        }
     }
 
     //
@@ -382,12 +460,10 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         self.dismissViewControllerAnimated(true, completion: nil)
         print(info)
         
-        // TODO: multi-photo support!
         if let photoUrl = info[UIImagePickerControllerReferenceURL] as? NSURL {
-            picture1ImageURL = photoUrl.absoluteString
+            updatePictureUrl(firstEmptyPictureItem(), url: photoUrl.absoluteString)
             updateSaveButtonState()
             configurePhotos()
-            
         }
     }
     
@@ -412,6 +488,12 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if !picture1ImageURL.isEmpty {
                 return true
         }
+        if !picture2ImageURL.isEmpty {
+            return true
+        }
+        if !picture3ImageURL.isEmpty {
+            return true
+        }
         return false
     }
 
@@ -435,8 +517,16 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                     return true
                 }
                 if meal.photo != picture1ImageURL {
-                NSLog("photo changed, enabling save")
+                NSLog("photo1 changed, enabling save")
                    return true
+                }
+                if meal.photo2 != picture2ImageURL {
+                    NSLog("photo2 changed, enabling save")
+                    return true
+                }
+                if meal.photo3 != picture3ImageURL {
+                    NSLog("photo3 changed, enabling save")
+                    return true
                 }
            }
        }
@@ -476,6 +566,8 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             mealItem.notes = notes
             mealItem.location = location
             mealItem.photo = picture1ImageURL
+            mealItem.photo2 = picture2ImageURL
+            mealItem.photo3 = picture3ImageURL
             
              // Save the database
             if mealItem.saveChanges() {
@@ -509,7 +601,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             return
         }
         
-        newEventItem = NutEvent.createMealEvent(titleTextField.text!, notes: filteredNotesText(), location: filteredLocationText(), photo: picture1ImageURL, photo2: "", photo3: "", time: eventTime)
+        newEventItem = NutEvent.createMealEvent(titleTextField.text!, notes: filteredNotesText(), location: filteredLocationText(), photo: picture1ImageURL, photo2: picture2ImageURL, photo3: picture3ImageURL, time: eventTime)
         
         if newEventItem != nil {
             updateItemAndGroupForNewEventItem()
@@ -562,6 +654,15 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     // MARK: - Alerts
     //
     
+    private func simpleInfoAlert(alertTitle: String, alertMessage: String) {
+        // use dialog to confirm cancel with user!
+        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("notifyAlertOkay", comment:"OK"), style: .Cancel, handler: { Void in
+            return
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+   
     private func alertOnCancelAndReturn(alertTitle: String, alertMessage: String) {
         // use dialog to confirm cancel with user!
         let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .Alert)

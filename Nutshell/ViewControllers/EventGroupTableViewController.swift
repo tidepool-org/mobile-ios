@@ -134,7 +134,8 @@ extension EventGroupTableViewController {
         if indexPath.item < eventGroup.itemArray.count {
             let eventItem = eventGroup.itemArray[indexPath.item]
             if let mealItem = eventItem as? NutMeal {
-                return !mealItem.photo.isEmpty
+                let photoUrl = mealItem.firstPictureUrl()
+                return !photoUrl.isEmpty
             }
         }
         return false

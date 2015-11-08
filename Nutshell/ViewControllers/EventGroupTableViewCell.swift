@@ -70,10 +70,11 @@ class EventGroupTableViewCell: BaseUITableViewCell {
 
         photoContainerView.hidden = true
         if let meal = eventItem as? NutMeal {
-            if !meal.photo.isEmpty {
-                NutUtils.loadImage(meal.photo, imageView: photoImageView)
+            let photoUrl = meal.firstPictureUrl()
+            if !photoUrl.isEmpty {
+                NutUtils.loadImage(photoUrl, imageView: photoImageView)
                 photoContainerView.hidden = false
-                showPhotoButton.photoUrl = meal.photo
+                showPhotoButton.photoUrl = photoUrl
             }
         }
         for c in photoContainerView.constraints {

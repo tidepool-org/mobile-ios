@@ -145,7 +145,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeSmallIcon" highlightedImage="placeSmallIcon" translatesAutoresizingMaskIntoConstraints="NO" id="hOf-cI-b81" userLabel="placeIcon">
-                                            <rect key="frame" x="46" y="46" width="11" height="18"/>
+                                            <rect key="frame" x="46" y="44" width="11" height="18"/>
                                             <color key="tintColor" red="0.30196078431372547" green="0.30588235294117649" blue="0.29803921568627451" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="11" id="3pg-Xr-UMq"/>
@@ -153,7 +153,7 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="El Farolito" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oUx-3c-Ssy" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="65" y="44" width="68" height="39"/>
+                                            <rect key="frame" x="65" y="43" width="60" height="39"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -162,7 +162,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="x 4" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Whe-Pt-KZq" userLabel="repeatCountLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="313" y="20" width="18" height="18"/>
+                                            <rect key="frame" x="313" y="19" width="18" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -264,7 +264,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oz1-hd-YVX" userLabel="innerHeaderView">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="98"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
                                     <subviews>
                                         <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hcc-lE-4JU" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
@@ -277,7 +277,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="This is the title" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ptv-E0-A66" userLabel="tableHeaderTitle" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="24" y="15" width="180" height="35"/>
+                                            <rect key="frame" x="24" y="15" width="120" height="24"/>
                                             <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="25.5"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -295,7 +295,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Location" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SxI-OJ-qN3" userLabel="tableHeaderLocation" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="24" y="55" width="272" height="24"/>
+                                            <rect key="frame" x="24" y="43" width="272" height="18"/>
                                             <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="12.5"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -659,7 +659,7 @@
                                                     <constraint firstAttribute="height" constant="1" id="OVL-qP-Mum"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="whiteBackground"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                             <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Jd-1i-UWb" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
@@ -669,7 +669,7 @@
                                                     <constraint firstAttribute="height" constant="1" id="jEY-io-Yfh"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="whiteBackground"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                         </subviews>
@@ -1073,12 +1073,18 @@
                                                     <constraint firstAttribute="height" constant="1" id="uhq-3I-wQc"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="whiteBackground"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pqj-03-nXf" userLabel="TitleAndNotes">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="158"/>
                                                 <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g3s-Sw-gxd" userLabel="titleTextLargeHitAreaButton">
+                                                        <rect key="frame" x="12" y="16" width="351" height="44"/>
+                                                        <connections>
+                                                            <action selector="titleTextLargeHitAreaButton:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="bVh-BR-LRc"/>
+                                                        </connections>
+                                                    </button>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Meal name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EOZ-el-4r9" userLabel="titleTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="12" y="16" width="351" height="24"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1094,21 +1100,27 @@
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Simple and repeatable" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2gd-CX-jRH" userLabel="titleHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="114" y="42" width="147" height="20"/>
+                                                        <rect key="frame" x="122" y="42" width="131" height="18"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellLocationDate"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventLocationDateHint"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Xd-vE-tGN" userLabel="notesTextLargeHitAreaButton">
+                                                        <rect key="frame" x="12" y="74" width="351" height="41"/>
+                                                        <connections>
+                                                            <action selector="notesTextLargeHitAreaButton:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="PKa-DR-lQY"/>
+                                                        </connections>
+                                                    </button>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Notes" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HNf-3W-C8L" userLabel="notesTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="12" y="76" width="351" height="24"/>
+                                                        <rect key="frame" x="12" y="74" width="351" height="21"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventTitleText"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventNotesText"/>
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="notesEditingDidBegin:" destination="wuR-Cf-1Tk" eventType="editingDidBegin" id="8Fk-02-aaY"/>
@@ -1117,34 +1129,42 @@
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sides, dessert, anything else?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QY4-ef-Zcn" userLabel="notesHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="93" y="102" width="190" height="20"/>
+                                                        <rect key="frame" x="103" y="97" width="169" height="18"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellLocationDate"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventLocationDateHint"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstItem="HNf-3W-C8L" firstAttribute="width" secondItem="EOZ-el-4r9" secondAttribute="width" id="2JE-tn-OtR"/>
+                                                    <constraint firstItem="1Xd-vE-tGN" firstAttribute="trailing" secondItem="HNf-3W-C8L" secondAttribute="trailing" id="90M-xr-XBu"/>
+                                                    <constraint firstItem="1Xd-vE-tGN" firstAttribute="top" secondItem="HNf-3W-C8L" secondAttribute="top" id="BRn-Oo-iN1"/>
                                                     <constraint firstItem="HNf-3W-C8L" firstAttribute="top" secondItem="2gd-CX-jRH" secondAttribute="bottom" constant="14" id="FPe-ba-MQN"/>
+                                                    <constraint firstItem="g3s-Sw-gxd" firstAttribute="trailing" secondItem="EOZ-el-4r9" secondAttribute="trailing" id="J14-De-RWr"/>
                                                     <constraint firstItem="2gd-CX-jRH" firstAttribute="top" secondItem="EOZ-el-4r9" secondAttribute="bottom" constant="2" id="Kbm-F3-KZn"/>
                                                     <constraint firstItem="EOZ-el-4r9" firstAttribute="top" secondItem="Pqj-03-nXf" secondAttribute="top" constant="16" id="NhC-Sb-GvZ"/>
                                                     <constraint firstItem="EOZ-el-4r9" firstAttribute="leading" secondItem="Pqj-03-nXf" secondAttribute="leading" constant="12" id="Pr3-Qb-759"/>
                                                     <constraint firstAttribute="trailing" secondItem="EOZ-el-4r9" secondAttribute="trailing" constant="12" id="SnD-89-yPY"/>
                                                     <constraint firstItem="HNf-3W-C8L" firstAttribute="bottom" secondItem="QY4-ef-Zcn" secondAttribute="top" constant="-2" id="T7N-Is-Qj3"/>
+                                                    <constraint firstItem="1Xd-vE-tGN" firstAttribute="bottom" secondItem="QY4-ef-Zcn" secondAttribute="bottom" id="XQP-N6-Fbe"/>
+                                                    <constraint firstItem="1Xd-vE-tGN" firstAttribute="leading" secondItem="HNf-3W-C8L" secondAttribute="leading" id="cdi-Re-gbn"/>
                                                     <constraint firstItem="QY4-ef-Zcn" firstAttribute="centerX" secondItem="HNf-3W-C8L" secondAttribute="centerX" id="ek4-J2-8eM"/>
+                                                    <constraint firstItem="g3s-Sw-gxd" firstAttribute="top" secondItem="EOZ-el-4r9" secondAttribute="top" id="gG4-da-khg"/>
+                                                    <constraint firstItem="g3s-Sw-gxd" firstAttribute="bottom" secondItem="2gd-CX-jRH" secondAttribute="bottom" id="gLg-dn-Exl"/>
                                                     <constraint firstItem="HNf-3W-C8L" firstAttribute="centerX" secondItem="Pqj-03-nXf" secondAttribute="centerX" id="tFQ-8V-P2Z"/>
                                                     <constraint firstItem="2gd-CX-jRH" firstAttribute="centerX" secondItem="EOZ-el-4r9" secondAttribute="centerX" id="xUZ-0v-sZB"/>
+                                                    <constraint firstItem="g3s-Sw-gxd" firstAttribute="leading" secondItem="EOZ-el-4r9" secondAttribute="leading" id="xfI-XY-eQS"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D0q-NY-j3z" userLabel="LocationDatePhotos">
                                                 <rect key="frame" x="0.0" y="158" width="375" height="100"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n3T-bo-EEn" userLabel="placeButtonLargeHitArea">
-                                                        <rect key="frame" x="16" y="0.0" width="100" height="50"/>
+                                                        <rect key="frame" x="16" y="0.0" width="100" height="48"/>
                                                         <connections>
                                                             <action selector="locationButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="IIO-JJ-cNg"/>
                                                         </connections>
@@ -1161,7 +1181,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xAO-cS-MZQ" userLabel="calendarButtonLargeHitArea">
-                                                        <rect key="frame" x="145" y="0.0" width="84" height="70"/>
+                                                        <rect key="frame" x="150" y="0.0" width="75" height="66"/>
                                                         <connections>
                                                             <action selector="dateButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="Ib0-nW-2TQ"/>
                                                         </connections>
@@ -1205,7 +1225,7 @@
                                                         </connections>
                                                     </button>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Location" textAlignment="center" adjustsFontSizeToFit="NO" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="b5b-5h-R2Q" userLabel="locationTextView" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="30" width="100" height="20"/>
+                                                        <rect key="frame" x="16" y="30" width="100" height="18"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Zrg-ax-gG8"/>
                                                         </constraints>
@@ -1213,7 +1233,7 @@
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellLocationDate"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventLocationDateHint"/>
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="locationEditingDidBegin:" destination="wuR-Cf-1Tk" eventType="editingDidBegin" id="i7H-7E-iUZ"/>
@@ -1222,28 +1242,28 @@
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7bq-Jj-vtF" userLabel="date1Label" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="145" y="31" width="84" height="20"/>
+                                                        <rect key="frame" x="150" y="31" width="75" height="18"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellLocationDate"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventLocationDateHint"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4:21 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OOd-y1-fQU" userLabel="date2Label" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="161" y="51" width="53" height="20"/>
+                                                        <rect key="frame" x="164" y="49" width="47" height="18"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellLocationDate"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventLocationDateHint"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HLo-MG-ejk" userLabel="pic1Container">
                                                         <rect key="frame" x="283" y="35" width="22" height="22"/>
                                                         <subviews>
-                                                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="miniPicBackground" translatesAutoresizingMaskIntoConstraints="NO" id="N28-Ub-Lig" userLabel="pic1Background">
-                                                                <rect key="frame" x="-283" y="-301" width="22" height="22"/>
+                                                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="miniPicBackground" translatesAutoresizingMaskIntoConstraints="NO" id="N28-Ub-Lig" userLabel="pic1Background">
+                                                                <rect key="frame" x="0.0" y="0.0" width="22" height="22"/>
                                                             </imageView>
                                                             <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QKq-ZG-6wA" userLabel="pic1Image">
                                                                 <rect key="frame" x="1" y="1" width="20" height="20"/>
@@ -1252,17 +1272,22 @@
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         <constraints>
                                                             <constraint firstItem="QKq-ZG-6wA" firstAttribute="centerX" secondItem="HLo-MG-ejk" secondAttribute="centerX" id="5Ds-rX-qOg"/>
+                                                            <constraint firstItem="N28-Ub-Lig" firstAttribute="width" secondItem="HLo-MG-ejk" secondAttribute="width" id="6W1-DU-Ov3"/>
+                                                            <constraint firstItem="N28-Ub-Lig" firstAttribute="height" secondItem="HLo-MG-ejk" secondAttribute="height" id="71g-1r-Gh1"/>
                                                             <constraint firstAttribute="width" constant="22" id="Myn-BT-nAf"/>
+                                                            <constraint firstItem="N28-Ub-Lig" firstAttribute="centerX" secondItem="HLo-MG-ejk" secondAttribute="centerX" id="Wk8-bd-qSt"/>
                                                             <constraint firstItem="QKq-ZG-6wA" firstAttribute="width" secondItem="HLo-MG-ejk" secondAttribute="width" constant="-2" id="Yeb-Ep-13H"/>
+                                                            <constraint firstItem="N28-Ub-Lig" firstAttribute="centerY" secondItem="HLo-MG-ejk" secondAttribute="centerY" id="aeY-RQ-eBj"/>
                                                             <constraint firstAttribute="height" constant="22" id="fHh-dN-7d7"/>
                                                             <constraint firstItem="QKq-ZG-6wA" firstAttribute="centerY" secondItem="HLo-MG-ejk" secondAttribute="centerY" id="xUP-jC-Uau"/>
                                                             <constraint firstItem="QKq-ZG-6wA" firstAttribute="height" secondItem="HLo-MG-ejk" secondAttribute="height" constant="-2" id="zBG-yf-D5y"/>
                                                         </constraints>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dQ3-lG-eOk" userLabel="pic1Button">
-                                                        <rect key="frame" x="266" y="35" width="40" height="65"/>
+                                                        <rect key="frame" x="266" y="35" width="40" height="40"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="40" id="bdx-Br-mql"/>
+                                                            <constraint firstAttribute="height" constant="40" id="ePn-fw-xDE"/>
                                                         </constraints>
                                                         <connections>
                                                             <action selector="picture1ButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="Wid-0F-kWq"/>
@@ -1302,11 +1327,17 @@
                                                             <constraint firstAttribute="width" constant="22" id="phV-vH-Qjx"/>
                                                         </constraints>
                                                     </view>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4BX-b9-L8E" userLabel="pic2Button">
+                                                        <rect key="frame" x="306" y="35" width="26" height="40"/>
+                                                        <connections>
+                                                            <action selector="picture2ButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="dgB-9b-G6R"/>
+                                                        </connections>
+                                                    </button>
                                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hwh-Qu-UlE" userLabel="pic3Container">
                                                         <rect key="frame" x="333" y="35" width="22" height="22"/>
                                                         <subviews>
-                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="miniPicBackground" translatesAutoresizingMaskIntoConstraints="NO" id="tbd-m7-2nq" userLabel="pic3Background">
-                                                                <rect key="frame" x="-333" y="-301" width="22" height="22"/>
+                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="miniPicBackground" translatesAutoresizingMaskIntoConstraints="NO" id="tbd-m7-2nq" userLabel="pic3Background">
+                                                                <rect key="frame" x="0.0" y="0.0" width="22" height="22"/>
                                                             </imageView>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="G8X-oe-aUq" userLabel="pic3Image">
                                                                 <rect key="frame" x="1" y="1" width="20" height="20"/>
@@ -1316,12 +1347,22 @@
                                                         <constraints>
                                                             <constraint firstItem="G8X-oe-aUq" firstAttribute="width" secondItem="hwh-Qu-UlE" secondAttribute="width" constant="-2" id="BHg-Mq-qYJ"/>
                                                             <constraint firstItem="G8X-oe-aUq" firstAttribute="centerX" secondItem="hwh-Qu-UlE" secondAttribute="centerX" id="ILP-xv-n5e"/>
+                                                            <constraint firstItem="tbd-m7-2nq" firstAttribute="centerY" secondItem="hwh-Qu-UlE" secondAttribute="centerY" id="JH9-K7-DuG"/>
                                                             <constraint firstAttribute="width" constant="22" id="LKc-2T-0Ra"/>
                                                             <constraint firstItem="G8X-oe-aUq" firstAttribute="centerY" secondItem="hwh-Qu-UlE" secondAttribute="centerY" id="aJz-iB-lkk"/>
                                                             <constraint firstAttribute="height" constant="22" id="bMt-jq-3vd"/>
                                                             <constraint firstItem="G8X-oe-aUq" firstAttribute="height" secondItem="hwh-Qu-UlE" secondAttribute="height" constant="-2" id="cbN-GK-AHZ"/>
+                                                            <constraint firstItem="tbd-m7-2nq" firstAttribute="height" secondItem="hwh-Qu-UlE" secondAttribute="height" id="gsO-Jk-0nk"/>
+                                                            <constraint firstItem="tbd-m7-2nq" firstAttribute="centerX" secondItem="hwh-Qu-UlE" secondAttribute="centerX" id="jI0-2y-CRb"/>
+                                                            <constraint firstItem="tbd-m7-2nq" firstAttribute="width" secondItem="hwh-Qu-UlE" secondAttribute="width" id="yiI-ol-JzB"/>
                                                         </constraints>
                                                     </view>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5N1-re-QWk" userLabel="pic3Button">
+                                                        <rect key="frame" x="332" y="35" width="40" height="40"/>
+                                                        <connections>
+                                                            <action selector="picture3ButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="shx-ti-Wma"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
@@ -1333,7 +1374,9 @@
                                                     <constraint firstItem="b5b-5h-R2Q" firstAttribute="centerX" secondItem="dPf-QW-Qby" secondAttribute="centerX" id="5dH-Cs-fss"/>
                                                     <constraint firstItem="aaa-jg-7gn" firstAttribute="top" secondItem="D0q-NY-j3z" secondAttribute="top" id="6fu-os-HPz"/>
                                                     <constraint firstItem="hwh-Qu-UlE" firstAttribute="centerY" secondItem="qsd-yF-K8c" secondAttribute="centerY" id="9Ky-HF-XEK"/>
+                                                    <constraint firstItem="5N1-re-QWk" firstAttribute="width" secondItem="dQ3-lG-eOk" secondAttribute="width" id="D1P-d9-xHH"/>
                                                     <constraint firstItem="n3T-bo-EEn" firstAttribute="trailing" secondItem="b5b-5h-R2Q" secondAttribute="trailing" id="Ee8-b5-C15"/>
+                                                    <constraint firstItem="4BX-b9-L8E" firstAttribute="trailing" secondItem="5N1-re-QWk" secondAttribute="leading" id="GN9-hf-vCk"/>
                                                     <constraint firstItem="qsd-yF-K8c" firstAttribute="leading" secondItem="HLo-MG-ejk" secondAttribute="trailing" constant="3" id="GZt-qr-Dea"/>
                                                     <constraint firstItem="DPt-Sa-D9K" firstAttribute="top" secondItem="D0q-NY-j3z" secondAttribute="top" id="Ihg-HW-ksD"/>
                                                     <constraint firstItem="dQ3-lG-eOk" firstAttribute="top" secondItem="HLo-MG-ejk" secondAttribute="top" id="Kbg-Mz-Njb"/>
@@ -1341,7 +1384,6 @@
                                                     <constraint firstItem="n3T-bo-EEn" firstAttribute="leading" secondItem="b5b-5h-R2Q" secondAttribute="leading" id="P1H-I6-4Mo"/>
                                                     <constraint firstItem="n3T-bo-EEn" firstAttribute="top" secondItem="dPf-QW-Qby" secondAttribute="top" id="Pdp-Q6-mJT"/>
                                                     <constraint firstAttribute="height" constant="100" id="PrQ-nx-xMn"/>
-                                                    <constraint firstAttribute="bottom" secondItem="dQ3-lG-eOk" secondAttribute="bottom" id="R3F-jT-Kr2"/>
                                                     <constraint firstItem="WCf-7M-VhS" firstAttribute="trailing" secondItem="hwh-Qu-UlE" secondAttribute="trailing" id="UKX-9Y-c6k"/>
                                                     <constraint firstItem="qsd-yF-K8c" firstAttribute="centerX" secondItem="DPt-Sa-D9K" secondAttribute="centerX" id="a1z-s8-Jjg"/>
                                                     <constraint firstItem="b5b-5h-R2Q" firstAttribute="top" secondItem="dPf-QW-Qby" secondAttribute="bottom" id="aAM-wa-lnT"/>
@@ -1350,15 +1392,21 @@
                                                     <constraint firstItem="b5b-5h-R2Q" firstAttribute="width" relation="lessThanOrEqual" secondItem="D0q-NY-j3z" secondAttribute="width" multiplier="0.33" id="cXn-OO-Ru2"/>
                                                     <constraint firstItem="xAO-cS-MZQ" firstAttribute="top" secondItem="aaa-jg-7gn" secondAttribute="top" id="csR-QH-Ext"/>
                                                     <constraint firstItem="qsd-yF-K8c" firstAttribute="trailing" secondItem="hwh-Qu-UlE" secondAttribute="leading" constant="-3" id="d5O-dy-vmR"/>
+                                                    <constraint firstItem="qsd-yF-K8c" firstAttribute="trailing" secondItem="5N1-re-QWk" secondAttribute="leading" constant="-2" id="e2B-fS-vs4"/>
                                                     <constraint firstItem="xAO-cS-MZQ" firstAttribute="bottom" secondItem="OOd-y1-fQU" secondAttribute="bottom" id="ezS-KA-m2n"/>
                                                     <constraint firstItem="xAO-cS-MZQ" firstAttribute="trailing" secondItem="7bq-Jj-vtF" secondAttribute="trailing" id="fDW-OZ-P58"/>
+                                                    <constraint firstItem="5N1-re-QWk" firstAttribute="bottom" secondItem="dQ3-lG-eOk" secondAttribute="bottom" id="iPn-eb-W0u"/>
                                                     <constraint firstItem="aaa-jg-7gn" firstAttribute="centerX" secondItem="D0q-NY-j3z" secondAttribute="centerX" id="ib6-Pj-ciA"/>
                                                     <constraint firstItem="dPf-QW-Qby" firstAttribute="top" secondItem="D0q-NY-j3z" secondAttribute="top" id="lyH-4i-X7k"/>
                                                     <constraint firstItem="qsd-yF-K8c" firstAttribute="leading" secondItem="dQ3-lG-eOk" secondAttribute="trailing" constant="2" id="nfk-Li-Rc4"/>
                                                     <constraint firstItem="qsd-yF-K8c" firstAttribute="top" secondItem="DPt-Sa-D9K" secondAttribute="bottom" constant="5" id="nk3-GD-LxU"/>
                                                     <constraint firstItem="DPt-Sa-D9K" firstAttribute="centerX" secondItem="D0q-NY-j3z" secondAttribute="centerX" multiplier="1.7" id="oGO-WD-aSA"/>
                                                     <constraint firstItem="OOd-y1-fQU" firstAttribute="centerX" secondItem="7bq-Jj-vtF" secondAttribute="centerX" id="q1b-YJ-ggy"/>
+                                                    <constraint firstItem="4BX-b9-L8E" firstAttribute="top" secondItem="dQ3-lG-eOk" secondAttribute="top" id="rNv-07-QnX"/>
+                                                    <constraint firstItem="4BX-b9-L8E" firstAttribute="leading" secondItem="dQ3-lG-eOk" secondAttribute="trailing" id="tQ3-xz-EPi"/>
                                                     <constraint firstItem="7bq-Jj-vtF" firstAttribute="centerX" secondItem="aaa-jg-7gn" secondAttribute="centerX" id="tld-IY-lws"/>
+                                                    <constraint firstItem="5N1-re-QWk" firstAttribute="top" secondItem="dQ3-lG-eOk" secondAttribute="top" id="tye-Ps-bec"/>
+                                                    <constraint firstItem="4BX-b9-L8E" firstAttribute="bottom" secondItem="dQ3-lG-eOk" secondAttribute="bottom" id="xa0-2Q-Emg"/>
                                                     <constraint firstItem="WCf-7M-VhS" firstAttribute="bottom" secondItem="qsd-yF-K8c" secondAttribute="top" id="zCc-Oa-6hY"/>
                                                 </constraints>
                                             </view>
@@ -1370,7 +1418,6 @@
                                             <constraint firstItem="Pqj-03-nXf" firstAttribute="top" secondItem="SRG-kl-8Sj" secondAttribute="top" id="7Lw-hO-EPm"/>
                                             <constraint firstAttribute="trailing" secondItem="D0q-NY-j3z" secondAttribute="trailing" id="CwO-Iy-zST"/>
                                             <constraint firstAttribute="trailing" secondItem="4Rr-Gr-kId" secondAttribute="trailing" id="Jd5-dh-AFj"/>
-                                            <constraint firstAttribute="height" constant="258" id="a74-0I-1Xs"/>
                                             <constraint firstItem="Pqj-03-nXf" firstAttribute="leading" secondItem="SRG-kl-8Sj" secondAttribute="leading" id="arA-Xd-3UK"/>
                                             <constraint firstItem="D0q-NY-j3z" firstAttribute="top" secondItem="Pqj-03-nXf" secondAttribute="bottom" id="fRN-8h-Sj2"/>
                                             <constraint firstItem="4Rr-Gr-kId" firstAttribute="top" secondItem="SRG-kl-8Sj" secondAttribute="top" id="rv3-xs-bi5"/>
@@ -1380,6 +1427,87 @@
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
                                         </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PUU-1V-UBf" userLabel="BottomSection">
+                                        <rect key="frame" x="0.0" y="258" width="375" height="301"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T6Z-E3-yFO" userLabel="DatePickView">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="301"/>
+                                                <subviews>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aQ0-cw-Q59" userLabel="Picker container">
+                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="247"/>
+                                                        <subviews>
+                                                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="7ie-Xi-2LD">
+                                                                <rect key="frame" x="0.0" y="16" width="375" height="216"/>
+                                                                <date key="date" timeIntervalSinceReferenceDate="465285901.60249501">
+                                                                    <!--2015-09-30 06:05:01 +0000-->
+                                                                </date>
+                                                                <connections>
+                                                                    <action selector="datePickerValueChanged:" destination="wuR-Cf-1Tk" eventType="valueChanged" id="elB-fY-eX8"/>
+                                                                </connections>
+                                                            </datePicker>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstItem="7ie-Xi-2LD" firstAttribute="centerY" secondItem="aQ0-cw-Q59" secondAttribute="centerY" id="2rJ-Cy-bbo"/>
+                                                            <constraint firstItem="7ie-Xi-2LD" firstAttribute="leading" secondItem="aQ0-cw-Q59" secondAttribute="leading" id="eTu-gV-86U"/>
+                                                            <constraint firstAttribute="trailing" secondItem="7ie-Xi-2LD" secondAttribute="trailing" id="vyJ-fC-G8j"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IUh-yf-NAt" userLabel="Cancel Button" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="247" width="188" height="54"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="54" id="2zZ-gM-jpT"/>
+                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="54" id="HUM-OG-dS0"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Cancel"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightBackgroundButton"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <variation key="default">
+                                                            <mask key="constraints">
+                                                                <exclude reference="HUM-OG-dS0"/>
+                                                            </mask>
+                                                        </variation>
+                                                        <connections>
+                                                            <action selector="cancelDatePickButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="CNV-QS-kMP"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WOu-JH-N7W" userLabel="Done Button" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="187" y="247" width="188" height="54"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="54" id="Gfb-9I-8e5"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Done"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackgroundButton"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="doneDatePickButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="eq1-ju-h3a"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="IUh-yf-NAt" firstAttribute="width" secondItem="T6Z-E3-yFO" secondAttribute="width" multiplier="0.5" id="BdN-7i-1ed"/>
+                                                    <constraint firstAttribute="trailing" secondItem="WOu-JH-N7W" secondAttribute="trailing" id="CWm-VU-lCM"/>
+                                                    <constraint firstItem="aQ0-cw-Q59" firstAttribute="bottom" secondItem="IUh-yf-NAt" secondAttribute="top" id="Hqx-Vv-ytb"/>
+                                                    <constraint firstAttribute="bottom" secondItem="IUh-yf-NAt" secondAttribute="bottom" id="K5n-Wa-fqo"/>
+                                                    <constraint firstAttribute="bottom" secondItem="WOu-JH-N7W" secondAttribute="bottom" id="Lbj-CO-ngL"/>
+                                                    <constraint firstItem="WOu-JH-N7W" firstAttribute="width" secondItem="IUh-yf-NAt" secondAttribute="width" id="XbW-DF-Sbf"/>
+                                                    <constraint firstItem="IUh-yf-NAt" firstAttribute="leading" secondItem="T6Z-E3-yFO" secondAttribute="leading" id="Z57-Jc-2Uj"/>
+                                                    <constraint firstItem="aQ0-cw-Q59" firstAttribute="leading" secondItem="T6Z-E3-yFO" secondAttribute="leading" id="re3-xg-aMO"/>
+                                                    <constraint firstItem="aQ0-cw-Q59" firstAttribute="top" secondItem="T6Z-E3-yFO" secondAttribute="top" id="vvb-vW-7Tb"/>
+                                                    <constraint firstAttribute="trailing" secondItem="aQ0-cw-Q59" secondAttribute="trailing" id="xRf-YN-oig"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="0.20000000000000001" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="T6Z-E3-yFO" firstAttribute="centerY" secondItem="PUU-1V-UBf" secondAttribute="centerY" id="2W7-BX-XmE"/>
+                                            <constraint firstItem="T6Z-E3-yFO" firstAttribute="centerX" secondItem="PUU-1V-UBf" secondAttribute="centerX" id="5B6-R6-DbC"/>
+                                            <constraint firstItem="T6Z-E3-yFO" firstAttribute="height" secondItem="PUU-1V-UBf" secondAttribute="height" id="K7a-In-VSq"/>
+                                            <constraint firstItem="T6Z-E3-yFO" firstAttribute="width" secondItem="PUU-1V-UBf" secondAttribute="width" id="YBe-Xy-koV"/>
+                                        </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="abX-6z-1bd" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="505" width="375" height="54"/>
@@ -1394,99 +1522,30 @@
                                             <action selector="saveButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="mTW-P2-R3G"/>
                                         </connections>
                                     </button>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T6Z-E3-yFO" userLabel="DatePickView">
-                                        <rect key="frame" x="0.0" y="258" width="375" height="301"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aQ0-cw-Q59" userLabel="Picker container">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="247"/>
-                                                <subviews>
-                                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="7ie-Xi-2LD">
-                                                        <rect key="frame" x="0.0" y="16" width="375" height="216"/>
-                                                        <date key="date" timeIntervalSinceReferenceDate="465285901.60249501">
-                                                            <!--2015-09-30 06:05:01 +0000-->
-                                                        </date>
-                                                        <connections>
-                                                            <action selector="datePickerValueChanged:" destination="wuR-Cf-1Tk" eventType="valueChanged" id="elB-fY-eX8"/>
-                                                        </connections>
-                                                    </datePicker>
-                                                </subviews>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstItem="7ie-Xi-2LD" firstAttribute="centerY" secondItem="aQ0-cw-Q59" secondAttribute="centerY" id="2rJ-Cy-bbo"/>
-                                                    <constraint firstItem="7ie-Xi-2LD" firstAttribute="leading" secondItem="aQ0-cw-Q59" secondAttribute="leading" id="eTu-gV-86U"/>
-                                                    <constraint firstAttribute="trailing" secondItem="7ie-Xi-2LD" secondAttribute="trailing" id="vyJ-fC-G8j"/>
-                                                </constraints>
-                                            </view>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IUh-yf-NAt" userLabel="Cancel Button" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="247" width="188" height="54"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="54" id="2zZ-gM-jpT"/>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="54" id="HUM-OG-dS0"/>
-                                                </constraints>
-                                                <state key="normal" title="Cancel"/>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightBackgroundButton"/>
-                                                </userDefinedRuntimeAttributes>
-                                                <variation key="default">
-                                                    <mask key="constraints">
-                                                        <exclude reference="HUM-OG-dS0"/>
-                                                    </mask>
-                                                </variation>
-                                                <connections>
-                                                    <action selector="cancelDatePickButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="CNV-QS-kMP"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WOu-JH-N7W" userLabel="Done Button" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="187" y="247" width="188" height="54"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="54" id="Gfb-9I-8e5"/>
-                                                </constraints>
-                                                <state key="normal" title="Done"/>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackgroundButton"/>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="doneDatePickButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="eq1-ju-h3a"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="IUh-yf-NAt" firstAttribute="width" secondItem="T6Z-E3-yFO" secondAttribute="width" multiplier="0.5" id="BdN-7i-1ed"/>
-                                            <constraint firstAttribute="trailing" secondItem="WOu-JH-N7W" secondAttribute="trailing" id="CWm-VU-lCM"/>
-                                            <constraint firstItem="aQ0-cw-Q59" firstAttribute="bottom" secondItem="IUh-yf-NAt" secondAttribute="top" id="Hqx-Vv-ytb"/>
-                                            <constraint firstAttribute="bottom" secondItem="IUh-yf-NAt" secondAttribute="bottom" id="K5n-Wa-fqo"/>
-                                            <constraint firstAttribute="bottom" secondItem="WOu-JH-N7W" secondAttribute="bottom" id="Lbj-CO-ngL"/>
-                                            <constraint firstItem="WOu-JH-N7W" firstAttribute="width" secondItem="IUh-yf-NAt" secondAttribute="width" id="XbW-DF-Sbf"/>
-                                            <constraint firstItem="IUh-yf-NAt" firstAttribute="leading" secondItem="T6Z-E3-yFO" secondAttribute="leading" id="Z57-Jc-2Uj"/>
-                                            <constraint firstItem="aQ0-cw-Q59" firstAttribute="leading" secondItem="T6Z-E3-yFO" secondAttribute="leading" id="re3-xg-aMO"/>
-                                            <constraint firstItem="aQ0-cw-Q59" firstAttribute="top" secondItem="T6Z-E3-yFO" secondAttribute="top" id="vvb-vW-7Tb"/>
-                                            <constraint firstAttribute="trailing" secondItem="aQ0-cw-Q59" secondAttribute="trailing" id="xRf-YN-oig"/>
-                                        </constraints>
-                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="T6Z-E3-yFO" firstAttribute="top" secondItem="SRG-kl-8Sj" secondAttribute="bottom" id="0Dh-RV-sye"/>
                                     <constraint firstAttribute="trailing" secondItem="SRG-kl-8Sj" secondAttribute="trailing" id="2uR-q9-yBw"/>
                                     <constraint firstItem="abX-6z-1bd" firstAttribute="leading" secondItem="EJp-jb-Txw" secondAttribute="leading" id="8Yg-Uj-Sc4"/>
-                                    <constraint firstAttribute="bottom" secondItem="T6Z-E3-yFO" secondAttribute="bottom" id="9oU-k2-nbl"/>
+                                    <constraint firstAttribute="trailing" secondItem="PUU-1V-UBf" secondAttribute="trailing" id="DEb-jS-ZZv"/>
                                     <constraint firstItem="SRG-kl-8Sj" firstAttribute="top" secondItem="EJp-jb-Txw" secondAttribute="top" id="Dhp-7V-HJE"/>
+                                    <constraint firstItem="PUU-1V-UBf" firstAttribute="leading" secondItem="EJp-jb-Txw" secondAttribute="leading" id="FNf-Wg-sMK"/>
                                     <constraint firstAttribute="trailing" secondItem="abX-6z-1bd" secondAttribute="trailing" id="HOI-CO-oTH"/>
-                                    <constraint firstItem="T6Z-E3-yFO" firstAttribute="leading" secondItem="EJp-jb-Txw" secondAttribute="leading" id="bsQ-sV-Cxo"/>
+                                    <constraint firstItem="SRG-kl-8Sj" firstAttribute="height" secondItem="EJp-jb-Txw" secondAttribute="height" multiplier="0.46" id="Pt4-fv-S9c"/>
+                                    <constraint firstItem="PUU-1V-UBf" firstAttribute="top" secondItem="SRG-kl-8Sj" secondAttribute="bottom" id="gHO-L7-jkM"/>
                                     <constraint firstItem="SRG-kl-8Sj" firstAttribute="leading" secondItem="EJp-jb-Txw" secondAttribute="leading" id="lPN-4X-6FQ"/>
-                                    <constraint firstAttribute="trailing" secondItem="T6Z-E3-yFO" secondAttribute="trailing" id="mW2-Sl-b4z"/>
+                                    <constraint firstAttribute="bottom" secondItem="PUU-1V-UBf" secondAttribute="bottom" id="tZf-8Z-VaJ"/>
                                     <constraint firstAttribute="bottom" secondItem="abX-6z-1bd" secondAttribute="bottom" id="y3d-IP-a94"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ejO-cF-P6G" userLabel="SuccessView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NX5-DR-3i3" userLabel="Add Success Image View">
-                                        <rect key="frame" x="117" y="232" width="140" height="140"/>
+                                        <rect key="frame" x="117" y="264" width="140" height="140"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="140" id="V4F-zC-7zR"/>
                                             <constraint firstAttribute="width" constant="140" id="faL-7y-qgt"/>
@@ -1507,16 +1566,16 @@
                         <constraints>
                             <constraint firstItem="EJp-jb-Txw" firstAttribute="top" secondItem="Jig-6N-30U" secondAttribute="bottom" id="0bW-Um-SE5"/>
                             <constraint firstAttribute="trailing" secondItem="EJp-jb-Txw" secondAttribute="trailing" id="8Zc-VD-oQS"/>
+                            <constraint firstItem="ejO-cF-P6G" firstAttribute="height" secondItem="bVV-Kv-f31" secondAttribute="height" id="AhG-Ml-oeG"/>
                             <constraint firstItem="EJp-jb-Txw" firstAttribute="top" secondItem="LRX-qB-1sq" secondAttribute="bottom" id="AlH-yK-Qjo"/>
+                            <constraint firstItem="ejO-cF-P6G" firstAttribute="centerY" secondItem="bVV-Kv-f31" secondAttribute="centerY" id="IJS-uF-4OJ"/>
                             <constraint firstItem="Jig-6N-30U" firstAttribute="leading" secondItem="bVV-Kv-f31" secondAttribute="leading" id="OfP-si-S7q"/>
                             <constraint firstItem="gjY-8v-S58" firstAttribute="top" secondItem="EJp-jb-Txw" secondAttribute="bottom" id="Stq-Oe-pMC"/>
-                            <constraint firstAttribute="trailing" secondItem="ejO-cF-P6G" secondAttribute="trailing" id="ZFH-8P-sRe"/>
+                            <constraint firstItem="ejO-cF-P6G" firstAttribute="centerX" secondItem="bVV-Kv-f31" secondAttribute="centerX" id="TSM-NJ-9nQ"/>
                             <constraint firstItem="EJp-jb-Txw" firstAttribute="leading" secondItem="bVV-Kv-f31" secondAttribute="leading" id="feX-8o-7et"/>
-                            <constraint firstItem="gjY-8v-S58" firstAttribute="top" secondItem="ejO-cF-P6G" secondAttribute="bottom" id="ikm-oP-X1a"/>
                             <constraint firstItem="Jig-6N-30U" firstAttribute="top" secondItem="LRX-qB-1sq" secondAttribute="bottom" id="kRw-X2-UBJ"/>
+                            <constraint firstItem="ejO-cF-P6G" firstAttribute="width" secondItem="bVV-Kv-f31" secondAttribute="width" id="lZX-Ua-wjd"/>
                             <constraint firstItem="gjY-8v-S58" firstAttribute="top" secondItem="Jig-6N-30U" secondAttribute="bottom" constant="269" id="ptE-4W-gC8"/>
-                            <constraint firstItem="ejO-cF-P6G" firstAttribute="top" secondItem="LRX-qB-1sq" secondAttribute="bottom" id="rBk-Bo-Gjg"/>
-                            <constraint firstItem="ejO-cF-P6G" firstAttribute="leading" secondItem="bVV-Kv-f31" secondAttribute="leading" id="uUt-Rn-uvQ"/>
                             <constraint firstAttribute="trailing" secondItem="Jig-6N-30U" secondAttribute="trailing" id="wQc-Yj-pct"/>
                         </constraints>
                         <variation key="default">
@@ -1599,7 +1658,7 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="iXa-mi-JQf"/>
-        <segue reference="vDO-8u-VmA"/>
+        <segue reference="2AV-5j-70h"/>
+        <segue reference="Shc-Yg-1xe"/>
     </inferredMetricsTieBreakers>
 </document>

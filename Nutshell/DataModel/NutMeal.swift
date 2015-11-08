@@ -60,5 +60,19 @@ class NutMeal: NutEventItem {
         }
         return super.changed()
     }
-
+    
+    override func firstPictureUrl() -> String {
+        if let _ = eventItem as? Meal {
+            if !photo.isEmpty {
+                return photo
+            }
+            if !photo2.isEmpty {
+                return photo2
+            }
+            if !photo3.isEmpty {
+                return photo3
+            }
+        }
+        return ""
+    }
 }
