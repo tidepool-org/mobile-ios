@@ -10,9 +10,6 @@
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="OpenSans-Bold.ttf">
-            <string>OpenSans-Bold</string>
-        </mutableArray>
         <mutableArray key="OpenSans-Regular.ttf">
             <string>OpenSans</string>
             <string>OpenSans</string>
@@ -260,11 +257,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <view key="tableHeaderView" contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="95" id="lmp-xJ-VzY" userLabel="headerView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="64" width="320" height="195"/>
+                            <rect key="frame" x="0.0" y="64" width="320" height="97"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oz1-hd-YVX" userLabel="innerHeaderView">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="96"/>
                                     <subviews>
                                         <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hcc-lE-4JU" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
@@ -273,11 +270,11 @@
                                                 <constraint firstAttribute="height" constant="1" id="jii-NX-reM"/>
                                             </constraints>
                                             <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="whiteBackground"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
                                             </userDefinedRuntimeAttributes>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="This is the title" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ptv-E0-A66" userLabel="tableHeaderTitle" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="24" y="15" width="120" height="24"/>
+                                            <rect key="frame" x="32" y="26" width="198" height="24"/>
                                             <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="25.5"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -285,19 +282,46 @@
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderTitle"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="752" text="x 4" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dEk-QE-WZE" userLabel="tableHeaderCount" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="278" y="24" width="18" height="18"/>
-                                            <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="12.5"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                            <nil key="highlightedColor"/>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderCount"/>
-                                            </userDefinedRuntimeAttributes>
-                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeSmallIcon" translatesAutoresizingMaskIntoConstraints="NO" id="kTc-vF-Qra" userLabel="placeIcon">
+                                            <rect key="frame" x="32" y="54" width="11" height="18"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="18" id="YSy-DQ-DZf"/>
+                                                <constraint firstAttribute="width" constant="11" id="qOs-wk-Tra"/>
+                                            </constraints>
+                                        </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Location" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SxI-OJ-qN3" userLabel="tableHeaderLocation" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="24" y="43" width="272" height="18"/>
+                                            <rect key="frame" x="51" y="54" width="179" height="18"/>
                                             <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="12.5"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderLocation"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xnK-Ld-hs9" userLabel="eatAgainLargeHitArea">
+                                            <rect key="frame" x="239" y="21" width="56" height="52"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="60" id="K7m-5d-ptN"/>
+                                            </constraints>
+                                            <connections>
+                                                <segue destination="wuR-Cf-1Tk" kind="presentation" identifier="EventItemAddSegue" id="F4O-hJ-7F1"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Suh-Vz-JZ7" userLabel="eatAgainButton">
+                                            <rect key="frame" x="249" y="21" width="34" height="34"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="34" id="DUI-YX-EVL"/>
+                                                <constraint firstAttribute="width" constant="34" id="Fiq-gI-caQ"/>
+                                            </constraints>
+                                            <state key="normal" image="add-button"/>
+                                            <connections>
+                                                <segue destination="wuR-Cf-1Tk" kind="presentation" identifier="EventItemAddSegue" id="Yx2-qa-hve"/>
+                                            </connections>
+                                        </button>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Eat again" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PpK-Rp-Hxw" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                            <rect key="frame" x="238" y="55" width="56" height="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderLocation"/>
@@ -307,18 +331,26 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="Hcc-lE-4JU" secondAttribute="trailing" id="1wq-Z9-sAg"/>
-                                        <constraint firstAttribute="trailing" secondItem="dEk-QE-WZE" secondAttribute="trailing" constant="24" id="2JI-qM-zyC"/>
-                                        <constraint firstItem="Ptv-E0-A66" firstAttribute="top" secondItem="oz1-hd-YVX" secondAttribute="top" constant="15" id="7AH-Ve-puQ"/>
-                                        <constraint firstItem="dEk-QE-WZE" firstAttribute="top" secondItem="oz1-hd-YVX" secondAttribute="top" constant="24" id="A1z-qZ-Xzq"/>
+                                        <constraint firstItem="kTc-vF-Qra" firstAttribute="centerY" secondItem="SxI-OJ-qN3" secondAttribute="firstBaseline" constant="-4" id="4rJ-jm-q7G"/>
+                                        <constraint firstItem="Ptv-E0-A66" firstAttribute="top" secondItem="oz1-hd-YVX" secondAttribute="top" constant="26" id="7AH-Ve-puQ"/>
+                                        <constraint firstItem="xnK-Ld-hs9" firstAttribute="trailing" secondItem="PpK-Rp-Hxw" secondAttribute="trailing" id="Ak5-kJ-7Pn"/>
                                         <constraint firstItem="Hcc-lE-4JU" firstAttribute="top" secondItem="oz1-hd-YVX" secondAttribute="top" constant="20" id="Cn1-pd-nrz"/>
-                                        <constraint firstItem="dEk-QE-WZE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ptv-E0-A66" secondAttribute="trailing" constant="8" id="Cz7-OQ-NEw"/>
-                                        <constraint firstAttribute="trailing" secondItem="SxI-OJ-qN3" secondAttribute="trailing" constant="24" id="GKF-jY-pKt"/>
                                         <constraint firstItem="Hcc-lE-4JU" firstAttribute="top" secondItem="oz1-hd-YVX" secondAttribute="top" id="Kxc-Za-1Kr"/>
+                                        <constraint firstItem="Suh-Vz-JZ7" firstAttribute="centerY" secondItem="oz1-hd-YVX" secondAttribute="centerY" constant="-10" id="M9J-Ng-Fz4"/>
                                         <constraint firstItem="Hcc-lE-4JU" firstAttribute="leading" secondItem="oz1-hd-YVX" secondAttribute="leading" id="Mcs-dF-wIp"/>
+                                        <constraint firstAttribute="trailing" secondItem="SxI-OJ-qN3" secondAttribute="trailing" constant="90" id="Nkb-bV-NY8"/>
                                         <constraint firstItem="SxI-OJ-qN3" firstAttribute="top" secondItem="Ptv-E0-A66" secondAttribute="bottom" constant="5" id="Nwv-T4-0H9"/>
-                                        <constraint firstItem="Ptv-E0-A66" firstAttribute="leading" secondItem="oz1-hd-YVX" secondAttribute="leading" constant="24" id="ePy-dL-BsV"/>
-                                        <constraint firstAttribute="bottom" secondItem="SxI-OJ-qN3" secondAttribute="bottom" constant="19" id="rfU-tj-f7o"/>
-                                        <constraint firstItem="SxI-OJ-qN3" firstAttribute="leading" secondItem="oz1-hd-YVX" secondAttribute="leading" constant="24" id="y1Q-VR-5Jx"/>
+                                        <constraint firstItem="xnK-Ld-hs9" firstAttribute="bottom" secondItem="PpK-Rp-Hxw" secondAttribute="bottom" id="Ruf-Lm-Bkj"/>
+                                        <constraint firstItem="PpK-Rp-Hxw" firstAttribute="top" secondItem="Suh-Vz-JZ7" secondAttribute="bottom" id="TCb-t3-zjw"/>
+                                        <constraint firstAttribute="trailing" secondItem="Ptv-E0-A66" secondAttribute="trailing" constant="90" id="W9f-F4-uFX"/>
+                                        <constraint firstItem="xnK-Ld-hs9" firstAttribute="leading" secondItem="PpK-Rp-Hxw" secondAttribute="leading" id="cc9-44-0HW"/>
+                                        <constraint firstItem="kTc-vF-Qra" firstAttribute="leading" secondItem="oz1-hd-YVX" secondAttribute="leading" constant="32" id="cjL-4y-XJp"/>
+                                        <constraint firstItem="Ptv-E0-A66" firstAttribute="leading" secondItem="oz1-hd-YVX" secondAttribute="leading" constant="32" id="ePy-dL-BsV"/>
+                                        <constraint firstAttribute="trailing" secondItem="Suh-Vz-JZ7" secondAttribute="trailing" constant="37" id="ijm-SW-T1P"/>
+                                        <constraint firstItem="PpK-Rp-Hxw" firstAttribute="centerX" secondItem="Suh-Vz-JZ7" secondAttribute="centerX" id="pVO-iy-CE7"/>
+                                        <constraint firstAttribute="bottom" secondItem="SxI-OJ-qN3" secondAttribute="bottom" constant="24" id="rfU-tj-f7o"/>
+                                        <constraint firstItem="xnK-Ld-hs9" firstAttribute="top" secondItem="Suh-Vz-JZ7" secondAttribute="top" id="xVO-Bv-u7F"/>
+                                        <constraint firstItem="kTc-vF-Qra" firstAttribute="trailing" secondItem="SxI-OJ-qN3" secondAttribute="leading" constant="-8" id="xvE-pK-EyL"/>
                                     </constraints>
                                     <variation key="default">
                                         <mask key="constraints">
@@ -339,7 +371,7 @@
                         </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="eventItemCell" id="t6w-VC-MaZ" customClass="EventGroupTableViewCell" customModule="Nutshell" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="287" width="320" height="164"/>
+                                <rect key="frame" x="0.0" y="189" width="320" height="164"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="t6w-VC-MaZ" id="QIn-qj-9Hx">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="164"/>
@@ -366,23 +398,23 @@
                                                 <userDefinedRuntimeAttribute type="string" keyPath="highlightedBackground" value="brightBackground"/>
                                             </userDefinedRuntimeAttributes>
                                         </view>
-                                        <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jqM-zX-wXB" userLabel="nutCrackedIndicatorContainer">
-                                            <rect key="frame" x="27" y="-3" width="53" height="80"/>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nlT-32-QZy" userLabel="badgeContainerView">
+                                            <rect key="frame" x="0.0" y="0.0" width="32" height="60"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="starLarge" translatesAutoresizingMaskIntoConstraints="NO" id="X4c-xD-fGj">
-                                                    <rect key="frame" x="0.0" y="22" width="38" height="36"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="starSmallBadge" translatesAutoresizingMaskIntoConstraints="NO" id="X4c-xD-fGj">
+                                                    <rect key="frame" x="8" y="24" width="17" height="22"/>
                                                 </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstItem="X4c-xD-fGj" firstAttribute="leading" secondItem="jqM-zX-wXB" secondAttribute="leading" id="8xU-Fb-5UU"/>
-                                                <constraint firstItem="X4c-xD-fGj" firstAttribute="centerY" secondItem="jqM-zX-wXB" secondAttribute="centerY" id="Dkm-HI-kN8"/>
-                                                <constraint firstAttribute="height" constant="80" id="lOg-1A-ea6"/>
-                                                <constraint firstAttribute="width" constant="53" id="lnA-md-ehd"/>
+                                                <constraint firstItem="X4c-xD-fGj" firstAttribute="top" secondItem="nlT-32-QZy" secondAttribute="top" constant="24" id="0Z8-Rg-uzT"/>
+                                                <constraint firstAttribute="width" constant="32" id="FRP-nQ-S32"/>
+                                                <constraint firstAttribute="height" constant="60" id="Xce-V6-ab6"/>
+                                                <constraint firstItem="X4c-xD-fGj" firstAttribute="centerX" secondItem="nlT-32-QZy" secondAttribute="centerX" id="zTX-Yy-HCv"/>
                                             </constraints>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Diet coke and 10 chips" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d9p-x8-wr7" userLabel="titleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="80" y="20" width="196" height="24"/>
+                                            <rect key="frame" x="32" y="20" width="244" height="24"/>
                                             <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="10"/>
                                             <color key="textColor" red="0.29019607843137252" green="0.29019607843137252" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -391,7 +423,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hkV-fw-Ufw" userLabel="timeLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="80" y="52" width="208" height="10"/>
+                                            <rect key="frame" x="32" y="46" width="256" height="10"/>
                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                             <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.55686274509803924" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -400,7 +432,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P6c-tV-ffU" userLabel="rightDiscloseButton">
-                                            <rect key="frame" x="284" y="23" width="9" height="15"/>
+                                            <rect key="frame" x="284" y="31" width="9" height="15"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="9" id="O4T-WA-EP1"/>
                                                 <constraint firstAttribute="height" constant="15" id="f77-WW-Dth"/>
@@ -411,12 +443,12 @@
                                             </connections>
                                         </button>
                                         <view contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="dKd-IQ-rN4" userLabel="photoContainer">
-                                            <rect key="frame" x="27" y="69" width="227" height="79"/>
+                                            <rect key="frame" x="32" y="69" width="227" height="79"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="W2N-rU-bPK">
                                                     <rect key="frame" x="0.0" y="0.0" width="227" height="79"/>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sGH-ND-vz1" userLabel="EventGroupButton" customClass="EventGroupTableCellButton" customModule="Nutshell" customModuleProvider="target">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sGH-ND-vz1" userLabel="showPhotoButton" customClass="EventGroupTableCellButton" customModule="Nutshell" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="227" height="79"/>
                                                     <connections>
                                                         <segue destination="PfN-dS-BM0" kind="show" identifier="PhotoDisplaySegue" id="Rt6-EB-gq6"/>
@@ -439,27 +471,27 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="P6c-tV-ffU" firstAttribute="leading" secondItem="d9p-x8-wr7" secondAttribute="trailing" constant="8" id="8p2-LH-Vio"/>
+                                        <constraint firstItem="nlT-32-QZy" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leading" id="BRD-bW-7Nl"/>
                                         <constraint firstItem="8B8-Re-ww8" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leading" id="Ihl-Hi-c1S"/>
                                         <constraint firstItem="d9p-x8-wr7" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" constant="20" id="Kdd-UL-Xn6"/>
+                                        <constraint firstItem="nlT-32-QZy" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" id="LOJ-kF-Vfw"/>
                                         <constraint firstItem="8B8-Re-ww8" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" id="MOI-L0-Joe"/>
-                                        <constraint firstItem="jqM-zX-wXB" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="top" constant="-3" id="Qkk-MI-lLS"/>
-                                        <constraint firstItem="P6c-tV-ffU" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="topMargin" constant="15" id="Qoo-yO-dFo"/>
+                                        <constraint firstItem="P6c-tV-ffU" firstAttribute="top" secondItem="QIn-qj-9Hx" secondAttribute="topMargin" constant="23" id="Qoo-yO-dFo"/>
                                         <constraint firstAttribute="bottom" secondItem="8B8-Re-ww8" secondAttribute="bottom" id="Vmk-bk-kbb"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="hkV-fw-Ufw" secondAttribute="trailing" constant="24" id="YxB-D8-hwb"/>
                                         <constraint firstAttribute="bottom" secondItem="dKd-IQ-rN4" secondAttribute="bottom" constant="16" id="aEb-tt-Yub"/>
-                                        <constraint firstItem="dKd-IQ-rN4" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leading" constant="27" id="e0g-7B-g5a"/>
+                                        <constraint firstItem="dKd-IQ-rN4" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leading" constant="32" id="e0g-7B-g5a"/>
                                         <constraint firstAttribute="trailing" secondItem="8B8-Re-ww8" secondAttribute="trailing" id="hXj-3W-0Gm"/>
-                                        <constraint firstItem="jqM-zX-wXB" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leading" constant="27" id="hhv-dd-AiA"/>
                                         <constraint firstAttribute="trailing" secondItem="P6c-tV-ffU" secondAttribute="trailing" constant="27" id="hz8-7P-l1p"/>
-                                        <constraint firstItem="d9p-x8-wr7" firstAttribute="bottom" secondItem="hkV-fw-Ufw" secondAttribute="top" constant="-8" id="ia6-fw-bKw"/>
-                                        <constraint firstItem="d9p-x8-wr7" firstAttribute="leading" secondItem="jqM-zX-wXB" secondAttribute="trailing" id="oKn-QK-oco"/>
+                                        <constraint firstItem="d9p-x8-wr7" firstAttribute="bottom" secondItem="hkV-fw-Ufw" secondAttribute="top" constant="-2" id="ia6-fw-bKw"/>
+                                        <constraint firstItem="d9p-x8-wr7" firstAttribute="leading" secondItem="QIn-qj-9Hx" secondAttribute="leading" constant="32" id="mhU-AS-YgS"/>
                                         <constraint firstItem="hkV-fw-Ufw" firstAttribute="leading" secondItem="d9p-x8-wr7" secondAttribute="leading" id="veB-6S-46l"/>
-                                        <constraint firstItem="dKd-IQ-rN4" firstAttribute="top" secondItem="hkV-fw-Ufw" secondAttribute="bottom" constant="8" id="yil-67-qWg"/>
+                                        <constraint firstItem="dKd-IQ-rN4" firstAttribute="top" secondItem="hkV-fw-Ufw" secondAttribute="bottom" constant="14" id="yil-67-qWg"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="cellBackgroundView" destination="8B8-Re-ww8" id="rDl-Uj-Hr7"/>
-                                    <outlet property="favoriteStarContainer" destination="jqM-zX-wXB" id="Xuw-m9-t72"/>
+                                    <outlet property="favoriteStarContainer" destination="nlT-32-QZy" id="2Qr-5P-Sg5"/>
                                     <outlet property="photoContainerView" destination="dKd-IQ-rN4" id="63B-Q5-CxN"/>
                                     <outlet property="photoImageView" destination="W2N-rU-bPK" id="xg3-gw-4VA"/>
                                     <outlet property="showPhotoButton" destination="sGH-ND-vz1" id="BCJ-2F-Z95"/>
@@ -478,29 +510,12 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="gpn-pI-6nu">
-                        <barButtonItem key="rightBarButtonItem" id="nuU-mo-i9I">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="oEI-d2-hWo" userLabel="EatAgain" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                <rect key="frame" x="211" y="11" width="93" height="22"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <inset key="titleEdgeInsets" minX="-52" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <inset key="imageEdgeInsets" minX="75" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Eat again" image="smallAdd"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderCount"/>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <segue destination="wuR-Cf-1Tk" kind="presentation" identifier="EventItemAddSegue" id="iXa-mi-JQf"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="gpn-pI-6nu"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="headerView" destination="lmp-xJ-VzY" id="KaN-zM-MzS"/>
                         <outlet property="innerHeaderView" destination="oz1-hd-YVX" id="cNu-aa-0mH"/>
-                        <outlet property="tableHeaderCount" destination="dEk-QE-WZE" id="QWa-Re-SCT"/>
                         <outlet property="tableHeaderLocation" destination="SxI-OJ-qN3" id="CHZ-EG-cXp"/>
                         <outlet property="tableHeaderTitle" destination="Ptv-E0-A66" id="INm-mw-uf2"/>
                         <segue destination="Q8R-td-OHu" kind="unwind" identifier="unwindSequeToEventList" unwindAction="nutEventChanged:" id="dAq-iI-8AI"/>
@@ -510,7 +525,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Y8-e3-eGs" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Q8R-td-OHu" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1391.5" y="852.5"/>
+            <point key="canvasLocation" x="1391" y="852"/>
         </scene>
         <!--EventDetail-->
         <scene sceneID="31A-7b-rzn">
@@ -1651,14 +1666,14 @@
         <image name="separatorLine" width="100" height="2"/>
         <image name="smallAdd" width="18" height="18"/>
         <image name="starHighlighted" width="27" height="27"/>
-        <image name="starLarge" width="38" height="36"/>
         <image name="starLargeBadge" width="22" height="30"/>
         <image name="starLargeSelectedBadge" width="22" height="30"/>
         <image name="starNormal" width="27" height="27"/>
+        <image name="starSmallBadge" width="17" height="22"/>
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="2AV-5j-70h"/>
-        <segue reference="Shc-Yg-1xe"/>
+        <segue reference="vDO-8u-VmA"/>
+        <segue reference="Yx2-qa-hve"/>
     </inferredMetricsTieBreakers>
 </document>

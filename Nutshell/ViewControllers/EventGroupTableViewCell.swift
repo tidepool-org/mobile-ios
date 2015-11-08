@@ -56,17 +56,7 @@ class EventGroupTableViewCell: BaseUITableViewCell {
         timeString.text = NutUtils.standardUIDateString(eventItem.time, relative: true)
         self.eventItem = eventItem
 
-        // Show/hide star, sliding title/date items right to accomodate
-        for c in favoriteStarContainer.constraints {
-            if c.firstAttribute == NSLayoutAttribute.Width {
-                if c.constant != 0.0 {
-                    starViewContainerWidth = c.constant
-                }
-                c.constant = eventItem.nutCracked ? starViewContainerWidth : 0.0
-                break
-            }
-        }
-        favoriteStarContainer.layoutIfNeeded()
+        favoriteStarContainer.hidden = !eventItem.nutCracked
 
         photoContainerView.hidden = true
         if let meal = eventItem as? NutMeal {

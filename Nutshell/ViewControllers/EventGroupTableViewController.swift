@@ -23,7 +23,6 @@ class EventGroupTableViewController: BaseUITableViewController {
 
     @IBOutlet weak var tableHeaderTitle: NutshellUILabel!
     @IBOutlet weak var tableHeaderLocation: NutshellUILabel!
-    @IBOutlet weak var tableHeaderCount: NutshellUILabel!
     @IBOutlet weak var headerView: NutshellUIView!
     @IBOutlet weak var innerHeaderView: UIView!
     
@@ -34,7 +33,6 @@ class EventGroupTableViewController: BaseUITableViewController {
 
         tableHeaderTitle.text = eventGroup.title
         tableHeaderLocation.text = eventGroup.location
-        tableHeaderCount.text = "x " + String("\(eventGroup.itemArray.count)")
     }
     
     override func viewWillAppear(animated: Bool) {

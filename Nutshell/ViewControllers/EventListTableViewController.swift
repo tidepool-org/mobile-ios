@@ -191,7 +191,7 @@ class EventListTableViewController: BaseUITableViewController {
     private func configureSearchUI() {
         let searchOn = searchMode()
         searchPlaceholderLabel.hidden = searchOn
-        self.title = searchOn && !filterString.isEmpty ? "Matching events" : "All events"
+        self.title = searchOn && !filterString.isEmpty ? "Events" : "All events"
     }
 
     private func updateFilteredAndReload() {
