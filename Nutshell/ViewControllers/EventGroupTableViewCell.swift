@@ -20,17 +20,36 @@ class EventGroupTableCellButton: UIButton {
     var photoUrl = ""
 }
 
+class EventGroupRowCollectionCell: UICollectionViewCell {
+    
+    static let cellReuseID = "EventGroupRowCollectionCell"
+    private var photoView: UIImageView?
+    var photoUrl = ""
+
+    func configureCell(photoUrl: String) {
+        if (photoView != nil) {
+            photoView?.removeFromSuperview();
+            photoView = nil;
+        }
+        self.photoUrl = photoUrl
+        photoView = UIImageView(frame: self.bounds)
+        photoView!.contentMode = .ScaleAspectFill
+        NutUtils.loadImage(photoUrl, imageView: photoView!)
+        self.addSubview(photoView!)
+    }
+}
+
 class EventGroupTableViewCell: BaseUITableViewCell {
 
     var eventItem: NutEventItem?
-    @IBOutlet weak var showPhotoButton: EventGroupTableCellButton!
     
     @IBOutlet weak var favoriteStarContainer: UIView!
     @IBOutlet weak var titleString: NutshellUILabel!
     @IBOutlet weak var timeString: NutshellUILabel!
-    @IBOutlet weak var photoImageView: UIImageView!
-    @IBOutlet weak var photoContainerView: UIView!
-
+    @IBOutlet weak var photoCollectionViewContainer: UIView!
+    @IBOutlet weak var photoCollectView: UICollectionView!
+    private var photoUrls: [String] = []
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -49,7 +68,6 @@ class EventGroupTableViewCell: BaseUITableViewCell {
         timeString.highlighted = highlighted
     }
 
-    private var starViewContainerWidth: CGFloat = 53.0
     private var photoContainerHeight: CGFloat = 79.0
     func configureCell(eventItem: NutEventItem) {
         titleString.text = eventItem.notes
@@ -58,24 +76,60 @@ class EventGroupTableViewCell: BaseUITableViewCell {
 
         favoriteStarContainer.hidden = !eventItem.nutCracked
 
-        photoContainerView.hidden = true
-        if let meal = eventItem as? NutMeal {
-            let photoUrl = meal.firstPictureUrl()
-            if !photoUrl.isEmpty {
-                NutUtils.loadImage(photoUrl, imageView: photoImageView)
-                photoContainerView.hidden = false
-                showPhotoButton.photoUrl = photoUrl
-            }
+        photoUrls = eventItem.photoUrlArray()
+    
+        let photoCount = photoUrls.count
+        if photoCount > 0 {
+            photoCollectView.reloadData()
         }
-        for c in photoContainerView.constraints {
+        
+        photoCollectionViewContainer.hidden = photoCount == 0
+        // collapse photo container if there are no photos...
+        for c in photoCollectionViewContainer.constraints {
             if c.firstAttribute == NSLayoutAttribute.Height {
                 if c.constant != 0.0 {
                     photoContainerHeight = c.constant
                 }
-                c.constant = photoContainerView.hidden ? 0.0 : photoContainerHeight
-                break
+                c.constant = photoCount > 0 ? photoContainerHeight : 0.0
+            }
+            if c.firstAttribute == NSLayoutAttribute.Width {
+                c.priority = photoCount == 1 ? 751 : 749
             }
         }
-        photoContainerView.layoutIfNeeded()
+        photoCollectionViewContainer.layoutIfNeeded()
     }
 }
+
+extension EventGroupTableViewCell: UICollectionViewDataSource {
+    
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return photoUrls.count
+    }
+    
+    func collectionView(collectionView: UICollectionView,
+        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(EventGroupRowCollectionCell.cellReuseID, forIndexPath: indexPath) as! EventGroupRowCollectionCell
+            
+            // index determines center time...
+            let photoIndex = indexPath.row
+            if photoIndex < photoUrls.count {
+                cell.configureCell(photoUrls[photoIndex])
+            }
+            return cell
+    }
+}
+
+extension EventGroupTableViewCell: UICollectionViewDelegate {
+    
+}
+
+extension EventGroupTableViewCell: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat
+    {
+        return 0.0
+    }
+}
+

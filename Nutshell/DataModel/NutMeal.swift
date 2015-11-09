@@ -75,4 +75,19 @@ class NutMeal: NutEventItem {
         }
         return ""
     }
+    
+    override func photoUrlArray() -> [String] {
+        var result: [String] = []
+        if !photo.isEmpty {
+            result.append(photo)
+        }
+        if !photo2.isEmpty {
+            result.append(photo2)
+        }
+        if !photo3.isEmpty {
+            result.append(photo3)
+        }
+        return result
+    }
+
 }

@@ -103,6 +103,10 @@ class NutEventItem {
         return ""
     }
 
+    func photoUrlArray() -> [String] {
+        return []
+    }
+
 }
 
 func != (left: NutEventItem, right: NutEventItem) -> Bool {

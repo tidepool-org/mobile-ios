@@ -29,7 +29,7 @@ class EventDetailGraphCollectionCell: UICollectionViewCell {
             if let graphView = graphView {
                 graphTime = centerTime
                 graphTimeInterval = timeInterval
-               graphView.configure()
+                graphView.configure()
                 self.addSubview(graphView)
                 return graphView.dataFound()
             } else {

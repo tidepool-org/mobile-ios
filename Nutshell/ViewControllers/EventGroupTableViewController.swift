@@ -19,7 +19,6 @@ import CoreData
 class EventGroupTableViewController: BaseUITableViewController {
 
     var eventGroup = NutEvent()
-    @IBOutlet weak var titleTextField: NutshellUITextField!
 
     @IBOutlet weak var tableHeaderTitle: NutshellUILabel!
     @IBOutlet weak var tableHeaderLocation: NutshellUILabel!
@@ -90,8 +89,8 @@ class EventGroupTableViewController: BaseUITableViewController {
             eventItemVC.eventGroup = eventGroup
         } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.PhotoDisplaySegue {
             let showPhotoVC = segue.destinationViewController as! ShowPhotoViewController
-            if let showPhotoButton = sender as? EventGroupTableCellButton {
-                showPhotoVC.imageUrl = showPhotoButton.photoUrl
+            if let photoCollectCell = sender as? EventGroupRowCollectionCell {
+                showPhotoVC.imageUrl = photoCollectCell.photoUrl
             }
         } else {
             NSLog("Unknown segue from eventGroup \(segue.identifier)")
@@ -114,6 +113,7 @@ class EventGroupTableViewController: BaseUITableViewController {
                 self.eventGroup = group
             }
         }
+        
     }
     
     @IBAction func cancel(segue: UIStoryboardSegue) {
