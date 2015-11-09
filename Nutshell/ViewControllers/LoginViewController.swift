@@ -20,6 +20,10 @@ class LoginViewController: BaseUIViewController {
 
     @IBOutlet weak var logInScene: UIView!
     @IBOutlet weak var logInEntryContainer: UIView!
+
+    @IBOutlet weak var inputContainerView: UIView!
+    @IBOutlet weak var offlineMessageContainerView: UIView!
+    
     @IBOutlet weak var emailTextField: NutshellUITextField!
     @IBOutlet weak var passwordTextField: NutshellUITextField!
     @IBOutlet weak var loginButton: UIButton!
@@ -55,6 +59,9 @@ class LoginViewController: BaseUIViewController {
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
 
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reachabilityChanged:", name: ReachabilityChangedNotification, object: nil)
+        configureForReachability()
+        
         // Tap all four corners to bring up server selection action sheet
         let width: CGFloat = 100
         let height: CGFloat = width
@@ -64,6 +71,39 @@ class LoginViewController: BaseUIViewController {
         corners.append(CGRect(x: self.view.frame.width - width, y: self.view.frame.height - height, width: width, height: height))
         for (var i = 0; i < corners.count; i++) {
             cornersBool.append(false)
+        }
+    }
+    
+    func reachabilityChanged(note: NSNotification) {
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate, api = appDelegate.API {
+            // try token refresh if we are now connected...
+            // TODO: change message to "attempting token refresh"?
+            if api.isConnectedToNetwork() && api.sessionToken != nil {
+                NSLog("Login: attempting to refresh token...")
+                api.refreshToken() { succeeded -> (Void) in
+                    if succeeded {
+                        appDelegate.setupUIForLoginSuccess()
+                    } else {
+                        NSLog("Refresh token failed, need to log in normally")
+                        api.logout() {
+                            self.configureForReachability()
+                        }
+                    }
+                }
+                return
+            }
+        }
+        configureForReachability()
+    }
+
+    private func configureForReachability() {
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            var connected = true
+            if let api = appDelegate.API {
+                connected = api.isConnectedToNetwork()
+            }
+            inputContainerView.hidden = !connected
+            offlineMessageContainerView.hidden = connected
         }
     }
     

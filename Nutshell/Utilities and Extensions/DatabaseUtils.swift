@@ -22,12 +22,14 @@ class DatabaseUtils {
                 "ContinuousGlucose", "Food", "GrabBag", "Note", "Prime", "ReservoirChange", "SelfMonitoringGlucose",
                 "Settings", "Status", "TimeChange", "Upload", "UrineKetone", "Wizard", "User"]
             
+            var objectCount = 0
             for entity in entities {
                 do {
                     let request = NSFetchRequest(entityName: entity)
                     let myList = try moc.executeFetchRequest(request)
                     for obj: AnyObject in myList {
                         moc.deleteObject(obj as! NSManagedObject)
+                        objectCount++
                     }
                 } catch let error as NSError {
                     print("Failed to delete \(entity) items: \(error)")
@@ -36,8 +38,9 @@ class DatabaseUtils {
             
             do {
                 try moc.save()
+                NSLog("***Database cleared of \(objectCount) objects!***")
             } catch let error as NSError {
-                print("clearDatabase: Failed to save MOC: \(error)")
+                NSLog("clearDatabase: Failed to save MOC: \(error)")
             }
         }
     }

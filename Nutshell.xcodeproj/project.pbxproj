@@ -173,6 +173,8 @@
 		48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
 		48DF9B9B1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
 		48E490BF1BE198BF004F33E4 /* ShowPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E490BE1BE198BF004F33E4 /* ShowPhotoViewController.swift */; };
+		48E4A4461BF015CE001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4451BF015CE001A7B35 /* Reachability.swift */; };
+		48E4A4471BF015CE001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4451BF015CE001A7B35 /* Reachability.swift */; };
 		48EC32301BA7BDD700A75103 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
 		48EC32321BA7BDDE00A75103 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
 		48ED0D341BADAF8B009D0D6F /* GraphUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */; };
@@ -308,6 +310,7 @@
 		48D056961BDFDD20009D1591 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
 		48E490BE1BE198BF004F33E4 /* ShowPhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShowPhotoViewController.swift; path = ViewControllers/ShowPhotoViewController.swift; sourceTree = "<group>"; };
+		48E4A4451BF015CE001A7B35 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = ServiceInterface/Reachability.swift; sourceTree = "<group>"; };
 		48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphUIView.swift; path = GraphView/GraphUIView.swift; sourceTree = "<group>"; };
 		48ED0D361BAF22CC009D0D6F /* addAnimation-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-01.png"; path = "Images/addAnimation/addAnimation-01.png"; sourceTree = "<group>"; };
 		48ED0D371BAF22CC009D0D6F /* addAnimation-02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-02.png"; path = "Images/addAnimation/addAnimation-02.png"; sourceTree = "<group>"; };
@@ -563,6 +566,7 @@
 			isa = PBXGroup;
 			children = (
 				486F5E231BA0DC1000BA2A57 /* APIConnect.swift */,
+				48E4A4451BF015CE001A7B35 /* Reachability.swift */,
 			);
 			name = Service;
 			sourceTree = "<group>";
@@ -852,6 +856,7 @@
 				0334CA1F1BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */,
 				0334CA371BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift in Sources */,
 				485420231BC44D290020CFE1 /* Workout.swift in Sources */,
+				48E4A4461BF015CE001A7B35 /* Reachability.swift in Sources */,
 				0334CA641BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift in Sources */,
 				485420251BC44D290020CFE1 /* Meal+CoreDataProperties.swift in Sources */,
 				4859FCC11B9A4DE4000C1269 /* Nutshell.xcdatamodeld in Sources */,
@@ -1002,6 +1007,7 @@
 				485420241BC44D290020CFE1 /* Workout.swift in Sources */,
 				0334CA291BA8DDFC00013096 /* BloodKetone.swift in Sources */,
 				0334CA6E1BA8DDFC00013096 /* Settings.swift in Sources */,
+				48E4A4471BF015CE001A7B35 /* Reachability.swift in Sources */,
 				0334CAA91BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

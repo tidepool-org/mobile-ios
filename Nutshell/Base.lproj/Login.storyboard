@@ -43,7 +43,7 @@
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wrong email or password!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bJV-Wt-zLG" userLabel="errorFeedbackLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="58" y="153.5" width="259" height="17.5"/>
+                                                <rect key="frame" x="58" y="154" width="259" height="18"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -89,7 +89,7 @@
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="remember me" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iby-0V-DJ8" userLabel="remember me label" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="36" y="117.5" width="114" height="23.5"/>
+                                                        <rect key="frame" x="36" y="117" width="114" height="23.5"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="23" id="LXv-EE-eR4"/>
                                                         </constraints>
@@ -182,18 +182,46 @@
                                                     </mask>
                                                 </variation>
                                             </view>
+                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pok-KF-0aG" userLabel="offlineMessageView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="46" y="175" width="283" height="180"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are not currently connected to a network!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nYu-JU-kh6" userLabel="offlineMessage" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="25" y="63" width="233" height="54.5"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="networkDisconnectText"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="nYu-JU-kh6" firstAttribute="centerY" secondItem="Pok-KF-0aG" secondAttribute="centerY" id="9T2-CF-Nel"/>
+                                                    <constraint firstAttribute="trailing" secondItem="nYu-JU-kh6" secondAttribute="trailing" constant="25" id="OOy-Fr-P3m"/>
+                                                    <constraint firstItem="nYu-JU-kh6" firstAttribute="leading" secondItem="Pok-KF-0aG" secondAttribute="leading" constant="25" id="PRE-gX-YLR"/>
+                                                    <constraint firstItem="nYu-JU-kh6" firstAttribute="centerX" secondItem="Pok-KF-0aG" secondAttribute="centerX" id="SAS-HT-zua"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
+                                            <constraint firstItem="Pok-KF-0aG" firstAttribute="centerX" secondItem="Ucb-jq-HNI" secondAttribute="centerX" id="EUc-6Q-vHy"/>
+                                            <constraint firstItem="Pok-KF-0aG" firstAttribute="height" secondItem="Ucb-jq-HNI" secondAttribute="height" id="HGU-wF-1Oy"/>
                                             <constraint firstAttribute="bottom" secondItem="Ucb-jq-HNI" secondAttribute="bottom" id="ILh-ND-WB9">
                                                 <variation key="heightClass=regular-widthClass=regular" constant="0.0"/>
                                             </constraint>
                                             <constraint firstItem="bJV-Wt-zLG" firstAttribute="leading" secondItem="Ucb-jq-HNI" secondAttribute="leading" constant="12" id="KNf-oA-fzL"/>
+                                            <constraint firstItem="Pok-KF-0aG" firstAttribute="centerY" secondItem="Ucb-jq-HNI" secondAttribute="centerY" id="Pi5-3m-abg"/>
                                             <constraint firstItem="Ucb-jq-HNI" firstAttribute="centerX" secondItem="iHd-Hc-UkR" secondAttribute="centerX" id="Wbr-s1-P9t"/>
                                             <constraint firstItem="Ucb-jq-HNI" firstAttribute="top" secondItem="kJo-Zi-pFB" secondAttribute="bottom" constant="60" id="XxF-kz-Tpz"/>
                                             <constraint firstItem="kJo-Zi-pFB" firstAttribute="top" secondItem="iHd-Hc-UkR" secondAttribute="top" id="bZ7-dV-922"/>
                                             <constraint firstItem="bJV-Wt-zLG" firstAttribute="trailing" secondItem="Ucb-jq-HNI" secondAttribute="trailing" constant="-12" id="egB-BW-0ad"/>
                                             <constraint firstItem="Ucb-jq-HNI" firstAttribute="top" secondItem="bJV-Wt-zLG" secondAttribute="bottom" constant="4" id="ein-NZ-dHS"/>
+                                            <constraint firstItem="Pok-KF-0aG" firstAttribute="width" secondItem="Ucb-jq-HNI" secondAttribute="width" id="mlA-kZ-7tA"/>
                                             <constraint firstItem="kJo-Zi-pFB" firstAttribute="centerX" secondItem="iHd-Hc-UkR" secondAttribute="centerX" id="uC1-T4-Rja"/>
                                             <constraint firstItem="Ucb-jq-HNI" firstAttribute="width" secondItem="iHd-Hc-UkR" secondAttribute="width" multiplier="0.7" constant="20" id="xuU-JW-9F5"/>
                                         </constraints>
@@ -352,10 +380,12 @@
                         <outlet property="emailTextField" destination="6dr-nu-GmC" id="Qie-KQ-RVg"/>
                         <outlet property="errorFeedbackLabel" destination="bJV-Wt-zLG" id="qUT-hb-Azt"/>
                         <outlet property="forgotPasswordLabel" destination="kFz-1S-09L" id="wru-8H-MY2"/>
+                        <outlet property="inputContainerView" destination="Ucb-jq-HNI" id="fGo-NZ-Nbo"/>
                         <outlet property="logInEntryContainer" destination="iHd-Hc-UkR" id="1uh-hC-C2o"/>
                         <outlet property="logInScene" destination="zV2-Yb-tzp" id="qWX-g4-d9v"/>
                         <outlet property="loginButton" destination="zPr-G0-r47" id="eY9-IV-5A5"/>
                         <outlet property="loginIndicator" destination="75w-tb-LSw" id="dfD-21-TW1"/>
+                        <outlet property="offlineMessageContainerView" destination="Pok-KF-0aG" id="JuZ-Kj-UCr"/>
                         <outlet property="passwordTextField" destination="yzu-4v-Bis" id="CbM-8W-WV7"/>
                         <outlet property="rememberMeButton" destination="UDq-QX-Q5y" id="9ky-le-JoI"/>
                     </connections>

@@ -106,14 +106,45 @@ class APIConnector {
     
     // Base URL for API calls, set during initialization
     var baseUrl: NSURL
+ 
+    // Reachability object, valid during lifetime of this APIConnector, and convenience function that uses this
+    // Register for ReachabilityChangedNotification to monitor reachability changes             
+    var reachability: Reachability?
+    func isConnectedToNetwork() -> Bool {
+        if let reachability = reachability {
+            return reachability.isReachable()
+        } else {
+            NSLog("Error: reachability object not configured!")
+            return true
+        }
+    }
     
-    // MARK: Initializaion
+    // MARK: Initialization
     
     // Required initializer
     init() {
         self.baseUrl = NSURL(string:APIConnector.kServers[APIConnector.currentService!]!)!
         self.sessionToken = NSUserDefaults.standardUserDefaults().stringForKey(APIConnector.kSessionTokenDefaultKey)
         NSLog("Using service: \(self.baseUrl)")
+        
+        do {
+            let reachability = try Reachability.reachabilityForInternetConnection()
+            self.reachability = reachability
+        } catch ReachabilityError.FailedToCreateWithAddress(let address) {
+            NSLog("Unable to create\nReachability with address:\n\(address)")
+        } catch {
+            NSLog("Other reachability error!")
+        }
+        
+        do {
+            try reachability?.startNotifier()
+        } catch {
+            NSLog("Error: Unable to start notifier!")
+        }
+    }
+    
+    deinit {
+        reachability?.stopNotifier()
     }
     
     /**
@@ -195,7 +226,6 @@ class APIConnector {
         }
     }
     
-    
     /** For now this method returns the result as a JSON object. The result set can be huge, and we want processing to
      *  happen outside of this method until we have something a little less firehose-y.
      */
@@ -214,14 +244,6 @@ class APIConnector {
                 completion(Result.Failure(nil, result.error!))
             }
         }
-    }
-    
-    /**
-    :returns: Returns true if connected.
-    Uses reachability to determine whether device is connected to a network.
-    */
-    class func isConnectedToNetwork() -> Bool {
-        return true
     }
     
     func clearSessionToken() -> Void {

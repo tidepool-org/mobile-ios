@@ -34,22 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Set up the API connection
         API = APIConnector()
-        // If we already have a token, no need to log in again....
-        // TODO: verify we need to do this even if there is no network connection!
-        if (API?.sessionToken != nil) {
-            print("attempting to refresh token...")
-            API?.refreshToken({ (succeeded) -> (Void) in
-                if ( succeeded ) {
-                    self.setupUIForLoginSuccess()
-                } else {
-                    NSLog("Refresh token failed, need to log in normally")
-                    self.setupUIForLogin()
-                }
-            });
-        } else {
-            logout()
-        }
-        
+        attemptTokenLogin()
         return true
     }
 
@@ -60,6 +45,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             API = APIConnector()
             NSLog("Switched to \(serverName) server")
         }
+    }
+    
+    func attemptTokenLogin() {
+        if let api = API {
+            if !api.isConnectedToNetwork() || api.sessionToken == nil {
+                setupUIForLogin()
+                return
+            }
+            
+            NSLog("AppDelegate: attempting to refresh token...")
+            api.refreshToken() { succeeded -> (Void) in
+                if succeeded {
+                    self.setupUIForLoginSuccess()
+                } else {
+                    NSLog("Refresh token failed, need to log in normally")
+                    api.logout() {
+                        self.setupUIForLogin()
+                    }
+                }
+            }
+        } 
     }
     
     func setupUIForLogin() {
@@ -97,13 +103,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+
+        // TODO: This prevents offline usage; is that desirable? Should we only refresh after a certain delay, or if "remember me" was not checked?
+        
         // Refresh the auth token
-        API?.refreshToken({ (succeeded) -> (Void) in
-            if ( !succeeded ) {
-                // We need to log the user out and have them log in again
-                self.logout()
-            }
-        })
+//        API?.refreshToken({ (succeeded) -> (Void) in
+//            if ( !succeeded ) {
+//                // We need to log the user out and have them log in again
+//                self.logout()
+//            }
+//        })
     }
 
     func applicationDidBecomeActive(application: UIApplication) {

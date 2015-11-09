@@ -58,6 +58,7 @@ public class Styles: NSObject {
         "brightLinkText": (mediumRegularFont, brightBlueColor),
         "inactiveButton": (largeRegularFont, whiteColor),
         "brightBackgroundButton": (largeRegularFont, whiteColor),
+        "networkDisconnectText" : (largeRegularFont, whiteColor),
         // event detail view
         "healthkitEventSubtext": (smallBoldFont, pinkColor),
         // table views
@@ -92,7 +93,6 @@ public class Styles: NSObject {
         "eventNotesText": (mediumSmallRegularFont, whiteColor),
         "eventLocationDateHint": (smallRegularFont, whiteColor),
         "doneButton": (largeRegularFont, whiteColor),
-
     ]
 
     class func backgroundImageofSize(size: CGSize, style: String) -> UIImage? {
