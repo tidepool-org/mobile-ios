@@ -41,21 +41,25 @@ class EventGroupTableViewController: BaseUITableViewController {
             return
         }
         
-        // Workaround: iOS currently doesn't resize table headers dynamically
-        if let headerView = headerView {
-            headerView.setNeedsLayout()
-            headerView.layoutIfNeeded()
-            let height = ceil(innerHeaderView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height)
-            var frame = headerView.frame
-            frame.size.height = height
-            headerView.frame = frame
-            tableView.tableHeaderView = headerView
-        }
-        
         eventGroup.sortEvents()
         tableView.reloadData()
     }
 
+    override func viewDidLayoutSubviews() {
+        // Workaround: iOS currently doesn't resize table headers dynamically
+        if let headerView = headerView {
+            let height = ceil(innerHeaderView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize).height)
+            var frame = headerView.frame
+            if frame.size.height != height {
+                NSLog("adjusting header height from \(frame.size.height) to \(height)")
+                frame.size.height = height
+                headerView.frame = frame
+                // set it back so table will adjust as well...
+                tableView.tableHeaderView = headerView
+            }
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
