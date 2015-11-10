@@ -72,9 +72,9 @@ class APIConnector {
     
     // Dictionary of servers and their base URLs
     static let kServers = [
-        "Production" :   "https://api.tidepool.io",
-        "Staging" :      "https://staging-api.tidepool.io",
-        "Development" :  "https://devel-api.tidepool.io",
+        "Production" :   "https://api.tidepool.org",
+        "Staging" :      "https://staging-api.tidepool.org",
+        "Development" :  "https://devel-api.tidepool.org",
     ]
     static let kDefaultServerName = "Production"
 
