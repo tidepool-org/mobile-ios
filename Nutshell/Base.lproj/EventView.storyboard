@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="MlM-Oh-SBV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="MlM-Oh-SBV">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -290,7 +290,7 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Location" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SxI-OJ-qN3" userLabel="tableHeaderLocation" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="51" y="55" width="179" height="18"/>
+                                            <rect key="frame" x="51" y="55" width="179" height="19"/>
                                             <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="12.5"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -299,7 +299,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xnK-Ld-hs9" userLabel="eatAgainLargeHitArea">
-                                            <rect key="frame" x="238" y="22" width="56" height="52"/>
+                                            <rect key="frame" x="239" y="22" width="56" height="52"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" relation="lessThanOrEqual" constant="60" id="K7m-5d-ptN"/>
                                             </constraints>
@@ -319,7 +319,7 @@
                                             </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Eat again" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PpK-Rp-Hxw" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="238" y="56" width="56" height="18"/>
+                                            <rect key="frame" x="239" y="56" width="56" height="18"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
@@ -347,6 +347,7 @@
                                         <constraint firstItem="kTc-vF-Qra" firstAttribute="leading" secondItem="oz1-hd-YVX" secondAttribute="leading" constant="32" id="cjL-4y-XJp"/>
                                         <constraint firstItem="Ptv-E0-A66" firstAttribute="leading" secondItem="oz1-hd-YVX" secondAttribute="leading" constant="32" id="ePy-dL-BsV"/>
                                         <constraint firstAttribute="trailing" secondItem="Suh-Vz-JZ7" secondAttribute="trailing" constant="37" id="ijm-SW-T1P"/>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="97" id="jHF-1k-kqd"/>
                                         <constraint firstItem="PpK-Rp-Hxw" firstAttribute="centerX" secondItem="Suh-Vz-JZ7" secondAttribute="centerX" id="pVO-iy-CE7"/>
                                         <constraint firstAttribute="bottom" secondItem="SxI-OJ-qN3" secondAttribute="bottom" constant="24" id="rfU-tj-f7o"/>
                                         <constraint firstItem="xnK-Ld-hs9" firstAttribute="top" secondItem="Suh-Vz-JZ7" secondAttribute="top" id="xVO-Bv-u7F"/>
@@ -532,6 +533,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="headerView" destination="lmp-xJ-VzY" id="KaN-zM-MzS"/>
+                        <outlet property="headerViewLocIcon" destination="kTc-vF-Qra" id="L9W-LS-xOw"/>
                         <outlet property="innerHeaderView" destination="oz1-hd-YVX" id="cNu-aa-0mH"/>
                         <outlet property="tableHeaderLocation" destination="SxI-OJ-qN3" id="CHZ-EG-cXp"/>
                         <outlet property="tableHeaderTitle" destination="Ptv-E0-A66" id="INm-mw-uf2"/>
@@ -1141,13 +1143,13 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Xd-vE-tGN" userLabel="notesTextLargeHitAreaButton">
-                                                        <rect key="frame" x="12" y="74" width="351" height="41"/>
+                                                        <rect key="frame" x="12" y="73" width="351" height="41"/>
                                                         <connections>
                                                             <action selector="notesTextLargeHitAreaButton:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="PKa-DR-lQY"/>
                                                         </connections>
                                                     </button>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Notes" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HNf-3W-C8L" userLabel="notesTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="12" y="74" width="351" height="21"/>
+                                                        <rect key="frame" x="12" y="73" width="351" height="21"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -1161,7 +1163,7 @@
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sides, dessert, anything else?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QY4-ef-Zcn" userLabel="notesHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="103" y="97" width="169" height="18"/>
+                                                        <rect key="frame" x="103" y="96" width="169" height="18"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -1213,7 +1215,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xAO-cS-MZQ" userLabel="calendarButtonLargeHitArea">
-                                                        <rect key="frame" x="150" y="0.0" width="75" height="67"/>
+                                                        <rect key="frame" x="150" y="0.0" width="75" height="66"/>
                                                         <connections>
                                                             <action selector="dateButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="Ib0-nW-2TQ"/>
                                                         </connections>
@@ -1283,7 +1285,7 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4:21 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OOd-y1-fQU" userLabel="date2Label" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="164" y="49" width="47" height="18"/>
+                                                        <rect key="frame" x="164" y="48" width="47" height="18"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>

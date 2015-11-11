@@ -790,6 +790,8 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         let demoWorkouts = [
             ["Runs", "regular 3 mile", "2015-07-28T12:25:21.000Z", "6000"],
             ["Workout", "running in park", "2015-07-27T04:23:20.000Z", "2100"],
+            ["Workout", "running around the neighborhood", "2015-07-24T02:43:20.000Z", "2100"],
+            ["Workout", "running at Rancho San Antonio", "2015-07-21T03:53:20.000Z", "2100"],
             ["PE class", "some notes for this one", "2015-07-27T08:25:21.000Z", "3600"],
             ["Soccer Practice", "", "2015-07-25T14:25:21.000Z", "4800"],
         ]

@@ -23,6 +23,7 @@ class EventGroupTableViewController: BaseUITableViewController {
     @IBOutlet weak var tableHeaderTitle: NutshellUILabel!
     @IBOutlet weak var tableHeaderLocation: NutshellUILabel!
     @IBOutlet weak var headerView: NutshellUIView!
+    @IBOutlet weak var headerViewLocIcon: UIImageView!
     @IBOutlet weak var innerHeaderView: UIView!
     
     override func viewDidLoad() {
@@ -32,6 +33,7 @@ class EventGroupTableViewController: BaseUITableViewController {
 
         tableHeaderTitle.text = eventGroup.title
         tableHeaderLocation.text = eventGroup.location
+        headerViewLocIcon.hidden = (tableHeaderLocation.text?.isEmpty)!
     }
     
     override func viewWillAppear(animated: Bool) {
