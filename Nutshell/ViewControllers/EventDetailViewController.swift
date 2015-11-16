@@ -44,6 +44,8 @@ class EventDetailViewController: BaseUIViewController {
     @IBOutlet weak var nutCrackedButton: NutshellUIButton!
     @IBOutlet weak var nutCrackedLabel: NutshellUILabel!
     
+    @IBOutlet weak var photoDisplayImageView: UIImageView!
+    
     private var eventTime = NSDate()
     private var placeholderLocationString = "Note location here!"
 
@@ -140,6 +142,26 @@ class EventDetailViewController: BaseUIViewController {
         }
     }
     
+    @IBAction func photoDisplayButtonHandler(sender: AnyObject) {
+        if let mealItem = eventItem as? NutMeal {
+            let photoUrls = mealItem.photoUrlArray()
+            if photoUrls.count > 1 {
+                // shift photo urls - either 2 or 3...
+                mealItem.photo = photoUrls[1]
+                if photoUrls.count == 3 {
+                    mealItem.photo2 = photoUrls[2]
+                    mealItem.photo3 = photoUrls[0]
+                } else {
+                    mealItem.photo2 = photoUrls[0]
+                    mealItem.photo3 = ""
+                }
+                // Save changes to database
+                mealItem.saveChanges()
+                configureDetailView()
+            }
+        }
+    }
+    
     //
     // MARK: - Configuration
     //
@@ -160,14 +182,14 @@ class EventDetailViewController: BaseUIViewController {
                 locationContainerView.hidden = false
             }
 
-            if let mealItem = eventItem as? NutMeal {
-                photoUIImageView.hidden = true
-                let photoUrl = mealItem.firstPictureUrl()
-                if !photoUrl.isEmpty {
-                    NutUtils.loadImage(photoUrl, imageView: photoUIImageView)
-                }
-            } else {
-                // TODO: workout support! Show other workout-specific items
+            photoUIImageView.hidden = true
+            photoDisplayImageView.hidden = true
+            let photoUrls = eventItem.photoUrlArray()
+            if photoUrls.count > 0 {
+                photoUIImageView.hidden = false
+                photoDisplayImageView.hidden = false
+                photoDisplayImageView.image = photoUrls.count == 1 ? UIImage(named: "singlePhotoIcon") : UIImage(named: "multiPhotoIcon")
+                NutUtils.loadImage(photoUrls[0], imageView: photoUIImageView)
             }
         }
         

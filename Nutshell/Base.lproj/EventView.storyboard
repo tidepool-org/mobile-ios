@@ -673,9 +673,27 @@
                                                             </mask>
                                                         </variation>
                                                     </view>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EYQ-h7-WaO" userLabel="photoDisplayButton">
+                                                        <rect key="frame" x="335" y="148" width="40" height="40"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="40" id="TkA-Jh-zmo"/>
+                                                            <constraint firstAttribute="height" constant="40" id="xbf-kf-0gC"/>
+                                                        </constraints>
+                                                        <connections>
+                                                            <action selector="photoDisplayButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="Am2-hh-4HC"/>
+                                                        </connections>
+                                                    </button>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="singlePhotoIcon" translatesAutoresizingMaskIntoConstraints="NO" id="4sc-ki-6ix" userLabel="photoDisplayImage">
+                                                        <rect key="frame" x="354" y="167" width="16" height="16"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="16" id="5qu-V9-LDT"/>
+                                                            <constraint firstAttribute="height" constant="16" id="DQl-as-leW"/>
+                                                        </constraints>
+                                                    </imageView>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
+                                                    <constraint firstItem="4sc-ki-6ix" firstAttribute="trailing" secondItem="EYQ-h7-WaO" secondAttribute="trailing" constant="-5" id="2EX-WC-I9G"/>
                                                     <constraint firstAttribute="bottom" secondItem="bxw-YN-kxC" secondAttribute="bottom" id="5bq-0K-5Wq"/>
                                                     <constraint firstItem="L5t-um-0Ba" firstAttribute="top" secondItem="z3U-KK-eno" secondAttribute="top" id="6KG-8I-fcT"/>
                                                     <constraint firstAttribute="trailing" secondItem="au5-2w-K1j" secondAttribute="trailing" constant="16" id="6gc-EB-QXM"/>
@@ -686,8 +704,10 @@
                                                     <constraint firstItem="U73-Nl-2gk" firstAttribute="top" secondItem="z3U-KK-eno" secondAttribute="top" id="Cy6-mI-9Ff"/>
                                                     <constraint firstItem="UkV-Ct-zaJ" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" constant="16" id="HJE-f2-bMc"/>
                                                     <constraint firstItem="bxw-YN-kxC" firstAttribute="height" secondItem="z3U-KK-eno" secondAttribute="height" multiplier="0.8875" id="Hzv-Ex-P21"/>
+                                                    <constraint firstAttribute="bottom" secondItem="EYQ-h7-WaO" secondAttribute="bottom" id="I5h-Ta-POe"/>
                                                     <constraint firstAttribute="trailing" secondItem="UkV-Ct-zaJ" secondAttribute="trailing" constant="16" id="JXu-tR-pcs"/>
                                                     <constraint firstItem="au5-2w-K1j" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" constant="16" id="M9l-Cc-4l3"/>
+                                                    <constraint firstAttribute="trailing" secondItem="EYQ-h7-WaO" secondAttribute="trailing" id="O7x-vQ-LSy"/>
                                                     <constraint firstItem="bxw-YN-kxC" firstAttribute="top" secondItem="au5-2w-K1j" secondAttribute="bottom" id="RcX-UO-vta"/>
                                                     <constraint firstAttribute="bottom" secondItem="L5t-um-0Ba" secondAttribute="bottom" id="UHN-FF-Km7"/>
                                                     <constraint firstItem="U73-Nl-2gk" firstAttribute="height" secondItem="z3U-KK-eno" secondAttribute="height" multiplier="0.3625" id="Wxo-oX-hfw"/>
@@ -699,6 +719,7 @@
                                                     <constraint firstItem="au5-2w-K1j" firstAttribute="top" secondItem="U73-Nl-2gk" secondAttribute="bottom" id="i7D-He-5lY"/>
                                                     <constraint firstItem="au5-2w-K1j" firstAttribute="top" secondItem="z3U-KK-eno" secondAttribute="top" id="mRi-6y-xor"/>
                                                     <constraint firstItem="UkV-Ct-zaJ" firstAttribute="height" secondItem="z3U-KK-eno" secondAttribute="height" multiplier="0.45" id="muB-AG-16g"/>
+                                                    <constraint firstItem="4sc-ki-6ix" firstAttribute="bottom" secondItem="EYQ-h7-WaO" secondAttribute="bottom" constant="-5" id="n6i-Tv-bji"/>
                                                 </constraints>
                                                 <variation key="default">
                                                     <mask key="constraints">
@@ -980,6 +1001,7 @@
                         <outlet property="notesLabel" destination="au5-2w-K1j" id="heW-2E-xn2"/>
                         <outlet property="nutCrackedButton" destination="12g-bz-WJr" id="uC8-1Y-8UB"/>
                         <outlet property="nutCrackedLabel" destination="c32-24-Hp7" id="3xk-a1-qBU"/>
+                        <outlet property="photoDisplayImageView" destination="4sc-ki-6ix" id="25x-RN-uNT"/>
                         <outlet property="photoUIImageView" destination="let-xp-dUr" id="oDy-7z-aYX"/>
                         <outlet property="titleLabel" destination="U73-Nl-2gk" id="oeo-FR-liY"/>
                         <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSegueToCancel" unwindAction="cancel:" id="kPJ-Hz-YIi"/>
@@ -1711,6 +1733,7 @@
         <image name="rightDisclosureArrow" width="9" height="15"/>
         <image name="searchIcon" width="21" height="21"/>
         <image name="separatorLine" width="100" height="2"/>
+        <image name="singlePhotoIcon" width="16" height="16"/>
         <image name="smallAdd" width="18" height="18"/>
         <image name="starHighlighted" width="27" height="27"/>
         <image name="starLargeBadge" width="22" height="30"/>
