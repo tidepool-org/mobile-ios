@@ -34,65 +34,65 @@ public class Styles: NSObject {
 
     // This table determines the background style design to color mapping in the UI. Setting "usage" variables in storyboards will determine color settings via this table; actual colors are defined below and can be changed globally there.
     static var usageToBackgroundColor = [
+        // general usage
         "brightBackground": brightBlueColor,
         "darkBackground": darkPurpleColor,
         "lightBackground": veryLightGreyColor,
         "whiteBackground": whiteColor,
         // login & signup
         "brightBackgroundButton": brightBlueColor,
-        "inactiveButton": darkPurpleColor,
         "userDataEntry": whiteColor,
         // menu and account settings
         "rowSeparator": mediumDarkGreyColor,
         "darkBackgroundButton": darkPurpleColor,
-        // add event scenes
-        "saveButton": brightBlueColor,
-        "doneButton": darkPurpleColor,
+        // add/edit event scenes
+        "addEditViewSaveButton": brightBlueColor,
     ]
 
     // This table is used for mapping usage to font and font color for UI elements including fonts (UITextField, UILabel, UIButton). An entry may appear here as well as in the basic color mapping table above to set both font attributes as well as background coloring.
     static var usageToFontWithColor = [
-        // login & signup
+        // general usage
+        "brightBackgroundButton": (largeRegularFont, whiteColor),
+        "darkBackgroundButton": (largeRegularFont, whiteColor),
+        // login & signup scenes
         "userDataEntry": (mediumRegularFont, darkPurpleColor),
         "dataEntryErrorFeedback": (smallSemiboldFont, redErrorColor),
         "brightLinkText": (mediumRegularFont, brightBlueColor),
-        "inactiveButton": (largeRegularFont, whiteColor),
-        "brightBackgroundButton": (largeRegularFont, whiteColor),
         "networkDisconnectText" : (largeRegularFont, whiteColor),
-        // event detail view
-        "healthkitEventSubtext": (smallBoldFont, pinkColor),
-        // table views
-        "tableHeaderTitle": (mediumSemiboldFont, whiteColor),
-        "tableHeaderLocation": (smallSemiboldFont, whiteColor),
-        "tableHeaderCount": (smallBoldFont, whiteColor),
+        // event list table scene
+        "eventListCellTitle": (mediumSemiboldFont, altDarkGreyColor),
+        "eventListCellLocation": (smallSemiboldFont, altDarkGreyColor),
+        "eventListCellRepeatCount": (smallBoldFont, altDarkGreyColor),
         "searchPlaceholder": (mediumLightFont, blackColor),
         "searchText": (largeRegularFont, blackColor),
-        "tableListCellTitle": (mediumSemiboldFont, altDarkGreyColor),
-        "tableListCellLocation": (smallSemiboldFont, altDarkGreyColor),
-        "tableListCellDate": (smallRegularFont, altDarkGreyColor),
-        "tableListCellRepeatCount": (smallBoldFont, altDarkGreyColor),
-        "tableCellTitle": (mediumSemiboldFont, darkGreyColor),
-        "tableCellSubtitle": (smallRegularFont, darkMediumGreyColor),
-        "saveButton": (mediumBoldFont, whiteColor),
-        // account configuration views
+        // grouped event list table scene
+        "groupedEventHeaderTitle": (mediumSemiboldFont, whiteColor),
+        "groupedEventHeaderLocation": (smallSemiboldFont, whiteColor),
+        "groupedEventHeaderButton": (mediumVerySmallSemiboldFont, whiteColor),
+        "groupedEventCellTitle": (mediumSmallSemiboldFont, darkGreyColor),
+        "groupedEventCellDate": (smallRegularFont, darkMediumGreyColor),
+        // event detail view scene
+        "detailHeaderTitle": (mediumLargeBoldFont, whiteColor),
+        "detailHeaderNotes": (mediumRegularFont, whiteColor),
+        "detailHeaderDate": (smallRegularFont, whiteColor),
+        "detailHeaderLocation": (smallBoldFont, whiteColor),
+        "detailViewButtonText": (smallBoldFont, whiteColor),
+        "advisoryText": (mediumSemiboldFont, darkGreyColor),
+        "advisorySubtext": (mediumRegularFont, lightDarkGreyColor),
+        "greenLink": (mediumRegularFont, lightGreenColor),
+        // add/edit event scenes
+        "addEditViewTitle": (mediumLargeBoldFont, whiteColor),
+        "addEditViewNotes": (mediumRegularFont, whiteColor),
+        "addEditViewHint": (smallRegularFont, whiteColor),
+        "addEditViewDate": (smallRegularFont, whiteColor),
+        "addEditViewLocation": (smallRegularFont, whiteColor),
+        "addEditViewSaveButton": (mediumBoldFont, whiteColor),
+        // account configuration scene
         "accountSettingItem": (mediumRegularFont, darkGreyColor),
         "accountSettingItemSmall": (mediumSmallRegularFont, darkGreyColor),
         "largeTargetValueInactive": (veryLargeSemiboldFont, mediumLightGreyColor),
         "largeTargetLow": (veryLargeSemiboldFont, peachColor),
         "largeTargetHigh": (veryLargeSemiboldFont, purpleColor),
-        "darkBackgroundButton": (largeRegularFont, whiteColor),
-        // event detail view
-        "notesText": (UIFont(name: "OpenSans-Semibold", size: 16.0), whiteColor),
-        "detailHeaderDate": (UIFont(name: "OpenSans", size: 12.5), whiteColor),
-        "detailHeaderLocation": (smallBoldFont, whiteColor),
-        "advisoryText": (mediumSemiboldFont, darkGreyColor),
-        "advisorySubtext": (mediumRegularFont, lightDarkGreyColor),
-        "greenLink": (mediumRegularFont, lightGreenColor),
-        // add event scenes
-        "eventTitleText": (mediumLargeBoldFont, whiteColor),
-        "eventNotesText": (mediumSmallRegularFont, whiteColor),
-        "eventLocationDateHint": (smallRegularFont, whiteColor),
-        "doneButton": (largeRegularFont, whiteColor),
     ]
 
     class func backgroundImageofSize(size: CGSize, style: String) -> UIImage? {
@@ -118,17 +118,18 @@ public class Styles: NSObject {
     
     private struct FontCache {
         static let verySmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 10.0)!
-        static let smallRegularFont: UIFont = UIFont(name: "OpenSans", size: 12.5)!
+        static let smallRegularFont: UIFont = UIFont(name: "OpenSans", size: 12.0)!
         static let mediumRegularFont: UIFont = UIFont(name: "OpenSans", size: 17.0)!
         static let mediumSmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 15.0)!
         static let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 20.0)!
         
-        static let smallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 12.5)!
+        static let smallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 12.0)!
         static let mediumSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 17.0)!
-        static let mediumSmallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 14.0)!
+        static let mediumSmallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 15.0)!
+        static let mediumVerySmallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 14.0)!
         static let veryLargeSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 25.5)!
         
-        static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.5)!
+        static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.0)!
         static let mediumBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 16.0)!
         static let mediumLargeBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 17.5)!
         static let navTitleBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 20.0)!
@@ -152,6 +153,7 @@ public class Styles: NSObject {
     public class var smallSemiboldFont: UIFont { return FontCache.smallSemiboldFont }
     public class var mediumSemiboldFont: UIFont { return FontCache.mediumSemiboldFont }
     public class var mediumSmallSemiboldFont: UIFont { return FontCache.mediumSmallSemiboldFont }
+    public class var mediumVerySmallSemiboldFont: UIFont { return FontCache.mediumVerySmallSemiboldFont }
     public class var veryLargeSemiboldFont: UIFont { return FontCache.veryLargeSemiboldFont }
 
     public class var smallBoldFont: UIFont { return FontCache.smallBoldFont }

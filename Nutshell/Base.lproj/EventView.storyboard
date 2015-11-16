@@ -10,11 +10,34 @@
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <customFonts key="customFonts">
+        <mutableArray key="OpenSans-Bold.ttf">
+            <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
+        </mutableArray>
         <mutableArray key="OpenSans-Regular.ttf">
+            <string>OpenSans</string>
+            <string>OpenSans</string>
+            <string>OpenSans</string>
+            <string>OpenSans</string>
+            <string>OpenSans</string>
+            <string>OpenSans</string>
+            <string>OpenSans</string>
+            <string>OpenSans</string>
+            <string>OpenSans</string>
+            <string>OpenSans</string>
+            <string>OpenSans</string>
             <string>OpenSans</string>
             <string>OpenSans</string>
         </mutableArray>
         <mutableArray key="OpenSans-Semibold.ttf">
+            <string>OpenSans-Semibold</string>
+            <string>OpenSans-Semibold</string>
+            <string>OpenSans-Semibold</string>
+            <string>OpenSans-Semibold</string>
             <string>OpenSans-Semibold</string>
             <string>OpenSans-Semibold</string>
             <string>OpenSans-Semibold</string>
@@ -134,11 +157,11 @@
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Tacos" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ohg-Qf-hKk" userLabel="titleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                             <rect key="frame" x="46" y="16" width="46" height="24"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellTitle"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventListCellTitle"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeSmallIcon" highlightedImage="placeSmallIcon" translatesAutoresizingMaskIntoConstraints="NO" id="hOf-cI-b81" userLabel="placeIcon">
@@ -150,21 +173,21 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="El Farolito" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oUx-3c-Ssy" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="65" y="44" width="60" height="38"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <rect key="frame" x="65" y="44" width="58" height="38"/>
+                                            <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="12"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellLocation"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventListCellLocation"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="x 4" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Whe-Pt-KZq" userLabel="repeatCountLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="313" y="19" width="18" height="18"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <rect key="frame" x="314" y="20" width="17" height="17"/>
+                                            <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="12"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableListCellRepeatCount"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventListCellRepeatCount"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v7l-kJ-wNL" userLabel="disclosureButton">
@@ -275,11 +298,11 @@
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="This is the title" lineBreakMode="wordWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ptv-E0-A66" userLabel="tableHeaderTitle" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                             <rect key="frame" x="32" y="26" width="198" height="24"/>
-                                            <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="25.5"/>
+                                            <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                             <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderTitle"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="groupedEventHeaderTitle"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeSmallIcon" translatesAutoresizingMaskIntoConstraints="NO" id="kTc-vF-Qra" userLabel="placeIcon">
@@ -290,8 +313,8 @@
                                             </constraints>
                                         </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Location" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SxI-OJ-qN3" userLabel="tableHeaderLocation" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="51" y="55" width="179" height="19"/>
-                                            <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="12.5"/>
+                                            <rect key="frame" x="51" y="55" width="179" height="18"/>
+                                            <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="12"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                             <userDefinedRuntimeAttributes>
@@ -299,9 +322,9 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xnK-Ld-hs9" userLabel="eatAgainLargeHitArea">
-                                            <rect key="frame" x="239" y="22" width="56" height="52"/>
+                                            <rect key="frame" x="235" y="22" width="62" height="54"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="60" id="K7m-5d-ptN"/>
+                                                <constraint firstAttribute="width" relation="lessThanOrEqual" constant="100" id="K7m-5d-ptN"/>
                                             </constraints>
                                             <connections>
                                                 <segue destination="wuR-Cf-1Tk" kind="presentation" identifier="EventItemAddSegue" id="F4O-hJ-7F1"/>
@@ -318,13 +341,13 @@
                                                 <segue destination="wuR-Cf-1Tk" kind="presentation" identifier="EventItemAddSegue" id="Yx2-qa-hve"/>
                                             </connections>
                                         </button>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Eat again" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PpK-Rp-Hxw" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="239" y="56" width="56" height="18"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Eat again" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PpK-Rp-Hxw" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                            <rect key="frame" x="235" y="56" width="62" height="20"/>
+                                            <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="14"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                             <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderLocation"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="groupedEventHeaderButton"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                     </subviews>
@@ -371,7 +394,7 @@
                             </userDefinedRuntimeAttributes>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="eventItemCell" id="t6w-VC-MaZ" customClass="EventGroupTableViewCell" customModule="Nutshell" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="eventItemCell" rowHeight="164" id="t6w-VC-MaZ" customClass="EventGroupTableViewCell" customModule="Nutshell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="189" width="320" height="164"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="t6w-VC-MaZ" id="QIn-qj-9Hx">
@@ -388,7 +411,7 @@
                                                     </constraints>
                                                 </imageView>
                                             </subviews>
-                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="backgroundColor" red="0.94901960784313721" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstItem="PH5-2u-P04" firstAttribute="leading" secondItem="8B8-Re-ww8" secondAttribute="leading" id="3oB-Yc-v6A"/>
                                                 <constraint firstAttribute="trailing" secondItem="PH5-2u-P04" secondAttribute="trailing" id="O3x-sm-Ame"/>
@@ -415,21 +438,21 @@
                                             </constraints>
                                         </view>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Diet coke and 10 chips" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d9p-x8-wr7" userLabel="titleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="32" y="20" width="244" height="24"/>
-                                            <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="10"/>
+                                            <rect key="frame" x="32" y="20" width="244" height="21"/>
+                                            <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
                                             <color key="textColor" red="0.29019607843137252" green="0.29019607843137252" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellTitle"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="groupedEventCellTitle"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hkV-fw-Ufw" userLabel="timeLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="32" y="46" width="256" height="9"/>
-                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
-                                            <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.55686274509803924" alpha="1" colorSpace="calibratedRGB"/>
+                                            <rect key="frame" x="32" y="43" width="256" height="17"/>
+                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
+                                            <color key="textColor" red="0.30196078431372547" green="0.30588235294117649" blue="0.29803921568627451" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableCellSubtitle"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="groupedEventCellDate"/>
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P6c-tV-ffU" userLabel="rightDiscloseButton">
@@ -443,12 +466,15 @@
                                                 <action selector="disclosureTouchDownHandler:" destination="gjn-FB-qdd" eventType="touchDown" id="Ie6-LE-kyj"/>
                                             </connections>
                                         </button>
-                                        <view contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HMO-WG-wUK" userLabel="photoCollectionViewContainer">
-                                            <rect key="frame" x="32" y="69" width="288" height="79"/>
+                                        <view autoresizesSubviews="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HMO-WG-wUK" userLabel="photoCollectionViewContainer">
+                                            <rect key="frame" x="32" y="74" width="288" height="74"/>
                                             <subviews>
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="f4D-EH-5Lz">
                                                     <rect key="frame" x="0.0" y="0.0" width="288" height="79"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="79" id="E4f-TM-fC1"/>
+                                                    </constraints>
                                                     <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="0.0" id="qs7-yO-c70">
                                                         <size key="itemSize" width="224" height="79"/>
                                                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -480,10 +506,9 @@
                                             <constraints>
                                                 <constraint firstAttribute="width" priority="749" constant="224" id="27h-3I-hBK"/>
                                                 <constraint firstAttribute="trailing" secondItem="f4D-EH-5Lz" secondAttribute="trailing" id="604-gy-n9f"/>
-                                                <constraint firstAttribute="height" constant="79" id="ZYf-hh-4VD"/>
+                                                <constraint firstAttribute="height" priority="750" constant="79" id="ZYf-hh-4VD"/>
                                                 <constraint firstItem="f4D-EH-5Lz" firstAttribute="leading" secondItem="HMO-WG-wUK" secondAttribute="leading" id="fPp-ZG-Hi8"/>
                                                 <constraint firstItem="f4D-EH-5Lz" firstAttribute="top" secondItem="HMO-WG-wUK" secondAttribute="top" id="gP0-O3-XIi"/>
-                                                <constraint firstAttribute="bottom" secondItem="f4D-EH-5Lz" secondAttribute="bottom" id="yFp-GP-cCb"/>
                                             </constraints>
                                         </view>
                                     </subviews>
@@ -579,25 +604,25 @@
                                                     </view>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="Title of this event" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U73-Nl-2gk" userLabel="eventTitleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="16" y="0.0" width="343" height="68"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17.5"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventTitleText"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="detailHeaderTitle"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notes for this event" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="au5-2w-K1j" userLabel="eventNotesLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="16" y="0.0" width="343" height="143"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="notesText"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="detailHeaderNotes"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015    4:21 PM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bxw-YN-kxC" userLabel="eventDateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="16" y="21" width="343" height="167"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
@@ -619,7 +644,7 @@
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="130" id="jjz-cz-S11"/>
                                                                 </constraints>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="12"/>
                                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
@@ -749,7 +774,7 @@
                                                         <state key="normal" image="starNormal"/>
                                                         <state key="selected" image="starHighlighted"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderCount"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="detailViewButtonText"/>
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="nutCrackedButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="mlG-03-kmc"/>
@@ -757,11 +782,11 @@
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nut cracked?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c32-24-Hp7" userLabel="nutCrackedLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="75" y="0.0" width="113" height="58"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="12"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderCount"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="detailViewButtonText"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                 </subviews>
@@ -791,10 +816,11 @@
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XKQ-xY-799" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="187" height="58"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="12"/>
                                                         <inset key="titleEdgeInsets" minX="25" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                         <state key="normal" title="Eat again" image="smallAdd"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="tableHeaderCount"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="detailViewButtonText"/>
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <segue destination="wuR-Cf-1Tk" kind="presentation" identifier="EventItemAddSegue" id="Shc-Yg-1xe"/>
@@ -840,7 +866,7 @@
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="37" id="O2U-ur-ofZ"/>
                                                                 </constraints>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="17"/>
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
@@ -852,7 +878,7 @@
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="30" id="3Ik-yO-z4I"/>
                                                                 </constraints>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
@@ -864,7 +890,7 @@
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="21" id="fXi-zT-0oL"/>
                                                                 </constraints>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
@@ -1114,7 +1140,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="158"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g3s-Sw-gxd" userLabel="titleTextLargeHitAreaButton">
-                                                        <rect key="frame" x="12" y="16" width="351" height="44"/>
+                                                        <rect key="frame" x="12" y="16" width="351" height="43"/>
                                                         <connections>
                                                             <action selector="titleTextLargeHitAreaButton:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="bVh-BR-LRc"/>
                                                         </connections>
@@ -1122,10 +1148,10 @@
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Meal name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EOZ-el-4r9" userLabel="titleTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="12" y="16" width="351" height="24"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17.5"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventTitleText"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewTitle"/>
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="titleEditingDidBegin:" destination="wuR-Cf-1Tk" eventType="editingDidBegin" id="Vse-CP-KN2"/>
@@ -1134,27 +1160,27 @@
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Simple and repeatable" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2gd-CX-jRH" userLabel="titleHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="122" y="42" width="131" height="18"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <rect key="frame" x="125" y="42" width="126" height="17"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventLocationDateHint"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewHint"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Xd-vE-tGN" userLabel="notesTextLargeHitAreaButton">
-                                                        <rect key="frame" x="12" y="73" width="351" height="41"/>
+                                                        <rect key="frame" x="12" y="73" width="351" height="43"/>
                                                         <connections>
                                                             <action selector="notesTextLargeHitAreaButton:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="PKa-DR-lQY"/>
                                                         </connections>
                                                     </button>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Notes" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HNf-3W-C8L" userLabel="notesTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="12" y="73" width="351" height="21"/>
+                                                        <rect key="frame" x="12" y="73" width="351" height="24"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
                                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventNotesText"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewNotes"/>
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="notesEditingDidBegin:" destination="wuR-Cf-1Tk" eventType="editingDidBegin" id="8Fk-02-aaY"/>
@@ -1163,12 +1189,12 @@
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sides, dessert, anything else?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QY4-ef-Zcn" userLabel="notesHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="103" y="96" width="169" height="18"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <rect key="frame" x="106" y="99" width="163" height="17"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventLocationDateHint"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewHint"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                 </subviews>
@@ -1198,7 +1224,7 @@
                                                 <rect key="frame" x="0.0" y="158" width="375" height="100"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n3T-bo-EEn" userLabel="placeButtonLargeHitArea">
-                                                        <rect key="frame" x="16" y="0.0" width="100" height="48"/>
+                                                        <rect key="frame" x="16" y="0.0" width="100" height="47"/>
                                                         <connections>
                                                             <action selector="locationButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="IIO-JJ-cNg"/>
                                                         </connections>
@@ -1214,8 +1240,25 @@
                                                             <action selector="locationButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="U1K-Va-jnV"/>
                                                         </connections>
                                                     </button>
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Location" textAlignment="center" adjustsFontSizeToFit="NO" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="b5b-5h-R2Q" userLabel="locationTextView" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="16" y="30" width="100" height="17"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Zrg-ax-gG8"/>
+                                                        </constraints>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
+                                                        <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewLocation"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="locationEditingDidBegin:" destination="wuR-Cf-1Tk" eventType="editingDidBegin" id="i7H-7E-iUZ"/>
+                                                            <action selector="locationEditingDidEnd:" destination="wuR-Cf-1Tk" eventType="editingDidEnd" id="gER-eO-Flf"/>
+                                                            <action selector="locationEditingDidEnd:" destination="wuR-Cf-1Tk" eventType="editingDidEndOnExit" id="wSq-4D-wL5"/>
+                                                        </connections>
+                                                    </textField>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xAO-cS-MZQ" userLabel="calendarButtonLargeHitArea">
-                                                        <rect key="frame" x="150" y="0.0" width="75" height="66"/>
+                                                        <rect key="frame" x="151" y="0.0" width="72" height="65"/>
                                                         <connections>
                                                             <action selector="dateButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="Ib0-nW-2TQ"/>
                                                         </connections>
@@ -1258,39 +1301,22 @@
                                                             <action selector="photoButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="xJP-G8-JFP"/>
                                                         </connections>
                                                     </button>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Location" textAlignment="center" adjustsFontSizeToFit="NO" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="b5b-5h-R2Q" userLabel="locationTextView" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="30" width="100" height="18"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="Zrg-ax-gG8"/>
-                                                        </constraints>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
-                                                        <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventLocationDateHint"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                        <connections>
-                                                            <action selector="locationEditingDidBegin:" destination="wuR-Cf-1Tk" eventType="editingDidBegin" id="i7H-7E-iUZ"/>
-                                                            <action selector="locationEditingDidEnd:" destination="wuR-Cf-1Tk" eventType="editingDidEnd" id="gER-eO-Flf"/>
-                                                            <action selector="locationEditingDidEnd:" destination="wuR-Cf-1Tk" eventType="editingDidEndOnExit" id="wSq-4D-wL5"/>
-                                                        </connections>
-                                                    </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7bq-Jj-vtF" userLabel="date1Label" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="150" y="31" width="75" height="18"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <rect key="frame" x="151" y="31" width="72" height="17"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventLocationDateHint"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewDate"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4:21 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OOd-y1-fQU" userLabel="date2Label" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="164" y="48" width="47" height="18"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <rect key="frame" x="165" y="48" width="45" height="17"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventLocationDateHint"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewDate"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HLo-MG-ejk" userLabel="pic1Container">
@@ -1494,6 +1520,7 @@
                                                             <constraint firstAttribute="height" constant="54" id="2zZ-gM-jpT"/>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="54" id="HUM-OG-dS0"/>
                                                         </constraints>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="20"/>
                                                         <state key="normal" title="Cancel"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightBackgroundButton"/>
@@ -1512,6 +1539,7 @@
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="54" id="Gfb-9I-8e5"/>
                                                         </constraints>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="20"/>
                                                         <state key="normal" title="Done"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackgroundButton"/>
@@ -1550,7 +1578,7 @@
                                         </constraints>
                                         <state key="normal" title="Save"/>
                                         <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="saveButton"/>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewSaveButton"/>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="saveButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="mTW-P2-R3G"/>
@@ -1692,7 +1720,7 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="Yx2-qa-hve"/>
         <segue reference="vDO-8u-VmA"/>
-        <segue reference="Shc-Yg-1xe"/>
     </inferredMetricsTieBreakers>
 </document>

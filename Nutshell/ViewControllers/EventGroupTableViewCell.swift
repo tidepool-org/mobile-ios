@@ -91,13 +91,16 @@ class EventGroupTableViewCell: BaseUITableViewCell {
                     photoContainerHeight = c.constant
                 }
                 c.constant = photoCount > 0 ? photoContainerHeight : 0.0
+                break
             }
+        }
+        for c in photoCollectionViewContainer.constraints {
             // let the width shrink if there is only one photo, so tapping past the one photo will segue to the detail view...
             if c.firstAttribute == NSLayoutAttribute.Width {
                 c.priority = photoCount == 1 ? 751 : 749
+                break
             }
         }
-        photoCollectionViewContainer.layoutIfNeeded()
     }
 }
 

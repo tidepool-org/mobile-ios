@@ -37,6 +37,7 @@ class EventGroupTableViewController: BaseUITableViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        //NSLog("Event group viewWillAppear")
         super.viewWillAppear(animated)
         if eventGroup.itemArray.count <= 1 {
             self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
@@ -172,7 +173,8 @@ extension EventGroupTableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("eventItemCell", forIndexPath: indexPath) as! EventGroupTableViewCell
-        
+        //NSLog("Event group cellForRowAtIndexPath: \(indexPath)")
+       
         // Configure the cell...
         if indexPath.item < eventGroup.itemArray.count {
             let eventItem = eventGroup.itemArray[indexPath.item]
