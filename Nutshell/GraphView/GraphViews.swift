@@ -61,8 +61,8 @@ public class GraphViews {
     private let mealLineColor = Styles.darkPurpleColor
     // Colors
     // TODO: add all graph colors here, based on Styles colors
-    private let backgroundRightColor = UIColor(red: 0.949, green: 0.953, blue: 0.961, alpha: 1.000)
-    private let backgroundLeftColor = UIColor(red: 0.918, green: 0.937, blue: 0.941, alpha: 1.000)
+    private let backgroundRightColor = Styles.veryLightGreyColor
+    private let backgroundLeftColor = Styles.veryLightGreyColor
     private let horizontalLineColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
 
     //
@@ -98,7 +98,7 @@ public class GraphViews {
     // Basal data
     //
     private let basalBlueRectColor = Styles.blueColor
-    private let basalLightBlueRectColor = Styles.lightBlueColor
+    private let basalLightBlueRectColor = Styles.blueColor
     private let kBasalMinScaleValue: CGFloat = 0.0
     
     //
@@ -336,6 +336,8 @@ public class GraphViews {
         //
         //  Draw the background blocks
         //
+        //  Note: This supports drawing backgrounds of alternating colors, every 3 hours on 3 hour boundaries. 
+        //      Currently, both colors are set to be identical.
 
         var nextXBoundary = floor(CGFloat(firstBoundarytimeOffset) * viewPixelsPerSec)
         print("first hour boundary at \(firstBoundarytimeOffset/60) minutes")
