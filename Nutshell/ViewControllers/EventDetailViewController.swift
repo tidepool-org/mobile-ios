@@ -38,8 +38,8 @@ class EventDetailViewController: BaseUIViewController {
     @IBOutlet weak var notesLabel: NutshellUILabel!
     
     @IBOutlet weak var dateLabel: NutshellUILabel!
-    @IBOutlet weak var locationContainerView: UIView!
     @IBOutlet weak var locationLabel: NutshellUILabel!
+    @IBOutlet weak var locationIcon: UIImageView!
     
     @IBOutlet weak var nutCrackedButton: NutshellUIButton!
     @IBOutlet weak var nutCrackedLabel: NutshellUILabel!
@@ -176,10 +176,12 @@ class EventDetailViewController: BaseUIViewController {
             photoUIImageView.hidden = true
             dateLabel.text = NutUtils.standardUIDateString(eventTime, relative: true)
             
-            locationContainerView.hidden = true
+            locationIcon.hidden = true
+            locationLabel.hidden = true
             if eventItem.location.characters.count > 0 {
                 locationLabel.text = eventItem.location
-                locationContainerView.hidden = false
+                locationIcon.hidden = false
+                locationLabel.hidden = false
             }
 
             photoUIImageView.hidden = true

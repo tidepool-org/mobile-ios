@@ -43,7 +43,7 @@ public class Styles: NSObject {
         "brightBackgroundButton": brightBlueColor,
         "userDataEntry": whiteColor,
         // menu and account settings
-        "rowSeparator": mediumDarkGreyColor,
+        "rowSeparator": dimmedDarkGreyColor,
         "darkBackgroundButton": darkPurpleColor,
         // add/edit event scenes
         "addEditViewSaveButton": brightBlueColor,
@@ -70,7 +70,7 @@ public class Styles: NSObject {
         "groupedEventHeaderLocation": (smallSemiboldFont, whiteColor),
         "groupedEventHeaderButton": (mediumVerySmallSemiboldFont, whiteColor),
         "groupedEventCellTitle": (mediumSmallSemiboldFont, darkGreyColor),
-        "groupedEventCellDate": (smallRegularFont, darkMediumGreyColor),
+        "groupedEventCellDate": (smallRegularFont, altDarkGreyColor),
         // event detail view scene
         "detailHeaderTitle": (mediumLargeBoldFont, whiteColor),
         "detailHeaderNotes": (mediumRegularFont, whiteColor),
@@ -181,17 +181,13 @@ public class Styles: NSObject {
         static let brightBlueColor: UIColor = UIColor(hex: 0x627cff) 
         static let lightGreyColor: UIColor = UIColor(hex: 0xeaeff0) 
         static let veryLightGreyColor: UIColor = UIColor(hex: 0xf2f3f5) 
-        static let greyColor: UIColor = UIColor(hex: 0xd0d3d4) 
-        static let redColor: UIColor = UIColor(hex: 0xf66f56) 
         static let redErrorColor: UIColor = UIColor(hex: 0xff354e)
         static let pinkColor: UIColor = UIColor(hex: 0xf58fc7)
-        static let lightPurpleColor: UIColor = UIColor(hex: 0xafbcfa)
         static let purpleColor: UIColor = UIColor(hex: 0xb29ac9)
         static let darkGreyColor: UIColor = UIColor(hex: 0x4a4a4a)
         static let lightDarkGreyColor: UIColor = UIColor(hex: 0x5c5c5c) 
         static let altDarkGreyColor: UIColor = UIColor(hex: 0x4d4e4c) 
-        static let darkMediumGreyColor: UIColor = UIColor(hex: 0x8e8e8e) 
-        static let mediumLightGreyColor: UIColor = UIColor(hex: 0xd0d3d4) 
+        static let mediumLightGreyColor: UIColor = UIColor(hex: 0xd0d3d4)
         static let mediumGreyColor: UIColor = UIColor(hex: 0xb8b8b8) 
         static let whiteColor: UIColor = UIColor(hex: 0xffffff) 
         static let dimmedWhiteColor: UIColor = UIColor(hex: 0xffffff, opacity: 0.30)
@@ -207,103 +203,33 @@ public class Styles: NSObject {
         static let lineColor: UIColor = UIColor(hex: 0x281946) 
         static let goldStarColor: UIColor = UIColor(hex: 0xf8ad04) 
         static let greyStarColor: UIColor = UIColor(hex: 0xd0d3d4) 
-        static let mediumDarkGreyColor: UIColor = UIColor(hex: 0x979797, opacity: 0.5)
-        static let lessOpaqueDarkPurple: UIColor  = UIColor(hex: 0x281946, opacity: 0.43) 
-        static let moreOpaqueDarkPurple: UIColor  = UIColor(hex: 0x281946, opacity: 0.54) 
+        static let dimmedDarkGreyColor: UIColor = UIColor(hex: 0x979797, opacity: 0.5)
     }
 
-    // Nav bar:     header
-    // Button:      done button in account settings
-    // View:        splash screen
     public class var darkPurpleColor: UIColor { return ColorCache.darkPurpleColor }
-
-    // Table cell:  selected event
-    // Button:      signup/login active, cancel for account settings,
-    // View:        event title area in event detail
-     public class var brightBlueColor: UIColor { return ColorCache.brightBlueColor }
-    
-    // View:        graph data left side
-     public class var lightGreyColor: UIColor { return ColorCache.lightGreyColor }
-    
-    // Table cell:  event tables
-    // Table background
-    // View:        graph data right side
-     public class var veryLightGreyColor: UIColor { return ColorCache.veryLightGreyColor }
-    
-    // Needed?
-     public class var greyColor: UIColor { return ColorCache.greyColor }
-    
-    // Table cell delete swipe background
-     public class var redColor: UIColor { return ColorCache.redColor }
+    public class var brightBlueColor: UIColor { return ColorCache.brightBlueColor }
+    public class var lightGreyColor: UIColor { return ColorCache.lightGreyColor }
+    public class var veryLightGreyColor: UIColor { return ColorCache.veryLightGreyColor }
 
     //
     // MARK: - Text Colors
     //
     
-    // Open Sans Semibold 11:   UILabel login error text
-    // Open Sans Bold 12:       UILabel event subtext for Apple Healthkit info
     public class var pinkColor: UIColor { return ColorCache.pinkColor }
-
-    // Open Sans Semibold 12.5  Login error text
     public class var redErrorColor: UIColor { return ColorCache.redErrorColor }
-
-    // Open Sans Regular 17:    UILabel? login default text over white background
-     public class var lightPurpleColor: UIColor { return ColorCache.lightPurpleColor }
-
-    // Over light grey background
-    // Open Sans Regular 10:    custom graph axis text
-    // Open Sans Regular 8.5:    custom graph axis text
-    // Open Sans Semibold 17:   UILabel table cell title text
-    // Open Sans Regular 17:    UILabel account settings item description
-     public class var darkGreyColor: UIColor { return ColorCache.darkGreyColor }
-    
-    // Open Sans Regular 17:    UILabel event detail view, missing data upload text
-     public class var lightDarkGreyColor: UIColor { return ColorCache.lightDarkGreyColor }
-
-    // Open Sans Regular 15:    UIButton inactive login button text
-     public class var altDarkGreyColor: UIColor { return ColorCache.altDarkGreyColor }
-
-    // Open Sans Regular 12.5:    UILabel table cell subtext
-     public class var darkMediumGreyColor: UIColor { return ColorCache.darkMediumGreyColor }
-
-    // Open Sans Semibold 25.5:   UILabel account settings, target level text inactive
-     public class var mediumLightGreyColor: UIColor { return ColorCache.mediumLightGreyColor }
-
-    // Over dark purple background
-    // OpenSans Semibold 16:    UILabel event subtext
-     public class var mediumGreyColor: UIColor { return ColorCache.mediumGreyColor }
-
-    // Open Sans Regular 20:    (Appearance) nav bar title, UILabel event title,
-    // Open Sans Semibold 16:   UILabel event subtext
-    // Open Sans Semibold 17:   UILabel table row item delete text, title text in highlighted row
-    // Open Sans Regular 15:    UIButton active login, sign up button text
-     public class var whiteColor: UIColor { return ColorCache.whiteColor }
-     public class var dimmedWhiteColor: UIColor { return ColorCache.dimmedWhiteColor }
-    
-    // Open Sans Regular 17:    UITextField sign up text entries
-    //class var brightBlueColor: UIColor { return brightBlueColor }
-
-    // Open Sans Light 17:      Search placeholder text
+    public class var darkGreyColor: UIColor { return ColorCache.darkGreyColor }
+    public class var lightDarkGreyColor: UIColor { return ColorCache.lightDarkGreyColor }
+    public class var altDarkGreyColor: UIColor { return ColorCache.altDarkGreyColor }
+    public class var mediumLightGreyColor: UIColor { return ColorCache.mediumLightGreyColor }
+    public class var mediumGreyColor: UIColor { return ColorCache.mediumGreyColor }
+    public class var whiteColor: UIColor { return ColorCache.whiteColor }
+    public class var dimmedWhiteColor: UIColor { return ColorCache.dimmedWhiteColor }
     public class var blackColor: UIColor { return ColorCache.blackColor }
-
-    // Open Sans Semibold 10:   custom graph carb amount text
-    // Open Sans Semibold 4.5:    custom graph carb amount text
-    //class var darkPurpleColor: UIColor { return ColorCache.darkPurpleColor }
-
-    // target low and high, blood glucose graph
-    // Open Sans Semibold 10:   custom graph blood glucose item text
-    // Open Sans Semibold 25.5:   UILabel account settings, low level active
-     public class var peachColor: UIColor { return ColorCache.peachColor }
-    // Row cell delete button...
-     public class var peachDeleteColor: UIColor { return ColorCache.peachDeleteColor }
-    // Open Sans Semibold 10:   custom graph blood glucose item text
-    // Open Sans Semibold 25.5:   UILabel account settings, high level active
-     public class var purpleColor: UIColor { return ColorCache.purpleColor }
-    // Open Sans Semibold 10:   custom graph glucose item text
-     public class var greenColor: UIColor { return ColorCache.greenColor }
-
-    // Open Sans Regular 17:   UILabel event detail view, missing data upload link text
-     public class var lightGreenColor: UIColor { return ColorCache.lightGreenColor }
+    public class var peachColor: UIColor { return ColorCache.peachColor }
+    public class var peachDeleteColor: UIColor { return ColorCache.peachDeleteColor }
+    public class var purpleColor: UIColor { return ColorCache.purpleColor }
+    public class var greenColor: UIColor { return ColorCache.greenColor }
+    public class var lightGreenColor: UIColor { return ColorCache.lightGreenColor }
 
     //
     // MARK: - Graph Colors
@@ -317,10 +243,10 @@ public class Styles: NSObject {
     // public class var darkGreyColor: UIColor { return darkGreyColor }
     
     // insulin bar
-     public class var lightBlueColor: UIColor { return ColorCache.lightBlueColor }
-     public class var blueColor: UIColor { return ColorCache.blueColor }
+    public class var lightBlueColor: UIColor { return ColorCache.lightBlueColor }
+    public class var blueColor: UIColor { return ColorCache.blueColor }
     // Open Sans Semibold 10:   custom graph insulin amount text
-     public class var mediumBlueColor: UIColor { return ColorCache.mediumBlueColor }
+    public class var mediumBlueColor: UIColor { return ColorCache.mediumBlueColor }
     
     
     // blood glucose data
@@ -329,26 +255,19 @@ public class Styles: NSObject {
     // public class var greenColor: UIColor { return greenColor }
     
     // event carb amount circle and vertical line
-     public class var goldColor: UIColor { return ColorCache.goldColor }
-     public class var lineColor: UIColor { return ColorCache.lineColor }
+    public class var goldColor: UIColor { return ColorCache.goldColor }
+    public class var lineColor: UIColor { return ColorCache.lineColor }
     
-    // health event bar
-    // public class var pinkColor: UIColor { return pinkColor }
-
     //
     // MARK: - Misc Colors
     //
     
     // Icon:    favorite star colors
-     public class var goldStarColor: UIColor { return ColorCache.goldStarColor }
-     public class var greyStarColor: UIColor { return ColorCache.greyStarColor }
+    public class var goldStarColor: UIColor { return ColorCache.goldStarColor }
+    public class var greyStarColor: UIColor { return ColorCache.greyStarColor }
 
     // View:    table row line separator
-     public class var mediumDarkGreyColor: UIColor { return ColorCache.mediumDarkGreyColor }
-
-    // View:    transparency - screen overlays top and bottom
-     public class var lessOpaqueDarkPurple: UIColor  { return ColorCache.lessOpaqueDarkPurple }
-     public class var moreOpaqueDarkPurple: UIColor  { return ColorCache.moreOpaqueDarkPurple }
+    public class var dimmedDarkGreyColor: UIColor { return ColorCache.dimmedDarkGreyColor }
 
     //
     // MARK: - Strings
