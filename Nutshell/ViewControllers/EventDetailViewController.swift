@@ -34,12 +34,13 @@ class EventDetailViewController: BaseUIViewController {
     
     @IBOutlet weak var photoUIImageView: UIImageView!
 
-    @IBOutlet weak var titleLabel: NutshellUILabel!
-    @IBOutlet weak var notesLabel: NutshellUILabel!
-    
-    @IBOutlet weak var dateLabel: NutshellUILabel!
-    @IBOutlet weak var locationLabel: NutshellUILabel!
-    @IBOutlet weak var locationIcon: UIImageView!
+    @IBOutlet weak var headerOverlayContainer: UIControl!
+    @IBOutlet weak var topSectionContainer: NutshellUIView!
+    var titleLabel: UILabel?
+    var notesLabel: UILabel?
+    var dateLabel: UILabel?
+    var locationLabel: UILabel?
+    var locationIcon: UIImageView?
     
     @IBOutlet weak var nutCrackedButton: NutshellUIButton!
     @IBOutlet weak var nutCrackedLabel: NutshellUILabel!
@@ -63,6 +64,12 @@ class EventDetailViewController: BaseUIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        //NSLog("viewWillAppear")
+        layoutHeaderView()
     }
     
     //
@@ -157,7 +164,7 @@ class EventDetailViewController: BaseUIViewController {
                 }
                 // Save changes to database
                 mealItem.saveChanges()
-                configureDetailView()
+                configurePhotoBackground()
             }
         }
     }
@@ -166,24 +173,9 @@ class EventDetailViewController: BaseUIViewController {
     // MARK: - Configuration
     //
     
-    private func configureDetailView() {
+    private func configurePhotoBackground() {
         if let eventItem = eventItem {
-            viewExistingEvent = true
-            titleLabel.text = eventItem.title
-            notesLabel.text = eventItem.notes
-            eventTime = eventItem.time
-            configureNutCracked()
             photoUIImageView.hidden = true
-            dateLabel.text = NutUtils.standardUIDateString(eventTime, relative: true)
-            
-            locationIcon.hidden = true
-            locationLabel.hidden = true
-            if eventItem.location.characters.count > 0 {
-                locationLabel.text = eventItem.location
-                locationIcon.hidden = false
-                locationLabel.hidden = false
-            }
-
             photoUIImageView.hidden = true
             photoDisplayImageView.hidden = true
             let photoUrls = eventItem.photoUrlArray()
@@ -194,11 +186,244 @@ class EventDetailViewController: BaseUIViewController {
                 NutUtils.loadImage(photoUrls[0], imageView: photoUIImageView)
             }
         }
-        
-        graphCenterTime = eventTime
+    }
+    
+    private func configureDetailView() {
+        if let eventItem = eventItem {
+            viewExistingEvent = true
+            configureNutCracked()
+
+            titleLabel = addLabel(eventItem.title, labelStyle: "detailHeaderTitle", currentView: titleLabel)
+            notesLabel = addLabel(eventItem.notes, labelStyle: "detailHeaderNotes", currentView: notesLabel)
+            notesLabel!.hidden = eventItem.notes.isEmpty
+
+            eventTime = eventItem.time
+            let dateLabelText = NutUtils.standardUIDateString(eventTime, relative: true)
+            dateLabel = addLabel(dateLabelText, labelStyle: "detailHeaderDate", currentView: dateLabel)
+
+            locationLabel = addLabel(eventItem.location, labelStyle: "detailHeaderLocation", currentView: locationLabel)
+            locationLabel!.hidden = eventItem.location.isEmpty
+            if !eventItem.location.isEmpty {
+                let icon = UIImage(named:"placeSmallIcon")
+                if let locationIcon = locationIcon {
+                    locationIcon.removeFromSuperview()
+                }
+                locationIcon = UIImageView(image: icon)
+                headerOverlayContainer.addSubview(locationIcon!)
+            }
+            configurePhotoBackground()
+        }
         // set up graph area later when we know size of view
+        graphCenterTime = eventTime
+    }
+    
+    private func addLabel(labelText: String, labelStyle: String, currentView: UILabel?) -> UILabel {
+        
+        let paragraphStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        paragraphStyle.alignment = .Center
+        paragraphStyle.lineBreakMode = .ByWordWrapping
+        paragraphStyle.lineHeightMultiple = 0.9
+        
+        let label = NutshellUILabel(frame: CGRectZero)
+        label.usage = labelStyle
+        label.numberOfLines = 0
+        label.attributedText = NSMutableAttributedString(string: labelText, attributes: [NSFontAttributeName: label.font, NSForegroundColorAttributeName: label.textColor, NSParagraphStyleAttributeName:paragraphStyle])
+        if let currentView = currentView {
+            currentView.removeFromSuperview()
+        }
+        headerOverlayContainer.addSubview(label)
+        return label
     }
 
+    //
+    // MARK: - Layout Header
+    //
+
+    private let kMinTopMargin: CGFloat = 5.0
+    private let kTargetTopMargin: CGFloat = 20.0
+    private let kMinBottomMargin: CGFloat = 5.0
+    private let kTargetBottomMargin: CGFloat = 20.0
+    private let kMinTitleSubtitleSeparation: CGFloat = 2.0
+    private let kTargetTitleSubtitleSeparation: CGFloat = 10.0
+    private let kMinSubtitleDateSeparation: CGFloat = 2.0
+    private let kTargetSubtitleDateSeparation: CGFloat = 10.0
+    private let kMinDateLocationSeparation: CGFloat = 2.0
+    private let kTargetDateLocationSeparation: CGFloat = 10.0
+    private let klocationIconOffset: CGFloat = 8.0
+    
+    private func sizeNeededForLabel(availWidth: CGFloat, availHeight: CGFloat, label: UILabel?) -> CGSize {
+        if let attribStr = label?.attributedText {
+            let sizeNeeded = attribStr.boundingRectWithSize(CGSize(width: availWidth, height: availHeight), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
+            return CGSize(width: ceil(sizeNeeded.width), height: ceil(sizeNeeded.height))
+        } else {
+            return CGSizeZero
+        }
+    }
+    
+    private func centerLabelInTopFrame(label: UILabel?, frame: CGRect) -> CGSize {
+        var calcFrame = CGRectZero
+        if let label = label {
+            let sizeNeeded = sizeNeededForLabel(frame.size.width, availHeight: frame.size.height, label: label)
+            calcFrame = frame
+            calcFrame.size.height = ceil(sizeNeeded.height)
+            calcFrame.origin.x += ceil((frame.size.width - sizeNeeded.width)/2)
+            calcFrame.origin.y = ceil(calcFrame.origin.y)
+            calcFrame.size.width = ceil(sizeNeeded.width)
+            label.frame = calcFrame
+            return sizeNeeded
+        } else {
+            return CGSizeZero
+        }
+    }
+    
+    private func growHeaderOverlayContainer(newMultiplier: CGFloat) -> CGRect {
+        for c in topSectionContainer.constraints {
+            // remove current constraint because multiplier can't be set
+            if c.firstAttribute == NSLayoutAttribute.Width {
+                topSectionContainer.removeConstraint(c)
+                break
+            }
+        }
+        let newC = NSLayoutConstraint(item: topSectionContainer, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: topSectionContainer, attribute: NSLayoutAttribute.Height, multiplier: newMultiplier, constant: 0.0)
+        topSectionContainer.addConstraint(newC)
+        topSectionContainer.setNeedsLayout()
+        topSectionContainer.layoutIfNeeded()
+        headerOverlayContainer.setNeedsLayout()
+        headerOverlayContainer.layoutIfNeeded()
+        return headerOverlayContainer.bounds
+    }
+    
+    private func shrinkLabelHeight(curAllocation: CGFloat, minAllocation: CGFloat, width: CGFloat, label: UILabel) -> CGFloat {
+        // trim label height allocation to minAllocation, returning reclaimed delta
+        if curAllocation > minAllocation {
+            let newAllocation = sizeNeededForLabel(width, availHeight: minAllocation, label: label).height
+            let reclaimable = curAllocation - newAllocation
+            if reclaimable > 0 {
+                return reclaimable
+            }
+        }
+        return 0.0
+    }
+
+/*
+    Top section size should be minimum of half the screen width (for 2:1 aspect ratio), up to perhaps a 4:3 aspect ratio (to leave enough room for the graph at the bottom after subtracting space for the top and middle bars).
+    
+    Measure what is needed for all fields; date field is one line, the others can be multiple lines. If that fits with some space to distribute between fields, we're pretty much done.
+    
+    If not, start by growing the section size, trying aspect ratios of 3:2 and then 4:3. If we still don't have enough room for all fields, start limiting those fields to some % of the space, first location, then title, then notes.
+    
+    Distribute the remaining space proportionally between the fields, with slightly more space at top and bottom margins.
+*/
+
+    private func layoutHeaderView() {
+        
+        //NSLog("EventDetailVC layoutHeaderView")
+        headerOverlayContainer.setNeedsLayout()
+        headerOverlayContainer.layoutIfNeeded()
+        var containerframe = headerOverlayContainer.bounds
+        
+        let titleHeightNeeded = sizeNeededForLabel(containerframe.width, availHeight: containerframe.height, label: titleLabel).height
+        let dateHeightNeeded = sizeNeededForLabel(containerframe.width, availHeight: containerframe.height, label: dateLabel).height
+        // note subtitle and location are optional
+        let subtitleHeightNeeded = notesLabel!.hidden ? 0.0 : sizeNeededForLabel(containerframe.width, availHeight: containerframe.height, label: notesLabel).height
+        let locationHeightNeeded = locationLabel!.hidden ? 0.0 : sizeNeededForLabel(containerframe.width, availHeight: containerframe.height, label: locationLabel).height
+        var totalHeightNeeded = titleHeightNeeded + subtitleHeightNeeded + dateHeightNeeded + locationHeightNeeded
+        let minSpacing = kMinTopMargin + kMinBottomMargin + kMinTitleSubtitleSeparation + kMinSubtitleDateSeparation + kMinDateLocationSeparation
+        let targetSpacing = kTargetTopMargin + kTargetBottomMargin + kTargetTitleSubtitleSeparation + kTargetSubtitleDateSeparation + kTargetDateLocationSeparation
+        
+        // if we are short space, try growing the container to a 3:2 aspect ratio from 2:1
+        if (containerframe.height < totalHeightNeeded + targetSpacing) {
+            //NSLog("increase container to 3:2 aspect ratio to fit large text")
+            containerframe = growHeaderOverlayContainer(1.5)
+        }
+        
+        // if we are still short space, try a 4:3 aspect ratio
+        if (containerframe.height < totalHeightNeeded + targetSpacing) {
+            //NSLog("increase container to 4:3 aspect ratio to fit large text")
+            containerframe = growHeaderOverlayContainer(4.0/3.0)
+        }
+        
+        // next try min spacing - if we still don't fit, need to start reducing field sizes...
+        
+        var titleHeightAllocated = titleHeightNeeded
+        var subtitleHeightAllocated = subtitleHeightNeeded
+        let dateHeightAllocated = dateHeightNeeded
+        var locationHeightAllocated = locationHeightNeeded
+        var locationIconWidth: CGFloat = 0.0
+        if let locationIcon = locationIcon {
+            if !locationIcon.hidden {
+                locationIconWidth = locationIcon.bounds.width + 2*klocationIconOffset
+            }
+        }
+        
+        let spaceTarget = containerframe.height - minSpacing
+        if locationHeightNeeded != 0.0 && (containerframe.height < totalHeightNeeded + minSpacing) {
+            // still need space, try limiting location field...
+            let reclaimable = shrinkLabelHeight(locationHeightNeeded, minAllocation: spaceTarget/4, width: headerOverlayContainer.bounds.width - locationIconWidth, label: locationLabel!)
+            totalHeightNeeded -= reclaimable
+            locationHeightAllocated -= reclaimable
+            //NSLog("save space by decreasing allocation to location by \(reclaimable)")
+        }
+        
+        if subtitleHeightNeeded != 0.0 && (containerframe.height < totalHeightNeeded + minSpacing) {
+            // still need space, try limiting title field...
+            let reclaimable = shrinkLabelHeight(titleHeightNeeded, minAllocation: spaceTarget/4, width: headerOverlayContainer.bounds.width, label: titleLabel!)
+            totalHeightNeeded -= reclaimable
+            titleHeightAllocated -= reclaimable
+            //NSLog("save space by decreasing allocation to title by \(reclaimable)")
+        }
+        
+        if (containerframe.height < totalHeightNeeded + minSpacing) {
+            // still need space, try limiting notes field...
+            let reclaimable = shrinkLabelHeight(subtitleHeightNeeded, minAllocation: spaceTarget/3, width: headerOverlayContainer.bounds.width, label: notesLabel!)
+            totalHeightNeeded -= reclaimable
+            subtitleHeightAllocated -= reclaimable
+            //NSLog("save space by decreasing allocation to subtitle by \(reclaimable)")
+        }
+        
+        // distribute space remaining
+        var spaceRemaining: CGFloat = containerframe.height - totalHeightNeeded
+        //NSLog("space remaining to distribute: \(spaceRemaining)")
+        if spaceRemaining < 0.0 {
+            spaceRemaining = 0.0
+            NSLog("Error: Still too large!!")
+        }
+        
+        var yAdvance = spaceRemaining == 0.0 ? kMinTopMargin : (kTargetTopMargin/targetSpacing) * spaceRemaining
+        var nextFrame = CGRect(x: 0.0, y: yAdvance, width: containerframe.width, height: titleHeightAllocated)
+        
+        var heightUsed = centerLabelInTopFrame(titleLabel, frame: nextFrame).height
+        var spacing = spaceRemaining == 0.0 ? kMinTitleSubtitleSeparation : (kTargetTitleSubtitleSeparation/targetSpacing) * spaceRemaining
+        yAdvance = centerLabelInTopFrame(titleLabel, frame: nextFrame).height + spacing
+        nextFrame.size.height = subtitleHeightAllocated
+        nextFrame.origin.y += yAdvance
+        
+        heightUsed = centerLabelInTopFrame(notesLabel, frame: nextFrame).height
+        spacing = spaceRemaining == 0.0 ? kMinSubtitleDateSeparation : (kTargetSubtitleDateSeparation/targetSpacing) * spaceRemaining
+        yAdvance =  heightUsed + spacing
+        nextFrame.size.height = dateHeightAllocated
+        nextFrame.origin.y += yAdvance
+        
+        heightUsed = centerLabelInTopFrame(dateLabel, frame: nextFrame).height
+        spacing = spaceRemaining == 0.0 ? kMinDateLocationSeparation : (kTargetDateLocationSeparation/targetSpacing) * spaceRemaining
+        yAdvance =  heightUsed + spacing
+        nextFrame.size.height = locationHeightAllocated
+        nextFrame.origin.y += yAdvance
+        
+        if !locationLabel!.hidden {
+            nextFrame.origin.x += locationIconWidth/2.0
+            nextFrame.size.width -= locationIconWidth
+            centerLabelInTopFrame(locationLabel, frame: nextFrame)
+            if let locationIcon = locationIcon, locationLabel = locationLabel {
+                // place icon to left of first line of location...
+                var iconFrame: CGRect = locationIcon.bounds
+                iconFrame.origin.x = ceil(locationLabel.frame.origin.x - iconFrame.width - klocationIconOffset)
+                iconFrame.origin.y = locationLabel.frame.origin.y
+                locationIcon.frame = iconFrame
+            }
+        }
+    }
+    
     //
     // MARK: - Graph view
     //
@@ -239,7 +464,7 @@ class EventDetailViewController: BaseUIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        
+        //NSLog("EventDetailVC viewDidLayoutSubviews")
         if viewExistingEvent && (graphCollectionView != nil) {
             // self.view's direct subviews are laid out.
             // force my subview to layout its subviews:

@@ -15,12 +15,8 @@
             <string>OpenSans-Bold</string>
             <string>OpenSans-Bold</string>
             <string>OpenSans-Bold</string>
-            <string>OpenSans-Bold</string>
-            <string>OpenSans-Bold</string>
         </mutableArray>
         <mutableArray key="OpenSans-Regular.ttf">
-            <string>OpenSans</string>
-            <string>OpenSans</string>
             <string>OpenSans</string>
             <string>OpenSans</string>
             <string>OpenSans</string>
@@ -82,7 +78,7 @@
                                         <action selector="searchEditingDidEnd:" destination="1ND-G3-Xkn" eventType="editingDidEnd" id="Jrs-QC-EmR"/>
                                     </connections>
                                 </textField>
-                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X2v-ZC-Ki5" userLabel="searchPlaceholder" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X2v-ZC-Ki5" userLabel="searchPlaceholder" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                     <rect key="frame" x="50" y="0.0" width="52" height="50"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -592,127 +588,37 @@
                                             <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ThreeTacosDemoPic.png" translatesAutoresizingMaskIntoConstraints="NO" id="let-xp-dUr" userLabel="photoUIImageView">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="160"/>
                                             </imageView>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3U-KK-eno" userLabel="photoOverlayView" customClass="UIControl">
+                                            <view userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L5t-um-0Ba" userLabel="backgroundView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="160"/>
-                                                <subviews>
-                                                    <view userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L5t-um-0Ba" userLabel="backgroundView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="320" height="160"/>
-                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </view>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="Title of this event which is long enough to wrap to two lines" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U73-Nl-2gk" userLabel="eventTitleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="15" width="288" height="36"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="28" id="mFZ-GX-RIC"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17.5"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <nil key="highlightedColor"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="detailHeaderTitle"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notes for this event" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="au5-2w-K1j" userLabel="eventNotesLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="54" width="288" height="24"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="24" id="bEm-n4-R47"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <nil key="highlightedColor"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="detailHeaderNotes"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015    4:21 PM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bxw-YN-kxC" userLabel="eventDateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="88" width="288" height="18"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="18" id="BmH-fT-JoA"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="detailHeaderDate"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeSmallIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Uth-HJ-dCg">
-                                                        <rect key="frame" x="98" y="116" width="11" height="18"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="11" id="9Gb-eL-ky8"/>
-                                                            <constraint firstAttribute="height" constant="18" id="tgm-Vs-gOI"/>
-                                                        </constraints>
-                                                    </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Some Location" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dPo-2j-cHI" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="116" y="116" width="88" height="17"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="15" id="D5b-O4-8lb"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="12"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="detailHeaderLocation"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EYQ-h7-WaO" userLabel="photoDisplayButton">
-                                                        <rect key="frame" x="280" y="120" width="40" height="40"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="40" id="TkA-Jh-zmo"/>
-                                                            <constraint firstAttribute="height" constant="40" id="xbf-kf-0gC"/>
-                                                        </constraints>
-                                                        <connections>
-                                                            <action selector="photoDisplayButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="Am2-hh-4HC"/>
-                                                        </connections>
-                                                    </button>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="singlePhotoIcon" translatesAutoresizingMaskIntoConstraints="NO" id="4sc-ki-6ix" userLabel="photoDisplayImage">
-                                                        <rect key="frame" x="299" y="139" width="16" height="16"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="16" id="5qu-V9-LDT"/>
-                                                            <constraint firstAttribute="height" constant="16" id="DQl-as-leW"/>
-                                                        </constraints>
-                                                    </imageView>
-                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3U-KK-eno" userLabel="headerOverlayContainer" customClass="UIControl">
+                                                <rect key="frame" x="16" y="0.0" width="288" height="160"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="dPo-2j-cHI" secondAttribute="bottom" priority="750" constant="27" id="0gs-Oh-VMz"/>
-                                                    <constraint firstItem="4sc-ki-6ix" firstAttribute="trailing" secondItem="EYQ-h7-WaO" secondAttribute="trailing" constant="-5" id="2EX-WC-I9G"/>
-                                                    <constraint firstItem="au5-2w-K1j" firstAttribute="top" relation="greaterThanOrEqual" secondItem="U73-Nl-2gk" secondAttribute="bottom" constant="2" id="5ie-63-cYD"/>
-                                                    <constraint firstItem="L5t-um-0Ba" firstAttribute="top" secondItem="z3U-KK-eno" secondAttribute="top" id="6KG-8I-fcT"/>
-                                                    <constraint firstAttribute="trailing" secondItem="au5-2w-K1j" secondAttribute="trailing" constant="16" id="6gc-EB-QXM"/>
-                                                    <constraint firstItem="U73-Nl-2gk" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" constant="16" id="7ND-xj-Tb2"/>
-                                                    <constraint firstAttribute="trailing" secondItem="L5t-um-0Ba" secondAttribute="trailing" id="7pH-cd-tVD"/>
-                                                    <constraint firstItem="au5-2w-K1j" firstAttribute="height" secondItem="z3U-KK-eno" secondAttribute="height" multiplier="0.25" priority="250" id="BRA-KD-AqA"/>
-                                                    <constraint firstItem="dPo-2j-cHI" firstAttribute="top" secondItem="bxw-YN-kxC" secondAttribute="bottom" priority="750" constant="10" id="BZ3-6n-Wf4"/>
-                                                    <constraint firstAttribute="trailing" secondItem="U73-Nl-2gk" secondAttribute="trailing" constant="16" id="CSZ-Uk-M84"/>
-                                                    <constraint firstItem="U73-Nl-2gk" firstAttribute="top" secondItem="z3U-KK-eno" secondAttribute="top" priority="751" constant="15" id="Cy6-mI-9Ff"/>
-                                                    <constraint firstItem="bxw-YN-kxC" firstAttribute="height" secondItem="z3U-KK-eno" secondAttribute="height" multiplier="0.25" priority="250" id="Hzv-Ex-P21"/>
-                                                    <constraint firstAttribute="bottom" secondItem="EYQ-h7-WaO" secondAttribute="bottom" id="I5h-Ta-POe"/>
-                                                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="dPo-2j-cHI" secondAttribute="bottom" id="IND-AR-VNk"/>
-                                                    <constraint firstItem="au5-2w-K1j" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" constant="16" id="M9l-Cc-4l3"/>
-                                                    <constraint firstAttribute="trailing" secondItem="EYQ-h7-WaO" secondAttribute="trailing" id="O7x-vQ-LSy"/>
-                                                    <constraint firstItem="bxw-YN-kxC" firstAttribute="top" secondItem="au5-2w-K1j" secondAttribute="bottom" priority="750" constant="10" id="RcX-UO-vta"/>
-                                                    <constraint firstItem="dPo-2j-cHI" firstAttribute="leading" secondItem="Uth-HJ-dCg" secondAttribute="trailing" constant="7" id="TbU-A9-avY"/>
-                                                    <constraint firstAttribute="bottom" secondItem="L5t-um-0Ba" secondAttribute="bottom" id="UHN-FF-Km7"/>
-                                                    <constraint firstItem="U73-Nl-2gk" firstAttribute="height" secondItem="z3U-KK-eno" secondAttribute="height" multiplier="0.25" priority="250" id="Wxo-oX-hfw"/>
-                                                    <constraint firstItem="bxw-YN-kxC" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" constant="16" id="ZPe-qv-ad7"/>
-                                                    <constraint firstItem="Uth-HJ-dCg" firstAttribute="centerY" secondItem="dPo-2j-cHI" secondAttribute="firstBaseline" constant="-4" id="c4F-vb-rB9"/>
-                                                    <constraint firstAttribute="trailing" secondItem="bxw-YN-kxC" secondAttribute="trailing" constant="16" id="cHh-9p-98e"/>
-                                                    <constraint firstItem="bxw-YN-kxC" firstAttribute="top" relation="greaterThanOrEqual" secondItem="au5-2w-K1j" secondAttribute="bottom" constant="2" id="fac-Ig-hkv"/>
-                                                    <constraint firstItem="L5t-um-0Ba" firstAttribute="leading" secondItem="z3U-KK-eno" secondAttribute="leading" id="gFi-KL-Ucl"/>
-                                                    <constraint firstItem="au5-2w-K1j" firstAttribute="top" secondItem="U73-Nl-2gk" secondAttribute="bottom" priority="750" constant="3" id="i7D-He-5lY"/>
-                                                    <constraint firstItem="dPo-2j-cHI" firstAttribute="width" relation="lessThanOrEqual" secondItem="z3U-KK-eno" secondAttribute="width" constant="-40" id="jfi-nU-rF1"/>
-                                                    <constraint firstItem="4sc-ki-6ix" firstAttribute="bottom" secondItem="EYQ-h7-WaO" secondAttribute="bottom" constant="-5" id="n6i-Tv-bji"/>
-                                                    <constraint firstItem="dPo-2j-cHI" firstAttribute="centerX" secondItem="z3U-KK-eno" secondAttribute="centerX" id="qeN-zP-Hh5"/>
-                                                    <constraint firstItem="dPo-2j-cHI" firstAttribute="top" relation="greaterThanOrEqual" secondItem="bxw-YN-kxC" secondAttribute="bottom" constant="2" id="rEi-5O-Suk"/>
-                                                    <constraint firstItem="U73-Nl-2gk" firstAttribute="top" relation="greaterThanOrEqual" secondItem="z3U-KK-eno" secondAttribute="top" constant="2" id="yKo-XZ-8Al"/>
-                                                </constraints>
                                                 <connections>
                                                     <action selector="photoOverlayTouchHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="TJ2-kn-6aN"/>
                                                 </connections>
                                             </view>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EYQ-h7-WaO" userLabel="photoDisplayButton">
+                                                <rect key="frame" x="280" y="120" width="40" height="40"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="40" id="TkA-Jh-zmo"/>
+                                                    <constraint firstAttribute="height" constant="40" id="xbf-kf-0gC"/>
+                                                </constraints>
+                                                <connections>
+                                                    <action selector="photoDisplayButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="Am2-hh-4HC"/>
+                                                </connections>
+                                            </button>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="singlePhotoIcon" translatesAutoresizingMaskIntoConstraints="NO" id="4sc-ki-6ix" userLabel="photoDisplayImage">
+                                                <rect key="frame" x="299" y="139" width="16" height="16"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="16" id="5qu-V9-LDT"/>
+                                                    <constraint firstAttribute="height" constant="16" id="DQl-as-leW"/>
+                                                </constraints>
+                                            </imageView>
                                             <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jqb-kE-6Hg" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -736,31 +642,33 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="218" id="2ba-sq-SPp"/>
+                                            <constraint firstItem="L5t-um-0Ba" firstAttribute="top" secondItem="CGM-yQ-ne9" secondAttribute="top" id="4o5-Dl-4vU"/>
+                                            <constraint firstAttribute="trailing" secondItem="L5t-um-0Ba" secondAttribute="trailing" id="6gY-Ky-5Gb"/>
                                             <constraint firstItem="z3U-KK-eno" firstAttribute="top" secondItem="CGM-yQ-ne9" secondAttribute="top" id="BWi-GV-E2d"/>
-                                            <constraint firstAttribute="trailing" secondItem="z3U-KK-eno" secondAttribute="trailing" id="FUB-o5-cBH"/>
+                                            <constraint firstAttribute="trailing" secondItem="z3U-KK-eno" secondAttribute="trailing" constant="16" id="FUB-o5-cBH"/>
                                             <constraint firstItem="Jqb-kE-6Hg" firstAttribute="top" secondItem="CGM-yQ-ne9" secondAttribute="top" id="Fo0-TR-nGi"/>
                                             <constraint firstItem="Jqb-kE-6Hg" firstAttribute="leading" secondItem="CGM-yQ-ne9" secondAttribute="leading" id="GAu-YY-ZsP"/>
+                                            <constraint firstItem="4sc-ki-6ix" firstAttribute="bottom" secondItem="EYQ-h7-WaO" secondAttribute="bottom" constant="-5" id="GKy-pE-zWt"/>
                                             <constraint firstAttribute="trailing" secondItem="4Jd-1i-UWb" secondAttribute="trailing" id="KKq-0U-Cdc"/>
                                             <constraint firstAttribute="bottom" secondItem="4Jd-1i-UWb" secondAttribute="bottom" id="Kbo-xt-xyZ"/>
+                                            <constraint firstItem="L5t-um-0Ba" firstAttribute="leading" secondItem="CGM-yQ-ne9" secondAttribute="leading" id="Mkw-KC-KNi"/>
                                             <constraint firstItem="4Jd-1i-UWb" firstAttribute="leading" secondItem="CGM-yQ-ne9" secondAttribute="leading" id="UN7-CX-kcg"/>
                                             <constraint firstItem="let-xp-dUr" firstAttribute="leading" secondItem="CGM-yQ-ne9" secondAttribute="leading" id="bYA-sR-xHv"/>
                                             <constraint firstAttribute="bottom" secondItem="z3U-KK-eno" secondAttribute="bottom" id="caq-ub-mgw"/>
                                             <constraint firstAttribute="trailing" secondItem="let-xp-dUr" secondAttribute="trailing" id="fmX-Ra-4h9"/>
-                                            <constraint firstAttribute="width" secondItem="CGM-yQ-ne9" secondAttribute="height" multiplier="2:1" id="jK6-1l-mRp"/>
+                                            <constraint firstAttribute="width" secondItem="CGM-yQ-ne9" secondAttribute="height" multiplier="2:1" identifier="updatedInCode" id="jK6-1l-mRp"/>
+                                            <constraint firstItem="4sc-ki-6ix" firstAttribute="trailing" secondItem="EYQ-h7-WaO" secondAttribute="trailing" constant="-5" id="mks-KJ-835"/>
+                                            <constraint firstAttribute="trailing" secondItem="EYQ-h7-WaO" secondAttribute="trailing" id="nHp-20-got"/>
+                                            <constraint firstAttribute="bottom" secondItem="L5t-um-0Ba" secondAttribute="bottom" id="pRw-AS-GYU"/>
                                             <constraint firstItem="let-xp-dUr" firstAttribute="top" secondItem="CGM-yQ-ne9" secondAttribute="top" id="qLk-6i-Hbx"/>
                                             <constraint firstAttribute="bottom" secondItem="let-xp-dUr" secondAttribute="bottom" id="xHq-fd-Coq"/>
+                                            <constraint firstAttribute="bottom" secondItem="EYQ-h7-WaO" secondAttribute="bottom" id="xce-s5-OAD"/>
                                             <constraint firstAttribute="trailing" secondItem="Jqb-kE-6Hg" secondAttribute="trailing" id="yUw-gA-59J"/>
-                                            <constraint firstItem="z3U-KK-eno" firstAttribute="leading" secondItem="CGM-yQ-ne9" secondAttribute="leading" id="ykw-31-ZqY"/>
+                                            <constraint firstItem="z3U-KK-eno" firstAttribute="leading" secondItem="CGM-yQ-ne9" secondAttribute="leading" constant="16" id="ykw-31-ZqY"/>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
                                         </userDefinedRuntimeAttributes>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="2ba-sq-SPp"/>
-                                            </mask>
-                                        </variation>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Qx-V0-1Du" userLabel="EventDescriptionContainer" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="160" width="320" height="58"/>
@@ -974,17 +882,14 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="dateLabel" destination="bxw-YN-kxC" id="h0k-0A-P6h"/>
                         <outlet property="graphSectionView" destination="INU-ti-JXM" id="r4i-Yu-eBP"/>
-                        <outlet property="locationIcon" destination="Uth-HJ-dCg" id="wtV-bZ-fGP"/>
-                        <outlet property="locationLabel" destination="dPo-2j-cHI" id="7HA-Vl-c5X"/>
+                        <outlet property="headerOverlayContainer" destination="z3U-KK-eno" id="zSL-NU-PtH"/>
                         <outlet property="missingDataAdvisoryView" destination="cmJ-dI-KmZ" id="XsH-bq-zbD"/>
-                        <outlet property="notesLabel" destination="au5-2w-K1j" id="heW-2E-xn2"/>
                         <outlet property="nutCrackedButton" destination="12g-bz-WJr" id="uC8-1Y-8UB"/>
                         <outlet property="nutCrackedLabel" destination="c32-24-Hp7" id="3xk-a1-qBU"/>
                         <outlet property="photoDisplayImageView" destination="4sc-ki-6ix" id="25x-RN-uNT"/>
                         <outlet property="photoUIImageView" destination="let-xp-dUr" id="oDy-7z-aYX"/>
-                        <outlet property="titleLabel" destination="U73-Nl-2gk" id="oeo-FR-liY"/>
+                        <outlet property="topSectionContainer" destination="CGM-yQ-ne9" id="3zq-qw-jwW"/>
                         <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSegueToCancel" unwindAction="cancel:" id="kPJ-Hz-YIi"/>
                         <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSegueToDone" unwindAction="done:" id="220-gi-taE"/>
                         <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSequeToEventList" unwindAction="nutEventChanged:" id="TzH-gF-xhj"/>
@@ -993,7 +898,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0lz-qm-Gfy" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="wwi-fg-jwa" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1999.5" y="920.5"/>
+            <point key="canvasLocation" x="1999" y="920"/>
         </scene>
         <!--Meal Photo-->
         <scene sceneID="AQK-D0-qC4">
