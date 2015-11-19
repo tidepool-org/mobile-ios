@@ -76,7 +76,7 @@ public class Styles: NSObject {
         "detailHeaderNotes": (mediumRegularFont, whiteColor),
         "detailHeaderDate": (smallRegularFont, whiteColor),
         "detailHeaderLocation": (smallBoldFont, whiteColor),
-        "detailViewButtonText": (smallBoldFont, whiteColor),
+        "detailViewButtonText": (mediumSmallBoldFont, whiteColor),
         "advisoryText": (mediumSemiboldFont, darkGreyColor),
         "advisorySubtext": (mediumRegularFont, lightDarkGreyColor),
         "greenLink": (mediumRegularFont, lightGreenColor),
@@ -130,10 +130,12 @@ public class Styles: NSObject {
         static let veryLargeSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 25.5)!
         
         static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.0)!
+        static let mediumSmallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 14.0)!
         static let mediumBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 16.0)!
         static let mediumLargeBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 17.5)!
         static let navTitleBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 20.0)!
         
+        static let smallLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 12.0)!
         static let mediumLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 17.0)!
         
         // Fonts for special graph view
@@ -157,10 +159,12 @@ public class Styles: NSObject {
     public class var veryLargeSemiboldFont: UIFont { return FontCache.veryLargeSemiboldFont }
 
     public class var smallBoldFont: UIFont { return FontCache.smallBoldFont }
+    public class var mediumSmallBoldFont: UIFont { return FontCache.mediumSmallBoldFont }
     public class var mediumBoldFont: UIFont { return FontCache.mediumBoldFont }
     public class var mediumLargeBoldFont: UIFont { return FontCache.mediumLargeBoldFont }
     public class var navTitleBoldFont: UIFont { return FontCache.navTitleBoldFont }
 
+    public class var smallLightFont: UIFont { return FontCache.smallLightFont }
     public class var mediumLightFont: UIFont { return FontCache.mediumLightFont }
 
     // Fonts for special graph view

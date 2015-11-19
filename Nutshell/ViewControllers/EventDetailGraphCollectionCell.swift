@@ -14,7 +14,7 @@ class EventDetailGraphCollectionCell: UICollectionViewCell {
     var graphTime: NSDate?
     var graphTimeInterval: NSTimeInterval?
     
-    func configureCell(centerTime: NSDate, timeInterval: NSTimeInterval) -> Bool {
+    func configureCell(centerTime: NSDate, timeInterval: NSTimeInterval, mainEventTime: NSDate) -> Bool {
         print("size at configure: \(self.frame.size)")
 
         if (graphView != nil) {
@@ -25,7 +25,7 @@ class EventDetailGraphCollectionCell: UICollectionViewCell {
         }
 
         if (graphView == nil) {
-            graphView = GraphUIView.init(frame: self.bounds, centerTime: centerTime, timeIntervalForView: timeInterval)
+            graphView = GraphUIView.init(frame: self.bounds, centerTime: centerTime, timeIntervalForView: timeInterval, timeOfMainEvent: mainEventTime)
             if let graphView = graphView {
                 graphTime = centerTime
                 graphTimeInterval = timeInterval

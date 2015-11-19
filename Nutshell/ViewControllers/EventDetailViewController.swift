@@ -420,7 +420,7 @@ class EventDetailViewController: BaseUIViewController {
                 // place icon to left of first line of location...
                 var iconFrame: CGRect = locationIcon.bounds
                 iconFrame.origin.x = ceil(locationLabel.frame.origin.x - iconFrame.width - klocationIconOffset)
-                iconFrame.origin.y = locationLabel.frame.origin.y
+                iconFrame.origin.y = locationLabel.frame.origin.y - 2.0
                 locationIcon.frame = iconFrame
             }
         }
@@ -442,7 +442,7 @@ class EventDetailViewController: BaseUIViewController {
         if viewExistingEvent && (graphCollectionView == nil) {
             
             // first put in the fixed background
-            let graphView = GraphUIView.init(frame: fixedGraphBackground.bounds, centerTime: graphCenterTime, timeIntervalForView: graphViewTimeInterval)
+            let graphView = GraphUIView.init(frame: fixedGraphBackground.bounds, centerTime: graphCenterTime, timeIntervalForView: graphViewTimeInterval, timeOfMainEvent: eventItem!.time)
             if let fixedBackgroundImageView = fixedBackgroundImageView {
                 fixedBackgroundImageView.removeFromSuperview()
             }
@@ -518,7 +518,7 @@ extension EventDetailViewController: UICollectionViewDataSource {
             if collectionOffset != 0 {
                 cellCenterTime = NSDate(timeInterval: graphViewTimeInterval*Double(collectionOffset), sinceDate: graphCenterTime)
             }
-            if cell.configureCell(cellCenterTime, timeInterval: graphViewTimeInterval) {
+            if cell.configureCell(cellCenterTime, timeInterval: graphViewTimeInterval, mainEventTime: eventItem!.time) {
                 // TODO: really want to scan the entire width to see if any of the time span has data...
                 missingDataAdvisoryView.hidden = true;
             }

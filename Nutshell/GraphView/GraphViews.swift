@@ -42,7 +42,7 @@ public class GraphViews {
     private let kGraphWorkoutBaseOffset: CGFloat = 2.0
     // Some margin constants
     private let kGraphYLabelHeight: CGFloat = 18.0
-    private let kGraphYLabelWidth: CGFloat = 20.0
+    private let kGraphYLabelWidth: CGFloat = 26.0
     private let kGraphYLabelXOrigin: CGFloat = 0.0
     private let kYAxisLineLeftMargin: CGFloat = 24.0
     private let kYAxisLineRightMargin: CGFloat = 10.0
@@ -57,8 +57,10 @@ public class GraphViews {
     // Background
     //
     private let hourMarkerStrokeColor = UIColor(hex: 0xe2e4e7)
-    private let axisTextColor = Styles.darkGreyColor
-    private let mealLineColor = Styles.darkPurpleColor
+    private let axisTextColor = UIColor(hex: 0x58595B)
+    private let mealLineColor = Styles.blackColor
+    private let mealTriangleColor = Styles.darkPurpleColor
+    private let otherMealColor = UIColor(hex: 0x948ca3)
     // Colors
     // TODO: add all graph colors here, based on Styles colors
     private let backgroundRightColor = Styles.veryLightGreyColor
@@ -84,11 +86,11 @@ public class GraphViews {
     //
     // Wizard and bolus data
     //
-    private let kWizardCircleDiameter: CGFloat = 27.0
+    private let kWizardCircleDiameter: CGFloat = 31.0
     private let kBolusRectWidth: CGFloat = 14.0
     private let kBolusLabelToRectGap: CGFloat = 0.0
     private let kBolusLabelRectWidth: CGFloat = 30.0
-    private let kBolusLabelRectHeight: CGFloat = 10.0
+    private let kBolusLabelRectHeight: CGFloat = 12.0
     private let kBolusMinScaleValue: CGFloat = 0.0
     // Colors
     private let bolusTextBlue = Styles.mediumBlueColor
@@ -252,7 +254,7 @@ public class GraphViews {
         return imageOfData
     }
 
-    func imageOfMealData(mealData: [NSTimeInterval]) -> UIImage {
+    func imageOfMealData(mealData: [(timeOffset: NSTimeInterval, mainEvent: Bool)]) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
         drawMealData(mealData)
         
@@ -314,7 +316,7 @@ public class GraphViews {
             let yAxisLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             yAxisLabelStyle.alignment = .Right
             
-            let yAxisLabelFontAttributes = [NSFontAttributeName: Styles.verySmallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: yAxisLabelStyle]
+            let yAxisLabelFontAttributes = [NSFontAttributeName: Styles.smallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: yAxisLabelStyle]
             
             // center vertically - to do this we need font height
             let textHeight: CGFloat = yLabel.boundingRectWithSize(CGSizeMake(labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: yAxisLabelFontAttributes, context: nil).size.height
@@ -326,16 +328,16 @@ public class GraphViews {
         
         let pixelsPerValue: CGFloat = yPixelsGlucose/kGlucoseRange
         
-        let yAxisValues = [40, 80, 180, 300]
-        for yAxisValue in yAxisValues {
-            let valueOffset = yBottomOfGlucose - (CGFloat(yAxisValue) * pixelsPerValue)
-            drawYAxisLabel(String(yAxisValue), center: valueOffset)
-        }
-        
         let yAxisLines = [80, 180]
         for yAxisLine in yAxisLines {
             let valueOffset = yBottomOfGlucose - (CGFloat(yAxisLine) * pixelsPerValue)
             drawYAxisLine(valueOffset)
+        }
+
+        let yAxisValues = [40, 80, 180, 300]
+        for yAxisValue in yAxisValues {
+            let valueOffset = yBottomOfGlucose - (CGFloat(yAxisValue) * pixelsPerValue)
+            drawYAxisLabel(String(yAxisValue), center: valueOffset)
         }
     }
 
@@ -374,13 +376,13 @@ public class GraphViews {
                 return
             }
 
-            let labelRect = CGRectMake(topCenter.x - 16.0, topCenter.y, 32.0, 18.0)
+            let labelRect = CGRectMake(topCenter.x - 16.0, topCenter.y + 2.0, 32.0, 18.0)
             let hourlabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             hourlabelStyle.alignment = .Center
             
-            let labelAttrStr = NSMutableAttributedString(string: hourStr, attributes: [NSFontAttributeName: Styles.verySmallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hourlabelStyle])
-            // Make " a" extra small
-            labelAttrStr.addAttribute(NSFontAttributeName, value: Styles.tinyRegularFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
+            let labelAttrStr = NSMutableAttributedString(string: hourStr, attributes: [NSFontAttributeName: Styles.smallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hourlabelStyle])
+            // Make " a" lighter
+            labelAttrStr.addAttribute(NSFontAttributeName, value: Styles.smallLightFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
             
             labelAttrStr.drawInRect(labelRect)
         }
@@ -438,14 +440,37 @@ public class GraphViews {
         }
     }
 
-    private func drawMealData(mealData: [NSTimeInterval]) {
+    private func drawMeal(timeOffset: NSTimeInterval, isMain: Bool) {
+        //// eventLine Drawing
+        let lineColor = isMain ? mealLineColor : otherMealColor
+        let triangleColor = isMain ? mealTriangleColor : otherMealColor
+        let lineHeight: CGFloat = isMain ? viewSize.height : kGraphHeaderHeight
+        let lineWidth: CGFloat = isMain ? 2.0 : 1.0
         
-        for timeOffset in mealData {
-            //// eventLine Drawing
-            let rect = CGRect(x: floor(CGFloat(timeOffset) * viewPixelsPerSec), y: 0.0, width: 1.0, height: viewSize.height)
-            let eventLinePath = UIBezierPath(rect: rect)
-            mealLineColor.setFill()
-            eventLinePath.fill()
+        let rect = CGRect(x: floor(CGFloat(timeOffset) * viewPixelsPerSec), y: 0.0, width: lineWidth, height: lineHeight)
+        let eventLinePath = UIBezierPath(rect: rect)
+        lineColor.setFill()
+        eventLinePath.fill()
+        
+        let trianglePath = UIBezierPath()
+        let centerX = rect.origin.x + lineWidth/2.0
+        let triangleSize: CGFloat = 15.5
+        let triangleOrgX = centerX - triangleSize/2.0
+        trianglePath.moveToPoint(CGPointMake(triangleOrgX, 0.0))
+        trianglePath.addLineToPoint(CGPointMake(triangleOrgX + triangleSize, 0.0))
+        trianglePath.addLineToPoint(CGPointMake(triangleOrgX + triangleSize/2.0, 13.5))
+        trianglePath.addLineToPoint(CGPointMake(triangleOrgX, 0))
+        trianglePath.closePath()
+        trianglePath.miterLimit = 4;
+        trianglePath.usesEvenOddFillRule = true;
+        triangleColor.setFill()
+        trianglePath.fill()
+    }
+    
+    private func drawMealData(mealData: [(timeOffset: NSTimeInterval, mainEvent: Bool)]) {
+        
+        for item in mealData {
+            drawMeal(item.0, isMain: item.1)
         }
     }
 
@@ -545,7 +570,7 @@ public class GraphViews {
             let bolusLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             bolusLabelStyle.alignment = .Center
             
-            let bolusLabelFontAttributes = [NSFontAttributeName: Styles.verySmallSemiboldFont, NSForegroundColorAttributeName: bolusTextBlue, NSParagraphStyleAttributeName: bolusLabelStyle]
+            let bolusLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: bolusTextBlue, NSParagraphStyleAttributeName: bolusLabelStyle]
             
             let bolusLabelTextHeight: CGFloat = bolusLabelTextContent.boundingRectWithSize(CGSizeMake(bolusLabelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: bolusLabelFontAttributes, context: nil).size.height
             CGContextSaveGState(context)
@@ -574,7 +599,7 @@ public class GraphViews {
             let labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             labelStyle.alignment = .Center
             
-            let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSFontAttributeName: Styles.verySmallSemiboldFont, NSForegroundColorAttributeName: Styles.altDarkGreyColor, NSParagraphStyleAttributeName: labelStyle])
+            let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: Styles.darkPurpleColor, NSParagraphStyleAttributeName: labelStyle])
             
             let labelTextHeight: CGFloat = labelAttrStr.boundingRectWithSize(CGSizeMake(labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).size.height
             CGContextSaveGState(context)
@@ -660,7 +685,7 @@ public class GraphViews {
             let readingLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             readingLabelStyle.alignment = .Center
             
-            let readingLabelFontAttributes = [NSFontAttributeName: Styles.verySmallSemiboldFont, NSForegroundColorAttributeName: circleColor, NSParagraphStyleAttributeName: readingLabelStyle]
+            let readingLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: circleColor, NSParagraphStyleAttributeName: readingLabelStyle]
             
             let readingLabelTextHeight: CGFloat = readingLabelTextContent.boundingRectWithSize(CGSizeMake(readingLabelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: readingLabelFontAttributes, context: nil).size.height
             CGContextSaveGState(context)

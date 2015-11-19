@@ -25,11 +25,12 @@ class GraphUIView: UIView {
     /// - parameter timeIntervalForView:
     ///   The time span covered by the graph
     
-    init(frame: CGRect, centerTime: NSDate, timeIntervalForView: NSTimeInterval) {
+    init(frame: CGRect, centerTime: NSDate, timeIntervalForView: NSTimeInterval, timeOfMainEvent: NSDate) {
 
         self.startTime = centerTime.dateByAddingTimeInterval(-timeIntervalForView/2)
         self.endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
         self.viewTimeInterval = timeIntervalForView
+        self.timeOfMainEvent = timeOfMainEvent
         self.graphViews = GraphViews(viewSize: frame.size, timeIntervalForView: viewTimeInterval, startTime: startTime)
         super.init(frame: frame)
     }
@@ -74,6 +75,7 @@ class GraphUIView: UIView {
     
     var startTime: NSDate, endTime: NSDate
     var viewTimeInterval: NSTimeInterval = 0.0
+    private var timeOfMainEvent: NSDate
     
     private var graphViews: GraphViews
     private var smbgData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
@@ -82,7 +84,7 @@ class GraphUIView: UIView {
     private var wizardData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var basalData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval)] = []
-    private var mealData: [NSTimeInterval] = []
+    private var mealData: [(timeOffset: NSTimeInterval, mainEvent: Bool)] = []
 
     //
     // MARK: - Private funcs
@@ -243,8 +245,9 @@ class GraphUIView: UIView {
                             addCbgEvent(cbgEvent, deltaTime: deltaTime)
                         }
                     case "meal":
-                        if let _ = event as? Meal {
-                            mealData.append(deltaTime)
+                        if let mealEvent = event as? Meal {
+                            let isMainEvent = mealEvent.time == timeOfMainEvent
+                            mealData.append((deltaTime, mainEvent: isMainEvent))
                         }
                     case "workout":
                         if let workoutEvent = event as? Workout {
