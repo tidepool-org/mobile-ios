@@ -31,6 +31,8 @@ class EventDetailViewController: BaseUIViewController {
     
     @IBOutlet weak var graphSectionView: UIView!
     @IBOutlet weak var missingDataAdvisoryView: UIView!
+    @IBOutlet weak var fixedGraphBackground: UIView!
+    var fixedBackgroundImageView: UIImageView?
     
     @IBOutlet weak var photoUIImageView: UIImageView!
 
@@ -439,12 +441,20 @@ class EventDetailViewController: BaseUIViewController {
     private func configureGraphViewIfNil() {
         if viewExistingEvent && (graphCollectionView == nil) {
             
+            // first put in the fixed background
+            let graphView = GraphUIView.init(frame: fixedGraphBackground.bounds, centerTime: graphCenterTime, timeIntervalForView: graphViewTimeInterval)
+            if let fixedBackgroundImageView = fixedBackgroundImageView {
+                fixedBackgroundImageView.removeFromSuperview()
+            }
+            fixedBackgroundImageView = UIImageView(image: graphView.fixedBackgroundImage())
+            fixedGraphBackground.addSubview(fixedBackgroundImageView!)
+            
             let flow = UICollectionViewFlowLayout()
             flow.itemSize = graphSectionView.bounds.size
             flow.scrollDirection = UICollectionViewScrollDirection.Horizontal
             graphCollectionView = UICollectionView(frame: graphSectionView.bounds, collectionViewLayout: flow)
             if let graphCollectionView = graphCollectionView {
-                graphCollectionView.backgroundColor = UIColor.whiteColor()
+                graphCollectionView.backgroundColor = UIColor.clearColor()
                 graphCollectionView.showsHorizontalScrollIndicator = false
                 graphCollectionView.showsVerticalScrollIndicator = false
                 graphCollectionView.dataSource = self
@@ -455,7 +465,7 @@ class EventDetailViewController: BaseUIViewController {
                 graphCollectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: graphCenterCellInCollection, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: false)
                 
                 graphSectionView.addSubview(graphCollectionView)
-                graphSectionView.sendSubviewToBack(graphCollectionView)
+                graphSectionView.insertSubview(graphCollectionView, aboveSubview: fixedBackgroundImageView!)
             }
             
             // need about 60 pixels per hour...
@@ -487,36 +497,7 @@ class EventDetailViewController: BaseUIViewController {
         deleteGraphView()
         configureGraphViewIfNil()
     }
-    
-    //
-    //    private func leftAndRightItems() -> (NutEventItem?, NutEventItem?) {
-    //        var result = (eventItem, eventItem)
-    //        var sawCurrentItem = false
-    //        if let eventItem = eventItem {
-    //            for item in (eventGroup?.itemArray)! {
-    //                if item.time == eventItem.time {
-    //                    sawCurrentItem = true
-    //                } else if !sawCurrentItem {
-    //                    result.0 = item
-    //                } else {
-    //                    result.1 = item
-    //                    break
-    //                }
-    //            }
-    //        }
-    //        return result
-    //    }
-    //
-    //    private func configureArrows() {
-    //        if !AppDelegate.testMode {
-    //            leftArrow.hidden = true
-    //            rightArrow.hidden = true
-    //        } else {
-    //            let leftAndRight = leftAndRightItems()
-    //            leftArrow.hidden = leftAndRight.0?.time == eventItem?.time
-    //            rightArrow.hidden = leftAndRight.1?.time == eventItem?.time
-    //        }
-    //    }
+
     
 }
 

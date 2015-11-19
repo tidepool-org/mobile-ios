@@ -58,6 +58,16 @@ class GraphUIView: UIView {
         return cbgData.count != 0 || bolusData.count != 0 || basalData.count != 0 || smbgData.count != 0 || wizardData.count != 0
     }
     
+    /// Return the non-changing part of the graph background
+    ///
+    /// Right now this is just the y axis with its values.
+    ///
+    /// - returns: A UIImageView the size of the current view, with static parts of the background. This should be placed in back of the graph...
+    
+    func fixedBackgroundImage() -> UIImage {
+        return graphViews.imageOfFixedGraphBackground()
+    }
+    
     //
     // MARK: - Private data
     //

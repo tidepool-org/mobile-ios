@@ -172,6 +172,16 @@ public class GraphViews {
         self.yPixelsWorkout = self.yBottomOfWorkout - self.yTopOfWorkout
     }
 
+    func imageOfFixedGraphBackground() -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
+        drawFixedGraphBackground()
+        
+        let imageOfFixedGraphBackground = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return imageOfFixedGraphBackground
+    }
+
     func imageOfGraphBackground() -> UIImage {
         UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
         drawGraphBackground()
@@ -256,123 +266,21 @@ public class GraphViews {
     // MARK: - Private drawing methods
     //
 
-    private func drawGraphBackground() {
+    private func drawFixedGraphBackground() {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()
         
         //// Frames - use whole view for background
         let contents = CGRectMake(0, 0, viewSize.width, viewSize.height)
-        let graphStartSecs = startTime.timeIntervalSinceReferenceDate
-        let pixelsPerHour = CGFloat(kHourInSecs) * viewPixelsPerSec
-
-        //
-        //  Draw the X-axis header...
-        //
-        
-        func drawHourMarker(start: CGPoint, length: CGFloat) {
-            let hourMarkerPath = UIBezierPath()
-            hourMarkerPath.moveToPoint(start)
-            hourMarkerPath.addLineToPoint(CGPointMake(start.x, start.y + length))
-            hourMarkerPath.miterLimit = 4;
-            
-            hourMarkerPath.lineCapStyle = .Square;
-            
-            hourMarkerPath.usesEvenOddFillRule = true;
-            
-            hourMarkerStrokeColor.setStroke()
-            hourMarkerPath.lineWidth = 1
-            hourMarkerPath.stroke()
-        }
-        
-        func drawHourLabel(hourStr: String, topCenter: CGPoint) {
-    
-            // Don't draw labels too close to margins
-            if topCenter.x < 20.0 || topCenter.x > (viewSize.width - 20) {
-                return
-            }
-
-            let labelRect = CGRectMake(topCenter.x - 16.0, topCenter.y, 32.0, 18.0)
-            let hourlabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-            hourlabelStyle.alignment = .Center
-            
-            let labelAttrStr = NSMutableAttributedString(string: hourStr, attributes: [NSFontAttributeName: Styles.verySmallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hourlabelStyle])
-            // Make " a" extra small
-            labelAttrStr.addAttribute(NSFontAttributeName, value: Styles.tinyRegularFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
-            
-            labelAttrStr.drawInRect(labelRect)
-        }
-        
-        let df = NSDateFormatter()
-        df.dateFormat = "h a"
-        let hourlabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        hourlabelStyle.alignment = .Center
-        
-        let nextHourBoundarySecs = ceil(graphStartSecs / kHourInSecs) * kHourInSecs
-        let firstBoundarytimeOffset: NSTimeInterval = nextHourBoundarySecs - graphStartSecs
-        let firstDate = NSDate(timeIntervalSinceReferenceDate:nextHourBoundarySecs)
-        
-        var curDate = firstDate
-        let timeOffset: NSTimeInterval = nextHourBoundarySecs - graphStartSecs
-        var viewXOffset = floor(CGFloat(timeOffset) * viewPixelsPerSec)
-
-        repeat {
-            
-            let markerStart = CGPointMake(viewXOffset, kGraphHeaderHeight - 8.0)
-            drawHourMarker(markerStart, length: 8.0)
-                
-            var hourStr = df.stringFromDate(curDate)
-            // Replace uppercase PM and AM with lowercase versions
-            hourStr = hourStr.stringByReplacingOccurrencesOfString("PM", withString: "p", options: NSStringCompareOptions.LiteralSearch, range: nil)
-            hourStr = hourStr.stringByReplacingOccurrencesOfString("AM", withString: "a", options: NSStringCompareOptions.LiteralSearch, range: nil)
-
-            // draw hour label
-            drawHourLabel(hourStr, topCenter: CGPoint(x: viewXOffset, y: 6.0))
-            
-            curDate = curDate.dateByAddingTimeInterval(kHourInSecs)
-            viewXOffset += pixelsPerHour
-            
-        } while (viewXOffset < viewSize.width)
         
         //
-        //  Draw the background blocks
+        //  Draw the background block
         //
-        //  Note: This supports drawing backgrounds of alternating colors, every 3 hours on 3 hour boundaries. 
-        //      Currently, both colors are set to be identical.
-
-        var nextXBoundary = floor(CGFloat(firstBoundarytimeOffset) * viewPixelsPerSec)
-        print("first hour boundary at \(firstBoundarytimeOffset/60) minutes")
-        var backgroundBlockOrigin = CGPoint(x: 0.0, y: kGraphHeaderHeight)
-        // first background block width is odd
-        var backgroundBlockSize = CGSize(width: nextXBoundary, height: viewSize.height - kGraphHeaderHeight)
-
-        // figure out hour for alternating colors...
-        df.dateFormat = "h"
-        var hourInt = 0
-        let calcHour = Int(df.stringFromDate(firstDate))
-        if calcHour != nil {
-            hourInt = calcHour!
-        }
-        hourInt--
+        let backgroundBlockRect = CGRect(x: 0.0, y: kGraphHeaderHeight, width: viewSize.width, height: viewSize.height - kGraphHeaderHeight)
+        let backgroundPath = UIBezierPath(rect: backgroundBlockRect)
+        backgroundLeftColor.setFill()
+        backgroundPath.fill()
         
-        while backgroundBlockOrigin.x < viewSize.width {
-            
-            let backgroundBlockRect = CGRect(origin: backgroundBlockOrigin, size: backgroundBlockSize)
-            let backgroundPath = UIBezierPath(rect: backgroundBlockRect)
-            let evenBlock = (hourInt/3)%2 == 0
-            hourInt++
-            
-            if evenBlock {
-                backgroundLeftColor.setFill()
-            } else {
-                backgroundRightColor.setFill()
-            }
-            backgroundPath.fill()
-            
-            backgroundBlockSize.width = min(viewSize.width-nextXBoundary, pixelsPerHour)
-            backgroundBlockOrigin.x = nextXBoundary
-            nextXBoundary += pixelsPerHour
-        }
-
         //
         //  Draw the Y-axis labels and lines...
         //
@@ -429,6 +337,83 @@ public class GraphViews {
             let valueOffset = yBottomOfGlucose - (CGFloat(yAxisLine) * pixelsPerValue)
             drawYAxisLine(valueOffset)
         }
+    }
+
+    private func drawGraphBackground() {
+        //// General Declarations
+        let context = UIGraphicsGetCurrentContext()
+        
+        //// Frames - use whole view for background
+        let contents = CGRectMake(0, 0, viewSize.width, viewSize.height)
+        let graphStartSecs = startTime.timeIntervalSinceReferenceDate
+        let pixelsPerHour = CGFloat(kHourInSecs) * viewPixelsPerSec
+
+        //
+        //  Draw the X-axis header...
+        //
+        
+        func drawHourMarker(start: CGPoint, length: CGFloat) {
+            let hourMarkerPath = UIBezierPath()
+            hourMarkerPath.moveToPoint(start)
+            hourMarkerPath.addLineToPoint(CGPointMake(start.x, start.y + length))
+            hourMarkerPath.miterLimit = 4;
+            
+            hourMarkerPath.lineCapStyle = .Square;
+            
+            hourMarkerPath.usesEvenOddFillRule = true;
+            
+            hourMarkerStrokeColor.setStroke()
+            hourMarkerPath.lineWidth = 1
+            hourMarkerPath.stroke()
+        }
+        
+        func drawHourLabel(hourStr: String, topCenter: CGPoint) {
+    
+            // Don't draw labels too close to margins
+            if topCenter.x < 20.0 || topCenter.x > (viewSize.width - 20) {
+                return
+            }
+
+            let labelRect = CGRectMake(topCenter.x - 16.0, topCenter.y, 32.0, 18.0)
+            let hourlabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+            hourlabelStyle.alignment = .Center
+            
+            let labelAttrStr = NSMutableAttributedString(string: hourStr, attributes: [NSFontAttributeName: Styles.verySmallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hourlabelStyle])
+            // Make " a" extra small
+            labelAttrStr.addAttribute(NSFontAttributeName, value: Styles.tinyRegularFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
+            
+            labelAttrStr.drawInRect(labelRect)
+        }
+        
+        let df = NSDateFormatter()
+        df.dateFormat = "h a"
+        let hourlabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        hourlabelStyle.alignment = .Center
+        
+        let nextHourBoundarySecs = ceil(graphStartSecs / kHourInSecs) * kHourInSecs
+        let firstDate = NSDate(timeIntervalSinceReferenceDate:nextHourBoundarySecs)
+        
+        var curDate = firstDate
+        let timeOffset: NSTimeInterval = nextHourBoundarySecs - graphStartSecs
+        var viewXOffset = floor(CGFloat(timeOffset) * viewPixelsPerSec)
+
+        repeat {
+            
+            let markerStart = CGPointMake(viewXOffset, kGraphHeaderHeight - 8.0)
+            drawHourMarker(markerStart, length: 8.0)
+                
+            var hourStr = df.stringFromDate(curDate)
+            // Replace uppercase PM and AM with lowercase versions
+            hourStr = hourStr.stringByReplacingOccurrencesOfString("PM", withString: "p", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            hourStr = hourStr.stringByReplacingOccurrencesOfString("AM", withString: "a", options: NSStringCompareOptions.LiteralSearch, range: nil)
+
+            // draw hour label
+            drawHourLabel(hourStr, topCenter: CGPoint(x: viewXOffset, y: 6.0))
+            
+            curDate = curDate.dateByAddingTimeInterval(kHourInSecs)
+            viewXOffset += pixelsPerHour
+            
+        } while (viewXOffset < viewSize.width)
     }
 
     private func drawWorkoutData(workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval)]) {

@@ -765,6 +765,10 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="INU-ti-JXM" userLabel="GraphSection">
                                         <rect key="frame" x="0.0" y="218" width="320" height="286"/>
                                         <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sIT-dT-5jh" userLabel="fixedGraphBackground" customClass="NutShellUIView">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="286"/>
+                                                <color key="backgroundColor" red="0.94901960784313721" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
+                                            </view>
                                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cmJ-dI-KmZ" userLabel="MissingData">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="286"/>
                                                 <subviews>
@@ -833,7 +837,11 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
+                                            <constraint firstItem="sIT-dT-5jh" firstAttribute="top" secondItem="INU-ti-JXM" secondAttribute="top" id="1yi-9V-1Vg"/>
+                                            <constraint firstAttribute="trailing" secondItem="sIT-dT-5jh" secondAttribute="trailing" id="2tw-Ba-brV"/>
                                             <constraint firstItem="cmJ-dI-KmZ" firstAttribute="leading" secondItem="INU-ti-JXM" secondAttribute="leading" id="ODb-WH-99X"/>
+                                            <constraint firstAttribute="bottom" secondItem="sIT-dT-5jh" secondAttribute="bottom" id="SuB-ml-Ow8"/>
+                                            <constraint firstItem="sIT-dT-5jh" firstAttribute="leading" secondItem="INU-ti-JXM" secondAttribute="leading" id="Vi2-mG-dUn"/>
                                             <constraint firstItem="cmJ-dI-KmZ" firstAttribute="top" secondItem="INU-ti-JXM" secondAttribute="top" id="Wb5-A1-Qd7"/>
                                             <constraint firstAttribute="bottom" secondItem="cmJ-dI-KmZ" secondAttribute="bottom" id="ZeQ-NE-Nk2"/>
                                             <constraint firstAttribute="trailing" secondItem="cmJ-dI-KmZ" secondAttribute="trailing" id="vZs-7q-Irx"/>
@@ -882,6 +890,7 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="fixedGraphBackground" destination="sIT-dT-5jh" id="zoI-BM-rbP"/>
                         <outlet property="graphSectionView" destination="INU-ti-JXM" id="r4i-Yu-eBP"/>
                         <outlet property="headerOverlayContainer" destination="z3U-KK-eno" id="zSL-NU-PtH"/>
                         <outlet property="missingDataAdvisoryView" destination="cmJ-dI-KmZ" id="XsH-bq-zbD"/>
