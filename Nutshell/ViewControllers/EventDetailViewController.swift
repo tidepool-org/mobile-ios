@@ -26,6 +26,11 @@ class EventDetailViewController: BaseUIViewController {
     var graphCollectionView: UICollectionView?
     private var graphCenterTime: NSDate = NSDate()
     private var graphViewTimeInterval: NSTimeInterval = 0.0
+    private var graphTimeScale = 1.0
+    private var startGraphTimeScale = 1.0
+    private let kMinGraphTimeScale = 0.5
+    private let kInitGraphTimeScale = 1.0
+    private let kMaxGraphTimeScale = 2.0
     private let graphCellsInCollection = 7
     private let graphCenterCellInCollection = 3
     
@@ -442,7 +447,7 @@ class EventDetailViewController: BaseUIViewController {
         if viewExistingEvent && (graphCollectionView == nil) {
             
             // first put in the fixed background
-            let graphView = GraphUIView.init(frame: fixedGraphBackground.bounds, centerTime: graphCenterTime, timeIntervalForView: graphViewTimeInterval, timeOfMainEvent: eventItem!.time)
+            let graphView = GraphUIView.init(frame: fixedGraphBackground.bounds, centerTime: graphCenterTime, timeIntervalForView: graphViewTimeInterval*graphTimeScale, timeOfMainEvent: eventItem!.time)
             if let fixedBackgroundImageView = fixedBackgroundImageView {
                 fixedBackgroundImageView.removeFromSuperview()
             }
@@ -466,10 +471,39 @@ class EventDetailViewController: BaseUIViewController {
                 
                 graphSectionView.addSubview(graphCollectionView)
                 graphSectionView.insertSubview(graphCollectionView, aboveSubview: fixedBackgroundImageView!)
+                
+                // add pinch gesture recognizer
+                let recognizer = UIPinchGestureRecognizer(target: self, action: "pinchGestureHandler:")
+                graphCollectionView.addGestureRecognizer(recognizer)
+                
             }
             
             // need about 60 pixels per hour...
-            graphViewTimeInterval = NSTimeInterval(graphSectionView.bounds.width*60/* *60/60 */)
+            graphViewTimeInterval = NSTimeInterval(graphSectionView.bounds.width*60/* *60/60 */) * kInitGraphTimeScale
+        }
+    }
+    
+    func pinchGestureHandler(sender: AnyObject) {
+        //NSLog("recognized pinch!")
+        if let gesture = sender as? UIPinchGestureRecognizer {
+            //NSLog("gesture state: \(gesture.state), scale: \(gesture.scale)")
+            if gesture.state == UIGestureRecognizerState.Began {
+                startGraphTimeScale = graphTimeScale
+                return
+            }
+            // TODO: on .Changed state, grow/shrink the x-axis to show new timing...
+            if gesture.state == UIGestureRecognizerState.Ended {
+                graphTimeScale = graphTimeScale / Double(gesture.scale)
+                if graphTimeScale > kMaxGraphTimeScale {
+                    graphTimeScale = kMaxGraphTimeScale
+                } else if graphTimeScale < kMinGraphTimeScale {
+                    graphTimeScale = kMinGraphTimeScale
+                }
+                if let graphCollectionView = graphCollectionView {
+                    graphCollectionView.reloadData()
+                    NSLog("New scale: \(graphTimeScale)")
+                }
+            }
         }
     }
     
@@ -516,9 +550,9 @@ extension EventDetailViewController: UICollectionViewDataSource {
             let collectionOffset = indexPath.row - graphCenterCellInCollection
             
             if collectionOffset != 0 {
-                cellCenterTime = NSDate(timeInterval: graphViewTimeInterval*Double(collectionOffset), sinceDate: graphCenterTime)
+                cellCenterTime = NSDate(timeInterval: graphViewTimeInterval*Double(collectionOffset)*graphTimeScale, sinceDate: graphCenterTime)
             }
-            if cell.configureCell(cellCenterTime, timeInterval: graphViewTimeInterval, mainEventTime: eventItem!.time) {
+            if cell.configureCell(cellCenterTime, timeInterval: graphViewTimeInterval*graphTimeScale, mainEventTime: eventItem!.time) {
                 // TODO: really want to scan the entire width to see if any of the time span has data...
                 missingDataAdvisoryView.hidden = true;
             }
