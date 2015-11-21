@@ -32,8 +32,12 @@ class EventGroupRowCollectionCell: UICollectionViewCell {
             photoView = nil;
         }
         self.photoUrl = photoUrl
-        photoView = UIImageView(frame: self.bounds)
+        var imageFrame = self.bounds
+        // leave a gap between photos
+        imageFrame.size.width -= 3.0
+        photoView = UIImageView(frame: imageFrame)
         photoView!.contentMode = .ScaleAspectFill
+        photoView!.backgroundColor = UIColor.clearColor()
         NutUtils.loadImage(photoUrl, imageView: photoView!)
         self.addSubview(photoView!)
     }
