@@ -98,39 +98,8 @@ class NutUtils {
         }
         return Static.instance
     }
-    
-    // NOTE: this is not internationalized, and ignores user preferences for date display!
-    class func standardUIDateString(date: NSDate, relative: Bool = false) -> String {
-        let df = NutUtils.dateFormatter
-        if (relative) {
-            df.dateFormat = "MMM d, yyyy"
-            var dayString = df.stringFromDate(date)
-            // If this year, remove year.
-            df.dateFormat = ", yyyy"
-            let thisYearString = df.stringFromDate(NSDate())
-            dayString = dayString.stringByReplacingOccurrencesOfString(thisYearString, withString: "")
-            if (date.timeIntervalSinceNow > -48 * 60 * 60) {
-                if NSCalendar.currentCalendar().isDateInToday(date) {
-                    dayString = "Today"
-                } else if NSCalendar.currentCalendar().isDateInYesterday(date) {
-                    dayString = "Yesterday"
-                }
-            }
-            // Figure the hour/minute part...
-            df.dateFormat = "h:mm a"
-            var hourString = df.stringFromDate(date)
-            // Replace uppercase PM and AM with lowercase versions
-            hourString = hourString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
-            hourString = hourString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
-            // Replace with today, yesterday if appropriate: only check if it's in the last 48 hours
-            // TODO: look at using NSCalendar.startOfDayForDate and then time intervals to determine today, yesterday, Saturday, etc., back a week.
-            return dayString + " at " + hourString
-        } else {
-            df.dateFormat = Styles.uniformDateFormat
-            return df.stringFromDate(date)
-        }
-    }
 
+    // NOTE: these date routines are not localized, and do not take into account user preferences for date display.
     class func standardUIDayString(date: NSDate) -> String {
         let df = NutUtils.dateFormatter
         df.dateFormat = "MMM d, yyyy"
@@ -139,6 +108,8 @@ class NutUtils {
         df.dateFormat = ", yyyy"
         let thisYearString = df.stringFromDate(NSDate())
         dayString = dayString.stringByReplacingOccurrencesOfString(thisYearString, withString: "")
+        // Replace with today, yesterday if appropriate: only check if it's in the last 48 hours
+        // TODO: look at using NSCalendar.startOfDayForDate and then time intervals to determine today, yesterday, Saturday, etc., back a week.
         if (date.timeIntervalSinceNow > -48 * 60 * 60) {
             if NSCalendar.currentCalendar().isDateInToday(date) {
                 dayString = "Today"
@@ -147,6 +118,23 @@ class NutUtils {
             }
         }
         return dayString
+    }
+    
+    class func standardUIDateString(date: NSDate, relative: Bool = false) -> String {
+        let df = NutUtils.dateFormatter
+        if (relative) {
+            let dayString = NutUtils.standardUIDayString(date)
+            // Figure the hour/minute part...
+            df.dateFormat = "h:mm a"
+            var hourString = df.stringFromDate(date)
+            // Replace uppercase PM and AM with lowercase versions
+            hourString = hourString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            hourString = hourString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            return dayString + " at " + hourString
+        } else {
+            df.dateFormat = Styles.uniformDateFormat
+            return df.stringFromDate(date)
+        }
     }
 
 }

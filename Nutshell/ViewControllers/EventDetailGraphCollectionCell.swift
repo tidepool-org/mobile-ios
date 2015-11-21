@@ -15,10 +15,11 @@ class EventDetailGraphCollectionCell: UICollectionViewCell {
     private var graphTimeInterval: NSTimeInterval?
     private var graphZoomed: Bool = false
     
-    func zoomXAxisToTimeInterval(zoomToTimeInterval: NSTimeInterval) {
+    func zoomXAxisToNewTime(centerTime: NSDate, timeInterval: NSTimeInterval) {
         if let graphView = graphView {
-            graphTimeInterval = zoomToTimeInterval
-            graphView.zoomXAxisToTimeInterval(zoomToTimeInterval)
+            graphTime = centerTime
+            graphTimeInterval = timeInterval
+            graphView.zoomXAxisToNewTime(centerTime, timeIntervalForView: timeInterval)
             graphZoomed = true
         }
     }

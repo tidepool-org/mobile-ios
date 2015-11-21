@@ -497,25 +497,35 @@ class EventDetailViewController: BaseUIViewController {
         let pointInCell = CGPoint(x: centerPoint.x + collectView.contentOffset.x, y: centerPoint.y + collectView.contentOffset.y)
         return collectView.indexPathForItemAtPoint(pointInCell)
     }
+    
+    func centerTimeOfCellAtIndex(indexPath: NSIndexPath) -> NSDate {
+        var cellCenterTime = graphCenterTime
+        let collectionOffset = indexPath.row - graphCenterCellInCollection
         
+        if collectionOffset != 0 {
+            cellCenterTime = NSDate(timeInterval: graphViewTimeInterval*Double(collectionOffset)*graphTimeScale, sinceDate: graphCenterTime)
+        }
+        return cellCenterTime
+    }
+    
     func pinchGestureHandler(sender: AnyObject) {
         if let graphCollectionView = graphCollectionView {
             
             //NSLog("recognized pinch!")
             if let gesture = sender as? UIPinchGestureRecognizer {
                 if gesture.state == UIGestureRecognizerState.Began {
-                    NSLog("gesture started: scale: \(graphTimeScale)")
+                    //NSLog("gesture started: scale: \(graphTimeScale)")
                     startGraphTimeScale = graphTimeScale
                     return
                 }
                 if gesture.state == UIGestureRecognizerState.Changed {
-                    NSLog("gesture state changed scale: \(gesture.scale)")
+                    //NSLog("gesture state changed scale: \(gesture.scale)")
                     updateTimescale(Double(gesture.scale))
                     if let curCellIndex = currentCellIndex(graphCollectionView) {
-                        NSLog("cur cell index: \(curCellIndex)")
                         if let curCell = graphCollectionView.cellForItemAtIndexPath(curCellIndex) {
                             if let graphCell = curCell as? EventDetailGraphCollectionCell {
-                                graphCell.zoomXAxisToTimeInterval(graphViewTimeInterval*graphTimeScale)
+                                let centerTime = centerTimeOfCellAtIndex(curCellIndex)
+                                graphCell.zoomXAxisToNewTime(centerTime, timeInterval:graphViewTimeInterval*graphTimeScale)
                             }
                         }
                     }
@@ -524,20 +534,7 @@ class EventDetailViewController: BaseUIViewController {
                 if gesture.state == UIGestureRecognizerState.Ended {
                     //NSLog("gesture ended with scale: \(gesture.scale)")
                     updateTimescale(Double(gesture.scale))
-                    // Also update the overall collectionView center, to keep current cell's center the same...
-                    if let curCellIndex = currentCellIndex(graphCollectionView) {
-                        if let curCell = graphCollectionView.cellForItemAtIndexPath(curCellIndex) {
-                            if let graphCell = curCell as? EventDetailGraphCollectionCell {
-                                let cellCenterTime = graphCell.graphTime
-                                let collectionOffset = curCellIndex.row - graphCenterCellInCollection
-                                if collectionOffset != 0 {
-                                    graphCenterTime = NSDate(timeInterval: -graphViewTimeInterval*Double(collectionOffset)*graphTimeScale, sinceDate: cellCenterTime!)
-                                }
-                            }
-                        }
-                    }
                     graphCollectionView.reloadData()
-                        //NSLog("New scale: \(graphTimeScale)")
                     return
                 }
             }
@@ -547,8 +544,7 @@ class EventDetailViewController: BaseUIViewController {
     override func viewDidLayoutSubviews() {
         //NSLog("EventDetailVC viewDidLayoutSubviews")
         if viewExistingEvent && (graphCollectionView != nil) {
-            // self.view's direct subviews are laid out.
-            // force my subview to layout its subviews:
+            // self.view's direct subviews are laid out, force graph subview to layout its subviews:
             graphSectionView.setNeedsLayout()
             graphSectionView.layoutIfNeeded()
             if (graphCollectionView!.frame.size != graphSectionView.frame.size) {
@@ -583,12 +579,7 @@ extension EventDetailViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(collectCellReuseID, forIndexPath: indexPath) as! EventDetailGraphCollectionCell
             
             // index determines center time...
-            var cellCenterTime = graphCenterTime
-            let collectionOffset = indexPath.row - graphCenterCellInCollection
-            
-            if collectionOffset != 0 {
-                cellCenterTime = NSDate(timeInterval: graphViewTimeInterval*Double(collectionOffset)*graphTimeScale, sinceDate: graphCenterTime)
-            }
+            let cellCenterTime = centerTimeOfCellAtIndex(indexPath)
             if cell.configureCell(cellCenterTime, timeInterval: graphViewTimeInterval*graphTimeScale, mainEventTime: eventItem!.time) {
                 // TODO: really want to scan the entire width to see if any of the time span has data...
                 missingDataAdvisoryView.hidden = true;
