@@ -173,6 +173,12 @@ public class GraphViews {
         self.yBottomOfWorkout = self.yTopOfWorkout + floor(kGraphFractionForWorkout * graphHeight) - kGraphWorkoutBaseOffset
         self.yPixelsWorkout = self.yBottomOfWorkout - self.yTopOfWorkout
     }
+    
+    func updateTimeframe(timeIntervalForView: NSTimeInterval, startTime: NSDate) {
+        self.timeIntervalForView = timeIntervalForView
+        self.startTime = startTime
+        self.viewPixelsPerSec = viewSize.width/CGFloat(timeIntervalForView)        
+    }
 
     func imageOfFixedGraphBackground() -> UIImage {
         UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
@@ -184,9 +190,9 @@ public class GraphViews {
         return imageOfFixedGraphBackground
     }
 
-    func imageOfGraphBackground() -> UIImage {
+    func imageOfXAxisHeader() -> UIImage {
         UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
-        drawGraphBackground()
+        drawXAxisHeader()
         
         let imageOfGraphBackground = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -341,7 +347,7 @@ public class GraphViews {
         }
     }
 
-    private func drawGraphBackground() {
+    private func drawXAxisHeader() {
         //// General Declarations
         let context = UIGraphicsGetCurrentContext()
         
@@ -349,7 +355,9 @@ public class GraphViews {
         let contents = CGRectMake(0, 0, viewSize.width, viewSize.height)
         let graphStartSecs = startTime.timeIntervalSinceReferenceDate
         let pixelsPerHour = CGFloat(kHourInSecs) * viewPixelsPerSec
-
+        var leftMargin: CGFloat = 18.0
+        let rightMargin: CGFloat = viewSize.width - 18.0
+        
         //
         //  Draw the X-axis header...
         //
@@ -370,11 +378,6 @@ public class GraphViews {
         }
         
         func drawHourLabel(hourStr: String, topCenter: CGPoint) {
-    
-            // Don't draw labels too close to margins
-            if topCenter.x < 20.0 || topCenter.x > (viewSize.width - 20) {
-                return
-            }
 
             let labelRect = CGRectMake(topCenter.x - 16.0, topCenter.y + 2.0, 32.0, 18.0)
             let hourlabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
@@ -383,6 +386,12 @@ public class GraphViews {
             let labelAttrStr = NSMutableAttributedString(string: hourStr, attributes: [NSFontAttributeName: Styles.smallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hourlabelStyle])
             // Make " a" lighter
             labelAttrStr.addAttribute(NSFontAttributeName, value: Styles.smallLightFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
+            
+            let widthNeeded = labelAttrStr.boundingRectWithSize(labelRect.size, options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).width
+            // Don't draw labels too close to margins
+            if (topCenter.x - widthNeeded/2.0) < leftMargin || topCenter.x > rightMargin {
+                return
+            }
             
             labelAttrStr.drawInRect(labelRect)
         }
@@ -394,6 +403,18 @@ public class GraphViews {
         
         let nextHourBoundarySecs = ceil(graphStartSecs / kHourInSecs) * kHourInSecs
         let firstDate = NSDate(timeIntervalSinceReferenceDate:nextHourBoundarySecs)
+
+        // first draw the current day...
+        NSLog("drawing xAxis first date: \(firstDate)")
+        let firstDateString = NutUtils.standardUIDayString(firstDate)
+        let firstDateAttrStr = NSMutableAttributedString(string: firstDateString, attributes: [NSFontAttributeName: Styles.smallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hourlabelStyle])
+        let sizeNeeded = firstDateAttrStr.boundingRectWithSize(CGSize(width: viewSize.width, height: kGraphHeaderHeight), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
+        let dateXOffset: CGFloat = 10.0
+        // don't draw any time labels over the date
+        let dateToTimeMargin: CGFloat = 8.0
+        leftMargin = sizeNeeded.width + dateXOffset + dateToTimeMargin
+        let dateRect = CGRectMake(dateXOffset, 8.0, sizeNeeded.width, 18.0)
+        firstDateAttrStr.drawInRect(dateRect)
         
         var curDate = firstDate
         let timeOffset: NSTimeInterval = nextHourBoundarySecs - graphStartSecs

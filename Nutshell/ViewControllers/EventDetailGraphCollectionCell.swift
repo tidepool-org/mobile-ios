@@ -10,17 +10,27 @@ import UIKit
 
 class EventDetailGraphCollectionCell: UICollectionViewCell {
 
-    var graphView: GraphUIView?
+    private var graphView: GraphUIView?
     var graphTime: NSDate?
-    var graphTimeInterval: NSTimeInterval?
+    private var graphTimeInterval: NSTimeInterval?
+    private var graphZoomed: Bool = false
+    
+    func zoomXAxisToTimeInterval(zoomToTimeInterval: NSTimeInterval) {
+        if let graphView = graphView {
+            graphTimeInterval = zoomToTimeInterval
+            graphView.zoomXAxisToTimeInterval(zoomToTimeInterval)
+            graphZoomed = true
+        }
+    }
     
     func configureCell(centerTime: NSDate, timeInterval: NSTimeInterval, mainEventTime: NSDate) -> Bool {
         print("size at configure: \(self.frame.size)")
 
         if (graphView != nil) {
-            if (graphView!.frame.size != self.frame.size) || timeInterval != graphTimeInterval || centerTime != graphTime {
+            if (graphView!.frame.size != self.frame.size) || timeInterval != graphTimeInterval || centerTime != graphTime || graphZoomed {
                 graphView?.removeFromSuperview();
                 graphView = nil;
+                graphZoomed = false
             }
         }
 

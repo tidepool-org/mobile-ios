@@ -483,25 +483,62 @@ class EventDetailViewController: BaseUIViewController {
         }
     }
     
+    private func updateTimescale(gestureScale: Double) {
+        graphTimeScale = startGraphTimeScale / gestureScale
+        if graphTimeScale > kMaxGraphTimeScale {
+            graphTimeScale = kMaxGraphTimeScale
+        } else if graphTimeScale < kMinGraphTimeScale {
+            graphTimeScale = kMinGraphTimeScale
+        }
+    }
+    
+    func currentCellIndex(collectView: UICollectionView) -> NSIndexPath? {
+        let centerPoint = collectView.center
+        let pointInCell = CGPoint(x: centerPoint.x + collectView.contentOffset.x, y: centerPoint.y + collectView.contentOffset.y)
+        return collectView.indexPathForItemAtPoint(pointInCell)
+    }
+        
     func pinchGestureHandler(sender: AnyObject) {
-        //NSLog("recognized pinch!")
-        if let gesture = sender as? UIPinchGestureRecognizer {
-            //NSLog("gesture state: \(gesture.state), scale: \(gesture.scale)")
-            if gesture.state == UIGestureRecognizerState.Began {
-                startGraphTimeScale = graphTimeScale
-                return
-            }
-            // TODO: on .Changed state, grow/shrink the x-axis to show new timing...
-            if gesture.state == UIGestureRecognizerState.Ended {
-                graphTimeScale = graphTimeScale / Double(gesture.scale)
-                if graphTimeScale > kMaxGraphTimeScale {
-                    graphTimeScale = kMaxGraphTimeScale
-                } else if graphTimeScale < kMinGraphTimeScale {
-                    graphTimeScale = kMinGraphTimeScale
+        if let graphCollectionView = graphCollectionView {
+            
+            //NSLog("recognized pinch!")
+            if let gesture = sender as? UIPinchGestureRecognizer {
+                if gesture.state == UIGestureRecognizerState.Began {
+                    NSLog("gesture started: scale: \(graphTimeScale)")
+                    startGraphTimeScale = graphTimeScale
+                    return
                 }
-                if let graphCollectionView = graphCollectionView {
+                if gesture.state == UIGestureRecognizerState.Changed {
+                    NSLog("gesture state changed scale: \(gesture.scale)")
+                    updateTimescale(Double(gesture.scale))
+                    if let curCellIndex = currentCellIndex(graphCollectionView) {
+                        NSLog("cur cell index: \(curCellIndex)")
+                        if let curCell = graphCollectionView.cellForItemAtIndexPath(curCellIndex) {
+                            if let graphCell = curCell as? EventDetailGraphCollectionCell {
+                                graphCell.zoomXAxisToTimeInterval(graphViewTimeInterval*graphTimeScale)
+                            }
+                        }
+                    }
+                    return
+                }
+                if gesture.state == UIGestureRecognizerState.Ended {
+                    //NSLog("gesture ended with scale: \(gesture.scale)")
+                    updateTimescale(Double(gesture.scale))
+                    // Also update the overall collectionView center, to keep current cell's center the same...
+                    if let curCellIndex = currentCellIndex(graphCollectionView) {
+                        if let curCell = graphCollectionView.cellForItemAtIndexPath(curCellIndex) {
+                            if let graphCell = curCell as? EventDetailGraphCollectionCell {
+                                let cellCenterTime = graphCell.graphTime
+                                let collectionOffset = curCellIndex.row - graphCenterCellInCollection
+                                if collectionOffset != 0 {
+                                    graphCenterTime = NSDate(timeInterval: -graphViewTimeInterval*Double(collectionOffset)*graphTimeScale, sinceDate: cellCenterTime!)
+                                }
+                            }
+                        }
+                    }
                     graphCollectionView.reloadData()
-                    NSLog("New scale: \(graphTimeScale)")
+                        //NSLog("New scale: \(graphTimeScale)")
+                    return
                 }
             }
         }

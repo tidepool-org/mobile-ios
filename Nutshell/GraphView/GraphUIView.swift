@@ -27,6 +27,7 @@ class GraphUIView: UIView {
     
     init(frame: CGRect, centerTime: NSDate, timeIntervalForView: NSTimeInterval, timeOfMainEvent: NSDate) {
 
+        self.centerTime = centerTime
         self.startTime = centerTime.dateByAddingTimeInterval(-timeIntervalForView/2)
         self.endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
         self.viewTimeInterval = timeIntervalForView
@@ -39,6 +40,18 @@ class GraphUIView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func zoomXAxisToTimeInterval(timeIntervalForView: NSTimeInterval) {
+        // Note: This will make all the other parts of the graph out of sync with the x-axis, so this is only useful for temporary pinch-zoom feedback...
+        self.startTime = centerTime.dateByAddingTimeInterval(-timeIntervalForView/2)
+        self.endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
+        self.viewTimeInterval = timeIntervalForView
+        // update image...
+        if let graphXAxisHeader = graphXAxisHeader {
+            graphViews.updateTimeframe(viewTimeInterval, startTime: startTime)
+            graphXAxisHeader.image = graphViews.imageOfXAxisHeader()
+        }
+    }
+    
     /// Graph set up
     ///
     /// Queries the core database for relevant events in the specified timeframe, and creates the graph view with that data.
@@ -73,11 +86,12 @@ class GraphUIView: UIView {
     // MARK: - Private data
     //
     
-    var startTime: NSDate, endTime: NSDate
+    var centerTime: NSDate, startTime: NSDate, endTime: NSDate
     var viewTimeInterval: NSTimeInterval = 0.0
     private var timeOfMainEvent: NSDate
     
     private var graphViews: GraphViews
+    private var graphXAxisHeader: UIImageView?
     private var smbgData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var cbgData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
@@ -94,9 +108,9 @@ class GraphUIView: UIView {
         // At this point data should be loaded, and we just need to plot the data
         // First generate the graph background
         
-        let backgroundImage = graphViews.imageOfGraphBackground()
-        let graphBackground = UIImageView(image: backgroundImage)
-        addSubview(graphBackground)
+        let xAxisImage = graphViews.imageOfXAxisHeader()
+        graphXAxisHeader = UIImageView(image: xAxisImage)
+        addSubview(graphXAxisHeader!)
     
         if !dataFound() {
             return
