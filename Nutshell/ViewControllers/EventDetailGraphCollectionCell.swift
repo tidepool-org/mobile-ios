@@ -28,11 +28,11 @@ class EventDetailGraphCollectionCell: UICollectionViewCell {
         print("size at configure: \(self.frame.size)")
 
         if (graphView != nil) {
-            if (graphView!.frame.size != self.frame.size) || timeInterval != graphTimeInterval || centerTime != graphTime || graphZoomed {
+//            if (graphView!.frame.size != self.frame.size) || timeInterval != graphTimeInterval || centerTime != graphTime || graphZoomed {
                 graphView?.removeFromSuperview();
                 graphView = nil;
                 graphZoomed = false
-            }
+//            }
         }
 
         if (graphView == nil) {

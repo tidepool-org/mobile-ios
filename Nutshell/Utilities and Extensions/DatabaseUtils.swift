@@ -10,6 +10,8 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+public let NewBlockRangeLoadedNotification = "NewBlockRangeLoadedNotification"
+
 class DatabaseUtils {
     
     /** Removes everything from the database. Do this on logout and / or after a successful login */
@@ -71,33 +73,111 @@ class DatabaseUtils {
         }
     }
     
-    class func updateUser(moc: NSManagedObjectContext, user: User) {
-        // Remove existing users
-        let request = NSFetchRequest(entityName: "User")
-        request.predicate = NSPredicate(format: "userid==%@", user.userid!)
-        do {
-            let results = try moc.executeFetchRequest(request) as! [User]
-            for result in results {
-                moc.deleteObject(result)
+    class func updateUser(currentUser: User?, newUser: User?) {
+        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+        let moc = ad.managedObjectContext
+        // Remove existing user if passed in
+        if let currentUser = currentUser {
+            let request = NSFetchRequest(entityName: "User")
+            request.predicate = NSPredicate(format: "userid==%@", currentUser.userid!)
+            do {
+                let results = try moc.executeFetchRequest(request) as! [User]
+                for result in results {
+                    moc.deleteObject(result)
+                }
+            } catch let error as NSError {
+                print("Failed to remove existing user: \(currentUser.userid) error: \(error)")
             }
-        } catch let error as NSError {
-            print("Failed to remove existing user: \(user.userid) error: \(error)")
+        }
+
+        if let newUser = newUser {
+            moc.insertObject(newUser)
         }
         
-        moc.insertObject(user)
         // Save the database
         do {
             try moc.save()
         } catch let error as NSError {
-            print("Failed to save MOC: \(error)")
+            print("Failed to save MOC for user: \(error)")
+        }
+    }
+
+    // MARK: - Methods to cache read-only data from service
+
+    // A sorted cache of server blocks we have fetched during the current application lifetime, along with the date of fetch...
+    static var serverBlocks = [Int : NSDate]()
+
+    class func dateToBucketNumber(date: NSDate) -> Int {
+        let refSeconds = Int(date.timeIntervalSinceReferenceDate)
+        let kBucketSeconds = 60*60*20 // 20 hour chunks
+        let result = refSeconds/kBucketSeconds
+        print("Date: \(date), bucket number: \(result)")
+        return result
+    }
+
+    private class var isoDateFormatter : NSDateFormatter {
+        struct Static {
+            static let instance: NSDateFormatter = {
+                let df = NSDateFormatter()
+                df.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+                return df
+            }()
+        }
+        return Static.instance
+    }
+
+    class func bucketNumberToIsoDateString(bucket: Int) -> String {
+        let date = NSDate(timeIntervalSinceReferenceDate: NSTimeInterval(bucket*60*60*20))
+        let df = DatabaseUtils.isoDateFormatter
+        let result = df.stringFromDate(date) + "Z"
+        print("Bucket number: \(bucket), date: \(date), string: \(result)")
+        return result
+    }
+
+    class func checkLoadDataForDateRange(startDate: NSDate, endDate: NSDate) {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        if !appDelegate.incrementalDataLoadMode {
+            return
+        }
+        let now = NSDate()
+        let startBucket = DatabaseUtils.dateToBucketNumber(startDate)
+        let endBucket = DatabaseUtils.dateToBucketNumber(endDate)
+        for bucket in startBucket...endBucket {
+            
+            if let lastFetchDate = serverBlocks[bucket] {
+                if now.timeIntervalSinceDate(lastFetchDate) < 60*10 {
+                    // don't check more often than every 10 minutes...
+                    NSLog("checkLoadDataForDateRange: skip load of bucket \(bucket)")
+                    continue
+                }
+            }
+            // kick off a fetch if we are online...
+            if appDelegate.serviceAvailable() {
+                serverBlocks[bucket] = now
+                let moc = appDelegate.managedObjectContext
+                let startTimeIsoDateStr = DatabaseUtils.bucketNumberToIsoDateString(bucket)
+                let endTimeIsoDateStr = DatabaseUtils.bucketNumberToIsoDateString(bucket+1)
+                appDelegate.API?.getReadOnlyUserData(startTimeIsoDateStr, endDate:endTimeIsoDateStr, completion: { (result) -> (Void) in
+                    if result.isSuccess {
+                        DatabaseUtils.updateEvents(moc, eventsJSON: result.value!)
+                    } else {
+                        print("Failed to get events in range for user. Error: \(result.error!)")
+                    }
+                })
+            }
         }
     }
     
+    class func updateEventsForRange(moc: NSManagedObjectContext, eventsJSON: JSON) {
+    }
     
     class func updateEvents(moc: NSManagedObjectContext, eventsJSON: JSON) {
         // We get back an array of JSON objects. Iterate through the array and insert the objects
         // into the database, removing any existing objects we may have.
-        
+
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let incrementalMode = appDelegate.incrementalDataLoadMode
+
         // Do this in the background- currently it takes forever because the result set is huge
         dispatch_async(dispatch_get_global_queue(Int(DISPATCH_QUEUE_PRIORITY_BACKGROUND), 0)){
             let bgMOC = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
@@ -106,50 +186,59 @@ class DatabaseUtils {
             let request = NSFetchRequest(entityName: "CommonData")
             var eventCounter = 0
             for (_, subJson) in eventsJSON {
+                NSLog("updateEvents next subJson: \(subJson)")
                 if let obj = CommonData.fromJSON(subJson, moc: bgMOC) {
                     // Remove existing object with the same ID
                     if let id=obj.id {
-                        request.predicate = NSPredicate(format: "id = %@", id)
-                        bgMOC.insertObject(obj)
-
                         eventCounter++
                         if eventCounter > 1000 {
                             eventCounter = 0
-                            // Save the database every 1000 events for now, until we can have more sophisticated incremental fetch
-                            do {
-                                try bgMOC.save()
-                                print("updateEvents: Database saved after 1000 events added!")
-                            } catch let error as NSError {
-                                print("Failed to save MOC: \(error)")
-                                break
-                            }
+                            NSLog("1000 items")
                         }
-//                        do {
-//                            let foundObjects = try bgMOC.executeFetchRequest(request) as! [NSManagedObject]
-//                            for foundObject in foundObjects {
-//                                bgMOC.deleteObject(foundObject)
-//                            }
-//                            bgMOC.insertObject(obj)
-//                        } catch let error as NSError {
-//                            print("updateEvents: Failed to replace existing event with ID \(id) error: \(error)")
-//                        }
+                        if incrementalMode {
+                            request.predicate = NSPredicate(format: "id = %@", id)
+                            
+                            do {
+                                let foundObjects = try bgMOC.executeFetchRequest(request) as! [NSManagedObject]
+                                for foundObject in foundObjects {
+                                    bgMOC.deleteObject(foundObject)
+                                }
+                                bgMOC.insertObject(obj)
+                            } catch let error as NSError {
+                                print("updateEvents: Failed to replace existing event with ID \(id) error: \(error)")
+                            }
+                        } else {
+                            bgMOC.insertObject(obj)
+                        }
                     } else {
-                        print("udpateEvents: no ID found for object: \(obj), not inserting!")
+                        print("updateEvents: no ID found for object: \(obj), not inserting!")
                     }
                 }
             }
-            
+            NSLog("extra events processed: \(eventCounter)")
             // Save the database
             do {
                 try bgMOC.save()
                 print("updateEvents: Database saved!")
+                dispatch_async(dispatch_get_main_queue()) {
+                    notifyOnDataLoad()
+                }
             } catch let error as NSError {
                 print("Failed to save MOC: \(error)")
             }
         }
     }
     
+    class func notifyOnDataLoad() {
+        // This will come in on the main thread, unlike the NSManagedObjectContextDidSaveNotification
+        NSNotificationCenter.defaultCenter().postNotificationName(NewBlockRangeLoadedNotification, object:nil)
+    }
+    
     class func getEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate, objectTypes: [String]? = nil) throws -> [CommonData] {
+
+        // load on-demand: if data has not been loaded, a notification will come later!
+        DatabaseUtils.checkLoadDataForDateRange(fromTime, endDate: toTime)
+
         let request = NSFetchRequest(entityName: "CommonData")
         
         if let types = objectTypes {

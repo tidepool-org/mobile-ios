@@ -66,19 +66,34 @@ class EventDetailViewController: BaseUIViewController {
         configureDetailView()
         // We use a custom back button so we can redirect back when the event has changed. This tweaks the arrow positioning to match the iOS back arrow position
         self.navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsetsMake(0.0, -8.0, -1.0, 0.0)
+        
+        let notificationCenter = NSNotificationCenter.defaultCenter()
+        notificationCenter.addObserver(self, selector: "databaseChanged:", name: NewBlockRangeLoadedNotification, object: nil)
     }
-    
+ 
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    private var viewIsForeground: Bool = false
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         //NSLog("viewWillAppear")
+        viewIsForeground = true
         layoutHeaderView()
+        checkUpdateGraph()
     }
-    
+
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewIsForeground = false
+    }
+
     //
     // MARK: - Navigation
     //
@@ -113,7 +128,27 @@ class EventDetailViewController: BaseUIViewController {
             reloadView()
         }
      }
+
+    private func checkUpdateGraph() {
+        if graphNeedsUpdate {
+            graphNeedsUpdate = false
+            if let graphCollectionView = graphCollectionView {
+                graphCollectionView.reloadData()
+            }
+        }
+    }
     
+    private var graphNeedsUpdate: Bool  = false
+    func databaseChanged(note: NSNotification) {
+        graphNeedsUpdate = true
+        if viewIsForeground {
+            NSLog("EventDetailView: database load finished, reloading")
+            checkUpdateGraph()
+        } else {
+            NSLog("EventDetailView: database load finished in background")
+        }
+    }
+
     @IBAction func cancel(segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventDetail cancel")
     }

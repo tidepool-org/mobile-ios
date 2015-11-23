@@ -22,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var API: APIConnector?
     static var testMode: Bool = false
+    var incrementalDataLoadMode = false
+    let enableIncrementalModeOnDev = true
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         AppDelegate.testMode = false
@@ -34,6 +36,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Set up the API connection
         API = APIConnector()
+        
+        if APIConnector.currentService == "Development" && enableIncrementalModeOnDev {
+            NSLog("DEVELOPMENT SERVER: USE INCREMENTAL DATA LOAD!")
+            self.incrementalDataLoadMode = true
+        }
+
         attemptTokenLogin()
         return true
     }
@@ -44,16 +52,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // refresh connector since there is a new service...
             API = APIConnector()
             NSLog("Switched to \(serverName) server")
+            if APIConnector.currentService == "Development" && enableIncrementalModeOnDev {
+                NSLog("DEVELOPMENT SERVER: USE INCREMENTAL DATA LOAD!")
+                self.incrementalDataLoadMode = true
+            } else {
+                self.incrementalDataLoadMode = false
+            }
         }
     }
     
     func attemptTokenLogin() {
         if let api = API {
-            if !api.isConnectedToNetwork() || api.sessionToken == nil {
+            if api.sessionToken == nil {
+                NSLog("No token available, clear any data in case user did not log out normally")
+                api.logout() {
+                    self.setupUIForLogin()
+                }
+                return
+            }
+
+            if !api.isConnectedToNetwork() {
                 setupUIForLogin()
                 return
             }
-            
+
             NSLog("AppDelegate: attempting to refresh token...")
             api.refreshToken() { succeeded -> (Void) in
                 if succeeded {
@@ -76,11 +98,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func logout() {
-        if let API = API {
-            API.logout() {
+        if let api = API {
+            api.logout() {
                 self.setupUIForLogin()
             }
         }
+    }
+    
+    func serviceAvailable() -> Bool {
+        if let api = API {
+            if !api.isConnectedToNetwork() || api.sessionToken == nil {
+                return false
+            }
+            return true
+        }
+        return false
     }
     
     func setupUIForLoginSuccess() {

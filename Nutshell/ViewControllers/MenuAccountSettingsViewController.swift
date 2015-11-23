@@ -25,7 +25,7 @@ class MenuAccountSettingsViewController: UIViewController {
         versionString.text = UIApplication.appVersion() + " on " + APIConnector.currentService!
         
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        loginAccount.text = appDelegate.API?.currentUserId
+        loginAccount.text = appDelegate.API?.currentUser?.username
     }
 
     override func didReceiveMemoryWarning() {

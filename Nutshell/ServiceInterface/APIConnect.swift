@@ -26,23 +26,31 @@ import CoreData
 class APIConnector {
     // MARK: Properties
     
-    /** ID of the currently logged-in user, or nil if nobody is logged in */
-    private var _currentUserId: String?
-    var currentUserId: String? {
+    
+    private var _currentUser: User?
+    var currentUser: User? {
         get {
-            if (_currentUserId == nil) {
+            if _currentUser == nil {
                 let ad = UIApplication.sharedApplication().delegate as! AppDelegate
                 if let user = DatabaseUtils.getUser(ad.managedObjectContext) {
-                    _currentUserId = user.username
+                    _currentUser = user
                 }
             }
-            return _currentUserId
+            return _currentUser
         }
-        set {
-            _currentUserId = newValue
+        set(newUser) {
+            if newUser != _currentUser {
+                DatabaseUtils.updateUser(_currentUser, newUser: newUser)
+                _currentUser = newUser
+                if newUser != nil {
+                    NSLog("Set currentUser, name: \(newUser!.username), id: \(newUser!.userid)")
+                } else {
+                    NSLog("Cleared currentUser!")
+                }
+            }
         }
     }
-
+    
     // MARK: - Constants
     
     static let kSessionTokenDefaultKey = "SToken"
@@ -74,7 +82,7 @@ class APIConnector {
     static let kServers = [
         "Production" :   "https://api.tidepool.org",
         "Staging" :      "https://staging-api.tidepool.org",
-        "Development" :  "https://devel-api.tidepool.org",
+        "Development" :  "https://devel-api.tidepool.io",
     ]
     static let kDefaultServerName = "Production"
 
@@ -124,9 +132,8 @@ class APIConnector {
     // Required initializer
     init() {
         self.baseUrl = NSURL(string:APIConnector.kServers[APIConnector.currentService!]!)!
-        self.sessionToken = NSUserDefaults.standardUserDefaults().stringForKey(APIConnector.kSessionTokenDefaultKey)
         NSLog("Using service: \(self.baseUrl)")
-        
+        self.sessionToken = NSUserDefaults.standardUserDefaults().stringForKey(APIConnector.kSessionTokenDefaultKey)
         do {
             let reachability = try Reachability.reachabilityForInternetConnection()
             self.reachability = reachability
@@ -175,14 +182,16 @@ class APIConnector {
                 // Create the User object
                 let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                 if let user = User.fromJSON(json, moc: appDelegate.managedObjectContext) {
+                    self.currentUser = user
                     completion(Result.Success(user))
-                    self.currentUserId = username
                 } else {
+                    self.currentUser = nil
                     completion(Result.Failure(nil, NSError(domain: APIConnector.kNutshellErrorDomain,
                         code: -1,
                         userInfo: ["description":"Could not create user from JSON", "result":result.value!])))
                 }
             } else {
+                self.currentUser = nil
                 completion(Result.Failure(nil, result.error!))
             }
         }
@@ -191,7 +200,7 @@ class APIConnector {
     func logout(completion: () -> (Void)) {
         // Clear our session token and remove entries from the db
         self.sessionToken = nil
-        currentUserId = nil
+        currentUser = nil
         let ad = UIApplication.sharedApplication().delegate as! AppDelegate!
         DatabaseUtils.clearDatabase(ad.managedObjectContext)
         completion()
@@ -201,7 +210,7 @@ class APIConnector {
         
         let endpoint = "/auth/login"
         
-        if ( self.sessionToken == nil ) {
+        if self.sessionToken == nil || self.currentUser == nil {
             // We don't have a session token to refresh.
             completion(succeeded: false)
             return
@@ -229,9 +238,9 @@ class APIConnector {
     /** For now this method returns the result as a JSON object. The result set can be huge, and we want processing to
      *  happen outside of this method until we have something a little less firehose-y.
      */
-    func getUserData(userId: String, completion: (Result<JSON>) -> (Void)) {
+    func getUserData(completion: (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user data
-        let endpoint = "data/" + userId;
+        let endpoint = "data/" + currentUser!.userid!;
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         sendRequest(Method.GET, endpoint: endpoint).responseJSON { (request, response, result) -> Void in
@@ -246,6 +255,26 @@ class APIConnector {
         }
     }
     
+    func getReadOnlyUserData(startDate: String, endDate: String,completion: (Result<JSON>) -> (Void)) {
+        // Set our endpoint for the user data
+        // TODO: centralize define of read-only events!
+        let endpoint = "data/" + currentUser!.userid! //+ "?type=smbg,bolus,cbg,wizard,basal&startdate=" + startDate + "&enddate=" + endDate
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        // TODO: Alamofire isn't escaping the periods, but service appears to expect this... right now I have Alamofire modified to do this.
+        // TODO: If there is no data returned, I get a failure case with status code 200, and error FAILURE: Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.} ] Maybe an Alamofire issue?
+        //var escapedStart = startDate.stringByReplacingOccurrencesOfString(".", withString: "%2E")
+        sendRequest(Method.GET, endpoint: endpoint, parameters: ["type":"smbg,bolus,cbg,wizard,basal", "startdate": startDate, "enddate": endDate]).responseJSON { (request, response, result) -> Void in
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            if ( result.isSuccess ) {
+                let json = JSON(result.value!)
+                completion(Result.Success(json))
+            } else {
+                // Failure
+                completion(Result.Failure(nil, result.error!))
+            }
+        }
+    }
+
     func clearSessionToken() -> Void {
         NSUserDefaults.standardUserDefaults().removeObjectForKey(APIConnector.kSessionTokenDefaultKey)
         sessionToken = nil
