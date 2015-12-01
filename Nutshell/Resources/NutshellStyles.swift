@@ -80,6 +80,8 @@ public class Styles: NSObject {
         "advisoryText": (mediumSemiboldFont, darkGreyColor),
         "advisorySubtext": (mediumRegularFont, lightDarkGreyColor),
         "greenLink": (mediumRegularFont, lightGreenColor),
+        // event detail graph area
+        "currentGraphDate" : (smallRegularFont, lightDarkGreyColor),
         // add/edit event scenes
         "addEditViewTitle": (mediumLargeBoldFont, whiteColor),
         "addEditViewNotes": (mediumRegularFont, whiteColor),

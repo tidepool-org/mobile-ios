@@ -31,9 +31,8 @@ public class GraphViews {
     private let kGraphWizardHeight: CGFloat = 27.0
     // After removing a constant height for the header and wizard values, the remaining graph vertical space is divided into four sections based on the following fractions (which should add to 1.0)
     private let kGraphFractionForGlucose: CGFloat = 180.0/266.0
-    private let kGraphFractionForBolus: CGFloat = 42.0/266.0
-    private let kGraphFractionForBasal: CGFloat = 28.0/266.0
-    private let kGraphFractionForWorkout: CGFloat = 16.0/266.0
+    private let kGraphFractionForBolusAndBasal: CGFloat = 76.0/266.0
+    //private let kGraphFractionForWorkout: CGFloat = 16.0/266.0
     // Each section has some base offset as well
     private let kGraphGlucoseBaseOffset: CGFloat = 2.0
     private let kGraphWizardBaseOffset: CGFloat = 2.0
@@ -65,6 +64,7 @@ public class GraphViews {
     // TODO: add all graph colors here, based on Styles colors
     private let backgroundRightColor = Styles.veryLightGreyColor
     private let backgroundLeftColor = Styles.veryLightGreyColor
+    private let backgroundColor = Styles.veryLightGreyColor
     private let horizontalLineColor = UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1.000)
 
     //
@@ -99,8 +99,7 @@ public class GraphViews {
     //
     // Basal data
     //
-    private let basalBlueRectColor = Styles.blueColor
-    private let basalLightBlueRectColor = Styles.blueColor
+    private let basalLightBlueRectColor = Styles.lightBlueColor
     private let kBasalMinScaleValue: CGFloat = 0.0
     
     //
@@ -118,18 +117,17 @@ public class GraphViews {
     private var yPixelsGlucose: CGFloat
     // Wizard readings overlap the bottom part of the glucose readings
     private var yBottomOfWizard: CGFloat
-    // Bolus readings go in a section below glucose
+    // Bolus and Basal readings go in a section below glucose
     private var yTopOfBolus: CGFloat
     private var yBottomOfBolus: CGFloat
     private var yPixelsBolus: CGFloat
-    // Basal readings go in a section below Bolus
     private var yTopOfBasal: CGFloat
     private var yBottomOfBasal: CGFloat
     private var yPixelsBasal: CGFloat
     // Workout durations go in a section below Basal
-    private var yTopOfWorkout: CGFloat
-    private var yBottomOfWorkout: CGFloat
-    private var yPixelsWorkout: CGFloat
+    //private var yTopOfWorkout: CGFloat
+    //private var yBottomOfWorkout: CGFloat
+    //private var yPixelsWorkout: CGFloat
 
     //
     // MARK: - Interface
@@ -158,20 +156,20 @@ public class GraphViews {
         // Wizard data sits above the bolus readings, in a fixed space area, overlapping the bottom of the glucose graph which should be empty of readings that low.
         self.yBottomOfWizard = self.yBottomOfGlucose + wizardHeight
 
-        // Next down are the bolus readings
+        // At the bottom are the bolus and basal readings
         self.yTopOfBolus = self.yBottomOfWizard + kGraphGlucoseBaseOffset
-        self.yBottomOfBolus = self.yTopOfBolus + floor(kGraphFractionForBolus * graphHeight) - kGraphBolusBaseOffset
+        self.yBottomOfBolus = self.yTopOfBolus + floor(kGraphFractionForBolusAndBasal * graphHeight) - kGraphBolusBaseOffset
         self.yPixelsBolus = self.yBottomOfBolus - self.yTopOfBolus
 
         // Basal values sit just below the bolus readings
-        self.yTopOfBasal = self.yBottomOfBolus + kGraphBolusBaseOffset
-        self.yBottomOfBasal = self.yTopOfBasal + floor(kGraphFractionForBasal * graphHeight) - kGraphBasalBaseOffset
-        self.yPixelsBasal = self.yBottomOfBasal - self.yTopOfBasal
+        self.yTopOfBasal = self.yTopOfBolus
+        self.yBottomOfBasal = self.yBottomOfBolus
+        self.yPixelsBasal = self.yPixelsBolus
 
         // Workout durations go in the bottom section
-        self.yTopOfWorkout = yBottomOfBasal + kGraphBasalBaseOffset
-        self.yBottomOfWorkout = self.yTopOfWorkout + floor(kGraphFractionForWorkout * graphHeight) - kGraphWorkoutBaseOffset
-        self.yPixelsWorkout = self.yBottomOfWorkout - self.yTopOfWorkout
+        //self.yTopOfWorkout = yBottomOfBasal + kGraphBasalBaseOffset
+        //self.yBottomOfWorkout = self.yTopOfWorkout + floor(kGraphFractionForWorkout * graphHeight) - kGraphWorkoutBaseOffset
+        //self.yPixelsWorkout = self.yBottomOfWorkout - self.yTopOfWorkout
     }
     
     func updateTimeframe(timeIntervalForView: NSTimeInterval, startTime: NSDate) {
@@ -377,23 +375,26 @@ public class GraphViews {
             hourMarkerPath.stroke()
         }
         
-        func drawHourLabel(hourStr: String, topCenter: CGPoint) {
+        func drawHourLabel(hourStr: String, topCenter: CGPoint, midnight: Bool) {
 
-            let labelRect = CGRectMake(topCenter.x - 16.0, topCenter.y + 2.0, 32.0, 18.0)
             let hourlabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-            hourlabelStyle.alignment = .Center
+            hourlabelStyle.alignment = .Left
             
             let labelAttrStr = NSMutableAttributedString(string: hourStr, attributes: [NSFontAttributeName: Styles.smallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hourlabelStyle])
-            // Make " a" lighter
-            labelAttrStr.addAttribute(NSFontAttributeName, value: Styles.smallLightFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
             
-            let widthNeeded = labelAttrStr.boundingRectWithSize(labelRect.size, options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).width
-            // Don't draw labels too close to margins
-            if (topCenter.x - widthNeeded/2.0) < leftMargin || topCenter.x > rightMargin {
-                return
+            if !midnight {
+                // Make " a" or " p" lighter
+                labelAttrStr.addAttribute(NSFontAttributeName, value: Styles.smallLightFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
             }
             
-            labelAttrStr.drawInRect(labelRect)
+            let labelRect = CGRectMake(0.0, 0.0, 100.0, 18.0)
+            let widthNeeded = labelAttrStr.boundingRectWithSize(labelRect.size, options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).width
+//            // Don't draw labels too close to margins
+//            if (topCenter.x - widthNeeded/2.0) < leftMargin || topCenter.x > rightMargin {
+//                return
+//            }
+            
+            labelAttrStr.drawAtPoint(CGPoint(x: topCenter.x - widthNeeded/2.0, y: 10.0))
         }
         
         let df = NSDateFormatter()
@@ -405,16 +406,16 @@ public class GraphViews {
         let firstDate = NSDate(timeIntervalSinceReferenceDate:nextHourBoundarySecs)
 
         // first draw the current day...
-        NSLog("drawing xAxis first date: \(firstDate)")
-        let firstDateString = NutUtils.standardUIDayString(firstDate)
-        let firstDateAttrStr = NSMutableAttributedString(string: firstDateString, attributes: [NSFontAttributeName: Styles.smallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hourlabelStyle])
-        let sizeNeeded = firstDateAttrStr.boundingRectWithSize(CGSize(width: viewSize.width, height: kGraphHeaderHeight), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
-        let dateXOffset: CGFloat = 10.0
-        // don't draw any time labels over the date
-        let dateToTimeMargin: CGFloat = 8.0
-        leftMargin = sizeNeeded.width + dateXOffset + dateToTimeMargin
-        let dateRect = CGRectMake(dateXOffset, 8.0, sizeNeeded.width, 18.0)
-        firstDateAttrStr.drawInRect(dateRect)
+//        NSLog("drawing xAxis first date: \(firstDate)")
+//        let firstDateString = NutUtils.standardUIDayString(firstDate)
+//        let firstDateAttrStr = NSMutableAttributedString(string: firstDateString, attributes: [NSFontAttributeName: Styles.smallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hourlabelStyle])
+//        let sizeNeeded = firstDateAttrStr.boundingRectWithSize(CGSize(width: viewSize.width, height: kGraphHeaderHeight), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
+//        let dateXOffset: CGFloat = 10.0
+//        // don't draw any time labels over the date
+//        let dateToTimeMargin: CGFloat = 8.0
+//        leftMargin = sizeNeeded.width + dateXOffset + dateToTimeMargin
+//        let dateRect = CGRectMake(dateXOffset, 8.0, sizeNeeded.width, 18.0)
+//        firstDateAttrStr.drawInRect(dateRect)
         
         var curDate = firstDate
         let timeOffset: NSTimeInterval = nextHourBoundarySecs - graphStartSecs
@@ -430,8 +431,13 @@ public class GraphViews {
             hourStr = hourStr.stringByReplacingOccurrencesOfString("PM", withString: "p", options: NSStringCompareOptions.LiteralSearch, range: nil)
             hourStr = hourStr.stringByReplacingOccurrencesOfString("AM", withString: "a", options: NSStringCompareOptions.LiteralSearch, range: nil)
 
+            var midnight = false
+            if hourStr == "12 a" {
+                midnight = true
+                hourStr = NutUtils.standardUIDayString(curDate)
+            }
             // draw hour label
-            drawHourLabel(hourStr, topCenter: CGPoint(x: viewXOffset, y: 6.0))
+            drawHourLabel(hourStr, topCenter: CGPoint(x: viewXOffset, y: 6.0), midnight: midnight)
             
             curDate = curDate.dateByAddingTimeInterval(kHourInSecs)
             viewXOffset += pixelsPerHour
@@ -441,24 +447,24 @@ public class GraphViews {
 
     private func drawWorkoutData(workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval)]) {
         
-        for item in workoutData {
-            let timeOffset = item.0
-            let workoutDuration = item.1
-            
-            //// eventLine Drawing
-            let centerX: CGFloat = floor(CGFloat(timeOffset) * viewPixelsPerSec)
-            let eventLinePath = UIBezierPath(rect: CGRect(x: centerX, y: 0.0, width: 1.0, height: viewSize.height))
-            Styles.pinkColor.setFill()
-            eventLinePath.fill()
-            
-            //// eventRectangle Drawing
-            let workoutRectWidth = floor(CGFloat(workoutDuration) * viewPixelsPerSec)
-            let workoutRect = CGRect(x: centerX - (workoutRectWidth/2), y:yTopOfWorkout, width: workoutRectWidth, height: yPixelsWorkout)
-            let eventRectanglePath = UIBezierPath(rect: workoutRect)
-            Styles.pinkColor.setFill()
-            eventRectanglePath.fill()
-            
-        }
+//        for item in workoutData {
+//            let timeOffset = item.0
+//            let workoutDuration = item.1
+//            
+//            //// eventLine Drawing
+//            let centerX: CGFloat = floor(CGFloat(timeOffset) * viewPixelsPerSec)
+//            let eventLinePath = UIBezierPath(rect: CGRect(x: centerX, y: 0.0, width: 1.0, height: viewSize.height))
+//            Styles.pinkColor.setFill()
+//            eventLinePath.fill()
+//            
+//            //// eventRectangle Drawing
+//            let workoutRectWidth = floor(CGFloat(workoutDuration) * viewPixelsPerSec)
+//            let workoutRect = CGRect(x: centerX - (workoutRectWidth/2), y:yTopOfWorkout, width: workoutRectWidth, height: yPixelsWorkout)
+//            let eventRectanglePath = UIBezierPath(rect: workoutRect)
+//            Styles.pinkColor.setFill()
+//            eventRectanglePath.fill()
+//            
+//        }
     }
 
     private func drawMeal(timeOffset: NSTimeInterval, isMain: Bool) {
@@ -497,8 +503,6 @@ public class GraphViews {
 
     private func drawBasalData(basalData: [(timeOffset: NSTimeInterval, value: NSNumber)]) {
         
-        var evenRect = true
-
         // first figure out the range of data; scale rectangle to fill this
         var rangeHi = CGFloat(kBasalMinScaleValue)
         for item in basalData {
@@ -511,8 +515,6 @@ public class GraphViews {
         let yPixelsPerUnit = yPixelsBasal / CGFloat(rangeHi)
 
         func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: NSNumber) {
-            let rectColor = evenRect ? basalLightBlueRectColor : basalBlueRectColor
-            evenRect = !evenRect
 
             let rectLeft = floor(CGFloat(startTimeOffset) * viewPixelsPerSec)
             let rectRight = floor(CGFloat(endTimeOffset) * viewPixelsPerSec)
@@ -520,7 +522,7 @@ public class GraphViews {
             let basalRect = CGRect(x: rectLeft, y: yBottomOfBasal - rectHeight, width: rectRight - rectLeft, height: rectHeight)
 
             let basalValueRectPath = UIBezierPath(rect: basalRect)
-            rectColor.setFill()
+            basalLightBlueRectColor.setFill()
             basalValueRectPath.fill()
         }
 
@@ -634,7 +636,7 @@ public class GraphViews {
         //// General Declarations
     
         let pixelsPerValue: CGFloat = yPixelsGlucose/kGlucoseRange
-        let circleRadius: CGFloat = 2.5
+        let circleRadius: CGFloat = 4.0
         
         var lowValue: CGFloat = kGlucoseMaxValue
         var highValue: CGFloat = kGlucoseMinValue
@@ -661,6 +663,9 @@ public class GraphViews {
                 let smallCirclePath = UIBezierPath(ovalInRect: circleRect)
                 circleColor.setFill()
                 smallCirclePath.fill()
+                backgroundColor.setStroke()
+                smallCirclePath.lineWidth = 1.5
+                smallCirclePath.stroke()
                 lastCircleDrawn = circleRect
             } else {
                 print("skipping overlapping value \(value)")
@@ -673,7 +678,7 @@ public class GraphViews {
         //// General Declarations
         
         let pixelsPerValue: CGFloat = yPixelsGlucose/kGlucoseRange
-        let circleRadius: CGFloat = 7.5
+        let circleRadius: CGFloat = 9.0
         var lowValue: CGFloat = kGlucoseMaxValue
         var highValue: CGFloat = kGlucoseMinValue
 
@@ -699,20 +704,32 @@ public class GraphViews {
             let largeCirclePath = UIBezierPath(ovalInRect: CGRectMake(centerX-circleRadius, centerY-circleRadius, circleRadius*2, circleRadius*2))
             circleColor.setFill()
             largeCirclePath.fill()
+            backgroundColor.setStroke()
+            largeCirclePath.lineWidth = 3.0
+            largeCirclePath.stroke()
             
-            let readingLabelRect = CGRectMake(centerX-18, centerY+circleRadius, 36, 20)
             let intValue = Int(valueForLabel)
             let readingLabelTextContent = String(intValue)
             let readingLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             readingLabelStyle.alignment = .Center
-            
             let readingLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: circleColor, NSParagraphStyleAttributeName: readingLabelStyle]
+            let readingLabelTextSize = readingLabelTextContent.boundingRectWithSize(CGSizeMake(CGFloat.infinity, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: readingLabelFontAttributes, context: nil).size
+            let readingLabelRect = CGRectMake(centerX-(readingLabelTextSize.width/2), centerY+circleRadius, readingLabelTextSize.width, readingLabelTextSize.height)
             
-            let readingLabelTextHeight: CGFloat = readingLabelTextContent.boundingRectWithSize(CGSizeMake(readingLabelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: readingLabelFontAttributes, context: nil).size.height
+            let readingLabelPath = UIBezierPath(rect: readingLabelRect.insetBy(dx: 1.0, dy: 2.5))
+            backgroundColor.setFill()
+            readingLabelPath.fill()
+            
             CGContextSaveGState(context)
-            CGContextClipToRect(context, readingLabelRect);
             
-            readingLabelTextContent.drawInRect(CGRectMake(readingLabelRect.minX, readingLabelRect.minY + (readingLabelRect.height - readingLabelTextHeight) / 2, readingLabelRect.width, readingLabelTextHeight), withAttributes: readingLabelFontAttributes)
+//            let shadow = NSShadow()
+//            shadow.shadowColor = backgroundColor
+//            shadow.shadowOffset = CGSizeMake(0.1, -0.1)
+//            shadow.shadowBlurRadius = 3
+//            CGContextSetShadowWithColor(context, shadow.shadowOffset, shadow.shadowBlurRadius, (shadow.shadowColor as! UIColor).CGColor)
+            
+            CGContextClipToRect(context, readingLabelRect);
+            readingLabelTextContent.drawInRect(readingLabelRect, withAttributes: readingLabelFontAttributes)
             CGContextRestoreGState(context)
         }
         print("\(smbgData.count) smbg events, low: \(lowValue) high: \(highValue)")

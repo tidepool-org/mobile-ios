@@ -147,14 +147,14 @@ class GraphUIView: UIView {
             addSubview(overlay)
         }
 
-        if !bolusData.isEmpty {
-            let overlayImage = graphViews.imageOfBolusData(bolusData)
+        if !basalData.isEmpty {
+            let overlayImage = graphViews.imageOfBasalData(basalData)
             let overlay = UIImageView(image:overlayImage)
             addSubview(overlay)
         }
-
-        if !basalData.isEmpty {
-            let overlayImage = graphViews.imageOfBasalData(basalData)
+        
+        if !bolusData.isEmpty {
+            let overlayImage = graphViews.imageOfBolusData(bolusData)
             let overlay = UIImageView(image:overlayImage)
             addSubview(overlay)
         }

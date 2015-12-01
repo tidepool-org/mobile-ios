@@ -27,13 +27,22 @@ class EventDetailViewController: BaseUIViewController {
     private var graphCenterTime: NSDate = NSDate()
     private var graphViewTimeInterval: NSTimeInterval = 0.0
     private var graphTimeScale = 1.0
+    // variables for scaling by multiplier
     private var startGraphTimeScale = 1.0
-    private let kMinGraphTimeScale = 0.5
+    private let kMinGraphTimeScale = 0.25
     private let kInitGraphTimeScale = 1.0
     private let kMaxGraphTimeScale = 2.0
+    // variables for scaling by pixels/hour
+    private var graphPixelsPerHour: CGFloat = 80
+    private let kInitPixelsPerHour: CGFloat = 80
+    private let kMinPixelsPerHour: CGFloat = 30
+    private let kMaxPixelsPerHour: CGFloat = 300
+    private let kDeltaPixelsPerHour: CGFloat = 10
+    
     private let graphCellsInCollection = 7
     private let graphCenterCellInCollection = 3
-    
+
+    @IBOutlet weak var graphLayerContainer: UIView!
     @IBOutlet weak var graphSectionView: UIView!
     @IBOutlet weak var missingDataAdvisoryView: UIView!
     @IBOutlet weak var fixedGraphBackground: UIView!
@@ -180,15 +189,16 @@ class EventDetailViewController: BaseUIViewController {
     }
     
     @IBAction func photoOverlayTouchHandler(sender: AnyObject) {
-        if let mealItem = eventItem as? NutMeal {
-            let firstPhotoUrl = mealItem.firstPictureUrl()
-            if !firstPhotoUrl.isEmpty {
-                let storyboard = UIStoryboard(name: "EventView", bundle: nil)
-                let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
-                photoVC.imageUrl = firstPhotoUrl
-                self.navigationController?.pushViewController(photoVC, animated: true)
-            }
-        }
+        centerGraphOnEvent(true)
+//        if let mealItem = eventItem as? NutMeal {
+//            let firstPhotoUrl = mealItem.firstPictureUrl()
+//            if !firstPhotoUrl.isEmpty {
+//                let storyboard = UIStoryboard(name: "EventView", bundle: nil)
+//                let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
+//                photoVC.imageUrl = firstPhotoUrl
+//                self.navigationController?.pushViewController(photoVC, animated: true)
+//            }
+//        }
     }
     
     @IBAction func photoDisplayButtonHandler(sender: AnyObject) {
@@ -208,6 +218,31 @@ class EventDetailViewController: BaseUIViewController {
                 mealItem.saveChanges()
                 configurePhotoBackground()
             }
+        }
+    }
+    
+    private func configureGraphPixelsTimeInterval(pixelsPerHour: CGFloat) {
+        if pixelsPerHour > kMaxPixelsPerHour || pixelsPerHour < kMinPixelsPerHour {
+            return
+        }
+        NSLog("New pixels per hour: \(pixelsPerHour)")
+        graphPixelsPerHour = pixelsPerHour
+        graphViewTimeInterval = NSTimeInterval(graphSectionView.bounds.width * 3600.0/graphPixelsPerHour)
+    }
+    
+    @IBAction func zoomInButtonHandler(sender: AnyObject) {
+        configureGraphPixelsTimeInterval(graphPixelsPerHour + kDeltaPixelsPerHour)
+        if let graphCollectionView = graphCollectionView {
+            graphCollectionView.reloadData()
+            centerGraphOnEvent(true)
+        }
+    }
+    
+    @IBAction func zoomOutButtonHandler(sender: AnyObject) {
+        configureGraphPixelsTimeInterval(graphPixelsPerHour - kDeltaPixelsPerHour)
+        if let graphCollectionView = graphCollectionView {
+            graphCollectionView.reloadData()
+            centerGraphOnEvent(true)
         }
     }
     
@@ -257,6 +292,15 @@ class EventDetailViewController: BaseUIViewController {
         }
         // set up graph area later when we know size of view
         graphCenterTime = eventTime
+    }
+
+    private func updateTimescale(newScale: Double) {
+        graphTimeScale = startGraphTimeScale / newScale
+        if graphTimeScale > kMaxGraphTimeScale {
+            graphTimeScale = kMaxGraphTimeScale
+        } else if graphTimeScale < kMinGraphTimeScale {
+            graphTimeScale = kMinGraphTimeScale
+        }
     }
     
     private func addLabel(labelText: String, labelStyle: String, currentView: UILabel?) -> UILabel {
@@ -477,6 +521,12 @@ class EventDetailViewController: BaseUIViewController {
         }
     }
     
+    private func centerGraphOnEvent(animated: Bool = false) {
+        if let graphCollectionView = graphCollectionView {
+            graphCollectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: graphCenterCellInCollection, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: animated)
+        }
+    }
+    
     private let collectCellReuseID = "graphViewCell"
     private func configureGraphViewIfNil() {
         if viewExistingEvent && (graphCollectionView == nil) {
@@ -499,13 +549,12 @@ class EventDetailViewController: BaseUIViewController {
                 graphCollectionView.showsVerticalScrollIndicator = false
                 graphCollectionView.dataSource = self
                 graphCollectionView.delegate = self
-                graphCollectionView.pagingEnabled = true
+                graphCollectionView.pagingEnabled = false
                 graphCollectionView.registerClass(EventDetailGraphCollectionCell.self, forCellWithReuseIdentifier: collectCellReuseID)
                 // event is in the center cell, see cellForItemAtIndexPath below...
-                graphCollectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: graphCenterCellInCollection, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: false)
-                
-                graphSectionView.addSubview(graphCollectionView)
-                graphSectionView.insertSubview(graphCollectionView, aboveSubview: fixedBackgroundImageView!)
+                centerGraphOnEvent()
+                graphLayerContainer.addSubview(graphCollectionView)
+                //graphSectionView.insertSubview(graphCollectionView, aboveSubview: fixedBackgroundImageView!)
                 
                 // add pinch gesture recognizer
                 let recognizer = UIPinchGestureRecognizer(target: self, action: "pinchGestureHandler:")
@@ -513,17 +562,8 @@ class EventDetailViewController: BaseUIViewController {
                 
             }
             
-            // need about 60 pixels per hour...
-            graphViewTimeInterval = NSTimeInterval(graphSectionView.bounds.width*60/* *60/60 */) * kInitGraphTimeScale
-        }
-    }
-    
-    private func updateTimescale(gestureScale: Double) {
-        graphTimeScale = startGraphTimeScale / gestureScale
-        if graphTimeScale > kMaxGraphTimeScale {
-            graphTimeScale = kMaxGraphTimeScale
-        } else if graphTimeScale < kMinGraphTimeScale {
-            graphTimeScale = kMinGraphTimeScale
+            // Now that graph width is known, configure time span
+            configureGraphPixelsTimeInterval(kInitPixelsPerHour)
         }
     }
     
