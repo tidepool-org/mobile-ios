@@ -75,7 +75,6 @@ public class GraphViews {
     private let kGlucoseMaxValue: CGFloat = 340.0
     private let kGlucoseRange: CGFloat = 340.0
     private let kGlucoseConversionToMgDl: CGFloat = 18.0
-    private let kSkipOverlappingValues = false
     private let highBoundary: NSNumber = 180.0
     private let lowBoundary: NSNumber = 80.0
     // Colors
@@ -89,7 +88,6 @@ public class GraphViews {
     private let kWizardCircleDiameter: CGFloat = 31.0
     private let kBolusRectWidth: CGFloat = 14.0
     private let kBolusLabelToRectGap: CGFloat = 0.0
-    private let kBolusLabelRectWidth: CGFloat = 30.0
     private let kBolusLabelRectHeight: CGFloat = 12.0
     private let kBolusMinScaleValue: CGFloat = 0.0
     // Colors
@@ -153,12 +151,13 @@ public class GraphViews {
         self.yBottomOfGlucose = self.yTopOfGlucose + floor(kGraphFractionForGlucose * graphHeight) - kGraphGlucoseBaseOffset
         self.yPixelsGlucose = self.yBottomOfGlucose - self.yTopOfGlucose
         
-        // Wizard data sits above the bolus readings, in a fixed space area, overlapping the bottom of the glucose graph which should be empty of readings that low.
+        // Wizard data sits above the bolus readings, in a fixed space area, possibly overlapping the bottom of the glucose graph which should be empty of readings that low.
+        // TODO: put wizard data on top of corresponding bolus data!
         self.yBottomOfWizard = self.yBottomOfGlucose + wizardHeight
 
         // At the bottom are the bolus and basal readings
-        self.yTopOfBolus = self.yBottomOfWizard + kGraphGlucoseBaseOffset
-        self.yBottomOfBolus = self.yTopOfBolus + floor(kGraphFractionForBolusAndBasal * graphHeight) - kGraphBolusBaseOffset
+        self.yTopOfBolus = self.yBottomOfWizard + kGraphWizardBaseOffset
+        self.yBottomOfBolus = viewSize.height
         self.yPixelsBolus = self.yBottomOfBolus - self.yTopOfBolus
 
         // Basal values sit just below the bolus readings
@@ -578,27 +577,28 @@ public class GraphViews {
             // bolusValueRect Drawing
             // Bolus rect is center-aligned to time start
             // Carb circle should be centered at timeline
-            var rectLeft = floor((CGFloat(item.0) * viewPixelsPerSec) - (kBolusRectWidth/2))
+            let centerX: CGFloat = floor(CGFloat(item.0) * viewPixelsPerSec)
+            var rectLeft = floor(centerX - (kBolusRectWidth/2))
             let bolusRectHeight = floor(yPixelsPerUnit * CGFloat(item.1.doubleValue))
             let bolusValueRect = CGRect(x: rectLeft, y: yBottomOfBolus - bolusRectHeight, width: kBolusRectWidth, height: bolusRectHeight)
             let bolusValueRectPath = UIBezierPath(rect: bolusValueRect)
             bolusBlueRectColor.setFill()
             bolusValueRectPath.fill()
            
-            // bolusLabel Drawing
-            let rectCenter = rectLeft + (kBolusRectWidth/2.0)
-            rectLeft = floor(rectCenter - (kBolusLabelRectWidth/2.0))
-            let bolusLabelRect = CGRect(x: rectLeft, y: yBottomOfBolus - bolusRectHeight - kBolusLabelToRectGap - kBolusLabelRectHeight, width: kBolusLabelRectWidth, height: kBolusLabelRectHeight)
             let bolusLabelTextContent = String(item.1)
             let bolusLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             bolusLabelStyle.alignment = .Center
-            
             let bolusLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: bolusTextBlue, NSParagraphStyleAttributeName: bolusLabelStyle]
+            let bolusLabelTextSize = bolusLabelTextContent.boundingRectWithSize(CGSizeMake(CGFloat.infinity, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: bolusLabelFontAttributes, context: nil).size
+            let bolusLabelRect = CGRect(x:centerX-(bolusLabelTextSize.width/2), y:yBottomOfBolus - bolusRectHeight - kBolusLabelToRectGap - bolusLabelTextSize.height, width: bolusLabelTextSize.width, height: bolusLabelTextSize.height)
             
-            let bolusLabelTextHeight: CGFloat = bolusLabelTextContent.boundingRectWithSize(CGSizeMake(bolusLabelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: bolusLabelFontAttributes, context: nil).size.height
+            let bolusLabelPath = UIBezierPath(rect: bolusLabelRect.insetBy(dx: 0.0, dy: 2.0))
+            backgroundColor.setFill()
+            bolusLabelPath.fill()
+
             CGContextSaveGState(context)
             CGContextClipToRect(context, bolusLabelRect);
-            bolusLabelTextContent.drawInRect(CGRectMake(bolusLabelRect.minX, bolusLabelRect.minY + bolusLabelRect.height - bolusLabelTextHeight, bolusLabelRect.width, bolusLabelTextHeight), withAttributes: bolusLabelFontAttributes)
+            bolusLabelTextContent.drawInRect(bolusLabelRect, withAttributes: bolusLabelFontAttributes)
             CGContextRestoreGState(context)
         }
 
@@ -636,7 +636,7 @@ public class GraphViews {
         //// General Declarations
     
         let pixelsPerValue: CGFloat = yPixelsGlucose/kGlucoseRange
-        let circleRadius: CGFloat = 4.0
+        let circleRadius: CGFloat = 3.5
         
         var lowValue: CGFloat = kGlucoseMaxValue
         var highValue: CGFloat = kGlucoseMinValue
@@ -659,17 +659,22 @@ public class GraphViews {
             
             let circleColor = value < lowBoundary ? lowColor : value < highBoundary ? targetColor : highColor
             let circleRect = CGRectMake(centerX-circleRadius, centerY-circleRadius, circleRadius*2, circleRadius*2)
-            if (!kSkipOverlappingValues || !lastCircleDrawn.intersects(circleRect)) {
+            let smallCircleRect = circleRect.insetBy(dx: 1.0, dy: 1.0)
+            
+            if !lastCircleDrawn.intersects(circleRect) {
                 let smallCirclePath = UIBezierPath(ovalInRect: circleRect)
                 circleColor.setFill()
                 smallCirclePath.fill()
                 backgroundColor.setStroke()
                 smallCirclePath.lineWidth = 1.5
                 smallCirclePath.stroke()
-                lastCircleDrawn = circleRect
             } else {
-                print("skipping overlapping value \(value)")
+                let smallCirclePath = UIBezierPath(ovalInRect: smallCircleRect)
+                circleColor.setFill()
+                smallCirclePath.fill()
             }
+                
+            lastCircleDrawn = circleRect
         }
         print("\(cbgData.count) cbg events, low: \(lowValue) high: \(highValue)")
     }
@@ -705,7 +710,7 @@ public class GraphViews {
             circleColor.setFill()
             largeCirclePath.fill()
             backgroundColor.setStroke()
-            largeCirclePath.lineWidth = 3.0
+            largeCirclePath.lineWidth = 1.5
             largeCirclePath.stroke()
             
             let intValue = Int(valueForLabel)

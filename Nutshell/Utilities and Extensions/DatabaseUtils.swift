@@ -186,7 +186,7 @@ class DatabaseUtils {
             let request = NSFetchRequest(entityName: "CommonData")
             var eventCounter = 0
             for (_, subJson) in eventsJSON {
-                NSLog("updateEvents next subJson: \(subJson)")
+                //NSLog("updateEvents next subJson: \(subJson)")
                 if let obj = CommonData.fromJSON(subJson, moc: bgMOC) {
                     // Remove existing object with the same ID
                     if let id=obj.id {

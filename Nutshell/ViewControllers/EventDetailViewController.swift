@@ -230,20 +230,23 @@ class EventDetailViewController: BaseUIViewController {
         graphViewTimeInterval = NSTimeInterval(graphSectionView.bounds.width * 3600.0/graphPixelsPerHour)
     }
     
-    @IBAction func zoomInButtonHandler(sender: AnyObject) {
-        configureGraphPixelsTimeInterval(graphPixelsPerHour + kDeltaPixelsPerHour)
+    private func zoomInOut(zoomIn: Bool) {
+        let currentHours = graphSectionView.bounds.width/graphPixelsPerHour
+        let newHours = currentHours + (zoomIn ? -1.0 : 1.0)
+        let newPixelsPerHour = floor(graphSectionView.bounds.width/newHours)
+        configureGraphPixelsTimeInterval(newPixelsPerHour)
         if let graphCollectionView = graphCollectionView {
             graphCollectionView.reloadData()
             centerGraphOnEvent(true)
         }
     }
     
+    @IBAction func zoomInButtonHandler(sender: AnyObject) {
+        zoomInOut(true)
+    }
+    
     @IBAction func zoomOutButtonHandler(sender: AnyObject) {
-        configureGraphPixelsTimeInterval(graphPixelsPerHour - kDeltaPixelsPerHour)
-        if let graphCollectionView = graphCollectionView {
-            graphCollectionView.reloadData()
-            centerGraphOnEvent(true)
-        }
+        zoomInOut(false)
     }
     
     //
