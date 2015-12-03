@@ -47,14 +47,12 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     @IBOutlet weak var date1Label: NutshellUILabel!
     @IBOutlet weak var date2Label: NutshellUILabel!
     
+    @IBOutlet weak var picture0Image: UIImageView!
     @IBOutlet weak var picture1Image: UIImageView!
     @IBOutlet weak var picture2Image: UIImageView!
-    @IBOutlet weak var picture3Image: UIImageView!
     
     private var eventTime = NSDate()
-    private var picture1ImageURL = ""
-    private var picture2ImageURL = ""
-    private var picture3ImageURL = ""
+    private var pictureImageURLs: [String] = []
     private var editingPictureItem: Int = 0
 
     //
@@ -108,12 +106,9 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         // Deal with possible delete/edit of photo from viewer...
         if segue.identifier == EventViewStoryboard.SegueIdentifiers.UnwindSegueFromShowPhoto {
             if let photoVC = segue.sourceViewController as? ShowPhotoViewController {
-                let picture = itemToPicture(editingPictureItem)
-                if picture.0 != photoVC.imageUrl {
-                    updatePictureUrl(editingPictureItem, url: photoVC.imageUrl)
-                    configurePhotos()
-                    updateSaveButtonState()
-                }
+                pictureImageURLs = photoVC.photoURLs
+                configurePhotos()
+                updateSaveButtonState()
             }
             editingPictureItem = 0
         }
@@ -135,9 +130,9 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 notesText = eventItem.notes
             }
             
+            picture0Image.hidden = true
             picture1Image.hidden = true
             picture2Image.hidden = true
-            picture3Image.hidden = true
            
             if let mealItem = eventItem as? NutMeal {
                 if !mealItem.location.isEmpty {
@@ -145,15 +140,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 } else {
                     locationTextField.text = Styles.placeholderLocationString
                 }
-                if !mealItem.photo.isEmpty {
-                    picture1ImageURL = mealItem.photo
-                }
-                if !mealItem.photo2.isEmpty {
-                    picture2ImageURL = mealItem.photo2
-                }
-                if !mealItem.photo3.isEmpty {
-                    picture3ImageURL = mealItem.photo3
-                }
+                pictureImageURLs = mealItem.photoUrlArray()
             } else {
                 // TODO: workout support! Add workout-specific items...
             }
@@ -192,13 +179,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     }
 
     private func configurePhotos() {
-        for item in 1...3 {
+        for item in 0...2 {
             let picture = itemToPicture(item)
-            if picture.0.isEmpty {
-                picture.1.hidden = true
+            let url = itemToImageUrl(item)
+            if url.isEmpty {
+                picture.hidden = true
             } else {
-                picture.1.hidden = false
-                NutUtils.loadImage(picture.0, imageView: picture.1)
+                picture.hidden = false
+                NutUtils.loadImage(url, imageView: picture)
             }
         }
     }
@@ -380,70 +368,65 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
     
-    private func firstEmptyPictureItem() -> Int {
-        var itemNum = 0
-        if picture1ImageURL.isEmpty {
-            itemNum = 1
-        } else if picture2ImageURL.isEmpty {
-            itemNum = 2
-        } else if picture3ImageURL.isEmpty {
-            itemNum = 3
+    private func pictureUrlEmptySlots() -> Int {
+        return 3 - pictureImageURLs.count
+    }
+
+    private func itemToImageUrl(itemNum: Int) -> String {
+        if itemNum >= pictureImageURLs.count {
+            return ""
+        } else {
+            return pictureImageURLs[itemNum]
         }
-        return itemNum
     }
     
-    private func itemToPicture(itemNum: Int) -> (String, UIImageView) {
+    private func itemToPicture(itemNum: Int) -> UIImageView {
         switch itemNum {
+        case 0:
+            return picture0Image
         case 1:
-            return (picture1ImageURL, picture1Image)
+            return picture1Image
         case 2:
-            return (picture2ImageURL, picture2Image)
-        case 3:
-            return (picture3ImageURL, picture3Image)
+            return picture2Image
         default:
-            return ("", picture1Image)
+            NSLog("Error: asking for out of range picture image!")
+            return picture0Image
         }
     }
     
-    private func updatePictureUrl(itemNum: Int, url: String) {
-        switch itemNum {
-        case 1:
-            picture1ImageURL = url
-        case 2:
-            picture2ImageURL = url
-        case 3:
-            picture3ImageURL = url
-        default:
-            break
+    private func appendPictureUrl(url: String) {
+        if pictureImageURLs.count < 3 {
+            pictureImageURLs.append(url)
         }
     }
-    
+
     private func showPicture(itemNum: Int) {
-        let pictureUrl = itemToPicture(itemNum).0
+        let pictureUrl = itemToImageUrl(itemNum)
         if !pictureUrl.isEmpty {
             let storyboard = UIStoryboard(name: "EventView", bundle: nil)
             let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
-            photoVC.imageUrl = pictureUrl
+            photoVC.photoURLs = pictureImageURLs
+            photoVC.imageIndex = itemNum
             photoVC.editAllowed = true
             editingPictureItem = itemNum
             self.navigationController?.pushViewController(photoVC, animated: true)
         }
     }
     
+    @IBAction func picture0ButtonHandler(sender: AnyObject) {
+        showPicture(0)
+    }
+    
     @IBAction func picture1ButtonHandler(sender: AnyObject) {
         showPicture(1)
     }
-    
+
     @IBAction func picture2ButtonHandler(sender: AnyObject) {
         showPicture(2)
     }
 
-    @IBAction func picture3ButtonHandler(sender: AnyObject) {
-        showPicture(3)
-    }
-
     @IBAction func photoButtonHandler(sender: AnyObject) {
-        if firstEmptyPictureItem() == 0 {
+        if pictureUrlEmptySlots() == 0 {
             simpleInfoAlert(NSLocalizedString("photoSlotsFullTitle", comment:"No empty photo slot"), alertMessage: NSLocalizedString("photoSlotsFullMessage", comment:"Three photos are supported. Please discard one before adding a new photo."))
         } else {
             let pickerC = UIImagePickerController()
@@ -461,7 +444,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         print(info)
         
         if let photoUrl = info[UIImagePickerControllerReferenceURL] as? NSURL {
-            updatePictureUrl(firstEmptyPictureItem(), url: photoUrl.absoluteString)
+            appendPictureUrl(photoUrl.absoluteString)
             updateSaveButtonState()
             configurePhotos()
         }
@@ -485,13 +468,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if notesTextField.text != Styles.placeholderNotesString {
             return true
         }
-        if !picture1ImageURL.isEmpty {
-                return true
-        }
-        if !picture2ImageURL.isEmpty {
-            return true
-        }
-        if !picture3ImageURL.isEmpty {
+        if !pictureImageURLs.isEmpty {
             return true
         }
         return false
@@ -516,15 +493,15 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                     NSLog("location changed, enabling save")
                     return true
                 }
-                if meal.photo != picture1ImageURL {
+                if meal.photo != itemToImageUrl(0) {
                 NSLog("photo1 changed, enabling save")
                    return true
                 }
-                if meal.photo2 != picture2ImageURL {
+                if meal.photo2 != itemToImageUrl(1) {
                     NSLog("photo2 changed, enabling save")
                     return true
                 }
-                if meal.photo3 != picture3ImageURL {
+                if meal.photo3 != itemToImageUrl(2) {
                     NSLog("photo3 changed, enabling save")
                     return true
                 }
@@ -565,9 +542,9 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             mealItem.time = eventTime
             mealItem.notes = notes
             mealItem.location = location
-            mealItem.photo = picture1ImageURL
-            mealItem.photo2 = picture2ImageURL
-            mealItem.photo3 = picture3ImageURL
+            mealItem.photo = itemToImageUrl(0)
+            mealItem.photo2 = itemToImageUrl(1)
+            mealItem.photo3 = itemToImageUrl(2)
             
              // Save the database
             if mealItem.saveChanges() {
@@ -601,7 +578,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             return
         }
         
-        newEventItem = NutEvent.createMealEvent(titleTextField.text!, notes: filteredNotesText(), location: filteredLocationText(), photo: picture1ImageURL, photo2: picture2ImageURL, photo3: picture3ImageURL, time: eventTime)
+        newEventItem = NutEvent.createMealEvent(titleTextField.text!, notes: filteredNotesText(), location: filteredLocationText(), photo: itemToImageUrl(0), photo2: itemToImageUrl(1), photo3: itemToImageUrl(2), time: eventTime)
         
         if newEventItem != nil {
             updateItemAndGroupForNewEventItem()

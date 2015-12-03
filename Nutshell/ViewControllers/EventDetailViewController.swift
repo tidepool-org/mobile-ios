@@ -135,9 +135,38 @@ class EventDetailViewController: BaseUIViewController {
                 self.eventItem = item
             }
             reloadView()
+        } else if let photoViewVC = segue.sourceViewController as? ShowPhotoViewController {
+            let newPhotoIndex = photoViewVC.imageIndex
+            if newPhotoIndex > 0 {
+                // Set image 0 as the last one viewed in the photo viewer...
+                if let mealItem = eventItem as? NutMeal {
+                    shiftPhotoArrayLeft(mealItem)
+                    if newPhotoIndex > 1 {
+                        shiftPhotoArrayLeft(mealItem)
+                    }
+                    // Save changes to database
+                    mealItem.saveChanges()
+                    configurePhotoBackground()
+                }
+            }
         }
      }
 
+    private func shiftPhotoArrayLeft(mealItem: NutMeal) {
+        // shift photo urls - either 2 or 3...
+        let photoUrls = mealItem.photoUrlArray()
+        if photoUrls.count > 1 {
+            mealItem.photo = photoUrls[1]
+            if photoUrls.count == 3 {
+                mealItem.photo2 = photoUrls[2]
+                mealItem.photo3 = photoUrls[0]
+            } else {
+                mealItem.photo2 = photoUrls[0]
+                mealItem.photo3 = ""
+            }
+        }
+    }
+    
     private func checkUpdateGraph() {
         if graphNeedsUpdate {
             graphNeedsUpdate = false
@@ -190,33 +219,21 @@ class EventDetailViewController: BaseUIViewController {
     
     @IBAction func photoOverlayTouchHandler(sender: AnyObject) {
         centerGraphOnEvent(true)
-//        if let mealItem = eventItem as? NutMeal {
-//            let firstPhotoUrl = mealItem.firstPictureUrl()
-//            if !firstPhotoUrl.isEmpty {
-//                let storyboard = UIStoryboard(name: "EventView", bundle: nil)
-//                let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
-//                photoVC.imageUrl = firstPhotoUrl
-//                self.navigationController?.pushViewController(photoVC, animated: true)
-//            }
-//        }
     }
     
     @IBAction func photoDisplayButtonHandler(sender: AnyObject) {
         if let mealItem = eventItem as? NutMeal {
             let photoUrls = mealItem.photoUrlArray()
-            if photoUrls.count > 1 {
-                // shift photo urls - either 2 or 3...
-                mealItem.photo = photoUrls[1]
-                if photoUrls.count == 3 {
-                    mealItem.photo2 = photoUrls[2]
-                    mealItem.photo3 = photoUrls[0]
-                } else {
-                    mealItem.photo2 = photoUrls[0]
-                    mealItem.photo3 = ""
+            if photoUrls.count > 0 {
+                let firstPhotoUrl = mealItem.firstPictureUrl()
+                if !firstPhotoUrl.isEmpty {
+                    let storyboard = UIStoryboard(name: "EventView", bundle: nil)
+                    let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
+                    photoVC.editAllowed = false
+                    photoVC.photoURLs = mealItem.photoUrlArray()
+                    photoVC.imageIndex = 0
+                    self.navigationController?.pushViewController(photoVC, animated: true)
                 }
-                // Save changes to database
-                mealItem.saveChanges()
-                configurePhotoBackground()
             }
         }
     }
@@ -237,7 +254,7 @@ class EventDetailViewController: BaseUIViewController {
         configureGraphPixelsTimeInterval(newPixelsPerHour)
         if let graphCollectionView = graphCollectionView {
             graphCollectionView.reloadData()
-            centerGraphOnEvent(true)
+            //centerGraphOnEvent(true)
         }
     }
     

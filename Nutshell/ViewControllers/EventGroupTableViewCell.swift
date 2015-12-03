@@ -16,21 +16,21 @@
 
 import UIKit
 
-class EventGroupTableCellButton: UIButton {
-    var photoUrl = ""
-}
-
 class EventGroupRowCollectionCell: UICollectionViewCell {
     
     static let cellReuseID = "EventGroupRowCollectionCell"
-    private var photoView: UIImageView?
+    
     var photoUrl = ""
+    var eventItem: NutEventItem?
+    
+    private var photoView: UIImageView?
 
-    func configureCell(photoUrl: String) {
+    func configureCell(photoUrl: String, eventItem: NutEventItem?) {
         if (photoView != nil) {
             photoView?.removeFromSuperview();
             photoView = nil;
         }
+        self.eventItem = eventItem
         self.photoUrl = photoUrl
         var imageFrame = self.bounds
         // leave a gap between photos
@@ -121,7 +121,7 @@ extension EventGroupTableViewCell: UICollectionViewDataSource {
             // index determines center time...
             let photoIndex = indexPath.row
             if photoIndex < photoUrls.count {
-                cell.configureCell(photoUrls[photoIndex])
+                cell.configureCell(photoUrls[photoIndex], eventItem: eventItem)
             }
             return cell
     }

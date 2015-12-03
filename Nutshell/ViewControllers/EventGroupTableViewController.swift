@@ -85,20 +85,18 @@ class EventGroupTableViewController: BaseUITableViewController {
         // Pass the selected object to the new view controller.
         super.prepareForSegue(segue, sender: sender)
         if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue {
-            let cell = sender as! EventGroupTableViewCell
             let eventItemVC = segue.destinationViewController as! EventDetailViewController
-            eventItemVC.eventItem = cell.eventItem
             eventItemVC.eventGroup = eventGroup
             eventItemVC.title = self.title
-        } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
+            if let cell = sender as? EventGroupTableViewCell {
+                eventItemVC.eventItem = cell.eventItem
+            } else if let collectCell = sender as? EventGroupRowCollectionCell {
+                eventItemVC.eventItem = collectCell.eventItem
+            }
+         } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
             let eventItemVC = segue.destinationViewController as! EventAddOrEditViewController
             // no existing item to pass along...
             eventItemVC.eventGroup = eventGroup
-        } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.PhotoDisplaySegue {
-            let showPhotoVC = segue.destinationViewController as! ShowPhotoViewController
-            if let photoCollectCell = sender as? EventGroupRowCollectionCell {
-                showPhotoVC.imageUrl = photoCollectCell.photoUrl
-            }
         } else {
             NSLog("Unknown segue from eventGroup \(segue.identifier)")
         }
