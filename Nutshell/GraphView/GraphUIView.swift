@@ -57,10 +57,10 @@ class GraphUIView: UIView {
     ///
     /// Queries the core database for relevant events in the specified timeframe, and creates the graph view with that data.
     
-    func configure() {
+    func configure(maxBolus: CGFloat = 0.0, maxBasal: CGFloat = 0.0) {
         
         loadDataForView()
-        graphData()
+        graphData(maxBolus, maxBasal: maxBasal)
     }
     
     /// Check for data points in graph
@@ -105,7 +105,7 @@ class GraphUIView: UIView {
     // MARK: - Private funcs
     //
 
-    private func graphData() {
+    private func graphData(maxBolus: CGFloat, maxBasal: CGFloat) {
         // At this point data should be loaded, and we just need to plot the data
         // First generate the graph background
         
@@ -148,13 +148,13 @@ class GraphUIView: UIView {
         }
 
         if !basalData.isEmpty {
-            let overlayImage = graphViews.imageOfBasalData(basalData)
+            let overlayImage = graphViews.imageOfBasalData(basalData, maxBasal: maxBasal)
             let overlay = UIImageView(image:overlayImage)
             addSubview(overlay)
         }
         
         if !bolusData.isEmpty {
-            let overlayImage = graphViews.imageOfBolusData(bolusData)
+            let overlayImage = graphViews.imageOfBolusData(bolusData, maxBolus: maxBolus)
             let overlay = UIImageView(image:overlayImage)
             addSubview(overlay)
         }

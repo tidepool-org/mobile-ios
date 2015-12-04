@@ -1,14 +1,21 @@
-//
-//  EventDetailGraphCollectionCell.swift
-//  Nutshell
-//
-//  Created by Larry Kenyon on 10/1/15.
-//  Copyright © 2015 Tidepool. All rights reserved.
-//
+/*
+* Copyright (c) 2015, Tidepool Project
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the associated License, which is identical to the BSD 2-Clause
+* License as published by the Open Source Initiative at opensource.org.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the License for more details.
+*
+* You should have received a copy of the License along with this program; if
+* not, you can obtain one from Tidepool Project at tidepool.org.
+*/
 
 import UIKit
 
-class EventDetailGraphCollectionCell: UICollectionViewCell {
+class GraphCollectionCell: UICollectionViewCell {
 
     private var graphView: GraphUIView?
     var graphTime: NSDate?
@@ -24,7 +31,7 @@ class EventDetailGraphCollectionCell: UICollectionViewCell {
         }
     }
     
-    func configureCell(centerTime: NSDate, timeInterval: NSTimeInterval, mainEventTime: NSDate) -> Bool {
+    func configureCell(centerTime: NSDate, timeInterval: NSTimeInterval, mainEventTime: NSDate, maxBolus: CGFloat, maxBasal: CGFloat) -> Bool {
         print("size at configure: \(self.frame.size)")
 
         if (graphView != nil) {
@@ -40,7 +47,7 @@ class EventDetailGraphCollectionCell: UICollectionViewCell {
             if let graphView = graphView {
                 graphTime = centerTime
                 graphTimeInterval = timeInterval
-                graphView.configure()
+                graphView.configure(maxBolus, maxBasal: maxBasal)
                 self.addSubview(graphView)
                 return graphView.dataFound()
             } else {

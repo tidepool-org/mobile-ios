@@ -89,7 +89,7 @@ public class GraphViews {
     private let kBolusRectWidth: CGFloat = 14.0
     private let kBolusLabelToRectGap: CGFloat = 0.0
     private let kBolusLabelRectHeight: CGFloat = 12.0
-    private let kBolusMinScaleValue: CGFloat = 0.0
+    private let kBolusMinScaleValue: CGFloat = 1.0
     // Colors
     private let bolusTextBlue = Styles.mediumBlueColor
     private let bolusBlueRectColor = Styles.blueColor
@@ -98,7 +98,7 @@ public class GraphViews {
     // Basal data
     //
     private let basalLightBlueRectColor = Styles.lightBlueColor
-    private let kBasalMinScaleValue: CGFloat = 0.0
+    private let kBasalMinScaleValue: CGFloat = 1.0
     
     //
     // MARK: - Graph vars based on view size and customization constants
@@ -227,9 +227,9 @@ public class GraphViews {
         return imageData
     }
 
-    func imageOfBolusData(bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)]) -> UIImage {
+    func imageOfBolusData(bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)], maxBolus: CGFloat) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
-        drawBolusData(bolusData)
+        drawBolusData(bolusData, maxBolus: maxBolus)
         
         let imageOfBolusData = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -237,9 +237,9 @@ public class GraphViews {
         return imageOfBolusData
     }
 
-    func imageOfBasalData(basalData: [(timeOffset: NSTimeInterval, value: NSNumber)]) -> UIImage {
+    func imageOfBasalData(basalData: [(timeOffset: NSTimeInterval, value: NSNumber)], maxBasal: CGFloat) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
-        drawBasalData(basalData)
+        drawBasalData(basalData, maxBasal: maxBasal)
         
         let imageOfBasalData = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -498,17 +498,23 @@ public class GraphViews {
         }
     }
 
-    private func drawBasalData(basalData: [(timeOffset: NSTimeInterval, value: NSNumber)]) {
+    private func drawBasalData(basalData: [(timeOffset: NSTimeInterval, value: NSNumber)], maxBasal: CGFloat) {
         
-        // first figure out the range of data; scale rectangle to fill this
+        // first figure out the range of data unless it has been pre-figured for us; scale rectangle to fill this
         var rangeHi = CGFloat(kBasalMinScaleValue)
-        for item in basalData {
-            let nextValue = CGFloat(item.1.doubleValue)
-            if nextValue > rangeHi {
-                rangeHi = nextValue
+        if maxBasal > 0.0 {
+            rangeHi = maxBasal
+        } else {
+            for item in basalData {
+                let nextValue = CGFloat(item.1.doubleValue)
+                if nextValue > rangeHi {
+                    rangeHi = nextValue
+                }
             }
         }
-
+        // Keep it integral
+        rangeHi = ceil(rangeHi)
+        
         let yPixelsPerUnit = yPixelsBasal / CGFloat(rangeHi)
 
         func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: NSNumber) {
@@ -554,19 +560,24 @@ public class GraphViews {
         
     }
 
-    private func drawBolusData(bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)]) {
+    private func drawBolusData(bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)], maxBolus: CGFloat) {
         
-        // first figure out the range of data; scale rectangle to fill this
+        // first figure out the range of data unless it has been pre-figured for us; scale rectangle to fill this
         var rangeHi = CGFloat(kBolusMinScaleValue)
-        for item in bolusData {
-            let nextValue = CGFloat(item.1.doubleValue)
-            if nextValue > rangeHi {
-                rangeHi = nextValue
+        if maxBolus > 0.0 {
+            rangeHi = maxBolus
+        } else {
+            for item in bolusData {
+                let nextValue = CGFloat(item.1.doubleValue)
+                if nextValue > rangeHi {
+                    rangeHi = nextValue
+                }
             }
         }
+        rangeHi = ceil(rangeHi)
         
         // bolus vertical area is split into a colored rect below, and label on top
-        let yPixelsPerUnit = (yPixelsBolus - kBolusLabelRectHeight - kBolusLabelToRectGap) / CGFloat(rangeHi)
+        let yPixelsPerUnit = (yPixelsBolus - kBolusLabelRectHeight - kBolusLabelToRectGap) / rangeHi
 
         // draw the items, with label on top.
         for item in bolusData {

@@ -21,32 +21,11 @@ class EventDetailViewController: BaseUIViewController {
     
     var eventItem: NutEventItem?
     var eventGroup: NutEvent?
-    private var viewExistingEvent = false
     
-    var graphCollectionView: UICollectionView?
-    private var graphCenterTime: NSDate = NSDate()
-    private var graphViewTimeInterval: NSTimeInterval = 0.0
-    private var graphTimeScale = 1.0
-    // variables for scaling by multiplier
-    private var startGraphTimeScale = 1.0
-    private let kMinGraphTimeScale = 0.25
-    private let kInitGraphTimeScale = 1.0
-    private let kMaxGraphTimeScale = 2.0
-    // variables for scaling by pixels/hour
-    private var graphPixelsPerHour: CGFloat = 80
-    private let kInitPixelsPerHour: CGFloat = 80
-    private let kMinPixelsPerHour: CGFloat = 30
-    private let kMaxPixelsPerHour: CGFloat = 300
-    private let kDeltaPixelsPerHour: CGFloat = 10
-    
-    private let graphCellsInCollection = 7
-    private let graphCenterCellInCollection = 3
-
-    @IBOutlet weak var graphLayerContainer: UIView!
     @IBOutlet weak var graphSectionView: UIView!
+    @IBOutlet weak var graphLayerContainer: UIView!
+    private var graphContainerView: GraphContainerView?
     @IBOutlet weak var missingDataAdvisoryView: UIView!
-    @IBOutlet weak var fixedGraphBackground: UIView!
-    var fixedBackgroundImageView: UIImageView?
     
     @IBOutlet weak var photoUIImageView: UIImageView!
 
@@ -170,8 +149,8 @@ class EventDetailViewController: BaseUIViewController {
     private func checkUpdateGraph() {
         if graphNeedsUpdate {
             graphNeedsUpdate = false
-            if let graphCollectionView = graphCollectionView {
-                graphCollectionView.reloadData()
+            if let graphContainerView = graphContainerView {
+                graphContainerView.reloadData()
             }
         }
     }
@@ -218,7 +197,9 @@ class EventDetailViewController: BaseUIViewController {
     }
     
     @IBAction func photoOverlayTouchHandler(sender: AnyObject) {
-        centerGraphOnEvent(true)
+        if let graphContainerView = graphContainerView {
+            graphContainerView.centerGraphOnEvent(true)
+        }
     }
     
     @IBAction func photoDisplayButtonHandler(sender: AnyObject) {
@@ -238,32 +219,16 @@ class EventDetailViewController: BaseUIViewController {
         }
     }
     
-    private func configureGraphPixelsTimeInterval(pixelsPerHour: CGFloat) {
-        if pixelsPerHour > kMaxPixelsPerHour || pixelsPerHour < kMinPixelsPerHour {
-            return
-        }
-        NSLog("New pixels per hour: \(pixelsPerHour)")
-        graphPixelsPerHour = pixelsPerHour
-        graphViewTimeInterval = NSTimeInterval(graphSectionView.bounds.width * 3600.0/graphPixelsPerHour)
-    }
-    
-    private func zoomInOut(zoomIn: Bool) {
-        let currentHours = graphSectionView.bounds.width/graphPixelsPerHour
-        let newHours = currentHours + (zoomIn ? -1.0 : 1.0)
-        let newPixelsPerHour = floor(graphSectionView.bounds.width/newHours)
-        configureGraphPixelsTimeInterval(newPixelsPerHour)
-        if let graphCollectionView = graphCollectionView {
-            graphCollectionView.reloadData()
-            //centerGraphOnEvent(true)
-        }
-    }
-    
     @IBAction func zoomInButtonHandler(sender: AnyObject) {
-        zoomInOut(true)
+        if let graphContainerView = graphContainerView {
+            graphContainerView.zoomInOut(true)
+        }
     }
     
     @IBAction func zoomOutButtonHandler(sender: AnyObject) {
-        zoomInOut(false)
+        if let graphContainerView = graphContainerView {
+            graphContainerView.zoomInOut(false)
+        }
     }
     
     //
@@ -287,7 +252,6 @@ class EventDetailViewController: BaseUIViewController {
     
     private func configureDetailView() {
         if let eventItem = eventItem {
-            viewExistingEvent = true
             configureNutCracked()
 
             titleLabel = addLabel(eventItem.title, labelStyle: "detailHeaderTitle", currentView: titleLabel)
@@ -310,19 +274,8 @@ class EventDetailViewController: BaseUIViewController {
             }
             configurePhotoBackground()
         }
-        // set up graph area later when we know size of view
-        graphCenterTime = eventTime
     }
 
-    private func updateTimescale(newScale: Double) {
-        graphTimeScale = startGraphTimeScale / newScale
-        if graphTimeScale > kMaxGraphTimeScale {
-            graphTimeScale = kMaxGraphTimeScale
-        } else if graphTimeScale < kMinGraphTimeScale {
-            graphTimeScale = kMinGraphTimeScale
-        }
-    }
-    
     private func addLabel(labelText: String, labelStyle: String, currentView: UILabel?) -> UILabel {
         
         let paragraphStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
@@ -534,120 +487,32 @@ class EventDetailViewController: BaseUIViewController {
     // MARK: - Graph view
     //
     
-    private func deleteGraphView() {
-        if (graphCollectionView != nil) {
-            graphCollectionView?.removeFromSuperview();
-            graphCollectionView = nil;
+    private func configureGraphContainer() {
+        if (graphContainerView != nil) {
+            graphContainerView?.removeFromSuperview();
+            graphContainerView = nil;
         }
+        graphContainerView = GraphContainerView.init(frame: graphLayerContainer.bounds)
+        if let graphContainerView = graphContainerView, eventItem = eventItem {
+            graphLayerContainer.addSubview(graphContainerView)
+            graphContainerView.configureGraphForEvent(eventItem)
+            graphContainerView.reloadData()
+            // TODO: Need to hook this up!!!
+            missingDataAdvisoryView.hidden = true
+       }
     }
-    
-    private func centerGraphOnEvent(animated: Bool = false) {
-        if let graphCollectionView = graphCollectionView {
-            graphCollectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: graphCenterCellInCollection, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: animated)
-        }
-    }
-    
-    private let collectCellReuseID = "graphViewCell"
-    private func configureGraphViewIfNil() {
-        if viewExistingEvent && (graphCollectionView == nil) {
-            
-            // first put in the fixed background
-            let graphView = GraphUIView.init(frame: fixedGraphBackground.bounds, centerTime: graphCenterTime, timeIntervalForView: graphViewTimeInterval*graphTimeScale, timeOfMainEvent: eventItem!.time)
-            if let fixedBackgroundImageView = fixedBackgroundImageView {
-                fixedBackgroundImageView.removeFromSuperview()
-            }
-            fixedBackgroundImageView = UIImageView(image: graphView.fixedBackgroundImage())
-            fixedGraphBackground.addSubview(fixedBackgroundImageView!)
-            
-            let flow = UICollectionViewFlowLayout()
-            flow.itemSize = graphSectionView.bounds.size
-            flow.scrollDirection = UICollectionViewScrollDirection.Horizontal
-            graphCollectionView = UICollectionView(frame: graphSectionView.bounds, collectionViewLayout: flow)
-            if let graphCollectionView = graphCollectionView {
-                graphCollectionView.backgroundColor = UIColor.clearColor()
-                graphCollectionView.showsHorizontalScrollIndicator = false
-                graphCollectionView.showsVerticalScrollIndicator = false
-                graphCollectionView.dataSource = self
-                graphCollectionView.delegate = self
-                graphCollectionView.pagingEnabled = false
-                graphCollectionView.registerClass(EventDetailGraphCollectionCell.self, forCellWithReuseIdentifier: collectCellReuseID)
-                // event is in the center cell, see cellForItemAtIndexPath below...
-                centerGraphOnEvent()
-                graphLayerContainer.addSubview(graphCollectionView)
-                //graphSectionView.insertSubview(graphCollectionView, aboveSubview: fixedBackgroundImageView!)
-                
-                // add pinch gesture recognizer
-                let recognizer = UIPinchGestureRecognizer(target: self, action: "pinchGestureHandler:")
-                graphCollectionView.addGestureRecognizer(recognizer)
-                
-            }
-            
-            // Now that graph width is known, configure time span
-            configureGraphPixelsTimeInterval(kInitPixelsPerHour)
-        }
-    }
-    
-    func currentCellIndex(collectView: UICollectionView) -> NSIndexPath? {
-        let centerPoint = collectView.center
-        let pointInCell = CGPoint(x: centerPoint.x + collectView.contentOffset.x, y: centerPoint.y + collectView.contentOffset.y)
-        return collectView.indexPathForItemAtPoint(pointInCell)
-    }
-    
-    func centerTimeOfCellAtIndex(indexPath: NSIndexPath) -> NSDate {
-        var cellCenterTime = graphCenterTime
-        let collectionOffset = indexPath.row - graphCenterCellInCollection
         
-        if collectionOffset != 0 {
-            cellCenterTime = NSDate(timeInterval: graphViewTimeInterval*Double(collectionOffset)*graphTimeScale, sinceDate: graphCenterTime)
-        }
-        return cellCenterTime
-    }
-    
-    func pinchGestureHandler(sender: AnyObject) {
-        if let graphCollectionView = graphCollectionView {
-            
-            //NSLog("recognized pinch!")
-            if let gesture = sender as? UIPinchGestureRecognizer {
-                if gesture.state == UIGestureRecognizerState.Began {
-                    //NSLog("gesture started: scale: \(graphTimeScale)")
-                    startGraphTimeScale = graphTimeScale
-                    return
-                }
-                if gesture.state == UIGestureRecognizerState.Changed {
-                    //NSLog("gesture state changed scale: \(gesture.scale)")
-                    updateTimescale(Double(gesture.scale))
-                    if let curCellIndex = currentCellIndex(graphCollectionView) {
-                        if let curCell = graphCollectionView.cellForItemAtIndexPath(curCellIndex) {
-                            if let graphCell = curCell as? EventDetailGraphCollectionCell {
-                                let centerTime = centerTimeOfCellAtIndex(curCellIndex)
-                                graphCell.zoomXAxisToNewTime(centerTime, timeInterval:graphViewTimeInterval*graphTimeScale)
-                            }
-                        }
-                    }
-                    return
-                }
-                if gesture.state == UIGestureRecognizerState.Ended {
-                    //NSLog("gesture ended with scale: \(gesture.scale)")
-                    updateTimescale(Double(gesture.scale))
-                    graphCollectionView.reloadData()
-                    return
-                }
-            }
-        }
-    }
-    
     override func viewDidLayoutSubviews() {
         //NSLog("EventDetailVC viewDidLayoutSubviews")
-        if viewExistingEvent && (graphCollectionView != nil) {
+        if let graphContainerView = graphContainerView {
             // self.view's direct subviews are laid out, force graph subview to layout its subviews:
             graphSectionView.setNeedsLayout()
             graphSectionView.layoutIfNeeded()
-            if (graphCollectionView!.frame.size != graphSectionView.frame.size) {
-                deleteGraphView()
+            if (graphContainerView.frame.size == graphSectionView.frame.size) {
+                return
             }
         }
-        configureGraphViewIfNil()
-        
+        configureGraphContainer()
     }
     
     //
@@ -656,46 +521,10 @@ class EventDetailViewController: BaseUIViewController {
     
     private func reloadView() {
         configureDetailView()
-        deleteGraphView()
-        configureGraphViewIfNil()
+        configureGraphContainer()
     }
 
     
-}
-
-extension EventDetailViewController: UICollectionViewDataSource {
-    
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return graphCellsInCollection
-    }
-    
-    func collectionView(collectionView: UICollectionView,
-        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(collectCellReuseID, forIndexPath: indexPath) as! EventDetailGraphCollectionCell
-            
-            // index determines center time...
-            let cellCenterTime = centerTimeOfCellAtIndex(indexPath)
-            if cell.configureCell(cellCenterTime, timeInterval: graphViewTimeInterval*graphTimeScale, mainEventTime: eventItem!.time) {
-                // TODO: really want to scan the entire width to see if any of the time span has data...
-                missingDataAdvisoryView.hidden = true;
-            }
-            
-            return cell
-    }
-}
-
-extension EventDetailViewController: UICollectionViewDelegate {
-    
-}
-
-extension EventDetailViewController: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat
-    {
-        return 0.0
-    }
 }
 
 

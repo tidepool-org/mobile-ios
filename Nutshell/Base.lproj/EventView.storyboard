@@ -765,11 +765,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="INU-ti-JXM" userLabel="GraphSection">
                                         <rect key="frame" x="0.0" y="218" width="320" height="286"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sIT-dT-5jh" userLabel="fixedGraphBackground" customClass="NutShellUIView">
-                                                <rect key="frame" x="0.0" y="0.0" width="320" height="286"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bkz-Fj-tdv" userLabel="graphContainerView">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bkz-Fj-tdv" userLabel="graphLayerContainer">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="286"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
@@ -871,10 +867,8 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="sIT-dT-5jh" firstAttribute="top" secondItem="INU-ti-JXM" secondAttribute="top" id="1yi-9V-1Vg"/>
                                             <constraint firstItem="Xh7-4E-j8e" firstAttribute="leading" secondItem="Ypb-MT-7BZ" secondAttribute="leading" id="27w-uf-Bcr"/>
                                             <constraint firstItem="bkz-Fj-tdv" firstAttribute="leading" secondItem="INU-ti-JXM" secondAttribute="leading" id="2t4-Tr-mhN"/>
-                                            <constraint firstAttribute="trailing" secondItem="sIT-dT-5jh" secondAttribute="trailing" id="2tw-Ba-brV"/>
                                             <constraint firstItem="rb4-Ot-jtC" firstAttribute="leading" secondItem="Ypb-MT-7BZ" secondAttribute="leading" constant="-10" id="EzH-NO-cvQ"/>
                                             <constraint firstAttribute="trailing" secondItem="bkz-Fj-tdv" secondAttribute="trailing" id="FR3-6r-CvL"/>
                                             <constraint firstItem="Xh7-4E-j8e" firstAttribute="top" secondItem="Ypb-MT-7BZ" secondAttribute="bottom" id="GeX-3b-xXJ"/>
@@ -886,9 +880,7 @@
                                             <constraint firstItem="qkI-Sp-hsq" firstAttribute="top" secondItem="Xh7-4E-j8e" secondAttribute="top" id="NE3-8s-vuh"/>
                                             <constraint firstItem="cmJ-dI-KmZ" firstAttribute="leading" secondItem="INU-ti-JXM" secondAttribute="leading" id="ODb-WH-99X"/>
                                             <constraint firstAttribute="bottom" secondItem="Xh7-4E-j8e" secondAttribute="bottom" constant="14" id="R0h-X9-VrR"/>
-                                            <constraint firstAttribute="bottom" secondItem="sIT-dT-5jh" secondAttribute="bottom" id="SuB-ml-Ow8"/>
                                             <constraint firstItem="rb4-Ot-jtC" firstAttribute="bottom" secondItem="Ypb-MT-7BZ" secondAttribute="bottom" id="TJn-zV-AjL"/>
-                                            <constraint firstItem="sIT-dT-5jh" firstAttribute="leading" secondItem="INU-ti-JXM" secondAttribute="leading" id="Vi2-mG-dUn"/>
                                             <constraint firstItem="cmJ-dI-KmZ" firstAttribute="top" secondItem="INU-ti-JXM" secondAttribute="top" id="Wb5-A1-Qd7"/>
                                             <constraint firstItem="Xh7-4E-j8e" firstAttribute="width" secondItem="Ypb-MT-7BZ" secondAttribute="width" id="YaG-hJ-yZ1"/>
                                             <constraint firstAttribute="bottom" secondItem="cmJ-dI-KmZ" secondAttribute="bottom" id="ZeQ-NE-Nk2"/>
@@ -942,7 +934,6 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
-                        <outlet property="fixedGraphBackground" destination="sIT-dT-5jh" id="zoI-BM-rbP"/>
                         <outlet property="graphLayerContainer" destination="bkz-Fj-tdv" id="yWd-ac-OMr"/>
                         <outlet property="graphSectionView" destination="INU-ti-JXM" id="r4i-Yu-eBP"/>
                         <outlet property="headerOverlayContainer" destination="z3U-KK-eno" id="zSL-NU-PtH"/>
@@ -1692,7 +1683,7 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="F4O-hJ-7F1"/>
+        <segue reference="Shc-Yg-1xe"/>
         <segue reference="dI7-Or-Hfd"/>
     </inferredMetricsTieBreakers>
 </document>
