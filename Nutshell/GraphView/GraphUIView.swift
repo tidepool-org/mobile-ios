@@ -128,12 +128,6 @@ class GraphUIView: UIView {
             addSubview(overlay)
         }
  
-        if !wizardData.isEmpty {
-            let overlayImage = graphViews.imageOfWizardData(wizardData)
-            let overlay = UIImageView(image:overlayImage)
-            addSubview(overlay)
-        }
-
         if !basalData.isEmpty {
             let overlayImage = graphViews.imageOfBasalData(basalData, maxBasal: maxBasal)
             let overlay = UIImageView(image:overlayImage)
@@ -146,6 +140,13 @@ class GraphUIView: UIView {
             addSubview(overlay)
         }
 
+        // Add wizard data last so it can be placed on top of corresponding bolus data
+        if !wizardData.isEmpty {
+            let overlayImage = graphViews.imageOfWizardData(wizardData)
+            let overlay = UIImageView(image:overlayImage)
+            addSubview(overlay)
+        }
+        
     }
 
     //

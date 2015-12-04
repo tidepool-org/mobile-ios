@@ -199,7 +199,7 @@ class DatabaseUtils {
                             request.predicate = NSPredicate(format: "id = %@", id)
                             
                             do {
-                                let foundObjects = try bgMOC.executeFetchRequest(request) as! [NSManagedObject]
+                                let foundObjects = try bgMOC.executeFetchRequest(request) as! [CommonData]
                                 for foundObject in foundObjects {
                                     bgMOC.deleteObject(foundObject)
                                 }

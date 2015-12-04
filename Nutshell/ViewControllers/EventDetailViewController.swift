@@ -151,6 +151,7 @@ class EventDetailViewController: BaseUIViewController {
             graphNeedsUpdate = false
             if let graphContainerView = graphContainerView {
                 graphContainerView.reloadData()
+                missingDataAdvisoryView.hidden = graphContainerView.containsData()
             }
         }
     }
@@ -497,8 +498,7 @@ class EventDetailViewController: BaseUIViewController {
             graphLayerContainer.addSubview(graphContainerView)
             graphContainerView.configureGraphForEvent(eventItem)
             graphContainerView.reloadData()
-            // TODO: Need to hook this up!!!
-            missingDataAdvisoryView.hidden = true
+            missingDataAdvisoryView.hidden = graphContainerView.containsData()
        }
     }
         

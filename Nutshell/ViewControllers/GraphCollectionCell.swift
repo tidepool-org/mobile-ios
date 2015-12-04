@@ -50,4 +50,11 @@ class GraphCollectionCell: UICollectionViewCell {
         }
     }
     
+    func containsData() -> Bool {
+        if let graphView = graphView {
+            return graphView.dataFound()
+        }
+        return false
+    }
+    
 }

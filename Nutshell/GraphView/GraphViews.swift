@@ -99,7 +99,11 @@ public class GraphViews {
     //
     private let basalLightBlueRectColor = Styles.lightBlueColor
     private let kBasalMinScaleValue: CGFloat = 1.0
-    
+
+    // Keep track of rects drawn for later drawing. E.g., Wizard circles are drawn just over associated Bolus labels.
+    private var bolusRects: [CGRect] = []
+    private var basalRects: [CGRect] = []
+
     //
     // MARK: - Graph vars based on view size and customization constants
     //
@@ -322,7 +326,7 @@ public class GraphViews {
             let yAxisLabelFontAttributes = [NSFontAttributeName: Styles.smallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: yAxisLabelStyle]
             
             // center vertically - to do this we need font height
-            let textHeight: CGFloat = yLabel.boundingRectWithSize(CGSizeMake(labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: yAxisLabelFontAttributes, context: nil).size.height
+            let textHeight: CGFloat = ceil(yLabel.boundingRectWithSize(CGSizeMake(labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: yAxisLabelFontAttributes, context: nil).size.height)
             CGContextSaveGState(context)
             CGContextClipToRect(context, labelRect);
             yLabel.drawInRect(CGRectMake(labelRect.minX, labelRect.minY + (labelRect.height - textHeight) / 2, labelRect.width, textHeight), withAttributes: yAxisLabelFontAttributes)
@@ -387,7 +391,8 @@ public class GraphViews {
                 labelAttrStr.addAttribute(NSFontAttributeName, value: Styles.smallLightFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
             }
             
-            let sizeNeeded = labelAttrStr.boundingRectWithSize(CGSizeMake(CGFloat.infinity, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
+            var sizeNeeded = labelAttrStr.boundingRectWithSize(CGSizeMake(CGFloat.infinity, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).size
+            sizeNeeded = CGSize(width: ceil(sizeNeeded.width), height: ceil(sizeNeeded.height))
             
             let originX = midnight ? topCenter.x + 4.0 : topCenter.x - sizeNeeded.width/2.0
             let labelRect = CGRect(x: originX, y: 6.0, width: sizeNeeded.width, height: sizeNeeded.height)
@@ -515,6 +520,9 @@ public class GraphViews {
         // Keep it integral
         rangeHi = ceil(rangeHi)
         
+        // Keep track of basal rects for later drawing of wizard data
+        basalRects = []
+        
         let yPixelsPerUnit = yPixelsBasal / CGFloat(rangeHi)
 
         func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: NSNumber) {
@@ -527,6 +535,8 @@ public class GraphViews {
             let basalValueRectPath = UIBezierPath(rect: basalRect)
             basalLightBlueRectColor.setFill()
             basalValueRectPath.fill()
+            
+            basalRects.append(basalRect)
         }
 
         var startValue: CGFloat = 0.0
@@ -576,6 +586,9 @@ public class GraphViews {
         }
         rangeHi = ceil(rangeHi)
         
+        // Keep track of bolus rects for later drawing of wizard data
+        bolusRects = []
+
         // bolus vertical area is split into a colored rect below, and label on top
         let yPixelsPerUnit = (yPixelsBolus - kBolusLabelRectHeight - kBolusLabelToRectGap) / rangeHi
 
@@ -599,7 +612,8 @@ public class GraphViews {
             let bolusLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             bolusLabelStyle.alignment = .Center
             let bolusLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: bolusTextBlue, NSParagraphStyleAttributeName: bolusLabelStyle]
-            let bolusLabelTextSize = bolusLabelTextContent.boundingRectWithSize(CGSizeMake(CGFloat.infinity, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: bolusLabelFontAttributes, context: nil).size
+            var bolusLabelTextSize = bolusLabelTextContent.boundingRectWithSize(CGSizeMake(CGFloat.infinity, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: bolusLabelFontAttributes, context: nil).size
+            bolusLabelTextSize = CGSize(width: ceil(bolusLabelTextSize.width), height: ceil(bolusLabelTextSize.height))
             let bolusLabelRect = CGRect(x:centerX-(bolusLabelTextSize.width/2), y:yBottomOfBolus - bolusRectHeight - kBolusLabelToRectGap - bolusLabelTextSize.height, width: bolusLabelTextSize.width, height: bolusLabelTextSize.height)
             
             let bolusLabelPath = UIBezierPath(rect: bolusLabelRect.insetBy(dx: 0.0, dy: 2.0))
@@ -610,10 +624,28 @@ public class GraphViews {
             CGContextClipToRect(context, bolusLabelRect);
             bolusLabelTextContent.drawInRect(bolusLabelRect, withAttributes: bolusLabelFontAttributes)
             CGContextRestoreGState(context)
+            
+            bolusRects.append(bolusLabelRect.union(bolusValueRect))
         }
+    }
 
-}
-
+    private func bolusRectAtPosition(rect: CGRect) -> CGRect {
+        var result = CGRectZero
+        let rectLeft = rect.origin.x
+        let rectRight = rectLeft + rect.width
+        for bolusRect in bolusRects {
+            let bolusLeftX = bolusRect.origin.x
+            let bolusRightX = bolusLeftX + bolusRect.width
+            if bolusRightX > rectLeft && bolusLeftX < rectRight {
+                if bolusRect.height > result.height {
+                    // return the bolusRect that is largest and intersects the x position of the target rect
+                    result = bolusRect
+                }
+            }
+        }
+        return result
+    }
+    
     private func drawWizardData(wizardData: [(timeOffset: NSTimeInterval, value: NSNumber)]) {
         for item in wizardData {
             
@@ -621,7 +653,11 @@ public class GraphViews {
             
             // Carb circle should be centered at timeline
             let offsetX = floor((CGFloat(item.0) * viewPixelsPerSec) - (kWizardCircleDiameter/2))
-            let wizardRect = CGRect(x: offsetX, y: yBottomOfWizard - kWizardCircleDiameter, width: kWizardCircleDiameter, height: kWizardCircleDiameter)
+            var wizardRect = CGRect(x: offsetX, y: yBottomOfWizard - kWizardCircleDiameter, width: kWizardCircleDiameter, height: kWizardCircleDiameter)
+            let bolusRect = bolusRectAtPosition(wizardRect)
+            if bolusRect.height != 0.0 {
+                wizardRect.origin.y = bolusRect.origin.y - kWizardCircleDiameter
+            }
             let wizardOval = UIBezierPath(ovalInRect: wizardRect)
             Styles.goldColor.setFill()
             wizardOval.fill()
@@ -638,7 +674,8 @@ public class GraphViews {
             
             let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: Styles.darkPurpleColor, NSParagraphStyleAttributeName: labelStyle])
             
-            let labelTextHeight: CGFloat = labelAttrStr.boundingRectWithSize(CGSizeMake(labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).size.height
+            let labelTextHeight: CGFloat = ceil(labelAttrStr.boundingRectWithSize(CGSizeMake(labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).size.height)
+            
             CGContextSaveGState(context)
             CGContextClipToRect(context, labelRect);
             labelAttrStr.drawInRect(CGRectMake(labelRect.minX, labelRect.minY + (labelRect.height - labelTextHeight) / 2, labelRect.width, labelTextHeight))
@@ -732,7 +769,8 @@ public class GraphViews {
             let readingLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             readingLabelStyle.alignment = .Center
             let readingLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: circleColor, NSParagraphStyleAttributeName: readingLabelStyle]
-            let readingLabelTextSize = readingLabelTextContent.boundingRectWithSize(CGSizeMake(CGFloat.infinity, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: readingLabelFontAttributes, context: nil).size
+            var readingLabelTextSize = readingLabelTextContent.boundingRectWithSize(CGSizeMake(CGFloat.infinity, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: readingLabelFontAttributes, context: nil).size
+            readingLabelTextSize = CGSize(width: ceil(readingLabelTextSize.width), height: ceil(readingLabelTextSize.height))
             let readingLabelRect = CGRectMake(centerX-(readingLabelTextSize.width/2), centerY+circleRadius, readingLabelTextSize.width, readingLabelTextSize.height)
             
             let readingLabelPath = UIBezierPath(rect: readingLabelRect.insetBy(dx: 1.0, dy: 2.5))

@@ -60,7 +60,21 @@ class GraphContainerView: UIView {
             graphCollectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: graphCenterCellInCollection, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: animated)
         }
     }
-    
+
+    func containsData() -> Bool {
+        if maxBolus != 0.0 || maxBasal != 0.0 {
+            return true
+        }
+        if let graphCollectionView = graphCollectionView {
+            if let cellIndexPath = currentCellIndex(graphCollectionView) {
+                if let cell = graphCollectionView.cellForItemAtIndexPath(cellIndexPath) as? GraphCollectionCell {
+                    return cell.containsData()
+                }
+            }
+        }
+        return false
+    }
+
     //
     // MARK: - Private methods
     //
