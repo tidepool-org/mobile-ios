@@ -16,19 +16,13 @@
 import UIKit
 
 class GraphContainerView: UIView {
-
+    
     var eventItem: NutEventItem?
     
     private var graphCollectionView: UICollectionView?
     private var fixedBackgroundImageView: UIImageView?
     private var graphCenterTime: NSDate = NSDate()
     private var graphViewTimeInterval: NSTimeInterval = 0.0
-    private var graphTimeScale = 1.0
-    // variables for scaling by multiplier
-    private var startGraphTimeScale = 1.0
-    private let kMinGraphTimeScale = 0.25
-    private let kInitGraphTimeScale = 1.0
-    private let kMaxGraphTimeScale = 2.0
     // variables for scaling by pixels/hour
     private var graphPixelsPerHour: CGFloat = 80
     private let kInitPixelsPerHour: CGFloat = 80
@@ -38,7 +32,7 @@ class GraphContainerView: UIView {
     
     private let graphCellsInCollection = 7
     private let graphCenterCellInCollection = 3
-
+    
     func configureGraphForEvent(eventItem: NutEventItem) {
         self.eventItem = eventItem
         graphCenterTime = eventItem.time
@@ -60,17 +54,17 @@ class GraphContainerView: UIView {
         configureGraphPixelsTimeInterval(newPixelsPerHour)
         reloadData()
     }
-
+    
     func centerGraphOnEvent(animated: Bool = false) {
         if let graphCollectionView = graphCollectionView {
             graphCollectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: graphCenterCellInCollection, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: animated)
         }
     }
-
+    
     //
     // MARK: - Private methods
     //
-
+    
     private func configureGraphPixelsTimeInterval(pixelsPerHour: CGFloat) {
         if pixelsPerHour > kMaxPixelsPerHour || pixelsPerHour < kMinPixelsPerHour {
             return
@@ -79,20 +73,11 @@ class GraphContainerView: UIView {
         graphPixelsPerHour = pixelsPerHour
         graphViewTimeInterval = NSTimeInterval(self.bounds.width * 3600.0/graphPixelsPerHour)
     }
-
-    private func updateTimescale(newScale: Double) {
-        graphTimeScale = startGraphTimeScale / newScale
-        if graphTimeScale > kMaxGraphTimeScale {
-            graphTimeScale = kMaxGraphTimeScale
-        } else if graphTimeScale < kMinGraphTimeScale {
-            graphTimeScale = kMinGraphTimeScale
-        }
-    }
-
+    
     //
     // MARK: - Data methods
     //
-
+    
     private var lastCenterTime: NSDate = NSDate()
     private var lastTimeInterval: NSTimeInterval = 0.0
     private var maxBolus: CGFloat = 0.0
@@ -118,27 +103,29 @@ class GraphContainerView: UIView {
             maxBasal = 0.0
             maxBolus = 0.0
             for event in events {
-                switch event.type as! String {
-                case "basal":
-                    if let basalEvent = event as? Basal {
-                        if let value = basalEvent.value {
-                            let floatValue = CGFloat(value)
-                            if floatValue > maxBasal {
-                                maxBasal = floatValue
+                if let type = event.type as? String {
+                    switch type {
+                    case "basal":
+                        if let basalEvent = event as? Basal {
+                            if let value = basalEvent.value {
+                                let floatValue = CGFloat(value)
+                                if floatValue > maxBasal {
+                                    maxBasal = floatValue
+                                }
                             }
                         }
-                    }
-                case "bolus":
-                    if let bolusEvent = event as? Bolus {
-                        if let value = bolusEvent.value {
-                            let floatValue = CGFloat(value)
-                            if floatValue > maxBolus {
-                                maxBolus = floatValue
+                    case "bolus":
+                        if let bolusEvent = event as? Bolus {
+                            if let value = bolusEvent.value {
+                                let floatValue = CGFloat(value)
+                                if floatValue > maxBolus {
+                                    maxBolus = floatValue
+                                }
                             }
                         }
+                    default:
+                        break
                     }
-                default:
-                    break
                 }
             }
             NSLog("Determined maxBolus:\(maxBolus), maxBasal:\(maxBasal)")
@@ -148,109 +135,71 @@ class GraphContainerView: UIView {
         
     }
     
-        //
-        // MARK: - Graph view
-        //
+    //
+    // MARK: - Graph view
+    //
     
-        private func deleteGraphView() {
-            if (graphCollectionView != nil) {
-                graphCollectionView?.removeFromSuperview();
-                graphCollectionView = nil;
-            }
-        }
-        
-        private let collectCellReuseID = "graphViewCell"
-        private func configureGraphViewIfNil() {
-            if graphCollectionView == nil {
-                
-                // first put in the fixed background
-                let graphView = GraphUIView.init(frame: self.bounds, centerTime: graphCenterTime, timeIntervalForView: graphViewTimeInterval*graphTimeScale, timeOfMainEvent: eventItem!.time)
-                if let fixedBackgroundImageView = fixedBackgroundImageView {
-                    fixedBackgroundImageView.removeFromSuperview()
-                }
-                fixedBackgroundImageView = UIImageView(image: graphView.fixedBackgroundImage())
-                self.addSubview(fixedBackgroundImageView!)
-                
-                let flow = UICollectionViewFlowLayout()
-                flow.itemSize = self.bounds.size
-                flow.scrollDirection = UICollectionViewScrollDirection.Horizontal
-                graphCollectionView = UICollectionView(frame: self.bounds, collectionViewLayout: flow)
-                if let graphCollectionView = graphCollectionView {
-                    graphCollectionView.backgroundColor = UIColor.clearColor()
-                    graphCollectionView.showsHorizontalScrollIndicator = false
-                    graphCollectionView.showsVerticalScrollIndicator = false
-                    graphCollectionView.dataSource = self
-                    graphCollectionView.delegate = self
-                    graphCollectionView.pagingEnabled = false
-                    //graphCollectionView.contentSize = self.bounds.size
-                    graphCollectionView.registerClass(GraphCollectionCell.self, forCellWithReuseIdentifier: collectCellReuseID)
-                    // event is in the center cell, see cellForItemAtIndexPath below...
-                    centerGraphOnEvent()
-                    self.addSubview(graphCollectionView)
-                    //graphSectionView.insertSubview(graphCollectionView, aboveSubview: fixedBackgroundImageView!)
-                    
-                    // add pinch gesture recognizer
-                    //let recognizer = UIPinchGestureRecognizer(target: self, action: "pinchGestureHandler:")
-                    //graphCollectionView.addGestureRecognizer(recognizer)
-                    
-                }
-                
-                // Now that graph width is known, configure time span
-                configureGraphPixelsTimeInterval(kInitPixelsPerHour)
-                // Figure out the largest bolus and basal events
-                determineGraphObjectSizing()
-            }
-        }
-        
-        func currentCellIndex(collectView: UICollectionView) -> NSIndexPath? {
-            let centerPoint = collectView.center
-            let pointInCell = CGPoint(x: centerPoint.x + collectView.contentOffset.x, y: centerPoint.y + collectView.contentOffset.y)
-            return collectView.indexPathForItemAtPoint(pointInCell)
-        }
-        
-        func centerTimeOfCellAtIndex(indexPath: NSIndexPath) -> NSDate {
-            var cellCenterTime = graphCenterTime
-            let collectionOffset = indexPath.row - graphCenterCellInCollection
-            
-            if collectionOffset != 0 {
-                cellCenterTime = NSDate(timeInterval: graphViewTimeInterval*Double(collectionOffset)*graphTimeScale, sinceDate: graphCenterTime)
-            }
-            return cellCenterTime
-        }
-        
-        func pinchGestureHandler(sender: AnyObject) {
-            if let graphCollectionView = graphCollectionView {
-                
-                //NSLog("recognized pinch!")
-                if let gesture = sender as? UIPinchGestureRecognizer {
-                    if gesture.state == UIGestureRecognizerState.Began {
-                        //NSLog("gesture started: scale: \(graphTimeScale)")
-                        startGraphTimeScale = graphTimeScale
-                        return
-                    }
-                    if gesture.state == UIGestureRecognizerState.Changed {
-                        //NSLog("gesture state changed scale: \(gesture.scale)")
-                        updateTimescale(Double(gesture.scale))
-                        if let curCellIndex = currentCellIndex(graphCollectionView) {
-                            if let curCell = graphCollectionView.cellForItemAtIndexPath(curCellIndex) {
-                                if let graphCell = curCell as? GraphCollectionCell {
-                                    let centerTime = centerTimeOfCellAtIndex(curCellIndex)
-                                    graphCell.zoomXAxisToNewTime(centerTime, timeInterval:graphViewTimeInterval*graphTimeScale)
-                                }
-                            }
-                        }
-                        return
-                    }
-                    if gesture.state == UIGestureRecognizerState.Ended {
-                        //NSLog("gesture ended with scale: \(gesture.scale)")
-                        updateTimescale(Double(gesture.scale))
-                        graphCollectionView.reloadData()
-                        return
-                    }
-                }
-            }
+    private func deleteGraphView() {
+        if (graphCollectionView != nil) {
+            graphCollectionView?.removeFromSuperview();
+            graphCollectionView = nil;
         }
     }
+    
+    private let collectCellReuseID = "graphViewCell"
+    private func configureGraphViewIfNil() {
+        if graphCollectionView == nil {
+            
+            // first put in the fixed background
+            let graphView = GraphUIView.init(frame: self.bounds, centerTime: graphCenterTime, timeIntervalForView: graphViewTimeInterval, timeOfMainEvent: eventItem!.time)
+            if let fixedBackgroundImageView = fixedBackgroundImageView {
+                fixedBackgroundImageView.removeFromSuperview()
+            }
+            fixedBackgroundImageView = UIImageView(image: graphView.fixedBackgroundImage())
+            self.addSubview(fixedBackgroundImageView!)
+            
+            let flow = UICollectionViewFlowLayout()
+            flow.itemSize = self.bounds.size
+            flow.scrollDirection = UICollectionViewScrollDirection.Horizontal
+            graphCollectionView = UICollectionView(frame: self.bounds, collectionViewLayout: flow)
+            if let graphCollectionView = graphCollectionView {
+                graphCollectionView.backgroundColor = UIColor.clearColor()
+                graphCollectionView.showsHorizontalScrollIndicator = false
+                graphCollectionView.showsVerticalScrollIndicator = false
+                graphCollectionView.dataSource = self
+                graphCollectionView.delegate = self
+                graphCollectionView.pagingEnabled = false
+                //graphCollectionView.contentSize = self.bounds.size
+                graphCollectionView.registerClass(GraphCollectionCell.self, forCellWithReuseIdentifier: collectCellReuseID)
+                // event is in the center cell, see cellForItemAtIndexPath below...
+                centerGraphOnEvent()
+                self.addSubview(graphCollectionView)
+            }
+            
+            // Now that graph width is known, configure time span
+            configureGraphPixelsTimeInterval(kInitPixelsPerHour)
+            // Figure out the largest bolus and basal events
+            determineGraphObjectSizing()
+        }
+    }
+    
+    func currentCellIndex(collectView: UICollectionView) -> NSIndexPath? {
+        let centerPoint = collectView.center
+        let pointInCell = CGPoint(x: centerPoint.x + collectView.contentOffset.x, y: centerPoint.y + collectView.contentOffset.y)
+        return collectView.indexPathForItemAtPoint(pointInCell)
+    }
+    
+    func centerTimeOfCellAtIndex(indexPath: NSIndexPath) -> NSDate {
+        var cellCenterTime = graphCenterTime
+        let collectionOffset = indexPath.row - graphCenterCellInCollection
+        
+        if collectionOffset != 0 {
+            cellCenterTime = NSDate(timeInterval: graphViewTimeInterval*Double(collectionOffset), sinceDate: graphCenterTime)
+        }
+        return cellCenterTime
+    }
+    
+}
 
 extension GraphContainerView: UICollectionViewDataSource {
     
@@ -264,7 +213,7 @@ extension GraphContainerView: UICollectionViewDataSource {
             
             // index determines center time...
             let cellCenterTime = centerTimeOfCellAtIndex(indexPath)
-            cell.configureCell(cellCenterTime, timeInterval: graphViewTimeInterval*graphTimeScale, mainEventTime: eventItem!.time, maxBolus: maxBolus, maxBasal: maxBasal)
+            cell.configureCell(cellCenterTime, timeInterval: graphViewTimeInterval, mainEventTime: eventItem!.time, maxBolus: maxBolus, maxBasal: maxBasal)
             return cell
     }
 }

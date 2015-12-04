@@ -39,19 +39,6 @@ class GraphUIView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    func zoomXAxisToNewTime(centerTime: NSDate, timeIntervalForView: NSTimeInterval) {
-        // Note: This will make all the other parts of the graph out of sync with the x-axis, so this is only useful for temporary pinch-zoom feedback...
-        self.centerTime = centerTime
-        self.startTime = centerTime.dateByAddingTimeInterval(-timeIntervalForView/2)
-        self.endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
-        self.viewTimeInterval = timeIntervalForView
-        // update image...
-        if let graphXAxisHeader = graphXAxisHeader {
-            graphViews.updateTimeframe(viewTimeInterval, startTime: startTime)
-            graphXAxisHeader.image = graphViews.imageOfXAxisHeader()
-        }
-    }
     
     /// Graph set up
     ///

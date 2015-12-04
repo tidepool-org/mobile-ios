@@ -22,15 +22,6 @@ class GraphCollectionCell: UICollectionViewCell {
     private var graphTimeInterval: NSTimeInterval?
     private var graphZoomed: Bool = false
     
-    func zoomXAxisToNewTime(centerTime: NSDate, timeInterval: NSTimeInterval) {
-        if let graphView = graphView {
-            graphTime = centerTime
-            graphTimeInterval = timeInterval
-            graphView.zoomXAxisToNewTime(centerTime, timeIntervalForView: timeInterval)
-            graphZoomed = true
-        }
-    }
-    
     func configureCell(centerTime: NSDate, timeInterval: NSTimeInterval, mainEventTime: NSDate, maxBolus: CGFloat, maxBasal: CGFloat) -> Bool {
         print("size at configure: \(self.frame.size)")
 
