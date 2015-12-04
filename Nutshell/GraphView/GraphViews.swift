@@ -352,9 +352,10 @@ public class GraphViews {
         let contents = CGRectMake(0, 0, viewSize.width, viewSize.height)
         let graphStartSecs = startTime.timeIntervalSinceReferenceDate
         let pixelsPerHour = CGFloat(kHourInSecs) * viewPixelsPerSec
-        var leftMargin: CGFloat = 18.0
-        let rightMargin: CGFloat = viewSize.width - 18.0
-        
+
+        // Remember last label rect so we don't overwrite previous...
+        var lastLabelDrawn = CGRectNull
+
         //
         //  Draw the X-axis header...
         //
@@ -386,62 +387,59 @@ public class GraphViews {
                 labelAttrStr.addAttribute(NSFontAttributeName, value: Styles.smallLightFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
             }
             
-            let labelRect = CGRectMake(0.0, 0.0, 100.0, 18.0)
-            let widthNeeded = labelAttrStr.boundingRectWithSize(labelRect.size, options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).width
-//            // Don't draw labels too close to margins
-//            if (topCenter.x - widthNeeded/2.0) < leftMargin || topCenter.x > rightMargin {
-//                return
-//            }
+            let sizeNeeded = labelAttrStr.boundingRectWithSize(CGSizeMake(CGFloat.infinity, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
             
-            labelAttrStr.drawAtPoint(CGPoint(x: topCenter.x - widthNeeded/2.0, y: 10.0))
+            let originX = midnight ? topCenter.x + 4.0 : topCenter.x - sizeNeeded.width/2.0
+            let labelRect = CGRect(x: originX, y: 6.0, width: sizeNeeded.width, height: sizeNeeded.height)
+            // skip label draw if we would overwrite previous label
+            if (!lastLabelDrawn.intersects(labelRect)) {
+                labelAttrStr.drawInRect(labelRect)
+                lastLabelDrawn = labelRect
+            } else {
+                print("skipping x axis label")
+            }
         }
         
         let df = NSDateFormatter()
         df.dateFormat = "h a"
         let hourlabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
         hourlabelStyle.alignment = .Center
-        
-        let nextHourBoundarySecs = ceil(graphStartSecs / kHourInSecs) * kHourInSecs
-        let firstDate = NSDate(timeIntervalSinceReferenceDate:nextHourBoundarySecs)
 
-        // first draw the current day...
-//        NSLog("drawing xAxis first date: \(firstDate)")
-//        let firstDateString = NutUtils.standardUIDayString(firstDate)
-//        let firstDateAttrStr = NSMutableAttributedString(string: firstDateString, attributes: [NSFontAttributeName: Styles.smallRegularFont, NSForegroundColorAttributeName: axisTextColor, NSParagraphStyleAttributeName: hourlabelStyle])
-//        let sizeNeeded = firstDateAttrStr.boundingRectWithSize(CGSize(width: viewSize.width, height: kGraphHeaderHeight), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
-//        let dateXOffset: CGFloat = 10.0
-//        // don't draw any time labels over the date
-//        let dateToTimeMargin: CGFloat = 8.0
-//        leftMargin = sizeNeeded.width + dateXOffset + dateToTimeMargin
-//        let dateRect = CGRectMake(dateXOffset, 8.0, sizeNeeded.width, 18.0)
-//        firstDateAttrStr.drawInRect(dateRect)
-        
-        var curDate = firstDate
+        // Draw times a little early and going to a little later so collection views overlap correctly
+        let earlyStartTime = graphStartSecs - timeExtensionForDataFetch
+        let lateEndLocation = kLargestGraphItemWidth
+
+        let nextHourBoundarySecs = ceil(earlyStartTime / kHourInSecs) * kHourInSecs
+        var curDate = NSDate(timeIntervalSinceReferenceDate:nextHourBoundarySecs)
         let timeOffset: NSTimeInterval = nextHourBoundarySecs - graphStartSecs
         var viewXOffset = floor(CGFloat(timeOffset) * viewPixelsPerSec)
 
         repeat {
             
-            let markerStart = CGPointMake(viewXOffset, kGraphHeaderHeight - 8.0)
-            drawHourMarker(markerStart, length: 8.0)
-                
             var hourStr = df.stringFromDate(curDate)
             // Replace uppercase PM and AM with lowercase versions
             hourStr = hourStr.stringByReplacingOccurrencesOfString("PM", withString: "p", options: NSStringCompareOptions.LiteralSearch, range: nil)
             hourStr = hourStr.stringByReplacingOccurrencesOfString("AM", withString: "a", options: NSStringCompareOptions.LiteralSearch, range: nil)
 
+            // TODO: don't overwrite this date with 1a, 2a, etc depending upon its length
             var midnight = false
             if hourStr == "12 a" {
                 midnight = true
                 hourStr = NutUtils.standardUIDayString(curDate)
             }
+            
+            // draw marker
+            let markerLength = midnight ? kGraphHeaderHeight : 8.0
+            let markerStart = CGPointMake(viewXOffset, kGraphHeaderHeight - markerLength)
+            drawHourMarker(markerStart, length: markerLength)
+
             // draw hour label
             drawHourLabel(hourStr, topCenter: CGPoint(x: viewXOffset, y: 6.0), midnight: midnight)
             
             curDate = curDate.dateByAddingTimeInterval(kHourInSecs)
             viewXOffset += pixelsPerHour
             
-        } while (viewXOffset < viewSize.width)
+        } while (viewXOffset < viewSize.width + lateEndLocation)
     }
 
     private func drawWorkoutData(workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval)]) {
@@ -578,14 +576,15 @@ public class GraphViews {
             // Bolus rect is center-aligned to time start
             // Carb circle should be centered at timeline
             let centerX: CGFloat = floor(CGFloat(item.0) * viewPixelsPerSec)
-            var rectLeft = floor(centerX - (kBolusRectWidth/2))
+            let rectLeft = floor(centerX - (kBolusRectWidth/2))
             let bolusRectHeight = floor(yPixelsPerUnit * CGFloat(item.1.doubleValue))
             let bolusValueRect = CGRect(x: rectLeft, y: yBottomOfBolus - bolusRectHeight, width: kBolusRectWidth, height: bolusRectHeight)
             let bolusValueRectPath = UIBezierPath(rect: bolusValueRect)
             bolusBlueRectColor.setFill()
             bolusValueRectPath.fill()
-           
-            let bolusLabelTextContent = String(item.1)
+            
+            let bolusFloatValue = Float(item.1)
+            let bolusLabelTextContent = String(format: "%.1f", bolusFloatValue)
             let bolusLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             bolusLabelStyle.alignment = .Center
             let bolusLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: bolusTextBlue, NSParagraphStyleAttributeName: bolusLabelStyle]
@@ -615,6 +614,10 @@ public class GraphViews {
             let wizardOval = UIBezierPath(ovalInRect: wizardRect)
             Styles.goldColor.setFill()
             wizardOval.fill()
+            // Draw background colored border to separate the circle from other objects
+            backgroundColor.setStroke()
+            wizardOval.lineWidth = 1.5
+            wizardOval.stroke()
             
             // Label Drawing
             let labelRect = wizardRect
@@ -726,12 +729,6 @@ public class GraphViews {
             readingLabelPath.fill()
             
             CGContextSaveGState(context)
-            
-//            let shadow = NSShadow()
-//            shadow.shadowColor = backgroundColor
-//            shadow.shadowOffset = CGSizeMake(0.1, -0.1)
-//            shadow.shadowBlurRadius = 3
-//            CGContextSetShadowWithColor(context, shadow.shadowOffset, shadow.shadowBlurRadius, (shadow.shadowColor as! UIColor).CGColor)
             
             CGContextClipToRect(context, readingLabelRect);
             readingLabelTextContent.drawInRect(readingLabelRect, withAttributes: readingLabelFontAttributes)
