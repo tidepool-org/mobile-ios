@@ -262,8 +262,9 @@ class APIConnector {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         // TODO: Alamofire isn't escaping the periods, but service appears to expect this... right now I have Alamofire modified to do this.
         // TODO: If there is no data returned, I get a failure case with status code 200, and error FAILURE: Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.} ] Maybe an Alamofire issue?
-        //var escapedStart = startDate.stringByReplacingOccurrencesOfString(".", withString: "%2E")
-        sendRequest(Method.GET, endpoint: endpoint, parameters: ["type":"smbg,bolus,cbg,wizard,basal", "startdate": startDate, "enddate": endDate]).responseJSON { (request, response, result) -> Void in
+        //let escapedStart = startDate.stringByReplacingOccurrencesOfString(".", withString: "%2E")
+        //let escapedEnd = endDate.stringByReplacingOccurrencesOfString(".", withString: "%2E")
+        sendRequest(Method.GET, endpoint: endpoint, parameters: ["type":"smbg,bolus,cbg,wizard,basal", "startDate": startDate, "endDate": endDate]).responseJSON { (request, response, result) -> Void in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if ( result.isSuccess ) {
                 let json = JSON(result.value!)

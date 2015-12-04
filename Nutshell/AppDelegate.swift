@@ -37,10 +37,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set up the API connection
         API = APIConnector()
         
-        if APIConnector.currentService == "Development" && enableIncrementalModeOnDev {
-            NSLog("DEVELOPMENT SERVER: USE INCREMENTAL DATA LOAD!")
+        //if APIConnector.currentService == "Development" && enableIncrementalModeOnDev {
+            //NSLog("DEVELOPMENT SERVER: USE INCREMENTAL DATA LOAD!")
             self.incrementalDataLoadMode = true
-        }
+        //}
 
         attemptTokenLogin()
         return true
