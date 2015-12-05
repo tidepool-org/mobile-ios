@@ -156,8 +156,6 @@
 		48B127951BC4445800061483 /* NutEventItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127931BC4445500061483 /* NutEventItem.swift */; };
 		48B127971BC4447100061483 /* NutWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127961BC4447100061483 /* NutWorkout.swift */; };
 		48B127981BC4447100061483 /* NutWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127961BC4447100061483 /* NutWorkout.swift */; };
-		48B1279F1BC4449400061483 /* Menu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48B1279B1BC4449400061483 /* Menu.storyboard */; };
-		48B127A01BC4449400061483 /* Menu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48B1279B1BC4449400061483 /* Menu.storyboard */; };
 		48B127A21BC444D300061483 /* GraphViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127A11BC444D300061483 /* GraphViews.swift */; };
 		48B127A31BC444D300061483 /* GraphViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127A11BC444D300061483 /* GraphViews.swift */; };
 		48B127A81BC444FE00061483 /* applejuicedemopic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B127A41BC444FE00061483 /* applejuicedemopic.png */; };
@@ -302,7 +300,6 @@
 		489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutMeal.swift; path = DataModel/NutMeal.swift; sourceTree = "<group>"; };
 		48B127931BC4445500061483 /* NutEventItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutEventItem.swift; path = DataModel/NutEventItem.swift; sourceTree = "<group>"; };
 		48B127961BC4447100061483 /* NutWorkout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutWorkout.swift; path = DataModel/NutWorkout.swift; sourceTree = "<group>"; };
-		48B1279C1BC4449400061483 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Menu.storyboard; sourceTree = "<group>"; };
 		48B127A11BC444D300061483 /* GraphViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphViews.swift; path = GraphView/GraphViews.swift; sourceTree = "<group>"; };
 		48B127A41BC444FE00061483 /* applejuicedemopic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = applejuicedemopic.png; path = Images/applejuicedemopic.png; sourceTree = "<group>"; };
 		48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ThreeTacosDemoPic.png; path = Images/ThreeTacosDemoPic.png; sourceTree = "<group>"; };
@@ -467,7 +464,6 @@
 		485922BB1B9CA0890056E605 /* MenuViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				48B1279B1BC4449400061483 /* Menu.storyboard */,
 				485922BC1B9CA13E0056E605 /* MenuTableViewController.swift */,
 				4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */,
 			);
@@ -725,7 +721,6 @@
 				486F5DFB1B9F874A00BA2A57 /* OpenSans-Semibold.ttf in Resources */,
 				486F5E151BA0908900BA2A57 /* login_logo@2x.png in Resources */,
 				4859FCC61B9A4DE4000C1269 /* LaunchScreen.storyboard in Resources */,
-				48B1279F1BC4449400061483 /* Menu.storyboard in Resources */,
 				486F5DF51B9F874A00BA2A57 /* OpenSans-Bold.ttf in Resources */,
 				486F5DF81B9F874A00BA2A57 /* OpenSans-Regular.ttf in Resources */,
 				48ED0D3C1BAF22CC009D0D6F /* addAnimation-01.png in Resources */,
@@ -746,7 +741,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48B127A01BC4449400061483 /* Menu.storyboard in Resources */,
 				48B127AD1BC444FE00061483 /* ThreeTacosDemoPic.png in Resources */,
 				486F5E161BA0908900BA2A57 /* login_logo@2x.png in Resources */,
 				4854202D1BC4790D0020CFE1 /* Assets.xcassets in Resources */,
@@ -1049,14 +1043,6 @@
 				4859FCC51B9A4DE4000C1269 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		48B1279B1BC4449400061483 /* Menu.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				48B1279C1BC4449400061483 /* Base */,
-			);
-			name = Menu.storyboard;
 			sourceTree = "<group>";
 		};
 		48D056951BDFDD16009D1591 /* Localizable.strings */ = {

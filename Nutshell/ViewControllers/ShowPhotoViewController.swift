@@ -45,14 +45,18 @@ class ShowPhotoViewController: UIViewController {
             if let curPhotoIndex = currentCellIndex(photoCollectionView) {
                 let curImageIndex = curPhotoIndex.row
                 photoURLs.removeAtIndex(curImageIndex)
-                configurePageControl()
-                photoCollectionView.reloadData()
+                if photoURLs.count == 0 {
+                    self.performSegueWithIdentifier(EventViewStoryboard.SegueIdentifiers.UnwindSegueFromShowPhoto, sender: self)
+                } else {
+                    configurePageControl()
+                    photoCollectionView.reloadData()
+                }
             }
         }
     }
     
     private func configurePhotoCollectionIfNil() {
-        if photoCollectionView != nil {
+        if photoCollectionView != nil || photoURLs.count == 0 {
             return
         }
         let flow = UICollectionViewFlowLayout()

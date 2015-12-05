@@ -154,14 +154,6 @@ class EventListTableViewController: BaseUITableViewController {
         updateFilteredAndReload()
     }
     
-    @IBAction func menuButtonHandler(sender: AnyObject) {
-        self.navigationItem.title = ""
-        let sb = UIStoryboard(name: "Menu", bundle: nil)
-        if let vc = sb.instantiateInitialViewController() {
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
-    }
-    
     // MARK: - Search
     
     func textFieldDidChange() {
