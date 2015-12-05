@@ -42,5 +42,11 @@ class MenuTableViewController: BaseUITableViewController {
     //  override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
     //  }
   
+    @IBAction func supportButtonHandler(sender: AnyObject) {
+        
+        let email = "support@tidepool.org"
+        let url = NSURL(string: "mailto:\(email)")
+        UIApplication.sharedApplication().openURL(url!)
+    }
 
 }

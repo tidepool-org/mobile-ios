@@ -26,6 +26,7 @@ class EventDetailViewController: BaseUIViewController {
     @IBOutlet weak var graphLayerContainer: UIView!
     private var graphContainerView: GraphContainerView?
     @IBOutlet weak var missingDataAdvisoryView: UIView!
+    @IBOutlet weak var missingDataAdvisoryTitle: NutshellUILabel!
     
     @IBOutlet weak var photoUIImageView: UIImageView!
 
@@ -57,10 +58,26 @@ class EventDetailViewController: BaseUIViewController {
         
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "databaseChanged:", name: NewBlockRangeLoadedNotification, object: nil)
+        notificationCenter.addObserver(self, selector: "reachabilityChanged:", name: ReachabilityChangedNotification, object: nil)
+        configureForReachability()
     }
  
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+
+    func reachabilityChanged(note: NSNotification) {
+        configureForReachability()
+    }
+    
+    private func configureForReachability() {
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+            var connected = true
+            if let api = appDelegate.API {
+                connected = api.isConnectedToNetwork()
+            }
+            missingDataAdvisoryTitle.text = connected ? "There is no data in here!" : "You are currently offline!"
+        }
     }
 
     override func didReceiveMemoryWarning() {
