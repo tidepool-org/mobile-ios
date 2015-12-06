@@ -808,7 +808,7 @@
                                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cmJ-dI-KmZ" userLabel="MissingData">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="286"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCd-7V-eEl">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCd-7V-eEl" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="41" y="96" width="239" height="103"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There is no data in here!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="azx-xE-oT0" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
@@ -848,7 +848,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                         </subviews>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <color key="backgroundColor" red="0.94901960784313721" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
                                                         <constraints>
                                                             <constraint firstItem="E2h-Ni-G2t" firstAttribute="top" secondItem="Y1z-zk-JS3" secondAttribute="bottom" id="AIh-lq-c7E"/>
                                                             <constraint firstItem="E2h-Ni-G2t" firstAttribute="leading" secondItem="TCd-7V-eEl" secondAttribute="leading" id="Fru-72-prk"/>
@@ -862,6 +862,9 @@
                                                             <constraint firstAttribute="trailing" secondItem="azx-xE-oT0" secondAttribute="trailing" id="lWG-wc-rcA"/>
                                                             <constraint firstAttribute="width" constant="239" id="r4e-Ew-MJr"/>
                                                         </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                                                        </userDefinedRuntimeAttributes>
                                                     </view>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

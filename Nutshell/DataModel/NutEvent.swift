@@ -83,6 +83,8 @@ class NutEvent {
             let now = NSDate()
             me.createdTime = now
             me.modifiedTime = now
+            // TODO: Determine policy for local id creation!
+            me.id = NSUUID().UUIDString
             moc.insertObject(me)
             if DatabaseUtils.databaseSave(moc) {
                 return me

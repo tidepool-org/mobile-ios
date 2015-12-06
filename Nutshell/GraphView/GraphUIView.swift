@@ -100,10 +100,6 @@ class GraphUIView: UIView {
         graphXAxisHeader = UIImageView(image: xAxisImage)
         addSubview(graphXAxisHeader!)
     
-        if !dataFound() {
-            return
-        }
-        
         if !workoutData.isEmpty {
             let overlayImage = graphViews.imageOfWorkoutData(workoutData)
             let overlay = UIImageView(image:overlayImage)

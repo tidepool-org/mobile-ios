@@ -153,6 +153,7 @@ class DatabaseUtils {
             }
             // kick off a fetch if we are online...
             if appDelegate.serviceAvailable() {
+                // TODO: if fetch fails, should we wait less time before retrying? 
                 serverBlocks[bucket] = now
                 let moc = appDelegate.managedObjectContext
                 let startTimeIsoDateStr = DatabaseUtils.bucketNumberToIsoDateString(bucket)
@@ -234,6 +235,7 @@ class DatabaseUtils {
         NSNotificationCenter.defaultCenter().postNotificationName(NewBlockRangeLoadedNotification, object:nil)
     }
     
+    // Note: This call has the side effect of fetching data from the service which may result in a future notification of database changes.
     class func getEvents(moc: NSManagedObjectContext, fromTime: NSDate, toTime: NSDate, objectTypes: [String]? = nil) throws -> [CommonData] {
 
         // load on-demand: if data has not been loaded, a notification will come later!
@@ -253,42 +255,48 @@ class DatabaseUtils {
         return try moc.executeFetchRequest(request) as! [CommonData]
     }
 
-    class func getMealItem(moc: NSManagedObjectContext, atTime: NSDate, title: String) throws -> [Meal] {
-        let request = NSFetchRequest(entityName: "EventItem")
-        request.predicate = NSPredicate(format: "(title == %@) AND  (time == %@)", title, atTime)
-        return try moc.executeFetchRequest(request) as! [Meal]
-    }
+//    class func getMealItem(moc: NSManagedObjectContext, atTime: NSDate, title: String) throws -> [Meal] {
+//        let request = NSFetchRequest(entityName: "EventItem")
+//        request.predicate = NSPredicate(format: "(title == %@) AND  (time == %@)", title, atTime)
+//        return try moc.executeFetchRequest(request) as! [Meal]
+//    }
 
+    // TODO: This will need to be reworked to sync data from the service when the service supports meal and workout events.
     class func getAllNutEvents(moc: NSManagedObjectContext) throws -> [EventItem] {
         let request = NSFetchRequest(entityName: "EventItem")
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
         return try moc.executeFetchRequest(request) as! [EventItem]
     }
 
-    class func getAllWorkoutEvents(moc: NSManagedObjectContext) throws -> [Workout] {
-        let request = NSFetchRequest(entityName: "Workout")
-        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
-        return try moc.executeFetchRequest(request) as! [Workout]
-    }
-
-    class func getAllMealEvents(moc: NSManagedObjectContext) throws -> [Meal] {
-        let request = NSFetchRequest(entityName: "Meal")
-        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
-        return try moc.executeFetchRequest(request) as! [Meal]
-    }
-    
-    class func getAllWizardEvents(moc: NSManagedObjectContext) throws -> [Wizard] {
-        let request = NSFetchRequest(entityName: "Wizard")
-        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
-        return try moc.executeFetchRequest(request) as! [Wizard]
-    }
+//    class func getAllWorkoutEvents(moc: NSManagedObjectContext) throws -> [Workout] {
+//        let request = NSFetchRequest(entityName: "Workout")
+//        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
+//        return try moc.executeFetchRequest(request) as! [Workout]
+//    }
+//
+//    class func getAllMealEvents(moc: NSManagedObjectContext) throws -> [Meal] {
+//        let request = NSFetchRequest(entityName: "Meal")
+//        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
+//        return try moc.executeFetchRequest(request) as! [Meal]
+//    }
+//    
+//    class func getAllWizardEvents(moc: NSManagedObjectContext) throws -> [Wizard] {
+//        let request = NSFetchRequest(entityName: "Wizard")
+//        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
+//        return try moc.executeFetchRequest(request) as! [Wizard]
+//    }
 
     class func deleteAllNutEvents(moc: NSManagedObjectContext) {
+        // TODO: Note this is currently only used for testing!
         do {
             let request = NSFetchRequest(entityName: "Meal")
             let myList = try moc.executeFetchRequest(request)
             for obj: AnyObject in myList {
-                moc.deleteObject(obj as! NSManagedObject)
+                if let objId = obj.id as? String {
+                    if objId.hasPrefix("demo")  {
+                        moc.deleteObject(obj as! NSManagedObject)
+                    }
+                }
             }
         } catch let error as NSError {
             print("Failed to delete meal items: \(error)")
@@ -298,7 +306,11 @@ class DatabaseUtils {
             let request = NSFetchRequest(entityName: "Workout")
             let myList = try moc.executeFetchRequest(request)
             for obj: AnyObject in myList {
-                moc.deleteObject(obj as! NSManagedObject)
+                if let objId = obj.id as? String {
+                    if objId.hasPrefix("demo")  {
+                        moc.deleteObject(obj as! NSManagedObject)
+                    }
+                }
             }
         } catch let error as NSError {
             print("Failed to delete workout items: \(error)")

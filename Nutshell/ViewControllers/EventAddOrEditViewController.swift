@@ -758,7 +758,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             me.location = event[3]
             me.photo = event[4]
             me.type = "meal"
-            me.id = NSUUID().UUIDString // required!
+            me.id = "demo" + NSUUID().UUIDString // required!
             let now = NSDate()
             me.createdTime = now
             me.modifiedTime = now
@@ -784,7 +784,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 we.duration = NSTimeInterval(event[3])
             }
             we.type = "workout"
-            we.id = NSUUID().UUIDString // required!
+            we.id = "demo" + NSUUID().UUIDString // required!
             let now = NSDate()
             we.createdTime = now
             we.modifiedTime = now
