@@ -270,7 +270,7 @@ class APIConnector {
                 let json = JSON(result.value!)
                 completion(Result.Success(json))
             } else {
-                // Failure
+                // Failure: Note we get here when no data is found as well!
                 completion(Result.Failure(nil, result.error!))
             }
         }

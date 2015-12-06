@@ -179,7 +179,7 @@ class DatabaseUtils {
         let incrementalMode = appDelegate.incrementalDataLoadMode
 
         // Do this in the background- currently it takes forever because the result set is huge
-        dispatch_async(dispatch_get_global_queue(Int(DISPATCH_QUEUE_PRIORITY_BACKGROUND), 0)){
+        //dispatch_async(dispatch_get_global_queue(Int(DISPATCH_QUEUE_PRIORITY_BACKGROUND), 0)){
             let bgMOC = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
             bgMOC.persistentStoreCoordinator = moc.persistentStoreCoordinator;
             
@@ -220,13 +220,13 @@ class DatabaseUtils {
             do {
                 try bgMOC.save()
                 print("updateEvents: Database saved!")
-                dispatch_async(dispatch_get_main_queue()) {
+                //dispatch_async(dispatch_get_main_queue()) {
                     notifyOnDataLoad()
-                }
+                //}
             } catch let error as NSError {
                 print("Failed to save MOC: \(error)")
             }
-        }
+        //}
     }
     
     class func notifyOnDataLoad() {
