@@ -181,14 +181,14 @@ class DatabaseUtils {
 
         // Do this in the background- currently it takes forever because the result set is huge
         //dispatch_async(dispatch_get_global_queue(Int(DISPATCH_QUEUE_PRIORITY_BACKGROUND), 0)){
-            let bgMOC = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-            bgMOC.persistentStoreCoordinator = moc.persistentStoreCoordinator;
+            //let bgMOC = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
+            //bgMOC.persistentStoreCoordinator = moc.persistentStoreCoordinator;
             
             let request = NSFetchRequest(entityName: "CommonData")
             var eventCounter = 0
             for (_, subJson) in eventsJSON {
                 //NSLog("updateEvents next subJson: \(subJson)")
-                if let obj = CommonData.fromJSON(subJson, moc: bgMOC) {
+                if let obj = CommonData.fromJSON(subJson, moc: moc) {
                     // Remove existing object with the same ID
                     if let id=obj.id {
                         eventCounter++
@@ -200,16 +200,16 @@ class DatabaseUtils {
                             request.predicate = NSPredicate(format: "id = %@", id)
                             
                             do {
-                                let foundObjects = try bgMOC.executeFetchRequest(request) as! [CommonData]
+                                let foundObjects = try moc.executeFetchRequest(request) as! [CommonData]
                                 for foundObject in foundObjects {
-                                    bgMOC.deleteObject(foundObject)
+                                    moc.deleteObject(foundObject)
                                 }
-                                bgMOC.insertObject(obj)
+                                moc.insertObject(obj)
                             } catch let error as NSError {
                                 print("updateEvents: Failed to replace existing event with ID \(id) error: \(error)")
                             }
                         } else {
-                            bgMOC.insertObject(obj)
+                            moc.insertObject(obj)
                         }
                     } else {
                         print("updateEvents: no ID found for object: \(obj), not inserting!")
@@ -219,7 +219,7 @@ class DatabaseUtils {
             NSLog("extra events processed: \(eventCounter)")
             // Save the database
             do {
-                try bgMOC.save()
+                try moc.save()
                 print("updateEvents: Database saved!")
                 //dispatch_async(dispatch_get_main_queue()) {
                     notifyOnDataLoad()
