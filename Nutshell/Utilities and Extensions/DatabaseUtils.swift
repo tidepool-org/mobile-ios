@@ -136,9 +136,6 @@ class DatabaseUtils {
 
     class func checkLoadDataForDateRange(startDate: NSDate, endDate: NSDate) {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        if !appDelegate.incrementalDataLoadMode {
-            return
-        }
         let now = NSDate()
         let startBucket = DatabaseUtils.dateToBucketNumber(startDate)
         let endBucket = DatabaseUtils.dateToBucketNumber(endDate)
@@ -173,61 +170,47 @@ class DatabaseUtils {
     }
     
     class func updateEvents(moc: NSManagedObjectContext, eventsJSON: JSON) {
-        // We get back an array of JSON objects. Iterate through the array and insert the objects
-        // into the database, removing any existing objects we may have.
-
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let incrementalMode = appDelegate.incrementalDataLoadMode
-
-        // Do this in the background- currently it takes forever because the result set is huge
-        //dispatch_async(dispatch_get_global_queue(Int(DISPATCH_QUEUE_PRIORITY_BACKGROUND), 0)){
-            //let bgMOC = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
-            //bgMOC.persistentStoreCoordinator = moc.persistentStoreCoordinator;
-            
-            let request = NSFetchRequest(entityName: "CommonData")
-            var eventCounter = 0
-            for (_, subJson) in eventsJSON {
-                //NSLog("updateEvents next subJson: \(subJson)")
-                if let obj = CommonData.fromJSON(subJson, moc: moc) {
-                    // Remove existing object with the same ID
-                    if let id=obj.id {
-                        eventCounter++
-                        if eventCounter > 1000 {
-                            eventCounter = 0
-                            NSLog("1000 items")
-                        }
-                        if incrementalMode {
-                            request.predicate = NSPredicate(format: "id = %@", id)
-                            
-                            do {
-                                let foundObjects = try moc.executeFetchRequest(request) as! [CommonData]
-                                for foundObject in foundObjects {
-                                    moc.deleteObject(foundObject)
-                                }
-                                moc.insertObject(obj)
-                            } catch let error as NSError {
-                                print("updateEvents: Failed to replace existing event with ID \(id) error: \(error)")
-                            }
-                        } else {
-                            moc.insertObject(obj)
-                        }
-                    } else {
-                        print("updateEvents: no ID found for object: \(obj), not inserting!")
+        // We get back an array of JSON objects. Iterate through the array and insert the objects into the database, removing any existing objects we may have.
+        
+        let request = NSFetchRequest(entityName: "CommonData")
+        var eventCounter = 0
+        for (_, subJson) in eventsJSON {
+            //NSLog("updateEvents next subJson: \(subJson)")
+            if let obj = CommonData.fromJSON(subJson, moc: moc) {
+                // Remove existing object with the same ID
+                if let id=obj.id {
+                    eventCounter++
+                    if eventCounter > 1000 {
+                        eventCounter = 0
+                        NSLog("1000 items")
                     }
+                    request.predicate = NSPredicate(format: "id = %@", id)
+                    
+                    do {
+                        let foundObjects = try moc.executeFetchRequest(request) as! [CommonData]
+                        for foundObject in foundObjects {
+                            moc.deleteObject(foundObject)
+                        }
+                        moc.insertObject(obj)
+                    } catch let error as NSError {
+                        print("updateEvents: Failed to replace existing event with ID \(id) error: \(error)")
+                    }
+                } else {
+                    print("updateEvents: no ID found for object: \(obj), not inserting!")
                 }
             }
-            NSLog("extra events processed: \(eventCounter)")
-            // Save the database
-            do {
-                try moc.save()
-                print("updateEvents: Database saved!")
-                //dispatch_async(dispatch_get_main_queue()) {
-                    notifyOnDataLoad()
-                //}
-            } catch let error as NSError {
-                print("Failed to save MOC: \(error)")
-            }
-        //}
+        }
+        NSLog("extra events processed: \(eventCounter)")
+        // Save the database
+        do {
+            try moc.save()
+            print("updateEvents: Database saved!")
+            //dispatch_async(dispatch_get_main_queue()) {
+            notifyOnDataLoad()
+            //}
+        } catch let error as NSError {
+            print("Failed to save MOC: \(error)")
+        }
     }
     
     class func notifyOnDataLoad() {

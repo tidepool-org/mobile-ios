@@ -22,7 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var API: APIConnector?
     static var testMode: Bool = false
-    var incrementalDataLoadMode = false
     let enableIncrementalModeOnDev = true
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -37,11 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Set up the API connection
         API = APIConnector()
         
-        //if APIConnector.currentService == "Development" && enableIncrementalModeOnDev {
-            //NSLog("DEVELOPMENT SERVER: USE INCREMENTAL DATA LOAD!")
-            self.incrementalDataLoadMode = true
-        //}
-
         attemptTokenLogin()
         return true
     }
@@ -52,12 +46,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // refresh connector since there is a new service...
             API = APIConnector()
             NSLog("Switched to \(serverName) server")
-            if APIConnector.currentService == "Development" && enableIncrementalModeOnDev {
-                NSLog("DEVELOPMENT SERVER: USE INCREMENTAL DATA LOAD!")
-                self.incrementalDataLoadMode = true
-            } else {
-                self.incrementalDataLoadMode = false
-            }
         }
     }
     

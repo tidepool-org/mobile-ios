@@ -150,22 +150,6 @@ class LoginViewController: BaseUIViewController {
                     if let user=result.value {
                         print("login success: \(user)")
                         appDelegate.setupUIForLoginSuccess()
-
-                        if appDelegate.incrementalDataLoadMode {
-                            NSLog("DEVELOPMENT SERVER: don't load data at login for development service!")
-                            return
-                        }
-                        
-                        // Update the database with the current user info
-                        appDelegate.API?.getUserData() { (result) -> (Void) in
-                            if result.isSuccess {
-                                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                                let moc = appDelegate.managedObjectContext
-                                DatabaseUtils.updateEvents(moc, eventsJSON: result.value!)
-                            } else {
-                                print("Failed to get events for user. Error: \(result.error!)")
-                            }
-                        }
                     } else {
                         // This should not happen- we should not succeed without a user!
                         print("Fatal error: No user returned!")
