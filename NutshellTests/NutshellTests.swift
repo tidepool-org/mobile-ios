@@ -23,8 +23,8 @@ class NutshellTests: XCTestCase {
     var apiConnector: APIConnector = APIConnector()
     var userid: String = ""
     
-    var email: String = "test username goes here!"
-    var pass: String = "test password goes here!"
+    var email: String = "testaccount+duffliteA@tidepool.org"
+    var pass: String = "testaccount+duffliteA"
     var server: String = "Production"
 
     override func setUp() {

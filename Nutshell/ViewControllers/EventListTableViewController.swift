@@ -139,7 +139,7 @@ class EventListTableViewController: BaseUITableViewController {
         
         // Get all Food and Activity events, chronologically; this will result in an unsorted dictionary of NutEvents.
         do {
-            let nutEvents = try DatabaseUtils.getAllNutEvents()
+            let nutEvents = try DatabaseUtils.getNutEvents()
             for event in nutEvents {
                 print("Event type: \(event.type), time: \(event.time), title: \(event.title), notes: \(event.notes)")
                 addNewEvent(event)

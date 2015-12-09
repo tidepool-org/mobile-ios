@@ -84,6 +84,7 @@ class NutEvent {
             me.modifiedTime = now
             // TODO: Determine policy for local id creation!
             me.id = NSUUID().UUIDString
+            me.userid = NutDataController.controller().currentUserId // critical!
             moc.insertObject(me)
             if DatabaseUtils.databaseSave(moc) {
                 return me

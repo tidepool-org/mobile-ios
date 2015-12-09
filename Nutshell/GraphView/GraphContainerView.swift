@@ -108,10 +108,7 @@ class GraphContainerView: UIView {
             let boundsTimeIntervalFromCenter = graphViewTimeInterval * Double(graphCellsInCollection)/2.0
             let graphCollectStartTime = graphCenterTime.dateByAddingTimeInterval(-boundsTimeIntervalFromCenter)
             let graphCollectEndTime = graphCenterTime.dateByAddingTimeInterval(boundsTimeIntervalFromCenter)
-            let moc = NutDataController.controller().mocForTidepoolEvents()!
-            
-            let events = try DatabaseUtils.getEvents(moc,
-                fromTime: graphCollectStartTime, toTime: graphCollectEndTime, objectTypes: ["basal", "bolus"])
+            let events = try DatabaseUtils.getTidepoolEvents(graphCollectStartTime, toTime: graphCollectEndTime, objectTypes: ["basal", "bolus"])
             
             NSLog("\(events.count) basal and bolus events fetched to figure max values")
             maxBasal = 0.0

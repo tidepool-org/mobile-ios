@@ -18,10 +18,10 @@ class User: NSManagedObject {
             me.userid = json["userid"].string
             me.username = json["username"].string
             me.fullName = json["fullName"].string
+            me.token = json["token"].string
             
             return me
         }
-        
         return nil
     }
 }

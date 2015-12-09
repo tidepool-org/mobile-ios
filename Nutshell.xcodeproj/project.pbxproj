@@ -152,6 +152,7 @@
 		486F5E6E1BA24C5C00BA2A57 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */; };
 		486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
 		489F3C501BB0AE1D00C95FDC /* NutMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */; };
+		48A150561C18E0A900ED800B /* Nutshell.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */; };
 		48B127941BC4445500061483 /* NutEventItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127931BC4445500061483 /* NutEventItem.swift */; };
 		48B127951BC4445800061483 /* NutEventItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127931BC4445500061483 /* NutEventItem.swift */; };
 		48B127971BC4447100061483 /* NutWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127961BC4447100061483 /* NutWorkout.swift */; };
@@ -300,6 +301,7 @@
 		486F5E751BA35CD800BA2A57 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		486F5E771BA3891600BA2A57 /* NutUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutUtils.swift; path = "Utilities and Extensions/NutUtils.swift"; sourceTree = "<group>"; };
 		489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutMeal.swift; path = DataModel/NutMeal.swift; sourceTree = "<group>"; };
+		48A150551C18E0A200ED800B /* Nutshell_v4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v4.xcdatamodel; sourceTree = "<group>"; };
 		48B127931BC4445500061483 /* NutEventItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutEventItem.swift; path = DataModel/NutEventItem.swift; sourceTree = "<group>"; };
 		48B127961BC4447100061483 /* NutWorkout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutWorkout.swift; path = DataModel/NutWorkout.swift; sourceTree = "<group>"; };
 		48B127A11BC444D300061483 /* GraphViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphViews.swift; path = GraphView/GraphViews.swift; sourceTree = "<group>"; };
@@ -1016,6 +1018,7 @@
 				48FB1E4E1C17C38600C89F8E /* NutshellDataController.swift in Sources */,
 				4854202C1BC44D290020CFE1 /* EventItem.swift in Sources */,
 				0334CA321BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,
+				48A150561C18E0A900ED800B /* Nutshell.xcdatamodeld in Sources */,
 				486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */,
 				485420281BC44D290020CFE1 /* Meal.swift in Sources */,
 				485420241BC44D290020CFE1 /* Workout.swift in Sources */,
@@ -1248,10 +1251,11 @@
 		4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				48A150551C18E0A200ED800B /* Nutshell_v4.xcdatamodel */,
 				483475B11BE9CE2E00EE9106 /* Nutshell_v2.xcdatamodel */,
 				4859FCC01B9A4DE4000C1269 /* Nutshell.xcdatamodel */,
 			);
-			currentVersion = 483475B11BE9CE2E00EE9106 /* Nutshell_v2.xcdatamodel */;
+			currentVersion = 48A150551C18E0A200ED800B /* Nutshell_v4.xcdatamodel */;
 			path = Nutshell.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

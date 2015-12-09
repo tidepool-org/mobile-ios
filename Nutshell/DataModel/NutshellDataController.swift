@@ -125,8 +125,14 @@ class NutDataController
 
     // no instances allowed..
     private init() {
+        self.runningUnitTests = false
+        if let _ = NSClassFromString("XCTest") {
+            self.runningUnitTests = true
+            NSLog("Detected running unit tests!")
+        }
     }
-    
+    private var runningUnitTests: Bool
+
     private var _managedObjectModel: NSManagedObjectModel?
     private var managedObjectModel: NSManagedObjectModel {
         get {
@@ -162,10 +168,17 @@ class NutDataController
 //                    NSLog("No user id path at persistent store time!")
 //                    abort()
 //                }
-                url = url.URLByAppendingPathComponent("SingleViewCoreData.sqlite")
+                if self.runningUnitTests {
+                    // NOTE: if we are running unit tests, the store objects will be incompatible!
+                    url = url.URLByAppendingPathComponent("TestNutshellDB.sqlite")
+                } else {
+                    url = url.URLByAppendingPathComponent("SingleViewCoreData.sqlite")
+                }
                 let failureReason = "There was an error creating or loading the application's saved data."
                 let pscOptions = [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true]
                 do {
+                    NSLog("Store url is \(url)")
+                    // TODO: use NSInMemoryStoreType for test databases!
                     try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: pscOptions)
                 } catch {
                     // Report any error we got.
