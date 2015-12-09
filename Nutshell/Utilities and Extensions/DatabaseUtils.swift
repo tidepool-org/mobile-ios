@@ -60,47 +60,6 @@ class DatabaseUtils {
         }
     }
 
-    class func getUser(moc: NSManagedObjectContext) -> User? {
-        let request = NSFetchRequest(entityName: "User")
-        do {
-            if let results = try moc.executeFetchRequest(request) as? [User] {
-                return results[0]
-            }
-            return  nil
-        } catch let error as NSError {
-            print("Error getting user: \(error)")
-            return nil
-        }
-    }
-    
-    class func updateUser(currentUser: User?, newUser: User?) {
-        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-        let moc = ad.managedObjectContext
-        // Remove existing user if passed in
-        if let currentUser = currentUser {
-            let request = NSFetchRequest(entityName: "User")
-            request.predicate = NSPredicate(format: "userid==%@", currentUser.userid!)
-            do {
-                let results = try moc.executeFetchRequest(request) as! [User]
-                for result in results {
-                    moc.deleteObject(result)
-                }
-            } catch let error as NSError {
-                print("Failed to remove existing user: \(currentUser.userid) error: \(error)")
-            }
-        }
-
-        if let newUser = newUser {
-            moc.insertObject(newUser)
-        }
-        
-        // Save the database
-        do {
-            try moc.save()
-        } catch let error as NSError {
-            print("Failed to save MOC for user: \(error)")
-        }
-    }
 
     // MARK: - Methods to cache read-only data from service
 
@@ -152,12 +111,11 @@ class DatabaseUtils {
             if appDelegate.serviceAvailable() {
                 // TODO: if fetch fails, should we wait less time before retrying? 
                 serverBlocks[bucket] = now
-                let moc = appDelegate.managedObjectContext
                 let startTimeIsoDateStr = DatabaseUtils.bucketNumberToIsoDateString(bucket)
                 let endTimeIsoDateStr = DatabaseUtils.bucketNumberToIsoDateString(bucket+1)
                 appDelegate.API?.getReadOnlyUserData(startTimeIsoDateStr, endDate:endTimeIsoDateStr, completion: { (result) -> (Void) in
                     if result.isSuccess {
-                        DatabaseUtils.updateEvents(moc, eventsJSON: result.value!)
+                        DatabaseUtils.updateEvents(NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: result.value!)
                     } else {
                         print("Failed to get events in range for user. Error: \(result.error!)")
                     }
@@ -245,7 +203,8 @@ class DatabaseUtils {
 //    }
 
     // TODO: This will need to be reworked to sync data from the service when the service supports meal and workout events.
-    class func getAllNutEvents(moc: NSManagedObjectContext) throws -> [EventItem] {
+    class func getAllNutEvents() throws -> [EventItem] {
+        let moc = NutDataController.controller().mocForNutEvents()!
         let request = NSFetchRequest(entityName: "EventItem")
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
         return try moc.executeFetchRequest(request) as! [EventItem]
@@ -269,8 +228,9 @@ class DatabaseUtils {
 //        return try moc.executeFetchRequest(request) as! [Wizard]
 //    }
 
-    class func deleteAllNutEvents(moc: NSManagedObjectContext) {
+    class func deleteAllNutEvents() {
         // TODO: Note this is currently only used for testing!
+        let moc = NutDataController.controller().mocForNutEvents()!
         do {
             let request = NSFetchRequest(entityName: "Meal")
             let myList = try moc.executeFetchRequest(request)

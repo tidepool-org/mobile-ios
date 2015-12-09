@@ -15,12 +15,25 @@
 
 import XCTest
 @testable import Nutshell
+import Alamofire
 
 class NutshellTests: XCTestCase {
+
+    // Initial API connection and note used throughout testing
+    var apiConnector: APIConnector = APIConnector()
+    var userid: String = ""
     
+    var email: String = "test username goes here!"
+    var pass: String = "test password goes here!"
+    var server: String = "Production"
+
     override func setUp() {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        // Initialize database by referencing username. This must be done before using the APIConnector!
+        let _ = NutDataController.controller().currentUserName
+        APIConnector.currentService = server
+        apiConnector = APIConnector()
     }
     
     override func tearDown() {
@@ -28,9 +41,37 @@ class NutshellTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
+    func testLoginOut() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+        let expectation = expectationWithDescription("Login successful")
+        if email == "test username goes here!" {
+            XCTFail("Fatal error: please edit NutshellTests.swift and add a test account!")
+        }
+        apiConnector.login(email,
+            password: pass, remember: false,
+            completion: { (result:(Alamofire.Result<User>)) -> (Void) in
+                print("Login result: \(result)")
+                if ( result.isSuccess ) {
+                    if let user=result.value {
+                        print("login success: \(user)")
+                        expectation.fulfill()
+                        //appDelegate.setupUIForLoginSuccess()
+                    } else {
+                        // This should not happen- we should not succeed without a user!
+                        XCTFail("Fatal error: No user returned!")
+                    }
+                } else {
+                    var errorCode = ""
+                    if let error = result.error as? NSError {
+                        errorCode = String(error.code)
+                    }
+                    XCTFail("login failed! Error: " + errorCode + result.error.debugDescription)
+                }
+        })
+        // Wait 5.0 seconds until expectation has been fulfilled. If not, fail.
+        waitForExpectationsWithTimeout(5.0, handler: nil)
+
     }
     
     func testPerformanceExample() {

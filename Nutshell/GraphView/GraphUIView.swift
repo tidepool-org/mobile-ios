@@ -212,15 +212,15 @@ class GraphUIView: UIView {
         wizardData = []
         mealData = []
         workoutData = []
-        
-        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-        do {
-            // we actually need to finish drawing events that end slightly before our start time, and start drawing events that happen slightly after our timeframe so that this graph will overlap a graph of the following time chunk without discontinuities.
-            let earlyStartTime = startTime.dateByAddingTimeInterval(-graphViews.timeExtensionForDataFetch)
-            let lateEndTime = endTime.dateByAddingTimeInterval(graphViews.timeExtensionForDataFetch)
 
-            let events = try DatabaseUtils.getEvents(ad.managedObjectContext,
-            fromTime: earlyStartTime, toTime: lateEndTime, objectTypes: ["smbg", "bolus", "cbg", "wizard", "meal", "workout"])
+        // we actually need to finish drawing events that end slightly before our start time, and start drawing events that happen slightly after our timeframe so that this graph will overlap a graph of the following time chunk without discontinuities.
+        let earlyStartTime = startTime.dateByAddingTimeInterval(-graphViews.timeExtensionForDataFetch)
+        let lateEndTime = endTime.dateByAddingTimeInterval(graphViews.timeExtensionForDataFetch)
+        
+        do {
+            let moc = NutDataController.controller().mocForTidepoolEvents()!
+            let events = try DatabaseUtils.getEvents(moc,
+            fromTime: earlyStartTime, toTime: lateEndTime, objectTypes: ["smbg", "bolus", "cbg", "wizard"])
             
             print("\(events.count) events")
             for event in events {
@@ -264,7 +264,8 @@ class GraphUIView: UIView {
         // since basal events have a duration, use a different query to start earlier in time
         do {
             let earlyStartTime = startTime.dateByAddingTimeInterval(-60*60*12)
-            let events = try DatabaseUtils.getEvents(ad.managedObjectContext,
+            let moc = NutDataController.controller().mocForTidepoolEvents()!
+            let events = try DatabaseUtils.getEvents(moc,
                 fromTime: earlyStartTime, toTime: endTime, objectTypes: ["basal"])
             
             print("\(events.count) events")
@@ -277,6 +278,36 @@ class GraphUIView: UIView {
                             addBasalEvent(basalEvent, deltaTime: deltaTime)
                         }
                     default:
+                        break
+                    }
+                }
+            }
+        } catch let error as NSError {
+            print("Error: \(error)")
+        }
+
+        // since meal events may be in a different store, make a separate call
+        // TODO: clean this up, it is too tightly coupled!
+        do {
+            let moc = NutDataController.controller().mocForNutEvents()!
+            let events = try DatabaseUtils.getEvents(moc,
+                fromTime: earlyStartTime, toTime: lateEndTime, objectTypes: ["meal", "workout"])
+            
+            print("\(events.count) events")
+            for event in events {
+                if let eventTime = event.time {
+                    let deltaTime = eventTime.timeIntervalSinceDate(startTime)
+                    switch event.type as! String {
+                    case "meal":
+                        if let mealEvent = event as? Meal {
+                            let isMainEvent = mealEvent.time == timeOfMainEvent
+                            mealData.append((deltaTime, mainEvent: isMainEvent))
+                        }
+                    case "workout":
+                        if let workoutEvent = event as? Workout {
+                            addWorkoutEvent(workoutEvent, deltaTime: deltaTime)
+                        }
+                    default: print("Ignoring event of type: \(event.type)")
                         break
                     }
                 }

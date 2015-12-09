@@ -564,16 +564,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             return
         }
 
-        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-        let moc = ad.managedObjectContext
         // This is a good place to splice in demo and test data. For now, entering "demo" as the title will result in us adding a set of demo events to the model, and "delete" will delete all food events.
         if titleTextField.text!.localizedCaseInsensitiveCompare("demo") == NSComparisonResult.OrderedSame {
-            DatabaseUtils.deleteAllNutEvents(moc)
+            DatabaseUtils.deleteAllNutEvents()
             addDemoData()
             self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
             return
         } else if titleTextField.text!.localizedCaseInsensitiveCompare("nodemo") == NSComparisonResult.OrderedSame {
-            DatabaseUtils.deleteAllNutEvents(moc)
+            DatabaseUtils.deleteAllNutEvents()
             self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
             return
         }
@@ -790,8 +788,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             we.modifiedTime = now
         }
         
-        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-        let moc = ad.managedObjectContext
+        let moc = NutDataController.controller().mocForNutEvents()!
         if let entityDescription = NSEntityDescription.entityForName("Meal", inManagedObjectContext: moc) {
             for event in demoMeals {
                 let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal

@@ -37,9 +37,9 @@ class EventListTableViewController: BaseUITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
 
         // Add a notification for when the database changes
-        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
+        let moc = NutDataController.controller().mocForNutEvents()
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: ad.managedObjectContext)
+        notificationCenter.addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: moc)
         notificationCenter.addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
     }
 
@@ -138,10 +138,8 @@ class EventListTableViewController: BaseUITableViewController {
         filterString = ""
         
         // Get all Food and Activity events, chronologically; this will result in an unsorted dictionary of NutEvents.
-        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-
         do {
-            let nutEvents = try DatabaseUtils.getAllNutEvents(ad.managedObjectContext)
+            let nutEvents = try DatabaseUtils.getAllNutEvents()
             for event in nutEvents {
                 print("Event type: \(event.type), time: \(event.time), title: \(event.title), notes: \(event.notes)")
                 addNewEvent(event)

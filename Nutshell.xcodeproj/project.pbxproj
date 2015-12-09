@@ -185,6 +185,8 @@
 		48ED0D411BAF22CC009D0D6F /* addAnimation-06.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D3B1BAF22CC009D0D6F /* addAnimation-06.png */; };
 		48EDC2C61BD6B403003049D9 /* EventAddOrEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EDC2C51BD6B403003049D9 /* EventAddOrEditViewController.swift */; };
 		48EDC2C91BD99141003049D9 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */; };
+		48FB1E4D1C17C38600C89F8E /* NutshellDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */; };
+		48FB1E4E1C17C38600C89F8E /* NutshellDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */; };
 		949A33B350C643B74EB54D43 /* Pods_Nutshell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -304,6 +306,7 @@
 		48B127A41BC444FE00061483 /* applejuicedemopic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = applejuicedemopic.png; path = Images/applejuicedemopic.png; sourceTree = "<group>"; };
 		48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ThreeTacosDemoPic.png; path = Images/ThreeTacosDemoPic.png; sourceTree = "<group>"; };
 		48B127B01BC4466E00061483 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseUtils.swift; path = "Utilities and Extensions/DatabaseUtils.swift"; sourceTree = "<group>"; };
+		48BA1EA41C18865100C1B71C /* Data Model.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Data Model.txt"; path = "Manual Test Cases/Data Model.txt"; sourceTree = "<group>"; };
 		48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
 		48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutShellUIViewWithHighlight.swift; path = Resources/NutShellUIViewWithHighlight.swift; sourceTree = "<group>"; };
 		48D056961BDFDD20009D1591 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -319,6 +322,7 @@
 		48ED0D3B1BAF22CC009D0D6F /* addAnimation-06.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-06.png"; path = "Images/addAnimation/addAnimation-06.png"; sourceTree = "<group>"; };
 		48EDC2C51BD6B403003049D9 /* EventAddOrEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventAddOrEditViewController.swift; path = ViewControllers/EventAddOrEditViewController.swift; sourceTree = "<group>"; };
 		48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
+		48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutshellDataController.swift; path = DataModel/NutshellDataController.swift; sourceTree = "<group>"; };
 		5A3109656497A8086C86BD31 /* Pods_NutshellTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NutshellTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		691EA93AF2D5DC902113C37D /* Pods-Nutshell.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.debug.xcconfig"; sourceTree = "<group>"; };
 		A08B5E3A2659E0859F53527E /* Pods-Nutshell.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.release.xcconfig"; sourceTree = "<group>"; };
@@ -510,6 +514,7 @@
 		4859FCCF1B9A4DE5000C1269 /* NutshellTests */ = {
 			isa = PBXGroup;
 			children = (
+				48BA1EA31C1885DE00C1B71C /* Manual Test Cases */,
 				4859FCD01B9A4DE5000C1269 /* NutshellTests.swift */,
 				4859FCD21B9A4DE5000C1269 /* Info.plist */,
 			);
@@ -576,6 +581,7 @@
 				48B127931BC4445500061483 /* NutEventItem.swift */,
 				489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */,
 				48B127961BC4447100061483 /* NutWorkout.swift */,
+				48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */,
 			);
 			name = DataModel;
 			sourceTree = "<group>";
@@ -589,6 +595,14 @@
 				486F5E771BA3891600BA2A57 /* NutUtils.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		48BA1EA31C1885DE00C1B71C /* Manual Test Cases */ = {
+			isa = PBXGroup;
+			children = (
+				48BA1EA41C18865100C1B71C /* Data Model.txt */,
+			);
+			name = "Manual Test Cases";
 			sourceTree = "<group>";
 		};
 		48EC32341BA7C5F400A75103 /* Graph View */ = {
@@ -933,6 +947,7 @@
 				0334CA5B1BA8DDFC00013096 /* Prime.swift in Sources */,
 				48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */,
 				4851C6921BA6281800F8E0EE /* NutshellUIView.swift in Sources */,
+				48FB1E4D1C17C38600C89F8E /* NutshellDataController.swift in Sources */,
 				4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */,
 				48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */,
 				4854202B1BC44D290020CFE1 /* EventItem.swift in Sources */,
@@ -998,6 +1013,7 @@
 				0334CA2C1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */,
 				0334CA8F1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift in Sources */,
 				0334CA891BA8DDFC00013096 /* User+CoreDataProperties.swift in Sources */,
+				48FB1E4E1C17C38600C89F8E /* NutshellDataController.swift in Sources */,
 				4854202C1BC44D290020CFE1 /* EventItem.swift in Sources */,
 				0334CA321BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,
 				486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */,

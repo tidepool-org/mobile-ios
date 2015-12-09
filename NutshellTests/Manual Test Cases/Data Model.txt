@@ -1,0 +1,18 @@
+Test Cases for Data Model
+
+SUPPORTS MULTIPLE USERS:
+TEST 1:
+- Log in as user A.
+- Add a meal event with time of known user A glucose/insulin log events
+- View meal event:
+    -> Verify should see user A's data.
+- Log out. Log in as user B.
+    -> Verify switch did not take more than 5 seconds.
+    -> Verify user A meal event is not present.
+- Create user B meal event with time of known user B data.
+- View meal event:
+    -> Verify should see user B's data.
+- Create user B meal event with time of known user A (!) data.
+- View meal event:
+    -> Verify should NOT see user A's data.
+TECH NOTES: User meal events are stored in the same database but tagged with current user id from service; the application should only display those meal events for the current user. Other user tidepool data is loaded into a database that is reset when the application switches users; only data for the current user should be seen.

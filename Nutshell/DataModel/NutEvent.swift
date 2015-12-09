@@ -68,8 +68,7 @@ class NutEvent {
     }
     
     class func createMealEvent(title: String, notes: String, location: String, photo: String, photo2: String, photo3: String, time: NSDate) -> EventItem? {
-        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-        let moc = ad.managedObjectContext
+        let moc = NutDataController.controller().mocForNutEvents()!
         if let entityDescription = NSEntityDescription.entityForName("Meal", inManagedObjectContext: moc) {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal
             me.title = title

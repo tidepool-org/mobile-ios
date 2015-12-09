@@ -24,33 +24,6 @@ import CoreData
 */
 
 class APIConnector {
-    // MARK: Properties
-    
-    
-    private var _currentUser: User?
-    var currentUser: User? {
-        get {
-            if _currentUser == nil {
-                let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-                if let user = DatabaseUtils.getUser(ad.managedObjectContext) {
-                    _currentUser = user
-                }
-            }
-            return _currentUser
-        }
-        set(newUser) {
-            if newUser != _currentUser {
-                DatabaseUtils.updateUser(_currentUser, newUser: newUser)
-                _currentUser = newUser
-                if newUser != nil {
-                    NSLog("Set currentUser, name: \(newUser!.username), id: \(newUser!.userid)")
-                } else {
-                    NSLog("Cleared currentUser!")
-                }
-            }
-        }
-    }
-    
     // MARK: - Constants
     
     static let kSessionTokenDefaultKey = "SToken"
@@ -62,6 +35,7 @@ class APIConnector {
     static let kNoSessionTokenErrorCode = -1
     
     // Session token, acquired on login and saved in NSUserDefaults
+    // TODO: save in database?
     private var _rememberToken = true
     private var _sessionToken: String?
     var sessionToken: String? {
@@ -180,18 +154,19 @@ class APIConnector {
                 let json = JSON(result.value!)
                 
                 // Create the User object
-                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                if let user = User.fromJSON(json, moc: appDelegate.managedObjectContext) {
-                    self.currentUser = user
+                // TODO: Should this call be made in NutshellDataController?
+                let moc = NutDataController.controller().mocForCurrentUser()
+                if let user = User.fromJSON(json, moc: moc) {
+                    NutDataController.controller().loginUser(user)
                     completion(Result.Success(user))
                 } else {
-                    self.currentUser = nil
+                    NutDataController.controller().logoutUser()
                     completion(Result.Failure(nil, NSError(domain: APIConnector.kNutshellErrorDomain,
                         code: -1,
                         userInfo: ["description":"Could not create user from JSON", "result":result.value!])))
                 }
             } else {
-                self.currentUser = nil
+                NutDataController.controller().logoutUser()
                 completion(Result.Failure(nil, result.error!))
             }
         }
@@ -200,9 +175,7 @@ class APIConnector {
     func logout(completion: () -> (Void)) {
         // Clear our session token and remove entries from the db
         self.sessionToken = nil
-        currentUser = nil
-        let ad = UIApplication.sharedApplication().delegate as! AppDelegate!
-        DatabaseUtils.clearDatabase(ad.managedObjectContext)
+        NutDataController.controller().logoutUser()
         completion()
     }
     
@@ -210,7 +183,7 @@ class APIConnector {
         
         let endpoint = "/auth/login"
         
-        if self.sessionToken == nil || self.currentUser == nil {
+        if self.sessionToken == nil || NutDataController.controller().currentUserId == nil {
             // We don't have a session token to refresh.
             completion(succeeded: false)
             return
@@ -240,7 +213,7 @@ class APIConnector {
      */
     func getUserData(completion: (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user data
-        let endpoint = "data/" + currentUser!.userid!;
+        let endpoint = "data/" + NutDataController.controller().currentUserId!;
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         sendRequest(Method.GET, endpoint: endpoint).responseJSON { (request, response, result) -> Void in
@@ -258,12 +231,10 @@ class APIConnector {
     func getReadOnlyUserData(startDate: String, endDate: String,completion: (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user data
         // TODO: centralize define of read-only events!
-        let endpoint = "data/" + currentUser!.userid! //+ "?type=smbg,bolus,cbg,wizard,basal&startdate=" + startDate + "&enddate=" + endDate
+        let endpoint = "data/" + NutDataController.controller().currentUserId!
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         // TODO: Alamofire isn't escaping the periods, but service appears to expect this... right now I have Alamofire modified to do this.
         // TODO: If there is no data returned, I get a failure case with status code 200, and error FAILURE: Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.} ] Maybe an Alamofire issue?
-        //let escapedStart = startDate.stringByReplacingOccurrencesOfString(".", withString: "%2E")
-        //let escapedEnd = endDate.stringByReplacingOccurrencesOfString(".", withString: "%2E")
         sendRequest(Method.GET, endpoint: endpoint, parameters: ["type":"smbg,bolus,cbg,wizard,basal", "startDate": startDate, "endDate": endDate]).responseJSON { (request, response, result) -> Void in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if ( result.isSuccess ) {

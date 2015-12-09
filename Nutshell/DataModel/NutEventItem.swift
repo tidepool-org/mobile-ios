@@ -50,24 +50,25 @@ class NutEventItem {
         return false;
     }
     
+    // true if item changed and was successfully saved...
     func saveChanges() -> Bool {
-        var result = true
         if changed() {
             copyChanges()
-            let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-            let moc = ad.managedObjectContext
-            eventItem.modifiedTime = NSDate()
-            moc.refreshObject(eventItem, mergeChanges: true)
-            result = DatabaseUtils.databaseSave(moc)
+            if let moc = eventItem.managedObjectContext {
+                eventItem.modifiedTime = NSDate()
+                moc.refreshObject(eventItem, mergeChanges: true)
+                return DatabaseUtils.databaseSave(moc)
+            }
         }
-        return result
+        return false
     }
 
     func deleteItem() -> Bool {
-        let ad = UIApplication.sharedApplication().delegate as! AppDelegate
-        let moc = ad.managedObjectContext
-        moc.deleteObject(self.eventItem)
-        return DatabaseUtils.databaseSave(moc)
+        if let moc = eventItem.managedObjectContext {
+            moc.deleteObject(self.eventItem)
+            return DatabaseUtils.databaseSave(moc)
+        }
+        return false
     }
 
     //
