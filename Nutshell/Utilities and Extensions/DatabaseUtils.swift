@@ -14,39 +14,6 @@ public let NewBlockRangeLoadedNotification = "NewBlockRangeLoadedNotification"
 
 class DatabaseUtils {
     
-    /** Removes everything from the database. Do this on logout and / or after a successful login */
-    // TODO: add code to delete "meal" and "workout" items from the database once we upload them to the service so they are backed up.
-    class func clearDatabase(moc: NSManagedObjectContext) {
-        NSLog("***Clearing database!***")
-        moc.performBlock { () -> Void in
-            
-            let entities = ["Activity", "Alarm", "Basal", "BloodKetone", "Bolus", "Calibration",
-                "ContinuousGlucose", "Food", "GrabBag", "Note", "Prime", "ReservoirChange", "SelfMonitoringGlucose",
-                "Settings", "Status", "TimeChange", "Upload", "UrineKetone", "Wizard", "User"]
-            
-            var objectCount = 0
-            for entity in entities {
-                do {
-                    let request = NSFetchRequest(entityName: entity)
-                    let myList = try moc.executeFetchRequest(request)
-                    for obj: AnyObject in myList {
-                        moc.deleteObject(obj as! NSManagedObject)
-                        objectCount++
-                    }
-                } catch let error as NSError {
-                    print("Failed to delete \(entity) items: \(error)")
-                }
-            }
-            
-            do {
-                try moc.save()
-                NSLog("***Database cleared of \(objectCount) objects!***")
-            } catch let error as NSError {
-                NSLog("clearDatabase: Failed to save MOC: \(error)")
-            }
-        }
-    }
-
     class func databaseSave(moc: NSManagedObjectContext) -> Bool {
         // Save the database
         do {
@@ -60,12 +27,15 @@ class DatabaseUtils {
         }
     }
 
-
     // MARK: - Methods to cache read-only data from service
 
     // A sorted cache of server blocks we have fetched during the current application lifetime, along with the date of fetch...
     static var serverBlocks = [Int : NSDate]()
-
+    // TODO: look at moving this to NutshellDataController...
+    class func resetTidepoolEventLoader() {
+        DatabaseUtils.serverBlocks = [Int : NSDate]()
+    }
+ 
     class func dateToBucketNumber(date: NSDate) -> Int {
         let refSeconds = Int(date.timeIntervalSinceReferenceDate)
         let kBucketSeconds = 60*60*20 // 20 hour chunks
@@ -204,10 +174,12 @@ class DatabaseUtils {
         
         if let fromTime = fromTime, toTime = toTime {
             // Return only objects in the requested range for the current user!
-            request.predicate = NSPredicate(format: "(userid == %@) AND (time >= %@) AND (time <= %@)", userId, fromTime, toTime)
+            // TODO: remove nil option before shipping!
+            request.predicate = NSPredicate(format: "((userid == %@) OR (userid = nil)) AND (time >= %@) AND (time <= %@)", userId, fromTime, toTime)
         } else {
             // Return all nut events in the requested range for the current user!
-            request.predicate = NSPredicate(format: "(userid == %@)", userId)
+            // TODO: remove nil option before shipping!
+            request.predicate = NSPredicate(format: "(userid == %@) OR (userid = nil)", userId)
         }
         
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
@@ -215,13 +187,14 @@ class DatabaseUtils {
     }
 
     // TEST ONLY!
+    // TODO: Move to NutshellTests!
     class func deleteAllNutEvents() {
         // TODO: Note this is currently only used for testing!
         let moc = NutDataController.controller().mocForNutEvents()!
         do {
             let request = NSFetchRequest(entityName: "EventItem")
             let userId = NutDataController.controller().currentUserId!
-            request.predicate = NSPredicate(format: "(userid == %@)", userId)
+            request.predicate = NSPredicate(format: "(userid == %@) OR (userid = nil)", userId)
             let myList = try moc.executeFetchRequest(request)
             for obj: AnyObject in myList {
                 if let objId = obj.id as? String {

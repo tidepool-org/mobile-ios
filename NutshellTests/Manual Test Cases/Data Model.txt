@@ -7,7 +7,7 @@ TEST 1:
 - View meal event:
     -> Verify should see user A's data.
 - Log out. Log in as user B.
-    -> Verify switch did not take more than 5 seconds.
+    -> Verify logout did not take more than a second.
     -> Verify user A meal event is not present.
 - Create user B meal event with time of known user B data.
 - View meal event:
@@ -16,3 +16,15 @@ TEST 1:
 - View meal event:
     -> Verify should NOT see user A's data.
 TECH NOTES: User meal events are stored in the same database but tagged with current user id from service; the application should only display those meal events for the current user. Other user tidepool data is loaded into a database that is reset when the application switches users; only data for the current user should be seen.
+
+SUPPORTS FAST LOGOUT-LOGIN:
+TEST 1:
+- Log in as user A.
+- Add several meal events with time of many known user A glucose/insulin log events (create one, then "eat again", changing dates on all the new meal events)
+- View meal events, zooming out to force load lots of data
+- Log out.
+    -> Verify logout did not take more than a second.
+- Log back in quickly, same user.
+    -> Verify meal events are still present
+    -> Verify meal event detail view loads same data
+TECH NOTES: On logout all cached tidepool glucose/insulin data is purged. On login, it should be brought back in as the user looks at data.

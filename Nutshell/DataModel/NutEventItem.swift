@@ -56,6 +56,7 @@ class NutEventItem {
             copyChanges()
             if let moc = eventItem.managedObjectContext {
                 eventItem.modifiedTime = NSDate()
+                eventItem.userid = NutDataController.controller().currentUserId // Should already be set but can't hurt
                 moc.refreshObject(eventItem, mergeChanges: true)
                 return DatabaseUtils.databaseSave(moc)
             }
@@ -88,6 +89,10 @@ class NutEventItem {
             return true
         }
         if eventItem.time == nil || time != eventItem.time {
+            return true
+        }
+        if eventItem.userid == nil {
+            NSLog("Found nut event with no userId!")
             return true
         }
         return false

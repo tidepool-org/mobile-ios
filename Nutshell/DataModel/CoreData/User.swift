@@ -10,10 +10,11 @@ import Foundation
 import CoreData
 import SwiftyJSON
 
+
 class User: NSManagedObject {
     class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> User? {
         if let entityDescription = NSEntityDescription.entityForName("User", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! User
+            let me = User(entity: entityDescription, insertIntoManagedObjectContext: nil)
             
             me.userid = json["userid"].string
             me.username = json["username"].string

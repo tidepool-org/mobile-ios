@@ -123,6 +123,16 @@ class EventListTableViewController: BaseUITableViewController {
         var nutEvents = [String: NutEvent]()
 
         func addNewEvent(newEvent: EventItem) {
+            /// TODO: TEMP UPGRADE CODE, REMOVE BEFORE SHIPPING!
+            if newEvent.userid == nil {
+                newEvent.userid = NutDataController.controller().currentUserId
+                if let moc = newEvent.managedObjectContext {
+                    NSLog("NOTE: Updated nil userid to \(newEvent.userid)")
+                    moc.refreshObject(newEvent, mergeChanges: true)
+                    DatabaseUtils.databaseSave(moc)
+                }
+            }
+            /// TODO: TEMP UPGRADE CODE, REMOVE BEFORE SHIPPING!
             let newEventId = newEvent.nutEventIdString()
             if let existingNutEvent = nutEvents[newEventId] {
                 existingNutEvent.addEvent(newEvent)
@@ -141,7 +151,7 @@ class EventListTableViewController: BaseUITableViewController {
         do {
             let nutEvents = try DatabaseUtils.getNutEvents()
             for event in nutEvents {
-                print("Event type: \(event.type), time: \(event.time), title: \(event.title), notes: \(event.notes)")
+                print("Event type: \(event.type), time: \(event.time), title: \(event.title), notes: \(event.notes), userid: \(event.userid)")
                 addNewEvent(event)
             }
         } catch let error as NSError {

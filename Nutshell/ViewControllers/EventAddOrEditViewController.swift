@@ -732,6 +732,8 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     // MARK: - Test code!
     //
     
+    // TODO: Move to NutshellTests!
+    
     private func addDemoData() {
         
         let demoMeals = [
