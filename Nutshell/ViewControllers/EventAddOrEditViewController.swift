@@ -53,7 +53,6 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     
     private var eventTime = NSDate()
     private var pictureImageURLs: [String] = []
-    private var editingPictureItem: Int = 0
 
     //
     // MARK: - Base methods
@@ -110,7 +109,6 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 configurePhotos()
                 updateSaveButtonState()
             }
-            editingPictureItem = 0
         }
     }
 
@@ -408,8 +406,12 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             photoVC.photoURLs = pictureImageURLs
             photoVC.imageIndex = itemNum
             photoVC.editAllowed = true
-            editingPictureItem = itemNum
-            self.navigationController?.pushViewController(photoVC, animated: true)
+            if viewExistingEvent {
+                self.navigationController?.pushViewController(photoVC, animated: true)
+            } else {
+                photoVC.modalPresentation = true
+                self.presentViewController(photoVC, animated: true, completion: nil)
+            }
         }
     }
     

@@ -13,19 +13,30 @@ class ShowPhotoViewController: UIViewController {
     var editAllowed = false
     var photoURLs: [String] = []
     var imageIndex: Int = 0
+    var modalPresentation = false
     
     @IBOutlet weak var photoCollectionContainerView: NutshellUIView!
     @IBOutlet weak var pageControl: UIPageControl!
-    
+    @IBOutlet weak var headerForModalView: NutshellUIView!
+
     private var photoCollectionView: UICollectionView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // We use a custom back button so we can hide the photo to minimizing flashing. This tweaks the arrow positioning to match the iOS back arrow position. TODO: -> actually turned off right now!
-        self.navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsetsMake(0.0, -8.0, -1.0, 0.0)
-        if editAllowed {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonHandler:")
+        if !modalPresentation {
+            // Hide modal header when used as a nav view
+            for c in headerForModalView.constraints {
+                if c.firstAttribute == NSLayoutAttribute.Height {
+                    c.constant = 0.0
+                    break
+                }
+            }
+            // We use a custom back button so we can hide the photo to minimizing flashing. This tweaks the arrow positioning to match the iOS back arrow position. TODO: -> actually turned off right now!
+            self.navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsetsMake(0.0, -8.0, -1.0, 0.0)
+            if editAllowed {
+                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonHandler:")
+            }
         }
         configurePageControl()
     }

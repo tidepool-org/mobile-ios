@@ -966,7 +966,7 @@
         <!--Meal Photo-->
         <scene sceneID="AQK-D0-qC4">
             <objects>
-                <viewController storyboardIdentifier="ShowPhotoViewController" title="Meal Photo" id="PfN-dS-BM0" customClass="ShowPhotoViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ShowPhotoViewController" title="Meal Photo" modalPresentationStyle="currentContext" id="PfN-dS-BM0" customClass="ShowPhotoViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="E72-77-ccB"/>
                         <viewControllerLayoutGuide type="bottom" id="9Eg-ng-nHg"/>
@@ -975,11 +975,54 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VYf-c6-XQd" userLabel="ImageContainerView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k9o-aM-bCq" userLabel="HeaderView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                <subviews>
+                                    <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fue-7M-CfP">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <items>
+                                            <navigationItem title="Meal Photo" id="P0S-oj-7oj">
+                                                <barButtonItem key="leftBarButtonItem" image="backArrow" id="2d8-m2-PGC">
+                                                    <connections>
+                                                        <action selector="backButtonHandler:" destination="PfN-dS-BM0" id="BtA-Uv-cLj"/>
+                                                    </connections>
+                                                </barButtonItem>
+                                                <barButtonItem key="rightBarButtonItem" systemItem="trash" id="5YL-eU-zSN">
+                                                    <connections>
+                                                        <action selector="deleteButtonHandler:" destination="PfN-dS-BM0" id="jSN-Tv-j7n"/>
+                                                    </connections>
+                                                </barButtonItem>
+                                            </navigationItem>
+                                        </items>
+                                    </navigationBar>
+                                    <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VUj-yP-j4o" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="43" width="320" height="1"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="e84-zj-TaX"/>
+                                            <constraint firstAttribute="height" constant="1" id="qQm-13-okl"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="whiteBackground"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="VUj-yP-j4o" secondAttribute="trailing" id="Qau-N4-Kxn"/>
+                                    <constraint firstAttribute="height" constant="44" id="SE1-O0-oOt"/>
+                                    <constraint firstAttribute="bottom" secondItem="VUj-yP-j4o" secondAttribute="bottom" id="h9I-Q4-acZ"/>
+                                    <constraint firstItem="VUj-yP-j4o" firstAttribute="leading" secondItem="k9o-aM-bCq" secondAttribute="leading" id="hMX-1U-Phg"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VYf-c6-XQd" userLabel="PhotoCollectionContainer" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="108" width="320" height="460"/>
                                 <subviews>
                                     <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="H9s-Kb-o8V">
-                                        <rect key="frame" x="141" y="435" width="39" height="37"/>
+                                        <rect key="frame" x="141" y="395" width="39" height="37"/>
                                     </pageControl>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -992,12 +1035,15 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="VYf-c6-XQd" firstAttribute="top" secondItem="k9o-aM-bCq" secondAttribute="bottom" id="2Ib-ge-GTl"/>
                             <constraint firstItem="9Eg-ng-nHg" firstAttribute="top" secondItem="VYf-c6-XQd" secondAttribute="bottom" id="9FT-gv-I5O"/>
+                            <constraint firstItem="k9o-aM-bCq" firstAttribute="leading" secondItem="hOQ-Ib-k2q" secondAttribute="leading" id="AYo-YJ-SyN"/>
+                            <constraint firstItem="k9o-aM-bCq" firstAttribute="top" secondItem="E72-77-ccB" secondAttribute="bottom" id="AwD-ed-K4E"/>
                             <constraint firstAttribute="trailing" secondItem="VYf-c6-XQd" secondAttribute="trailing" id="TnZ-JX-9td"/>
-                            <constraint firstItem="VYf-c6-XQd" firstAttribute="top" secondItem="E72-77-ccB" secondAttribute="bottom" id="caf-yn-nvQ"/>
                             <constraint firstItem="VYf-c6-XQd" firstAttribute="leading" secondItem="hOQ-Ib-k2q" secondAttribute="leading" id="dOW-9q-N9j"/>
+                            <constraint firstAttribute="trailing" secondItem="k9o-aM-bCq" secondAttribute="trailing" id="lFm-C6-EpC"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Meal Photo" id="7I3-GC-bFg">
@@ -1007,9 +1053,11 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
+                        <outlet property="headerForModalView" destination="k9o-aM-bCq" id="pol-7F-4t8"/>
                         <outlet property="pageControl" destination="H9s-Kb-o8V" id="rzh-z6-uQ2"/>
                         <outlet property="photoCollectionContainerView" destination="VYf-c6-XQd" id="9g5-Lg-8Dp"/>
                         <segue destination="56N-PU-Tx1" kind="unwind" identifier="UnwindSegueFromShowPhoto" unwindAction="done:" id="4je-C3-qVV"/>
