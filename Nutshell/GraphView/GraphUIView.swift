@@ -26,7 +26,7 @@ class GraphUIView: UIView {
     ///   The time span covered by the graph
     
     init(frame: CGRect, centerTime: NSDate, timeIntervalForView: NSTimeInterval, timeOfMainEvent: NSDate) {
-
+        NSLog("GraphUIView init frame \(frame)")
         self.centerTime = centerTime
         self.startTime = centerTime.dateByAddingTimeInterval(-timeIntervalForView/2)
         self.endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
@@ -46,15 +46,29 @@ class GraphUIView: UIView {
     
     func configure(maxBolus: CGFloat = 0.0, maxBasal: CGFloat = 0.0) {
         
+        NSLog("GraphUIView configure maxBolus \(maxBolus), maxBasal \(maxBasal)")
+        self.maxBasal = maxBasal
+        self.maxBolus = maxBolus
         loadDataForView()
-        graphData(maxBolus, maxBasal: maxBasal)
+        graphData()
+    }
+    
+    func updateViewSize(newSize: CGSize) {
+        // Quick way to update when data haven't changed...
+        NSLog("GraphUIView current size: \(self.bounds.size), new size \(newSize)")
+        self.graphViews.updateViewSize(newSize)
+        let views = self.subviews
+        for view in views {
+            view.removeFromSuperview()
+        }
+        graphData()
     }
     
     /// Check for data points in graph
     ///
     /// A graph with no data points will consist of the graph background (labeled axes) and any nut events in the timeframe
     ///
-    /// - returns: True if there were any cpg, bolus, basal or smgb events in the time frame of the graph
+    /// - returns: True if there were any cbg, bolus, basal or smgb events in the time frame of the graph
     
     func dataFound() -> Bool {
         return cbgData.count != 0 || bolusData.count != 0 || basalData.count != 0 || smbgData.count != 0 || wizardData.count != 0
@@ -80,6 +94,8 @@ class GraphUIView: UIView {
     
     private var graphViews: GraphViews
     private var graphXAxisHeader: UIImageView?
+    private var maxBolus: CGFloat = 0.0
+    private var maxBasal: CGFloat = 0.0
     private var smbgData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var cbgData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
@@ -92,7 +108,7 @@ class GraphUIView: UIView {
     // MARK: - Private funcs
     //
 
-    private func graphData(maxBolus: CGFloat, maxBasal: CGFloat) {
+    private func graphData() {
         // At this point data should be loaded, and we just need to plot the data
         // First generate the graph background
         
@@ -240,15 +256,6 @@ class GraphUIView: UIView {
                     case "cbg":
                         if let cbgEvent = event as? ContinuousGlucose {
                             addCbgEvent(cbgEvent, deltaTime: deltaTime)
-                        }
-                    case "meal":
-                        if let mealEvent = event as? Meal {
-                            let isMainEvent = mealEvent.time == timeOfMainEvent
-                            mealData.append((deltaTime, mainEvent: isMainEvent))
-                        }
-                    case "workout":
-                        if let workoutEvent = event as? Workout {
-                            addWorkoutEvent(workoutEvent, deltaTime: deltaTime)
                         }
                     default: print("Ignoring event of type: \(event.type)")
                         break

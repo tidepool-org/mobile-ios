@@ -111,21 +111,22 @@ public class GraphViews {
     // These are based on an origin on the lower left. For plotting, the y value needs to be adjusted for origin on the upper left.
     private var viewSize: CGSize
     private var timeIntervalForView: NSTimeInterval
-    private var viewPixelsPerSec: CGFloat
     private var startTime: NSDate
+    // 
+    private var viewPixelsPerSec: CGFloat = 0.0
     // Glucose readings go from 340(?) down to 0 in a section just below the header
-    private var yTopOfGlucose: CGFloat
-    private var yBottomOfGlucose: CGFloat
-    private var yPixelsGlucose: CGFloat
+    private var yTopOfGlucose: CGFloat = 0.0
+    private var yBottomOfGlucose: CGFloat = 0.0
+    private var yPixelsGlucose: CGFloat = 0.0
     // Wizard readings overlap the bottom part of the glucose readings
-    private var yBottomOfWizard: CGFloat
+    private var yBottomOfWizard: CGFloat = 0.0
     // Bolus and Basal readings go in a section below glucose
-    private var yTopOfBolus: CGFloat
-    private var yBottomOfBolus: CGFloat
-    private var yPixelsBolus: CGFloat
-    private var yTopOfBasal: CGFloat
-    private var yBottomOfBasal: CGFloat
-    private var yPixelsBasal: CGFloat
+    private var yTopOfBolus: CGFloat = 0.0
+    private var yBottomOfBolus: CGFloat = 0.0
+    private var yPixelsBolus: CGFloat = 0.0
+    private var yTopOfBasal: CGFloat = 0.0
+    private var yBottomOfBasal: CGFloat = 0.0
+    private var yPixelsBasal: CGFloat = 0.0
     // Workout durations go in a section below Basal
     //private var yTopOfWorkout: CGFloat
     //private var yBottomOfWorkout: CGFloat
@@ -139,11 +140,26 @@ public class GraphViews {
         self.viewSize = viewSize
         self.timeIntervalForView = timeIntervalForView
         self.startTime = startTime
+        self.configureGraphParameters()
+    }
+    
+    func updateViewSize(newSize: CGSize) {
+        self.viewSize = newSize
+        self.configureGraphParameters()
+    }
+    
+    func updateTimeframe(timeIntervalForView: NSTimeInterval, startTime: NSDate) {
+        self.timeIntervalForView = timeIntervalForView
+        self.startTime = startTime
+        self.viewPixelsPerSec = viewSize.width/CGFloat(timeIntervalForView)        
+    }
+
+    private func configureGraphParameters() {
         self.viewPixelsPerSec = viewSize.width/CGFloat(timeIntervalForView)
         
         // calculate the extra time we need data fetched for at the end of the graph time span so we draw the beginnings of next graph items
         timeExtensionForDataFetch = NSTimeInterval(kLargestGraphItemWidth/viewPixelsPerSec)
-
+        
         // Tweak: if height is less than 320 pixels, let the wizard circles drift up into the low area of the blood glucose data since that should be clear
         let wizardHeight = viewSize.height < 320.0 ? 0.0 : kGraphWizardHeight
         
@@ -158,29 +174,18 @@ public class GraphViews {
         // Wizard data sits above the bolus readings, in a fixed space area, possibly overlapping the bottom of the glucose graph which should be empty of readings that low.
         // TODO: put wizard data on top of corresponding bolus data!
         self.yBottomOfWizard = self.yBottomOfGlucose + wizardHeight
-
+        
         // At the bottom are the bolus and basal readings
         self.yTopOfBolus = self.yBottomOfWizard + kGraphWizardBaseOffset
         self.yBottomOfBolus = viewSize.height
         self.yPixelsBolus = self.yBottomOfBolus - self.yTopOfBolus
-
+        
         // Basal values sit just below the bolus readings
         self.yTopOfBasal = self.yTopOfBolus
         self.yBottomOfBasal = self.yBottomOfBolus
         self.yPixelsBasal = self.yPixelsBolus
-
-        // Workout durations go in the bottom section
-        //self.yTopOfWorkout = yBottomOfBasal + kGraphBasalBaseOffset
-        //self.yBottomOfWorkout = self.yTopOfWorkout + floor(kGraphFractionForWorkout * graphHeight) - kGraphWorkoutBaseOffset
-        //self.yPixelsWorkout = self.yBottomOfWorkout - self.yTopOfWorkout
     }
     
-    func updateTimeframe(timeIntervalForView: NSTimeInterval, startTime: NSDate) {
-        self.timeIntervalForView = timeIntervalForView
-        self.startTime = startTime
-        self.viewPixelsPerSec = viewSize.width/CGFloat(timeIntervalForView)        
-    }
-
     func imageOfFixedGraphBackground() -> UIImage {
         UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
         drawFixedGraphBackground()

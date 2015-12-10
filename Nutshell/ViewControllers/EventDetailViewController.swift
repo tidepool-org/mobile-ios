@@ -17,7 +17,7 @@
 import UIKit
 import CoreData
 
-class EventDetailViewController: BaseUIViewController {
+class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegate {
     
     var eventItem: NutEventItem?
     var eventGroup: NutEvent?
@@ -512,13 +512,19 @@ class EventDetailViewController: BaseUIViewController {
         }
         graphContainerView = GraphContainerView.init(frame: graphLayerContainer.bounds)
         if let graphContainerView = graphContainerView, eventItem = eventItem {
+            graphContainerView.delegate = self
             graphLayerContainer.addSubview(graphContainerView)
             graphContainerView.configureGraphForEvent(eventItem)
             graphContainerView.reloadData()
             missingDataAdvisoryView.hidden = graphContainerView.containsData()
        }
     }
-        
+    
+    // GraphContainerViewDelegate
+    func containerCellUpdated(dataDetected: Bool) {
+        missingDataAdvisoryView.hidden = graphContainerView!.containsData()
+    }
+    
     override func viewDidLayoutSubviews() {
         //NSLog("EventDetailVC viewDidLayoutSubviews")
         if let graphContainerView = graphContainerView {

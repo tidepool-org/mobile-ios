@@ -20,33 +20,28 @@ class GraphCollectionCell: UICollectionViewCell {
     private var graphView: GraphUIView?
     var graphTime: NSDate?
     private var graphTimeInterval: NSTimeInterval?
-    private var graphZoomed: Bool = false
     
-    func configureCell(centerTime: NSDate, timeInterval: NSTimeInterval, mainEventTime: NSDate, maxBolus: CGFloat, maxBasal: CGFloat) -> Bool {
-        print("size at configure: \(self.frame.size)")
-
-        if (graphView != nil) {
-//            if (graphView!.frame.size != self.frame.size) || timeInterval != graphTimeInterval || centerTime != graphTime || graphZoomed {
-                graphView?.removeFromSuperview();
-                graphView = nil;
-                graphZoomed = false
-//            }
+    func updateViewSize() {
+        NSLog("GraphCollectionCell checkLayout frame \(self.frame.size)")
+        if let graphView = graphView {
+            graphView.updateViewSize(self.frame.size)
         }
+    }
+    
+    func configureCell(centerTime: NSDate, timeInterval: NSTimeInterval,                 mainEventTime: NSDate, maxBolus: CGFloat, maxBasal: CGFloat) -> Bool {
 
-        if (graphView == nil) {
-            graphView = GraphUIView.init(frame: self.bounds, centerTime: centerTime, timeIntervalForView: timeInterval, timeOfMainEvent: mainEventTime)
-            if let graphView = graphView {
-                graphTime = centerTime
-                graphTimeInterval = timeInterval
-                graphView.configure(maxBolus, maxBasal: maxBasal)
-                self.addSubview(graphView)
-                return graphView.dataFound()
-            } else {
-                return false
-            }
+        NSLog("GraphCollectionCell configure centerTime \(centerTime), timeInterval \(timeInterval), frame \(self.frame.size)")
+
+        graphView?.removeFromSuperview()
+        graphView = GraphUIView.init(frame: self.bounds, centerTime: centerTime, timeIntervalForView: timeInterval, timeOfMainEvent: mainEventTime)
+        if let graphView = graphView {
+            graphTime = centerTime
+            graphTimeInterval = timeInterval
+            graphView.configure(maxBolus, maxBasal: maxBasal)
+            self.addSubview(graphView)
+            return graphView.dataFound()
         } else {
-            print("skipping redo of graph at size: \(self.frame.size), time: \(graphTime)")
-            return graphView!.dataFound()
+            return false
         }
     }
     
