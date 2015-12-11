@@ -271,6 +271,10 @@ class LoginViewController: BaseUIViewController {
                 appDelegate.switchToServer(serverName)
             }))
         }
+        if let popoverController = actionSheet.popoverPresentationController {
+            popoverController.sourceView = self.view
+            popoverController.sourceRect = logInEntryContainer.bounds
+        }
         self.presentViewController(actionSheet, animated: true, completion: nil)
     }
 

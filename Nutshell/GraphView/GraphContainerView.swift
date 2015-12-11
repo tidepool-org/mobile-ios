@@ -69,7 +69,6 @@ class GraphContainerView: UIView {
         if let graphCollectionView = graphCollectionView {
             var size = self.cellSize
             
-            let graphLayout = UICollectionViewFlowLayout()
             if zoomIn {
                 size.width = size.width * 1.25  // 5/4
                 // Don't let the cell size get too huge!
@@ -85,16 +84,50 @@ class GraphContainerView: UIView {
                     return
                 }
             }
-            graphLayout.itemSize = size
-
             NSLog("Zoom from cell size: \(self.cellSize) to \(size)")
-            self.cellSize = size
+            self.cellSize = size //  new cell sizing
+
+            // Get current middle of view time offset, then convert back for the new content view size so the point in the middle of our graph view doesn't change
+
+            let contentOffsetToViewMiddle = graphCollectionView.contentOffset.x + (self.bounds.width)/2.0
+            let timeOffsetToViewMiddle = self.viewXOffsetToTimeOffset(contentOffsetToViewMiddle)
+            
+            // Figure backwards with new overall content view sizing for xOffset to the same time offset as before...
+            let newContentSizeWidth = size.width * CGFloat(graphCellsInCollection)
+            let newContentOffsetToViewMiddle = CGFloat(timeOffsetToViewMiddle / self.graphViewTimeInterval) * newContentSizeWidth
+            var targetOffsetX = newContentOffsetToViewMiddle - (self.bounds.width)/2.0
+            
+            // Don't let offset get below zero or less than a screen's width away from the right edge
+             if targetOffsetX < 0.0 {
+                targetOffsetX = 0.0
+            }
+            let maxOffsetX = newContentSizeWidth - self.bounds.width
+            if targetOffsetX > maxOffsetX {
+                targetOffsetX = maxOffsetX
+            }
+            let targetOffset = CGPoint(x: targetOffsetX, y: 0.0)
+            
+            let graphLayout = UICollectionViewFlowLayout()
+            graphLayout.itemSize = size
+            graphLayout.targetContentOffsetForProposedContentOffset(targetOffset)
             graphLayout.scrollDirection = UICollectionViewScrollDirection.Horizontal
             graphCollectionView.setCollectionViewLayout(graphLayout, animated: false)
+            NSLog("End content offset & size: \(graphCollectionView.contentOffset) & \(graphCollectionView.contentSize)")
             
             // Since we aren't changing the timeframe or time offset covered by each cell, we only need to have each visible cell redraw itself with its new sizing
             redrawData()
+            graphCollectionView.setContentOffset(targetOffset, animated: false)
         }
+    }
+    
+    func viewXOffsetToTimeOffset(viewXOffset: CGFloat) -> NSTimeInterval {
+        let viewWidth = graphCollectionView!.contentSize.width
+        return graphViewTimeInterval * NSTimeInterval(viewXOffset / viewWidth)
+    }
+    
+    func timeOffsetToViewXOffset(timeOffset: NSTimeInterval) -> CGFloat {
+        let viewWidth = graphCollectionView!.contentSize.width
+        return CGFloat(timeOffset / self.graphViewTimeInterval) * viewWidth
     }
     
     func centerGraphOnEvent(animated: Bool = false) {
