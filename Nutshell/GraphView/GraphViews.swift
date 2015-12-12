@@ -533,7 +533,7 @@ public class GraphViews {
         func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: NSNumber) {
 
             let rectLeft = floor(CGFloat(startTimeOffset) * viewPixelsPerSec)
-            let rectRight = floor(CGFloat(endTimeOffset) * viewPixelsPerSec)
+            let rectRight = ceil(CGFloat(endTimeOffset) * viewPixelsPerSec)
             let rectHeight = floor(yPixelsPerUnit * CGFloat(value))
             let basalRect = CGRect(x: rectLeft, y: yBottomOfBasal - rectHeight, width: rectRight - rectLeft, height: rectHeight)
 

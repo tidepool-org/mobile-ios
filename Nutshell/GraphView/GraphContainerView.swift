@@ -18,6 +18,7 @@ import UIKit
 protocol GraphContainerViewDelegate {
     // Notify caller that a new cell has been loaded...
     func containerCellUpdated(dataDetected: Bool)
+    func pinchZoomEnded()
 }
 
 class GraphContainerView: UIView {
@@ -26,6 +27,8 @@ class GraphContainerView: UIView {
     var delegate: GraphContainerViewDelegate?
     
     private var cellSize = CGSizeZero
+    private var pinchStartCellSize = CGSizeZero
+    private var pinchLocationInView = CGPointZero
     private var dataDetected = false
     private var graphCollectionView: UICollectionView?
     private var fixedBackgroundImageView: UIImageView?
@@ -51,6 +54,8 @@ class GraphContainerView: UIView {
         if let graphCollectionView = graphCollectionView, eventItem = eventItem {
             graphCenterTime = eventItem.time
             NSLog("GraphContainerView reloading data")
+            // max bolus/basal may have changed with new data, so need to refigure those!
+            determineGraphObjectSizing()
             graphCollectionView.reloadData()
         }
     }
@@ -66,36 +71,68 @@ class GraphContainerView: UIView {
     }
 
     func zoomInOut(zoomIn: Bool) {
-        if let graphCollectionView = graphCollectionView {
-            var size = self.cellSize
-            
-            if zoomIn {
-                size.width = size.width * 1.25  // 5/4
-                // Don't let the cell size get too huge!
-                if size.width > 4 * self.frame.width || size.width > 2000.0 {
-                    NSLog("Zoom in limit reached!")
-                    return
-                }
-            } else {
-                size.width = size.width * 0.8   // 4/5
-                // Don't let the cell size get so small that the number of cells can't cover the width of our view!
-                if (size.width * CGFloat(graphCellsInCollection) < self.frame.width) {
-                    NSLog("Zoom out limit reached!")
-                    return
-                }
+        var size = self.cellSize
+        
+        if zoomIn {
+            size.width = size.width * 1.25  // 5/4
+        } else {
+            size.width = size.width * 0.8   // 4/5
+        }
+        // Use middle of view as zoom spreading center
+        zoomCellSize(size, xOffsetInView: (self.bounds.width)/2.0)
+    }
+    
+    func canZoomIn() -> Bool {
+        return self.cellSize.width < zoomInMaxCellWidth()
+    }
+    
+    func canZoomOut() -> Bool {
+        return self.cellSize.width > zoomOutMinCellWidth()
+    }
+    // Somewhat arbitrary max cell width
+    private func zoomInMaxCellWidth() -> CGFloat {
+        return min((4 * self.frame.width), 2000.0)
+    }
+
+    // Minimum cell width is more important: cells need to at least cover the view width
+    private func zoomOutMinCellWidth() -> CGFloat {
+        return self.frame.width / CGFloat(graphCellsInCollection)
+    }
+
+    private func zoomCellSize(var size: CGSize, xOffsetInView: CGFloat) {
+
+        // First check against limits, return if we are already there
+        let maxWidth = zoomInMaxCellWidth()
+        if size.width >= maxWidth {
+            NSLog("Zoom in limit reached!")
+            if size.width == maxWidth {
+                return
             }
+            size.width = maxWidth
+        }
+        let minWidth = zoomOutMinCellWidth()
+        if size.width <= minWidth {
+            NSLog("Zoom out limit reached!")
+            if size.width == minWidth {
+                return
+            }
+            size.width = minWidth
+        }
+
+        if let graphCollectionView = graphCollectionView {
             NSLog("Zoom from cell size: \(self.cellSize) to \(size)")
             self.cellSize = size //  new cell sizing
+            let ratioXOffset = xOffsetInView / self.bounds.width
 
-            // Get current middle of view time offset, then convert back for the new content view size so the point in the middle of our graph view doesn't change
+            // Convert view xOffset for zoom center back for the new content view size so the point in the middle of our graph view doesn't change
 
-            let contentOffsetToViewMiddle = graphCollectionView.contentOffset.x + (self.bounds.width)/2.0
-            let timeOffsetToViewMiddle = self.viewXOffsetToTimeOffset(contentOffsetToViewMiddle)
+            let contentOffsetToViewCenterZoom = graphCollectionView.contentOffset.x + xOffsetInView
+            let timeOffsetToViewCenterZoom = self.viewXOffsetToTimeOffset(contentOffsetToViewCenterZoom)
             
             // Figure backwards with new overall content view sizing for xOffset to the same time offset as before...
             let newContentSizeWidth = size.width * CGFloat(graphCellsInCollection)
-            let newContentOffsetToViewMiddle = CGFloat(timeOffsetToViewMiddle / self.graphViewTimeInterval) * newContentSizeWidth
-            var targetOffsetX = newContentOffsetToViewMiddle - (self.bounds.width)/2.0
+            let newContentOffsetToViewCenterZoom = CGFloat(timeOffsetToViewCenterZoom / self.graphViewTimeInterval) * newContentSizeWidth
+            var targetOffsetX = newContentOffsetToViewCenterZoom - (ratioXOffset * self.bounds.width)
             
             // Don't let offset get below zero or less than a screen's width away from the right edge
              if targetOffsetX < 0.0 {
@@ -194,6 +231,11 @@ class GraphContainerView: UIView {
                 // event is in the center cell, see cellForItemAtIndexPath below...
                 centerGraphOnEvent()
                 self.addSubview(graphCollectionView)
+
+                // add pinch gesture recognizer
+                let recognizer = UIPinchGestureRecognizer(target: self, action: "pinchGestureHandler:")
+                graphCollectionView.addGestureRecognizer(recognizer)
+
             }
             
             // Now that graph width is known, configure time span
@@ -218,7 +260,36 @@ class GraphContainerView: UIView {
         }
         return cellCenterTime
     }
-    
+
+    func pinchGestureHandler(sender: AnyObject) {
+        NSLog("recognized pinch!")
+        if let gesture = sender as? UIPinchGestureRecognizer {
+            if gesture.state == UIGestureRecognizerState.Began {
+                NSLog("gesture started: start cell size: \(cellSize)")
+                pinchStartCellSize = cellSize
+                pinchLocationInView = gesture.locationInView(self)
+                return
+            }
+            if gesture.state == UIGestureRecognizerState.Changed {
+                NSLog("gesture state changed scale: \(gesture.scale)")
+                var newCellSize = pinchStartCellSize
+                newCellSize.width = newCellSize.width * CGFloat(gesture.scale)
+                zoomCellSize(newCellSize, xOffsetInView: pinchLocationInView.x)
+                delegate?.pinchZoomEnded()
+                
+                return
+            }
+            if gesture.state == UIGestureRecognizerState.Ended {
+                NSLog("gesture ended with scale: \(gesture.scale)")
+                var newCellSize = pinchStartCellSize
+                newCellSize.width = newCellSize.width * CGFloat(gesture.scale)
+                zoomCellSize(newCellSize, xOffsetInView: pinchLocationInView.x)
+                delegate?.pinchZoomEnded()
+                return
+            }
+        }
+    }
+
     //
     // MARK: - Data methods
     //

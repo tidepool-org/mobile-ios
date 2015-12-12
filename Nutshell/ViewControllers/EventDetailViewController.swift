@@ -240,12 +240,23 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     @IBAction func zoomInButtonHandler(sender: AnyObject) {
         if let graphContainerView = graphContainerView {
             graphContainerView.zoomInOut(true)
+            adjustZoomButtons()
         }
     }
     
     @IBAction func zoomOutButtonHandler(sender: AnyObject) {
         if let graphContainerView = graphContainerView {
             graphContainerView.zoomInOut(false)
+            adjustZoomButtons()
+        }
+    }
+    
+    @IBOutlet weak var zoomInButton: UIButton!
+    @IBOutlet weak var zoomOutButton: UIButton!
+    private func adjustZoomButtons() {
+        if let graphContainerView = graphContainerView {
+            zoomInButton.enabled = graphContainerView.canZoomIn()
+            zoomOutButton.enabled = graphContainerView.canZoomOut()
         }
     }
     
@@ -524,7 +535,11 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     func containerCellUpdated(dataDetected: Bool) {
         missingDataAdvisoryView.hidden = graphContainerView!.containsData()
     }
-    
+
+    func pinchZoomEnded() {
+        adjustZoomButtons()
+    }
+
     override func viewDidLayoutSubviews() {
         //NSLog("EventDetailVC viewDidLayoutSubviews")
         if let graphContainerView = graphContainerView {
