@@ -16,7 +16,7 @@
 import UIKit
 import CoreData
 
-class EventListTableViewController: BaseUITableViewController {
+class EventListTableViewController: BaseUITableViewController, ENSideMenuDelegate {
 
     @IBOutlet weak var menuButton: UIBarButtonItem!
     @IBOutlet weak var searchTextField: NutshellUITextField!
@@ -42,17 +42,26 @@ class EventListTableViewController: BaseUITableViewController {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: moc)
         notificationCenter.addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
-        
-        if self.revealViewController() != nil {
-            menuButton.target = self.revealViewController()
-            menuButton.action = "revealToggle:"
-            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-            // Left drawer is designed to be 240 pixels wide for iPhone 5. Let it grow proportionally for iPhone 6, but no wider on larger devices.
-            // When it reveals terms of service, let it grow to full width on iPhone 5 and 6, but no wider.
-            self.revealViewController().rearViewRevealWidth = min(ceil((240.0/320.0) * self.view.bounds.width), 281.0)
-            let overDraw = min(floor((80.0/320.0) * self.view.bounds.width), 94.0)
-            self.revealViewController().rearViewRevealOverdraw = overDraw
+
+        if let sideMenu = self.sideMenuController()?.sideMenu {
+            sideMenu.delegate = self
+            menuButton.target = self
+            menuButton.action = "toggleSideMenu:"
+            let revealWidth = min(ceil((240.0/320.0) * self.view.bounds.width), 281.0)
+            sideMenu.menuWidth = revealWidth
+            sideMenu.bouncingEnabled = false
         }
+
+//        if self.revealViewController() != nil {
+//            menuButton.target = self.revealViewController()
+//            menuButton.action = "revealToggle:"
+//            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+//            // Left drawer is designed to be 240 pixels wide for iPhone 5. Let it grow proportionally for iPhone 6, but no wider on larger devices.
+//            // When it reveals terms of service, let it grow to full width on iPhone 5 and 6, but no wider.
+//            self.revealViewController().rearViewRevealWidth = min(ceil((240.0/320.0) * self.view.bounds.width), 281.0)
+//            let overDraw = min(floor((80.0/320.0) * self.view.bounds.width), 94.0)
+//            self.revealViewController().rearViewRevealOverdraw = overDraw
+//        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -85,8 +94,63 @@ class EventListTableViewController: BaseUITableViewController {
         searchTextField.resignFirstResponder()
         viewIsForeground = false
     }
+
+    @IBAction func toggleSideMenu(sender: AnyObject) {
+        toggleSideMenuView()
+    }
+
+    //
+    // MARK: - ENSideMenu Delegate
+    //
+
+    private var tableCoverView: NutshellUIView?
+    private func configureForMenuOpen(open: Bool) {
+        if let tableView = self.tableView as? NutshellUITableView {
+            if tableCoverView == nil {
+                tableCoverView = NutshellUIView(frame: tableView.bounds)
+                tableCoverView?.usage = "darkBackground"
+                tableCoverView?.alpha = 0.5
+                tableCoverView?.userInteractionEnabled = true
+            }
+            if open {
+                tableView.addSubview(tableCoverView!)
+                tableView.bringSubviewToFront(tableCoverView!)
+                self.navigationItem.rightBarButtonItem?.enabled = false
+            } else {
+                tableCoverView?.removeFromSuperview()
+                self.navigationItem.rightBarButtonItem?.enabled = true
+            }
+        }
+    }
     
+    func sideMenuWillOpen() {
+        print("EventList sideMenuWillOpen")
+        configureForMenuOpen(true)
+    }
+    
+    func sideMenuWillClose() {
+        print("EventList sideMenuWillClose")
+        configureForMenuOpen(false)
+    }
+    
+    func sideMenuShouldOpenSideMenu() -> Bool {
+        print("EventList sideMenuShouldOpenSideMenu")
+        return true
+    }
+    
+    func sideMenuDidClose() {
+        print("EventList sideMenuDidClose")
+        configureForMenuOpen(false)
+    }
+    
+    func sideMenuDidOpen() {
+        print("EventList sideMenuDidOpen")
+        configureForMenuOpen(true)
+    }
+
+    //
     // MARK: - Navigation
+    //
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

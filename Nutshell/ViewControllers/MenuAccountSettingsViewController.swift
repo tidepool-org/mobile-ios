@@ -13,12 +13,10 @@ class MenuAccountSettingsViewController: UIViewController {
     @IBOutlet weak var loginAccount: UILabel!
     @IBOutlet weak var versionString: NutshellUILabel!
     
-    @IBOutlet weak var termsOfUseView: UIView!
     @IBOutlet weak var sidebarView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        termsOfUseView.hidden = true
         versionString.text = UIApplication.appVersion() + " on " + APIConnector.currentService!
         loginAccount.text = NutDataController.controller().currentUserName
     }
@@ -33,25 +31,12 @@ class MenuAccountSettingsViewController: UIViewController {
         appDelegate.logout()
     }
 
-    private func showTerms(show: Bool) {
-        termsOfUseView.hidden = !show
-        sidebarView.hidden = show
-        if self.revealViewController() != nil {
-            if show {
-                self.revealViewController().setFrontViewPosition(FrontViewPosition.RightMost, animated: true)
-            } else {
-                self.revealViewController().setFrontViewPosition(FrontViewPosition.Right, animated: true)
-            }
-        }
-    }
-    
     @IBAction func termsOfUseTapped(sender: AnyObject) {
-        showTerms(true)
+        let storyboard = UIStoryboard(name: "EventView", bundle: nil)
+        let menuController = storyboard.instantiateViewControllerWithIdentifier("menuTermsVC") as! MenuTermsViewController
+        sideMenuController()?.setContentViewController(menuController)
     }
     
-    @IBAction func closeTermsButtonHandler(sender: AnyObject) {
-        showTerms(false)
-    }
     /*
     // MARK: - Navigation
 

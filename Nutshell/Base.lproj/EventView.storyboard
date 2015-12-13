@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="14F1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ioO-sB-7VM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="14F1509" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="MlM-Oh-SBV">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
@@ -45,7 +45,7 @@
         <!--EventList-->
         <scene sceneID="pZD-8B-I9t">
             <objects>
-                <tableViewController title="EventList" id="1ND-G3-Xkn" customClass="EventListTableViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="eventListVC" title="EventList" id="1ND-G3-Xkn" customClass="EventListTableViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="102" sectionHeaderHeight="28" sectionFooterHeight="28" id="zPG-RC-CX0" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1064,10 +1064,10 @@
             </objects>
             <point key="canvasLocation" x="2214" y="1080"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Event View Nav Controller-->
         <scene sceneID="PPE-fc-DuL">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MlM-Oh-SBV" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MlM-Oh-SBV" customClass="EventViewNavController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="xoN-ni-B6S">
@@ -1085,29 +1085,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OeG-qi-T86" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="348" y="853"/>
-        </scene>
-        <!--Reveal View Controller-->
-        <scene sceneID="QMx-uy-HbU">
-            <objects>
-                <viewController id="ioO-sB-7VM" customClass="SWRevealViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="ruK-YL-ygb"/>
-                        <viewControllerLayoutGuide type="bottom" id="KzJ-ek-F2e"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="OZR-8j-als">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                    <connections>
-                        <segue destination="MlM-Oh-SBV" kind="custom" identifier="sw_front" customClass="SWRevealViewControllerSegueSetController" id="85n-fp-O9g"/>
-                        <segue destination="jOa-f6-dl3" kind="custom" identifier="sw_rear" customClass="SWRevealViewControllerSegueSetController" id="YbP-EV-2tV"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jMG-Y4-fGt" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-359.5" y="1556.5"/>
         </scene>
         <!--EventAddEdit-->
         <scene sceneID="YaE-9z-Fc2">
@@ -1741,57 +1718,23 @@
         <!--Menu Account Settings View Controller-->
         <scene sceneID="Tz8-D7-tVt">
             <objects>
-                <viewController id="jOa-f6-dl3" customClass="MenuAccountSettingsViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="sidebarController" id="jOa-f6-dl3" customClass="MenuAccountSettingsViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Yfg-jr-ctW"/>
                         <viewControllerLayoutGuide type="bottom" id="Ijt-Qt-Glr"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Msq-rR-Cxe" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fa3-lE-rhJ" userLabel="TermsOfUse">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
-                                <subviews>
-                                    <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X4E-dE-YQk">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                        <items>
-                                            <navigationItem title="Privacy and Terms of Use" id="W5e-to-1yq">
-                                                <barButtonItem key="leftBarButtonItem" image="xIcon" id="jEv-Az-DbL" userLabel="Menu Button Item">
-                                                    <connections>
-                                                        <action selector="closeTermsButtonHandler:" destination="jOa-f6-dl3" id="aVE-sd-f2P"/>
-                                                    </connections>
-                                                </barButtonItem>
-                                            </navigationItem>
-                                        </items>
-                                    </navigationBar>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="iHL-jw-La5">
-                                        <rect key="frame" x="0.0" y="44" width="375" height="603"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    </textView>
-                                </subviews>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="iHL-jw-La5" secondAttribute="bottom" id="0c6-UH-hMo"/>
-                                    <constraint firstAttribute="trailing" secondItem="iHL-jw-La5" secondAttribute="trailing" id="IN9-UW-Nqp"/>
-                                    <constraint firstItem="iHL-jw-La5" firstAttribute="leading" secondItem="fa3-lE-rhJ" secondAttribute="leading" id="Mhk-Rs-h7Z"/>
-                                    <constraint firstAttribute="trailing" secondItem="X4E-dE-YQk" secondAttribute="trailing" id="SZm-EC-Pce"/>
-                                    <constraint firstItem="X4E-dE-YQk" firstAttribute="leading" secondItem="fa3-lE-rhJ" secondAttribute="leading" id="caR-va-pXj"/>
-                                    <constraint firstItem="X4E-dE-YQk" firstAttribute="top" secondItem="fa3-lE-rhJ" secondAttribute="top" id="ewS-R4-lPU"/>
-                                    <constraint firstItem="iHL-jw-La5" firstAttribute="top" secondItem="X4E-dE-YQk" secondAttribute="bottom" id="h7J-3N-L6d"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9OQ-uM-nfY" userLabel="SIdebarContainerView">
-                                <rect key="frame" x="0.0" y="20" width="235" height="647"/>
+                                <rect key="frame" x="0.0" y="44" width="235" height="559"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wmi-HA-2WR" userLabel="TopSection">
-                                        <rect key="frame" x="0.0" y="0.0" width="235" height="125"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="235" height="150"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AkY-6Y-8Cr" userLabel="logoutView">
-                                                <rect key="frame" x="0.0" y="-17" width="235" height="160"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="235" height="150"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Name Here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8eU-B6-eOM" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="46" y="25" width="144" height="24"/>
@@ -1830,7 +1773,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Rq-xO-II6" userLabel="line separator" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="24" y="123" width="187" height="1"/>
+                                                <rect key="frame" x="24" y="148" width="187" height="1"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="187" id="ZnI-lJ-ftw"/>
@@ -1844,16 +1787,16 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="AkY-6Y-8Cr" firstAttribute="leading" secondItem="Wmi-HA-2WR" secondAttribute="leading" id="5EP-RC-Meb"/>
-                                            <constraint firstItem="AkY-6Y-8Cr" firstAttribute="top" secondItem="Wmi-HA-2WR" secondAttribute="top" constant="-17" id="UQ4-Yb-nvB"/>
-                                            <constraint firstAttribute="bottom" secondItem="AkY-6Y-8Cr" secondAttribute="bottom" constant="-18" id="Vig-iR-Ka6"/>
+                                            <constraint firstItem="AkY-6Y-8Cr" firstAttribute="top" secondItem="Wmi-HA-2WR" secondAttribute="top" id="UQ4-Yb-nvB"/>
+                                            <constraint firstAttribute="bottom" secondItem="AkY-6Y-8Cr" secondAttribute="bottom" id="Vig-iR-Ka6"/>
                                             <constraint firstAttribute="trailing" secondItem="AkY-6Y-8Cr" secondAttribute="trailing" id="cyo-hc-7Ln"/>
                                             <constraint firstAttribute="bottom" secondItem="9Rq-xO-II6" secondAttribute="bottom" constant="1" id="h6V-Ib-FCX"/>
                                             <constraint firstItem="9Rq-xO-II6" firstAttribute="centerX" secondItem="Wmi-HA-2WR" secondAttribute="centerX" id="jNm-dX-MGh"/>
-                                            <constraint firstAttribute="height" constant="125" id="ype-nj-ENU"/>
+                                            <constraint firstAttribute="height" constant="150" id="ype-nj-ENU"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ls-ZC-LIS" userLabel="MiddleSection">
-                                        <rect key="frame" x="0.0" y="125" width="235" height="492"/>
+                                        <rect key="frame" x="0.0" y="150" width="235" height="363"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="440-zP-S8a" userLabel="Privacy and terms of use">
                                                 <rect key="frame" x="40" y="27" width="155" height="30"/>
@@ -1873,7 +1816,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7mt-7W-tG5" userLabel="bottomSettingsView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="617" width="235" height="30"/>
+                                        <rect key="frame" x="0.0" y="513" width="235" height="30"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mA2-zl-vsY" userLabel="versionView">
                                                 <rect key="frame" x="0.0" y="0.0" width="235" height="30"/>
@@ -1915,7 +1858,7 @@
                                     <constraint firstItem="7mt-7W-tG5" firstAttribute="leading" secondItem="9OQ-uM-nfY" secondAttribute="leading" id="JfJ-Xv-5tI"/>
                                     <constraint firstAttribute="width" constant="235" id="Ufm-FF-OfY"/>
                                     <constraint firstItem="7mt-7W-tG5" firstAttribute="top" secondItem="9Ls-ZC-LIS" secondAttribute="bottom" id="aZ8-bo-3Bw"/>
-                                    <constraint firstAttribute="bottom" secondItem="7mt-7W-tG5" secondAttribute="bottom" id="d1j-Wo-Ryk"/>
+                                    <constraint firstAttribute="bottom" secondItem="7mt-7W-tG5" secondAttribute="bottom" constant="16" id="d1j-Wo-Ryk"/>
                                     <constraint firstItem="Wmi-HA-2WR" firstAttribute="leading" secondItem="9OQ-uM-nfY" secondAttribute="leading" id="glI-cl-qgN"/>
                                     <constraint firstAttribute="trailing" secondItem="Wmi-HA-2WR" secondAttribute="trailing" id="lYc-rm-QEP"/>
                                     <constraint firstAttribute="trailing" secondItem="7mt-7W-tG5" secondAttribute="trailing" id="n7C-D0-eeO"/>
@@ -1926,12 +1869,8 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="9OQ-uM-nfY" firstAttribute="top" secondItem="Yfg-jr-ctW" secondAttribute="bottom" id="6ZA-dO-Nr0"/>
+                            <constraint firstItem="9OQ-uM-nfY" firstAttribute="top" secondItem="Yfg-jr-ctW" secondAttribute="bottom" constant="44" id="AGR-7F-OzU"/>
                             <constraint firstItem="9OQ-uM-nfY" firstAttribute="leading" secondItem="Msq-rR-Cxe" secondAttribute="leading" id="Ivg-Mt-Qa5"/>
-                            <constraint firstItem="fa3-lE-rhJ" firstAttribute="leading" secondItem="Msq-rR-Cxe" secondAttribute="leading" id="Ppu-Fz-Y6N"/>
-                            <constraint firstItem="Ijt-Qt-Glr" firstAttribute="top" secondItem="fa3-lE-rhJ" secondAttribute="bottom" id="T6i-pe-1qn"/>
-                            <constraint firstItem="fa3-lE-rhJ" firstAttribute="top" secondItem="Yfg-jr-ctW" secondAttribute="bottom" id="cTL-fG-eoG"/>
-                            <constraint firstAttribute="trailing" secondItem="fa3-lE-rhJ" secondAttribute="trailing" id="lyA-bO-WGT"/>
                             <constraint firstItem="Ijt-Qt-Glr" firstAttribute="top" secondItem="9OQ-uM-nfY" secondAttribute="bottom" id="o3f-By-lSR"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
@@ -1939,18 +1878,73 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <nil key="simulatedTopBarMetrics"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="loginAccount" destination="9sA-Dh-xzl" id="2XT-bE-ria"/>
                         <outlet property="sidebarView" destination="9OQ-uM-nfY" id="Ix6-bv-TsQ"/>
-                        <outlet property="termsOfUseView" destination="fa3-lE-rhJ" id="7XW-VU-Grs"/>
                         <outlet property="versionString" destination="FRD-xW-MeJ" id="XGz-45-lWe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XvS-Cr-aVr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="320" y="1910"/>
+            <point key="canvasLocation" x="347.5" y="1617.5"/>
+        </scene>
+        <!--Terms-->
+        <scene sceneID="R7J-LQ-A0k">
+            <objects>
+                <viewController storyboardIdentifier="menuTermsVC" id="z06-2M-3t9" customClass="MenuTermsViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y6U-8q-D6I"/>
+                        <viewControllerLayoutGuide type="bottom" id="MEP-oo-QAa"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="LiT-6x-Xmn">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yXI-pV-gDH" userLabel="Terms Container View" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="iHL-jw-La5">
+                                        <rect key="frame" x="16" y="0.0" width="343" height="603"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="iHL-jw-La5" secondAttribute="bottom" id="3Bf-w0-i50"/>
+                                    <constraint firstItem="iHL-jw-La5" firstAttribute="top" secondItem="yXI-pV-gDH" secondAttribute="top" id="ca5-ub-Hbs"/>
+                                    <constraint firstItem="iHL-jw-La5" firstAttribute="leading" secondItem="yXI-pV-gDH" secondAttribute="leading" constant="16" id="tRk-TD-rzo"/>
+                                    <constraint firstAttribute="trailing" secondItem="iHL-jw-La5" secondAttribute="trailing" constant="16" id="wmL-v7-fNN"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="yXI-pV-gDH" secondAttribute="trailing" id="BIn-kh-g8D"/>
+                            <constraint firstItem="MEP-oo-QAa" firstAttribute="top" secondItem="yXI-pV-gDH" secondAttribute="bottom" id="F4r-XY-sym"/>
+                            <constraint firstItem="yXI-pV-gDH" firstAttribute="leading" secondItem="LiT-6x-Xmn" secondAttribute="leading" id="OPw-wv-NlX"/>
+                            <constraint firstItem="yXI-pV-gDH" firstAttribute="top" secondItem="y6U-8q-D6I" secondAttribute="bottom" id="cHe-uj-JVK"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Terms" id="OCv-fb-XTm">
+                        <barButtonItem key="leftBarButtonItem" image="xIcon" id="AZv-IT-Ipu">
+                            <connections>
+                                <action selector="toggleSideMenu:" destination="z06-2M-3t9" id="b5i-3I-YCi"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="S0n-oh-3mS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="821.5" y="1617.5"/>
         </scene>
     </scenes>
     <resources>
