@@ -50,7 +50,7 @@ class MenuTermsViewController: UIViewController, ENSideMenuDelegate {
     
     func sideMenuShouldOpenSideMenu() -> Bool {
         print("MenuTermsViewController sideMenuShouldOpenSideMenu")
-        return true
+        return false
     }
     
     func sideMenuDidClose() {

@@ -103,21 +103,13 @@ class EventListTableViewController: BaseUITableViewController, ENSideMenuDelegat
     // MARK: - ENSideMenu Delegate
     //
 
-    private var tableCoverView: NutshellUIView?
     private func configureForMenuOpen(open: Bool) {
         if let tableView = self.tableView as? NutshellUITableView {
-            if tableCoverView == nil {
-                tableCoverView = NutshellUIView(frame: tableView.bounds)
-                tableCoverView?.usage = "darkBackground"
-                tableCoverView?.alpha = 0.5
-                tableCoverView?.userInteractionEnabled = true
-            }
-            if open {
-                tableView.addSubview(tableCoverView!)
-                tableView.bringSubviewToFront(tableCoverView!)
+             if open {
+                tableView.userInteractionEnabled = false
                 self.navigationItem.rightBarButtonItem?.enabled = false
             } else {
-                tableCoverView?.removeFromSuperview()
+                tableView.userInteractionEnabled = true
                 self.navigationItem.rightBarButtonItem?.enabled = true
             }
         }
