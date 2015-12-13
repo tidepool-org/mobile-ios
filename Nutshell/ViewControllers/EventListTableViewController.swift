@@ -18,6 +18,7 @@ import CoreData
 
 class EventListTableViewController: BaseUITableViewController {
 
+    @IBOutlet weak var menuButton: UIBarButtonItem!
     @IBOutlet weak var searchTextField: NutshellUITextField!
     @IBOutlet weak var searchPlaceholderLabel: NutshellUILabel!
     
@@ -41,6 +42,17 @@ class EventListTableViewController: BaseUITableViewController {
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: moc)
         notificationCenter.addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
+        
+        if self.revealViewController() != nil {
+            menuButton.target = self.revealViewController()
+            menuButton.action = "revealToggle:"
+            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+            // Left drawer is designed to be 240 pixels wide for iPhone 5. Let it grow proportionally for iPhone 6, but no wider on larger devices.
+            // When it reveals terms of service, let it grow to full width on iPhone 5 and 6, but no wider.
+            self.revealViewController().rearViewRevealWidth = min(ceil((240.0/320.0) * self.view.bounds.width), 281.0)
+            let overDraw = min(floor((80.0/320.0) * self.view.bounds.width), 94.0)
+            self.revealViewController().rearViewRevealOverdraw = overDraw
+        }
     }
 
     override func didReceiveMemoryWarning() {

@@ -90,6 +90,7 @@ public class Styles: NSObject {
         "addEditViewLocation": (smallRegularFont, whiteColor),
         "addEditViewSaveButton": (mediumBoldFont, whiteColor),
         // account configuration scene
+        "accountSettingUserName": (mediumLargeBoldFont, blackColor),
         "accountSettingItem": (mediumRegularFont, darkGreyColor),
         "accountSettingItemSmall": (mediumSmallRegularFont, darkGreyColor),
         "largeTargetValueInactive": (veryLargeSemiboldFont, mediumLightGreyColor),

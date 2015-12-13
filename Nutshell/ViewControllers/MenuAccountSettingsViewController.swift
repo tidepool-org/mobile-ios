@@ -10,20 +10,16 @@ import UIKit
 
 class MenuAccountSettingsViewController: UIViewController {
 
-    @IBOutlet weak var glucoseSettingsView: UIView!
-    @IBOutlet weak var bottomSettingsView: NutshellUIView!
     @IBOutlet weak var loginAccount: UILabel!
     @IBOutlet weak var versionString: NutshellUILabel!
     
+    @IBOutlet weak var termsOfUseView: UIView!
+    @IBOutlet weak var sidebarView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        glucoseSettingsView.hidden = true;
-        bottomSettingsView.hidden = false;
-        
+        termsOfUseView.hidden = true
         versionString.text = UIApplication.appVersion() + " on " + APIConnector.currentService!
-        
         loginAccount.text = NutDataController.controller().currentUserName
     }
 
@@ -37,6 +33,25 @@ class MenuAccountSettingsViewController: UIViewController {
         appDelegate.logout()
     }
 
+    private func showTerms(show: Bool) {
+        termsOfUseView.hidden = !show
+        sidebarView.hidden = show
+        if self.revealViewController() != nil {
+            if show {
+                self.revealViewController().setFrontViewPosition(FrontViewPosition.RightMost, animated: true)
+            } else {
+                self.revealViewController().setFrontViewPosition(FrontViewPosition.Right, animated: true)
+            }
+        }
+    }
+    
+    @IBAction func termsOfUseTapped(sender: AnyObject) {
+        showTerms(true)
+    }
+    
+    @IBAction func closeTermsButtonHandler(sender: AnyObject) {
+        showTerms(false)
+    }
     /*
     // MARK: - Navigation
 
@@ -46,5 +61,9 @@ class MenuAccountSettingsViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+
+    @IBAction func done(segue: UIStoryboardSegue) {
+        print("unwind segue to menuaccount done!")
+    }
 
 }
