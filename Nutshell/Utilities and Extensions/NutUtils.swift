@@ -19,6 +19,10 @@ import Photos
 
 class NutUtils {
 
+    func onIPad() -> Bool {
+        return UIDevice.currentDevice().userInterfaceIdiom == .Pad
+    }
+
     class func dispatchBoolToVoidAfterSecs(secs: Float, result: Bool, boolToVoid: (Bool) -> (Void)) {
         let time = dispatch_time(DISPATCH_TIME_NOW, Int64(secs * Float(NSEC_PER_SEC)))
         dispatch_after(time, dispatch_get_main_queue()){
@@ -33,6 +37,38 @@ class NutUtils {
                 Int64(delay * Double(NSEC_PER_SEC))
             ),
             dispatch_get_main_queue(), closure)
+    }
+    
+    func compressImage(image: UIImage) -> UIImage {
+        var actualHeight : CGFloat = image.size.height
+        var actualWidth : CGFloat = image.size.width
+        let maxHeight : CGFloat = 600.0
+        let maxWidth : CGFloat = 800.0
+        var imgRatio : CGFloat = actualWidth/actualHeight
+        let maxRatio : CGFloat = maxWidth/maxHeight
+        let compressionQuality : CGFloat = 0.5 //50 percent compression
+        
+        if ((actualHeight > maxHeight) || (actualWidth > maxWidth)){
+            if(imgRatio < maxRatio){
+                //adjust height according to maxWidth
+                imgRatio = maxWidth / actualWidth;
+                actualHeight = imgRatio * actualHeight;
+                actualWidth = maxWidth;
+            }
+            else{
+                actualHeight = maxHeight;
+                actualWidth = maxWidth;
+            }
+        }
+        
+        let rect = CGRectMake(0.0, 0.0, actualWidth, actualHeight)
+        UIGraphicsBeginImageContext(rect.size)
+        image.drawInRect(rect)
+        let img : UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        let imageData = UIImageJPEGRepresentation(img, compressionQuality)
+        UIGraphicsEndImageContext()
+        NSLog("Compressed length: \(imageData!.length)")
+        return UIImage(data: imageData!)!
     }
     
     class func loadImage(url: String, imageView: UIImageView) {
