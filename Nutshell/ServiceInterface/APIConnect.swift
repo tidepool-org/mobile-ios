@@ -19,20 +19,31 @@ import Alamofire
 import SwiftyJSON
 import CoreData
 
-/*
-    Most of the service interface is exposed via the data classes. However, for login/logout, some set of service interface functions are needed. Much of the needed login code should be portable from Urchin.
-*/
-
+/// APIConnector is a singleton object with the main responsibility of communicating to the Tidepool service:
+/// - Given a username and password, login.
+/// - Can refresh connection.
+/// - Fetches Tidepool data.
+/// - Provides online/offline statis.
 class APIConnector {
+    
+    static var _connector: APIConnector?
+    /// Supports a singleton for the application.
+    class func connector() -> APIConnector {
+        if _connector == nil {
+        _connector = APIConnector()
+        }
+        return _connector!
+    }
+    
     // MARK: - Constants
     
-    static let kSessionTokenDefaultKey = "SToken"
-    static let kCurrentServiceDefaultKey = "SCurrentService"
-    static let kSessionIdHeader = "x-tidepool-session-token"
+    private let kSessionTokenDefaultKey = "SToken"
+    private let kCurrentServiceDefaultKey = "SCurrentService"
+    private let kSessionIdHeader = "x-tidepool-session-token"
 
     // Error domain and codes
-    static let kNutshellErrorDomain = "NutshellErrorDomain"
-    static let kNoSessionTokenErrorCode = -1
+    private let kNutshellErrorDomain = "NutshellErrorDomain"
+    private let kNoSessionTokenErrorCode = -1
     
     // Session token, acquired on login and saved in NSUserDefaults
     // TODO: save in database?
@@ -41,9 +52,9 @@ class APIConnector {
     var sessionToken: String? {
         set(newToken) {
             if ( newToken != nil  && _rememberToken) {
-                NSUserDefaults.standardUserDefaults().setValue(newToken, forKey: APIConnector.kSessionTokenDefaultKey)
+                NSUserDefaults.standardUserDefaults().setValue(newToken, forKey:kSessionTokenDefaultKey)
             } else {
-                NSUserDefaults.standardUserDefaults().removeObjectForKey(APIConnector.kSessionTokenDefaultKey)
+                NSUserDefaults.standardUserDefaults().removeObjectForKey(kSessionTokenDefaultKey)
             }
             _sessionToken = newToken
         }
@@ -53,41 +64,41 @@ class APIConnector {
     }
     
     // Dictionary of servers and their base URLs
-    static let kServers = [
+    let kServers = [
         "Production" :   "https://api.tidepool.org",
         "Staging" :      "https://stg-api.tidepool.org",
         "Development" :  "https://dev-api.tidepool.org",
     ]
-    static let kDefaultServerName = "Production"
+    private let kDefaultServerName = "Production"
 
-    static var _currentService: String?
-    static var currentService: String? {
+    private var _currentService: String?
+    var currentService: String? {
         set(newService) {
             if newService == nil {
-                NSUserDefaults.standardUserDefaults().removeObjectForKey(APIConnector.kCurrentServiceDefaultKey)
+                NSUserDefaults.standardUserDefaults().removeObjectForKey(kCurrentServiceDefaultKey)
                 _currentService = nil
             } else {
-                if APIConnector.kServers[newService!] != nil {
-                    NSUserDefaults.standardUserDefaults().setValue(newService, forKey: APIConnector.kCurrentServiceDefaultKey)
+                if kServers[newService!] != nil {
+                    NSUserDefaults.standardUserDefaults().setValue(newService, forKey: kCurrentServiceDefaultKey)
                     _currentService = newService
                 }
             }
         }
         get {
             if _currentService == nil {
-                if let service = NSUserDefaults.standardUserDefaults().stringForKey(APIConnector.kCurrentServiceDefaultKey) {
+                if let service = NSUserDefaults.standardUserDefaults().stringForKey(kCurrentServiceDefaultKey) {
                     _currentService = service
                 }
             }
-            if _currentService == nil || APIConnector.kServers[_currentService!] == nil {
-                _currentService = APIConnector.kDefaultServerName
+            if _currentService == nil || kServers[_currentService!] == nil {
+                _currentService = kDefaultServerName
             }
             return _currentService
         }
     }
     
     // Base URL for API calls, set during initialization
-    var baseUrl: NSURL
+    var baseUrl: NSURL?
  
     // Reachability object, valid during lifetime of this APIConnector, and convenience function that uses this
     // Register for ReachabilityChangedNotification to monitor reachability changes             
@@ -100,37 +111,55 @@ class APIConnector {
             return true
         }
     }
-    
+
+    func serviceAvailable() -> Bool {
+        if !isConnectedToNetwork() || sessionToken == nil {
+            return false
+        }
+        return true
+    }
+
     // MARK: Initialization
     
-    // Required initializer
-    init() {
-        self.baseUrl = NSURL(string:APIConnector.kServers[APIConnector.currentService!]!)!
+    /// Creator of APIConnector must call this function after init!
+    func configure() -> APIConnector {
+        self.baseUrl = NSURL(string: kServers[currentService!]!)!
         NSLog("Using service: \(self.baseUrl)")
-        self.sessionToken = NSUserDefaults.standardUserDefaults().stringForKey(APIConnector.kSessionTokenDefaultKey)
+        self.sessionToken = NSUserDefaults.standardUserDefaults().stringForKey(kSessionTokenDefaultKey)
+        if let reachability = reachability {
+            reachability.stopNotifier()
+        }
         do {
             let reachability = try Reachability.reachabilityForInternetConnection()
             self.reachability = reachability
         } catch ReachabilityError.FailedToCreateWithAddress(let address) {
             NSLog("Unable to create\nReachability with address:\n\(address)")
         } catch {
-            NSLog("Other reachability error!")
+                NSLog("Other reachability error!")
         }
         
         do {
-            try reachability?.startNotifier()
+           try reachability?.startNotifier()
         } catch {
             NSLog("Error: Unable to start notifier!")
         }
+        return self
     }
     
     deinit {
         reachability?.stopNotifier()
     }
     
-    /**
-     * Logs in the user and obtains the session token for the session (stored internally)
-    */
+    func switchToServer(serverName: String) {
+        if (currentService != serverName) {
+            currentService = serverName
+            // refresh connector since there is a new service...
+            configure()
+            NSLog("Switched to \(serverName) server")
+        }
+    }
+    
+    /// Logs in the user and obtains the session token for the session (stored internally)
     func login(username: String, password: String, remember: Bool, completion: (Result<User>) -> (Void)) {
         // Set our endpoint for login
         let endpoint = "auth/login"
@@ -150,7 +179,7 @@ class APIConnector {
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if ( result.isSuccess ) {
                 // Look for the auth token
-                self.sessionToken = response!.allHeaderFields[APIConnector.kSessionIdHeader] as! String?
+                self.sessionToken = response!.allHeaderFields[self.kSessionIdHeader] as! String?
                 let json = JSON(result.value!)
                 
                 // Create the User object
@@ -161,12 +190,28 @@ class APIConnector {
                     completion(Result.Success(user))
                 } else {
                     NutDataController.controller().logoutUser()
-                    completion(Result.Failure(nil, NSError(domain: APIConnector.kNutshellErrorDomain,
+                    completion(Result.Failure(nil, NSError(domain: self.kNutshellErrorDomain,
                         code: -1,
                         userInfo: ["description":"Could not create user from JSON", "result":result.value!])))
                 }
             } else {
                 NutDataController.controller().logoutUser()
+                completion(Result.Failure(nil, result.error!))
+            }
+        }
+    }
+ 
+    func fetchProfile(completion: (Result<JSON>) -> (Void)) {
+        // Set our endpoint for the user profile
+        let endpoint = "metadata/" + NutDataController.controller().currentUserId! + "/profile"
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        sendRequest(Method.GET, endpoint: endpoint).responseJSON { (request, response, result) -> Void in
+            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            if ( result.isSuccess ) {
+                let json = JSON(result.value!)
+                completion(Result.Success(json))
+            } else {
+                // Failure
                 completion(Result.Failure(nil, result.error!))
             }
         }
@@ -195,7 +240,7 @@ class APIConnector {
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if ( result.isSuccess ) {
                 NSLog("Session token updated")
-                self.sessionToken = response!.allHeaderFields[APIConnector.kSessionIdHeader] as! String?
+                self.sessionToken = response!.allHeaderFields[self.kSessionIdHeader] as! String?
                 completion(succeeded: true)
             } else {
                 NSLog("Session token update failed: \(result)")
@@ -248,7 +293,7 @@ class APIConnector {
     }
 
     func clearSessionToken() -> Void {
-        NSUserDefaults.standardUserDefaults().removeObjectForKey(APIConnector.kSessionTokenDefaultKey)
+        NSUserDefaults.standardUserDefaults().removeObjectForKey(kSessionTokenDefaultKey)
         sessionToken = nil
     }
 
@@ -262,7 +307,7 @@ class APIConnector {
         parameters: [String: AnyObject]? = nil,
         headers: [String: String]? = nil) -> (Request)
     {
-        let url = baseUrl.URLByAppendingPathComponent(endpoint)
+        let url = baseUrl!.URLByAppendingPathComponent(endpoint)
         
         // Get our API headers (the session token) and add any headers supplied by the caller
         var apiHeaders = getApiHeaders()
@@ -283,7 +328,7 @@ class APIConnector {
     
     func getApiHeaders() -> [String: String]? {
         if ( sessionToken != nil ) {
-            return [APIConnector.kSessionIdHeader : sessionToken!]
+            return [kSessionIdHeader : sessionToken!]
         }
         return nil
     }

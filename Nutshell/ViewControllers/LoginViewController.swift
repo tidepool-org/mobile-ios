@@ -15,7 +15,9 @@
 
 import UIKit
 import Alamofire
+import SwiftyJSON
 
+/// Presents the UI to capture email and password for login and calls APIConnector to login. Show errors to the user. Backdoor UI for development setting of the service.
 class LoginViewController: BaseUIViewController {
 
     @IBOutlet weak var logInScene: UIView!
@@ -75,9 +77,10 @@ class LoginViewController: BaseUIViewController {
     }
     
     func reachabilityChanged(note: NSNotification) {
-        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate, api = appDelegate.API {
+        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
             // try token refresh if we are now connected...
             // TODO: change message to "attempting token refresh"?
+            let api = APIConnector.connector()
             if api.isConnectedToNetwork() && api.sessionToken != nil {
                 NSLog("Login: attempting to refresh token...")
                 api.refreshToken() { succeeded -> (Void) in
@@ -97,14 +100,9 @@ class LoginViewController: BaseUIViewController {
     }
 
     private func configureForReachability() {
-        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-            var connected = true
-            if let api = appDelegate.API {
-                connected = api.isConnectedToNetwork()
-            }
-            inputContainerView.hidden = !connected
-            offlineMessageContainerView.hidden = connected
-        }
+        let connected = APIConnector.connector().isConnectedToNetwork()
+        inputContainerView.hidden = !connected
+        offlineMessageContainerView.hidden = connected
     }
     
     override func didReceiveMemoryWarning() {
@@ -139,37 +137,50 @@ class LoginViewController: BaseUIViewController {
     @IBAction func login_button_tapped(sender: AnyObject) {
         updateButtonStates()
         loginIndicator.startAnimating()
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
-        appDelegate.API?.login(emailTextField.text!,
-            password: passwordTextField.text!, remember: rememberMeButton.selected,
-            completion: { (result:(Alamofire.Result<User>)) -> (Void) in
-                print("Login result: \(result)")
-                self.loginIndicator.stopAnimating()
-                if ( result.isSuccess ) {
-                    if let user=result.value {
-                        print("login success: \(user)")
-                        appDelegate.setupUIForLoginSuccess()
-                    } else {
-                        // This should not happen- we should not succeed without a user!
-                        print("Fatal error: No user returned!")
-                    }
-                } else {
-                    print("login failed! Error: " + result.error.debugDescription)
-                    var errorText = NSLocalizedString("loginErrUserOrPassword", comment: "Wrong email or password!")
-                    if let error = result.error as? NSError {
-                        print("NSError: \(error)")
-                        if error.code == -1009 {
-                            errorText = NSLocalizedString("loginErrOffline", comment: "The Internet connection appears to be offline!")
-                        }
-                        // TODO: handle network offline!
-                    }
-                    self.errorFeedbackLabel.text = errorText
-                    self.errorFeedbackLabel.hidden = false
-                    self.passwordTextField.text = ""
-                }
-        })
+        APIConnector.connector().login(emailTextField.text!,
+            password: passwordTextField.text!, remember: rememberMeButton.selected) { (result:Alamofire.Result<User>) -> (Void) in
+                NSLog("Login result: \(result)")
+                self.processLoginResult(result)
+        }
     }
+    
+    private func processLoginResult(result: Alamofire.Result<User>) {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        self.loginIndicator.stopAnimating()
+        if (result.isSuccess) {
+            if let user=result.value {
+                NSLog("login success: \(user)")
+                APIConnector.connector().fetchProfile() { (result:Alamofire.Result<JSON>) -> (Void) in
+                        NSLog("Profile fetch result: \(result)")
+                    if (result.isSuccess) {
+                        if let json = result.value {
+                            NutDataController.controller().processProfileFetch(json)
+                        }
+                    }
+                }
+                appDelegate.setupUIForLoginSuccess()
+            } else {
+                // This should not happen- we should not succeed without a user!
+                NSLog("Fatal error: No user returned!")
+            }
+        } else {
+            NSLog("login failed! Error: " + result.error.debugDescription)
+            var errorText = NSLocalizedString("loginErrUserOrPassword", comment: "Wrong email or password!")
+            if let error = result.error as? NSError {
+                NSLog("NSError: \(error)")
+                if error.code == -1009 {
+                    errorText = NSLocalizedString("loginErrOffline", comment: "The Internet connection appears to be offline!")
+                }
+                // TODO: handle network offline!
+            }
+            self.errorFeedbackLabel.text = errorText
+            self.errorFeedbackLabel.hidden = false
+            self.passwordTextField.text = ""
+        }
+    }
+    
+    
     
     func textFieldDidChange() {
         updateButtonStates()
@@ -262,13 +273,12 @@ class LoginViewController: BaseUIViewController {
         for (var i = 0; i < corners.count; i++) {
             cornersBool[i] = false
         }
-        
-        let actionSheet = UIAlertController(title: "Server" + " (" + APIConnector.currentService! + ")", message: "", preferredStyle: .ActionSheet)
-        for server in APIConnector.kServers {
+        let api = APIConnector.connector()
+        let actionSheet = UIAlertController(title: "Server" + " (" + api.currentService! + ")", message: "", preferredStyle: .ActionSheet)
+        for server in api.kServers {
             actionSheet.addAction(UIAlertAction(title: server.0, style: .Default, handler: { Void in
                 let serverName = server.0
-                let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-                appDelegate.switchToServer(serverName)
+                api.switchToServer(serverName)
             }))
         }
         if let popoverController = actionSheet.popoverPresentationController {

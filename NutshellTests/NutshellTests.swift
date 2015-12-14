@@ -20,9 +20,7 @@ import Alamofire
 class NutshellTests: XCTestCase {
 
     // Initial API connection and note used throughout testing
-    var apiConnector: APIConnector = APIConnector()
     var userid: String = ""
-    
     var email: String = "testaccount+duffliteA@tidepool.org"
     var pass: String = "testaccount+duffliteA"
     var server: String = "Production"
@@ -32,8 +30,8 @@ class NutshellTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         // Initialize database by referencing username. This must be done before using the APIConnector!
         let _ = NutDataController.controller().currentUserName
-        APIConnector.currentService = server
-        apiConnector = APIConnector()
+        APIConnector.connector().configure()
+        APIConnector.connector().switchToServer(server)
     }
     
     override func tearDown() {
@@ -48,7 +46,7 @@ class NutshellTests: XCTestCase {
         if email == "test username goes here!" {
             XCTFail("Fatal error: please edit NutshellTests.swift and add a test account!")
         }
-        apiConnector.login(email,
+        APIConnector.connector().login(email,
             password: pass, remember: false,
             completion: { (result:(Alamofire.Result<User>)) -> (Void) in
                 print("Login result: \(result)")

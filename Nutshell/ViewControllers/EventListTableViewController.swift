@@ -108,6 +108,11 @@ class EventListTableViewController: BaseUITableViewController, ENSideMenuDelegat
              if open {
                 tableView.userInteractionEnabled = false
                 self.navigationItem.rightBarButtonItem?.enabled = false
+                if let sideMenuController = self.sideMenuController()?.sideMenu?.menuViewController as? MenuAccountSettingsViewController {
+                    // give sidebar a chance to update
+                    // TODO: this should really be in ENSideMenu!
+                    sideMenuController.menuWillOpen()
+                }
             } else {
                 tableView.userInteractionEnabled = true
                 self.navigationItem.rightBarButtonItem?.enabled = true

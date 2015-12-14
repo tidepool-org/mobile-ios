@@ -16,13 +16,15 @@
 import UIKit
 import CoreData
 
+/// AppDelegate deals with app startup, restart, termination:
+/// - Switches UI between login and event controllers.
+/// - Initializes the UI appearance defaults.
+/// - Initializes data model and api connector.
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var API: APIConnector?
     static var testMode: Bool = false
-    let enableIncrementalModeOnDev = true
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         AppDelegate.testMode = false
@@ -39,48 +41,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSLog("Initializing NutshellDataController, found and set user \(name)")
         }
         // Set up the API connection
-        API = APIConnector()
+        APIConnector.connector().configure()
         
         attemptTokenLogin()
         return true
     }
-
-    func switchToServer(serverName: String) {
-        if (APIConnector.currentService != serverName) {
-            APIConnector.currentService = serverName
-            // refresh connector since there is a new service...
-            API = APIConnector()
-            NSLog("Switched to \(serverName) server")
-        }
-    }
     
     func attemptTokenLogin() {
-        if let api = API {
-            if api.sessionToken == nil {
-                NSLog("No token available, clear any data in case user did not log out normally")
+        let api = APIConnector.connector()
+        if api.sessionToken == nil {
+            NSLog("No token available, clear any data in case user did not log out normally")
+            api.logout() {
+                self.setupUIForLogin()
+            }
+            return
+        }
+        
+        if !api.isConnectedToNetwork() {
+            setupUIForLogin()
+            return
+        }
+        
+        NSLog("AppDelegate: attempting to refresh token...")
+        api.refreshToken() { succeeded -> (Void) in
+            if succeeded {
+                self.setupUIForLoginSuccess()
+            } else {
+                NSLog("Refresh token failed, need to log in normally")
                 api.logout() {
                     self.setupUIForLogin()
                 }
-                return
             }
-
-            if !api.isConnectedToNetwork() {
-                setupUIForLogin()
-                return
-            }
-
-            NSLog("AppDelegate: attempting to refresh token...")
-            api.refreshToken() { succeeded -> (Void) in
-                if succeeded {
-                    self.setupUIForLoginSuccess()
-                } else {
-                    NSLog("Refresh token failed, need to log in normally")
-                    api.logout() {
-                        self.setupUIForLogin()
-                    }
-                }
-            }
-        } 
+        }
     }
     
     func setupUIForLogin() {
@@ -91,21 +83,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func logout() {
-        if let api = API {
-            api.logout() {
-                self.setupUIForLogin()
-            }
+        APIConnector.connector().logout() {
+            self.setupUIForLogin()
         }
-    }
-    
-    func serviceAvailable() -> Bool {
-        if let api = API {
-            if !api.isConnectedToNetwork() || api.sessionToken == nil {
-                return false
-            }
-            return true
-        }
-        return false
     }
     
     func setupUIForLoginSuccess() {

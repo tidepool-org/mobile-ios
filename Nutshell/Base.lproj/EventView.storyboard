@@ -1883,6 +1883,7 @@
                     <connections>
                         <outlet property="loginAccount" destination="9sA-Dh-xzl" id="2XT-bE-ria"/>
                         <outlet property="sidebarView" destination="9OQ-uM-nfY" id="Ix6-bv-TsQ"/>
+                        <outlet property="usernameLabel" destination="8eU-B6-eOM" id="iCh-s4-6Aa"/>
                         <outlet property="versionString" destination="FRD-xW-MeJ" id="XGz-45-lWe"/>
                     </connections>
                 </viewController>
@@ -1972,7 +1973,7 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Zwr-CU-iYy"/>
         <segue reference="2AV-5j-70h"/>
+        <segue reference="Shc-Yg-1xe"/>
     </inferredMetricsTieBreakers>
 </document>

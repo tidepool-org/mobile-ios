@@ -71,13 +71,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     }
     
     private func configureForReachability() {
-        if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-            var connected = true
-            if let api = appDelegate.API {
-                connected = api.isConnectedToNetwork()
-            }
-            missingDataAdvisoryTitle.text = connected ? "There is no data in here!" : "You are currently offline!"
-        }
+        let connected = APIConnector.connector().isConnectedToNetwork()
+        missingDataAdvisoryTitle.text = connected ? "There is no data in here!" : "You are currently offline!"
     }
 
     override func didReceiveMemoryWarning() {

@@ -16,6 +16,7 @@
 
 import UIKit
 import CoreData
+import SwiftyJSON
 
 /// Provides NSManagedObjectContext's for local and tidepool data stored locally. Manages the persistent object representing the current user.
 ///
@@ -25,7 +26,7 @@ import CoreData
 ///
 /// The local data store is allocated when the application starts, if not already allocated, and never deleted. Meal and Workout events in this store are tagged with the service userId string; queries against this database for these events always include the userid as a match criteria.
 ///
-/// The Tidepool data store is only allocated at login, and is deleted at logout. It is names so it won't be backed up to iCloud if the user has application backup to cloud configured.
+/// The Tidepool data store is only allocated at login, and is deleted at logout. It is named so it won't be backed up to iCloud if the user has application backup to cloud configured.
 class NutDataController
 {
 
@@ -72,7 +73,7 @@ class NutDataController
     }
     
 
-    var _currentUserId: String?
+    private var _currentUserId: String?
     /// Service userid for the currently logged in account, or nil. 
     /// 
     /// Read only - set indirectly via loginUser/logoutUser calls. Needed to tag nut events in database.
@@ -116,12 +117,26 @@ class NutDataController
         self.currentUser = nil
         _currentUserId = nil
     }
+
+    func processProfileFetch(json: JSON) {
+        if let user = self.currentUser {
+            user.processProfileJSON(json)
+            DatabaseUtils.databaseSave(user.managedObjectContext!)
+        }
+    }
     
     /// Courtesy call from the AppDelegate for any last minute save, probably not necessary.
     func appWillTerminate() {
         self.saveContext()
     }
 
+    /// 
+    var userFullName: String? {
+        get {
+            return currentUser?.fullName ?? ""
+        }
+    }
+    
     //
     // MARK: - Private methods
     //
@@ -356,40 +371,6 @@ class NutDataController
         }
     }
     
-    /** Removes everything from the database. Do this on logout and / or after a successful login */
-     // TODO: add code to delete "meal" and "workout" items from the database once we upload them to the service so they are backed up.
-    private func clearDatabase() {
-        NSLog("***Clearing database!***")
-        if let moc = self.mocForTidepoolObjects {
-            moc.performBlock { () -> Void in
-            
-                let entities = ["Activity", "Alarm", "Basal", "BloodKetone", "Bolus", "Calibration",
-                    "ContinuousGlucose", "Food", "GrabBag", "Note", "Prime", "ReservoirChange", "SelfMonitoringGlucose",
-                    "Settings", "Status", "TimeChange", "Upload", "UrineKetone", "Wizard", "User"]
-                var objectCount = 0
-                
-                for entity in entities {
-                    do {
-                        let request = NSFetchRequest(entityName: entity)
-                        let myList = try moc.executeFetchRequest(request)
-                        for obj: AnyObject in myList {
-                            moc.deleteObject(obj as! NSManagedObject)
-                            objectCount++
-                        }
-                    } catch let error as NSError {
-                        print("Failed to delete \(entity) items: \(error)")
-                    }
-                }
-                
-                do {
-                    try moc.save()
-                    NSLog("***Database cleared of \(objectCount) objects!***")
-                } catch let error as NSError {
-                    NSLog("clearDatabase: Failed to save MOC: \(error)")
-                }
-            
-            }
-        }
-    }
+
 
 }

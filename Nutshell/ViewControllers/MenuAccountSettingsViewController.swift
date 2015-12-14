@@ -12,19 +12,23 @@ class MenuAccountSettingsViewController: UIViewController {
 
     @IBOutlet weak var loginAccount: UILabel!
     @IBOutlet weak var versionString: NutshellUILabel!
-    
+    @IBOutlet weak var usernameLabel: NutshellUILabel!
     @IBOutlet weak var sidebarView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let curService = APIConnector.currentService!
+        let curService = APIConnector.connector().currentService!
         if curService == "Production" {
             versionString.text = "V" + UIApplication.appVersion()
         } else{
             versionString.text = "V" + UIApplication.appVersion() + " on " + curService
-            
         }
         loginAccount.text = NutDataController.controller().currentUserName
+    }
+    
+    func menuWillOpen() {
+        // Late binding here because profile fetch occurs after login complete!
+        usernameLabel.text = NutDataController.controller().userFullName
     }
 
     override func didReceiveMemoryWarning() {

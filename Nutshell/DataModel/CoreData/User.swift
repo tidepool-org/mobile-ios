@@ -25,4 +25,12 @@ class User: NSManagedObject {
         }
         return nil
     }
+    
+    func processProfileJSON(json: JSON) {
+        fullName = json["fullName"].string
+        if fullName != nil {
+            self.managedObjectContext?.refreshObject(self, mergeChanges: true)
+            NSLog("Added full name from profile: \(fullName)")
+        }
+    }
 }

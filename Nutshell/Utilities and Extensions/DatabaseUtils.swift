@@ -64,7 +64,6 @@ class DatabaseUtils {
     }
 
     class func checkLoadDataForDateRange(startDate: NSDate, endDate: NSDate) {
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let now = NSDate()
         let startBucket = DatabaseUtils.dateToBucketNumber(startDate)
         let endBucket = DatabaseUtils.dateToBucketNumber(endDate)
@@ -78,12 +77,12 @@ class DatabaseUtils {
                 }
             }
             // kick off a fetch if we are online...
-            if appDelegate.serviceAvailable() {
+            if APIConnector.connector().serviceAvailable() {
                 // TODO: if fetch fails, should we wait less time before retrying? 
                 serverBlocks[bucket] = now
                 let startTimeIsoDateStr = DatabaseUtils.bucketNumberToIsoDateString(bucket)
                 let endTimeIsoDateStr = DatabaseUtils.bucketNumberToIsoDateString(bucket+1)
-                appDelegate.API?.getReadOnlyUserData(startTimeIsoDateStr, endDate:endTimeIsoDateStr, completion: { (result) -> (Void) in
+                APIConnector.connector().getReadOnlyUserData(startTimeIsoDateStr, endDate:endTimeIsoDateStr, completion: { (result) -> (Void) in
                     if result.isSuccess {
                         DatabaseUtils.updateEvents(NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: result.value!)
                     } else {
@@ -210,7 +209,7 @@ class DatabaseUtils {
         do {
             try moc.save()
         } catch let error as NSError {
-            print("clearDatabase: Failed to save MOC: \(error)")
+            print("deleteAllNutEvents: Failed to save MOC: \(error)")
         }
     }
 }
