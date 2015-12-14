@@ -17,7 +17,13 @@ class MenuAccountSettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        versionString.text = UIApplication.appVersion() + " on " + APIConnector.currentService!
+        let curService = APIConnector.currentService!
+        if curService == "Production" {
+            versionString.text = "V" + UIApplication.appVersion()
+        } else{
+            versionString.text = "V" + UIApplication.appVersion() + " on " + curService
+            
+        }
         loginAccount.text = NutDataController.controller().currentUserName
     }
 
