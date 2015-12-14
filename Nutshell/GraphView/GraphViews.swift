@@ -613,7 +613,10 @@ public class GraphViews {
             bolusValueRectPath.fill()
             
             let bolusFloatValue = Float(item.1)
-            let bolusLabelTextContent = String(format: "%.1f", bolusFloatValue)
+            var bolusLabelTextContent = String(format: "%.2f", bolusFloatValue)
+            if bolusLabelTextContent.hasSuffix("0") {
+                bolusLabelTextContent = String(format: "%.1f", bolusFloatValue)
+            }
             let bolusLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
             bolusLabelStyle.alignment = .Center
             let bolusLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: bolusTextBlue, NSParagraphStyleAttributeName: bolusLabelStyle]
