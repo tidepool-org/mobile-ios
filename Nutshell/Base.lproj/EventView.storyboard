@@ -1776,8 +1776,8 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AkY-6Y-8Cr" userLabel="logoutView">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Name Here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8eU-B6-eOM" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="116" y="25" width="144" height="24"/>
+                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Name Here" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8eU-B6-eOM" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="25" width="375" height="24"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -1785,8 +1785,8 @@
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="accountSettingUserName"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="john@doe.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9sA-Dh-xzl">
-                                                        <rect key="frame" x="130" y="59" width="115" height="21"/>
+                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="john@doe.com" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9sA-Dh-xzl">
+                                                        <rect key="frame" x="0.0" y="59" width="375" height="21"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -1806,10 +1806,12 @@
                                                 <constraints>
                                                     <constraint firstItem="9sA-Dh-xzl" firstAttribute="top" secondItem="8eU-B6-eOM" secondAttribute="bottom" constant="10" id="6R9-S5-2h9"/>
                                                     <constraint firstItem="M98-PL-e0L" firstAttribute="top" secondItem="9sA-Dh-xzl" secondAttribute="bottom" constant="15" id="Cs7-gR-5Tu"/>
+                                                    <constraint firstItem="9sA-Dh-xzl" firstAttribute="width" secondItem="AkY-6Y-8Cr" secondAttribute="width" id="E4c-pJ-uW5"/>
                                                     <constraint firstItem="8eU-B6-eOM" firstAttribute="top" secondItem="AkY-6Y-8Cr" secondAttribute="top" constant="25" id="JfD-yC-7gb"/>
                                                     <constraint firstItem="8eU-B6-eOM" firstAttribute="centerX" secondItem="AkY-6Y-8Cr" secondAttribute="centerX" id="PMu-U3-46m"/>
                                                     <constraint firstItem="M98-PL-e0L" firstAttribute="centerX" secondItem="AkY-6Y-8Cr" secondAttribute="centerX" id="ZOE-yx-5MW"/>
                                                     <constraint firstItem="9sA-Dh-xzl" firstAttribute="centerX" secondItem="AkY-6Y-8Cr" secondAttribute="centerX" id="orC-Le-pAu"/>
+                                                    <constraint firstItem="8eU-B6-eOM" firstAttribute="width" secondItem="AkY-6Y-8Cr" secondAttribute="width" id="pXm-rD-KRL"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Rq-xO-II6" userLabel="line separator" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">

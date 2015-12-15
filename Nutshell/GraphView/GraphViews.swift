@@ -541,8 +541,8 @@ public class GraphViews {
             let lineHeight: CGFloat = 2.0
             let context = UIGraphicsGetCurrentContext()
             let linePath = UIBezierPath()
-            linePath.moveToPoint(CGPoint(x: rect.origin.x, y: rect.origin.y + lineHeight))
-            linePath.addLineToPoint(CGPoint(x: (rect.origin.x + rect.size.width), y: rect.origin.y + lineHeight))
+            linePath.moveToPoint(CGPoint(x: rect.origin.x, y: rect.origin.y))
+            linePath.addLineToPoint(CGPoint(x: (rect.origin.x + rect.size.width), y: rect.origin.y))
             linePath.miterLimit = 4;
             linePath.lineCapStyle = .Square;
             linePath.lineJoinStyle = .Round;
