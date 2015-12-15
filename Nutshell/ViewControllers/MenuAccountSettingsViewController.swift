@@ -51,12 +51,6 @@ class MenuAccountSettingsViewController: UIViewController {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.logout()
     }
-
-    @IBAction func termsOfUseTapped(sender: AnyObject) {
-        let storyboard = UIStoryboard(name: "EventView", bundle: nil)
-        let menuController = storyboard.instantiateViewControllerWithIdentifier("menuTermsVC") as! MenuTermsViewController
-        sideMenuController()?.setContentViewController(menuController)
-    }
     
     /*
     // MARK: - Navigation
