@@ -22,7 +22,7 @@ class GraphCollectionCell: UICollectionViewCell {
     private var graphTimeInterval: NSTimeInterval?
     
     func updateViewSize() {
-        NSLog("GraphCollectionCell checkLayout frame \(self.frame.size)")
+        //NSLog("GraphCollectionCell checkLayout frame \(self.frame.size)")
         if let graphView = graphView {
             graphView.updateViewSize(self.frame.size)
         }
@@ -30,7 +30,7 @@ class GraphCollectionCell: UICollectionViewCell {
     
     func configureCell(centerTime: NSDate, timeInterval: NSTimeInterval,                 mainEventTime: NSDate, maxBolus: CGFloat, maxBasal: CGFloat) -> Bool {
 
-        NSLog("GraphCollectionCell configure centerTime \(centerTime), timeInterval \(timeInterval), frame \(self.frame.size)")
+        //NSLog("GraphCollectionCell configure centerTime \(centerTime), timeInterval \(timeInterval), frame \(self.frame.size)")
 
         graphView?.removeFromSuperview()
         graphView = GraphUIView.init(frame: self.bounds, centerTime: centerTime, timeIntervalForView: timeInterval, timeOfMainEvent: mainEventTime)

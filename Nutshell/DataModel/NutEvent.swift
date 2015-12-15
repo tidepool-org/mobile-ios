@@ -122,9 +122,9 @@ class NutEvent {
     }
 
     func printNutEvent() {
-        print("nut has \(itemArray.count) items")
+        NSLog("nut has \(itemArray.count) items")
         for item in itemArray {
-            print("item: \(item.notes), \(item.time)")
+            NSLog("item: \(item.notes), \(item.time)")
         }
     }
     

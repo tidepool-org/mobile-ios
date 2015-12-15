@@ -172,10 +172,10 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     func databaseChanged(note: NSNotification) {
         graphNeedsUpdate = true
         if viewIsForeground {
-            NSLog("EventDetailView: database load finished, reloading")
+            NSLog("EventDetailView: databaseChanged, reloading")
             checkUpdateGraph()
         } else {
-            NSLog("EventDetailView: database load finished in background")
+            NSLog("EventDetailView: databaseChanged, in background")
         }
     }
 

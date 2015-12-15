@@ -198,7 +198,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
             if let existingNutEvent = nutEvents[newEventId] {
                 existingNutEvent.addEvent(newEvent)
                 //NSLog("appending new event: \(newEvent.notes)")
-                existingNutEvent.printNutEvent()
+                //existingNutEvent.printNutEvent()
             } else {
                 nutEvents[newEventId] = NutEvent(firstEvent: newEvent)
             }

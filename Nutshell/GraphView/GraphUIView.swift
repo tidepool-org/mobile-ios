@@ -26,7 +26,7 @@ class GraphUIView: UIView {
     ///   The time span covered by the graph
     
     init(frame: CGRect, centerTime: NSDate, timeIntervalForView: NSTimeInterval, timeOfMainEvent: NSDate) {
-        NSLog("GraphUIView init frame \(frame)")
+        //NSLog("GraphUIView init frame \(frame)")
         self.centerTime = centerTime
         self.startTime = centerTime.dateByAddingTimeInterval(-timeIntervalForView/2)
         self.endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
@@ -46,7 +46,7 @@ class GraphUIView: UIView {
     
     func configure(maxBolus: CGFloat = 0.0, maxBasal: CGFloat = 0.0) {
         
-        NSLog("GraphUIView configure maxBolus \(maxBolus), maxBasal \(maxBasal)")
+        //NSLog("GraphUIView configure maxBolus \(maxBolus), maxBasal \(maxBasal)")
         self.maxBasal = maxBasal
         self.maxBolus = maxBolus
         loadDataForView()
@@ -100,7 +100,7 @@ class GraphUIView: UIView {
     private var cbgData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var wizardData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
-    private var basalData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
+    private var basalData: [(timeOffset: NSTimeInterval, value: NSNumber, suppressed: NSNumber?)] = []
     private var workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval)] = []
     private var mealData: [(timeOffset: NSTimeInterval, mainEvent: Bool)] = []
 
@@ -166,56 +166,64 @@ class GraphUIView: UIView {
     //
 
     private func addSmbgEvent(event: SelfMonitoringGlucose, deltaTime: NSTimeInterval) {
-        //print("Adding smbg event: \(event)")
+        //NSLog("Adding smbg event: \(event)")
         if let value = event.value {
             smbgData.append((timeOffset: deltaTime, value: value))
         } else {
-            print("ignoring Smbg event with nil value")
+            NSLog("ignoring Smbg event with nil value")
         }
     }
     
     private func addCbgEvent(event: ContinuousGlucose, deltaTime: NSTimeInterval) {
-        //print("Adding Cbg event: \(event)")
+        //NSLog("Adding Cbg event: \(event)")
         if let value = event.value {
             cbgData.append((timeOffset: deltaTime, value: value))
         } else {
-            print("ignoring Cbg event with nil value")
+            NSLog("ignoring Cbg event with nil value")
         }
     }
 
     private func addBolusEvent(event: Bolus, deltaTime: NSTimeInterval) {
-        //print("Adding Bolus event: \(event)")
+        //NSLog("Adding Bolus event: \(event)")
         if let value = event.value {
             bolusData.append((timeOffset: deltaTime, value: value))
         } else {
-            print("ignoring Bolus event with nil value")
+            NSLog("ignoring Bolus event with nil value")
         }
     }
 
     private func addWizardEvent(event: Wizard, deltaTime: NSTimeInterval) {
-        //print("Adding Wizard event: \(event)")
+        //NSLog("Adding Wizard event: \(event)")
         if let value = event.carbInput {
             wizardData.append((timeOffset: deltaTime, value: value))
         } else {
-            print("ignoring Wizard event with nil carbInput value!")
+            NSLog("ignoring Wizard event with nil carbInput value!")
         }
     }
 
     private func addBasalEvent(event: Basal, deltaTime: NSTimeInterval) {
-        //print("Adding Basal event: \(event)")
-        if let value = event.value {
-            basalData.append((timeOffset: deltaTime, value: value))
+        //NSLog("Adding Basal event: \(event)")
+        var value = event.value
+        if value == nil {
+            if let deliveryType = event.deliveryType {
+                if deliveryType == "suspend" {
+                    value = NSNumber(double: 0.0)
+                }
+            }
+        }
+        if value != nil {
+            basalData.append((timeOffset: deltaTime, value: value!, suppressed: event.percent))
         } else {
-            print("ignoring Basal event with nil value")
+            NSLog("ignoring Basal event with nil value")
         }
     }
 
     private func addWorkoutEvent(event: Workout, deltaTime: NSTimeInterval) {
-        //print("Adding Workout event: \(event)")
+        //NSLog("Adding Workout event: \(event)")
         if let duration = event.duration {
             workoutData.append((timeOffset: deltaTime, duration: NSTimeInterval(duration)))
         } else {
-            print("ignoring Workout event with nil duration")
+            NSLog("ignoring Workout event with nil duration")
         }
     }
 
@@ -236,7 +244,6 @@ class GraphUIView: UIView {
         do {
             let events = try DatabaseUtils.getTidepoolEvents(earlyStartTime, toTime: lateEndTime, objectTypes: ["smbg", "bolus", "cbg", "wizard"])
             
-            print("\(events.count) events")
             for event in events {
                 if let eventTime = event.time {
                     let deltaTime = eventTime.timeIntervalSinceDate(startTime)
@@ -257,13 +264,13 @@ class GraphUIView: UIView {
                         if let cbgEvent = event as? ContinuousGlucose {
                             addCbgEvent(cbgEvent, deltaTime: deltaTime)
                         }
-                    default: print("Ignoring event of type: \(event.type)")
+                    default: NSLog("Ignoring event of type: \(event.type)")
                         break
                     }
                 }
             }
         } catch let error as NSError {
-            print("Error: \(error)")
+            NSLog("Error: \(error)")
         }
         
         // since basal events have a duration, use a different query to start earlier in time
@@ -271,7 +278,6 @@ class GraphUIView: UIView {
             let earlyStartTime = startTime.dateByAddingTimeInterval(-60*60*12)
             let events = try DatabaseUtils.getTidepoolEvents(earlyStartTime, toTime: endTime, objectTypes: ["basal"])
             
-            print("\(events.count) events")
             for event in events {
                 if let eventTime = event.time {
                     let deltaTime = eventTime.timeIntervalSinceDate(startTime)
@@ -286,7 +292,7 @@ class GraphUIView: UIView {
                 }
             }
         } catch let error as NSError {
-            print("Error: \(error)")
+            NSLog("Error: \(error)")
         }
 
         // since meal events may be in a different store, make a separate call
@@ -294,7 +300,6 @@ class GraphUIView: UIView {
         do {
             let events = try DatabaseUtils.getNutEvents(earlyStartTime, toTime: lateEndTime)
             
-            print("\(events.count) events")
             for event in events {
                 if let eventTime = event.time {
                     let deltaTime = eventTime.timeIntervalSinceDate(startTime)
@@ -308,15 +313,15 @@ class GraphUIView: UIView {
                         if let workoutEvent = event as? Workout {
                             addWorkoutEvent(workoutEvent, deltaTime: deltaTime)
                         }
-                    default: print("Ignoring event of type: \(event.type)")
+                    default: NSLog("Ignoring event of type: \(event.type)")
                         break
                     }
                 }
             }
         } catch let error as NSError {
-            print("Error: \(error)")
+            NSLog("Error: \(error)")
         }
 
-        print("loaded \(smbgData.count) smbg events, \(cbgData.count) cbg events, \(bolusData.count) bolus events, \(basalData.count) basal events, \(wizardData.count) wizard events, \(mealData.count) meal events, \(workoutData.count) workout events")
+        NSLog("loaded \(smbgData.count) smbg events, \(cbgData.count) cbg events, \(bolusData.count) bolus events, \(basalData.count) basal events, \(wizardData.count) wizard events, \(mealData.count) meal events, \(workoutData.count) workout events")
     }
 }

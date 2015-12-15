@@ -286,7 +286,8 @@ class APIConnector {
                 let json = JSON(result.value!)
                 completion(Result.Success(json))
             } else {
-                // Failure: Note we get here when no data is found as well!
+                // Failure
+                // TODO: Note we get here when no data is found as well - status code 200, NSCocoaErrorDomain Code 3840 "The operation couldn't be completed"
                 completion(Result.Failure(nil, result.error!))
             }
         }

@@ -246,7 +246,7 @@ public class GraphViews {
         return imageOfBolusData
     }
 
-    func imageOfBasalData(basalData: [(timeOffset: NSTimeInterval, value: NSNumber)], maxBasal: CGFloat) -> UIImage {
+    func imageOfBasalData(basalData: [(timeOffset: NSTimeInterval, value: NSNumber, suppressed: NSNumber?)], maxBasal: CGFloat) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
         drawBasalData(basalData, maxBasal: maxBasal)
         
@@ -320,7 +320,7 @@ public class GraphViews {
             
             // Don't draw labels too close to margins
             if center < 20.0 || center > (viewSize.width - 20.0) {
-                print("skipping yAxis label \(yLabel)")
+                NSLog("skipping yAxis label \(yLabel)")
                 return
             }
             
@@ -406,7 +406,7 @@ public class GraphViews {
                 labelAttrStr.drawInRect(labelRect)
                 lastLabelDrawn = labelRect
             } else {
-                print("skipping x axis label")
+                NSLog("skipping x axis label")
             }
         }
         
@@ -508,69 +508,112 @@ public class GraphViews {
         }
     }
 
-    private func drawBasalData(basalData: [(timeOffset: NSTimeInterval, value: NSNumber)], maxBasal: CGFloat) {
+    private func drawBasalData(basalData: [(timeOffset: NSTimeInterval, value: NSNumber, suppressed: NSNumber?)], maxBasal: CGFloat) {
         
-        // first figure out the range of data unless it has been pre-figured for us; scale rectangle to fill this
+        // first figure out the range of data
         var rangeHi = CGFloat(kBasalMinScaleValue)
+        for item in basalData {
+            let nextValue = CGFloat(item.1.doubleValue)
+            if nextValue > rangeHi {
+                rangeHi = nextValue
+            }
+        }
+        //rangeHi = ceil(rangeHi) // Keep it integral
         if maxBasal > 0.0 {
-            rangeHi = maxBasal
-        } else {
-            for item in basalData {
-                let nextValue = CGFloat(item.1.doubleValue)
-                if nextValue > rangeHi {
-                    rangeHi = nextValue
+            if rangeHi > maxBasal {
+                // Hmmm... we found a value that is higher than our presumed max!
+                NSLog("Basal range max \(rangeHi) is greater than maxBasal \(maxBasal)!")
+            } else {
+                if maxBasal > CGFloat(kBasalMinScaleValue) {
+                    rangeHi = maxBasal
+                } else {
+                    NSLog("maxBasal \(maxBasal) lower than min scale \(CGFloat(kBasalMinScaleValue))!")
                 }
             }
         }
-        // Keep it integral
-        rangeHi = ceil(rangeHi)
-        
+            
         // Keep track of basal rects for later drawing of wizard data
         basalRects = []
         
         let yPixelsPerUnit = yPixelsBasal / CGFloat(rangeHi)
 
-        func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: NSNumber) {
+        func drawSuppressedLine(rect: CGRect) {
+            let lineHeight: CGFloat = 2.0
+            let context = UIGraphicsGetCurrentContext()
+            let linePath = UIBezierPath()
+            linePath.moveToPoint(CGPoint(x: rect.origin.x, y: rect.origin.y + lineHeight))
+            linePath.addLineToPoint(CGPoint(x: (rect.origin.x + rect.size.width), y: rect.origin.y + lineHeight))
+            linePath.miterLimit = 4;
+            linePath.lineCapStyle = .Square;
+            linePath.lineJoinStyle = .Round;
+            linePath.usesEvenOddFillRule = true;
+            
+            bolusBlueRectColor.setStroke()
+            linePath.lineWidth = lineHeight
+            CGContextSaveGState(context)
+            CGContextSetLineDash(context, 0, [2, 5], 2)
+            linePath.stroke()
+            CGContextRestoreGState(context)
+        }
+
+        func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: NSNumber, percent: NSNumber?) {
 
             let rectLeft = floor(CGFloat(startTimeOffset) * viewPixelsPerSec)
             let rectRight = ceil(CGFloat(endTimeOffset) * viewPixelsPerSec)
             let rectHeight = floor(yPixelsPerUnit * CGFloat(value))
-            let basalRect = CGRect(x: rectLeft, y: yBottomOfBasal - rectHeight, width: rectRight - rectLeft, height: rectHeight)
+            var basalRect = CGRect(x: rectLeft, y: yBottomOfBasal - rectHeight, width: rectRight - rectLeft, height: rectHeight)
 
             let basalValueRectPath = UIBezierPath(rect: basalRect)
             basalLightBlueRectColor.setFill()
             basalValueRectPath.fill()
+            
+            if let percent = percent {
+                var suppressedValue = CGFloat(percent)
+                if suppressedValue != 0 {
+                    suppressedValue = CGFloat(value) / suppressedValue
+                    let lineHeight = floor(yPixelsPerUnit * suppressedValue)
+                    // reuse basalRect, it just needs y adjust, height not used
+                    basalRect.origin.y = yBottomOfBasal - lineHeight
+                    drawSuppressedLine(basalRect)
+                }
+            }
             
             basalRects.append(basalRect)
         }
 
         var startValue: CGFloat = 0.0
         var startTimeOffset: NSTimeInterval = 0.0
+        var startPercentSuppressed: NSNumber?
         
         // draw the items, left to right. A zero value ends a rect, a new value ends any current rect and starts a new one.
         for item in basalData {
             // skip over values before starting time, but remember last value...
             let itemTime = item.0
             let itemValue = item.1
+            let itemPercent = item.2
+            
             if itemTime < 0 {
                 startValue = CGFloat(itemValue)
+                startPercentSuppressed = itemPercent
             } else if startValue == 0.0 {
                 if (itemValue > 0.0) {
                     // just starting a rect, note the time...
                     startTimeOffset = itemTime
                     startValue = CGFloat(itemValue)
+                    startPercentSuppressed = itemPercent
                 }
             } else {
                 // got another value, draw the rect
-                drawBasalRect(startTimeOffset, endTimeOffset: itemTime, value: startValue)
+                drawBasalRect(startTimeOffset, endTimeOffset: itemTime, value: startValue, percent: startPercentSuppressed)
                 // and start another rect...
                 startValue = CGFloat(itemValue)
                 startTimeOffset = itemTime
+                startPercentSuppressed = itemPercent
             }
         }
         // finish off any rect we started...
         if (startValue > 0.0) {
-            drawBasalRect(startTimeOffset, endTimeOffset: timeIntervalForView, value: startValue)
+            drawBasalRect(startTimeOffset, endTimeOffset: timeIntervalForView, value: startValue, percent: startPercentSuppressed)
         }
         
     }
@@ -735,7 +778,7 @@ public class GraphViews {
                 
             lastCircleDrawn = circleRect
         }
-        print("\(cbgData.count) cbg events, low: \(lowValue) high: \(highValue)")
+        //NSLog("\(cbgData.count) cbg events, low: \(lowValue) high: \(highValue)")
     }
    
     private func drawSmbgData(smbgData: [(timeOffset: NSTimeInterval, value: NSNumber)]) {
@@ -791,7 +834,7 @@ public class GraphViews {
             readingLabelTextContent.drawInRect(readingLabelRect, withAttributes: readingLabelFontAttributes)
             CGContextRestoreGState(context)
         }
-        print("\(smbgData.count) smbg events, low: \(lowValue) high: \(highValue)")
+        //NSLog("\(smbgData.count) smbg events, low: \(lowValue) high: \(highValue)")
     }
 
 }

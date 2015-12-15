@@ -18,11 +18,11 @@ class DatabaseUtils {
         // Save the database
         do {
             try moc.save()
-            print("EventGroup: Database saved!")
+            NSLog("DatabaseUtils: Database saved!")
             return true
         } catch let error as NSError {
             // TO DO: error message!
-            print("Failed to save MOC: \(error)")
+            NSLog("Failed to save MOC: \(error)")
             return false
         }
     }
@@ -40,7 +40,7 @@ class DatabaseUtils {
         let refSeconds = Int(date.timeIntervalSinceReferenceDate)
         let kBucketSeconds = 60*60*20 // 20 hour chunks
         let result = refSeconds/kBucketSeconds
-        print("Date: \(date), bucket number: \(result)")
+        //NSLog("Date: \(date), bucket number: \(result)")
         return result
     }
 
@@ -59,7 +59,7 @@ class DatabaseUtils {
         let date = NSDate(timeIntervalSinceReferenceDate: NSTimeInterval(bucket*60*60*20))
         let df = DatabaseUtils.isoDateFormatter
         let result = df.stringFromDate(date) + "Z"
-        print("Bucket number: \(bucket), date: \(date), string: \(result)")
+        //NSLog("Bucket number: \(bucket), date: \(date), string: \(result)")
         return result
     }
 
@@ -72,7 +72,7 @@ class DatabaseUtils {
             if let lastFetchDate = serverBlocks[bucket] {
                 if now.timeIntervalSinceDate(lastFetchDate) < 60*10 {
                     // don't check more often than every 10 minutes...
-                    NSLog("checkLoadDataForDateRange: skip load of bucket \(bucket)")
+                    //NSLog("checkLoadDataForDateRange: skip load of bucket \(bucket)")
                     continue
                 }
             }
@@ -86,7 +86,7 @@ class DatabaseUtils {
                     if result.isSuccess {
                         DatabaseUtils.updateEvents(NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: result.value!)
                     } else {
-                        print("Failed to get events in range for user. Error: \(result.error!)")
+                        NSLog("No events in range \(startTimeIsoDateStr) to \(endTimeIsoDateStr)")
                     }
                 })
             }
@@ -117,23 +117,23 @@ class DatabaseUtils {
                         }
                         moc.insertObject(obj)
                     } catch let error as NSError {
-                        print("updateEvents: Failed to replace existing event with ID \(id) error: \(error)")
+                        NSLog("updateEvents: Failed to replace existing event with ID \(id) error: \(error)")
                     }
                 } else {
-                    print("updateEvents: no ID found for object: \(obj), not inserting!")
+                    NSLog("updateEvents: no ID found for object: \(obj), not inserting!")
                 }
             }
         }
-        NSLog("extra events processed: \(eventCounter)")
+        NSLog("\(eventCounter) items")
         // Save the database
         do {
             try moc.save()
-            print("updateEvents: Database saved!")
+            NSLog("updateEvents: Database saved!")
             //dispatch_async(dispatch_get_main_queue()) {
             notifyOnDataLoad()
             //}
         } catch let error as NSError {
-            print("Failed to save MOC: \(error)")
+            NSLog("Failed to save MOC: \(error)")
         }
     }
     
@@ -203,13 +203,13 @@ class DatabaseUtils {
                 }
             }
         } catch let error as NSError {
-            print("Failed to delete nut event items: \(error)")
+            NSLog("Failed to delete nut event items: \(error)")
         }
         
         do {
             try moc.save()
         } catch let error as NSError {
-            print("deleteAllNutEvents: Failed to save MOC: \(error)")
+            NSLog("deleteAllNutEvents: Failed to save MOC: \(error)")
         }
     }
 }

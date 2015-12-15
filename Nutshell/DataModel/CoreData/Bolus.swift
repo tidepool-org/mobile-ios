@@ -16,20 +16,22 @@ class Bolus: CommonData {
         if let entityDescription = NSEntityDescription.entityForName("Bolus", inManagedObjectContext: moc) {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Bolus
             
+            me.normal = json["normal"].number
+            me.extended = json["extended"].number
+            me.duration = json["duration"].number
+            me.expectedExtended = json["expectedExtended"].number
+            me.expectedDuration = json["expectedDuration"].number
+            
+            var value: Float = 0.0
+            if let normal = me.normal {
+                value = value + Float(normal)
+            }
+            if let extended = me.extended {
+                value = value + Float(extended)
+            }
+            me.value = NSNumber(float: value)
+            // The following are unused...
             me.subType = json["subType"].string
-            var valueType: String?
-            if let subtype = me.subType {
-                switch subtype {
-                case "normal": valueType = "normal"
-                case "square": valueType = "extended"
-                case "dual/square": valueType = "extended"
-                case "injected": valueType = "value"
-                default: print("Bolus subtype: Unknown type \(me.subType)")
-                }
-            }
-            if (valueType != nil) {
-                me.value = json[valueType!].number
-            }
             me.insulin = json["insulin"].string
             
             return me

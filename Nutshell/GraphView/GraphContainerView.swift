@@ -53,7 +53,7 @@ class GraphContainerView: UIView {
     func reloadData() {
         if let graphCollectionView = graphCollectionView, eventItem = eventItem {
             graphCenterTime = eventItem.time
-            NSLog("GraphContainerView reloading data")
+            //NSLog("GraphContainerView reloading data")
             // max bolus/basal may have changed with new data, so need to refigure those!
             determineGraphObjectSizing()
             graphCollectionView.reloadData()
@@ -120,7 +120,7 @@ class GraphContainerView: UIView {
         }
 
         if let graphCollectionView = graphCollectionView {
-            NSLog("Zoom from cell size: \(self.cellSize) to \(size)")
+            //NSLog("Zoom from cell size: \(self.cellSize) to \(size)")
             self.cellSize = size //  new cell sizing
             let ratioXOffset = xOffsetInView / self.bounds.width
 
@@ -149,7 +149,7 @@ class GraphContainerView: UIView {
             graphLayout.targetContentOffsetForProposedContentOffset(targetOffset)
             graphLayout.scrollDirection = UICollectionViewScrollDirection.Horizontal
             graphCollectionView.setCollectionViewLayout(graphLayout, animated: false)
-            NSLog("End content offset & size: \(graphCollectionView.contentOffset) & \(graphCollectionView.contentSize)")
+            //NSLog("End content offset & size: \(graphCollectionView.contentOffset) & \(graphCollectionView.contentSize)")
             
             // Since we aren't changing the timeframe or time offset covered by each cell, we only need to have each visible cell redraw itself with its new sizing
             redrawData()
@@ -185,7 +185,7 @@ class GraphContainerView: UIView {
         if pixelsPerHour > kMaxPixelsPerHour || pixelsPerHour < kMinPixelsPerHour {
             return
         }
-        NSLog("New pixels per hour: \(pixelsPerHour)")
+        //NSLog("New pixels per hour: \(pixelsPerHour)")
         graphPixelsPerHour = pixelsPerHour
         graphViewTimeInterval = NSTimeInterval(self.bounds.width * 3600.0/graphPixelsPerHour)
     }
@@ -262,16 +262,16 @@ class GraphContainerView: UIView {
     }
 
     func pinchGestureHandler(sender: AnyObject) {
-        NSLog("recognized pinch!")
+        //NSLog("recognized pinch!")
         if let gesture = sender as? UIPinchGestureRecognizer {
             if gesture.state == UIGestureRecognizerState.Began {
-                NSLog("gesture started: start cell size: \(cellSize)")
+                //NSLog("gesture started: start cell size: \(cellSize)")
                 pinchStartCellSize = cellSize
                 pinchLocationInView = gesture.locationInView(self)
                 return
             }
             if gesture.state == UIGestureRecognizerState.Changed {
-                NSLog("gesture state changed scale: \(gesture.scale)")
+                //NSLog("gesture state changed scale: \(gesture.scale)")
                 var newCellSize = pinchStartCellSize
                 newCellSize.width = newCellSize.width * CGFloat(gesture.scale)
                 zoomCellSize(newCellSize, xOffsetInView: pinchLocationInView.x)
@@ -280,7 +280,7 @@ class GraphContainerView: UIView {
                 return
             }
             if gesture.state == UIGestureRecognizerState.Ended {
-                NSLog("gesture ended with scale: \(gesture.scale)")
+                //NSLog("gesture ended with scale: \(gesture.scale)")
                 var newCellSize = pinchStartCellSize
                 newCellSize.width = newCellSize.width * CGFloat(gesture.scale)
                 zoomCellSize(newCellSize, xOffsetInView: pinchLocationInView.x)
@@ -305,7 +305,7 @@ class GraphContainerView: UIView {
             let graphCollectEndTime = graphCenterTime.dateByAddingTimeInterval(boundsTimeIntervalFromCenter)
             let events = try DatabaseUtils.getTidepoolEvents(graphCollectStartTime, toTime: graphCollectEndTime, objectTypes: ["basal", "bolus"])
             
-            NSLog("\(events.count) basal and bolus events fetched to figure max values")
+            //NSLog("\(events.count) basal and bolus events fetched to figure max values")
             maxBasal = 0.0
             maxBolus = 0.0
             for event in events {
@@ -359,7 +359,7 @@ extension GraphContainerView: UICollectionViewDataSource {
         cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(collectCellReuseID, forIndexPath: indexPath) as! GraphCollectionCell
 
-            NSLog("GraphContainerView cellForItemAtIndexPath \(indexPath.row)")
+            //NSLog("GraphContainerView cellForItemAtIndexPath \(indexPath.row)")
             // index determines center time...
             let cellCenterTime = centerTimeOfCellAtIndex(indexPath)
             if cell.configureCell(cellCenterTime, timeInterval: graphViewTimeInterval, mainEventTime: eventItem!.time, maxBolus: maxBolus, maxBasal: maxBasal) {
