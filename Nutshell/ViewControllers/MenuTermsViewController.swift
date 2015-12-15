@@ -25,7 +25,7 @@ class MenuTermsViewController: UIViewController, ENSideMenuDelegate {
     @IBAction func toggleSideMenu(sender: AnyObject) {
         //toggleSideMenuView()
         let storyboard = UIStoryboard(name: "EventView", bundle: nil)
-        let eventListController = storyboard.instantiateViewControllerWithIdentifier("eventListVC") as! EventListTableViewController
+        let eventListController = storyboard.instantiateViewControllerWithIdentifier("eventListVC") as! EventListViewController
         sideMenuController()?.setContentViewController(eventListController)
     }
 

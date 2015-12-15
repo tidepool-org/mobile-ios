@@ -16,11 +16,13 @@
 import UIKit
 import CoreData
 
-class EventListTableViewController: BaseUITableViewController, ENSideMenuDelegate {
+class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
 
     @IBOutlet weak var menuButton: UIBarButtonItem!
     @IBOutlet weak var searchTextField: NutshellUITextField!
     @IBOutlet weak var searchPlaceholderLabel: NutshellUILabel!
+    @IBOutlet weak var tableView: NutshellUITableView!
+    @IBOutlet weak var coverView: UIControl!
     
     private var sortedNutEvents = [(String, NutEvent)]()
     private var filteredNutEvents = [(String, NutEvent)]()
@@ -51,17 +53,6 @@ class EventListTableViewController: BaseUITableViewController, ENSideMenuDelegat
             sideMenu.menuWidth = revealWidth
             sideMenu.bouncingEnabled = false
         }
-
-//        if self.revealViewController() != nil {
-//            menuButton.target = self.revealViewController()
-//            menuButton.action = "revealToggle:"
-//            self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
-//            // Left drawer is designed to be 240 pixels wide for iPhone 5. Let it grow proportionally for iPhone 6, but no wider on larger devices.
-//            // When it reveals terms of service, let it grow to full width on iPhone 5 and 6, but no wider.
-//            self.revealViewController().rearViewRevealWidth = min(ceil((240.0/320.0) * self.view.bounds.width), 281.0)
-//            let overDraw = min(floor((80.0/320.0) * self.view.bounds.width), 94.0)
-//            self.revealViewController().rearViewRevealOverdraw = overDraw
-//        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -104,44 +95,41 @@ class EventListTableViewController: BaseUITableViewController, ENSideMenuDelegat
     //
 
     private func configureForMenuOpen(open: Bool) {
-        if let tableView = self.tableView as? NutshellUITableView {
-             if open {
-                tableView.userInteractionEnabled = false
-                self.navigationItem.rightBarButtonItem?.enabled = false
-                if let sideMenuController = self.sideMenuController()?.sideMenu?.menuViewController as? MenuAccountSettingsViewController {
-                    // give sidebar a chance to update
-                    // TODO: this should really be in ENSideMenu!
-                    sideMenuController.menuWillOpen()
-                }
-            } else {
-                tableView.userInteractionEnabled = true
-                self.navigationItem.rightBarButtonItem?.enabled = true
+         if open {
+            if let sideMenuController = self.sideMenuController()?.sideMenu?.menuViewController as? MenuAccountSettingsViewController {
+                // give sidebar a chance to update
+                // TODO: this should really be in ENSideMenu!
+                sideMenuController.menuWillOpen()
             }
         }
+        
+        tableView.userInteractionEnabled = !open
+        self.navigationItem.rightBarButtonItem?.enabled = !open
+        coverView.hidden = !open
     }
     
     func sideMenuWillOpen() {
-        print("EventList sideMenuWillOpen")
+        //NSLog("EventList sideMenuWillOpen")
         configureForMenuOpen(true)
     }
     
     func sideMenuWillClose() {
-        print("EventList sideMenuWillClose")
+        //NSLog("EventList sideMenuWillClose")
         configureForMenuOpen(false)
     }
     
     func sideMenuShouldOpenSideMenu() -> Bool {
-        print("EventList sideMenuShouldOpenSideMenu")
+        //NSLog("EventList sideMenuShouldOpenSideMenu")
         return true
     }
     
     func sideMenuDidClose() {
-        print("EventList sideMenuDidClose")
+        //NSLog("EventList sideMenuDidClose")
         configureForMenuOpen(false)
     }
     
     func sideMenuDidOpen() {
-        print("EventList sideMenuDidOpen")
+        //NSLog("EventList sideMenuDidOpen")
         configureForMenuOpen(true)
     }
 
@@ -170,20 +158,20 @@ class EventListTableViewController: BaseUITableViewController, ENSideMenuDelegat
     }
     
     @IBAction func nutEventChanged(segue: UIStoryboardSegue) {
-        print("unwind segue to eventList addedSomeNewEvent")
+        NSLog("unwind segue to eventList addedSomeNewEvent")
     }
 
     @IBAction func done(segue: UIStoryboardSegue) {
-        print("unwind segue to eventList done!")
+        NSLog("unwind segue to eventList done!")
     }
 
     @IBAction func cancel(segue: UIStoryboardSegue) {
-        print("unwind segue to eventList cancel")
+        NSLog("unwind segue to eventList cancel")
     }
 
     private var eventListNeedsUpdate: Bool  = false
     func databaseChanged(note: NSNotification) {
-        print("EventList: Database Change Notification")
+        NSLog("EventList: Database Change Notification")
         if viewIsForeground {
             getNutEvents()
         } else {
@@ -209,7 +197,7 @@ class EventListTableViewController: BaseUITableViewController, ENSideMenuDelegat
             let newEventId = newEvent.nutEventIdString()
             if let existingNutEvent = nutEvents[newEventId] {
                 existingNutEvent.addEvent(newEvent)
-                print("appending new event: \(newEvent.notes)")
+                //NSLog("appending new event: \(newEvent.notes)")
                 existingNutEvent.printNutEvent()
             } else {
                 nutEvents[newEventId] = NutEvent(firstEvent: newEvent)
@@ -224,11 +212,11 @@ class EventListTableViewController: BaseUITableViewController, ENSideMenuDelegat
         do {
             let nutEvents = try DatabaseUtils.getNutEvents()
             for event in nutEvents {
-                print("Event type: \(event.type), time: \(event.time), title: \(event.title), notes: \(event.notes), userid: \(event.userid)")
+                //NSLog("Event type: \(event.type), time: \(event.time), title: \(event.title), notes: \(event.notes), userid: \(event.userid)")
                 addNewEvent(event)
             }
         } catch let error as NSError {
-            print("Error: \(error)")
+            NSLog("Error: \(error)")
         }
         
         sortedNutEvents = nutEvents.sort() { $0.1.mostRecent.compare($1.1.mostRecent) == NSComparisonResult.OrderedDescending }
@@ -299,17 +287,17 @@ class EventListTableViewController: BaseUITableViewController, ENSideMenuDelegat
 // MARK: - Table view delegate
 //
 
-extension EventListTableViewController {
+extension EventListViewController: UITableViewDelegate {
     
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath: NSIndexPath) -> CGFloat {
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath: NSIndexPath) -> CGFloat {
         return 102.0;
     }
 
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath: NSIndexPath) -> CGFloat {
+    func tableView(tableView: UITableView, heightForRowAtIndexPath: NSIndexPath) -> CGFloat {
         return UITableViewAutomaticDimension;
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let tuple = self.filteredNutEvents[indexPath.item]
         let nutEvent = tuple.1
@@ -327,17 +315,17 @@ extension EventListTableViewController {
 // MARK: - Table view data source
 //
 
-extension EventListTableViewController {
+extension EventListViewController: UITableViewDataSource {
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredNutEvents.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(EventViewStoryboard.TableViewCellIdentifiers.eventListCell, forIndexPath: indexPath) as! EventListTableViewCell
         
         if (indexPath.item < filteredNutEvents.count) {

@@ -14,6 +14,7 @@ class MenuAccountSettingsViewController: UIViewController {
     @IBOutlet weak var versionString: NutshellUILabel!
     @IBOutlet weak var usernameLabel: NutshellUILabel!
     @IBOutlet weak var sidebarView: UIView!
+    @IBOutlet weak var privacyLink: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,9 @@ class MenuAccountSettingsViewController: UIViewController {
             versionString.text = "V" + UIApplication.appVersion() + " on " + curService
         }
         loginAccount.text = NutDataController.controller().currentUserName
+        let attributes = [NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue]
+        let attributedText = NSAttributedString(string: privacyLink.currentTitle!, attributes: attributes)
+        privacyLink.titleLabel?.attributedText = attributedText
     }
     
     func menuWillOpen() {

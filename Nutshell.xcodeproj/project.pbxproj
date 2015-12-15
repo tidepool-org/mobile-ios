@@ -110,6 +110,7 @@
 		4837CC6B1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */; };
 		483E3C361B9F4A6300DA49E7 /* BaseUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */; };
 		483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */; };
+		48501BF01C1FC5EC00A7ADA8 /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */; };
 		4851C6921BA6281800F8E0EE /* NutshellUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851C6911BA6281800F8E0EE /* NutshellUIView.swift */; };
 		4851C6951BA689FC00F8E0EE /* NutshellUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851C6941BA689FC00F8E0EE /* NutshellUITableView.swift */; };
 		485420211BC44D290020CFE1 /* Workout+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854201B1BC44D290020CFE1 /* Workout+CoreDataProperties.swift */; };
@@ -126,7 +127,6 @@
 		4854202C1BC44D290020CFE1 /* EventItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485420201BC44D290020CFE1 /* EventItem.swift */; };
 		4854202D1BC4790D0020CFE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4859FCC21B9A4DE4000C1269 /* Assets.xcassets */; };
 		4859229B1B9A61510056E605 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 485922991B9A61510056E605 /* Login.storyboard */; };
-		485922A21B9A634E0056E605 /* EventListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485922A11B9A634E0056E605 /* EventListTableViewController.swift */; };
 		485922A41B9A639B0056E605 /* EventGroupTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485922A31B9A639B0056E605 /* EventGroupTableViewController.swift */; };
 		485922A81B9C98420056E605 /* splash_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 485922A61B9C98420056E605 /* splash_logo@2x.png */; };
 		4859FCB91B9A4DE4000C1269 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */; };
@@ -268,6 +268,7 @@
 		4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuAccountSettingsViewController.swift; path = ViewControllers/MenuAccountSettingsViewController.swift; sourceTree = "<group>"; };
 		483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUIViewController.swift; path = ViewControllers/BaseUIViewController.swift; sourceTree = "<group>"; };
 		483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewController.swift; path = ViewControllers/BaseUITableViewController.swift; sourceTree = "<group>"; };
+		48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListViewController.swift; path = ViewControllers/EventListViewController.swift; sourceTree = "<group>"; };
 		4851C6911BA6281800F8E0EE /* NutshellUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUIView.swift; path = Resources/NutshellUIView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4851C6931BA628A500F8E0EE /* UIDesignNotes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = UIDesignNotes.rtf; path = Resources/UIDesignNotes.rtf; sourceTree = "<group>"; };
 		4851C6941BA689FC00F8E0EE /* NutshellUITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUITableView.swift; path = Resources/NutshellUITableView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -278,7 +279,6 @@
 		4854201F1BC44D290020CFE1 /* EventItem+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EventItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		485420201BC44D290020CFE1 /* EventItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventItem.swift; sourceTree = "<group>"; };
 		4859229A1B9A61510056E605 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
-		485922A11B9A634E0056E605 /* EventListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListTableViewController.swift; path = ViewControllers/EventListTableViewController.swift; sourceTree = "<group>"; };
 		485922A31B9A639B0056E605 /* EventGroupTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventGroupTableViewController.swift; path = ViewControllers/EventGroupTableViewController.swift; sourceTree = "<group>"; };
 		485922A61B9C98420056E605 /* splash_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "splash_logo@2x.png"; path = "Images/splash_logo@2x.png"; sourceTree = "<group>"; };
 		4859FCB51B9A4DE4000C1269 /* Nutshell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nutshell.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -451,7 +451,7 @@
 			children = (
 				4859FCBC1B9A4DE4000C1269 /* EventView.storyboard */,
 				486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */,
-				485922A11B9A634E0056E605 /* EventListTableViewController.swift */,
+				48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */,
 				486F5E5F1BA1EBE100BA2A57 /* EventListTableViewCell.swift */,
 				485922A31B9A639B0056E605 /* EventGroupTableViewController.swift */,
 				486F5E6B1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift */,
@@ -921,7 +921,6 @@
 				48E490BF1BE198BF004F33E4 /* ShowPhotoViewController.swift in Sources */,
 				486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */,
 				0334CA731BA8DDFC00013096 /* Status.swift in Sources */,
-				485922A21B9A634E0056E605 /* EventListTableViewController.swift in Sources */,
 				48103E961C1DE4CC0055C27A /* ENSideMenu.swift in Sources */,
 				0334CA5E1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift in Sources */,
 				0334CA821BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift in Sources */,
@@ -965,6 +964,7 @@
 				486F5E241BA0DC1000BA2A57 /* APIConnect.swift in Sources */,
 				48103E971C1DE4CC0055C27A /* ENSideMenuNavigationController.swift in Sources */,
 				485420291BC44D290020CFE1 /* EventItem+CoreDataProperties.swift in Sources */,
+				48501BF01C1FC5EC00A7ADA8 /* EventListViewController.swift in Sources */,
 				0334CA701BA8DDFC00013096 /* Status+CoreDataProperties.swift in Sources */,
 				0334CA7F1BA8DDFC00013096 /* Upload.swift in Sources */,
 				486F5E601BA1EBE100BA2A57 /* EventListTableViewCell.swift in Sources */,
