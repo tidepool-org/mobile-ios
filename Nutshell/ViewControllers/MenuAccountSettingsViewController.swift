@@ -14,7 +14,8 @@ class MenuAccountSettingsViewController: UIViewController {
     @IBOutlet weak var versionString: NutshellUILabel!
     @IBOutlet weak var usernameLabel: NutshellUILabel!
     @IBOutlet weak var sidebarView: UIView!
-    @IBOutlet weak var privacyLink: UIButton!
+    
+    @IBOutlet weak var privacyTextField: UITextView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,9 +26,15 @@ class MenuAccountSettingsViewController: UIViewController {
             versionString.text = "V" + UIApplication.appVersion() + " on " + curService
         }
         loginAccount.text = NutDataController.controller().currentUserName
-        let attributes = [NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue]
-        let attributedText = NSAttributedString(string: privacyLink.currentTitle!, attributes: attributes)
-        privacyLink.titleLabel?.attributedText = attributedText
+        //let attributes = [NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue]
+ 
+        let str = "Privacy and Terms of Use"
+        let paragraphStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        paragraphStyle.alignment = .Center
+        let attributedString = NSMutableAttributedString(string:str, attributes:[NSFontAttributeName: Styles.mediumVerySmallSemiboldFont, NSForegroundColorAttributeName: Styles.blackColor, NSParagraphStyleAttributeName: paragraphStyle])
+        attributedString.addAttribute(NSLinkAttributeName, value: NSURL(string: "http://developer.tidepool.io/privacy-policy/")!, range: NSRange(location: 0, length: 7))
+        attributedString.addAttribute(NSLinkAttributeName, value: NSURL(string: "http://developer.tidepool.io/terms-of-use/")!, range: NSRange(location: attributedString.length - 12, length: 12))
+        privacyTextField.attributedText = attributedString
     }
     
     func menuWillOpen() {

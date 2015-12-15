@@ -99,7 +99,6 @@
 		48103E961C1DE4CC0055C27A /* ENSideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E941C1DE4CC0055C27A /* ENSideMenu.swift */; };
 		48103E971C1DE4CC0055C27A /* ENSideMenuNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E951C1DE4CC0055C27A /* ENSideMenuNavigationController.swift */; };
 		48103E991C1DE7BC0055C27A /* EventViewNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E981C1DE7BC0055C27A /* EventViewNavController.swift */; };
-		48103E9B1C1DF0840055C27A /* MenuTermsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E9A1C1DF0840055C27A /* MenuTermsViewController.swift */; };
 		4814FEBE1BB0D7DD00F66379 /* NutMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */; };
 		4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
 		482B4E571BBDAFFF00835CAC /* GraphCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482B4E561BBDAFFF00835CAC /* GraphCollectionCell.swift */; };
@@ -256,7 +255,6 @@
 		48103E941C1DE4CC0055C27A /* ENSideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ENSideMenu.swift; path = "Third Party/ENSideMenu/ENSideMenu.swift"; sourceTree = "<group>"; };
 		48103E951C1DE4CC0055C27A /* ENSideMenuNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ENSideMenuNavigationController.swift; path = "Third Party/ENSideMenu/ENSideMenuNavigationController.swift"; sourceTree = "<group>"; };
 		48103E981C1DE7BC0055C27A /* EventViewNavController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventViewNavController.swift; path = ViewControllers/EventViewNavController.swift; sourceTree = "<group>"; };
-		48103E9A1C1DF0840055C27A /* MenuTermsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuTermsViewController.swift; path = ViewControllers/MenuTermsViewController.swift; sourceTree = "<group>"; };
 		48103E9C1C1E05660055C27A /* Nutshell-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Nutshell-Bridging-Header.h"; sourceTree = "<group>"; };
 		4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/Pods-Nutshell/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		482B4E561BBDAFFF00835CAC /* GraphCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCollectionCell.swift; path = ViewControllers/GraphCollectionCell.swift; sourceTree = "<group>"; };
@@ -479,7 +477,6 @@
 			isa = PBXGroup;
 			children = (
 				4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */,
-				48103E9A1C1DF0840055C27A /* MenuTermsViewController.swift */,
 			);
 			name = MenuViewControllers;
 			sourceTree = "<group>";
@@ -953,7 +950,6 @@
 				0334CA911BA8DDFC00013096 /* Wizard.swift in Sources */,
 				0334CA2B1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */,
 				0334CA251BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */,
-				48103E9B1C1DF0840055C27A /* MenuTermsViewController.swift in Sources */,
 				48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */,
 				0334CA311BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,
 				0334CA281BA8DDFC00013096 /* BloodKetone.swift in Sources */,

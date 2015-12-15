@@ -1838,21 +1838,21 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ls-ZC-LIS" userLabel="MiddleSection">
                                         <rect key="frame" x="0.0" y="150" width="375" height="363"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="440-zP-S8a" userLabel="Privacy and terms of use">
-                                                <rect key="frame" x="110" y="27" width="155" height="30"/>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Privacy and Terms of Use" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Vvg-5y-QfG" userLabel="privacyTextField">
+                                                <rect key="frame" x="75" y="27" width="225" height="37"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="37" id="DpS-4Q-1po"/>
+                                                    <constraint firstAttribute="width" constant="225" id="Vyn-Ff-NBK"/>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="13"/>
-                                                <state key="normal" title="Privacy and terms of use">
-                                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="termsOfUseTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="K91-o4-e75"/>
-                                                </connections>
-                                            </button>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="440-zP-S8a" firstAttribute="top" secondItem="9Ls-ZC-LIS" secondAttribute="top" constant="27" id="6kx-e8-fAU"/>
-                                            <constraint firstItem="440-zP-S8a" firstAttribute="centerX" secondItem="9Ls-ZC-LIS" secondAttribute="centerX" id="Cvt-N1-Zgl"/>
+                                            <constraint firstItem="Vvg-5y-QfG" firstAttribute="top" secondItem="9Ls-ZC-LIS" secondAttribute="top" constant="27" id="WhU-pB-Snh"/>
+                                            <constraint firstItem="Vvg-5y-QfG" firstAttribute="centerX" secondItem="9Ls-ZC-LIS" secondAttribute="centerX" id="hCu-aM-LeR"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7mt-7W-tG5" userLabel="bottomSettingsView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
@@ -1922,7 +1922,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <connections>
                         <outlet property="loginAccount" destination="9sA-Dh-xzl" id="2XT-bE-ria"/>
-                        <outlet property="privacyLink" destination="440-zP-S8a" id="Qic-wh-trC"/>
+                        <outlet property="privacyTextField" destination="Vvg-5y-QfG" id="Rbe-uQ-Aru"/>
                         <outlet property="sidebarView" destination="9OQ-uM-nfY" id="Ix6-bv-TsQ"/>
                         <outlet property="usernameLabel" destination="8eU-B6-eOM" id="iCh-s4-6Aa"/>
                         <outlet property="versionString" destination="FRD-xW-MeJ" id="XGz-45-lWe"/>
@@ -1931,62 +1931,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XvS-Cr-aVr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="347.5" y="1617.5"/>
-        </scene>
-        <!--Terms-->
-        <scene sceneID="R7J-LQ-A0k">
-            <objects>
-                <viewController storyboardIdentifier="menuTermsVC" id="z06-2M-3t9" customClass="MenuTermsViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="y6U-8q-D6I"/>
-                        <viewControllerLayoutGuide type="bottom" id="MEP-oo-QAa"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="LiT-6x-Xmn">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yXI-pV-gDH" userLabel="Terms Container View" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                                <subviews>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="iHL-jw-La5">
-                                        <rect key="frame" x="16" y="0.0" width="343" height="603"/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    </textView>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="iHL-jw-La5" secondAttribute="bottom" id="3Bf-w0-i50"/>
-                                    <constraint firstItem="iHL-jw-La5" firstAttribute="top" secondItem="yXI-pV-gDH" secondAttribute="top" id="ca5-ub-Hbs"/>
-                                    <constraint firstItem="iHL-jw-La5" firstAttribute="leading" secondItem="yXI-pV-gDH" secondAttribute="leading" constant="16" id="tRk-TD-rzo"/>
-                                    <constraint firstAttribute="trailing" secondItem="iHL-jw-La5" secondAttribute="trailing" constant="16" id="wmL-v7-fNN"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                        </subviews>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="yXI-pV-gDH" secondAttribute="trailing" id="BIn-kh-g8D"/>
-                            <constraint firstItem="MEP-oo-QAa" firstAttribute="top" secondItem="yXI-pV-gDH" secondAttribute="bottom" id="F4r-XY-sym"/>
-                            <constraint firstItem="yXI-pV-gDH" firstAttribute="leading" secondItem="LiT-6x-Xmn" secondAttribute="leading" id="OPw-wv-NlX"/>
-                            <constraint firstItem="yXI-pV-gDH" firstAttribute="top" secondItem="y6U-8q-D6I" secondAttribute="bottom" id="cHe-uj-JVK"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="Terms" id="OCv-fb-XTm">
-                        <barButtonItem key="leftBarButtonItem" image="xIcon" id="AZv-IT-Ipu">
-                            <connections>
-                                <action selector="toggleSideMenu:" destination="z06-2M-3t9" id="b5i-3I-YCi"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="S0n-oh-3mS" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="821.5" y="1617.5"/>
         </scene>
     </scenes>
     <resources>
