@@ -350,7 +350,7 @@ class NutDataController
         }
     }
 
-    /** Resets the tidepool object database! */
+    /// Resets the tidepool object database by deleting the underlying file!
     private func deleteAnyTidepoolData() {
         // Delete the underlying file
         var url = self.applicationDocumentsDirectory
