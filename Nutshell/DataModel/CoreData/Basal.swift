@@ -20,18 +20,17 @@ class Basal: CommonData {
             me.value = json["rate"].number
             me.duration = json["duration"].number
             me.insulin = json["insulin"].string
+            // TODO: change field name to "scheduledRate"
             me.percent = nil
             
             if let deliveryType = me.deliveryType {
                 if deliveryType == "temp" {
-                    me.percent = json["percent"].number
-                    if me.percent == nil {
-                        NSLog("DATA ERR: No percent field in temp basal!")
-                    }
-                    // just checking...
-                    let suppressedRate = json["suppressed"]["rate"]
+                    let suppressedRate: NSNumber? = json["suppressed"]["rate"].number
                     if suppressedRate == nil {
                         NSLog("DATA ERR: No suppressed rate in temp basal!")
+                        // TODO: Deal with nested suppressed arrays - need to march up them to find the innermost value. Data may have a temp rate of 0, and multiple suppressions all at zero.
+                    } else {
+                        me.percent = suppressedRate
                     }
                 }
             }

@@ -90,6 +90,10 @@ public class GraphViews {
     private let kBolusLabelToRectGap: CGFloat = 0.0
     private let kBolusLabelRectHeight: CGFloat = 12.0
     private let kBolusMinScaleValue: CGFloat = 1.0
+    private let kExtensionLineHeight: CGFloat = 2.0
+    private let kExtensionEndshapeWidth: CGFloat = 7.0
+    private let kExtensionEndshapeHeight: CGFloat = 11.0
+
     // Colors
     private let bolusTextBlue = Styles.mediumBlueColor
     private let bolusBlueRectColor = Styles.blueColor
@@ -236,7 +240,7 @@ public class GraphViews {
         return imageData
     }
 
-    func imageOfBolusData(bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)], maxBolus: CGFloat) -> UIImage {
+    func imageOfBolusData(bolusData: [BolusData], maxBolus: CGFloat) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
         drawBolusData(bolusData, maxBolus: maxBolus)
         
@@ -518,16 +522,14 @@ public class GraphViews {
                 rangeHi = nextValue
             }
         }
-        //rangeHi = ceil(rangeHi) // Keep it integral
+
         if maxBasal > 0.0 {
             if rangeHi > maxBasal {
-                // Hmmm... we found a value that is higher than our presumed max!
+                // Found a value that is higher than our presumed max!
                 NSLog("Basal range max \(rangeHi) is greater than maxBasal \(maxBasal)!")
             } else {
                 if maxBasal > CGFloat(kBasalMinScaleValue) {
                     rangeHi = maxBasal
-                } else {
-                    NSLog("maxBasal \(maxBasal) lower than min scale \(CGFloat(kBasalMinScaleValue))!")
                 }
             }
         }
@@ -568,9 +570,8 @@ public class GraphViews {
             basalValueRectPath.fill()
             
             if let percent = percent {
-                var suppressedValue = CGFloat(percent)
+                let suppressedValue = CGFloat(percent)
                 if suppressedValue != 0 {
-                    suppressedValue = CGFloat(value) / suppressedValue
                     let lineHeight = floor(yPixelsPerUnit * suppressedValue)
                     // reuse basalRect, it just needs y adjust, height not used
                     basalRect.origin.y = yBottomOfBasal - lineHeight
@@ -618,44 +619,75 @@ public class GraphViews {
         
     }
 
-    private func drawBolusData(bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)], maxBolus: CGFloat) {
+    private func drawBolusData(bolusData: [BolusData], maxBolus: CGFloat) {
         
-        // first figure out the range of data unless it has been pre-figured for us; scale rectangle to fill this
+        // first figure out the range of data
         var rangeHi = CGFloat(kBolusMinScaleValue)
+        for bolus in bolusData {
+            let nextValue = bolus.value
+            if nextValue > rangeHi {
+                rangeHi = nextValue
+            }
+        }
+        
         if maxBolus > 0.0 {
-            rangeHi = maxBolus
-        } else {
-            for item in bolusData {
-                let nextValue = CGFloat(item.1.doubleValue)
-                if nextValue > rangeHi {
-                    rangeHi = nextValue
+            if rangeHi > maxBolus {
+                // Found a value that is higher than our presumed max!
+                NSLog("maxBolus range max \(rangeHi) is greater than maxBolus \(maxBolus)!")
+            } else {
+                if maxBolus > CGFloat(kBolusMinScaleValue) {
+                    rangeHi = maxBolus
                 }
             }
         }
-        rangeHi = ceil(rangeHi)
         
         // Keep track of bolus rects for later drawing of wizard data
         bolusRects = []
-
+        
         // bolus vertical area is split into a colored rect below, and label on top
         let yPixelsPerUnit = (yPixelsBolus - kBolusLabelRectHeight - kBolusLabelToRectGap) / rangeHi
-
+        
+        func drawBolusExtension(var originX: CGFloat, centerY: CGFloat, var width: CGFloat) {
+            if width < kExtensionEndshapeWidth {
+                // If extension is shorter than the end trapezoid shape, only draw that shape, backing it into the bolus rect
+                originX = originX - (kExtensionEndshapeWidth - width)
+                width = kExtensionEndshapeWidth
+            }
+            let originY = centerY - (kExtensionEndshapeHeight/2.0)
+            let bottomLineY = centerY + (kExtensionLineHeight / 2.0)
+            let topLineY = centerY - (kExtensionLineHeight / 2.0)
+            let rightSideX = originX + width
+            
+            //// Bezier Drawing
+            let bezierPath = UIBezierPath()
+            bezierPath.moveToPoint(CGPointMake(rightSideX, originY))
+            bezierPath.addLineToPoint(CGPointMake(rightSideX, originY + kExtensionEndshapeHeight))
+            bezierPath.addLineToPoint(CGPointMake(rightSideX - kExtensionEndshapeWidth, bottomLineY))
+            bezierPath.addLineToPoint(CGPointMake(originX, bottomLineY))
+            bezierPath.addLineToPoint(CGPointMake(originX, topLineY))
+            bezierPath.addLineToPoint(CGPointMake(rightSideX - kExtensionEndshapeWidth, topLineY))
+            bezierPath.addLineToPoint(CGPointMake(rightSideX, originY))
+            bezierPath.closePath()
+            bolusBlueRectColor.setFill()
+            bezierPath.fill()
+        }
+        
         // draw the items, with label on top.
-        for item in bolusData {
+        for bolus in bolusData {
             let context = UIGraphicsGetCurrentContext()
             
             // bolusValueRect Drawing
             // Bolus rect is center-aligned to time start
             // Carb circle should be centered at timeline
-            let centerX: CGFloat = floor(CGFloat(item.0) * viewPixelsPerSec)
+            let centerX: CGFloat = floor(CGFloat(bolus.timeOffset) * viewPixelsPerSec)
             let rectLeft = floor(centerX - (kBolusRectWidth/2))
-            let bolusRectHeight = floor(yPixelsPerUnit * CGFloat(item.1.doubleValue))
+            let bolusRectHeight = floor(yPixelsPerUnit * bolus.value)
             let bolusValueRect = CGRect(x: rectLeft, y: yBottomOfBolus - bolusRectHeight, width: kBolusRectWidth, height: bolusRectHeight)
             let bolusValueRectPath = UIBezierPath(rect: bolusValueRect)
             bolusBlueRectColor.setFill()
             bolusValueRectPath.fill()
             
-            let bolusFloatValue = Float(item.1)
+            let bolusFloatValue = Float(bolus.value)
             var bolusLabelTextContent = String(format: "%.2f", bolusFloatValue)
             if bolusLabelTextContent.hasSuffix("0") {
                 bolusLabelTextContent = String(format: "%.1f", bolusFloatValue)
@@ -670,11 +702,19 @@ public class GraphViews {
             let bolusLabelPath = UIBezierPath(rect: bolusLabelRect.insetBy(dx: 0.0, dy: 2.0))
             backgroundColor.setFill()
             bolusLabelPath.fill()
-
+            
             CGContextSaveGState(context)
             CGContextClipToRect(context, bolusLabelRect);
             bolusLabelTextContent.drawInRect(bolusLabelRect, withAttributes: bolusLabelFontAttributes)
             CGContextRestoreGState(context)
+            
+            if bolus.hasExtension {
+                let width = floor(CGFloat(bolus.duration) * viewPixelsPerSec)
+                // Note: bolus.value is comprised of the initial bolus value plus the extended value, and hasExtension is false if the extended value is zero, so there should be no divide by zero issues even with "bad" data
+                let height = bolus.extendedValue * yPixelsPerUnit
+                drawBolusExtension(bolusValueRect.origin.x + bolusValueRect.width, centerY: yBottomOfBolus - height, width: width)
+                NSLog("bolus extension duration \(bolus.duration/60) minutes, extended value \(bolus.extendedValue), total value: \(bolus.value)")
+            }
             
             bolusRects.append(bolusLabelRect.union(bolusValueRect))
         }

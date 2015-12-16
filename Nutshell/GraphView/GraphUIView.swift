@@ -98,7 +98,7 @@ class GraphUIView: UIView {
     private var maxBasal: CGFloat = 0.0
     private var smbgData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var cbgData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
-    private var bolusData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
+    private var bolusData: [BolusData] = []
     private var wizardData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var basalData: [(timeOffset: NSTimeInterval, value: NSNumber, suppressed: NSNumber?)] = []
     private var workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval)] = []
@@ -185,8 +185,9 @@ class GraphUIView: UIView {
 
     private func addBolusEvent(event: Bolus, deltaTime: NSTimeInterval) {
         //NSLog("Adding Bolus event: \(event)")
-        if let value = event.value {
-            bolusData.append((timeOffset: deltaTime, value: value))
+        if event.value != nil {
+            let bolus = BolusData(event: event, deltaTime: deltaTime)
+            bolusData.append(bolus)
         } else {
             NSLog("ignoring Bolus event with nil value")
         }
@@ -195,7 +196,12 @@ class GraphUIView: UIView {
     private func addWizardEvent(event: Wizard, deltaTime: NSTimeInterval) {
         //NSLog("Adding Wizard event: \(event)")
         if let value = event.carbInput {
-            wizardData.append((timeOffset: deltaTime, value: value))
+            if Float(value) != 0.0 {
+                wizardData.append((timeOffset: deltaTime, value: value))
+            } else {
+                NSLog("ignoring Wizard event with carbInput value of zero!")
+            }
+            
         } else {
             NSLog("ignoring Wizard event with nil carbInput value!")
         }

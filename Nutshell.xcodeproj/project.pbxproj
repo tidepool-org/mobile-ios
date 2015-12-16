@@ -101,6 +101,8 @@
 		48103E991C1DE7BC0055C27A /* EventViewNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E981C1DE7BC0055C27A /* EventViewNavController.swift */; };
 		4814FEBE1BB0D7DD00F66379 /* NutMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */; };
 		4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
+		4820ED6A1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
+		4820ED6B1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
 		482B4E571BBDAFFF00835CAC /* GraphCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482B4E561BBDAFFF00835CAC /* GraphCollectionCell.swift */; };
 		4837C1661C11F9FC00D29B64 /* GraphContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837C1651C11F9FC00D29B64 /* GraphContainerView.swift */; };
 		4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */; };
@@ -257,6 +259,7 @@
 		48103E981C1DE7BC0055C27A /* EventViewNavController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventViewNavController.swift; path = ViewControllers/EventViewNavController.swift; sourceTree = "<group>"; };
 		48103E9C1C1E05660055C27A /* Nutshell-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Nutshell-Bridging-Header.h"; sourceTree = "<group>"; };
 		4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/Pods-Nutshell/SwiftyJSON.framework"; sourceTree = "<group>"; };
+		4820ED691C21E8E3008C754A /* GraphDataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataTypes.swift; path = GraphView/GraphDataTypes.swift; sourceTree = "<group>"; };
 		482B4E561BBDAFFF00835CAC /* GraphCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCollectionCell.swift; path = ViewControllers/GraphCollectionCell.swift; sourceTree = "<group>"; };
 		483475B11BE9CE2E00EE9106 /* Nutshell_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v2.xcdatamodel; sourceTree = "<group>"; };
 		4837C1651C11F9FC00D29B64 /* GraphContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphContainerView.swift; path = GraphView/GraphContainerView.swift; sourceTree = "<group>"; };
@@ -630,6 +633,7 @@
 				482B4E561BBDAFFF00835CAC /* GraphCollectionCell.swift */,
 				48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */,
 				48B127A11BC444D300061483 /* GraphViews.swift */,
+				4820ED691C21E8E3008C754A /* GraphDataTypes.swift */,
 			);
 			name = "Graph View";
 			sourceTree = "<group>";
@@ -902,6 +906,7 @@
 				0334CAAB1BA8E22E00013096 /* Bolus.swift in Sources */,
 				0334CA851BA8DDFC00013096 /* UrineKetone.swift in Sources */,
 				0334CA551BA8DDFC00013096 /* Note.swift in Sources */,
+				4820ED6A1C21E8E3008C754A /* GraphDataTypes.swift in Sources */,
 				486283B41BA48B1500547BE3 /* EventViewStoryboardTypes.swift in Sources */,
 				0334CA6D1BA8DDFC00013096 /* Settings.swift in Sources */,
 				0334CA341BA8DDFC00013096 /* CommonData.swift in Sources */,
@@ -1014,6 +1019,7 @@
 				0334CAAC1BA8E22E00013096 /* Bolus.swift in Sources */,
 				0334CA2F1BA8DDFC00013096 /* Calibration.swift in Sources */,
 				4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */,
+				4820ED6B1C21E8E3008C754A /* GraphDataTypes.swift in Sources */,
 				0334CA8C1BA8DDFC00013096 /* User.swift in Sources */,
 				0334CA681BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
 				0334CA411BA8DDFC00013096 /* DeviceMetadata.swift in Sources */,
