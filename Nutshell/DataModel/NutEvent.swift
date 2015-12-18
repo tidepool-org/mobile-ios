@@ -82,6 +82,7 @@ class NutEvent {
             let now = NSDate()
             me.createdTime = now
             me.modifiedTime = now
+            me.timezoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT/60
             // TODO: Determine policy for local id creation!
             me.id = NSUUID().UUIDString
             me.userid = NutDataController.controller().currentUserId // critical!

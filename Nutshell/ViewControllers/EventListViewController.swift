@@ -194,6 +194,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
                 }
             }
             /// TODO: TEMP UPGRADE CODE, REMOVE BEFORE SHIPPING!
+
             let newEventId = newEvent.nutEventIdString()
             if let existingNutEvent = nutEvents[newEventId] {
                 existingNutEvent.addEvent(newEvent)
@@ -212,7 +213,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         do {
             let nutEvents = try DatabaseUtils.getNutEvents()
             for event in nutEvents {
-                //NSLog("Event type: \(event.type), time: \(event.time), title: \(event.title), notes: \(event.notes), userid: \(event.userid)")
+                //NSLog("Event type: \(event.type), time: \(event.time), title: \(event.title), notes: \(event.notes), userid: \(event.userid), timezone offset:\(event.timezoneOffset)")
                 addNewEvent(event)
             }
         } catch let error as NSError {

@@ -152,12 +152,6 @@ public class GraphViews {
         self.configureGraphParameters()
     }
     
-    func updateTimeframe(timeIntervalForView: NSTimeInterval, startTime: NSDate) {
-        self.timeIntervalForView = timeIntervalForView
-        self.startTime = startTime
-        self.viewPixelsPerSec = viewSize.width/CGFloat(timeIntervalForView)        
-    }
-
     private func configureGraphParameters() {
         self.viewPixelsPerSec = viewSize.width/CGFloat(timeIntervalForView)
         
@@ -185,9 +179,9 @@ public class GraphViews {
         self.yPixelsBolus = self.yBottomOfBolus - self.yTopOfBolus
         
         // Basal values sit just below the bolus readings
-        self.yTopOfBasal = self.yTopOfBolus
         self.yBottomOfBasal = self.yBottomOfBolus
-        self.yPixelsBasal = self.yPixelsBolus
+        self.yPixelsBasal = ceil(self.yPixelsBolus/2)
+        self.yTopOfBasal = self.yTopOfBolus - self.yPixelsBasal
     }
     
     func imageOfFixedGraphBackground() -> UIImage {
@@ -681,7 +675,7 @@ public class GraphViews {
             // Carb circle should be centered at timeline
             let centerX: CGFloat = floor(CGFloat(bolus.timeOffset) * viewPixelsPerSec)
             let rectLeft = floor(centerX - (kBolusRectWidth/2))
-            let bolusRectHeight = floor(yPixelsPerUnit * bolus.value)
+            let bolusRectHeight = ceil(yPixelsPerUnit * bolus.value)
             let bolusValueRect = CGRect(x: rectLeft, y: yBottomOfBolus - bolusRectHeight, width: kBolusRectWidth, height: bolusRectHeight)
             let bolusValueRectPath = UIBezierPath(rect: bolusValueRect)
             bolusBlueRectColor.setFill()

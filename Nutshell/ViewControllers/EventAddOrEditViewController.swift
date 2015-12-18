@@ -739,6 +739,12 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     private func addDemoData() {
         
         let demoMeals = [
+            ["Extended Bolus", "100% extended", "2015-10-30T03:03:00.000Z", "brandon", ""],
+            ["Extended Bolus", "2% extended", "2015-10-31T08:08:00.000Z", "brandon", ""],
+            ["Extended Bolus", "various extended", "2015-10-29T03:08:00.000Z", "brandon", ""],
+            ["Extended Bolus", "various extended", "2015-10-28T21:00:00.000Z", "brandon", ""],
+            ["Temp Basal", "Higher than scheduled", "2015-12-14T18:57:00.000Z", "brandon", ""],
+            ["Temp Basal", "Shift in scheduled during temp", "2015-12-16T05:00:00.000Z", "brandon", ""],
             ["Three tacos", "with 15 chips & salsa", "2015-08-20T10:03:21.000Z", "238 Garrett St", "ThreeTacosDemoPic"],
             ["Three tacos", "after ballet", "2015-08-09T19:42:40.000Z", "238 Garrett St", "applejuicedemopic"],
             ["Three tacos", "Apple Juice before", "2015-07-29T04:55:27.000Z", "238 Garrett St", "applejuicedemopic"],
@@ -765,6 +771,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             let now = NSDate()
             me.createdTime = now
             me.modifiedTime = now
+            me.timezoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT/60
         }
         
         let demoWorkouts = [
@@ -792,6 +799,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             let now = NSDate()
             we.createdTime = now
             we.modifiedTime = now
+            we.timezoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT/60
         }
         
         let moc = NutDataController.controller().mocForNutEvents()!
