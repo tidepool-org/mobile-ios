@@ -103,6 +103,10 @@ class NutUtils {
         return nil
     }
     
+    class func dateToJSON(date: NSDate) -> String {
+        return jsonDateFormatter.stringFromDate(date)
+    }
+
     class func decimalFromJSON(json: String?) -> NSDecimalNumber? {
         if let json = json {
             return NSDecimalNumber(string: json)

@@ -13,7 +13,7 @@ import SwiftyJSON
 class Food: CommonData {
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Food? {
         if let entityDescription = NSEntityDescription.entityForName("Food", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Food
+            let me = Food(entity: entityDescription, insertIntoManagedObjectContext: nil) 
             
             me.carbs = NutUtils.decimalFromJSON(json["carbs"].string)
             me.protein = NutUtils.decimalFromJSON(json["protein"].string)

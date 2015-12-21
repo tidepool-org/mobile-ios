@@ -14,7 +14,7 @@ class Activity: CommonData {
 
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Activity? {
         if let entityDescription = NSEntityDescription.entityForName("Activity", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Activity
+            let me = Activity(entity: entityDescription, insertIntoManagedObjectContext: nil) 
             
             me.subType = json["subType"].string
             me.duration = json["duration"].number

@@ -13,7 +13,7 @@ import SwiftyJSON
 class Prime: DeviceMetadata {
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Prime? {
         if let entityDescription = NSEntityDescription.entityForName("Prime", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Prime
+            let me = Prime(entity: entityDescription, insertIntoManagedObjectContext: nil) 
             
             me.primeTarget = json["primeTarget"].string
             me.volume = NutUtils.decimalFromJSON(json["volume"].string)

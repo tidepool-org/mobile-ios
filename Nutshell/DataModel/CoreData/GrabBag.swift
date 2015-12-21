@@ -13,7 +13,7 @@ import SwiftyJSON
 class GrabBag: CommonData {
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> GrabBag? {
         if let entityDescription = NSEntityDescription.entityForName("GrabBag", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! GrabBag
+            let me = GrabBag(entity: entityDescription, insertIntoManagedObjectContext: nil)
             
             me.subType = json["subType"].string
             

@@ -248,30 +248,32 @@ class GraphUIView: UIView {
         let lateEndTime = endTime.dateByAddingTimeInterval(graphViews.timeExtensionForDataFetch)
         
         do {
-            let events = try DatabaseUtils.getTidepoolEvents(earlyStartTime, toTime: lateEndTime, objectTypes: ["smbg", "bolus", "cbg", "wizard"])
+            let events = try DatabaseUtils.getTidepoolEvents(earlyStartTime, thruTime: lateEndTime, objectTypes: ["smbg", "bolus", "cbg", "wizard"])
             
             for event in events {
-                if let eventTime = event.time {
-                    let deltaTime = eventTime.timeIntervalSinceDate(startTime)
-                    switch event.type as! String {
-                    case "smbg":
-                        if let smbgEvent = event as? SelfMonitoringGlucose {
-                            addSmbgEvent(smbgEvent, deltaTime: deltaTime)
+                if let event = event as? CommonData {
+                    if let eventTime = event.time {
+                        let deltaTime = eventTime.timeIntervalSinceDate(startTime)
+                        switch event.type as! String {
+                        case "smbg":
+                            if let smbgEvent = event as? SelfMonitoringGlucose {
+                                addSmbgEvent(smbgEvent, deltaTime: deltaTime)
+                            }
+                        case "bolus":
+                            if let bolusEvent = event as? Bolus {
+                                addBolusEvent(bolusEvent, deltaTime: deltaTime)
+                            }
+                        case "wizard":
+                            if let wizardEvent = event as? Wizard {
+                                addWizardEvent(wizardEvent, deltaTime: deltaTime)
+                            }
+                        case "cbg":
+                            if let cbgEvent = event as? ContinuousGlucose {
+                                addCbgEvent(cbgEvent, deltaTime: deltaTime)
+                            }
+                        default: NSLog("Ignoring event of type: \(event.type)")
+                            break
                         }
-                    case "bolus":
-                        if let bolusEvent = event as? Bolus {
-                            addBolusEvent(bolusEvent, deltaTime: deltaTime)
-                        }
-                    case "wizard":
-                        if let wizardEvent = event as? Wizard {
-                            addWizardEvent(wizardEvent, deltaTime: deltaTime)
-                        }
-                    case "cbg":
-                        if let cbgEvent = event as? ContinuousGlucose {
-                            addCbgEvent(cbgEvent, deltaTime: deltaTime)
-                        }
-                    default: NSLog("Ignoring event of type: \(event.type)")
-                        break
                     }
                 }
             }
@@ -282,18 +284,20 @@ class GraphUIView: UIView {
         // since basal events have a duration, use a different query to start earlier in time
         do {
             let earlyStartTime = startTime.dateByAddingTimeInterval(-60*60*12)
-            let events = try DatabaseUtils.getTidepoolEvents(earlyStartTime, toTime: endTime, objectTypes: ["basal"])
+            let events = try DatabaseUtils.getTidepoolEvents(earlyStartTime, thruTime: endTime, objectTypes: ["basal"])
             
             for event in events {
-                if let eventTime = event.time {
-                    let deltaTime = eventTime.timeIntervalSinceDate(startTime)
-                    switch event.type as! String {
-                    case "basal":
-                        if let basalEvent = event as? Basal {
-                            addBasalEvent(basalEvent, deltaTime: deltaTime)
+                if let event = event as? CommonData {
+                    if let eventTime = event.time {
+                        let deltaTime = eventTime.timeIntervalSinceDate(startTime)
+                        switch event.type as! String {
+                        case "basal":
+                            if let basalEvent = event as? Basal {
+                                addBasalEvent(basalEvent, deltaTime: deltaTime)
+                            }
+                        default:
+                            break
                         }
-                    default:
-                        break
                     }
                 }
             }

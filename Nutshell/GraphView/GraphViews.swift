@@ -509,7 +509,7 @@ public class GraphViews {
     private func drawBasalData(basalData: [(timeOffset: NSTimeInterval, value: NSNumber, suppressed: NSNumber?)], maxBasal: CGFloat) {
         
         // first figure out the range of data
-        var rangeHi = CGFloat(kBasalMinScaleValue)
+        var rangeHi = kBasalMinScaleValue
         for item in basalData {
             let nextValue = CGFloat(item.1.doubleValue)
             if nextValue > rangeHi {
@@ -518,11 +518,11 @@ public class GraphViews {
         }
 
         if maxBasal > 0.0 {
-            if rangeHi > maxBasal {
+            if rangeHi > maxBasal && rangeHi != kBasalMinScaleValue {
                 // Found a value that is higher than our presumed max!
                 NSLog("Basal range max \(rangeHi) is greater than maxBasal \(maxBasal)!")
             } else {
-                if maxBasal > CGFloat(kBasalMinScaleValue) {
+                if maxBasal > kBasalMinScaleValue {
                     rangeHi = maxBasal
                 }
             }
@@ -616,7 +616,7 @@ public class GraphViews {
     private func drawBolusData(bolusData: [BolusData], maxBolus: CGFloat) {
         
         // first figure out the range of data
-        var rangeHi = CGFloat(kBolusMinScaleValue)
+        var rangeHi = kBolusMinScaleValue
         for bolus in bolusData {
             let nextValue = bolus.value
             if nextValue > rangeHi {
@@ -625,11 +625,11 @@ public class GraphViews {
         }
         
         if maxBolus > 0.0 {
-            if rangeHi > maxBolus {
+            if rangeHi > maxBolus && rangeHi != kBolusMinScaleValue {
                 // Found a value that is higher than our presumed max!
                 NSLog("maxBolus range max \(rangeHi) is greater than maxBolus \(maxBolus)!")
             } else {
-                if maxBolus > CGFloat(kBolusMinScaleValue) {
+                if maxBolus > kBolusMinScaleValue {
                     rangeHi = maxBolus
                 }
             }

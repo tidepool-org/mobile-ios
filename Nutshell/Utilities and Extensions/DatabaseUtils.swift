@@ -44,23 +44,10 @@ class DatabaseUtils {
         return result
     }
 
-    private class var isoDateFormatter : NSDateFormatter {
-        struct Static {
-            static let instance: NSDateFormatter = {
-                let df = NSDateFormatter()
-                df.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS"
-                return df
-            }()
-        }
-        return Static.instance
-    }
-
-    class func bucketNumberToIsoDateString(bucket: Int) -> String {
+    class func bucketNumberToDate(bucket: Int) -> NSDate {
         let date = NSDate(timeIntervalSinceReferenceDate: NSTimeInterval(bucket*60*60*20))
-        let df = DatabaseUtils.isoDateFormatter
-        let result = df.stringFromDate(date) + "Z"
-        //NSLog("Bucket number: \(bucket), date: \(date), string: \(result)")
-        return result
+        //NSLog("Bucket number: \(bucket), date: \(date)")
+        return date
     }
 
     class func checkLoadDataForDateRange(startDate: NSDate, endDate: NSDate) {
@@ -80,17 +67,71 @@ class DatabaseUtils {
             if APIConnector.connector().serviceAvailable() {
                 // TODO: if fetch fails, should we wait less time before retrying? 
                 serverBlocks[bucket] = now
-                let startTimeIsoDateStr = DatabaseUtils.bucketNumberToIsoDateString(bucket)
-                let endTimeIsoDateStr = DatabaseUtils.bucketNumberToIsoDateString(bucket+1)
-                APIConnector.connector().getReadOnlyUserData(startTimeIsoDateStr, endDate:endTimeIsoDateStr, completion: { (result) -> (Void) in
+                let startTime = DatabaseUtils.bucketNumberToDate(bucket)
+                let endTime = DatabaseUtils.bucketNumberToDate(bucket+1)
+                APIConnector.connector().getReadOnlyUserData(startTime, endDate:endTime, completion: { (result) -> (Void) in
                     if result.isSuccess {
-                        DatabaseUtils.updateEvents(NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: result.value!)
+                        DatabaseUtils.updateEventsForTimeRange(startTime, endTime: endTime, moc: NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: result.value!)
                     } else {
-                        NSLog("No events in range \(startTimeIsoDateStr) to \(endTimeIsoDateStr)")
+                        NSLog("No events in range \(startTime) to \(endTime)")
                     }
                 })
             }
         }
+    }
+    
+    class func updateEventsForTimeRange(startTime: NSDate, endTime: NSDate, moc: NSManagedObjectContext, eventsJSON: JSON) {
+        
+        var deleteEventCounter = 0
+        // Delete all tidepool items in range before adding the new ones...
+        do {
+            let request = NSFetchRequest(entityName: "CommonData")
+            // Return all objects in the requested range, exclusive of start time and inclusive of end time, to match server fetch
+            // NOTE: This would include Meal and Workout items if they were part of this database!
+            request.predicate = NSPredicate(format: "(time > %@) AND (time <= %@)", startTime, endTime)
+            request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
+            let events = try moc.executeFetchRequest(request) as! [NSManagedObject]
+            for obj: NSManagedObject in events {
+//                if let tObj = obj as? CommonData {
+//                    NSLog("deleting event id: \(tObj.id) with time: \(tObj.time)")
+//                }
+                moc.deleteObject(obj)
+                deleteEventCounter++
+            }
+        } catch let error as NSError {
+            NSLog("Error in updateEventsForTimeRange deleting objects: \(error)")
+        }
+        NSLog("updateEventsForTimeRange deleted \(deleteEventCounter) items")
+
+        var insertEventCounter = 0
+        for (_, subJson) in eventsJSON {
+            //NSLog("updateEvents next subJson: \(subJson)")
+            if let obj = CommonData.fromJSON(subJson, moc: moc) {
+                // Remove existing object with the same ID
+                if let _=obj.id {
+                    insertEventCounter++
+                    moc.insertObject(obj)
+                    //NSLog("inserting event id: \(obj.id) with time: \(obj.time)")
+                } else {
+                    NSLog("updateEvents: no ID found for object: \(obj), not inserting!")
+                }
+            }
+        }
+        NSLog("updateEventsForTimeRange updated \(insertEventCounter) items")
+        if deleteEventCounter != 0 && insertEventCounter != deleteEventCounter {
+            NSLog("NOTE: deletes were non-zero and did not match inserts!!!")
+        }
+        // Save the database
+        do {
+            try moc.save()
+            NSLog("updateEventsForTimeRange \(startTime) to \(endTime): Database saved!")
+            //dispatch_async(dispatch_get_main_queue()) {
+            notifyOnDataLoad()
+            //}
+        } catch let error as NSError {
+            NSLog("Failed to save MOC: \(error)")
+        }
+        
     }
     
     class func updateEvents(moc: NSManagedObjectContext, eventsJSON: JSON) {
@@ -104,14 +145,10 @@ class DatabaseUtils {
                 // Remove existing object with the same ID
                 if let id=obj.id {
                     eventCounter++
-                    if eventCounter > 1000 {
-                        eventCounter = 0
-                        NSLog("1000 items")
-                    }
                     request.predicate = NSPredicate(format: "id = %@", id)
                     
                     do {
-                        let foundObjects = try moc.executeFetchRequest(request) as! [CommonData]
+                        let foundObjects = try moc.executeFetchRequest(request) as! [NSManagedObject]
                         for foundObject in foundObjects {
                             moc.deleteObject(foundObject)
                         }
@@ -124,7 +161,7 @@ class DatabaseUtils {
                 }
             }
         }
-        NSLog("\(eventCounter) items")
+        NSLog("updateEvents updated \(eventCounter) items")
         // Save the database
         do {
             try moc.save()
@@ -143,24 +180,25 @@ class DatabaseUtils {
     }
     
     // Note: This call has the side effect of fetching data from the service which may result in a future notification of database changes.
-    class func getTidepoolEvents(fromTime: NSDate, toTime: NSDate, objectTypes: [String]? = nil) throws -> [CommonData] {
+    class func getTidepoolEvents(afterTime: NSDate, thruTime: NSDate, objectTypes: [String]? = nil) throws -> [NSManagedObject] {
         let moc = NutDataController.controller().mocForTidepoolEvents()!
 
         // load on-demand: if data has not been loaded, a notification will come later!
-        DatabaseUtils.checkLoadDataForDateRange(fromTime, endDate: toTime)
+        DatabaseUtils.checkLoadDataForDateRange(afterTime, endDate: thruTime)
 
         let request = NSFetchRequest(entityName: "CommonData")
         
         if let types = objectTypes {
             // Return only objects of the requested types in the requested range
-            request.predicate = NSPredicate(format: "(type IN %@) AND (time >= %@) AND (time <= %@)", types, fromTime, toTime)
+            request.predicate = NSPredicate(format: "(type IN %@) AND (time > %@) AND (time <= %@)", types, afterTime, thruTime)
         } else {
             // Return all objects in the requested range
-            request.predicate = NSPredicate(format: "(time >= %@) AND (time <= %@)", fromTime, toTime)
+            request.predicate = NSPredicate(format: "(time > %@) AND (time <= %@)", afterTime, thruTime)
         }
         
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
-        return try moc.executeFetchRequest(request) as! [CommonData]
+        let events = try moc.executeFetchRequest(request) as! [NSManagedObject]
+        return events
     }
 
     // Note: This call has the side effect of fetching data from the service which may result in a future notification of database changes.

@@ -13,7 +13,7 @@ import SwiftyJSON
 class TimeChange: DeviceMetadata {
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> TimeChange? {
         if let entityDescription = NSEntityDescription.entityForName("TimeChange", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! TimeChange
+            let me = TimeChange(entity: entityDescription, insertIntoManagedObjectContext: nil)
             
             me.changeFrom = NutUtils.dateFromJSON(json["changeFrom"].string)
             me.changeTo = NutUtils.dateFromJSON(json["changeTo"].string)

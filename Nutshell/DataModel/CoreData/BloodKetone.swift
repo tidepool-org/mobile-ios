@@ -13,7 +13,7 @@ import SwiftyJSON
 class BloodKetone: CommonData {
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> BloodKetone? {
         if let entityDescription = NSEntityDescription.entityForName("BloodKetone", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! BloodKetone
+            let me = BloodKetone(entity: entityDescription, insertIntoManagedObjectContext: nil)
             
             me.value = NutUtils.decimalFromJSON(json["value"].string)
             

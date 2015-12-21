@@ -237,6 +237,7 @@ class NutDataController
             NSLog("Store url is \(url)")
             // TODO: use NSInMemoryStoreType for test databases!
             try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: pscOptions)
+            NSLog("Using database file \(url)")
         } catch {
             // Report any error we got.
             var dict = [String: AnyObject]()
@@ -261,6 +262,7 @@ class NutDataController
                 let managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
                 managedObjectContext.persistentStoreCoordinator = coordinator
                 _mocForLocalObjects = managedObjectContext
+                
             }
             return _mocForLocalObjects!
         }
@@ -329,9 +331,11 @@ class NutDataController
             let request = NSFetchRequest(entityName: "User")
             request.predicate = NSPredicate(format: "userid==%@", currentUser.userid!)
             do {
-                let results = try moc.executeFetchRequest(request) as! [User]
-                for result in results {
-                    moc.deleteObject(result)
+                let results = try moc.executeFetchRequest(request) as? [User]
+                if results != nil {
+                    for result in results! {
+                        moc.deleteObject(result)
+                    }
                 }
             } catch let error as NSError {
                 print("Failed to remove existing user: \(currentUser.userid) error: \(error)")
@@ -365,6 +369,7 @@ class NutDataController
             let fm = NSFileManager.defaultManager()
             do {
                 try fm.removeItemAtURL(url)
+                NSLog("Deleted database at \(url)")
             } catch let error as NSError {
                 NSLog("Failed to delete \(url), error: \(error)")
             }

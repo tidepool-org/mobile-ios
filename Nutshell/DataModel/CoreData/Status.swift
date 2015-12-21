@@ -13,7 +13,7 @@ import SwiftyJSON
 class Status: DeviceMetadata {
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Status? {
         if let entityDescription = NSEntityDescription.entityForName("Status", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Status
+            let me = Status(entity: entityDescription, insertIntoManagedObjectContext: nil)
             
             me.status = json["status"].string
             me.reason = json["reason"].string

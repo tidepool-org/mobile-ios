@@ -14,7 +14,7 @@ class Bolus: CommonData {
 
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Bolus? {
         if let entityDescription = NSEntityDescription.entityForName("Bolus", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Bolus
+            let me = Bolus(entity: entityDescription, insertIntoManagedObjectContext: nil)
             
             me.normal = json["normal"].number
             me.extended = json["extended"].number

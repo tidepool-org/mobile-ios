@@ -13,7 +13,7 @@ import SwiftyJSON
 class UrineKetone: CommonData {
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> UrineKetone? {
         if let entityDescription = NSEntityDescription.entityForName("UrineKetone", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! UrineKetone
+            let me = UrineKetone(entity: entityDescription, insertIntoManagedObjectContext: nil)
             
             me.value = json["value"].string
                         

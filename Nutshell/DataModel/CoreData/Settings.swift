@@ -13,7 +13,7 @@ import SwiftyJSON
 class Settings: CommonData {
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Settings? {
         if let entityDescription = NSEntityDescription.entityForName("Settings", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Settings
+            let me = Settings(entity: entityDescription, insertIntoManagedObjectContext: nil)
             
             me.activeSchedule = json["activeSchedule"].string
             me.unitsCarb = json["unitsCarb"].string

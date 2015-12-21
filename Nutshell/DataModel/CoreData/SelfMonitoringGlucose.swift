@@ -13,7 +13,7 @@ import SwiftyJSON
 class SelfMonitoringGlucose: CommonData {
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> SelfMonitoringGlucose? {
         if let entityDescription = NSEntityDescription.entityForName("SelfMonitoringGlucose", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! SelfMonitoringGlucose
+            let me = SelfMonitoringGlucose(entity: entityDescription, insertIntoManagedObjectContext: nil)
             
             me.subType = json["subType"].string
             

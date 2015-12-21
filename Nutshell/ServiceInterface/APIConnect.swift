@@ -273,14 +273,23 @@ class APIConnector {
         }
     }
     
-    func getReadOnlyUserData(startDate: String, endDate: String,completion: (Result<JSON>) -> (Void)) {
+    func getReadOnlyUserData(startDate: NSDate? = nil, endDate: NSDate? = nil,completion: (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user data
         // TODO: centralize define of read-only events!
         let endpoint = "data/" + NutDataController.controller().currentUserId!
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         // TODO: Alamofire isn't escaping the periods, but service appears to expect this... right now I have Alamofire modified to do this.
         // TODO: If there is no data returned, I get a failure case with status code 200, and error FAILURE: Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.} ] Maybe an Alamofire issue?
-        sendRequest(Method.GET, endpoint: endpoint, parameters: ["type":"smbg,bolus,cbg,wizard,basal", "startDate": startDate, "endDate": endDate]).responseJSON { (request, response, result) -> Void in
+        var parameters: Dictionary = ["type":"smbg,bolus,cbg,wizard,basal"]
+        if let startDate = startDate {
+            // NOTE: start date is excluded (i.e., dates > start date)
+            parameters.updateValue(NutUtils.dateToJSON(startDate), forKey: "startDate")
+        }
+        if let endDate = endDate {
+            // NOTE: end date is included (i.e., dates <= end date)
+            parameters.updateValue(NutUtils.dateToJSON(endDate), forKey: "endDate")
+        }
+        sendRequest(Method.GET, endpoint: endpoint, parameters: parameters).responseJSON { (request, response, result) -> Void in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
             if ( result.isSuccess ) {
                 let json = JSON(result.value!)

@@ -13,7 +13,7 @@ import SwiftyJSON
 class Calibration: DeviceMetadata {
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Calibration? {
         if let entityDescription = NSEntityDescription.entityForName("Calibration", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Calibration
+            let me = Calibration(entity: entityDescription, insertIntoManagedObjectContext: nil)
             
             me.value = NutUtils.decimalFromJSON(json["value"].string)
             

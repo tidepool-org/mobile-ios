@@ -13,7 +13,7 @@ import SwiftyJSON
 class Wizard: CommonData {
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Wizard? {
         if let entityDescription = NSEntityDescription.entityForName("Wizard", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Wizard
+            let me = Wizard(entity: entityDescription, insertIntoManagedObjectContext: nil) 
             me.bgInput = json["bgInput"].number
             me.carbInput = json["carbInput"].number
             me.insulinOnBoard = json["insulinOnBoard"].number

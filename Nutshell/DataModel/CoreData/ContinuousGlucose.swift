@@ -14,7 +14,7 @@ class ContinuousGlucose: CommonData {
 
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> ContinuousGlucose? {
         if let entityDescription = NSEntityDescription.entityForName("ContinuousGlucose", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! ContinuousGlucose
+            let me = ContinuousGlucose(entity: entityDescription, insertIntoManagedObjectContext: nil) 
             
             if let value = json["value"].number {
                 me.value = value

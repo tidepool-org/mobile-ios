@@ -303,34 +303,36 @@ class GraphContainerView: UIView {
             let boundsTimeIntervalFromCenter = graphViewTimeInterval * Double(graphCellsInCollection)/2.0
             let graphCollectStartTime = graphCenterTime.dateByAddingTimeInterval(-boundsTimeIntervalFromCenter)
             let graphCollectEndTime = graphCenterTime.dateByAddingTimeInterval(boundsTimeIntervalFromCenter)
-            let events = try DatabaseUtils.getTidepoolEvents(graphCollectStartTime, toTime: graphCollectEndTime, objectTypes: ["basal", "bolus"])
+            let events = try DatabaseUtils.getTidepoolEvents(graphCollectStartTime, thruTime: graphCollectEndTime, objectTypes: ["basal", "bolus"])
             
             //NSLog("\(events.count) basal and bolus events fetched to figure max values")
             maxBasal = 0.0
             maxBolus = 0.0
             for event in events {
-                if let type = event.type as? String {
-                    switch type {
-                    case "basal":
-                        if let basalEvent = event as? Basal {
-                            if let value = basalEvent.value {
-                                let floatValue = CGFloat(value)
-                                if floatValue > maxBasal {
-                                    maxBasal = floatValue
+                if let event = event as? CommonData {
+                    if let type = event.type as? String {
+                        switch type {
+                        case "basal":
+                            if let basalEvent = event as? Basal {
+                                if let value = basalEvent.value {
+                                    let floatValue = CGFloat(value)
+                                    if floatValue > maxBasal {
+                                        maxBasal = floatValue
+                                    }
                                 }
                             }
-                        }
-                    case "bolus":
-                        if let bolusEvent = event as? Bolus {
-                            if let value = bolusEvent.value {
-                                let floatValue = CGFloat(value)
-                                if floatValue > maxBolus {
-                                    maxBolus = floatValue
+                        case "bolus":
+                            if let bolusEvent = event as? Bolus {
+                                if let value = bolusEvent.value {
+                                    let floatValue = CGFloat(value)
+                                    if floatValue > maxBolus {
+                                        maxBolus = floatValue
+                                    }
                                 }
                             }
+                        default:
+                            break
                         }
-                    default:
-                        break
                     }
                 }
             }
