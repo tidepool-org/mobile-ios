@@ -878,7 +878,7 @@
                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="greenLink"/>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="advisorySubtext"/>
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                         </subviews>
