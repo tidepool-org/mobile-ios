@@ -1335,7 +1335,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WCf-7M-VhS" userLabel="photoButtonLargeHitArea">
-                                                        <rect key="frame" x="279" y="0.0" width="80" height="45"/>
+                                                        <rect key="frame" x="279" y="0.0" width="80" height="100"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="80" id="cwJ-Al-2eu"/>
                                                         </constraints>
@@ -1502,6 +1502,7 @@
                                                     <constraint firstItem="dQ3-lG-eOk" firstAttribute="top" secondItem="HLo-MG-ejk" secondAttribute="top" id="Kbg-Mz-Njb"/>
                                                     <constraint firstItem="n3T-bo-EEn" firstAttribute="bottom" secondItem="b5b-5h-R2Q" secondAttribute="bottom" constant="20" id="M05-B3-B80"/>
                                                     <constraint firstAttribute="height" constant="100" id="PrQ-nx-xMn"/>
+                                                    <constraint firstAttribute="bottom" secondItem="WCf-7M-VhS" secondAttribute="bottom" id="UaK-GV-bBs"/>
                                                     <constraint firstItem="qsd-yF-K8c" firstAttribute="centerX" secondItem="DPt-Sa-D9K" secondAttribute="centerX" id="a1z-s8-Jjg"/>
                                                     <constraint firstItem="b5b-5h-R2Q" firstAttribute="top" secondItem="dPf-QW-Qby" secondAttribute="bottom" id="aAM-wa-lnT"/>
                                                     <constraint firstItem="OOd-y1-fQU" firstAttribute="top" secondItem="7bq-Jj-vtF" secondAttribute="bottom" id="aG2-el-12U"/>
@@ -1525,7 +1526,6 @@
                                                     <constraint firstItem="5N1-re-QWk" firstAttribute="top" secondItem="dQ3-lG-eOk" secondAttribute="top" id="tye-Ps-bec"/>
                                                     <constraint firstItem="WCf-7M-VhS" firstAttribute="top" secondItem="D0q-NY-j3z" secondAttribute="top" id="uJi-wP-gzp"/>
                                                     <constraint firstItem="4BX-b9-L8E" firstAttribute="bottom" secondItem="dQ3-lG-eOk" secondAttribute="bottom" id="xa0-2Q-Emg"/>
-                                                    <constraint firstItem="WCf-7M-VhS" firstAttribute="bottom" secondItem="qsd-yF-K8c" secondAttribute="top" id="zCc-Oa-6hY"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -1961,6 +1961,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="4IF-4C-2rf"/>
-        <segue reference="dFt-cX-XeW"/>
+        <segue reference="Shc-Yg-1xe"/>
     </inferredMetricsTieBreakers>
 </document>

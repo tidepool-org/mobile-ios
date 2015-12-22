@@ -398,7 +398,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
 
-    private func showPicture(itemNum: Int) {
+    private func showPicture(itemNum: Int) -> Bool {
         let pictureUrl = itemToImageUrl(itemNum)
         if !pictureUrl.isEmpty {
             let storyboard = UIStoryboard(name: "EventView", bundle: nil)
@@ -412,19 +412,28 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 photoVC.modalPresentation = true
                 self.presentViewController(photoVC, animated: true, completion: nil)
             }
+            return true
+        } else {
+            return false
         }
     }
     
     @IBAction func picture0ButtonHandler(sender: AnyObject) {
-        showPicture(0)
+        if !showPicture(0) {
+            photoButtonHandler(sender)
+        }
     }
     
     @IBAction func picture1ButtonHandler(sender: AnyObject) {
-        showPicture(1)
+        if !showPicture(1) {
+            photoButtonHandler(sender)
+        }
     }
 
     @IBAction func picture2ButtonHandler(sender: AnyObject) {
-        showPicture(2)
+        if !showPicture(2) {
+            photoButtonHandler(sender)
+        }
     }
 
     @IBAction func photoButtonHandler(sender: AnyObject) {
