@@ -132,9 +132,9 @@ public class GraphViews {
     private var yBottomOfBasal: CGFloat = 0.0
     private var yPixelsBasal: CGFloat = 0.0
     // Workout durations go in a section below Basal
-    //private var yTopOfWorkout: CGFloat
-    //private var yBottomOfWorkout: CGFloat
-    //private var yPixelsWorkout: CGFloat
+    private var yTopOfWorkout: CGFloat = 0.0
+    private var yBottomOfWorkout: CGFloat = 0.0
+    private var yPixelsWorkout: CGFloat = 0.0
 
     //
     // MARK: - Interface
@@ -164,6 +164,11 @@ public class GraphViews {
         // The pie to divide is what's left over after removing constant height areas
         let graphHeight = viewSize.height - kGraphHeaderHeight - wizardHeight
         
+        // Put the workout data at the top, over the X-axis
+        yTopOfWorkout = 2.0
+        yBottomOfWorkout = viewSize.height
+        yPixelsWorkout = kGraphHeaderHeight - 4.0
+
         // The largest section is for the glucose readings just below the header
         self.yTopOfGlucose = kGraphHeaderHeight
         self.yBottomOfGlucose = self.yTopOfGlucose + floor(kGraphFractionForGlucose * graphHeight) - kGraphGlucoseBaseOffset
@@ -254,7 +259,7 @@ public class GraphViews {
         return imageOfBasalData
     }
 
-    func imageOfWorkoutData(workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval)]) -> UIImage {
+    func imageOfWorkoutData(workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval, mainEvent: Bool)]) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
         drawWorkoutData(workoutData)
         
@@ -450,26 +455,27 @@ public class GraphViews {
         } while (viewXOffset < viewSize.width + lateEndLocation)
     }
 
-    private func drawWorkoutData(workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval)]) {
+    private func drawWorkoutData(workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval, mainEvent: Bool)]) {
         
-//        for item in workoutData {
-//            let timeOffset = item.0
-//            let workoutDuration = item.1
-//            
-//            //// eventLine Drawing
-//            let centerX: CGFloat = floor(CGFloat(timeOffset) * viewPixelsPerSec)
-//            let eventLinePath = UIBezierPath(rect: CGRect(x: centerX, y: 0.0, width: 1.0, height: viewSize.height))
-//            Styles.pinkColor.setFill()
-//            eventLinePath.fill()
-//            
-//            //// eventRectangle Drawing
-//            let workoutRectWidth = floor(CGFloat(workoutDuration) * viewPixelsPerSec)
-//            let workoutRect = CGRect(x: centerX - (workoutRectWidth/2), y:yTopOfWorkout, width: workoutRectWidth, height: yPixelsWorkout)
-//            let eventRectanglePath = UIBezierPath(rect: workoutRect)
-//            Styles.pinkColor.setFill()
-//            eventRectanglePath.fill()
-//            
-//        }
+        for item in workoutData {
+            let timeOffset = item.0
+            let workoutDuration = item.1
+            let lineWidth: CGFloat = item.2 ? 2.0 : 1.0
+            
+            //// eventLine Drawing
+            let centerX: CGFloat = floor(CGFloat(timeOffset) * viewPixelsPerSec)
+            let eventLinePath = UIBezierPath(rect: CGRect(x: centerX, y: yTopOfWorkout, width: lineWidth, height: yBottomOfWorkout - yTopOfWorkout))
+            Styles.pinkColor.setFill()
+            eventLinePath.fill()
+            
+            //// eventRectangle Drawing
+            let workoutRectWidth = floor(CGFloat(workoutDuration) * viewPixelsPerSec)
+            let workoutRect = CGRect(x: centerX /*- (workoutRectWidth/2)*/, y:yTopOfWorkout, width: workoutRectWidth, height: yPixelsWorkout)
+            let eventRectanglePath = UIBezierPath(rect: workoutRect)
+            Styles.pinkColor.setFill()
+            eventRectanglePath.fill()
+            
+        }
     }
 
     private func drawMeal(timeOffset: NSTimeInterval, isMain: Bool) {

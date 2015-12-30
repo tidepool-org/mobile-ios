@@ -138,6 +138,9 @@
 		4859FCD11B9A4DE5000C1269 /* NutshellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCD01B9A4DE5000C1269 /* NutshellTests.swift */; };
 		486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */; };
 		486283B41BA48B1500547BE3 /* EventViewStoryboardTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */; };
+		486EAA751C304A86003B4497 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486EAA741C304A86003B4497 /* HealthKitManager.swift */; };
+		486EAA761C304A86003B4497 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486EAA741C304A86003B4497 /* HealthKitManager.swift */; };
+		486EAA7A1C305E38003B4497 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 486EAA791C305E38003B4497 /* HealthKit.framework */; };
 		486F5DF21B9F874A00BA2A57 /* LaBelleAurore.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DEE1B9F874A00BA2A57 /* LaBelleAurore.ttf */; };
 		486F5DF51B9F874A00BA2A57 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DEF1B9F874A00BA2A57 /* OpenSans-Bold.ttf */; };
 		486F5DF81B9F874A00BA2A57 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DF01B9F874A00BA2A57 /* OpenSans-Regular.ttf */; };
@@ -293,6 +296,9 @@
 		4859FCD01B9A4DE5000C1269 /* NutshellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutshellTests.swift; sourceTree = "<group>"; };
 		4859FCD21B9A4DE5000C1269 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventViewStoryboardTypes.swift; path = ViewControllers/EventViewStoryboardTypes.swift; sourceTree = "<group>"; };
+		486EAA741C304A86003B4497 /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = DataModel/HealthKitManager.swift; sourceTree = "<group>"; };
+		486EAA791C305E38003B4497 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		486EAA7B1C305E39003B4497 /* Nutshell.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Nutshell.entitlements; sourceTree = "<group>"; };
 		486F5DEE1B9F874A00BA2A57 /* LaBelleAurore.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = LaBelleAurore.ttf; path = Resources/LaBelleAurore.ttf; sourceTree = "<group>"; };
 		486F5DEF1B9F874A00BA2A57 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Bold.ttf"; path = "Resources/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		486F5DF01B9F874A00BA2A57 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Regular.ttf"; path = "Resources/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
@@ -343,6 +349,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				486EAA7A1C305E38003B4497 /* HealthKit.framework in Frameworks */,
 				0334C8941BA7814700013096 /* CoreData.framework in Frameworks */,
 				949A33B350C643B74EB54D43 /* Pods_Nutshell.framework in Frameworks */,
 			);
@@ -420,6 +427,7 @@
 		0B896CBEA8D0BFD3140D313E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				486EAA791C305E38003B4497 /* HealthKit.framework */,
 				4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */,
 				0334C8931BA7814700013096 /* CoreData.framework */,
 				11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */,
@@ -508,6 +516,7 @@
 		4859FCB71B9A4DE4000C1269 /* Nutshell */ = {
 			isa = PBXGroup;
 			children = (
+				486EAA7B1C305E39003B4497 /* Nutshell.entitlements */,
 				48AEB7C71C1CE33F00B2A214 /* Third Party */,
 				4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */,
 				4859FCC41B9A4DE4000C1269 /* LaunchScreen.storyboard */,
@@ -592,6 +601,7 @@
 				489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */,
 				48B127961BC4447100061483 /* NutWorkout.swift */,
 				48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */,
+				486EAA741C304A86003B4497 /* HealthKitManager.swift */,
 			);
 			name = DataModel;
 			sourceTree = "<group>";
@@ -719,6 +729,11 @@
 					4859FCB41B9A4DE4000C1269 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 75U4X84TEG;
+						SystemCapabilities = {
+							com.apple.HealthKit = {
+								enabled = 1;
+							};
+						};
 					};
 					4859FCCB1B9A4DE5000C1269 = {
 						CreatedOnToolsVersion = 7.0;
@@ -971,6 +986,7 @@
 				486F5E601BA1EBE100BA2A57 /* EventListTableViewCell.swift in Sources */,
 				0334CA5B1BA8DDFC00013096 /* Prime.swift in Sources */,
 				48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */,
+				486EAA751C304A86003B4497 /* HealthKitManager.swift in Sources */,
 				4851C6921BA6281800F8E0EE /* NutshellUIView.swift in Sources */,
 				48FB1E4D1C17C38600C89F8E /* NutshellDataController.swift in Sources */,
 				4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */,
@@ -1045,6 +1061,7 @@
 				48A150561C18E0A900ED800B /* Nutshell.xcdatamodeld in Sources */,
 				486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */,
 				485420281BC44D290020CFE1 /* Meal.swift in Sources */,
+				486EAA761C304A86003B4497 /* HealthKitManager.swift in Sources */,
 				485420241BC44D290020CFE1 /* Workout.swift in Sources */,
 				0334CA291BA8DDFC00013096 /* BloodKetone.swift in Sources */,
 				0334CA6E1BA8DDFC00013096 /* Settings.swift in Sources */,
@@ -1189,12 +1206,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Nutshell/Nutshell.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Nutshell/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.nutshell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Nutshell/Nutshell-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -1206,12 +1226,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Tidepool Project (75U4X84TEG)";
+				CODE_SIGN_ENTITLEMENTS = Nutshell/Nutshell.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Nutshell/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.nutshell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Nutshell/Nutshell-Bridging-Header.h";
 			};
 			name = Release;

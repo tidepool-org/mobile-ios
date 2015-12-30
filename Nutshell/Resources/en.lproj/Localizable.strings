@@ -22,11 +22,20 @@
 
 "discardPhotoAlertTitle" = "Discard photo?";
 "discardPhotoAlertMessage" = "If you discard this photo, your photo will be lost.";
+
+"discardWorkoutAlertTitle" = "Discard workout?";
+"discardWorkoutAlertMessage" = "If you discard this workout, your workout will be lost.";
 "discardMealAlertTitle" = "Discard meal?";
 "discardMealAlertMessage" = "If you discard this meal, your meal will be lost.";
+
+
 "discardEditsAlertTitle" = "Discard changes?";
-"discardEditsAlertMessage" = "If you press discard, your changes to this meal will be lost.";
+"discardMealEditsAlertMessage" = "If you press discard, your changes to this meal will be lost.";
+"discardWorkoutEditsAlertMessage" = "If you press discard, your changes to this workout will be lost.";
+
 "closeMealAlertMessage" = "If you close this meal, your meal will be lost.";
+"closeWorkoutAlertMessage" = "If you close this workout, your workout will be lost.";
+
 "discardAlertCancel" = "Cancel";
 "discardAlertOkay" = "Discard";
 

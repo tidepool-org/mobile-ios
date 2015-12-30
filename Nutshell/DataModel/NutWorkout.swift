@@ -19,6 +19,11 @@ class NutWorkout: NutEventItem {
         super.init(eventItem: workout)
     }
 
+    override func prefix() -> String {
+        // Subclass!
+        return "W"
+    }
+
     //
     // MARK: - Overrides
     //

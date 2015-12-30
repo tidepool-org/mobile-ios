@@ -25,9 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     static var testMode: Bool = false
+    static var workoutInterfaceEnabled: Bool = false
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         AppDelegate.testMode = false
+        // Keep workout interface on if it is currently enabled!
+        AppDelegate.workoutInterfaceEnabled = NSUserDefaults.standardUserDefaults().boolForKey("workoutSamplingEnabled")
         
         // Override point for customization after application launch.
         UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor
@@ -40,10 +43,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if !name.isEmpty {
             NSLog("Initializing NutshellDataController, found and set user \(name)")
         }
+
         // Set up the API connection
         APIConnector.connector().configure()
-        
         attemptTokenLogin()
+        
+        NSLog("did finish launching")
         return true
     }
     
@@ -65,6 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSLog("AppDelegate: attempting to refresh token...")
         api.refreshToken() { succeeded -> (Void) in
             if succeeded {
+                NutDataController.controller().configureForCurrentUser()
                 self.setupUIForLoginSuccess()
             } else {
                 NSLog("Refresh token failed, need to log in normally")

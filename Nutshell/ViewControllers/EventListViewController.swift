@@ -69,11 +69,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         if sortedNutEvents.isEmpty || eventListNeedsUpdate {
             eventListNeedsUpdate = false
             getNutEvents()
-        }
-        
-        if AppDelegate.testMode {
-            // select random cell and push after delay?
-        }
+        }        
      }
     
     deinit {

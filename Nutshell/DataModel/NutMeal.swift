@@ -9,7 +9,12 @@
 import Foundation
 
 class NutMeal: NutEventItem {
-    
+
+    override func prefix() -> String {
+        // Subclass!
+        return "M"
+    }
+
     var photo: String
     var photo2: String
     var photo3: String

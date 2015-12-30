@@ -19,7 +19,7 @@ import Photos
 
 class NutUtils {
 
-    func onIPad() -> Bool {
+    class func onIPad() -> Bool {
         return UIDevice.currentDevice().userInterfaceIdiom == .Pad
     }
 
@@ -39,7 +39,7 @@ class NutUtils {
             dispatch_get_main_queue(), closure)
     }
     
-    func compressImage(image: UIImage) -> UIImage {
+    class func compressImage(image: UIImage) -> UIImage {
         var actualHeight : CGFloat = image.size.height
         var actualWidth : CGFloat = image.size.width
         let maxHeight : CGFloat = 600.0

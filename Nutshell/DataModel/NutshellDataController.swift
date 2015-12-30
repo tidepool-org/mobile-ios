@@ -17,6 +17,7 @@
 import UIKit
 import CoreData
 import SwiftyJSON
+import HealthKit
 
 /// Provides NSManagedObjectContext's for local and tidepool data stored locally. Manages the persistent object representing the current user.
 ///
@@ -46,7 +47,7 @@ class NutDataController
         }
         return _controller!
     }
-
+    
     /// Coordinator/store for current userId, token, etc. Should always be available.
     func mocForCurrentUser() -> NSManagedObjectContext {
         return self.mocForLocalObjects!
@@ -72,7 +73,6 @@ class NutDataController
         return nil;
     }
     
-
     private var _currentUserId: String?
     /// Service userid for the currently logged in account, or nil. 
     /// 
@@ -100,6 +100,17 @@ class NutDataController
             return ""
         }
     }
+    
+    /// Call this at startup if we already have a current user and token can be refreshed...
+    func configureForCurrentUser() {
+        if _currentUserId != nil {
+            if #available(iOS 9, *) {
+                if NSUserDefaults.standardUserDefaults().boolForKey("workoutSamplingEnabled") {
+                    monitorForWorkoutData(true)
+                }
+            }
+        }
+    }
 
     /// Call this after logging into a service account to set up the current user and configure the data model for the user.
     ///
@@ -109,6 +120,7 @@ class NutDataController
         self.deleteAnyTidepoolData()
         self.currentUser = newUser
         _currentUserId = newUser.userid
+        configureForCurrentUser()
     }
 
     /// Call this after logging out of the service to deconfigure the data model and clear the persisted user. Only the Meal and Workout events should remain persisted after this.
@@ -116,6 +128,39 @@ class NutDataController
         self.deleteAnyTidepoolData()
         self.currentUser = nil
         _currentUserId = nil
+        if #available(iOS 9, *) {
+            if NSUserDefaults.standardUserDefaults().boolForKey("workoutSamplingEnabled") {
+                monitorForWorkoutData(false)
+            }
+        }
+    }
+
+    @available(iOS 9, *)
+    func monitorForWorkoutData(monitor: Bool) {
+        // Set up HealthKit observation and background query.
+        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+            if monitor {
+                HealthKitManager.sharedInstance.startObservingWorkoutSamples() {
+                    (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
+                    
+                    if (newSamples != nil) {
+                        NSLog("********* PROCESSING \(newSamples!.count) new workout samples ********* ")
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.processWorkoutEvents(newSamples!)
+                        }
+                    }
+                    
+                    if (deletedSamples != nil) {
+                        NSLog("********* PROCESSING \(deletedSamples!.count) deleted workout samples ********* ")
+                        dispatch_async(dispatch_get_main_queue()) {
+                            self.processDeleteWorkoutEvents(deletedSamples!)
+                        }
+                    }
+                }
+            } else {
+                HealthKitManager.sharedInstance.stopObservingWorkoutSamples()
+            }
+        }
     }
 
     func processProfileFetch(json: JSON) {
@@ -140,6 +185,46 @@ class NutDataController
     //
     // MARK: - Private methods
     //
+
+    @available(iOS 9.0, *)
+    private func processWorkoutEvents(workouts: [HKSample]) {
+        let moc = NutDataController.controller().mocForNutEvents()!
+        if let entityDescription = NSEntityDescription.entityForName("Workout", inManagedObjectContext: moc) {
+            for event in workouts {
+                if let workout = event as? HKWorkout {
+                    let we = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Workout
+                    
+                    we.title = "Workout"
+                    if workout.workoutActivityType == HKWorkoutActivityType.Running {
+                        we.title = "Running"
+                    }
+                    we.time = workout.startDate
+                    we.duration = workout.duration
+                    we.type = "workout"
+                    we.id = event.UUID.UUIDString
+                    we.userid = NutDataController.controller().currentUserId
+                    let now = NSDate()
+                    we.createdTime = now
+                    we.modifiedTime = now
+                    we.timezoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT/60
+                    moc.insertObject(we)
+                } else {
+                    NSLog("ERROR: \(__FUNCTION__): Expected HKWorkout!")
+                }
+            }
+        }
+        DatabaseUtils.databaseSave(moc)
+        
+    }
+    
+    @available(iOS 9.0, *)
+    private func processDeleteWorkoutEvents(workouts: [HKDeletedObject]) {
+        for sample in workouts {
+            NSLog("Processed deleted workout sample with UUID: \(sample.UUID)");
+            // TODO: delete workout item with healthkit UUID == workout.uuid
+        }
+    }
+    
 
     private var runningUnitTests: Bool
     // no instances allowed..

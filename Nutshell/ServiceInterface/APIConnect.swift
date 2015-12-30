@@ -56,6 +56,7 @@ class APIConnector {
             } else {
                 NSUserDefaults.standardUserDefaults().removeObjectForKey(kSessionTokenDefaultKey)
             }
+            NSUserDefaults.standardUserDefaults().synchronize()
             _sessionToken = newToken
         }
         get {
@@ -76,10 +77,12 @@ class APIConnector {
         set(newService) {
             if newService == nil {
                 NSUserDefaults.standardUserDefaults().removeObjectForKey(kCurrentServiceDefaultKey)
+                NSUserDefaults.standardUserDefaults().synchronize()
                 _currentService = nil
             } else {
                 if kServers[newService!] != nil {
                     NSUserDefaults.standardUserDefaults().setValue(newService, forKey: kCurrentServiceDefaultKey)
+                    NSUserDefaults.standardUserDefaults().synchronize()
                     _currentService = newService
                 }
             }
@@ -304,6 +307,7 @@ class APIConnector {
 
     func clearSessionToken() -> Void {
         NSUserDefaults.standardUserDefaults().removeObjectForKey(kSessionTokenDefaultKey)
+        NSUserDefaults.standardUserDefaults().synchronize()
         sessionToken = nil
     }
 

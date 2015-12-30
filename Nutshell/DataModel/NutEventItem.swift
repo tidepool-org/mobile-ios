@@ -40,7 +40,12 @@ class NutEventItem {
         //  title: "My NutEvent at Home", loc: "" with
         //  title: "My NutEvent at ", loc: "Home"
         // But for now consider this a feature...
-        return title + location
+        return self.prefix()  + title + location
+    }
+    
+    func prefix() -> String {
+        // Subclass!
+        return ""
     }
     
     func containsSearchString(searchString: String) -> Bool {

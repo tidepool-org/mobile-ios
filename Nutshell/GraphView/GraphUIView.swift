@@ -101,7 +101,7 @@ class GraphUIView: UIView {
     private var bolusData: [BolusData] = []
     private var wizardData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
     private var basalData: [(timeOffset: NSTimeInterval, value: NSNumber, suppressed: NSNumber?)] = []
-    private var workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval)] = []
+    private var workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval, mainEvent: Bool)] = []
     private var mealData: [(timeOffset: NSTimeInterval, mainEvent: Bool)] = []
 
     //
@@ -224,15 +224,6 @@ class GraphUIView: UIView {
         }
     }
 
-    private func addWorkoutEvent(event: Workout, deltaTime: NSTimeInterval) {
-        //NSLog("Adding Workout event: \(event)")
-        if let duration = event.duration {
-            workoutData.append((timeOffset: deltaTime, duration: NSTimeInterval(duration)))
-        } else {
-            NSLog("ignoring Workout event with nil duration")
-        }
-    }
-
     private func loadDataForView() {
         // Reload all data, assuming time span has changed
         smbgData = []
@@ -321,7 +312,12 @@ class GraphUIView: UIView {
                         }
                     case "workout":
                         if let workoutEvent = event as? Workout {
-                            addWorkoutEvent(workoutEvent, deltaTime: deltaTime)
+                            let isMainEvent = workoutEvent.time == timeOfMainEvent
+                            if let duration = workoutEvent.duration {
+                                workoutData.append((timeOffset: deltaTime, duration: NSTimeInterval(duration), mainEvent: isMainEvent))
+                            } else {
+                                NSLog("ignoring Workout event with nil duration")
+                            }
                         }
                     default: NSLog("Ignoring event of type: \(event.type)")
                         break

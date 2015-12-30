@@ -25,12 +25,22 @@ class EventGroupTableViewController: BaseUITableViewController {
     @IBOutlet weak var headerView: NutshellUIView!
     @IBOutlet weak var headerViewLocIcon: UIImageView!
     @IBOutlet weak var innerHeaderView: UIView!
+    @IBOutlet weak var eatAgainButton: UIButton!
+    @IBOutlet weak var eatAgainLabel: NutshellUILabel!
+    @IBOutlet weak var eatAgainLargeHitArea: UIButton!
+    
+    private var isWorkout: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         title = ""
 
+        isWorkout = eventGroup.isWorkout
+        eatAgainButton.hidden = isWorkout
+        eatAgainLabel.hidden = isWorkout
+        eatAgainLargeHitArea.hidden = isWorkout
+        
         tableHeaderTitle.text = eventGroup.title
         tableHeaderLocation.text = eventGroup.location
         headerViewLocIcon.hidden = (tableHeaderLocation.text?.isEmpty)!

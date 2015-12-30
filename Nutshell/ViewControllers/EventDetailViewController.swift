@@ -21,12 +21,14 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     
     var eventItem: NutEventItem?
     var eventGroup: NutEvent?
+    private var isWorkout: Bool = false
     
     @IBOutlet weak var graphSectionView: UIView!
     @IBOutlet weak var graphLayerContainer: UIView!
     private var graphContainerView: GraphContainerView?
     @IBOutlet weak var missingDataAdvisoryView: UIView!
     @IBOutlet weak var missingDataAdvisoryTitle: NutshellUILabel!
+    @IBOutlet weak var eatAgainView: UIView!
     
     @IBOutlet weak var photoUIImageView: UIImageView!
 
@@ -278,6 +280,11 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         if let eventItem = eventItem {
             configureNutCracked()
 
+            if let _ = eventItem as? NutWorkout {
+                isWorkout = true
+                eatAgainView.hidden = true
+            }
+            
             titleLabel = addLabel(eventItem.title, labelStyle: "detailHeaderTitle", currentView: titleLabel)
             notesLabel = addLabel(eventItem.notes, labelStyle: "detailHeaderNotes", currentView: notesLabel)
             notesLabel!.hidden = eventItem.notes.isEmpty

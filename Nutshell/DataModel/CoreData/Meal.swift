@@ -15,7 +15,7 @@ class Meal: EventItem {
     // override for eventItems that have location too!
     override func nutEventIdString() -> String {
         if let title = title,  location = location {
-            return title + location
+            return "M" + title + location
         }
         return super.nutEventIdString()
     }

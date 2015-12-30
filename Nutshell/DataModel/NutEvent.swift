@@ -23,6 +23,7 @@ class NutEvent {
     var location: String
     var mostRecent: NSDate
     var itemArray: [NutEventItem]
+    var isWorkout: Bool = false
 
     init(firstEvent: EventItem) {
         self.title = firstEvent.title!
@@ -37,6 +38,7 @@ class NutEvent {
         } else if let workout = firstEvent as? Workout {
             let firstItem = NutWorkout(workout: workout)
             self.itemArray = [firstItem]
+            isWorkout = true
         } else {
             self.itemArray = []
         }
@@ -62,7 +64,7 @@ class NutEvent {
                 mostRecent = newItem!.time.laterDate(mostRecent)
             }
         } else {
-            print("attempting to add item with non-matching title and location to NutEvent!")
+            NSLog("attempting to add item with non-matching title and location to NutEvent!")
         }
         return newItem
     }
@@ -104,7 +106,8 @@ class NutEvent {
         //  title: "My NutEvent at Home", loc: "" with
         //  title: "My NutEvent at ", loc: "Home"
         // But for now consider this a feature...
-        return title + location
+        let prefix = isWorkout ? "W" : "M"
+        return prefix + title + location
     }
 
     func containsSearchString(searchString: String) -> Bool {

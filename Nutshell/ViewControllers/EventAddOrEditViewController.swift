@@ -24,6 +24,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     var eventGroup: NutEvent?
     var newEventItem: EventItem?
     private var viewExistingEvent = false
+    private var isWorkout: Bool = false
     
     @IBOutlet weak var titleTextField: NutshellUITextField!
     @IBOutlet weak var titleHintLabel: NutshellUILabel!
@@ -33,6 +34,10 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     @IBOutlet weak var placeIconButton: UIButton!
     @IBOutlet weak var photoIconButton: UIButton!
     @IBOutlet weak var calendarIconButton: UIButton!
+    
+    @IBOutlet weak var placeControlContainer: UIView!
+    @IBOutlet weak var calendarControlContainer: UIView!
+    @IBOutlet weak var photoControlContainer: UIView!
     
     @IBOutlet weak var headerForModalView: NutshellUIView!
     @IBOutlet weak var sceneContainer: UIView!
@@ -64,6 +69,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if let eventItem = eventItem {
             viewExistingEvent = true
             eventTime = eventItem.time
+
+            // hide location and photo controls for workouts
+            if let _ = eventItem as? NutWorkout {
+                isWorkout = true
+                placeControlContainer.hidden = true
+                photoControlContainer.hidden = true
+            }
+
             // hide modal header when used as a nav view
             for c in headerForModalView.constraints {
                 if c.firstAttribute == NSLayoutAttribute.Height {
@@ -140,7 +153,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 }
                 pictureImageURLs = mealItem.photoUrlArray()
             } else {
-                // TODO: workout support! Add workout-specific items...
+                // TODO: Add workout-specific items...
             }
         } else if let eventGroup = eventGroup {
                 titleText = eventGroup.title
@@ -345,14 +358,24 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if viewExistingEvent {
             // cancel of edit
             if existingEventChanged() {
-                alertOnCancelAndReturn(NSLocalizedString("discardEditsAlertTitle", comment:"Discard changes?"), alertMessage: NSLocalizedString("discardEditsAlertMessage", comment:"If you press discard, your changes to this meal will be lost."))
+                var alertString = NSLocalizedString("discardMealEditsAlertMessage", comment:"If you press discard, your changes to this meal will be lost.")
+                if let _ = eventItem as? NutWorkout {
+                    alertString = NSLocalizedString("discardWorkoutEditsAlertMessage", comment:"If you press discard, your changes to this workout will be lost.")
+                }
+                alertOnCancelAndReturn(NSLocalizedString("discardEditsAlertTitle", comment:"Discard changes?"), alertMessage: alertString)
             } else {
                 self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
             }
         } else {
             // cancel of add
             if newEventChanged() {
-                alertOnCancelAndReturn(NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), alertMessage: NSLocalizedString("closeMealAlertMessage", comment:"If you close this meal, your meal will be lost."))
+                var alertTitle = NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?")
+                var alertMessage = NSLocalizedString("closeMealAlertMessage", comment:"If you close this meal, your meal will be lost.")
+                if let _ = eventItem as? NutWorkout {
+                    alertTitle = NSLocalizedString("discardWorkoutAlertTitle", comment:"Discard workout?")
+                    alertMessage = NSLocalizedString("closeWorkoutAlertMessage", comment:"If you close this workout, your workout will be lost.")
+                }
+                alertOnCancelAndReturn(alertTitle, alertMessage: alertMessage)
             } else {
                 self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
             }
@@ -565,6 +588,23 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             } else {
                 newEventItem = nil
             }
+        } else if let workoutItem = eventItem as? NutWorkout {
+            let location = filteredLocationText()
+            let notes = filteredNotesText()
+            
+            workoutItem.title = titleTextField.text!
+            workoutItem.time = eventTime
+            workoutItem.notes = notes
+            workoutItem.location = location
+
+            // Save the database
+            if workoutItem.saveChanges() {
+                // note event changed as "new" event
+                newEventItem = workoutItem.eventItem
+                updateItemAndGroupForNewEventItem()
+            } else {
+                newEventItem = nil
+            }
         }
     }
 
@@ -573,6 +613,16 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             AppDelegate.testMode = !AppDelegate.testMode
             self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
             return
+        }
+
+        if titleTextField.text!.localizedCaseInsensitiveCompare("workoutInterface") == NSComparisonResult.OrderedSame  {
+            if #available(iOS 9, *) {
+                if !NutUtils.onIPad() {
+                    AppDelegate.workoutInterfaceEnabled = !AppDelegate.workoutInterfaceEnabled
+                    self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+                    return
+                }
+            }
         }
 
         // This is a good place to splice in demo and test data. For now, entering "demo" as the title will result in us adding a set of demo events to the model, and "delete" will delete all food events.
@@ -587,6 +637,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             return
         }
         
+        // Note: we only create meal events in this app - workout events come from other apps via HealthKit...
         newEventItem = NutEvent.createMealEvent(titleTextField.text!, notes: filteredNotesText(), location: filteredLocationText(), photo: itemToImageUrl(0), photo2: itemToImageUrl(1), photo3: itemToImageUrl(2), time: eventTime)
         
         if newEventItem != nil {
@@ -664,7 +715,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     
     private func alertOnDeleteAndReturn(nutItem: NutEventItem, nutEvent: NutEvent) {
         // use dialog to confirm delete with user!
-        let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), message: NSLocalizedString("discardMealAlertMessage", comment:"If you discard this meal, your meal will be lost."), preferredStyle: .Alert)
+        var titleString = NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?")
+        var messageString = NSLocalizedString("discardMealAlertMessage", comment:"If you discard this meal, your meal will be lost.")
+        if let _ = nutItem as? NutWorkout {
+            titleString = NSLocalizedString("discardWorkoutAlertTitle", comment:"Discard workout?")
+            messageString = NSLocalizedString("discardWorkoutAlertMessage", comment:"If you discard this workout, your workout will be lost.")
+        }
+
+        let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
             return
         }))
@@ -819,13 +877,17 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 moc.insertObject(me)
             }
         }
-        if let entityDescription = NSEntityDescription.entityForName("Workout", inManagedObjectContext: moc) {
-            for event in demoWorkouts {
-                let we = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Workout
-                addWorkout(we, event: event)
-                moc.insertObject(we)
+        
+        if AppDelegate.workoutInterfaceEnabled {
+            if let entityDescription = NSEntityDescription.entityForName("Workout", inManagedObjectContext: moc) {
+                for event in demoWorkouts {
+                    let we = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Workout
+                    addWorkout(we, event: event)
+                    moc.insertObject(we)
+                }
             }
         }
+        
         DatabaseUtils.databaseSave(moc)
     }
 }

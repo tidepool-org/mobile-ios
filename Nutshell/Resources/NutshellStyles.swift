@@ -189,7 +189,7 @@ public class Styles: NSObject {
         static let lightGreyColor: UIColor = UIColor(hex: 0xeaeff0) 
         static let veryLightGreyColor: UIColor = UIColor(hex: 0xf2f3f5) 
         static let redErrorColor: UIColor = UIColor(hex: 0xff354e)
-        static let pinkColor: UIColor = UIColor(hex: 0xf58fc7)
+        static let pinkColor: UIColor = UIColor(hex: 0xf58fc7, opacity: 0.75)
         static let purpleColor: UIColor = UIColor(hex: 0xb29ac9)
         static let darkGreyColor: UIColor = UIColor(hex: 0x4a4a4a)
         static let lightDarkGreyColor: UIColor = UIColor(hex: 0x5c5c5c) 
