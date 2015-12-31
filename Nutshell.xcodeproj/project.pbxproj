@@ -172,6 +172,7 @@
 		48B127AD1BC444FE00061483 /* ThreeTacosDemoPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */; };
 		48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
+		48B3C9F01C35ADC400E00E7B /* EventPhotoCollectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B3C9EF1C35ADC400E00E7B /* EventPhotoCollectView.swift */; };
 		48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */; };
 		48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */; };
 		48D056921BDFDD16009D1591 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48D056951BDFDD16009D1591 /* Localizable.strings */; };
@@ -322,6 +323,7 @@
 		48B127A41BC444FE00061483 /* applejuicedemopic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = applejuicedemopic.png; path = Images/applejuicedemopic.png; sourceTree = "<group>"; };
 		48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ThreeTacosDemoPic.png; path = Images/ThreeTacosDemoPic.png; sourceTree = "<group>"; };
 		48B127B01BC4466E00061483 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseUtils.swift; path = "Utilities and Extensions/DatabaseUtils.swift"; sourceTree = "<group>"; };
+		48B3C9EF1C35ADC400E00E7B /* EventPhotoCollectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventPhotoCollectView.swift; path = ViewControllers/EventPhotoCollectView.swift; sourceTree = "<group>"; };
 		48BA1EA41C18865100C1B71C /* Data Model.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Data Model.txt"; path = "Manual Test Cases/Data Model.txt"; sourceTree = "<group>"; };
 		48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
 		48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutShellUIViewWithHighlight.swift; path = Resources/NutShellUIViewWithHighlight.swift; sourceTree = "<group>"; };
@@ -468,6 +470,7 @@
 				486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */,
 				48E490BE1BE198BF004F33E4 /* ShowPhotoViewController.swift */,
 				48103E981C1DE7BC0055C27A /* EventViewNavController.swift */,
+				48B3C9EF1C35ADC400E00E7B /* EventPhotoCollectView.swift */,
 			);
 			name = EventViewControllers;
 			sourceTree = "<group>";
@@ -952,6 +955,7 @@
 				0334CA8E1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift in Sources */,
 				486F5E6E1BA24C5C00BA2A57 /* EventDetailViewController.swift in Sources */,
 				0334CA881BA8DDFC00013096 /* User+CoreDataProperties.swift in Sources */,
+				48B3C9F01C35ADC400E00E7B /* EventPhotoCollectView.swift in Sources */,
 				0334CA221BA8DDFC00013096 /* Basal.swift in Sources */,
 				0334CA6A1BA8DDFC00013096 /* Settings+CoreDataProperties.swift in Sources */,
 				0334CA581BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,

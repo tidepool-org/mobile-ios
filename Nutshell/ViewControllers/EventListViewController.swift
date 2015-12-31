@@ -65,6 +65,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         super.viewWillAppear(animated)
         viewIsForeground = true
         configureSearchUI()
+        if let sideMenu = self.sideMenuController()?.sideMenu {
+            sideMenu.allowLeftSwipe = true
+            sideMenu.allowRightSwipe = true
+            sideMenu.allowPanGesture = true
+       }
         
         if sortedNutEvents.isEmpty || eventListNeedsUpdate {
             eventListNeedsUpdate = false
@@ -80,6 +85,12 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         super.viewWillDisappear(animated)
         searchTextField.resignFirstResponder()
         viewIsForeground = false
+        if let sideMenu = self.sideMenuController()?.sideMenu {
+            NSLog("swipe disabled")
+            sideMenu.allowLeftSwipe = false
+            sideMenu.allowRightSwipe = false
+            sideMenu.allowPanGesture = false
+        }
     }
 
     @IBAction func toggleSideMenu(sender: AnyObject) {

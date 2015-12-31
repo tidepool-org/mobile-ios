@@ -17,7 +17,7 @@
 import UIKit
 import CoreData
 
-class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegate {
+class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegate, UIGestureRecognizerDelegate, EventPhotoCollectViewDelegate {
     
     var eventItem: NutEventItem?
     var eventGroup: NutEvent?
@@ -30,10 +30,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     @IBOutlet weak var missingDataAdvisoryTitle: NutshellUILabel!
     @IBOutlet weak var eatAgainView: UIView!
     
-    @IBOutlet weak var photoUIImageView: UIImageView!
-
     @IBOutlet weak var headerOverlayContainer: UIControl!
-    @IBOutlet weak var topSectionContainer: NutshellUIView!
+    @IBOutlet weak var topSectionContainer: EventPhotoCollectView!
     var titleLabel: UILabel?
     var notesLabel: UILabel?
     var dateLabel: UILabel?
@@ -57,7 +55,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         configureDetailView()
         // We use a custom back button so we can redirect back when the event has changed. This tweaks the arrow positioning to match the iOS back arrow position
         self.navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsetsMake(0.0, -8.0, -1.0, 0.0)
-        
+        topSectionContainer.backgroundColor = Styles.darkPurpleColor
         let notificationCenter = NSNotificationCenter.defaultCenter()
         notificationCenter.addObserver(self, selector: "databaseChanged:", name: NewBlockRangeLoadedNotification, object: nil)
         notificationCenter.addObserver(self, selector: "reachabilityChanged:", name: ReachabilityChangedNotification, object: nil)
@@ -211,6 +209,10 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         }
     }
     
+    func didSelectItemAtIndexPath(indexPath: NSIndexPath) {
+        self.photoOverlayTouchHandler(self)
+    }
+    
     @IBAction func photoOverlayTouchHandler(sender: AnyObject) {
         if let graphContainerView = graphContainerView {
             graphContainerView.centerGraphOnEvent(true)
@@ -261,17 +263,20 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     // MARK: - Configuration
     //
     
+    private var curPhotoDisplayedIndex = 0
     private func configurePhotoBackground() {
         if let eventItem = eventItem {
-            photoUIImageView.hidden = true
-            photoUIImageView.hidden = true
             photoDisplayImageView.hidden = true
             let photoUrls = eventItem.photoUrlArray()
+            topSectionContainer.setNeedsLayout()
+            topSectionContainer.layoutIfNeeded()
+            topSectionContainer.photoURLs = photoUrls
+            topSectionContainer.photoDisplayMode = .ScaleAspectFill
+            topSectionContainer.delegate = self // handle touches here!
+            topSectionContainer.configurePhotoCollection()
             if photoUrls.count > 0 {
-                photoUIImageView.hidden = false
                 photoDisplayImageView.hidden = false
                 photoDisplayImageView.image = photoUrls.count == 1 ? UIImage(named: "singlePhotoIcon") : UIImage(named: "multiPhotoIcon")
-                NutUtils.loadImage(photoUrls[0], imageView: photoUIImageView)
             }
         }
     }
@@ -303,7 +308,6 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
                 locationIcon = UIImageView(image: icon)
                 headerOverlayContainer.addSubview(locationIcon!)
             }
-            configurePhotoBackground()
         }
     }
 
@@ -553,6 +557,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             }
         }
         configureGraphContainer()
+        configurePhotoBackground()
     }
     
     //
@@ -562,6 +567,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     private func reloadView() {
         configureDetailView()
         configureGraphContainer()
+        configurePhotoBackground()
     }
 
     

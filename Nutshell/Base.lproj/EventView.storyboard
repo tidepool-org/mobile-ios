@@ -626,12 +626,9 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A21-yX-8hn" userLabel="SceneContainer">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CGM-yQ-ne9" userLabel="TopSection" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CGM-yQ-ne9" userLabel="TopSection" customClass="EventPhotoCollectView" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="160"/>
                                         <subviews>
-                                            <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ThreeTacosDemoPic.png" translatesAutoresizingMaskIntoConstraints="NO" id="let-xp-dUr" userLabel="photoUIImageView">
-                                                <rect key="frame" x="0.0" y="0.0" width="320" height="160"/>
-                                            </imageView>
                                             <view userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L5t-um-0Ba" userLabel="backgroundView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="160"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -639,12 +636,9 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3U-KK-eno" userLabel="headerOverlayContainer" customClass="UIControl">
+                                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3U-KK-eno" userLabel="headerOverlayContainer">
                                                 <rect key="frame" x="16" y="0.0" width="288" height="160"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <connections>
-                                                    <action selector="photoOverlayTouchHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="TJ2-kn-6aN"/>
-                                                </connections>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EYQ-h7-WaO" userLabel="photoDisplayButton">
                                                 <rect key="frame" x="270" y="110" width="50" height="50"/>
@@ -697,22 +691,18 @@
                                             <constraint firstAttribute="bottom" secondItem="4Jd-1i-UWb" secondAttribute="bottom" id="Kbo-xt-xyZ"/>
                                             <constraint firstItem="L5t-um-0Ba" firstAttribute="leading" secondItem="CGM-yQ-ne9" secondAttribute="leading" id="Mkw-KC-KNi"/>
                                             <constraint firstItem="4Jd-1i-UWb" firstAttribute="leading" secondItem="CGM-yQ-ne9" secondAttribute="leading" id="UN7-CX-kcg"/>
-                                            <constraint firstItem="let-xp-dUr" firstAttribute="leading" secondItem="CGM-yQ-ne9" secondAttribute="leading" id="bYA-sR-xHv"/>
                                             <constraint firstAttribute="bottom" secondItem="z3U-KK-eno" secondAttribute="bottom" id="caq-ub-mgw"/>
-                                            <constraint firstAttribute="trailing" secondItem="let-xp-dUr" secondAttribute="trailing" id="fmX-Ra-4h9"/>
                                             <constraint firstAttribute="width" secondItem="CGM-yQ-ne9" secondAttribute="height" multiplier="2:1" identifier="updatedInCode" id="jK6-1l-mRp"/>
                                             <constraint firstItem="4sc-ki-6ix" firstAttribute="trailing" secondItem="EYQ-h7-WaO" secondAttribute="trailing" constant="-5" id="mks-KJ-835"/>
                                             <constraint firstAttribute="trailing" secondItem="EYQ-h7-WaO" secondAttribute="trailing" id="nHp-20-got"/>
                                             <constraint firstAttribute="bottom" secondItem="L5t-um-0Ba" secondAttribute="bottom" id="pRw-AS-GYU"/>
-                                            <constraint firstItem="let-xp-dUr" firstAttribute="top" secondItem="CGM-yQ-ne9" secondAttribute="top" id="qLk-6i-Hbx"/>
-                                            <constraint firstAttribute="bottom" secondItem="let-xp-dUr" secondAttribute="bottom" id="xHq-fd-Coq"/>
                                             <constraint firstAttribute="bottom" secondItem="EYQ-h7-WaO" secondAttribute="bottom" id="xce-s5-OAD"/>
                                             <constraint firstAttribute="trailing" secondItem="Jqb-kE-6Hg" secondAttribute="trailing" id="yUw-gA-59J"/>
                                             <constraint firstItem="z3U-KK-eno" firstAttribute="leading" secondItem="CGM-yQ-ne9" secondAttribute="leading" constant="16" id="ykw-31-ZqY"/>
                                         </constraints>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
-                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="photoOverlayTouchHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="3a4-2L-4hm"/>
+                                        </connections>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Qx-V0-1Du" userLabel="EventDescriptionContainer" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="160" width="320" height="58"/>
@@ -990,7 +980,6 @@
                         <outlet property="nutCrackedButton" destination="12g-bz-WJr" id="uC8-1Y-8UB"/>
                         <outlet property="nutCrackedLabel" destination="c32-24-Hp7" id="3xk-a1-qBU"/>
                         <outlet property="photoDisplayImageView" destination="4sc-ki-6ix" id="25x-RN-uNT"/>
-                        <outlet property="photoUIImageView" destination="let-xp-dUr" id="oDy-7z-aYX"/>
                         <outlet property="topSectionContainer" destination="CGM-yQ-ne9" id="3zq-qw-jwW"/>
                         <outlet property="zoomInButton" destination="Ypb-MT-7BZ" id="Fni-uM-kHp"/>
                         <outlet property="zoomOutButton" destination="Xh7-4E-j8e" id="lmZ-i4-dfG"/>
@@ -1059,17 +1048,29 @@
                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VYf-c6-XQd" userLabel="PhotoCollectionContainer" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VYf-c6-XQd" userLabel="PhotoSceneContainer" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="108" width="320" height="460"/>
                                 <subviews>
-                                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="H9s-Kb-o8V">
-                                        <rect key="frame" x="141" y="395" width="39" height="37"/>
-                                    </pageControl>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BSi-Qd-onx" userLabel="photoCollectView" customClass="EventPhotoCollectView" customModule="Nutshell" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="460"/>
+                                        <subviews>
+                                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="H9s-Kb-o8V">
+                                                <rect key="frame" x="140" y="396" width="39" height="37"/>
+                                            </pageControl>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="H9s-Kb-o8V" firstAttribute="centerY" secondItem="BSi-Qd-onx" secondAttribute="centerY" multiplier="1.8" id="7mI-Zh-qOY"/>
+                                            <constraint firstItem="H9s-Kb-o8V" firstAttribute="centerX" secondItem="BSi-Qd-onx" secondAttribute="centerX" id="UrA-uW-Tg2"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="H9s-Kb-o8V" firstAttribute="centerX" secondItem="VYf-c6-XQd" secondAttribute="centerX" id="0hZ-Yz-eX8"/>
-                                    <constraint firstItem="H9s-Kb-o8V" firstAttribute="centerY" secondItem="VYf-c6-XQd" secondAttribute="centerY" multiplier="1.8" id="uVN-r8-LPZ"/>
+                                    <constraint firstAttribute="trailing" secondItem="BSi-Qd-onx" secondAttribute="trailing" id="63V-nL-dJJ"/>
+                                    <constraint firstItem="BSi-Qd-onx" firstAttribute="top" secondItem="VYf-c6-XQd" secondAttribute="top" id="LhO-UN-F8y"/>
+                                    <constraint firstItem="BSi-Qd-onx" firstAttribute="leading" secondItem="VYf-c6-XQd" secondAttribute="leading" id="hEs-f4-hu2"/>
+                                    <constraint firstAttribute="bottom" secondItem="BSi-Qd-onx" secondAttribute="bottom" id="qE6-Xf-knb"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
@@ -1100,7 +1101,7 @@
                     <connections>
                         <outlet property="headerForModalView" destination="k9o-aM-bCq" id="pol-7F-4t8"/>
                         <outlet property="pageControl" destination="H9s-Kb-o8V" id="rzh-z6-uQ2"/>
-                        <outlet property="photoCollectionContainerView" destination="VYf-c6-XQd" id="9g5-Lg-8Dp"/>
+                        <outlet property="photoCollectView" destination="BSi-Qd-onx" id="RFH-LF-Xgz"/>
                         <segue destination="56N-PU-Tx1" kind="unwind" identifier="UnwindSegueFromShowPhoto" unwindAction="done:" id="4je-C3-qVV"/>
                     </connections>
                 </viewController>
@@ -1999,7 +2000,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ThreeTacosDemoPic.png" width="1280" height="456"/>
         <image name="add-button" width="23" height="23"/>
         <image name="backArrow" width="13" height="22"/>
         <image name="calendarIcon" width="15" height="17"/>
@@ -2023,7 +2023,7 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Yx2-qa-hve"/>
         <segue reference="vDO-8u-VmA"/>
+        <segue reference="Shc-Yg-1xe"/>
     </inferredMetricsTieBreakers>
 </document>
