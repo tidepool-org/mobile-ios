@@ -60,16 +60,6 @@ class GraphContainerView: UIView {
         }
     }
     
-    func redrawData() {
-        if let graphCollectionView = graphCollectionView {
-            for cell in graphCollectionView.visibleCells() {
-                if let graphCell = cell as? GraphCollectionCell {
-                    graphCell.updateViewSize()
-                }
-            }
-        }
-    }
-
     func zoomInOut(zoomIn: Bool) {
         var size = self.cellSize
         
@@ -97,6 +87,16 @@ class GraphContainerView: UIView {
     // Minimum cell width is more important: cells need to at least cover the view width
     private func zoomOutMinCellWidth() -> CGFloat {
         return self.frame.width / CGFloat(graphCellsInCollection)
+    }
+
+    private func redrawData() {
+        if let graphCollectionView = graphCollectionView {
+            for cell in graphCollectionView.visibleCells() {
+                if let graphCell = cell as? GraphCollectionCell {
+                    graphCell.updateViewSize()
+                }
+            }
+        }
     }
 
     private func zoomCellSize(var size: CGSize, xOffsetInView: CGFloat) {
@@ -157,16 +157,6 @@ class GraphContainerView: UIView {
         }
     }
     
-    func viewXOffsetToTimeOffset(viewXOffset: CGFloat) -> NSTimeInterval {
-        let viewWidth = graphCollectionView!.contentSize.width
-        return graphViewTimeInterval * NSTimeInterval(viewXOffset / viewWidth)
-    }
-    
-    func timeOffsetToViewXOffset(timeOffset: NSTimeInterval) -> CGFloat {
-        let viewWidth = graphCollectionView!.contentSize.width
-        return CGFloat(timeOffset / self.graphViewTimeInterval) * viewWidth
-    }
-    
     func centerGraphOnEvent(animated: Bool = false) {
         if let graphCollectionView = graphCollectionView {
             graphCollectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: graphCenterCellInCollection, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: animated)
@@ -180,6 +170,16 @@ class GraphContainerView: UIView {
     //
     // MARK: - Private methods
     //
+
+    private func viewXOffsetToTimeOffset(viewXOffset: CGFloat) -> NSTimeInterval {
+        let viewWidth = graphCollectionView!.contentSize.width
+        return graphViewTimeInterval * NSTimeInterval(viewXOffset / viewWidth)
+    }
+    
+    private func timeOffsetToViewXOffset(timeOffset: NSTimeInterval) -> CGFloat {
+        let viewWidth = graphCollectionView!.contentSize.width
+        return CGFloat(timeOffset / self.graphViewTimeInterval) * viewWidth
+    }
     
     private func configureGraphPixelsTimeInterval(pixelsPerHour: CGFloat) {
         if pixelsPerHour > kMaxPixelsPerHour || pixelsPerHour < kMinPixelsPerHour {
@@ -189,7 +189,6 @@ class GraphContainerView: UIView {
         graphPixelsPerHour = pixelsPerHour
         graphViewTimeInterval = NSTimeInterval(self.bounds.width * 3600.0/graphPixelsPerHour)
     }
-    
     
     //
     // MARK: - Graph view
