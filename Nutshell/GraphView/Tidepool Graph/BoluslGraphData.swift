@@ -78,8 +78,13 @@ class BolusGraphDataLayer: GraphDataLayer {
             if let bolus = dataPoint as? BolusGraphDataType {
                 // Bolus rect is center-aligned to time start
                 let centerX = xOffset
+                var bolusValue = bolus.value
+                if bolusValue > maxBolus && bolusValue > layout.kBolusMinScaleValue {
+                    NSLog("ERR: max bolus exceeded!")
+                    bolusValue = maxBolus
+                }
                 let rectLeft = floor(centerX - (layout.kBolusRectWidth/2))
-                let bolusRectHeight = ceil(pixelsPerValue * bolus.value)
+                let bolusRectHeight = ceil(pixelsPerValue * bolusValue)
                 let bolusValueRect = CGRect(x: rectLeft, y: layout.yBottomOfBolus - bolusRectHeight, width: layout.kBolusRectWidth, height: bolusRectHeight)
                 let bolusValueRectPath = UIBezierPath(rect: bolusValueRect)
                 layout.bolusBlueRectColor.setFill()

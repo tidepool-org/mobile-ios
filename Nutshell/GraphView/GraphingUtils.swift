@@ -53,6 +53,16 @@ public class GraphingUtils {
         return imageOfFixedGraphBackground
     }
 
+    func imageOfXAxisHeader() -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
+        drawXAxisHeader()
+        
+        let imageOfGraphBackground = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return imageOfGraphBackground
+    }
+
     //
     // MARK: - Private methods
     //
@@ -124,6 +134,107 @@ public class GraphingUtils {
             let yOffset = round(yAxisBase - (CGFloat(label) * pixelsPerValue))
             drawLabelLeftOfPoint(String(label), rightCenter: CGPoint(x: yAxisLineLeftMargin, y: yOffset), font: layout.axesLabelTextFont, color: layout.axesLabelTextColor)
         }
+    }
+
+    private let kHourInSecs:NSTimeInterval = 3600.0
+    private func drawXAxisHeader() {
+        //// General Declarations
+        let context = UIGraphicsGetCurrentContext()
+        
+        //// Frames - use whole view for background
+        let contents = CGRectMake(0, 0, viewSize.width, viewSize.height)
+        let graphStartSecs = startTime.timeIntervalSinceReferenceDate
+        let pixelsPerHour = CGFloat(kHourInSecs) * viewPixelsPerSec
+        
+        // Remember last label rect so we don't overwrite previous...
+        var lastLabelDrawn = CGRectNull
+        
+        //
+        //  Draw the X-axis header...
+        //
+        
+        func drawHourMarker(start: CGPoint, length: CGFloat) {
+            let hourMarkerPath = UIBezierPath()
+            hourMarkerPath.moveToPoint(start)
+            hourMarkerPath.addLineToPoint(CGPointMake(start.x, start.y + length))
+            hourMarkerPath.miterLimit = 4;
+            
+            hourMarkerPath.lineCapStyle = .Square;
+            
+            hourMarkerPath.usesEvenOddFillRule = true;
+            
+            layout.hourMarkerStrokeColor.setStroke()
+            hourMarkerPath.lineWidth = 1
+            hourMarkerPath.stroke()
+        }
+        
+        func drawHourLabel(hourStr: String, topCenter: CGPoint, midnight: Bool) {
+            
+            let hourlabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+            hourlabelStyle.alignment = .Left
+            
+            let labelAttrStr = NSMutableAttributedString(string: hourStr, attributes: [NSFontAttributeName: Styles.smallRegularFont, NSForegroundColorAttributeName: layout.axesLabelTextColor, NSParagraphStyleAttributeName: hourlabelStyle])
+            
+            if !midnight {
+                // Make " a" or " p" lighter
+                labelAttrStr.addAttribute(NSFontAttributeName, value: Styles.smallLightFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
+            }
+            
+            var sizeNeeded = labelAttrStr.boundingRectWithSize(CGSizeMake(CGFloat.infinity, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).size
+            sizeNeeded = CGSize(width: ceil(sizeNeeded.width), height: ceil(sizeNeeded.height))
+            
+            let originX = midnight ? topCenter.x + 4.0 : topCenter.x - sizeNeeded.width/2.0
+            let labelRect = CGRect(x: originX, y: 6.0, width: sizeNeeded.width, height: sizeNeeded.height)
+            // skip label draw if we would overwrite previous label
+            if (!lastLabelDrawn.intersects(labelRect)) {
+                labelAttrStr.drawInRect(labelRect)
+                lastLabelDrawn = labelRect
+            } else {
+                NSLog("skipping x axis label")
+            }
+        }
+        
+        let df = NSDateFormatter()
+        df.dateFormat = "h a"
+        let hourlabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        hourlabelStyle.alignment = .Center
+        
+        // Draw times a little early and going to a little later so collection views overlap correctly
+        let timeExtensionForDataFetch = NSTimeInterval(layout.largestXAxisDateWidth/viewPixelsPerSec)
+        let earlyStartTime = graphStartSecs - timeExtensionForDataFetch
+        let lateEndLocation = layout.largestXAxisDateWidth
+        
+        let nextHourBoundarySecs = ceil(earlyStartTime / kHourInSecs) * kHourInSecs
+        var curDate = NSDate(timeIntervalSinceReferenceDate:nextHourBoundarySecs)
+        let timeOffset: NSTimeInterval = nextHourBoundarySecs - graphStartSecs
+        var viewXOffset = floor(CGFloat(timeOffset) * viewPixelsPerSec)
+        
+        repeat {
+            
+            var hourStr = df.stringFromDate(curDate)
+            // Replace uppercase PM and AM with lowercase versions
+            hourStr = hourStr.stringByReplacingOccurrencesOfString("PM", withString: "p", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            hourStr = hourStr.stringByReplacingOccurrencesOfString("AM", withString: "a", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            
+            // TODO: don't overwrite this date with 1a, 2a, etc depending upon its length
+            var midnight = false
+            if hourStr == "12 a" {
+                midnight = true
+                hourStr = NutUtils.standardUIDayString(curDate)
+            }
+            
+            // draw marker
+            let markerLength = midnight ? layout.headerHeight : 8.0
+            let markerStart = CGPointMake(viewXOffset, layout.headerHeight - markerLength)
+            drawHourMarker(markerStart, length: markerLength)
+            
+            // draw hour label
+            drawHourLabel(hourStr, topCenter: CGPoint(x: viewXOffset, y: 6.0), midnight: midnight)
+            
+            curDate = curDate.dateByAddingTimeInterval(kHourInSecs)
+            viewXOffset += pixelsPerHour
+            
+        } while (viewXOffset < viewSize.width + lateEndLocation)
     }
 
 }

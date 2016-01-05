@@ -186,6 +186,8 @@
 		48C491661C3B2DEE00F34630 /* SmbgGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491641C3B2DEE00F34630 /* SmbgGraphData.swift */; };
 		48C491681C3B47A000F34630 /* BasalGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491671C3B47A000F34630 /* BasalGraphData.swift */; };
 		48C4916A1C3B59B400F34630 /* BoluslGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491691C3B59B400F34630 /* BoluslGraphData.swift */; };
+		48C4916C1C3B771200F34630 /* WizardGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C4916B1C3B771200F34630 /* WizardGraphData.swift */; };
+		48C4916E1C3B816700F34630 /* WorkoutGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C4916D1C3B816700F34630 /* WorkoutGraphData.swift */; };
 		48D056921BDFDD16009D1591 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48D056951BDFDD16009D1591 /* Localizable.strings */; };
 		48D056931BDFDD16009D1591 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48D056951BDFDD16009D1591 /* Localizable.strings */; };
 		48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
@@ -349,6 +351,8 @@
 		48C491641C3B2DEE00F34630 /* SmbgGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SmbgGraphData.swift; path = "GraphView/Tidepool Graph/SmbgGraphData.swift"; sourceTree = "<group>"; };
 		48C491671C3B47A000F34630 /* BasalGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasalGraphData.swift; path = "GraphView/Tidepool Graph/BasalGraphData.swift"; sourceTree = "<group>"; };
 		48C491691C3B59B400F34630 /* BoluslGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BoluslGraphData.swift; path = "GraphView/Tidepool Graph/BoluslGraphData.swift"; sourceTree = "<group>"; };
+		48C4916B1C3B771200F34630 /* WizardGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WizardGraphData.swift; path = "GraphView/Tidepool Graph/WizardGraphData.swift"; sourceTree = "<group>"; };
+		48C4916D1C3B816700F34630 /* WorkoutGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutGraphData.swift; path = "GraphView/Tidepool Graph/WorkoutGraphData.swift"; sourceTree = "<group>"; };
 		48D056961BDFDD20009D1591 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
 		48E490BE1BE198BF004F33E4 /* ShowPhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShowPhotoViewController.swift; path = ViewControllers/ShowPhotoViewController.swift; sourceTree = "<group>"; };
@@ -687,6 +691,8 @@
 		48C491621C3B2D2200F34630 /* Tidepool Graph Data */ = {
 			isa = PBXGroup;
 			children = (
+				48C4916D1C3B816700F34630 /* WorkoutGraphData.swift */,
+				48C4916B1C3B771200F34630 /* WizardGraphData.swift */,
 				48C491691C3B59B400F34630 /* BoluslGraphData.swift */,
 				48C491671C3B47A000F34630 /* BasalGraphData.swift */,
 				48C491631C3B2DEE00F34630 /* MealGraphData.swift */,
@@ -1040,6 +1046,7 @@
 				48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */,
 				48C491681C3B47A000F34630 /* BasalGraphData.swift in Sources */,
 				0334CA311BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,
+				48C4916C1C3B771200F34630 /* WizardGraphData.swift in Sources */,
 				0334CA281BA8DDFC00013096 /* BloodKetone.swift in Sources */,
 				486F5E111BA08DE900BA2A57 /* LoginViewController.swift in Sources */,
 				0334CA611BA8DDFC00013096 /* ReservoirChange.swift in Sources */,
@@ -1063,6 +1070,7 @@
 				48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */,
 				48C4916A1C3B59B400F34630 /* BoluslGraphData.swift in Sources */,
 				4854202B1BC44D290020CFE1 /* EventItem.swift in Sources */,
+				48C4916E1C3B816700F34630 /* WorkoutGraphData.swift in Sources */,
 				48C491531C38750900F34630 /* TidepoolGraphView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

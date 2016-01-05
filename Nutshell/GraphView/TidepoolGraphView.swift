@@ -48,6 +48,10 @@ class TidepoolGraphView: GraphContainerView, GraphDataSource {
         loadAllDataForTimeRange(layer.startTime, timeInterval: layer.timeIntervalForView)
 
         // Create the appropriate data layer based on type passed in...
+        if let workoutLayer = layer as? WorkoutGraphDataLayer {
+            workoutLayer.dataArray = workoutData
+            return workoutData.count
+        }
         if let mealLayer = layer as? MealGraphDataLayer {
             mealLayer.dataArray = mealData
             return mealData.count
@@ -70,6 +74,10 @@ class TidepoolGraphView: GraphContainerView, GraphDataSource {
             bolusLayer.maxBolus = maxBolus
             return bolusData.count
         }
+        if let wizardLayer = layer as? WizardGraphDataLayer {
+            wizardLayer.dataArray = wizardData
+            return wizardData.count
+        }
         return 0;
     }
     
@@ -84,9 +92,9 @@ class TidepoolGraphView: GraphContainerView, GraphDataSource {
     private var smbgData: [SmbgGraphDataType] = []
     private var cbgData: [CbgGraphDataType] = []
     private var bolusData: [BolusGraphDataType] = []
-    private var wizardData: [(timeOffset: NSTimeInterval, value: NSNumber)] = []
+    private var wizardData: [WizardGraphDataType] = []
     private var basalData: [BasalGraphDataType] = []
-    private var workoutData: [(timeOffset: NSTimeInterval, duration: NSTimeInterval, mainEvent: Bool)] = []
+    private var workoutData: [WorkoutGraphDataType] = []
     private var mealData: [MealGraphDataType] = []
 
     //
@@ -130,8 +138,9 @@ class TidepoolGraphView: GraphContainerView, GraphDataSource {
     private func addWizardEvent(event: Wizard, deltaTime: NSTimeInterval) {
         //NSLog("Adding Wizard event: \(event)")
         if let value = event.carbInput {
-            if Float(value) != 0.0 {
-                wizardData.append((timeOffset: deltaTime, value: value))
+            let floatValue = round(CGFloat(value))
+            if floatValue != 0.0 {
+                wizardData.append(WizardGraphDataType(value: floatValue, timeOffset: deltaTime))
             } else {
                 NSLog("ignoring Wizard event with carbInput value of zero!")
             }
@@ -323,7 +332,7 @@ class TidepoolGraphView: GraphContainerView, GraphDataSource {
                         if let workoutEvent = event as? Workout {
                             let isMainEvent = workoutEvent.time == self.eventItem?.time
                             if let duration = workoutEvent.duration {
-                                workoutData.append((timeOffset: deltaTime, duration: NSTimeInterval(duration), mainEvent: isMainEvent))
+                                workoutData.append(WorkoutGraphDataType(timeOffset: deltaTime, isMain: isMainEvent, duration: NSTimeInterval(duration)))
                             } else {
                                 NSLog("ignoring Workout event with nil duration")
                             }

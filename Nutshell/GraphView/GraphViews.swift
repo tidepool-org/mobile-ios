@@ -175,7 +175,6 @@ public class GraphViews {
         self.yPixelsGlucose = self.yBottomOfGlucose - self.yTopOfGlucose
         
         // Wizard data sits above the bolus readings, in a fixed space area, possibly overlapping the bottom of the glucose graph which should be empty of readings that low.
-        // TODO: put wizard data on top of corresponding bolus data!
         self.yBottomOfWizard = self.yBottomOfGlucose + wizardHeight
         
         // At the bottom are the bolus and basal readings

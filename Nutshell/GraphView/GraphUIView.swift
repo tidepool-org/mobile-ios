@@ -20,7 +20,7 @@ class GraphUIView: UIView {
     // NEW ARCH
     var layout: GraphLayout?
     var dataSource: GraphDataSource?
-    private var graphImages: GraphingUtils?
+    private var graphUtils: GraphingUtils?
     private var viewSize: CGSize = CGSizeZero
     private var graphLayers: [GraphDataLayer] = []
 
@@ -52,7 +52,7 @@ class GraphUIView: UIView {
         layout.configure(self.bounds.size)
         self.dataSource = dataSource
         self.viewSize = frame.size
-        graphImages = GraphingUtils(layout: layout, timeIntervalForView: timeIntervalForView, startTime: startTime)
+        graphUtils = GraphingUtils(layout: layout, timeIntervalForView: timeIntervalForView, startTime: startTime)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -114,9 +114,9 @@ class GraphUIView: UIView {
     /// - returns: A UIImageView the size of the current view, with static parts of the background. This should be placed in back of the graph...
     
     func fixedBackgroundImage() -> UIImage {
-        if let graphImages = graphImages {
+        if let graphUtils = graphUtils {
             // NEW ARCH
-            return graphImages.imageOfFixedGraphBackground()
+            return graphUtils.imageOfFixedGraphBackground()
         }
         return graphViews.imageOfFixedGraphBackground()
     }
@@ -155,13 +155,13 @@ class GraphUIView: UIView {
         
         if let layout = layout {
             // NEW ARCH
-//            let xAxisImage = graphViews.imageOfXAxisHeader()
-//            graphXAxisHeader = UIImageView(image: xAxisImage)
-//            addSubview(graphXAxisHeader!)
+            let xAxisImage = graphUtils!.imageOfXAxisHeader()
+            graphXAxisHeader = UIImageView(image: xAxisImage)
+            addSubview(graphXAxisHeader!)
 
             for dataLayer in layout.graphLayers(viewSize, timeIntervalForView: viewTimeInterval, startTime: startTime) {
                 dataSource!.loadDataItemsForLayer(dataLayer)
-                let imageView = dataLayer.imageView(graphImages!)
+                let imageView = dataLayer.imageView(graphUtils!)
                 if imageView != nil {
                     addSubview(imageView!)
                 }

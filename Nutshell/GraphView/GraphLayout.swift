@@ -24,25 +24,47 @@ class GraphLayout {
     }
     
     // Override in configure()!
+
+    //
+    // Header and background configuration
+    //
     var headerHeight: CGFloat = 32.0
+    var backgroundColor: UIColor = UIColor.grayColor()
+
+    //
+    // Y-axis configuration
+    //
     var yAxisLineLeftMargin: CGFloat = 20.0
     var yAxisLineRightMargin: CGFloat = 10.0
     var yAxisLineColor: UIColor = UIColor.blackColor()
-    var backgroundColor: UIColor = UIColor.grayColor()
     var yAxisValuesWithLines: [Int] = []
     var yAxisValuesWithLabels: [Int] = []
     var yAxisRange: CGFloat = 0.0
     var yAxisBase: CGFloat = 0.0
     var yAxisPixels: CGFloat = 0.0
+    
+    //
+    // Y-axis and X-axis configuration
+    //
     var axesLabelTextColor: UIColor = UIColor.blackColor()
     var axesLabelTextFont: UIFont = UIFont.systemFontOfSize(12.0)
     
-    // Override!
+    //
+    // X-axis configuration
+    //
+    var hourMarkerStrokeColor = UIColor(hex: 0xe2e4e7)
+    var largestXAxisDateWidth: CGFloat = 30.0
+
+    //
+    // Methods to override!
+    //
+
+    /// Set the configuration variables here
     func configure (viewSize: CGSize) {
         self.viewSize = viewSize
     }
-        
-    // Override!
+    
+    /// Returns the various layers used to compose the graph, other than the fixed background, and X-axis time values.
     func graphLayers(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate) -> [GraphDataLayer] {
         return []
     }

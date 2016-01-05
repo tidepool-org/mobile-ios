@@ -484,7 +484,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hkV-fw-Ufw" userLabel="timeLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="32" y="42" width="256" height="17"/>
+                                            <rect key="frame" x="32" y="43" width="256" height="17"/>
                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                             <color key="textColor" red="0.30196078431372547" green="0.30588235294117649" blue="0.29803921568627451" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -504,7 +504,7 @@
                                             </connections>
                                         </button>
                                         <view autoresizesSubviews="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HMO-WG-wUK" userLabel="photoCollectionViewContainer">
-                                            <rect key="frame" x="32" y="73" width="288" height="75"/>
+                                            <rect key="frame" x="32" y="74" width="288" height="74"/>
                                             <subviews>
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="f4D-EH-5Lz">
                                                     <rect key="frame" x="0.0" y="0.0" width="288" height="79"/>
@@ -1249,7 +1249,7 @@
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sides, dessert, anything else?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QY4-ef-Zcn" userLabel="notesHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="107" y="99" width="163" height="17"/>
+                                                        <rect key="frame" x="106" y="99" width="163" height="17"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -2024,6 +2024,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="vDO-8u-VmA"/>
-        <segue reference="Shc-Yg-1xe"/>
+        <segue reference="Yx2-qa-hve"/>
     </inferredMetricsTieBreakers>
 </document>

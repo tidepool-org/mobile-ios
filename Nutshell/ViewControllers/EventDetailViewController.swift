@@ -25,8 +25,9 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     
     @IBOutlet weak var graphSectionView: UIView!
     @IBOutlet weak var graphLayerContainer: UIView!
-    private var graphContainerView: TidepoolGraphView?
+    //OLD ARCH
     //private var graphContainerView: GraphContainerView?
+    private var graphContainerView: TidepoolGraphView?
     @IBOutlet weak var missingDataAdvisoryView: UIView!
     @IBOutlet weak var missingDataAdvisoryTitle: NutshellUILabel!
     @IBOutlet weak var eatAgainView: UIView!
@@ -528,6 +529,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             graphContainerView?.removeFromSuperview();
             graphContainerView = nil;
         }
+        //OLD ARCH
         //graphContainerView = GraphContainerView.init(frame: graphLayerContainer.bounds)
         graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.bounds)
         if let graphContainerView = graphContainerView, eventItem = eventItem {

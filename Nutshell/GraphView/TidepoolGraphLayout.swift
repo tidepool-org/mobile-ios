@@ -27,9 +27,8 @@ class TidepoolGraphLayout: GraphLayout {
 
         // TODO: x-axis
         
-        // TODO: workout
+        let workoutLayer = WorkoutGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: WorkoutGraphDataType(), layout: self)
         
-        // TODO: meal
         let mealLayer = MealGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: MealGraphDataType(), layout: self)
         
         let cbgLayer = CbgGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: CbgGraphDataType(), layout: self)
@@ -40,9 +39,10 @@ class TidepoolGraphLayout: GraphLayout {
 
         let bolusLayer = BolusGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: BolusGraphDataType(), layout: self)
 
-        // TODO: wizard
-        
-        return [mealLayer, cbgLayer, smbgLayer, basalLayer, bolusLayer]
+        let wizardLayer = WizardGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: WizardGraphDataType(), layout: self)
+
+        // Note: ordering is important! E.g., wizard layer draws after bolus layer so it can place circles above related bolus rectangles.
+        return [workoutLayer, mealLayer, cbgLayer, smbgLayer, basalLayer, bolusLayer, wizardLayer]
     }
     
     //
@@ -98,13 +98,12 @@ class TidepoolGraphLayout: GraphLayout {
     // Keep track of rects drawn for later drawing. E.g., Wizard circles are drawn just over associated Bolus labels.
     var bolusRects: [CGRect] = []
     
-    
     // Glucose readings go from 340(?) down to 0 in a section just below the header
     var yTopOfGlucose: CGFloat = 0.0
     var yBottomOfGlucose: CGFloat = 0.0
     var yPixelsGlucose: CGFloat = 0.0
     // Wizard readings overlap the bottom part of the glucose readings
-    private var yBottomOfWizard: CGFloat = 0.0
+    var yBottomOfWizard: CGFloat = 0.0
     // Bolus and Basal readings go in a section below glucose
     var yTopOfBolus: CGFloat = 0.0
     var yBottomOfBolus: CGFloat = 0.0
@@ -131,6 +130,10 @@ class TidepoolGraphLayout: GraphLayout {
     private let kGraphBolusBaseOffset: CGFloat = 2.0
     private let kGraphBasalBaseOffset: CGFloat = 2.0
     private let kGraphWorkoutBaseOffset: CGFloat = 2.0
+
+    //
+    // MARK: - Configuration
+    //
 
     /// Dynamic layout configuration based on view sizing
     override func configure(viewSize: CGSize) {
@@ -184,4 +187,26 @@ class TidepoolGraphLayout: GraphLayout {
         self.yAxisPixels = yPixelsGlucose
     }
     
+    //
+    // MARK: - Tidepool specific utility functions
+    //
+    
+    func bolusRectAtPosition(rect: CGRect) -> CGRect {
+        var result = CGRectZero
+        let rectLeft = rect.origin.x
+        let rectRight = rectLeft + rect.width
+        for bolusRect in bolusRects {
+            let bolusLeftX = bolusRect.origin.x
+            let bolusRightX = bolusLeftX + bolusRect.width
+            if bolusRightX > rectLeft && bolusLeftX < rectRight {
+                if bolusRect.height > result.height {
+                    // return the bolusRect that is largest and intersects the x position of the target rect
+                    result = bolusRect
+                }
+            }
+        }
+        return result
+    }
+    
+
 }
