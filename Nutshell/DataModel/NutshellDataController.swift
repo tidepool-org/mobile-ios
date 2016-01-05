@@ -194,10 +194,20 @@ class NutDataController
                 if let workout = event as? HKWorkout {
                     let we = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Workout
                     
-                    we.title = "Workout"
+                    var title = "Workout"
                     if workout.workoutActivityType == HKWorkoutActivityType.Running {
-                        we.title = "Running"
+                        title = "Running"
                     }
+                    title = title + " - " + workout.source.name
+                    we.title = title
+                    var notes = ""
+                    if let distance = workout.totalDistance {
+                        notes = String(distance)
+                    }
+                    if let calories = workout.totalEnergyBurned {
+                        notes = notes + " - " + String(calories)
+                    }
+                    we.notes = notes
                     we.time = workout.startDate
                     we.duration = workout.duration
                     we.type = "workout"
