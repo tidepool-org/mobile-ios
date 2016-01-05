@@ -15,6 +15,27 @@
 
 import UIKit
 
+/// Basic graph datapoint has a value and a time offset.
+class GraphDataType {
+
+    let value: CGFloat
+    let timeOffset: NSTimeInterval
+    
+    init(value: CGFloat = 0.0, timeOffset: NSTimeInterval = 0.0) {
+        self.value = value
+        self.timeOffset = timeOffset
+    }
+    
+    func label() -> String {
+        return String(value)
+    }
+    
+    func typeString() -> String {
+        return ""
+    }
+}
+
+// OLD ARCH
 struct BolusData {
     var timeOffset: NSTimeInterval = 0
     var value: CGFloat = 0.0  // value is normal plus any extended bolus delivered

@@ -16,10 +16,12 @@
 import UIKit
 
 class GraphCollectionCell: UICollectionViewCell {
+    // NEW ARCH
+    var layout: GraphLayout?
+    var dataSource: GraphDataSource?
 
+    // BOTH
     private var graphView: GraphUIView?
-    var graphTime: NSDate?
-    private var graphTimeInterval: NSTimeInterval?
     
     func updateViewSize() {
         //NSLog("GraphCollectionCell checkLayout frame \(self.frame.size)")
@@ -28,21 +30,33 @@ class GraphCollectionCell: UICollectionViewCell {
         }
     }
     
+    // TODO: change centerTime to startTime!
     func configureCell(centerTime: NSDate, timeInterval: NSTimeInterval,                 mainEventTime: NSDate, maxBolus: CGFloat, maxBasal: CGFloat) -> Bool {
 
         //NSLog("GraphCollectionCell configure centerTime \(centerTime), timeInterval \(timeInterval), frame \(self.frame.size)")
 
         graphView?.removeFromSuperview()
-        graphView = GraphUIView.init(frame: self.bounds, centerTime: centerTime, timeIntervalForView: timeInterval, timeOfMainEvent: mainEventTime)
-        if let graphView = graphView {
-            graphTime = centerTime
-            graphTimeInterval = timeInterval
-            graphView.configure(maxBolus, maxBasal: maxBasal)
-            self.addSubview(graphView)
-            return graphView.dataFound()
+        graphView = nil
+        
+        if let layout=layout, dataSource=dataSource {
+            // NEW ARCH
+            let startTime = NSDate(timeInterval: -timeInterval/2.0, sinceDate: centerTime)
+            graphView = GraphUIView.init(frame: self.bounds, startTime: startTime, timeIntervalForView: timeInterval, layout: layout, dataSource: dataSource)
+            if let graphView = graphView {
+                graphView.configure()
+                self.addSubview(graphView)
+                return dataSource.dataFound()
+            }
         } else {
-            return false
+            graphView = GraphUIView.init(frame: self.bounds, centerTime: centerTime, timeIntervalForView: timeInterval, timeOfMainEvent: mainEventTime)
+            if let graphView = graphView {
+                graphView.configure(maxBolus, maxBasal: maxBasal)
+                self.addSubview(graphView)
+                return graphView.dataFound()
+            }
         }
+        NSLog("ERROR: unable to create GraphUIView in \(__FUNCTION__)!")
+        return false
     }
     
     func containsData() -> Bool {

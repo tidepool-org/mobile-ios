@@ -25,15 +25,18 @@ class GraphContainerView: UIView {
     
     var eventItem: NutEventItem?
     var delegate: GraphContainerViewDelegate?
+    // NEW ARCH
+    var dataDelegate: GraphDataSource?
+    var layout: GraphLayout?
     
     private var cellSize = CGSizeZero
     private var pinchStartCellSize = CGSizeZero
     private var pinchLocationInView = CGPointZero
-    private var dataDetected = false
-    private var graphCollectionView: UICollectionView?
+    var dataDetected = false
+    var graphCollectionView: UICollectionView?
     private var fixedBackgroundImageView: UIImageView?
-    private var graphCenterTime: NSDate = NSDate()
-    private var graphViewTimeInterval: NSTimeInterval = 0.0
+    var graphCenterTime: NSDate = NSDate()
+    var graphViewTimeInterval: NSTimeInterval = 0.0
     // variables for scaling by pixels/hour
     private var graphPixelsPerHour: CGFloat = 80
     private let kInitPixelsPerHour: CGFloat = 80
@@ -41,7 +44,7 @@ class GraphContainerView: UIView {
     private let kMaxPixelsPerHour: CGFloat = 300
     private let kDeltaPixelsPerHour: CGFloat = 10
     
-    private let graphCellsInCollection = 7
+    let graphCellsInCollection = 7
     private let graphCenterCellInCollection = 3
     
     func configureGraphForEvent(eventItem: NutEventItem) {
@@ -202,15 +205,24 @@ class GraphContainerView: UIView {
     }
     
     private let collectCellReuseID = "graphViewCell"
-    private func configureGraphViewIfNil() {
+    func configureGraphViewIfNil() {
         if graphCollectionView == nil {
             
             // first put in the fixed background
-            let graphView = GraphUIView.init(frame: self.bounds, centerTime: graphCenterTime, timeIntervalForView: graphViewTimeInterval, timeOfMainEvent: eventItem!.time)
             if let fixedBackgroundImageView = fixedBackgroundImageView {
                 fixedBackgroundImageView.removeFromSuperview()
             }
-            fixedBackgroundImageView = UIImageView(image: graphView.fixedBackgroundImage())
+            
+            if let layout=layout, dataDelegate=dataDelegate {
+                // NEW ARCH
+                let startTime = graphCenterTime.dateByAddingTimeInterval(-graphViewTimeInterval/2)
+                let graphView = GraphUIView.init(frame: self.bounds, startTime: startTime, timeIntervalForView: graphViewTimeInterval, layout: layout, dataSource: dataDelegate)
+                fixedBackgroundImageView = UIImageView(image: graphView.fixedBackgroundImage())
+            } else {
+                let graphView = GraphUIView.init(frame: self.bounds, centerTime: graphCenterTime, timeIntervalForView: graphViewTimeInterval, timeOfMainEvent: eventItem!.time)
+                fixedBackgroundImageView = UIImageView(image: graphView.fixedBackgroundImage())
+            }
+            
             self.addSubview(fixedBackgroundImageView!)
             
             let graphLayout = UICollectionViewFlowLayout()
@@ -230,11 +242,11 @@ class GraphContainerView: UIView {
                 // event is in the center cell, see cellForItemAtIndexPath below...
                 centerGraphOnEvent()
                 self.addSubview(graphCollectionView)
-
+                
                 // add pinch gesture recognizer
                 let recognizer = UIPinchGestureRecognizer(target: self, action: "pinchGestureHandler:")
                 graphCollectionView.addGestureRecognizer(recognizer)
-
+                
             }
             
             // Now that graph width is known, configure time span
@@ -363,6 +375,12 @@ extension GraphContainerView: UICollectionViewDataSource {
             //NSLog("GraphContainerView cellForItemAtIndexPath \(indexPath.row)")
             // index determines center time...
             let cellCenterTime = centerTimeOfCellAtIndex(indexPath)
+            // NEW ARCHITECTURE
+            if let dataDelegate = dataDelegate, layout = layout {
+                // TODO: should get layout from graphDelegate? Or layout needs to be initialized with sizing later!
+                cell.layout = layout
+                cell.dataSource = dataDelegate
+            }
             if cell.configureCell(cellCenterTime, timeInterval: graphViewTimeInterval, mainEventTime: eventItem!.time, maxBolus: maxBolus, maxBasal: maxBasal) {
                 dataDetected = true
             }

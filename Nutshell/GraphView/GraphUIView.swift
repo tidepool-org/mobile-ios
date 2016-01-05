@@ -17,6 +17,13 @@ import UIKit
 
 class GraphUIView: UIView {
 
+    // NEW ARCH
+    var layout: GraphLayout?
+    var dataSource: GraphDataSource?
+    private var graphImages: GraphingUtils?
+    private var viewSize: CGSize = CGSizeZero
+    private var graphLayers: [GraphDataLayer] = []
+
     /// After init, call configure to create the graph.
     ///
     /// - parameter centerTime:
@@ -36,6 +43,18 @@ class GraphUIView: UIView {
         super.init(frame: frame)
     }
 
+    convenience init(frame: CGRect, startTime: NSDate, timeIntervalForView: NSTimeInterval, layout: GraphLayout, dataSource: GraphDataSource) {
+        let centerTime =  NSDate(timeInterval: timeIntervalForView/2.0, sinceDate: startTime)
+        let timeOfMainEvent = NSDate()
+        self.init(frame: frame, centerTime: centerTime, timeIntervalForView: timeIntervalForView, timeOfMainEvent:timeOfMainEvent)
+        // NEW ARCH
+        self.layout = layout
+        layout.configure(self.bounds.size)
+        self.dataSource = dataSource
+        self.viewSize = frame.size
+        graphImages = GraphingUtils(layout: layout, timeIntervalForView: timeIntervalForView, startTime: startTime)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -47,19 +66,30 @@ class GraphUIView: UIView {
     func configure(maxBolus: CGFloat = 0.0, maxBasal: CGFloat = 0.0) {
         
         //NSLog("GraphUIView configure maxBolus \(maxBolus), maxBasal \(maxBasal)")
-        self.maxBasal = maxBasal
-        self.maxBolus = maxBolus
-        loadDataForView()
-        graphData()
+        if let layout = layout {
+            // NEW ARCH
+            graphLayers = layout.graphLayers(viewSize, timeIntervalForView: viewTimeInterval, startTime: startTime)
+            graphData()
+        } else {
+            self.maxBasal = maxBasal
+            self.maxBolus = maxBolus
+            loadDataForView()
+            graphData()
+        }
     }
     
     func updateViewSize(newSize: CGSize) {
         // Quick way to update when data haven't changed...
         NSLog("GraphUIView current size: \(self.bounds.size), new size \(newSize)")
-        self.graphViews.updateViewSize(newSize)
-        let views = self.subviews
-        for view in views {
-            view.removeFromSuperview()
+        if let layout = layout {
+            // NEW ARCH
+            self.viewSize = newSize
+            layout.configure(newSize)
+            for layer in graphLayers {
+                layer.updateViewSize(newSize)
+            }
+        } else {
+            self.graphViews.updateViewSize(newSize)
         }
         graphData()
     }
@@ -71,6 +101,9 @@ class GraphUIView: UIView {
     /// - returns: True if there were any cbg, bolus, basal or smgb events in the time frame of the graph
     
     func dataFound() -> Bool {
+        if let dataSource = dataSource {
+            return dataSource.dataFound()
+        }
         return cbgData.count != 0 || bolusData.count != 0 || basalData.count != 0 || smbgData.count != 0 || wizardData.count != 0
     }
     
@@ -81,6 +114,10 @@ class GraphUIView: UIView {
     /// - returns: A UIImageView the size of the current view, with static parts of the background. This should be placed in back of the graph...
     
     func fixedBackgroundImage() -> UIImage {
+        if let graphImages = graphImages {
+            // NEW ARCH
+            return graphImages.imageOfFixedGraphBackground()
+        }
         return graphViews.imageOfFixedGraphBackground()
     }
     
@@ -110,8 +147,29 @@ class GraphUIView: UIView {
 
     private func graphData() {
         // At this point data should be loaded, and we just need to plot the data
-        // First generate the graph background
+        // First remove any previously graphed data in case this is a resizing..
+        let views = self.subviews
+        for view in views {
+            view.removeFromSuperview()
+        }
         
+        if let layout = layout {
+            // NEW ARCH
+//            let xAxisImage = graphViews.imageOfXAxisHeader()
+//            graphXAxisHeader = UIImageView(image: xAxisImage)
+//            addSubview(graphXAxisHeader!)
+
+            for dataLayer in layout.graphLayers(viewSize, timeIntervalForView: viewTimeInterval, startTime: startTime) {
+                dataSource!.loadDataItemsForLayer(dataLayer)
+                let imageView = dataLayer.imageView(graphImages!)
+                if imageView != nil {
+                    addSubview(imageView!)
+                }
+            }
+
+            return
+        }
+
         let xAxisImage = graphViews.imageOfXAxisHeader()
         graphXAxisHeader = UIImageView(image: xAxisImage)
         addSubview(graphXAxisHeader!)

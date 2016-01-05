@@ -175,6 +175,17 @@
 		48B3C9F01C35ADC400E00E7B /* EventPhotoCollectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B3C9EF1C35ADC400E00E7B /* EventPhotoCollectView.swift */; };
 		48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */; };
 		48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */; };
+		48C4914F1C3872AD00F34630 /* GraphDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C4914E1C3872AD00F34630 /* GraphDataSource.swift */; };
+		48C491511C38738A00F34630 /* GraphDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491501C38738A00F34630 /* GraphDataLayer.swift */; };
+		48C491531C38750900F34630 /* TidepoolGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491521C38750900F34630 /* TidepoolGraphView.swift */; };
+		48C491551C38798E00F34630 /* GraphLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491541C38798E00F34630 /* GraphLayout.swift */; };
+		48C491571C38804700F34630 /* GraphingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491561C38804700F34630 /* GraphingUtils.swift */; };
+		48C491591C38B1AF00F34630 /* TidepoolGraphLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491581C38B1AF00F34630 /* TidepoolGraphLayout.swift */; };
+		48C491611C3B2D1A00F34630 /* CbgGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491601C3B2D1A00F34630 /* CbgGraphData.swift */; };
+		48C491651C3B2DEE00F34630 /* MealGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491631C3B2DEE00F34630 /* MealGraphData.swift */; };
+		48C491661C3B2DEE00F34630 /* SmbgGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491641C3B2DEE00F34630 /* SmbgGraphData.swift */; };
+		48C491681C3B47A000F34630 /* BasalGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491671C3B47A000F34630 /* BasalGraphData.swift */; };
+		48C4916A1C3B59B400F34630 /* BoluslGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491691C3B59B400F34630 /* BoluslGraphData.swift */; };
 		48D056921BDFDD16009D1591 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48D056951BDFDD16009D1591 /* Localizable.strings */; };
 		48D056931BDFDD16009D1591 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48D056951BDFDD16009D1591 /* Localizable.strings */; };
 		48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
@@ -327,6 +338,17 @@
 		48BA1EA41C18865100C1B71C /* Data Model.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Data Model.txt"; path = "Manual Test Cases/Data Model.txt"; sourceTree = "<group>"; };
 		48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
 		48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutShellUIViewWithHighlight.swift; path = Resources/NutShellUIViewWithHighlight.swift; sourceTree = "<group>"; };
+		48C4914E1C3872AD00F34630 /* GraphDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataSource.swift; path = GraphView/GraphDataSource.swift; sourceTree = "<group>"; };
+		48C491501C38738A00F34630 /* GraphDataLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataLayer.swift; path = GraphView/GraphDataLayer.swift; sourceTree = "<group>"; };
+		48C491521C38750900F34630 /* TidepoolGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolGraphView.swift; path = GraphView/TidepoolGraphView.swift; sourceTree = "<group>"; };
+		48C491541C38798E00F34630 /* GraphLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphLayout.swift; path = GraphView/GraphLayout.swift; sourceTree = "<group>"; };
+		48C491561C38804700F34630 /* GraphingUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphingUtils.swift; path = GraphView/GraphingUtils.swift; sourceTree = "<group>"; };
+		48C491581C38B1AF00F34630 /* TidepoolGraphLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolGraphLayout.swift; path = GraphView/TidepoolGraphLayout.swift; sourceTree = "<group>"; };
+		48C491601C3B2D1A00F34630 /* CbgGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CbgGraphData.swift; path = "GraphView/Tidepool Graph/CbgGraphData.swift"; sourceTree = "<group>"; };
+		48C491631C3B2DEE00F34630 /* MealGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MealGraphData.swift; path = "GraphView/Tidepool Graph/MealGraphData.swift"; sourceTree = "<group>"; };
+		48C491641C3B2DEE00F34630 /* SmbgGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SmbgGraphData.swift; path = "GraphView/Tidepool Graph/SmbgGraphData.swift"; sourceTree = "<group>"; };
+		48C491671C3B47A000F34630 /* BasalGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasalGraphData.swift; path = "GraphView/Tidepool Graph/BasalGraphData.swift"; sourceTree = "<group>"; };
+		48C491691C3B59B400F34630 /* BoluslGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BoluslGraphData.swift; path = "GraphView/Tidepool Graph/BoluslGraphData.swift"; sourceTree = "<group>"; };
 		48D056961BDFDD20009D1591 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
 		48E490BE1BE198BF004F33E4 /* ShowPhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShowPhotoViewController.swift; path = ViewControllers/ShowPhotoViewController.swift; sourceTree = "<group>"; };
@@ -639,14 +661,49 @@
 			name = "Manual Test Cases";
 			sourceTree = "<group>";
 		};
-		48EC32341BA7C5F400A75103 /* Graph View */ = {
+		48C4915A1C39DBCA00F34630 /* Old Arch */ = {
+			isa = PBXGroup;
+			children = (
+				48B127A11BC444D300061483 /* GraphViews.swift */,
+			);
+			name = "Old Arch";
+			sourceTree = "<group>";
+		};
+		48C4915B1C39DBF600F34630 /* Graphing Package */ = {
 			isa = PBXGroup;
 			children = (
 				4837C1651C11F9FC00D29B64 /* GraphContainerView.swift */,
 				482B4E561BBDAFFF00835CAC /* GraphCollectionCell.swift */,
 				48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */,
-				48B127A11BC444D300061483 /* GraphViews.swift */,
+				48C491501C38738A00F34630 /* GraphDataLayer.swift */,
 				4820ED691C21E8E3008C754A /* GraphDataTypes.swift */,
+				48C4914E1C3872AD00F34630 /* GraphDataSource.swift */,
+				48C491541C38798E00F34630 /* GraphLayout.swift */,
+				48C491561C38804700F34630 /* GraphingUtils.swift */,
+			);
+			name = "Graphing Package";
+			sourceTree = "<group>";
+		};
+		48C491621C3B2D2200F34630 /* Tidepool Graph Data */ = {
+			isa = PBXGroup;
+			children = (
+				48C491691C3B59B400F34630 /* BoluslGraphData.swift */,
+				48C491671C3B47A000F34630 /* BasalGraphData.swift */,
+				48C491631C3B2DEE00F34630 /* MealGraphData.swift */,
+				48C491641C3B2DEE00F34630 /* SmbgGraphData.swift */,
+				48C491601C3B2D1A00F34630 /* CbgGraphData.swift */,
+			);
+			name = "Tidepool Graph Data";
+			sourceTree = "<group>";
+		};
+		48EC32341BA7C5F400A75103 /* Graph View */ = {
+			isa = PBXGroup;
+			children = (
+				48C491521C38750900F34630 /* TidepoolGraphView.swift */,
+				48C491581C38B1AF00F34630 /* TidepoolGraphLayout.swift */,
+				48C491621C3B2D2200F34630 /* Tidepool Graph Data */,
+				48C4915B1C39DBF600F34630 /* Graphing Package */,
+				48C4915A1C39DBCA00F34630 /* Old Arch */,
 			);
 			name = "Graph View";
 			sourceTree = "<group>";
@@ -941,6 +998,7 @@
 				48E490BF1BE198BF004F33E4 /* ShowPhotoViewController.swift in Sources */,
 				486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */,
 				0334CA731BA8DDFC00013096 /* Status.swift in Sources */,
+				48C491591C38B1AF00F34630 /* TidepoolGraphLayout.swift in Sources */,
 				48103E961C1DE4CC0055C27A /* ENSideMenu.swift in Sources */,
 				0334CA5E1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift in Sources */,
 				0334CA821BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift in Sources */,
@@ -956,14 +1014,17 @@
 				486F5E6E1BA24C5C00BA2A57 /* EventDetailViewController.swift in Sources */,
 				0334CA881BA8DDFC00013096 /* User+CoreDataProperties.swift in Sources */,
 				48B3C9F01C35ADC400E00E7B /* EventPhotoCollectView.swift in Sources */,
+				48C491511C38738A00F34630 /* GraphDataLayer.swift in Sources */,
 				0334CA221BA8DDFC00013096 /* Basal.swift in Sources */,
 				0334CA6A1BA8DDFC00013096 /* Settings+CoreDataProperties.swift in Sources */,
 				0334CA581BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,
 				0334CA4F1BA8DDFC00013096 /* GrabBag.swift in Sources */,
+				48C491661C3B2DEE00F34630 /* SmbgGraphData.swift in Sources */,
 				48B127941BC4445500061483 /* NutEventItem.swift in Sources */,
 				0334CA521BA8DDFC00013096 /* Note+CoreDataProperties.swift in Sources */,
 				0334CA401BA8DDFC00013096 /* DeviceMetadata.swift in Sources */,
 				0334CA191BA8DDFC00013096 /* Alarm+CoreDataProperties.swift in Sources */,
+				48C4914F1C3872AD00F34630 /* GraphDataSource.swift in Sources */,
 				0334CA461BA8DDFC00013096 /* Food.swift in Sources */,
 				48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */,
 				4837CC6B1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift in Sources */,
@@ -972,9 +1033,12 @@
 				483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */,
 				0334CA1C1BA8DDFC00013096 /* Alarm.swift in Sources */,
 				0334CA911BA8DDFC00013096 /* Wizard.swift in Sources */,
+				48C491551C38798E00F34630 /* GraphLayout.swift in Sources */,
 				0334CA2B1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */,
+				48C491571C38804700F34630 /* GraphingUtils.swift in Sources */,
 				0334CA251BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */,
 				48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */,
+				48C491681C3B47A000F34630 /* BasalGraphData.swift in Sources */,
 				0334CA311BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,
 				0334CA281BA8DDFC00013096 /* BloodKetone.swift in Sources */,
 				486F5E111BA08DE900BA2A57 /* LoginViewController.swift in Sources */,
@@ -984,7 +1048,9 @@
 				486F5E241BA0DC1000BA2A57 /* APIConnect.swift in Sources */,
 				48103E971C1DE4CC0055C27A /* ENSideMenuNavigationController.swift in Sources */,
 				485420291BC44D290020CFE1 /* EventItem+CoreDataProperties.swift in Sources */,
+				48C491651C3B2DEE00F34630 /* MealGraphData.swift in Sources */,
 				48501BF01C1FC5EC00A7ADA8 /* EventListViewController.swift in Sources */,
+				48C491611C3B2D1A00F34630 /* CbgGraphData.swift in Sources */,
 				0334CA701BA8DDFC00013096 /* Status+CoreDataProperties.swift in Sources */,
 				0334CA7F1BA8DDFC00013096 /* Upload.swift in Sources */,
 				486F5E601BA1EBE100BA2A57 /* EventListTableViewCell.swift in Sources */,
@@ -995,7 +1061,9 @@
 				48FB1E4D1C17C38600C89F8E /* NutshellDataController.swift in Sources */,
 				4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */,
 				48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */,
+				48C4916A1C3B59B400F34630 /* BoluslGraphData.swift in Sources */,
 				4854202B1BC44D290020CFE1 /* EventItem.swift in Sources */,
+				48C491531C38750900F34630 /* TidepoolGraphView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

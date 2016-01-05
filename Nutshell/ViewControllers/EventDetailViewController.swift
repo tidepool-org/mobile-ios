@@ -25,7 +25,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     
     @IBOutlet weak var graphSectionView: UIView!
     @IBOutlet weak var graphLayerContainer: UIView!
-    private var graphContainerView: GraphContainerView?
+    private var graphContainerView: TidepoolGraphView?
+    //private var graphContainerView: GraphContainerView?
     @IBOutlet weak var missingDataAdvisoryView: UIView!
     @IBOutlet weak var missingDataAdvisoryTitle: NutshellUILabel!
     @IBOutlet weak var eatAgainView: UIView!
@@ -527,7 +528,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             graphContainerView?.removeFromSuperview();
             graphContainerView = nil;
         }
-        graphContainerView = GraphContainerView.init(frame: graphLayerContainer.bounds)
+        //graphContainerView = GraphContainerView.init(frame: graphLayerContainer.bounds)
+        graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.bounds)
         if let graphContainerView = graphContainerView, eventItem = eventItem {
             graphContainerView.delegate = self
             graphLayerContainer.addSubview(graphContainerView)
@@ -547,14 +549,16 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     }
 
     override func viewDidLayoutSubviews() {
-        //NSLog("EventDetailVC viewDidLayoutSubviews")
+        // self.view's direct subviews are laid out, force graph subview to layout its subviews:
+        graphSectionView.setNeedsLayout()
+        graphSectionView.layoutIfNeeded()
+        NSLog("EventDetailVC viewDidLayoutSubviews, graphSectionView: \(graphSectionView.frame.size)")
         if let graphContainerView = graphContainerView {
-            // self.view's direct subviews are laid out, force graph subview to layout its subviews:
-            graphSectionView.setNeedsLayout()
-            graphSectionView.layoutIfNeeded()
             if (graphContainerView.frame.size == graphSectionView.frame.size) {
+                NSLog("reconfigure skipped!")
                 return
             }
+            NSLog("Reconfigure graph, graphContainerView: \(graphContainerView.frame.size)")
         }
         configureGraphContainer()
         configurePhotoBackground()
