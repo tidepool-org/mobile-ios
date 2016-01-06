@@ -17,6 +17,7 @@ import UIKit
 
 /// Continuous Blood Glucose readings vary between sub-100 to over 340 (we clip them there).
 /// CbgGraphDataType is a single-value type, so no additional data is needed.
+
 class MealGraphDataType: GraphDataType {
     
     var isMainEvent: Bool = false
@@ -29,13 +30,23 @@ class MealGraphDataType: GraphDataType {
     override func typeString() -> String {
         return "meal"
     }
+
+    override func nominalPixelWidth() -> CGFloat {
+        return MealGraphDataLayer.mealTriangleTopWidth
+    }
 }
 
 class MealGraphDataLayer: GraphDataLayer {
     
     // vars for drawing datapoints of this type
     var pixelsPerValue: CGFloat = 0.0
-    
+
+    // Meal config constants
+    let mealLineColor = Styles.blackColor
+    let mealTriangleColor = Styles.darkPurpleColor
+    let otherMealColor = UIColor(hex: 0x948ca3)
+    static let mealTriangleTopWidth: CGFloat = 15.5
+
     // override for any draw setup
     override func configureForDrawing() {
         if let layout = self.layout as? TidepoolGraphLayout {
@@ -53,8 +64,8 @@ class MealGraphDataLayer: GraphDataLayer {
             }
 
             // eventLine Drawing
-            let lineColor = isMain ? layout.mealLineColor : layout.otherMealColor
-            let triangleColor = isMain ? layout.mealTriangleColor : layout.otherMealColor
+            let lineColor = isMain ? mealLineColor : otherMealColor
+            let triangleColor = isMain ? mealTriangleColor : otherMealColor
             let lineHeight: CGFloat = isMain ? viewSize.height : layout.headerHeight
             let lineWidth: CGFloat = isMain ? 2.0 : 1.0
             
@@ -65,7 +76,7 @@ class MealGraphDataLayer: GraphDataLayer {
             
             let trianglePath = UIBezierPath()
             let centerX = rect.origin.x + lineWidth/2.0
-            let triangleSize: CGFloat = 15.5
+            let triangleSize: CGFloat = MealGraphDataLayer.mealTriangleTopWidth
             let triangleOrgX = centerX - triangleSize/2.0
             trianglePath.moveToPoint(CGPointMake(triangleOrgX, 0.0))
             trianglePath.addLineToPoint(CGPointMake(triangleOrgX + triangleSize, 0.0))

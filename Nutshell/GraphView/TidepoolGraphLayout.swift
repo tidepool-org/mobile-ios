@@ -25,8 +25,6 @@ class TidepoolGraphLayout: GraphLayout {
     // create and return an array of GraphDataLayer objects, w/o data, ordered in view layer from back to front (i.e., last item in array will be drawn last)
     override func graphLayers(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate) -> [GraphDataLayer] {
 
-        // TODO: x-axis
-        
         let workoutLayer = WorkoutGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: WorkoutGraphDataType(), layout: self)
         
         let mealLayer = MealGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: MealGraphDataType(), layout: self)
@@ -50,13 +48,6 @@ class TidepoolGraphLayout: GraphLayout {
     //
 
     //
-    // Meal and Workout data
-    //
-    let mealLineColor = Styles.blackColor
-    let mealTriangleColor = Styles.darkPurpleColor
-    let otherMealColor = UIColor(hex: 0x948ca3)
-
-    //
     // Blood glucose data (cbg and smbg)
     //
     // NOTE: only supports minvalue==0 right now!
@@ -70,30 +61,6 @@ class TidepoolGraphLayout: GraphLayout {
     let highColor = Styles.purpleColor
     let targetColor = Styles.greenColor
     let lowColor = Styles.peachColor
-
-    //
-    // Basal data
-    //
-    let basalLightBlueRectColor = Styles.lightBlueColor
-    let kBasalMinScaleValue: CGFloat = 1.0
-
-    //
-    // Bolus data
-    //
-    let bolusTextBlue = Styles.mediumBlueColor
-    let bolusBlueRectColor = Styles.blueColor
-
-    //
-    // Wizard and bolus data
-    //
-    let kWizardCircleDiameter: CGFloat = 31.0
-    let kBolusRectWidth: CGFloat = 14.0
-    let kBolusLabelToRectGap: CGFloat = 0.0
-    let kBolusLabelRectHeight: CGFloat = 12.0
-    let kBolusMinScaleValue: CGFloat = 1.0
-    let kExtensionLineHeight: CGFloat = 2.0
-    let kExtensionEndshapeWidth: CGFloat = 7.0
-    let kExtensionEndshapeHeight: CGFloat = 11.0
 
     // Keep track of rects drawn for later drawing. E.g., Wizard circles are drawn just over associated Bolus labels.
     var bolusRects: [CGRect] = []

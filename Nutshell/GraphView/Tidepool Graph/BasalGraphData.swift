@@ -30,6 +30,11 @@ class BasalGraphDataType: GraphDataType {
     override func typeString() -> String {
         return "basal"
     }
+
+    override func maxTimeExtension() -> NSTimeInterval {
+        return 12*60*60  // Assume maximum basal length of 12 hours!
+    }
+
 }
 
 class BasalGraphDataLayer: GraphDataLayer {
@@ -37,7 +42,12 @@ class BasalGraphDataLayer: GraphDataLayer {
     // vars for drawing datapoints of this type
     var pixelsPerValue: CGFloat = 0.0
     var maxBasal: CGFloat = 0.0
-    
+ 
+    // config...
+    let basalLightBlueRectColor = Styles.lightBlueColor
+    let kBasalMinScaleValue: CGFloat = 1.0
+    let basalDarkBlueRectColor = Styles.blueColor
+
     // locals...
     private var context: CGContext?
     private var startValue: CGFloat = 0.0
@@ -51,8 +61,8 @@ class BasalGraphDataLayer: GraphDataLayer {
     override func configureForDrawing() {
         context = UIGraphicsGetCurrentContext()
         if let layout = self.layout as? TidepoolGraphLayout {
-            if maxBasal < layout.kBasalMinScaleValue {
-                maxBasal = layout.kBasalMinScaleValue
+            if maxBasal < kBasalMinScaleValue {
+                maxBasal = kBasalMinScaleValue
             }
             self.pixelsPerValue = layout.yPixelsBasal / CGFloat(maxBasal)
         }
@@ -113,7 +123,7 @@ class BasalGraphDataLayer: GraphDataLayer {
         linePath.lineJoinStyle = .Round;
         linePath.usesEvenOddFillRule = true;
         
-        layout.bolusBlueRectColor.setStroke()
+        basalDarkBlueRectColor.setStroke()
         linePath.lineWidth = lineHeight
         CGContextSaveGState(context)
         CGContextSetLineDash(context, 0, [2, 5], 2)
@@ -129,7 +139,7 @@ class BasalGraphDataLayer: GraphDataLayer {
         var basalRect = CGRect(x: rectLeft, y: layout.yBottomOfBasal - rectHeight, width: rectRight - rectLeft, height: rectHeight)
         
         let basalValueRectPath = UIBezierPath(rect: basalRect)
-        layout.basalLightBlueRectColor.setFill()
+        basalLightBlueRectColor.setFill()
         basalValueRectPath.fill()
         
         if let suppressed = suppressed {

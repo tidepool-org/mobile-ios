@@ -31,6 +31,10 @@ class WorkoutGraphDataType: GraphDataType {
     override func typeString() -> String {
         return "workout"
     }
+
+    override func maxTimeExtension() -> NSTimeInterval {
+        return 3*60*60  // Assume maximum workout length of 3 hours!
+    }
 }
 
 class WorkoutGraphDataLayer: GraphDataLayer {

@@ -85,6 +85,7 @@ class GraphUIView: UIView {
             // NEW ARCH
             self.viewSize = newSize
             layout.configure(newSize)
+            graphUtils?.updateViewSize(newSize)
             for layer in graphLayers {
                 layer.updateViewSize(newSize)
             }

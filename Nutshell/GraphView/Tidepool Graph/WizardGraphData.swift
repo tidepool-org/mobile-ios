@@ -18,9 +18,13 @@ import UIKit
 /// Continuous Blood Glucose readings vary between sub-100 to over 340 (we clip them there).
 /// CbgGraphDataType is a single-value type, so no additional data is needed.
 class WizardGraphDataType: GraphDataType {
-    
+
     override func typeString() -> String {
         return "wizard"
+    }
+
+    override func nominalPixelWidth() -> CGFloat {
+        return WizardGraphDataLayer.kWizardCircleDiameter
     }
 }
 
@@ -31,6 +35,7 @@ class WizardGraphDataLayer: GraphDataLayer {
     let circleRadius: CGFloat = 9.0
     var lastCircleDrawn = CGRectNull
     var context: CGContext?
+    static let kWizardCircleDiameter: CGFloat = 31.0
     
     override func configure() {
     }
@@ -48,7 +53,7 @@ class WizardGraphDataLayer: GraphDataLayer {
         
         if let layout = self.layout as? TidepoolGraphLayout {
             let centerX = xOffset
-            let circleDiameter = layout.kWizardCircleDiameter
+            let circleDiameter = WizardGraphDataLayer.kWizardCircleDiameter
             let value = round(dataPoint.value)
             // Carb circle should be centered at timeline
             let offsetX = centerX - (circleDiameter/2)

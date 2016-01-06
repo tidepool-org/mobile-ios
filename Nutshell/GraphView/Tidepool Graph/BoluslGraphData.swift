@@ -40,13 +40,37 @@ class BolusGraphDataType: GraphDataType {
     override func typeString() -> String {
         return "bolus"
     }
+
+    override func maxTimeExtension() -> NSTimeInterval {
+        return 6*60*60  // Assume maximum bolus extension of 6 hours!
+    }
+    
+    override func nominalPixelWidth() -> CGFloat {
+        return BolusGraphDataLayer.kBolusRectWidth
+    }
 }
 
 class BolusGraphDataLayer: GraphDataLayer {
     
     // vars for drawing datapoints of this type
-    var pixelsPerValue: CGFloat = 0.0
     var maxBolus: CGFloat = 0.0
+    
+    //
+    // Bolus data
+    //
+    let bolusTextBlue = Styles.mediumBlueColor
+    let bolusBlueRectColor = Styles.blueColor
+    
+    //
+    // Bolus data
+    //
+    static let kBolusRectWidth: CGFloat = 14.0
+    let kBolusLabelToRectGap: CGFloat = 0.0
+    let kBolusLabelRectHeight: CGFloat = 12.0
+    let kBolusMinScaleValue: CGFloat = 1.0
+    let kExtensionLineHeight: CGFloat = 2.0
+    let kExtensionEndshapeWidth: CGFloat = 7.0
+    let kExtensionEndshapeHeight: CGFloat = 11.0
     
     // locals...
     private var context: CGContext?
@@ -61,10 +85,10 @@ class BolusGraphDataLayer: GraphDataLayer {
     override func configureForDrawing() {
         context = UIGraphicsGetCurrentContext()
         if let layout = self.layout as? TidepoolGraphLayout {
-            if maxBolus < layout.kBolusMinScaleValue {
-                maxBolus = layout.kBolusMinScaleValue
+            layout.bolusRects = []
+            if maxBolus < kBolusMinScaleValue {
+                maxBolus = kBolusMinScaleValue
             }
-            self.pixelsPerValue = layout.yPixelsBolus / CGFloat(maxBolus)
         }
         startValue = 0.0
         startTimeOffset = 0.0
@@ -79,17 +103,12 @@ class BolusGraphDataLayer: GraphDataLayer {
                 // Bolus rect is center-aligned to time start
                 let centerX = xOffset
                 var bolusValue = bolus.value
-                if bolusValue > maxBolus && bolusValue > layout.kBolusMinScaleValue {
+                if bolusValue > maxBolus && bolusValue > kBolusMinScaleValue {
                     NSLog("ERR: max bolus exceeded!")
                     bolusValue = maxBolus
                 }
-                let rectLeft = floor(centerX - (layout.kBolusRectWidth/2))
-                let bolusRectHeight = ceil(pixelsPerValue * bolusValue)
-                let bolusValueRect = CGRect(x: rectLeft, y: layout.yBottomOfBolus - bolusRectHeight, width: layout.kBolusRectWidth, height: bolusRectHeight)
-                let bolusValueRectPath = UIBezierPath(rect: bolusValueRect)
-                layout.bolusBlueRectColor.setFill()
-                bolusValueRectPath.fill()
                 
+                // Measure out the label first so we know how much space we have for the rect below it.
                 let bolusFloatValue = Float(bolus.value)
                 var bolusLabelTextContent = String(format: "%.2f", bolusFloatValue)
                 if bolusLabelTextContent.hasSuffix("0") {
@@ -97,11 +116,22 @@ class BolusGraphDataLayer: GraphDataLayer {
                 }
                 let bolusLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
                 bolusLabelStyle.alignment = .Center
-                let bolusLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: layout.bolusTextBlue, NSParagraphStyleAttributeName: bolusLabelStyle]
+                let bolusLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: bolusTextBlue, NSParagraphStyleAttributeName: bolusLabelStyle]
                 var bolusLabelTextSize = bolusLabelTextContent.boundingRectWithSize(CGSizeMake(CGFloat.infinity, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: bolusLabelFontAttributes, context: nil).size
                 bolusLabelTextSize = CGSize(width: ceil(bolusLabelTextSize.width), height: ceil(bolusLabelTextSize.height))
-                let bolusLabelRect = CGRect(x:centerX-(bolusLabelTextSize.width/2), y:layout.yBottomOfBolus - bolusRectHeight - layout.kBolusLabelToRectGap - bolusLabelTextSize.height, width: bolusLabelTextSize.width, height: bolusLabelTextSize.height)
+
+                let pixelsPerValue = (layout.yPixelsBolus - bolusLabelTextSize.height - kBolusLabelToRectGap) / CGFloat(maxBolus)
                 
+                // Draw the bolus rectangle
+                let rectLeft = floor(centerX - (BolusGraphDataLayer.kBolusRectWidth/2))
+                let bolusRectHeight = ceil(pixelsPerValue * bolusValue)
+                let bolusValueRect = CGRect(x: rectLeft, y: layout.yBottomOfBolus - bolusRectHeight, width: BolusGraphDataLayer.kBolusRectWidth, height: bolusRectHeight)
+                let bolusValueRectPath = UIBezierPath(rect: bolusValueRect)
+                bolusBlueRectColor.setFill()
+                bolusValueRectPath.fill()
+                
+                // Finally, draw the bolus label above the rectangle
+                let bolusLabelRect = CGRect(x:centerX-(bolusLabelTextSize.width/2), y:layout.yBottomOfBolus - bolusRectHeight - kBolusLabelToRectGap - bolusLabelTextSize.height, width: bolusLabelTextSize.width, height: bolusLabelTextSize.height)
                 let bolusLabelPath = UIBezierPath(rect: bolusLabelRect.insetBy(dx: 0.0, dy: 2.0))
                 layout.backgroundColor.setFill()
                 bolusLabelPath.fill()
@@ -125,27 +155,27 @@ class BolusGraphDataLayer: GraphDataLayer {
     }
     
     private func drawBolusExtension(var originX: CGFloat, centerY: CGFloat, var width: CGFloat, layout: TidepoolGraphLayout) {
-        if width < layout.kExtensionEndshapeWidth {
+        if width < kExtensionEndshapeWidth {
             // If extension is shorter than the end trapezoid shape, only draw that shape, backing it into the bolus rect
-            originX = originX - (layout.kExtensionEndshapeWidth - width)
-            width = layout.kExtensionEndshapeWidth
+            originX = originX - (kExtensionEndshapeWidth - width)
+            width = kExtensionEndshapeWidth
         }
-        let originY = centerY - (layout.kExtensionEndshapeHeight/2.0)
-        let bottomLineY = centerY + (layout.kExtensionLineHeight / 2.0)
-        let topLineY = centerY - (layout.kExtensionLineHeight / 2.0)
+        let originY = centerY - (kExtensionEndshapeHeight/2.0)
+        let bottomLineY = centerY + (kExtensionLineHeight / 2.0)
+        let topLineY = centerY - (kExtensionLineHeight / 2.0)
         let rightSideX = originX + width
         
         //// Bezier Drawing
         let bezierPath = UIBezierPath()
         bezierPath.moveToPoint(CGPointMake(rightSideX, originY))
-        bezierPath.addLineToPoint(CGPointMake(rightSideX, originY + layout.kExtensionEndshapeHeight))
-        bezierPath.addLineToPoint(CGPointMake(rightSideX - layout.kExtensionEndshapeWidth, bottomLineY))
+        bezierPath.addLineToPoint(CGPointMake(rightSideX, originY + kExtensionEndshapeHeight))
+        bezierPath.addLineToPoint(CGPointMake(rightSideX - kExtensionEndshapeWidth, bottomLineY))
         bezierPath.addLineToPoint(CGPointMake(originX, bottomLineY))
         bezierPath.addLineToPoint(CGPointMake(originX, topLineY))
-        bezierPath.addLineToPoint(CGPointMake(rightSideX - layout.kExtensionEndshapeWidth, topLineY))
+        bezierPath.addLineToPoint(CGPointMake(rightSideX - kExtensionEndshapeWidth, topLineY))
         bezierPath.addLineToPoint(CGPointMake(rightSideX, originY))
         bezierPath.closePath()
-        layout.bolusBlueRectColor.setFill()
+        bolusBlueRectColor.setFill()
         bezierPath.fill()
     }
 

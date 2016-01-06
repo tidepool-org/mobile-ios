@@ -17,14 +17,18 @@
 import UIKit
 import CoreGraphics
 
+/// Used for drawing within a graph view: handles the background, y-axis and x-axis drawing, and provides drawing methods that can be used to draw labels, circles, etc.
+/// Note: an overall graph composed of multiple collection view cells would have a separate GraphingUtils object for each cell. 
 public class GraphingUtils {
     
     var layout: GraphLayout
+    /// viewSize is set at init, and can be updated via updateViewSize later, changing viewPixelsPerSec
     var viewSize: CGSize
+    var viewPixelsPerSec: CGFloat = 0.0
+    /// timeIntervalForView and startTime are invariant.
     var timeIntervalForView: NSTimeInterval
     var startTime: NSDate
     //
-    private var viewPixelsPerSec: CGFloat = 0.0
 
     //
     // MARK: - Interface
@@ -69,8 +73,10 @@ public class GraphingUtils {
 
     private func configureGraphParameters() {
         self.viewPixelsPerSec = viewSize.width/CGFloat(timeIntervalForView)
+        // calculate the extra time we need data fetched for at the end of the graph time span so we draw the beginnings of next graph items
     }
 
+    // TODO: generalize so it can be shared!
     private func drawDashedHorizontalLine(start: CGPoint, length: CGFloat, lineWidth: CGFloat) {
         let context = UIGraphicsGetCurrentContext()
         let yAxisLinePath = UIBezierPath()
@@ -89,6 +95,7 @@ public class GraphingUtils {
         CGContextRestoreGState(context)
     }
 
+    // TODO: generalize so it can be shared!
     private func drawLabelLeftOfPoint(label: String, rightCenter: CGPoint, font: UIFont, color: UIColor) {
         let alignRightStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
         alignRightStyle.alignment = .Right

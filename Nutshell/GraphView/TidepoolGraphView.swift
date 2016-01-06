@@ -45,7 +45,7 @@ class TidepoolGraphView: GraphContainerView, GraphDataSource {
     /// GraphDataSource methods
     func loadDataItemsForLayer(layer: GraphDataLayer) -> Int {
         // Load all the types in anticipation they will all be needed...
-        loadAllDataForTimeRange(layer.startTime, timeInterval: layer.timeIntervalForView)
+        loadAllDataForTimeRange(layer)
 
         // Create the appropriate data layer based on type passed in...
         if let workoutLayer = layer as? WorkoutGraphDataLayer {
@@ -232,8 +232,12 @@ class TidepoolGraphView: GraphContainerView, GraphDataSource {
         curTimeInterval = 0.0
     }
     
-    private func loadAllDataForTimeRange(startTime: NSDate, timeInterval: NSTimeInterval) {
-        
+    private func loadAllDataForTimeRange(layer: GraphDataLayer) {
+    
+        let startTime = layer.startTime
+        let timeInterval = layer.timeIntervalForView
+        let viewPixelsPerSec = layer.viewSize.width/CGFloat(timeInterval)
+    
         if let curStartTime=curStartTime {
             if startTime == curStartTime && timeInterval == curTimeInterval {
                 return // we already have the data...
@@ -252,9 +256,11 @@ class TidepoolGraphView: GraphContainerView, GraphDataSource {
         mealData = []
         workoutData = []
         
-        // TODO: figure out a better time extension? One hour should pick up anything other than bolus extensions and workouts longer than 1 hour...
-        let earlyStartTime = startTime.dateByAddingTimeInterval(-3600 /* -graphViews.timeExtensionForDataFetch*/)
-        let lateEndTime = endTime.dateByAddingTimeInterval(3600 /* -graphViews.timeExtensionForDataFetch*/)
+        // TODO: figure out a better time extension? Perhaps move to fetching data per item type, and have the item type determine this!
+        let timeExtensionForDataFetch = NSTimeInterval(30.0/viewPixelsPerSec)
+
+        let earlyStartTime = startTime.dateByAddingTimeInterval(-timeExtensionForDataFetch)
+        let lateEndTime = endTime.dateByAddingTimeInterval(timeExtensionForDataFetch)
         
         do {
             let events = try DatabaseUtils.getTidepoolEvents(earlyStartTime, thruTime: lateEndTime, objectTypes: ["smbg", "bolus", "cbg", "wizard"])
