@@ -31,62 +31,76 @@ class MealGraphDataType: GraphDataType {
         return "meal"
     }
 
-    override func nominalPixelWidth() -> CGFloat {
-        return MealGraphDataLayer.mealTriangleTopWidth
-    }
 }
 
 class MealGraphDataLayer: GraphDataLayer {
-    
-    // vars for drawing datapoints of this type
-    var pixelsPerValue: CGFloat = 0.0
+
+    var layout: TidepoolGraphLayout
+
+    init(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate, layout: TidepoolGraphLayout) {
+        self.layout = layout
+        super.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime)
+    }
 
     // Meal config constants
-    let mealLineColor = Styles.blackColor
-    let mealTriangleColor = Styles.darkPurpleColor
-    let otherMealColor = UIColor(hex: 0x948ca3)
-    static let mealTriangleTopWidth: CGFloat = 15.5
-
-    // override for any draw setup
-    override func configureForDrawing() {
-        if let layout = self.layout as? TidepoolGraphLayout {
-            self.pixelsPerValue = layout.yPixelsGlucose/layout.kGlucoseRange
+    let kMealLineColor = Styles.blackColor
+    let kMealTriangleColor = Styles.darkPurpleColor
+    let kOtherMealColor = UIColor(hex: 0x948ca3)
+    let kMealTriangleTopWidth: CGFloat = 15.5
+    
+    override func loadDataItems() {
+        dataArray = []
+        let endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
+        let timeExtensionForDataFetch = NSTimeInterval(kMealTriangleTopWidth/viewPixelsPerSec)
+        let earlyStartTime = startTime.dateByAddingTimeInterval(-timeExtensionForDataFetch)
+        let lateEndTime = endTime.dateByAddingTimeInterval(timeExtensionForDataFetch)
+        do {
+            let events = try DatabaseUtils.getMealEvents(earlyStartTime, toTime: lateEndTime)
+            for mealEvent in events {
+                if let eventTime = mealEvent.time {
+                    let deltaTime = eventTime.timeIntervalSinceDate(startTime)
+                    var isMainEvent = false
+                    isMainEvent = mealEvent.time == layout.mainEventTime
+                    dataArray.append(MealGraphDataType(timeOffset: deltaTime, isMain: isMainEvent))
+                }
+            }
+        } catch let error as NSError {
+            NSLog("Error: \(error)")
         }
+        NSLog("loaded \(dataArray.count) meal events")
     }
     
     // override!
     override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
         
-        if let layout = self.layout as? TidepoolGraphLayout {
-            var isMain = false
-            if let mealDataType = dataPoint as? MealGraphDataType {
-                isMain = mealDataType.isMainEvent
-            }
-
-            // eventLine Drawing
-            let lineColor = isMain ? mealLineColor : otherMealColor
-            let triangleColor = isMain ? mealTriangleColor : otherMealColor
-            let lineHeight: CGFloat = isMain ? viewSize.height : layout.headerHeight
-            let lineWidth: CGFloat = isMain ? 2.0 : 1.0
-            
-            let rect = CGRect(x: xOffset, y: 0.0, width: lineWidth, height: lineHeight)
-            let eventLinePath = UIBezierPath(rect: rect)
-            lineColor.setFill()
-            eventLinePath.fill()
-            
-            let trianglePath = UIBezierPath()
-            let centerX = rect.origin.x + lineWidth/2.0
-            let triangleSize: CGFloat = MealGraphDataLayer.mealTriangleTopWidth
-            let triangleOrgX = centerX - triangleSize/2.0
-            trianglePath.moveToPoint(CGPointMake(triangleOrgX, 0.0))
-            trianglePath.addLineToPoint(CGPointMake(triangleOrgX + triangleSize, 0.0))
-            trianglePath.addLineToPoint(CGPointMake(triangleOrgX + triangleSize/2.0, 13.5))
-            trianglePath.addLineToPoint(CGPointMake(triangleOrgX, 0))
-            trianglePath.closePath()
-            trianglePath.miterLimit = 4;
-            trianglePath.usesEvenOddFillRule = true;
-            triangleColor.setFill()
-            trianglePath.fill()
+        var isMain = false
+        if let mealDataType = dataPoint as? MealGraphDataType {
+            isMain = mealDataType.isMainEvent
         }
+
+        // eventLine Drawing
+        let lineColor = isMain ? kMealLineColor : kOtherMealColor
+        let triangleColor = isMain ? kMealTriangleColor : kOtherMealColor
+        let lineHeight: CGFloat = isMain ? cellViewSize.height : layout.headerHeight
+        let lineWidth: CGFloat = isMain ? 2.0 : 1.0
+        
+        let rect = CGRect(x: xOffset, y: 0.0, width: lineWidth, height: lineHeight)
+        let eventLinePath = UIBezierPath(rect: rect)
+        lineColor.setFill()
+        eventLinePath.fill()
+        
+        let trianglePath = UIBezierPath()
+        let centerX = rect.origin.x + lineWidth/2.0
+        let triangleSize: CGFloat = kMealTriangleTopWidth
+        let triangleOrgX = centerX - triangleSize/2.0
+        trianglePath.moveToPoint(CGPointMake(triangleOrgX, 0.0))
+        trianglePath.addLineToPoint(CGPointMake(triangleOrgX + triangleSize, 0.0))
+        trianglePath.addLineToPoint(CGPointMake(triangleOrgX + triangleSize/2.0, 13.5))
+        trianglePath.addLineToPoint(CGPointMake(triangleOrgX, 0))
+        trianglePath.closePath()
+        trianglePath.miterLimit = 4;
+        trianglePath.usesEvenOddFillRule = true;
+        triangleColor.setFill()
+        trianglePath.fill()
     }
 }

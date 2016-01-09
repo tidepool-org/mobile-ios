@@ -24,7 +24,7 @@ class SmbgGraphDataType: GraphDataType {
     }
 }
 
-class SmbgGraphDataLayer: GraphDataLayer {
+class SmbgGraphDataLayer: TidepoolGraphDataLayer {
     
     // vars for drawing datapoints of this type
     var pixelsPerValue: CGFloat = 0.0
@@ -32,56 +32,70 @@ class SmbgGraphDataLayer: GraphDataLayer {
     var lastCircleDrawn = CGRectNull
     var context: CGContext?
     
-    override func configure() {
+    override func nominalPixelWidth() -> CGFloat {
+        return circleRadius * 2
+    }
+    
+    override func typeString() -> String {
+        return "smbg"
+    }
+    
+    private let kGlucoseConversionToMgDl: CGFloat = 18.0
+    override func loadEvent(event: CommonData, timeOffset: NSTimeInterval) {
+        if let smbgEvent = event as? SelfMonitoringGlucose {
+            //NSLog("Adding smbg event: \(event)")
+            if let value = smbgEvent.value {
+                let convertedValue = round(CGFloat(value) * kGlucoseConversionToMgDl)
+                dataArray.append(CbgGraphDataType(value: convertedValue, timeOffset: timeOffset))
+            } else {
+                NSLog("ignoring smbg event with nil value")
+            }
+        }
     }
     
     // override for any draw setup
     override func configureForDrawing() {
-        if let layout = self.layout as? TidepoolGraphLayout {
-            self.pixelsPerValue = layout.yPixelsGlucose/layout.kGlucoseRange
-        }
+        self.pixelsPerValue = layout.yPixelsGlucose/layout.kGlucoseRange
         context = UIGraphicsGetCurrentContext()
    }
     
     // override!
     override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
         
-        if let layout = self.layout as? TidepoolGraphLayout {
-            let centerX = xOffset
-            var value = round(dataPoint.value)
-            let valueForLabel = value
-            if value > layout.kGlucoseMaxValue {
-                value = layout.kGlucoseMaxValue
-            }
-            // flip the Y to compensate for origin!
-            let centerY: CGFloat = layout.yTopOfGlucose + layout.yPixelsGlucose - floor(value * pixelsPerValue)
-            
-            let circleColor = value < layout.lowBoundary ? layout.lowColor : value < layout.highBoundary ? layout.targetColor : layout.highColor
-
-            let largeCirclePath = UIBezierPath(ovalInRect: CGRectMake(centerX-circleRadius, centerY-circleRadius, circleRadius*2, circleRadius*2))
-            circleColor.setFill()
-            largeCirclePath.fill()
-            layout.backgroundColor.setStroke()
-            largeCirclePath.lineWidth = 1.5
-            largeCirclePath.stroke()
-            
-            let intValue = Int(valueForLabel)
-            let readingLabelTextContent = String(intValue)
-            let readingLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-            readingLabelStyle.alignment = .Center
-            let readingLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: circleColor, NSParagraphStyleAttributeName: readingLabelStyle]
-            var readingLabelTextSize = readingLabelTextContent.boundingRectWithSize(CGSizeMake(CGFloat.infinity, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: readingLabelFontAttributes, context: nil).size
-            readingLabelTextSize = CGSize(width: ceil(readingLabelTextSize.width), height: ceil(readingLabelTextSize.height))
-            let readingLabelRect = CGRectMake(centerX-(readingLabelTextSize.width/2), centerY+circleRadius, readingLabelTextSize.width, readingLabelTextSize.height)
-            
-            let readingLabelPath = UIBezierPath(rect: readingLabelRect.insetBy(dx: 1.0, dy: 2.5))
-            layout.backgroundColor.setFill()
-            readingLabelPath.fill()
-            
-            CGContextSaveGState(context)
-            CGContextClipToRect(context, readingLabelRect);
-            readingLabelTextContent.drawInRect(readingLabelRect, withAttributes: readingLabelFontAttributes)
-            CGContextRestoreGState(context)
+        let centerX = xOffset
+        var value = round(dataPoint.value)
+        let valueForLabel = value
+        if value > layout.kGlucoseMaxValue {
+            value = layout.kGlucoseMaxValue
         }
+        // flip the Y to compensate for origin!
+        let centerY: CGFloat = layout.yTopOfGlucose + layout.yPixelsGlucose - floor(value * pixelsPerValue)
+        
+        let circleColor = value < layout.lowBoundary ? layout.lowColor : value < layout.highBoundary ? layout.targetColor : layout.highColor
+
+        let largeCirclePath = UIBezierPath(ovalInRect: CGRectMake(centerX-circleRadius, centerY-circleRadius, circleRadius*2, circleRadius*2))
+        circleColor.setFill()
+        largeCirclePath.fill()
+        layout.backgroundColor.setStroke()
+        largeCirclePath.lineWidth = 1.5
+        largeCirclePath.stroke()
+        
+        let intValue = Int(valueForLabel)
+        let readingLabelTextContent = String(intValue)
+        let readingLabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        readingLabelStyle.alignment = .Center
+        let readingLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: circleColor, NSParagraphStyleAttributeName: readingLabelStyle]
+        var readingLabelTextSize = readingLabelTextContent.boundingRectWithSize(CGSizeMake(CGFloat.infinity, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: readingLabelFontAttributes, context: nil).size
+        readingLabelTextSize = CGSize(width: ceil(readingLabelTextSize.width), height: ceil(readingLabelTextSize.height))
+        let readingLabelRect = CGRectMake(centerX-(readingLabelTextSize.width/2), centerY+circleRadius, readingLabelTextSize.width, readingLabelTextSize.height)
+        
+        let readingLabelPath = UIBezierPath(rect: readingLabelRect.insetBy(dx: 1.0, dy: 2.5))
+        layout.backgroundColor.setFill()
+        readingLabelPath.fill()
+        
+        CGContextSaveGState(context)
+        CGContextClipToRect(context, readingLabelRect);
+        readingLabelTextContent.drawInRect(readingLabelRect, withAttributes: readingLabelFontAttributes)
+        CGContextRestoreGState(context)
     }
 }

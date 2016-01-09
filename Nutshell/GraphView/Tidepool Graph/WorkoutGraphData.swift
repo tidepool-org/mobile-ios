@@ -32,48 +32,76 @@ class WorkoutGraphDataType: GraphDataType {
         return "workout"
     }
 
-    override func maxTimeExtension() -> NSTimeInterval {
-        return 3*60*60  // Assume maximum workout length of 3 hours!
-    }
 }
 
 class WorkoutGraphDataLayer: GraphDataLayer {
     
     // vars for drawing datapoints of this type
     var pixelsPerValue: CGFloat = 0.0
+ 
+    private var layout: TidepoolGraphLayout
     
-    // override for any draw setup
-    override func configureForDrawing() {
-        if let layout = self.layout as? TidepoolGraphLayout {
-            self.pixelsPerValue = layout.yPixelsGlucose/layout.kGlucoseRange
+    init(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate, layout: TidepoolGraphLayout) {
+        self.layout = layout
+        super.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime)
+    }
+
+    // Assume maximum workout length of 3 hours for prefetch!
+    private let maxWorkoutDuration: NSTimeInterval = 3*60*60
+    private let minPixelWidth: CGFloat = 2.0
+
+    override func loadDataItems() {
+        dataArray = []
+        let endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
+        let timeExtensionForDataFetch = NSTimeInterval(minPixelWidth/viewPixelsPerSec)
+        let earlyStartTime = startTime.dateByAddingTimeInterval(-maxWorkoutDuration)
+        let lateEndTime = endTime.dateByAddingTimeInterval(timeExtensionForDataFetch)
+        do {
+            let events = try DatabaseUtils.getWorkoutEvents(earlyStartTime, toTime: lateEndTime)
+            for workoutEvent in events {
+                if let eventTime = workoutEvent.time {
+                    let deltaTime = eventTime.timeIntervalSinceDate(startTime)
+                    var isMainEvent = false
+                    isMainEvent = workoutEvent.time == layout.mainEventTime
+                    if let duration = workoutEvent.duration {
+                        dataArray.append(WorkoutGraphDataType(timeOffset: deltaTime, isMain: isMainEvent, duration: NSTimeInterval(duration)))
+                    } else {
+                        NSLog("ignoring Workout event with nil duration")
+                    }
+                }
+            }
+        } catch let error as NSError {
+            NSLog("Error: \(error)")
         }
+        NSLog("loaded \(dataArray.count) workout events")
     }
     
-    // override!
+    // override for draw setup
+    override func configureForDrawing() {
+        self.pixelsPerValue = layout.yPixelsGlucose/layout.kGlucoseRange
+    }
+    
     override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
         
-        if let layout = self.layout as? TidepoolGraphLayout {
-            var isMain = false
-            if let workoutDataType = dataPoint as? WorkoutGraphDataType {
-                isMain = workoutDataType.isMainEvent
+        var isMain = false
+        if let workoutDataType = dataPoint as? WorkoutGraphDataType {
+            isMain = workoutDataType.isMainEvent
+        
+            let workoutDuration = workoutDataType.duration
+            let lineWidth: CGFloat = isMain ? 2.0 : 1.0
             
-                let workoutDuration = workoutDataType.duration
-                let lineWidth: CGFloat = isMain ? 2.0 : 1.0
-                
-                //// eventLine Drawing
-                let centerX = xOffset
-                let eventLinePath = UIBezierPath(rect: CGRect(x: centerX, y: layout.yTopOfWorkout, width: lineWidth, height: layout.yBottomOfWorkout - layout.yTopOfWorkout))
-                Styles.pinkColor.setFill()
-                eventLinePath.fill()
-                
-                //// eventRectangle Drawing
-                let workoutRectWidth = floor(CGFloat(workoutDuration) * viewPixelsPerSec)
-                let workoutRect = CGRect(x: centerX /*- (workoutRectWidth/2)*/, y:layout.yTopOfWorkout, width: workoutRectWidth, height: layout.yPixelsWorkout)
-                let eventRectanglePath = UIBezierPath(rect: workoutRect)
-                Styles.pinkColor.setFill()
-                eventRectanglePath.fill()
-            }
-
+            //// eventLine Drawing
+            let centerX = xOffset
+            let eventLinePath = UIBezierPath(rect: CGRect(x: centerX, y: layout.yTopOfWorkout, width: lineWidth, height: layout.yBottomOfWorkout - layout.yTopOfWorkout))
+            Styles.pinkColor.setFill()
+            eventLinePath.fill()
+            
+            //// eventRectangle Drawing
+            let workoutRectWidth = floor(CGFloat(workoutDuration) * viewPixelsPerSec)
+            let workoutRect = CGRect(x: centerX /*- (workoutRectWidth/2)*/, y:layout.yTopOfWorkout, width: workoutRectWidth, height: layout.yPixelsWorkout)
+            let eventRectanglePath = UIBezierPath(rect: workoutRect)
+            Styles.pinkColor.setFill()
+            eventRectanglePath.fill()
         }
     }
 }

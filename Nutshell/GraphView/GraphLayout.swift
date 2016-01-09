@@ -18,12 +18,54 @@ import UIKit
 /// Provides an ordered array of GraphDataLayer objects.
 class GraphLayout {
     
-    var viewSize: CGSize
-    init (viewSize: CGSize) {
-        self.viewSize = viewSize
+    let graphViewSize: CGSize
+    let graphCenterTime: NSDate
+    /// Time at x-origin of graph
+    let graphStartTime: NSDate
+    /// Time interval covered by the entire graph.
+    let graphTimeInterval: NSTimeInterval
+    /// Starts at size of graph view, but varies with zoom.
+    var cellViewSize: CGSize
+    /// Time interval covered by one graph tile.
+    let cellTimeInterval: NSTimeInterval
+    /// Density of time on x-axis
+    var graphPixelsPerSec: CGFloat = 0.0
+
+    init (viewSize: CGSize, centerTime: NSDate) {
+        self.graphViewSize = viewSize
+        self.cellViewSize = viewSize
+        self.cellTimeInterval = NSTimeInterval(graphViewSize.width * 3600.0/initPixelsPerHour)
+        self.graphTimeInterval = self.cellTimeInterval * NSTimeInterval(graphCellsInCollection)
+        self.graphCenterTime = centerTime
+        self.graphStartTime = centerTime.dateByAddingTimeInterval(-self.graphTimeInterval/2.0)
+    }
+    
+    /// Call as graph is zoomed in or out!
+    func updateCellViewSize(newSize: CGSize) {
+        self.cellViewSize = newSize
+        self.graphPixelsPerSec = newSize.width/CGFloat(cellTimeInterval)
     }
     
     // Override in configure()!
+
+    //
+    // Graph sizing/tiling parameters
+    //
+    var initPixelsPerHour: CGFloat = 80
+    var zoomIncrement: CGFloat = 0.8
+    
+    let graphCellsInCollection = 7
+    let graphCenterCellInCollection = 3
+
+    /// Somewhat arbitrary max cell width.
+    func zoomInMaxCellWidth() -> CGFloat {
+        return min((4 * graphViewSize.width), 2000.0)
+    }
+    
+    /// Cells need to at least cover the view width.
+    func zoomOutMinCellWidth() -> CGFloat {
+        return graphViewSize.width / CGFloat(graphCellsInCollection)
+    }
 
     //
     // Header and background configuration
@@ -59,9 +101,8 @@ class GraphLayout {
     // Methods to override!
     //
 
-    /// Set the configuration variables here
-    func configure (viewSize: CGSize) {
-        self.viewSize = viewSize
+    func configureGraph() {
+        
     }
     
     /// Returns the various layers used to compose the graph, other than the fixed background, and X-axis time values.

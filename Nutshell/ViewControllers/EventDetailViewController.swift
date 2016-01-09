@@ -25,12 +25,10 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     
     @IBOutlet weak var graphSectionView: UIView!
     @IBOutlet weak var graphLayerContainer: UIView!
-    //OLD ARCH
-    //private var graphContainerView: GraphContainerView?
-    private var graphContainerView: TidepoolGraphView?
     @IBOutlet weak var missingDataAdvisoryView: UIView!
     @IBOutlet weak var missingDataAdvisoryTitle: NutshellUILabel!
     @IBOutlet weak var eatAgainView: UIView!
+    private var graphContainerView: TidepoolGraphView?
     
     @IBOutlet weak var headerOverlayContainer: UIControl!
     @IBOutlet weak var topSectionContainer: EventPhotoCollectView!
@@ -164,8 +162,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         if graphNeedsUpdate {
             graphNeedsUpdate = false
             if let graphContainerView = graphContainerView {
-                graphContainerView.reloadData()
-                missingDataAdvisoryView.hidden = graphContainerView.containsData()
+                graphContainerView.loadGraphData()
+                missingDataAdvisoryView.hidden = graphContainerView.dataFound()
             }
         }
     }
@@ -529,21 +527,18 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             graphContainerView?.removeFromSuperview();
             graphContainerView = nil;
         }
-        //OLD ARCH
-        //graphContainerView = GraphContainerView.init(frame: graphLayerContainer.bounds)
-        graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.bounds)
-        if let graphContainerView = graphContainerView, eventItem = eventItem {
-            graphContainerView.delegate = self
+        graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.bounds, delegate: self, eventItem: eventItem!)
+        if let graphContainerView = graphContainerView {
+            graphContainerView.configureGraph()
             graphLayerContainer.addSubview(graphContainerView)
-            graphContainerView.configureGraphForEvent(eventItem)
-            graphContainerView.reloadData()
-            missingDataAdvisoryView.hidden = graphContainerView.containsData()
+            graphContainerView.loadGraphData()
+            missingDataAdvisoryView.hidden = graphContainerView.dataFound()
        }
     }
     
     // GraphContainerViewDelegate
-    func containerCellUpdated(dataDetected: Bool) {
-        missingDataAdvisoryView.hidden = graphContainerView!.containsData()
+    func containerCellUpdated() {
+        missingDataAdvisoryView.hidden = graphContainerView!.dataFound()
     }
 
     func pinchZoomEnded() {
@@ -557,7 +552,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         NSLog("EventDetailVC viewDidLayoutSubviews, graphSectionView: \(graphSectionView.frame.size)")
         if let graphContainerView = graphContainerView {
             if (graphContainerView.frame.size == graphSectionView.frame.size) {
-                NSLog("reconfigure skipped!")
+                NSLog("graph reconfigure skipped!")
                 return
             }
             NSLog("Reconfigure graph, graphContainerView: \(graphContainerView.frame.size)")

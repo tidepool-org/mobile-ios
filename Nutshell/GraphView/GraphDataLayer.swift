@@ -17,46 +17,37 @@ import UIKit
 
 class GraphDataLayer {
     // size in pixels and time for this layer
-    var viewSize: CGSize = CGSizeZero
+    var cellViewSize: CGSize = CGSizeZero
     var timeIntervalForView: NSTimeInterval
     var startTime: NSDate
-    var dataType: GraphDataType
-    var layout: GraphLayout
 
     // dataPoint array, configured later by GraphDataSource
     var dataArray: [GraphDataType] = []
 
     // useful variables for subclasses and data source
-    var timeExtensionForDataFetch: NSTimeInterval = 0.0
     var viewPixelsPerSec: CGFloat = 0.0
 
-    init(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate, dataType: GraphDataType, layout: GraphLayout) {
-        self.viewSize = viewSize
+    init(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate) {
+        self.cellViewSize = viewSize
         self.timeIntervalForView = timeIntervalForView
         self.startTime = startTime
-        self.dataType = dataType
-        self.layout = layout
-        self.configureGraphParameters()
+        self.viewPixelsPerSec = viewSize.width/CGFloat(timeIntervalForView)
     }
 
     func updateViewSize(newSize: CGSize) {
-        self.viewSize = newSize
-        self.configureGraphParameters()
+        self.cellViewSize = newSize
+        self.viewPixelsPerSec = newSize.width/CGFloat(timeIntervalForView)
     }
     
-    private let kLargestGraphItemWidth: CGFloat = 30.0
-    private func configureGraphParameters() {
-        self.viewPixelsPerSec = viewSize.width/CGFloat(timeIntervalForView)
-        // calculate the extra time we need data fetched for at the end of the graph time span so we draw the beginnings of next graph items
-        timeExtensionForDataFetch = NSTimeInterval(kLargestGraphItemWidth/viewPixelsPerSec)
-        self.configure()
+    /// Override point for case where GraphDataLayer handles data loading.
+    func loadDataItems() {
     }
-    
+
     func imageView(graphDraw: GraphingUtils) -> UIImageView? {
         if dataArray.count == 0 {
             return nil
         }
-        UIGraphicsBeginImageContextWithOptions(viewSize, false, 0)
+        UIGraphicsBeginImageContextWithOptions(cellViewSize, false, 0)
         configureForDrawing()
         for dataPoint in dataArray {
             let xOffset: CGFloat = floor(CGFloat(dataPoint.timeOffset) * viewPixelsPerSec)
@@ -64,13 +55,9 @@ class GraphDataLayer {
         }
         finishDrawing()
         
-        let imageOfCbgData = UIGraphicsGetImageFromCurrentImageContext()
+        let imageOfLayerData = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return UIImageView(image:imageOfCbgData)
-    }
-    
-    // override for any post-init or size-change configuration
-    func configure() {
+        return UIImageView(image:imageOfLayerData)
     }
     
     // override for any draw setup

@@ -36,7 +36,7 @@ public class GraphingUtils {
     
     init(layout: GraphLayout, timeIntervalForView: NSTimeInterval, startTime: NSDate) {
         self.layout = layout
-        self.viewSize = layout.viewSize
+        self.viewSize = layout.cellViewSize
         self.timeIntervalForView = timeIntervalForView
         self.startTime = startTime
         self.configureGraphParameters()

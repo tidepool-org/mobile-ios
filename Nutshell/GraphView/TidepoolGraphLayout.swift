@@ -18,6 +18,14 @@ import UIKit
 /// Provides an ordered array of GraphDataLayer objects.
 class TidepoolGraphLayout: GraphLayout {
     
+    var mainEventTime: NSDate
+    var dataDetected = false
+
+    init (viewSize: CGSize, mainEventTime: NSDate) {
+        self.mainEventTime = mainEventTime
+        super.init(viewSize: viewSize, centerTime: mainEventTime)
+    }
+
     //
     // MARK: - Overrides for graph customization
     //
@@ -25,22 +33,33 @@ class TidepoolGraphLayout: GraphLayout {
     // create and return an array of GraphDataLayer objects, w/o data, ordered in view layer from back to front (i.e., last item in array will be drawn last)
     override func graphLayers(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate) -> [GraphDataLayer] {
 
-        let workoutLayer = WorkoutGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: WorkoutGraphDataType(), layout: self)
+        let workoutLayer = WorkoutGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
         
-        let mealLayer = MealGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: MealGraphDataType(), layout: self)
+        let mealLayer = MealGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
         
-        let cbgLayer = CbgGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: CbgGraphDataType(), layout: self)
+        let cbgLayer = CbgGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
         
-        let smbgLayer = SmbgGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: SmbgGraphDataType(), layout: self)
+        let smbgLayer = SmbgGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
 
-        let basalLayer = BasalGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: BasalGraphDataType(), layout: self)
+        let basalLayer = BasalGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
 
-        let bolusLayer = BolusGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: BolusGraphDataType(), layout: self)
+        let bolusLayer = BolusGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
 
-        let wizardLayer = WizardGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, dataType: WizardGraphDataType(), layout: self)
+        let wizardLayer = WizardGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
 
         // Note: ordering is important! E.g., wizard layer draws after bolus layer so it can place circles above related bolus rectangles.
         return [workoutLayer, mealLayer, cbgLayer, smbgLayer, basalLayer, bolusLayer, wizardLayer]
+    }
+
+    // Bolus and basal values are scaled according to max value found, so the records are queried for the complete graph time range and stored here where the tiles can share them.
+    var maxBolus: CGFloat = 0.0
+    var maxBasal: CGFloat = 0.0
+    var allBasalData: [GraphDataType]?
+    var allBolusData: [GraphDataType]?
+    
+    func invalidateCaches() {
+        allBasalData = nil
+        allBolusData = nil
     }
     
     //
@@ -103,9 +122,9 @@ class TidepoolGraphLayout: GraphLayout {
     //
 
     /// Dynamic layout configuration based on view sizing
-    override func configure(viewSize: CGSize) {
+    override func configureGraph() {
         
-        super.configure(viewSize)
+        super.configureGraph()
 
         self.headerHeight = 32.0
         self.yAxisLineLeftMargin = 26.0
@@ -119,14 +138,14 @@ class TidepoolGraphLayout: GraphLayout {
         self.axesLabelTextFont = Styles.smallRegularFont
         
         // Tweak: if height is less than 320 pixels, let the wizard circles drift up into the low area of the blood glucose data since that should be clear
-        let wizardHeight = viewSize.height < 320.0 ? 0.0 : kGraphWizardHeight
+        let wizardHeight = graphViewSize.height < 320.0 ? 0.0 : kGraphWizardHeight
 
         // The pie to divide is what's left over after removing constant height areas
-        let graphHeight = viewSize.height - headerHeight - wizardHeight
+        let graphHeight = graphViewSize.height - headerHeight - wizardHeight
         
         // Put the workout data at the top, over the X-axis
         yTopOfWorkout = 2.0
-        yBottomOfWorkout = viewSize.height
+        yBottomOfWorkout = graphViewSize.height
         yPixelsWorkout = headerHeight - 4.0
         
         // The largest section is for the glucose readings just below the header
@@ -140,7 +159,7 @@ class TidepoolGraphLayout: GraphLayout {
         
         // At the bottom are the bolus and basal readings
         self.yTopOfBolus = self.yBottomOfWizard + kGraphWizardBaseOffset
-        self.yBottomOfBolus = viewSize.height
+        self.yBottomOfBolus = graphViewSize.height
         self.yPixelsBolus = self.yBottomOfBolus - self.yTopOfBolus
         
         // Basal values sit just below the bolus readings

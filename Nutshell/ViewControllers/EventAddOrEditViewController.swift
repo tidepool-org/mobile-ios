@@ -153,7 +153,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 }
                 pictureImageURLs = mealItem.photoUrlArray()
             } else {
-                // TODO: Add workout-specific items...
+                // Add workout-specific items...
             }
         } else if let eventGroup = eventGroup {
                 titleText = eventGroup.title
@@ -566,7 +566,6 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
 
     private func updateCurrentEvent() {
         
-        // TODO: workout support! Allow editing workout items as well!
         if let mealItem = eventItem as? NutMeal {
             
             let location = filteredLocationText()

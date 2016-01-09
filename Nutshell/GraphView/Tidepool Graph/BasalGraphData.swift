@@ -31,22 +31,18 @@ class BasalGraphDataType: GraphDataType {
         return "basal"
     }
 
-    override func maxTimeExtension() -> NSTimeInterval {
-        return 12*60*60  // Assume maximum basal length of 12 hours!
-    }
-
 }
 
-class BasalGraphDataLayer: GraphDataLayer {
+class BasalGraphDataLayer: TidepoolGraphDataLayer {
     
     // vars for drawing datapoints of this type
     var pixelsPerValue: CGFloat = 0.0
-    var maxBasal: CGFloat = 0.0
  
     // config...
-    let basalLightBlueRectColor = Styles.lightBlueColor
-    let kBasalMinScaleValue: CGFloat = 1.0
-    let basalDarkBlueRectColor = Styles.blueColor
+    private let kBasalLightBlueRectColor = Styles.lightBlueColor
+    private let kBasalMinScaleValue: CGFloat = 1.0
+    private let kBasalDarkBlueRectColor = Styles.blueColor
+    private let kBasalMaxDuration: NSTimeInterval = 12*60*60 // Assume maximum basal of 12 hours!
 
     // locals...
     private var context: CGContext?
@@ -54,18 +50,80 @@ class BasalGraphDataLayer: GraphDataLayer {
     private var startTimeOffset: NSTimeInterval = 0.0
     private var startValueSuppressed: CGFloat?
 
-    override func configure() {
+    // NOTE: the first BasalGraphDataLayer slice that has loadDataItems called loads the basal data for the entire graph time interval
+    override func loadStartTime() -> NSDate {
+        return layout.graphStartTime.dateByAddingTimeInterval(-kBasalMaxDuration)
     }
     
+    override func loadEndTime() -> NSDate {
+        return layout.graphStartTime.dateByAddingTimeInterval(layout.graphTimeInterval)
+    }
+
+    override func typeString() -> String {
+        return "basal"
+    }
+    
+    override func loadEvent(event: CommonData, timeOffset: NSTimeInterval) {
+        if let event = event as? Basal {
+            let eventTime = event.time!
+            let graphTimeOffset = eventTime.timeIntervalSinceDate(layout.graphStartTime)
+            //NSLog("Adding Basal event: \(event)")
+            var value = event.value
+            if value == nil {
+                if let deliveryType = event.deliveryType {
+                    if deliveryType == "suspend" {
+                        value = NSNumber(double: 0.0)
+                    }
+                }
+            }
+            if value != nil {
+                let floatValue = CGFloat(value!)
+                var suppressed: CGFloat? = nil
+                if event.percent != nil {
+                    suppressed = CGFloat(event.percent!)
+                }
+                dataArray.append(BasalGraphDataType(value: floatValue, timeOffset: graphTimeOffset, suppressed: suppressed))
+                if floatValue > layout.maxBasal {
+                    layout.maxBasal = floatValue
+                }
+            } else {
+                NSLog("ignoring Basal event with nil value")
+            }
+        }
+    }
+
+    override func loadDataItems() {
+        // Note: since each graph tile needs to know the max basal value for the graph, the first tile to load loads data for the whole graph range...
+        if layout.allBasalData == nil {
+            dataArray = []
+            super.loadDataItems()
+            layout.allBasalData = dataArray
+            if layout.maxBasal < kBasalMinScaleValue {
+                layout.maxBasal = kBasalMinScaleValue
+            }
+            NSLog("Prefetched \(dataArray.count) basal items for graph")
+        }
+        
+        dataArray = []
+        let dataLayerOffset = startTime.timeIntervalSinceDate(layout.graphStartTime)
+        let rangeStart = dataLayerOffset - kBasalMaxDuration
+        let rangeEnd = dataLayerOffset + timeIntervalForView
+        // copy over cached items in the range needed for this tile!
+        for item in layout.allBasalData! {
+            if let basalItem = item as? BasalGraphDataType {
+                if basalItem.timeOffset >= rangeStart && basalItem.timeOffset <= rangeEnd {
+                    dataArray.append(BasalGraphDataType(value: basalItem.value, timeOffset: basalItem.timeOffset - dataLayerOffset, suppressed: basalItem.suppressed))
+                }
+            }
+        }
+        NSLog("Copied \(dataArray.count) basal items from graph cache for slice at offset \(dataLayerOffset/3600) hours")
+
+    }
+
     // override for any draw setup
     override func configureForDrawing() {
         context = UIGraphicsGetCurrentContext()
-        if let layout = self.layout as? TidepoolGraphLayout {
-            if maxBasal < kBasalMinScaleValue {
-                maxBasal = kBasalMinScaleValue
-            }
-            self.pixelsPerValue = layout.yPixelsBasal / CGFloat(maxBasal)
-        }
+        self.pixelsPerValue = layout.yPixelsBasal / CGFloat(layout.maxBasal)
         startValue = 0.0
         startTimeOffset = 0.0
         startValueSuppressed = nil
@@ -74,31 +132,29 @@ class BasalGraphDataLayer: GraphDataLayer {
     // override!
     override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
         
-        if let layout = self.layout as? TidepoolGraphLayout {
-            if let basalPoint = dataPoint as? BasalGraphDataType {
-                // skip over values before starting time, but remember last value...
-                let itemTime = basalPoint.timeOffset
-                let itemValue = basalPoint.value
-                let itemSuppressed = basalPoint.suppressed
+        if let basalPoint = dataPoint as? BasalGraphDataType {
+            // skip over values before starting time, but remember last value...
+            let itemTime = basalPoint.timeOffset
+            let itemValue = basalPoint.value
+            let itemSuppressed = basalPoint.suppressed
 
-                if itemTime < 0 {
-                    startValue = itemValue
-                    startValueSuppressed = basalPoint.suppressed
-                } else if startValue == 0.0 {
-                    if (itemValue > 0.0) {
-                        // just starting a rect, note the time...
-                        startTimeOffset = itemTime
-                        startValue = itemValue
-                        startValueSuppressed = itemSuppressed
-                    }
-                } else {
-                    // got another value, draw the rect
-                    drawBasalRect(startTimeOffset, endTimeOffset: itemTime, value: startValue, suppressed: startValueSuppressed, layout: layout)
-                    // and start another rect...
-                    startValue = itemValue
+            if itemTime < 0 {
+                startValue = itemValue
+                startValueSuppressed = basalPoint.suppressed
+            } else if startValue == 0.0 {
+                if (itemValue > 0.0) {
+                    // just starting a rect, note the time...
                     startTimeOffset = itemTime
+                    startValue = itemValue
                     startValueSuppressed = itemSuppressed
                 }
+            } else {
+                // got another value, draw the rect
+                drawBasalRect(startTimeOffset, endTimeOffset: itemTime, value: startValue, suppressed: startValueSuppressed, layout: layout)
+                // and start another rect...
+                startValue = itemValue
+                startTimeOffset = itemTime
+                startValueSuppressed = itemSuppressed
             }
         }
     }
@@ -106,9 +162,7 @@ class BasalGraphDataLayer: GraphDataLayer {
     override func finishDrawing() {
         // finish off any rect we started...
         if (startValue > 0.0) {
-            if let layout = self.layout as? TidepoolGraphLayout {
-                drawBasalRect(startTimeOffset, endTimeOffset: timeIntervalForView, value: startValue, suppressed: startValueSuppressed, layout: layout)
-            }
+            drawBasalRect(startTimeOffset, endTimeOffset: timeIntervalForView, value: startValue, suppressed: startValueSuppressed, layout: layout)
         }
     }
     
@@ -123,7 +177,7 @@ class BasalGraphDataLayer: GraphDataLayer {
         linePath.lineJoinStyle = .Round;
         linePath.usesEvenOddFillRule = true;
         
-        basalDarkBlueRectColor.setStroke()
+        kBasalDarkBlueRectColor.setStroke()
         linePath.lineWidth = lineHeight
         CGContextSaveGState(context)
         CGContextSetLineDash(context, 0, [2, 5], 2)
@@ -139,7 +193,7 @@ class BasalGraphDataLayer: GraphDataLayer {
         var basalRect = CGRect(x: rectLeft, y: layout.yBottomOfBasal - rectHeight, width: rectRight - rectLeft, height: rectHeight)
         
         let basalValueRectPath = UIBezierPath(rect: basalRect)
-        basalLightBlueRectColor.setFill()
+        kBasalLightBlueRectColor.setFill()
         basalValueRectPath.fill()
         
         if let suppressed = suppressed {

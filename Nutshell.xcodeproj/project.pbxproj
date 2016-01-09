@@ -158,14 +158,13 @@
 		486F5E6C1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E6B1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift */; };
 		486F5E6E1BA24C5C00BA2A57 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */; };
 		486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
+		487ED2511C3DA40A00EE36DF /* TidepoolGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */; };
 		489F3C501BB0AE1D00C95FDC /* NutMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */; };
 		48A150561C18E0A900ED800B /* Nutshell.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */; };
 		48B127941BC4445500061483 /* NutEventItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127931BC4445500061483 /* NutEventItem.swift */; };
 		48B127951BC4445800061483 /* NutEventItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127931BC4445500061483 /* NutEventItem.swift */; };
 		48B127971BC4447100061483 /* NutWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127961BC4447100061483 /* NutWorkout.swift */; };
 		48B127981BC4447100061483 /* NutWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127961BC4447100061483 /* NutWorkout.swift */; };
-		48B127A21BC444D300061483 /* GraphViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127A11BC444D300061483 /* GraphViews.swift */; };
-		48B127A31BC444D300061483 /* GraphViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127A11BC444D300061483 /* GraphViews.swift */; };
 		48B127A81BC444FE00061483 /* applejuicedemopic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B127A41BC444FE00061483 /* applejuicedemopic.png */; };
 		48B127A91BC444FE00061483 /* applejuicedemopic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B127A41BC444FE00061483 /* applejuicedemopic.png */; };
 		48B127AC1BC444FE00061483 /* ThreeTacosDemoPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */; };
@@ -175,7 +174,6 @@
 		48B3C9F01C35ADC400E00E7B /* EventPhotoCollectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B3C9EF1C35ADC400E00E7B /* EventPhotoCollectView.swift */; };
 		48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */; };
 		48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */; };
-		48C4914F1C3872AD00F34630 /* GraphDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C4914E1C3872AD00F34630 /* GraphDataSource.swift */; };
 		48C491511C38738A00F34630 /* GraphDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491501C38738A00F34630 /* GraphDataLayer.swift */; };
 		48C491531C38750900F34630 /* TidepoolGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491521C38750900F34630 /* TidepoolGraphView.swift */; };
 		48C491551C38798E00F34630 /* GraphLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491541C38798E00F34630 /* GraphLayout.swift */; };
@@ -328,11 +326,11 @@
 		486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventDetailViewController.swift; path = ViewControllers/EventDetailViewController.swift; sourceTree = "<group>"; };
 		486F5E751BA35CD800BA2A57 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		486F5E771BA3891600BA2A57 /* NutUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutUtils.swift; path = "Utilities and Extensions/NutUtils.swift"; sourceTree = "<group>"; };
+		487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolGraphData.swift; path = "GraphView/Tidepool Graph/TidepoolGraphData.swift"; sourceTree = "<group>"; };
 		489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutMeal.swift; path = DataModel/NutMeal.swift; sourceTree = "<group>"; };
 		48A150551C18E0A200ED800B /* Nutshell_v4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v4.xcdatamodel; sourceTree = "<group>"; };
 		48B127931BC4445500061483 /* NutEventItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutEventItem.swift; path = DataModel/NutEventItem.swift; sourceTree = "<group>"; };
 		48B127961BC4447100061483 /* NutWorkout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutWorkout.swift; path = DataModel/NutWorkout.swift; sourceTree = "<group>"; };
-		48B127A11BC444D300061483 /* GraphViews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphViews.swift; path = GraphView/GraphViews.swift; sourceTree = "<group>"; };
 		48B127A41BC444FE00061483 /* applejuicedemopic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = applejuicedemopic.png; path = Images/applejuicedemopic.png; sourceTree = "<group>"; };
 		48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ThreeTacosDemoPic.png; path = Images/ThreeTacosDemoPic.png; sourceTree = "<group>"; };
 		48B127B01BC4466E00061483 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseUtils.swift; path = "Utilities and Extensions/DatabaseUtils.swift"; sourceTree = "<group>"; };
@@ -340,7 +338,6 @@
 		48BA1EA41C18865100C1B71C /* Data Model.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Data Model.txt"; path = "Manual Test Cases/Data Model.txt"; sourceTree = "<group>"; };
 		48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
 		48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutShellUIViewWithHighlight.swift; path = Resources/NutShellUIViewWithHighlight.swift; sourceTree = "<group>"; };
-		48C4914E1C3872AD00F34630 /* GraphDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataSource.swift; path = GraphView/GraphDataSource.swift; sourceTree = "<group>"; };
 		48C491501C38738A00F34630 /* GraphDataLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataLayer.swift; path = GraphView/GraphDataLayer.swift; sourceTree = "<group>"; };
 		48C491521C38750900F34630 /* TidepoolGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolGraphView.swift; path = GraphView/TidepoolGraphView.swift; sourceTree = "<group>"; };
 		48C491541C38798E00F34630 /* GraphLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphLayout.swift; path = GraphView/GraphLayout.swift; sourceTree = "<group>"; };
@@ -665,24 +662,15 @@
 			name = "Manual Test Cases";
 			sourceTree = "<group>";
 		};
-		48C4915A1C39DBCA00F34630 /* Old Arch */ = {
-			isa = PBXGroup;
-			children = (
-				48B127A11BC444D300061483 /* GraphViews.swift */,
-			);
-			name = "Old Arch";
-			sourceTree = "<group>";
-		};
 		48C4915B1C39DBF600F34630 /* Graphing Package */ = {
 			isa = PBXGroup;
 			children = (
+				48C491541C38798E00F34630 /* GraphLayout.swift */,
 				4837C1651C11F9FC00D29B64 /* GraphContainerView.swift */,
 				482B4E561BBDAFFF00835CAC /* GraphCollectionCell.swift */,
 				48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */,
 				48C491501C38738A00F34630 /* GraphDataLayer.swift */,
 				4820ED691C21E8E3008C754A /* GraphDataTypes.swift */,
-				48C4914E1C3872AD00F34630 /* GraphDataSource.swift */,
-				48C491541C38798E00F34630 /* GraphLayout.swift */,
 				48C491561C38804700F34630 /* GraphingUtils.swift */,
 			);
 			name = "Graphing Package";
@@ -691,11 +679,12 @@
 		48C491621C3B2D2200F34630 /* Tidepool Graph Data */ = {
 			isa = PBXGroup;
 			children = (
+				487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */,
 				48C4916D1C3B816700F34630 /* WorkoutGraphData.swift */,
+				48C491631C3B2DEE00F34630 /* MealGraphData.swift */,
 				48C4916B1C3B771200F34630 /* WizardGraphData.swift */,
 				48C491691C3B59B400F34630 /* BoluslGraphData.swift */,
 				48C491671C3B47A000F34630 /* BasalGraphData.swift */,
-				48C491631C3B2DEE00F34630 /* MealGraphData.swift */,
 				48C491641C3B2DEE00F34630 /* SmbgGraphData.swift */,
 				48C491601C3B2D1A00F34630 /* CbgGraphData.swift */,
 			);
@@ -709,7 +698,6 @@
 				48C491581C38B1AF00F34630 /* TidepoolGraphLayout.swift */,
 				48C491621C3B2D2200F34630 /* Tidepool Graph Data */,
 				48C4915B1C39DBF600F34630 /* Graphing Package */,
-				48C4915A1C39DBCA00F34630 /* Old Arch */,
 			);
 			name = "Graph View";
 			sourceTree = "<group>";
@@ -980,7 +968,6 @@
 				485420211BC44D290020CFE1 /* Workout+CoreDataProperties.swift in Sources */,
 				0334CA671BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
 				0334CA791BA8DDFC00013096 /* TimeChange.swift in Sources */,
-				48B127A21BC444D300061483 /* GraphViews.swift in Sources */,
 				48EDC2C61BD6B403003049D9 /* EventAddOrEditViewController.swift in Sources */,
 				4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */,
 				0334CAA81BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */,
@@ -1030,7 +1017,6 @@
 				0334CA521BA8DDFC00013096 /* Note+CoreDataProperties.swift in Sources */,
 				0334CA401BA8DDFC00013096 /* DeviceMetadata.swift in Sources */,
 				0334CA191BA8DDFC00013096 /* Alarm+CoreDataProperties.swift in Sources */,
-				48C4914F1C3872AD00F34630 /* GraphDataSource.swift in Sources */,
 				0334CA461BA8DDFC00013096 /* Food.swift in Sources */,
 				48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */,
 				4837CC6B1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift in Sources */,
@@ -1065,6 +1051,7 @@
 				48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */,
 				486EAA751C304A86003B4497 /* HealthKitManager.swift in Sources */,
 				4851C6921BA6281800F8E0EE /* NutshellUIView.swift in Sources */,
+				487ED2511C3DA40A00EE36DF /* TidepoolGraphData.swift in Sources */,
 				48FB1E4D1C17C38600C89F8E /* NutshellDataController.swift in Sources */,
 				4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */,
 				48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */,
@@ -1125,7 +1112,6 @@
 				0334CA921BA8DDFC00013096 /* Wizard.swift in Sources */,
 				48DF9B9B1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */,
 				48EC32301BA7BDD700A75103 /* NutEvent.swift in Sources */,
-				48B127A31BC444D300061483 /* GraphViews.swift in Sources */,
 				48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */,
 				0334CA3E1BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift in Sources */,
 				0334CA771BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift in Sources */,

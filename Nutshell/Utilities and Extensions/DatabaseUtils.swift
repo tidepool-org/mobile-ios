@@ -203,24 +203,39 @@ class DatabaseUtils {
 
     // Note: This call has the side effect of fetching data from the service which may result in a future notification of database changes.
     // TODO: This will need to be reworked to sync data from the service when the service supports meal and workout events.
-    class func getNutEvents(fromTime: NSDate? = nil, toTime: NSDate? = nil) throws -> [EventItem] {
+    class func getAllNutEvents() throws -> [EventItem] {
         
         let moc = NutDataController.controller().mocForNutEvents()!
         let userId = NutDataController.controller().currentUserId!
         let request = NSFetchRequest(entityName: "EventItem")
-        
-        if let fromTime = fromTime, toTime = toTime {
-            // Return only objects in the requested range for the current user!
-            // TODO: remove nil option before shipping!
-            request.predicate = NSPredicate(format: "((userid == %@) OR (userid = nil)) AND (time >= %@) AND (time <= %@)", userId, fromTime, toTime)
-        } else {
-            // Return all nut events in the requested range for the current user!
-            // TODO: remove nil option before shipping!
-            request.predicate = NSPredicate(format: "(userid == %@) OR (userid = nil)", userId)
-        }
-        
+        // Return all nut events in the requested range for the current user!
+        // TODO: remove nil option before shipping!
+        request.predicate = NSPredicate(format: "(userid == %@) OR (userid = nil)", userId)
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
         return try moc.executeFetchRequest(request) as! [EventItem]
+    }
+
+    class func nutEventRequest(nutType: String, fromTime: NSDate, toTime: NSDate) -> (request: NSFetchRequest, moc: NSManagedObjectContext) {
+        let moc = NutDataController.controller().mocForNutEvents()!
+        let userId = NutDataController.controller().currentUserId!
+        let request = NSFetchRequest(entityName: nutType)
+        // Return only objects in the requested range for the current user!
+        // TODO: remove nil option before shipping!
+        request.predicate = NSPredicate(format: "((userid == %@) OR (userid = nil)) AND (time >= %@) AND (time <= %@)", userId, fromTime, toTime)
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
+        return (request, moc)
+    }
+ 
+    class func getWorkoutEvents(fromTime: NSDate, toTime: NSDate) throws -> [Workout] {
+        let (request, moc) = nutEventRequest("Workout", fromTime: fromTime, toTime: toTime)
+        return try moc.executeFetchRequest(request) as! [Workout]
+    }
+    
+
+    class func getMealEvents(fromTime: NSDate, toTime: NSDate) throws -> [Meal] {
+        let (request, moc) = nutEventRequest("Meal", fromTime: fromTime, toTime: toTime)
+        return try moc.executeFetchRequest(request) as! [Meal]
     }
 
     // TEST ONLY!

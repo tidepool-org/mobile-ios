@@ -218,7 +218,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         
         // Get all Food and Activity events, chronologically; this will result in an unsorted dictionary of NutEvents.
         do {
-            let nutEvents = try DatabaseUtils.getNutEvents()
+            let nutEvents = try DatabaseUtils.getAllNutEvents()
             for event in nutEvents {
                 //NSLog("Event type: \(event.type), time: \(event.time), title: \(event.title), notes: \(event.notes), userid: \(event.userid), timezone offset:\(event.timezoneOffset)")
                 addNewEvent(event)

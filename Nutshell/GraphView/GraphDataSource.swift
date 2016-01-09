@@ -16,6 +16,5 @@
 import UIKit
 
 protocol GraphDataSource {
-    func loadDataItemsForLayer(layer: GraphDataLayer) -> Int
     func dataFound() -> Bool
 }

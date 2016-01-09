@@ -23,67 +23,80 @@ class WizardGraphDataType: GraphDataType {
         return "wizard"
     }
 
-    override func nominalPixelWidth() -> CGFloat {
-        return WizardGraphDataLayer.kWizardCircleDiameter
-    }
 }
 
-class WizardGraphDataLayer: GraphDataLayer {
+class WizardGraphDataLayer: TidepoolGraphDataLayer {
     
     // vars for drawing datapoints of this type
     var pixelsPerValue: CGFloat = 0.0
     let circleRadius: CGFloat = 9.0
     var lastCircleDrawn = CGRectNull
     var context: CGContext?
-    static let kWizardCircleDiameter: CGFloat = 31.0
-    
-    override func configure() {
+    let kWizardCircleDiameter: CGFloat = 31.0
+
+    override func nominalPixelWidth() -> CGFloat {
+        return kWizardCircleDiameter
     }
     
+    override func typeString() -> String {
+        return "wizard"
+    }
+    
+    override func loadEvent(event: CommonData, timeOffset: NSTimeInterval) {
+        if let event = event as? Wizard {
+            if let value = event.carbInput {
+                let floatValue = round(CGFloat(value))
+                if floatValue != 0.0 {
+                    dataArray.append(WizardGraphDataType(value: floatValue, timeOffset: timeOffset))
+                } else {
+                    NSLog("ignoring Wizard event with carbInput value of zero!")
+                }
+            } else {
+                NSLog("ignoring Wizard event with nil carbInput value!")
+            }
+        }
+    }
+
     // override for any draw setup
     override func configureForDrawing() {
-        if let layout = self.layout as? TidepoolGraphLayout {
-            self.pixelsPerValue = layout.yPixelsGlucose/layout.kGlucoseRange
-        }
+        self.pixelsPerValue = layout.yPixelsGlucose/layout.kGlucoseRange
         context = UIGraphicsGetCurrentContext()
    }
     
     // override!
     override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
         
-        if let layout = self.layout as? TidepoolGraphLayout {
-            let centerX = xOffset
-            let circleDiameter = WizardGraphDataLayer.kWizardCircleDiameter
-            let value = round(dataPoint.value)
-            // Carb circle should be centered at timeline
-            let offsetX = centerX - (circleDiameter/2)
-            var wizardRect = CGRect(x: offsetX, y: layout.yBottomOfWizard - circleDiameter, width: circleDiameter, height: circleDiameter)
-            let bolusRect = layout.bolusRectAtPosition(wizardRect)
-            if bolusRect.height != 0.0 {
-                wizardRect.origin.y = bolusRect.origin.y - circleDiameter
-            }
-            let wizardOval = UIBezierPath(ovalInRect: wizardRect)
-            Styles.goldColor.setFill()
-            wizardOval.fill()
-            // Draw background colored border to separate the circle from other objects
-            layout.backgroundColor.setStroke()
-            wizardOval.lineWidth = 1.5
-            wizardOval.stroke()
-            
-            // Label Drawing
-            let labelRect = wizardRect
-            let labelText = String(Int(value))
-            let labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-            labelStyle.alignment = .Center
-            
-            let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: Styles.darkPurpleColor, NSParagraphStyleAttributeName: labelStyle])
-            
-            let labelTextHeight: CGFloat = ceil(labelAttrStr.boundingRectWithSize(CGSizeMake(labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).size.height)
-            
-            CGContextSaveGState(context)
-            CGContextClipToRect(context, labelRect);
-            labelAttrStr.drawInRect(CGRectMake(labelRect.minX, labelRect.minY + (labelRect.height - labelTextHeight) / 2, labelRect.width, labelTextHeight))
-            CGContextRestoreGState(context)
+        let centerX = xOffset
+        let circleDiameter = kWizardCircleDiameter
+        let value = round(dataPoint.value)
+        // Carb circle should be centered at timeline
+        let offsetX = centerX - (circleDiameter/2)
+        var wizardRect = CGRect(x: offsetX, y: layout.yBottomOfWizard - circleDiameter, width: circleDiameter, height: circleDiameter)
+        let bolusRect = layout.bolusRectAtPosition(wizardRect)
+        if bolusRect.height != 0.0 {
+            wizardRect.origin.y = bolusRect.origin.y - circleDiameter
         }
+        let wizardOval = UIBezierPath(ovalInRect: wizardRect)
+        Styles.goldColor.setFill()
+        wizardOval.fill()
+        // Draw background colored border to separate the circle from other objects
+        layout.backgroundColor.setStroke()
+        wizardOval.lineWidth = 1.5
+        wizardOval.stroke()
+        
+        // Label Drawing
+        let labelRect = wizardRect
+        let labelText = String(Int(value))
+        let labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+        labelStyle.alignment = .Center
+        
+        let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: Styles.darkPurpleColor, NSParagraphStyleAttributeName: labelStyle])
+        
+        let labelTextHeight: CGFloat = ceil(labelAttrStr.boundingRectWithSize(CGSizeMake(labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).size.height)
+        
+        CGContextSaveGState(context)
+        CGContextClipToRect(context, labelRect);
+        labelAttrStr.drawInRect(CGRectMake(labelRect.minX, labelRect.minY + (labelRect.height - labelTextHeight) / 2, labelRect.width, labelTextHeight))
+        CGContextRestoreGState(context)
     }
 }
