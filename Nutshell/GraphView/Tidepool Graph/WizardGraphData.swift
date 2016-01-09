@@ -15,10 +15,16 @@
 
 import UIKit
 
-/// Continuous Blood Glucose readings vary between sub-100 to over 340 (we clip them there).
-/// CbgGraphDataType is a single-value type, so no additional data is needed.
+
 class WizardGraphDataType: GraphDataType {
 
+    var bolusId: String?
+    
+    init(value: CGFloat, timeOffset: NSTimeInterval, bolusId: String?) {
+        super.init(value: value, timeOffset: timeOffset)
+        self.bolusId = bolusId
+    }
+    
     override func typeString() -> String {
         return "wizard"
     }
@@ -32,7 +38,15 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
     let circleRadius: CGFloat = 9.0
     var lastCircleDrawn = CGRectNull
     var context: CGContext?
-    let kWizardCircleDiameter: CGFloat = 31.0
+    
+    // Bolus drawing will store rects here. E.g., Wizard circles are drawn just over associated Bolus labels.
+    var bolusRects: [CGRect] = []
+    
+    private let kWizardCircleDiameter: CGFloat = 31.0
+
+    //
+    // MARK: - Loading data
+    //
 
     override func nominalPixelWidth() -> CGFloat {
         return kWizardCircleDiameter
@@ -47,7 +61,7 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
             if let value = event.carbInput {
                 let floatValue = round(CGFloat(value))
                 if floatValue != 0.0 {
-                    dataArray.append(WizardGraphDataType(value: floatValue, timeOffset: timeOffset))
+                    dataArray.append(WizardGraphDataType(value: floatValue, timeOffset: timeOffset, bolusId: event.bolus))
                 } else {
                     NSLog("ignoring Wizard event with carbInput value of zero!")
                 }
@@ -56,6 +70,10 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
             }
         }
     }
+
+    //
+    // MARK: - Drawing data points
+    //
 
     // override for any draw setup
     override func configureForDrawing() {
@@ -72,7 +90,7 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
         // Carb circle should be centered at timeline
         let offsetX = centerX - (circleDiameter/2)
         var wizardRect = CGRect(x: offsetX, y: layout.yBottomOfWizard - circleDiameter, width: circleDiameter, height: circleDiameter)
-        let bolusRect = layout.bolusRectAtPosition(wizardRect)
+        let bolusRect = bolusRectAtPosition(wizardRect)
         if bolusRect.height != 0.0 {
             wizardRect.origin.y = bolusRect.origin.y - circleDiameter
         }
@@ -99,4 +117,26 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
         labelAttrStr.drawInRect(CGRectMake(labelRect.minX, labelRect.minY + (labelRect.height - labelTextHeight) / 2, labelRect.width, labelTextHeight))
         CGContextRestoreGState(context)
     }
+    
+    //
+    // MARK: - Tidepool specific utility functions
+    //
+    
+    func bolusRectAtPosition(rect: CGRect) -> CGRect {
+        var result = CGRectZero
+        let rectLeft = rect.origin.x
+        let rectRight = rectLeft + rect.width
+        for bolusRect in bolusRects {
+            let bolusLeftX = bolusRect.origin.x
+            let bolusRightX = bolusLeftX + bolusRect.width
+            if bolusRightX > rectLeft && bolusLeftX < rectRight {
+                if bolusRect.height > result.height {
+                    // return the bolusRect that is largest and intersects the x position of the target rect
+                    result = bolusRect
+                }
+            }
+        }
+        return result
+    }
+
 }

@@ -15,9 +15,6 @@
 
 import UIKit
 
-/// Continuous Blood Glucose readings vary between sub-100 to over 340 (we clip them there).
-/// CbgGraphDataType is a single-value type, so no additional data is needed.
-
 class MealGraphDataType: GraphDataType {
     
     var isMainEvent: Bool = false
@@ -47,7 +44,11 @@ class MealGraphDataLayer: GraphDataLayer {
     let kMealTriangleColor = Styles.darkPurpleColor
     let kOtherMealColor = UIColor(hex: 0x948ca3)
     let kMealTriangleTopWidth: CGFloat = 15.5
-    
+
+    //
+    // MARK: - Loading data
+    //
+
     override func loadDataItems() {
         dataArray = []
         let endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
@@ -69,8 +70,11 @@ class MealGraphDataLayer: GraphDataLayer {
         }
         NSLog("loaded \(dataArray.count) meal events")
     }
-    
-    // override!
+ 
+    //
+    // MARK: - Drawing data points
+    //
+
     override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
         
         var isMain = false

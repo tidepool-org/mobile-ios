@@ -15,8 +15,6 @@
 
 import UIKit
 
-/// Continuous Blood Glucose readings vary between sub-100 to over 340 (we clip them there).
-/// CbgGraphDataType is a single-value type, so no additional data is needed.
 class BasalGraphDataType: GraphDataType {
     
     var suppressed: CGFloat?
@@ -49,6 +47,11 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
     private var startValue: CGFloat = 0.0
     private var startTimeOffset: NSTimeInterval = 0.0
     private var startValueSuppressed: CGFloat?
+    private var suppressedLine: UIBezierPath?
+    
+    //
+    // MARK: - Loading data
+    //
 
     // NOTE: the first BasalGraphDataLayer slice that has loadDataItems called loads the basal data for the entire graph time interval
     override func loadStartTime() -> NSDate {
@@ -77,14 +80,29 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
                 }
             }
             if value != nil {
-                let floatValue = CGFloat(value!)
-                var suppressed: CGFloat? = nil
-                if event.percent != nil {
-                    suppressed = CGFloat(event.percent!)
-                }
-                dataArray.append(BasalGraphDataType(value: floatValue, timeOffset: graphTimeOffset, suppressed: suppressed))
-                if floatValue > layout.maxBasal {
-                    layout.maxBasal = floatValue
+                if event.duration != nil {
+                    let duration = CGFloat(event.duration!)
+                    if duration > 0 {
+                        let floatValue = CGFloat(value!)
+                        var suppressed: CGFloat? = nil
+                        if event.percent != nil {
+                            suppressed = CGFloat(event.percent!)
+                        }
+                        dataArray.append(BasalGraphDataType(value: floatValue, timeOffset: graphTimeOffset, suppressed: suppressed))
+                        if floatValue > layout.maxBasal {
+                            layout.maxBasal = floatValue
+                        }
+                    } else {
+                        // Note: a zero duration event may follow a suspended bolus, and might even have the same time stamp as another basal event with a different rate value! In general, durations should be very long.
+                        NSLog("ignoring Basal event with zero duration")
+                    }
+                } else {
+                    // Note: sometimes suspend events have a nil duration - put in a zero valued record!
+                    if event.deliveryType == "suspend" {
+                        dataArray.append(BasalGraphDataType(value: 0.0, timeOffset: graphTimeOffset, suppressed: nil))
+                    } else {
+                        NSLog("ignoring non-suspend Basal event with nil duration")
+                    }
                 }
             } else {
                 NSLog("ignoring Basal event with nil value")
@@ -120,16 +138,19 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
 
     }
 
-    // override for any draw setup
+    //
+    // MARK: - Drawing data points
+    //
+
     override func configureForDrawing() {
         context = UIGraphicsGetCurrentContext()
         self.pixelsPerValue = layout.yPixelsBasal / CGFloat(layout.maxBasal)
         startValue = 0.0
         startTimeOffset = 0.0
         startValueSuppressed = nil
+        suppressedLine = nil
    }
     
-    // override!
     override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
         
         if let basalPoint = dataPoint as? BasalGraphDataType {
@@ -138,11 +159,13 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
             let itemValue = basalPoint.value
             let itemSuppressed = basalPoint.suppressed
 
+            //NSLog("time: \(itemTime) val: \(itemValue) sup: \(itemSuppressed)")
+            
             if itemTime < 0 {
                 startValue = itemValue
-                startValueSuppressed = basalPoint.suppressed
-            } else if startValue == 0.0 {
-                if (itemValue > 0.0) {
+                startValueSuppressed = itemSuppressed
+            } else if startValue == 0.0 && startValueSuppressed == nil {
+                if (itemValue > 0.0 || itemSuppressed != nil) {
                     // just starting a rect, note the time...
                     startTimeOffset = itemTime
                     startValue = itemValue
@@ -160,25 +183,22 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
     }
     
     override func finishDrawing() {
-        // finish off any rect we started...
-        if (startValue > 0.0) {
-            drawBasalRect(startTimeOffset, endTimeOffset: timeIntervalForView, value: startValue, suppressed: startValueSuppressed, layout: layout)
+        // finish off any rect/supressed line we started, to right edge of graph
+        if (startValue > 0.0 || startValueSuppressed != nil) {
+            drawBasalRect(startTimeOffset, endTimeOffset: timeIntervalForView, value: startValue, suppressed: nil, layout: layout)
         }
     }
     
-    private func drawSuppressedLine(rect: CGRect, layout: TidepoolGraphLayout) {
-        let lineHeight: CGFloat = 2.0
+    private func drawSuppressedLine(linePath: UIBezierPath) {
         let context = UIGraphicsGetCurrentContext()
-        let linePath = UIBezierPath()
-        linePath.moveToPoint(CGPoint(x: rect.origin.x, y: rect.origin.y))
-        linePath.addLineToPoint(CGPoint(x: (rect.origin.x + rect.size.width), y: rect.origin.y))
+        let lineWidth: CGFloat = 2.0
         linePath.miterLimit = 4;
         linePath.lineCapStyle = .Square;
         linePath.lineJoinStyle = .Round;
         linePath.usesEvenOddFillRule = true;
         
         kBasalDarkBlueRectColor.setStroke()
-        linePath.lineWidth = lineHeight
+        linePath.lineWidth = lineWidth
         CGContextSaveGState(context)
         CGContextSetLineDash(context, 0, [2, 5], 2)
         linePath.stroke()
@@ -186,24 +206,34 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
     }
     
     private func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: CGFloat, suppressed: CGFloat?, layout: TidepoolGraphLayout) {
-        
         let rectLeft = floor(CGFloat(startTimeOffset) * viewPixelsPerSec)
         let rectRight = ceil(CGFloat(endTimeOffset) * viewPixelsPerSec)
+        let rectWidth = rectRight-rectLeft
+        //NSLog("  len: \(rectWidth) bas: \(value), sup: \(suppressed)")
         let rectHeight = floor(pixelsPerValue * value)
-        var basalRect = CGRect(x: rectLeft, y: layout.yBottomOfBasal - rectHeight, width: rectRight - rectLeft, height: rectHeight)
-        
+        let basalRect = CGRect(x: rectLeft, y: layout.yBottomOfBasal - rectHeight, width: rectWidth, height: rectHeight)
         let basalValueRectPath = UIBezierPath(rect: basalRect)
         kBasalLightBlueRectColor.setFill()
         basalValueRectPath.fill()
+        //kBasalDarkBlueRectColor.setStroke()
+        //basalValueRectPath.stroke()
         
         if let suppressed = suppressed {
-            if suppressed != 0 {
-                let lineHeight = floor(pixelsPerValue * suppressed)
-                // reuse basalRect, it just needs y adjust, height not used
-                basalRect.origin.y = layout.yBottomOfBasal - lineHeight
-                drawSuppressedLine(basalRect, layout: layout)
+            let suppressedStart = CGPoint(x: basalRect.origin.x, y:layout.yBottomOfBasal - floor(pixelsPerValue * suppressed) + 1.0)
+            let suppressedEnd = CGPoint(x: suppressedStart.x + basalRect.size.width, y: suppressedStart.y)
+            if suppressedLine == nil {
+                // start a new line path
+                suppressedLine = UIBezierPath()
+                suppressedLine?.moveToPoint(suppressedStart)
+            } else {
+                // continue an existing suppressed line path by adding connecting line
+                suppressedLine?.addLineToPoint(suppressedStart)
             }
+            // add current line segment
+            suppressedLine?.addLineToPoint(suppressedEnd)
+        } else if suppressedLine != nil {
+            drawSuppressedLine(suppressedLine!)
+            suppressedLine = nil
         }
     }
-
 }

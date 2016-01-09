@@ -15,17 +15,15 @@
 
 import UIKit
 
-/// Continuous Blood Glucose readings vary between sub-100 to over 340 (we clip them there).
-/// CbgGraphDataType is a single-value type, so no additional data is needed.
 class BolusGraphDataType: GraphDataType {
     
     var hasExtension: Bool = false
     var extendedValue: CGFloat = 0.0
     var duration: NSTimeInterval = 0.0
+    var id: String
     
-    convenience init(event: Bolus, timeOffset: NSTimeInterval) {
-        let value = CGFloat(event.value!)
-        self.init(value: value, timeOffset: timeOffset)
+    init(event: Bolus, timeOffset: NSTimeInterval) {
+        self.id = event.id! as String
         let extendedBolus = event.extended
         let duration = event.duration
         if let extendedBolus = extendedBolus, duration = duration {
@@ -34,13 +32,16 @@ class BolusGraphDataType: GraphDataType {
             let durationInMS = Int(duration)
             self.duration = NSTimeInterval(durationInMS / 1000)
         }
+        let value = CGFloat(event.value!)
+        super.init(value: value, timeOffset: timeOffset)
     }
 
-    convenience init(curDatapoint: BolusGraphDataType, deltaTime: NSTimeInterval) {
-        self.init(value: curDatapoint.value, timeOffset: deltaTime)
+    init(curDatapoint: BolusGraphDataType, deltaTime: NSTimeInterval) {
+        self.id = curDatapoint.id
         self.hasExtension = curDatapoint.hasExtension
         self.extendedValue = curDatapoint.extendedValue
         self.duration = curDatapoint.duration
+        super.init(value: curDatapoint.value, timeOffset: deltaTime)
     }
 
     //(timeOffset: NSTimeInterval, value: NSNumber, suppressed: NSNumber?)
@@ -49,9 +50,11 @@ class BolusGraphDataType: GraphDataType {
     }
 }
 
+/// BolusGraphDataType and WizardGraphDataType layers are coupled. Wizard datapoints are drawn after bolus datapoints, and directly above their corresponding bolus datapoint. Also, the bolus drawing needs to refer to the corresponding wizard data to determine whether an override has taken place.
 class BolusGraphDataLayer: TidepoolGraphDataLayer {
     
-    // vars for drawing datapoints of this type
+    // when drawing the bolus layer, it is necessary to check for corresponding wizard values to determine if a bolus is an override of a wizard recommendation.
+    var wizardLayer: WizardGraphDataLayer?
     
     // config...
     private let kBolusTextBlue = Styles.mediumBlueColor
@@ -70,6 +73,10 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
     private var startValue: CGFloat = 0.0
     private var startTimeOffset: NSTimeInterval = 0.0
     private var startValueSuppressed: CGFloat?
+
+    //
+    // MARK: - Loading data
+    //
 
     override func nominalPixelWidth() -> CGFloat {
         return kBolusRectWidth
@@ -136,10 +143,14 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
         
     }
 
+    //
+    // MARK: - Drawing data points
+    //
+
     // override for any draw setup
     override func configureForDrawing() {
         context = UIGraphicsGetCurrentContext()
-        layout.bolusRects = []
+        wizardLayer?.bolusRects = []
         startValue = 0.0
         startTimeOffset = 0.0
         startValueSuppressed = nil
@@ -155,6 +166,12 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             if bolusValue > layout.maxBolus && bolusValue > kBolusMinScaleValue {
                 NSLog("ERR: max bolus exceeded!")
                 bolusValue = layout.maxBolus
+            }
+            
+            // See if there is a corresponding wizard datapoint
+            let wizardPoint = getWizardForBolusId(bolus.id)
+            if let wizardPoint = wizardPoint {
+                NSLog("found wizard with carb \(wizardPoint.value) for bolus of value \(bolusValue)")
             }
             
             // Measure out the label first so we know how much space we have for the rect below it.
@@ -195,10 +212,10 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                 // Note: bolus.value is comprised of the initial bolus value plus the extended value, and hasExtension is false if the extended value is zero, so there should be no divide by zero issues even with "bad" data
                 let height = bolus.extendedValue * pixelsPerValue
                 drawBolusExtension(bolusValueRect.origin.x + bolusValueRect.width, centerY: layout.yBottomOfBolus - height, width: width, layout: layout)
-                NSLog("bolus extension duration \(bolus.duration/60) minutes, extended value \(bolus.extendedValue), total value: \(bolus.value)")
+                //NSLog("bolus extension duration \(bolus.duration/60) minutes, extended value \(bolus.extendedValue), total value: \(bolus.value)")
             }
             
-            layout.bolusRects.append(bolusLabelRect.union(bolusValueRect))
+            wizardLayer?.bolusRects.append(bolusLabelRect.union(bolusValueRect))
         }
     }
     
@@ -227,4 +244,19 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
         bezierPath.fill()
     }
 
+    private func getWizardForBolusId(bolusId: String) -> WizardGraphDataType? {
+        if let wizardLayer = wizardLayer {
+            for wizardItem in wizardLayer.dataArray {
+                if let wizardItem = wizardItem as? WizardGraphDataType {
+                    if let wizBolusId = wizardItem.bolusId {
+                        if wizBolusId == bolusId  {
+                            return wizardItem
+                        }
+                    }
+                }
+            }
+        }
+        return nil
+    }
+    
 }

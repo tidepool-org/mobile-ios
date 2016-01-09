@@ -15,8 +15,6 @@
 
 import UIKit
 
-/// Continuous Blood Glucose readings vary between sub-100 to over 340 (we clip them there).
-/// CbgGraphDataType is a single-value type, so no additional data is needed.
 class SmbgGraphDataType: GraphDataType {
     
     override func typeString() -> String {
@@ -31,16 +29,21 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
     let circleRadius: CGFloat = 9.0
     var lastCircleDrawn = CGRectNull
     var context: CGContext?
-    
+
+    override func typeString() -> String {
+        return "smbg"
+    }
+
+    private let kGlucoseConversionToMgDl: CGFloat = 18.0
+
+    //
+    // MARK: - Loading data
+    //
+
     override func nominalPixelWidth() -> CGFloat {
         return circleRadius * 2
     }
     
-    override func typeString() -> String {
-        return "smbg"
-    }
-    
-    private let kGlucoseConversionToMgDl: CGFloat = 18.0
     override func loadEvent(event: CommonData, timeOffset: NSTimeInterval) {
         if let smbgEvent = event as? SelfMonitoringGlucose {
             //NSLog("Adding smbg event: \(event)")
@@ -52,7 +55,11 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
             }
         }
     }
-    
+
+    //
+    // MARK: - Drawing data points
+    //
+
     // override for any draw setup
     override func configureForDrawing() {
         self.pixelsPerValue = layout.yPixelsGlucose/layout.kGlucoseRange

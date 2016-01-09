@@ -12,6 +12,7 @@ import SwiftyJSON
 
 class Basal: CommonData {
 
+    
     override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Basal? {
         if let entityDescription = NSEntityDescription.entityForName("Basal", inManagedObjectContext: moc) {
             let me = Basal(entity: entityDescription, insertIntoManagedObjectContext: nil)
@@ -22,13 +23,29 @@ class Basal: CommonData {
             me.insulin = json["insulin"].string
             // TODO: change field name to "scheduledRate"
             me.percent = nil
-            
+ 
+            // Deal with nested suppressed arrays - need to march up them to find the innermost value. Data may have a temp rate of 0, and multiple suppressions all at zero. Only innermost will have a delivery type of 'scheduled'.
+            func getScheduledSuppressed(json: [String: JSON]) -> NSNumber? {
+                if let devType = json["deliveryType"]?.string {
+                    if devType == "scheduled" {
+                        return json["rate"]?.number
+                    }
+                    if let suppressedRec = json["suppressed"]?.dictionary {
+                        return getScheduledSuppressed(suppressedRec)
+                    }
+                }
+                return nil
+            }
+
             if let deliveryType = me.deliveryType {
                 if deliveryType == "temp" {
-                    let suppressedRate: NSNumber? = json["suppressed"]["rate"].number
+                    var suppressedRate: NSNumber?
+                    let suppressedRec = json["suppressed"].dictionary
+                    if let suppressedRec = suppressedRec {
+                        suppressedRate = getScheduledSuppressed(suppressedRec)
+                    }
                     if suppressedRate == nil {
                         NSLog("DATA ERR: No suppressed rate in temp basal!")
-                        // TODO: Deal with nested suppressed arrays - need to march up them to find the innermost value. Data may have a temp rate of 0, and multiple suppressions all at zero.
                     } else {
                         me.percent = suppressedRate
                     }

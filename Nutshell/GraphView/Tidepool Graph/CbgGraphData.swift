@@ -31,15 +31,21 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
     let circleRadius: CGFloat = 3.5
     var lastCircleDrawn = CGRectNull
 
-    override func nominalPixelWidth() -> CGFloat {
-        return circleRadius * 2
-    }
 
     override func typeString() -> String {
         return "cbg"
     }
 
     private let kGlucoseConversionToMgDl: CGFloat = 18.0
+
+    //
+    // MARK: - Loading data
+    //
+
+    override func nominalPixelWidth() -> CGFloat {
+        return circleRadius * 2
+    }
+    
     override func loadEvent(event: CommonData, timeOffset: NSTimeInterval) {
         if let cbgEvent = event as? ContinuousGlucose {
             //NSLog("Adding Cbg event: \(event)")
@@ -52,7 +58,10 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
         }
     }
 
-    // override for any draw setup
+    //
+    // MARK: - Drawing data points
+    //
+
     override func configureForDrawing() {
         self.pixelsPerValue = layout.yPixelsGlucose/layout.kGlucoseRange
         lastCircleDrawn = CGRectNull

@@ -46,6 +46,9 @@ class TidepoolGraphLayout: GraphLayout {
         let bolusLayer = BolusGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
 
         let wizardLayer = WizardGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
+        
+        // Note these two layers are not independent!
+        bolusLayer.wizardLayer = wizardLayer
 
         // Note: ordering is important! E.g., wizard layer draws after bolus layer so it can place circles above related bolus rectangles.
         return [workoutLayer, mealLayer, cbgLayer, smbgLayer, basalLayer, bolusLayer, wizardLayer]
@@ -80,9 +83,6 @@ class TidepoolGraphLayout: GraphLayout {
     let highColor = Styles.purpleColor
     let targetColor = Styles.greenColor
     let lowColor = Styles.peachColor
-
-    // Keep track of rects drawn for later drawing. E.g., Wizard circles are drawn just over associated Bolus labels.
-    var bolusRects: [CGRect] = []
     
     // Glucose readings go from 340(?) down to 0 in a section just below the header
     var yTopOfGlucose: CGFloat = 0.0
@@ -172,27 +172,5 @@ class TidepoolGraphLayout: GraphLayout {
         self.yAxisBase = yBottomOfGlucose
         self.yAxisPixels = yPixelsGlucose
     }
-    
-    //
-    // MARK: - Tidepool specific utility functions
-    //
-    
-    func bolusRectAtPosition(rect: CGRect) -> CGRect {
-        var result = CGRectZero
-        let rectLeft = rect.origin.x
-        let rectRight = rectLeft + rect.width
-        for bolusRect in bolusRects {
-            let bolusLeftX = bolusRect.origin.x
-            let bolusRightX = bolusLeftX + bolusRect.width
-            if bolusRightX > rectLeft && bolusLeftX < rectRight {
-                if bolusRect.height > result.height {
-                    // return the bolusRect that is largest and intersects the x position of the target rect
-                    result = bolusRect
-                }
-            }
-        }
-        return result
-    }
-    
 
 }

@@ -107,13 +107,17 @@ class GraphUIView: UIView {
         let xAxisImageView = UIImageView(image:graphUtils.imageOfXAxisHeader())
         addSubview(xAxisImageView)
 
+        // first load the data for all the layers in case there is any data inter-dependency
         for dataLayer in graphLayers {
             dataLayer.loadDataItems()
+        }
+        // then draw each layer, and add non-empty layers as subviews
+        for dataLayer in graphLayers {
             let imageView = dataLayer.imageView(graphUtils)
             if imageView != nil {
                 addSubview(imageView!)
             }
         }
-    }
+}
 
 }

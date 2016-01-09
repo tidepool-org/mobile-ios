@@ -82,6 +82,7 @@ class DatabaseUtils {
     
     class func updateEventsForTimeRange(startTime: NSDate, endTime: NSDate, moc: NSManagedObjectContext, eventsJSON: JSON) {
         
+        // NSLog("Events from \(startTime) to \(endTime): \(eventsJSON)")
         var deleteEventCounter = 0
         // Delete all tidepool items in range before adding the new ones...
         do {

@@ -15,8 +15,6 @@
 
 import UIKit
 
-/// Continuous Blood Glucose readings vary between sub-100 to over 340 (we clip them there).
-/// CbgGraphDataType is a single-value type, so no additional data is needed.
 class WorkoutGraphDataType: GraphDataType {
     
     var isMainEvent: Bool = false
@@ -50,6 +48,10 @@ class WorkoutGraphDataLayer: GraphDataLayer {
     private let maxWorkoutDuration: NSTimeInterval = 3*60*60
     private let minPixelWidth: CGFloat = 2.0
 
+    //
+    // MARK: - Loading data
+    //
+
     override func loadDataItems() {
         dataArray = []
         let endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
@@ -75,7 +77,11 @@ class WorkoutGraphDataLayer: GraphDataLayer {
         }
         NSLog("loaded \(dataArray.count) workout events")
     }
-    
+
+    //
+    // MARK: - Drawing data points
+    //
+
     // override for draw setup
     override func configureForDrawing() {
         self.pixelsPerValue = layout.yPixelsGlucose/layout.kGlucoseRange
