@@ -19,10 +19,12 @@ import UIKit
 class WizardGraphDataType: GraphDataType {
 
     var bolusId: String?
+    var recommendedNet: NSNumber?
     
-    init(value: CGFloat, timeOffset: NSTimeInterval, bolusId: String?) {
+    init(value: CGFloat, timeOffset: NSTimeInterval, bolusId: String?, recommendedNet: NSNumber?) {
         super.init(value: value, timeOffset: timeOffset)
         self.bolusId = bolusId
+        self.recommendedNet = recommendedNet
     }
     
     override func typeString() -> String {
@@ -58,16 +60,19 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
     
     override func loadEvent(event: CommonData, timeOffset: NSTimeInterval) {
         if let event = event as? Wizard {
-            if let value = event.carbInput {
-                let floatValue = round(CGFloat(value))
-                if floatValue != 0.0 {
-                    dataArray.append(WizardGraphDataType(value: floatValue, timeOffset: timeOffset, bolusId: event.bolus))
-                } else {
-                    NSLog("ignoring Wizard event with carbInput value of zero!")
+            let value = event.carbInput ?? 0.0
+            let floatValue = round(CGFloat(value))
+            // TODO: Rename insulinCarbRatio to recommendedNet!
+            dataArray.append(WizardGraphDataType(value: floatValue, timeOffset: timeOffset, bolusId: event.bolus, recommendedNet: event.insulinCarbRatio))
+            
+            // Let recommended bolus values figure into the bolus value scaling as well!
+            if let recommended = event.insulinCarbRatio {
+                let recommendedValue = CGFloat(recommended)
+                if recommendedValue > layout.maxBolus {
+                    layout.maxBolus = recommendedValue
                 }
-            } else {
-                NSLog("ignoring Wizard event with nil carbInput value!")
             }
+
         }
     }
 
@@ -84,6 +89,11 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
     // override!
     override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
         
+        if dataPoint.value == 0.0 {
+            // Don't plot nil or zero values - probably used for recommended bolus record!
+            NSLog("Skip plot of wizard with zero value!")
+            return
+        }
         let centerX = xOffset
         let circleDiameter = kWizardCircleDiameter
         let value = round(dataPoint.value)

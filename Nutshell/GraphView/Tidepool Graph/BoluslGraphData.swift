@@ -59,6 +59,8 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
     // config...
     private let kBolusTextBlue = Styles.mediumBlueColor
     private let kBolusBlueRectColor = Styles.blueColor
+    private let kBolusOverrideIconColor = UIColor(hex: 0x0C6999)
+    private let kBolusOverrideRectColor = Styles.lightBlueColor
     private let kBolusRectWidth: CGFloat = 14.0
     private let kBolusLabelToRectGap: CGFloat = 0.0
     private let kBolusLabelRectHeight: CGFloat = 12.0
@@ -168,12 +170,6 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                 bolusValue = layout.maxBolus
             }
             
-            // See if there is a corresponding wizard datapoint
-            let wizardPoint = getWizardForBolusId(bolus.id)
-            if let wizardPoint = wizardPoint {
-                NSLog("found wizard with carb \(wizardPoint.value) for bolus of value \(bolusValue)")
-            }
-            
             // Measure out the label first so we know how much space we have for the rect below it.
             let bolusFloatValue = Float(bolus.value)
             var bolusLabelTextContent = String(format: "%.2f", bolusFloatValue)
@@ -188,16 +184,57 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
 
             let pixelsPerValue = (layout.yPixelsBolus - bolusLabelTextSize.height - kBolusLabelToRectGap) / CGFloat(layout.maxBolus)
             
+            var override = false
+            var recommendedValue: CGFloat = 0.0
+            // See if there is a corresponding wizard datapoint
+            let wizardPoint = getWizardForBolusId(bolus.id)
+            if let wizardPoint = wizardPoint {
+                NSLog("found wizard with carb \(wizardPoint.value) for bolus of value \(bolusValue)")
+                if let recommended = wizardPoint.recommendedNet {
+                    recommendedValue = CGFloat(recommended)
+                    override = recommendedValue != bolusValue
+                }
+            }
+
             // Draw the bolus rectangle
             let rectLeft = floor(centerX - (kBolusRectWidth/2))
             let bolusRectHeight = ceil(pixelsPerValue * bolusValue)
-            let bolusValueRect = CGRect(x: rectLeft, y: layout.yBottomOfBolus - bolusRectHeight, width: kBolusRectWidth, height: bolusRectHeight)
+            var yOriginBolusRect = layout.yBottomOfBolus - bolusRectHeight
+            let bolusValueRect = CGRect(x: rectLeft, y: yOriginBolusRect, width: kBolusRectWidth, height: bolusRectHeight)
             let bolusValueRectPath = UIBezierPath(rect: bolusValueRect)
             kBolusBlueRectColor.setFill()
             bolusValueRectPath.fill()
-            
+
+            // Draw override rectangle and icon if applicable
+            if override  {
+                let recommendedYOffset = layout.yBottomOfBolus - ceil(pixelsPerValue * recommendedValue)
+                var yOriginOverrideIcon = recommendedYOffset
+                // if recommended value was higher than the bolus, first draw a light-colored rect at the recommended value
+                if recommendedValue > bolusValue {
+                    yOriginOverrideIcon = yOriginBolusRect
+                    // comment the following to place the label on top of the bolus rect, over the recommended rect bottom
+                    yOriginBolusRect = recommendedYOffset // bump to recommended height so label goes above this!
+                    let recommendedRectHeight = ceil(pixelsPerValue * (recommendedValue - bolusValue))
+                    // alt 1: just draw dotted rect with no fill
+                    let recommendedRect = CGRect(x: rectLeft+0.5, y: recommendedYOffset+0.5, width: kBolusRectWidth-1.0, height: recommendedRectHeight)
+                    let recommendedRectPath = UIBezierPath(rect: recommendedRect)
+                    kBolusBlueRectColor.setStroke()
+                    recommendedRectPath.lineWidth = 1
+                    CGContextSaveGState(context)
+                    CGContextSetLineDash(context, 0, [2, 2], 2)
+                    recommendedRectPath.stroke()
+                    CGContextRestoreGState(context)
+                    // alt 2: draw light colored blue, though this blends with basal rect color!
+                    //let recommendedRect = CGRect(x: rectLeft, y: recommendedYOffset, width: kBolusRectWidth, height: recommendedRectHeight)
+                    //let recommendedRectPath = UIBezierPath(rect: recommendedRect)
+                    //kBolusOverrideRectColor.setFill()
+                    //recommendedRectPath.fill()
+                }
+                self.drawBolusOverrideIcon(rectLeft, yOffset: yOriginOverrideIcon, pointUp: recommendedValue < bolusValue)
+            }
+
             // Finally, draw the bolus label above the rectangle
-            let bolusLabelRect = CGRect(x:centerX-(bolusLabelTextSize.width/2), y:layout.yBottomOfBolus - bolusRectHeight - kBolusLabelToRectGap - bolusLabelTextSize.height, width: bolusLabelTextSize.width, height: bolusLabelTextSize.height)
+            let bolusLabelRect = CGRect(x:centerX-(bolusLabelTextSize.width/2), y: yOriginBolusRect - kBolusLabelToRectGap - bolusLabelTextSize.height, width: bolusLabelTextSize.width, height: bolusLabelTextSize.height)
             let bolusLabelPath = UIBezierPath(rect: bolusLabelRect.insetBy(dx: 0.0, dy: 2.0))
             layout.backgroundColor.setFill()
             bolusLabelPath.fill()
@@ -217,6 +254,28 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             
             wizardLayer?.bolusRects.append(bolusLabelRect.union(bolusValueRect))
         }
+    }
+    
+    private func drawBolusOverrideIcon(xOffset: CGFloat, yOffset: CGFloat, pointUp: Bool) {
+        // The override icon has its origin at the y position corresponding to the suggested bolus value that was overridden. 
+        let context = UIGraphicsGetCurrentContext()
+        CGContextSaveGState(context)
+        CGContextTranslateCTM(context, xOffset, yOffset)
+        let flip: CGFloat = pointUp ? -1.0 : 1.0
+        
+        let bezierPath = UIBezierPath()
+        bezierPath.moveToPoint(CGPointMake(0, 0))
+        bezierPath.addLineToPoint(CGPointMake(0, 3.5*flip))
+        bezierPath.addLineToPoint(CGPointMake(3.5, 3.5*flip))
+        bezierPath.addLineToPoint(CGPointMake(7, 7*flip))
+        bezierPath.addLineToPoint(CGPointMake(10.5, 3.5*flip))
+        bezierPath.addLineToPoint(CGPointMake(14, 3.5*flip))
+        bezierPath.addLineToPoint(CGPointMake(14, 0))
+        bezierPath.addLineToPoint(CGPointMake(0, 0))
+        bezierPath.closePath()
+        kBolusOverrideIconColor.setFill()
+        bezierPath.fill()
+        CGContextRestoreGState(context)
     }
     
     private func drawBolusExtension(var originX: CGFloat, centerY: CGFloat, var width: CGFloat, layout: TidepoolGraphLayout) {
