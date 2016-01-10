@@ -194,22 +194,27 @@ class NutDataController
                 if let workout = event as? HKWorkout {
                     let we = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Workout
                     
-                    var title = "Workout"
-                    if workout.workoutActivityType == HKWorkoutActivityType.Running {
-                        title = "Running"
-                    }
-                    title = title + " - " + workout.source.name
-                    we.title = title
-                    var notes = ""
-                    if let distance = workout.totalDistance {
-                        notes = String(distance)
-                    }
-                    if let calories = workout.totalEnergyBurned {
-                        notes = notes + " - " + String(calories)
-                    }
-                    we.notes = notes
-                    we.time = workout.startDate
+                    // Workout fields
+                    we.appleHealthDate = workout.startDate
+                    we.calories = workout.totalEnergyBurned?.doubleValueForUnit(HKUnit.kilocalorieUnit())
+                    we.distance = workout.totalDistance?.doubleValueForUnit(HKUnit.mileUnit())
                     we.duration = workout.duration
+                    we.source = workout.source.name
+                    // NOTE: use the Open mHealth enum string here!
+                    we.subType = Workout.enumStringForHKWorkoutActivityType(workout.workoutActivityType)
+                    
+                    // EventItem fields
+                    // Default title format: "Run - 4.2 miles"
+                    var title: String = Workout.userStringForHKWorkoutActivityTypeEnumString(we.subType!)
+                    if let miles = we.distance {
+                        title = title + " - " + String(miles) + " miles"
+                    }
+                    we.title = title
+                    // Default notes string is the application name sourcing the event
+                    we.notes = we.source
+                    
+                    // Common fields
+                    we.time = workout.startDate
                     we.type = "workout"
                     we.id = event.UUID.UUIDString
                     we.userid = NutDataController.controller().currentUserId
