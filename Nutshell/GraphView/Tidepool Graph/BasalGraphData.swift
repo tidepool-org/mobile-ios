@@ -173,7 +173,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
                 }
             } else {
                 // got another value, draw the rect
-                drawBasalRect(startTimeOffset, endTimeOffset: itemTime, value: startValue, suppressed: startValueSuppressed, layout: layout)
+                drawBasalRect(startTimeOffset, endTimeOffset: itemTime, value: startValue, suppressed: startValueSuppressed, layout: layout, finish: itemTime == timeIntervalForView)
                 // and start another rect...
                 startValue = itemValue
                 startTimeOffset = itemTime
@@ -185,7 +185,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
     override func finishDrawing() {
         // finish off any rect/supressed line we started, to right edge of graph
         if (startValue > 0.0 || startValueSuppressed != nil) {
-            drawBasalRect(startTimeOffset, endTimeOffset: timeIntervalForView, value: startValue, suppressed: nil, layout: layout)
+            drawBasalRect(startTimeOffset, endTimeOffset: timeIntervalForView, value: startValue, suppressed: startValueSuppressed, layout: layout, finish: true)
         }
     }
     
@@ -205,7 +205,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
         CGContextRestoreGState(context)
     }
     
-    private func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: CGFloat, suppressed: CGFloat?, layout: TidepoolGraphLayout) {
+    private func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: CGFloat, suppressed: CGFloat?, layout: TidepoolGraphLayout, finish: Bool) {
         let rectLeft = floor(CGFloat(startTimeOffset) * viewPixelsPerSec)
         let rectRight = ceil(CGFloat(endTimeOffset) * viewPixelsPerSec)
         let rectWidth = rectRight-rectLeft
@@ -224,13 +224,16 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
             if suppressedLine == nil {
                 // start a new line path
                 suppressedLine = UIBezierPath()
-                suppressedLine?.moveToPoint(suppressedStart)
+                suppressedLine!.moveToPoint(suppressedStart)
             } else {
                 // continue an existing suppressed line path by adding connecting line
-                suppressedLine?.addLineToPoint(suppressedStart)
+                suppressedLine!.addLineToPoint(suppressedStart)
             }
             // add current line segment
-            suppressedLine?.addLineToPoint(suppressedEnd)
+            suppressedLine!.addLineToPoint(suppressedEnd)
+            if finish {
+                drawSuppressedLine(suppressedLine!)
+            }
         } else if suppressedLine != nil {
             drawSuppressedLine(suppressedLine!)
             suppressedLine = nil
