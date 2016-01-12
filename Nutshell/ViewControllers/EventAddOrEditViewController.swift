@@ -812,6 +812,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             ["Extended Bolus", "various extended", "2015-10-28T21:00:00.000Z", "brandon", ""],
             ["Temp Basal", "Higher than scheduled", "2015-12-14T18:57:00.000Z", "brandon", ""],
             ["Temp Basal", "Shift in scheduled during temp", "2015-12-16T05:00:00.000Z", "brandon", ""],
+            ["Interrupted Bolus", "Both regular and extended", "2015-11-17T04:00:00.000Z", "brandon", ""],
             // larry account
             ["Overridden Bolus", "Suggested .15, delivered 1, suggested .2, delivered 2.5", "2015-08-15T04:47:00.000Z", "larry", ""],
             ["Overridden Bolus", "Suggested 1.2, overrode to .6, suggested 1.2, overrode to .8", "2015-08-09T19:14:00.000Z", "larry", ""],

@@ -19,6 +19,9 @@ class Bolus: CommonData {
             me.normal = json["normal"].number
             me.extended = json["extended"].number
             me.duration = json["duration"].number
+            // for an interrupted bolus, expectedNormal will exist
+            me.expectedNormal = json["expectedNormal"].number
+            // for an interrupted extended bolus, these two fields will exist
             me.expectedExtended = json["expectedExtended"].number
             me.expectedDuration = json["expectedDuration"].number
             

@@ -21,8 +21,7 @@ class Basal: CommonData {
             me.value = json["rate"].number
             me.duration = json["duration"].number
             me.insulin = json["insulin"].string
-            // TODO: change field name to "scheduledRate"
-            me.percent = nil
+            me.suppressedRate = nil
  
             // Deal with nested suppressed arrays - need to march up them to find the innermost value. Data may have a temp rate of 0, and multiple suppressions all at zero. Only innermost will have a delivery type of 'scheduled'.
             func getScheduledSuppressed(json: [String: JSON]) -> NSNumber? {
@@ -47,7 +46,7 @@ class Basal: CommonData {
                     if suppressedRate == nil {
                         NSLog("DATA ERR: No suppressed rate in temp basal!")
                     } else {
-                        me.percent = suppressedRate
+                        me.suppressedRate = suppressedRate
                     }
                 }
             }

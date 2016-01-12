@@ -17,8 +17,7 @@ class Wizard: CommonData {
             me.bgInput = json["bgInput"].number
             me.carbInput = json["carbInput"].number
             me.insulinOnBoard = json["insulinOnBoard"].number
-            // Rename to "recommendedNet"
-            me.insulinCarbRatio = json["recommended"]["net"].number
+            me.recommendedNet = json["recommended"]["net"].number
             me.insulinSensitivity = json["insulinSensitivity"].number
             me.bolus = json["bolus"].string
             

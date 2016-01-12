@@ -18,6 +18,7 @@ extension Bolus {
     @NSManaged var subType: String?
     @NSManaged var value: NSNumber?
     @NSManaged var normal: NSNumber?
+    @NSManaged var expectedNormal: NSNumber?
     @NSManaged var extended: NSNumber?
     @NSManaged var duration: NSNumber?
     @NSManaged var expectedDuration: NSNumber?

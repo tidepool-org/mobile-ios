@@ -62,11 +62,10 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
         if let event = event as? Wizard {
             let value = event.carbInput ?? 0.0
             let floatValue = round(CGFloat(value))
-            // TODO: Rename insulinCarbRatio to recommendedNet!
-            dataArray.append(WizardGraphDataType(value: floatValue, timeOffset: timeOffset, bolusId: event.bolus, recommendedNet: event.insulinCarbRatio))
+            dataArray.append(WizardGraphDataType(value: floatValue, timeOffset: timeOffset, bolusId: event.bolus, recommendedNet: event.recommendedNet))
             
             // Let recommended bolus values figure into the bolus value scaling as well!
-            if let recommended = event.insulinCarbRatio {
+            if let recommended = event.recommendedNet {
                 let recommendedValue = CGFloat(recommended)
                 if recommendedValue > layout.maxBolus {
                     layout.maxBolus = recommendedValue

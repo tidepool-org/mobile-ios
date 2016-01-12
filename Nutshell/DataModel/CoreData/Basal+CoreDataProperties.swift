@@ -18,6 +18,6 @@ extension Basal {
     @NSManaged var duration: NSNumber?
     @NSManaged var insulin: String?
     @NSManaged var value: NSNumber?
-    @NSManaged var percent: NSNumber?
+    @NSManaged var suppressedRate: NSNumber?
 
 }
