@@ -20,6 +20,7 @@ class WizardGraphDataType: GraphDataType {
 
     var bolusId: String?
     var recommendedNet: NSNumber?
+    var bolusTopY: CGFloat?
     
     init(value: CGFloat, timeOffset: NSTimeInterval, bolusId: String?, recommendedNet: NSNumber?) {
         super.init(value: value, timeOffset: timeOffset)
@@ -93,55 +94,61 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
             NSLog("Skip plot of wizard with zero value!")
             return
         }
-        let centerX = xOffset
-        let circleDiameter = kWizardCircleDiameter
-        let value = round(dataPoint.value)
-        // Carb circle should be centered at timeline
-        let offsetX = centerX - (circleDiameter/2)
-        var wizardRect = CGRect(x: offsetX, y: layout.yBottomOfWizard - circleDiameter, width: circleDiameter, height: circleDiameter)
-        let bolusRect = bolusRectAtPosition(wizardRect)
-        if bolusRect.height != 0.0 {
-            wizardRect.origin.y = bolusRect.origin.y - circleDiameter
+        
+        if let wizard = dataPoint as? WizardGraphDataType {
+            let centerX = xOffset
+            let circleDiameter = kWizardCircleDiameter
+            let value = round(dataPoint.value)
+            // Carb circle should be centered at timeline
+            let offsetX = centerX - (circleDiameter/2)
+            var wizardRect = CGRect(x: offsetX, y: layout.yBottomOfWizard - circleDiameter, width: circleDiameter, height: circleDiameter)
+            var yAtBolusTop = bolusYAtPosition(wizardRect)
+            if wizard.bolusTopY != nil {
+                yAtBolusTop = wizard.bolusTopY
+            }
+            if let yAtBolusTop = yAtBolusTop {
+                wizardRect.origin.y = yAtBolusTop - circleDiameter
+            }
+            let wizardOval = UIBezierPath(ovalInRect: wizardRect)
+            Styles.goldColor.setFill()
+            wizardOval.fill()
+            // Draw background colored border to separate the circle from other objects
+            layout.backgroundColor.setStroke()
+            wizardOval.lineWidth = 1.5
+            wizardOval.stroke()
+            
+            // Label Drawing
+            let labelRect = wizardRect
+            let labelText = String(Int(value))
+            let labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
+            labelStyle.alignment = .Center
+            
+            let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: Styles.darkPurpleColor, NSParagraphStyleAttributeName: labelStyle])
+            
+            let labelTextHeight: CGFloat = ceil(labelAttrStr.boundingRectWithSize(CGSizeMake(labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).size.height)
+            
+            CGContextSaveGState(context)
+            CGContextClipToRect(context, labelRect);
+            labelAttrStr.drawInRect(CGRectMake(labelRect.minX, labelRect.minY + (labelRect.height - labelTextHeight) / 2, labelRect.width, labelTextHeight))
+            CGContextRestoreGState(context)
         }
-        let wizardOval = UIBezierPath(ovalInRect: wizardRect)
-        Styles.goldColor.setFill()
-        wizardOval.fill()
-        // Draw background colored border to separate the circle from other objects
-        layout.backgroundColor.setStroke()
-        wizardOval.lineWidth = 1.5
-        wizardOval.stroke()
-        
-        // Label Drawing
-        let labelRect = wizardRect
-        let labelText = String(Int(value))
-        let labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        labelStyle.alignment = .Center
-        
-        let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: Styles.darkPurpleColor, NSParagraphStyleAttributeName: labelStyle])
-        
-        let labelTextHeight: CGFloat = ceil(labelAttrStr.boundingRectWithSize(CGSizeMake(labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).size.height)
-        
-        CGContextSaveGState(context)
-        CGContextClipToRect(context, labelRect);
-        labelAttrStr.drawInRect(CGRectMake(labelRect.minX, labelRect.minY + (labelRect.height - labelTextHeight) / 2, labelRect.width, labelTextHeight))
-        CGContextRestoreGState(context)
     }
     
     //
     // MARK: - Tidepool specific utility functions
     //
     
-    func bolusRectAtPosition(rect: CGRect) -> CGRect {
-        var result = CGRectZero
+    func bolusYAtPosition(rect: CGRect) -> CGFloat? {
+        var result: CGFloat?
         let rectLeft = rect.origin.x
         let rectRight = rectLeft + rect.width
         for bolusRect in bolusRects {
             let bolusLeftX = bolusRect.origin.x
             let bolusRightX = bolusLeftX + bolusRect.width
             if bolusRightX > rectLeft && bolusLeftX < rectRight {
-                if bolusRect.height > result.height {
+                if bolusRect.height > result {
                     // return the bolusRect that is largest and intersects the x position of the target rect
-                    result = bolusRect
+                    result = bolusRect.height
                 }
             }
         }

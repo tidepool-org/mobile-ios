@@ -21,7 +21,7 @@ class BolusGraphDataType: GraphDataType {
     var duration: NSTimeInterval?
     var expectedNormal: CGFloat?
     var expectedExtended: CGFloat?
-    var expectedDuration: CGFloat?
+    var expectedDuration: NSTimeInterval?
     var id: String
     
     init(event: Bolus, timeOffset: NSTimeInterval) {
@@ -40,7 +40,8 @@ class BolusGraphDataType: GraphDataType {
             self.expectedExtended = CGFloat(event.expectedExtended!)
         }
         if event.expectedDuration != nil {
-            self.expectedDuration = CGFloat(event.expectedDuration!)
+            let expectedDurationInMS = Int(event.expectedDuration!)
+            self.expectedDuration = NSTimeInterval(expectedDurationInMS / 1000)
         }
         let value = CGFloat(event.value!)
         super.init(value: value, timeOffset: timeOffset)
@@ -211,14 +212,18 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             
             var override = false
             var interrupted = false
+            var wizardHasOriginal = false
             var originalValue: CGFloat = 0.0
             // See if there is a corresponding wizard datapoint
             let wizardPoint = getWizardForBolusId(bolus.id)
             if let wizardPoint = wizardPoint {
                 NSLog("found wizard with carb \(wizardPoint.value) for bolus of value \(bolusValue)")
                 if let recommended = wizardPoint.recommendedNet {
-                    originalValue = CGFloat(recommended)
-                    override = originalValue != bolusValue
+                    if recommended != bolusValue {
+                        override = true
+                        wizardHasOriginal = true
+                        originalValue = CGFloat(recommended)
+                    }
                 }
             }
 
@@ -230,14 +235,38 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             let bolusValueRectPath = UIBezierPath(rect: bolusValueRect)
             kBolusBlueRectColor.setFill()
             bolusValueRectPath.fill()
+            
+            // Alt option: Draw background colored border to separate the bolus from other objects
+            //layout.backgroundColor.setStroke()
+            //bolusValueRectPath.lineWidth = 1.0
+            //bolusValueRectPath.stroke()
 
+            // Handle interrupted boluses
             if let expectedNormal = bolus.expectedNormal {
                 if expectedNormal > bolusValue {
-                    override = true
                     interrupted = true
+                    override = true
                     originalValue = expectedNormal
+                    wizardHasOriginal = false
                 } else {
                     NSLog("UNEXPECTED DATA - expectedNormal \(expectedNormal) not > bolus \(bolusValue)")
+                }
+            }
+
+            // Handle extended, and interrupted extended bolus portion
+            if let extendedValue = bolus.extendedValue {
+                var extendedOriginal = extendedValue
+                if let expectedExtended = bolus.expectedExtended {
+                    if expectedExtended > extendedValue {
+                        override = true
+                        interrupted = true
+                        extendedOriginal = expectedExtended
+                    } else {
+                        NSLog("UNEXPECTED DATA - expectedExtended \(expectedExtended) not > extended \(extendedValue)")
+                    }
+                }
+                if !wizardHasOriginal {
+                    originalValue += extendedOriginal
                 }
             }
 
@@ -251,7 +280,19 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                     // comment the following to place the label on top of the bolus rect, over the recommended rect bottom
                     yOriginBolusRect = originalYOffset // bump to recommended height so label goes above this!
                     let originalRectHeight = ceil(pixelsPerValue * (originalValue - bolusValue))
-                    // alt 1: just draw dotted rect with no fill
+
+                    // alt 1: draw light colored blue, though this blends with basal rect color!
+                    let originalRect2 = CGRect(x: rectLeft, y: originalYOffset, width: kBolusRectWidth, height: originalRectHeight)
+                    let originalRectPath2 = UIBezierPath(rect: originalRect2)
+                    kBolusOverrideRectColor.setFill()
+                    originalRectPath2.fill()
+
+                    // alt option: draw background colored border to separate the bolus from other objects
+                    //layout.backgroundColor.setStroke()
+                    //originalRectPath2.lineWidth = 1.0
+                    //originalRectPath2.stroke()
+
+                    // alt 2: just draw dotted rect with no fill
                     let originalRect = CGRect(x: rectLeft+0.5, y: originalYOffset+0.5, width: kBolusRectWidth-1.0, height: originalRectHeight)
                     let originalRectPath = UIBezierPath(rect: originalRect)
                     kBolusBlueRectColor.setStroke()
@@ -260,11 +301,6 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                     CGContextSetLineDash(context, 0, [2, 2], 2)
                     originalRectPath.stroke()
                     CGContextRestoreGState(context)
-                    // alt 2: draw light colored blue, though this blends with basal rect color!
-                    //let originalRect = CGRect(x: rectLeft, y: originalYOffset, width: kBolusRectWidth, height: originalRectHeight)
-                    //let originalRectPath = UIBezierPath(rect: originalRect)
-                    //kBolusOverrideRectColor.setFill()
-                    //originalRectPath.fill()
                 }
                 if interrupted {
                     self.drawBolusInterruptBar(rectLeft, yOffset: yOriginOverrideIcon)
@@ -287,11 +323,22 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             if let extendedValue = bolus.extendedValue, duration = bolus.duration {
                 let width = floor(CGFloat(duration) * viewPixelsPerSec)
                 let height = extendedValue * pixelsPerValue
-                drawBolusExtension(bolusValueRect.origin.x + bolusValueRect.width, centerY: layout.yBottomOfBolus - height, width: width, layout: layout)
+                var originalWidth: CGFloat?
+                if let _ = bolus.expectedExtended, expectedDuration = bolus.expectedDuration {
+                    // extension was interrupted...
+                    if expectedDuration > duration {
+                        originalWidth = floor(CGFloat(expectedDuration) * viewPixelsPerSec)
+                    } else {
+                        NSLog("UNEXPECTED DATA - expectedDuration \(expectedDuration) not > duration \(duration)")
+                    }
+                }
+                drawBolusExtension(bolusValueRect.origin.x + bolusValueRect.width, centerY: layout.yBottomOfBolus - height, width: width, originalWidth: originalWidth)
                 //NSLog("bolus extension duration \(bolus.duration/60) minutes, extended value \(bolus.extendedValue), total value: \(bolus.value)")
             }
             
-            wizardLayer?.bolusRects.append(bolusLabelRect.union(bolusValueRect))
+            let completeBolusRect = bolusLabelRect.union(bolusValueRect)
+            wizardLayer?.bolusRects.append(completeBolusRect)
+            wizardPoint?.bolusTopY = completeBolusRect.origin.y
         }
     }
 
@@ -318,7 +365,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
     }
 
     private func drawBolusInterruptBar(xOffset: CGFloat, yOffset: CGFloat) {
-        // The override icon has its origin at the y position corresponding to the suggested bolus value that was overridden.
+        // Bar width matches width of bolus rect, height is 3.5 points
         let context = UIGraphicsGetCurrentContext()
         CGContextSaveGState(context)
         CGContextTranslateCTM(context, xOffset, yOffset)
@@ -335,16 +382,34 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
         CGContextRestoreGState(context)
     }
 
-    private func drawBolusExtension(var originX: CGFloat, centerY: CGFloat, var width: CGFloat, layout: TidepoolGraphLayout) {
-        if width < kExtensionEndshapeWidth {
-            // If extension is shorter than the end trapezoid shape, only draw that shape, backing it into the bolus rect
-            originX = originX - (kExtensionEndshapeWidth - width)
-            width = kExtensionEndshapeWidth
-        }
+    private func drawBolusExtensionInterruptBar(xOffset: CGFloat, centerY: CGFloat) {
+        // Bar width is 3.5 points, height is same as extension end triangle, fits on the end of the delivered extension triangle
+        let context = UIGraphicsGetCurrentContext()
+        CGContextSaveGState(context)
+        CGContextTranslateCTM(context, xOffset, centerY-(kExtensionEndshapeHeight/2.0))
+        
+        let bezierPath = UIBezierPath()
+        bezierPath.moveToPoint(CGPointMake(0, 0))
+        bezierPath.addLineToPoint(CGPointMake(3.5, 0))
+        bezierPath.addLineToPoint(CGPointMake(3.5, kExtensionEndshapeHeight))
+        bezierPath.addLineToPoint(CGPointMake(0, kExtensionEndshapeHeight))
+        bezierPath.addLineToPoint(CGPointMake(0, 0))
+        bezierPath.closePath()
+        kBolusInterruptBarColor.setFill()
+        bezierPath.fill()
+        CGContextRestoreGState(context)
+    }
+
+    private func drawBolusExtensionShape(originX: CGFloat, centerY: CGFloat, width: CGFloat, borderOnly: Bool = false) {
         let originY = centerY - (kExtensionEndshapeHeight/2.0)
-        let bottomLineY = centerY + (kExtensionLineHeight / 2.0)
-        let topLineY = centerY - (kExtensionLineHeight / 2.0)
+        var bottomLineY = centerY + (kExtensionLineHeight / 2.0)
+        var topLineY = centerY - (kExtensionLineHeight / 2.0)
         let rightSideX = originX + width
+        
+        //if borderOnly {
+        //    topLineY -= 0.5
+        //    bottomLineY += 0.5
+        //}
         
         //// Bezier Drawing
         let bezierPath = UIBezierPath()
@@ -356,8 +421,40 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
         bezierPath.addLineToPoint(CGPointMake(rightSideX - kExtensionEndshapeWidth, topLineY))
         bezierPath.addLineToPoint(CGPointMake(rightSideX, originY))
         bezierPath.closePath()
-        kBolusBlueRectColor.setFill()
-        bezierPath.fill()
+        if borderOnly {
+            // Alt 1: use light-color instead
+            kBolusOverrideRectColor.setFill()
+            bezierPath.fill()
+            
+            // Alt 2: use a border
+            kBolusBlueRectColor.setStroke()
+            bezierPath.lineWidth = 1
+            CGContextSaveGState(context)
+            CGContextSetLineDash(context, 0, [2, 2], 2)
+            bezierPath.stroke()
+            CGContextRestoreGState(context)
+        } else {
+            kBolusBlueRectColor.setFill()
+            bezierPath.fill()
+        }
+    }
+
+    private func drawBolusExtension(var originX: CGFloat, centerY: CGFloat, var width: CGFloat, originalWidth: CGFloat?) {
+        if width < kExtensionEndshapeWidth {
+            // If extension is shorter than the end trapezoid shape, only draw that shape, backing it into the bolus rect
+            originX = originX - (kExtensionEndshapeWidth - width)
+            width = kExtensionEndshapeWidth
+        }
+        drawBolusExtensionShape(originX, centerY: centerY, width: width)
+        // handle interrupted extended bolus!
+        if let originalWidth = originalWidth {
+            // only draw original extension if it is at least as large as the end shape!
+            if originalWidth > (width + 3.5 + kExtensionEndshapeWidth) {
+                drawBolusExtensionShape(originX + width, centerY: centerY, width: (originalWidth - width), borderOnly: true)
+            }
+            // always draw an interrupt bar at the end of the delivered part of the extension
+            drawBolusExtensionInterruptBar(originX+width, centerY: centerY)
+        }
     }
 
     private func getWizardForBolusId(bolusId: String) -> WizardGraphDataType? {
