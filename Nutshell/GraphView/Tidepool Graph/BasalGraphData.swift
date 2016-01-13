@@ -134,7 +134,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
                 }
             }
         }
-        NSLog("Copied \(dataArray.count) basal items from graph cache for slice at offset \(dataLayerOffset/3600) hours")
+        //NSLog("Copied \(dataArray.count) basal items from graph cache for slice at offset \(dataLayerOffset/3600) hours")
 
     }
 
@@ -189,20 +189,23 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
         }
     }
     
-    private func drawSuppressedLine(linePath: UIBezierPath) {
+    private func drawSuppressedLine() {
         let context = UIGraphicsGetCurrentContext()
-        let lineWidth: CGFloat = 2.0
-        linePath.miterLimit = 4;
-        linePath.lineCapStyle = .Square;
-        linePath.lineJoinStyle = .Round;
-        linePath.usesEvenOddFillRule = true;
-        
-        kBasalDarkBlueRectColor.setStroke()
-        linePath.lineWidth = lineWidth
-        CGContextSaveGState(context)
-        CGContextSetLineDash(context, 0, [2, 5], 2)
-        linePath.stroke()
-        CGContextRestoreGState(context)
+        if let linePath = suppressedLine {
+            let lineWidth: CGFloat = 2.0
+            linePath.miterLimit = 4;
+            linePath.lineCapStyle = .Square;
+            linePath.lineJoinStyle = .Round;
+            linePath.usesEvenOddFillRule = true;
+            
+            kBasalDarkBlueRectColor.setStroke()
+            linePath.lineWidth = lineWidth
+            CGContextSaveGState(context)
+            CGContextSetLineDash(context, 0, [2, 4], 2)
+            linePath.stroke()
+            CGContextRestoreGState(context)
+            suppressedLine = nil
+        }
     }
     
     private func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: CGFloat, suppressed: CGFloat?, layout: TidepoolGraphLayout, finish: Bool) {
@@ -215,28 +218,33 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
         let basalValueRectPath = UIBezierPath(rect: basalRect)
         kBasalLightBlueRectColor.setFill()
         basalValueRectPath.fill()
-        //kBasalDarkBlueRectColor.setStroke()
-        //basalValueRectPath.stroke()
         
         if let suppressed = suppressed {
-            let suppressedStart = CGPoint(x: basalRect.origin.x, y:layout.yBottomOfBasal - floor(pixelsPerValue * suppressed) + 1.0)
-            let suppressedEnd = CGPoint(x: suppressedStart.x + basalRect.size.width, y: suppressedStart.y)
+            let suppressedStart = CGPoint(x: basalRect.origin.x + 1.0, y:layout.yBottomOfBasal - floor(pixelsPerValue * suppressed) + 1.0) // add 1.0 so suppressed line top is same as basal top
+            let suppressedEnd = CGPoint(x: suppressedStart.x + basalRect.size.width - 2.0, y: suppressedStart.y)
             if suppressedLine == nil {
                 // start a new line path
                 suppressedLine = UIBezierPath()
                 suppressedLine!.moveToPoint(suppressedStart)
+                //NSLog("suppressed move to \(suppressedStart)")
             } else {
-                // continue an existing suppressed line path by adding connecting line
-                suppressedLine!.addLineToPoint(suppressedStart)
+                // continue an existing suppressed line path by adding connecting line if it's at a different y
+                let currentEnd = suppressedLine!.currentPoint
+                if abs(currentEnd.y - suppressedStart.y) > 4.0 {
+                    suppressedLine!.addLineToPoint(suppressedStart)
+                    //NSLog("suppressed line to \(suppressedStart)")
+                }
             }
             // add current line segment
             suppressedLine!.addLineToPoint(suppressedEnd)
+            //NSLog("suppressed line to \(suppressedEnd)")
             if finish {
-                drawSuppressedLine(suppressedLine!)
+                drawSuppressedLine()
+                //NSLog("suppressed line draw at finish!")
             }
         } else if suppressedLine != nil {
-            drawSuppressedLine(suppressedLine!)
-            suppressedLine = nil
+            drawSuppressedLine()
+            //NSLog("suppressed line draw!")
         }
     }
 }
