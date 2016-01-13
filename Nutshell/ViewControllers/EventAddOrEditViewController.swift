@@ -813,12 +813,13 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             ["Temp Basal", "Higher than scheduled", "2015-12-14T18:57:00.000Z", "brandon", ""],
             ["Temp Basal", "Shift in scheduled during temp", "2015-12-16T05:00:00.000Z", "brandon", ""],
             ["Interrupted Bolus", "Both regular and extended", "2015-11-17T04:00:00.000Z", "brandon", ""],
+            ["Different Time Zone", "Nutshell shows duplicate events, Blip does not", "2015-08-12T19:40:00.000Z", "brandon", ""],
             // larry account
             ["Overridden Bolus", "Suggested .15, delivered 1, suggested .2, delivered 2.5", "2015-08-15T04:47:00.000Z", "larry", ""],
             ["Overridden Bolus", "Suggested 1.2, overrode to .6, suggested 1.2, overrode to .8", "2015-08-09T19:14:00.000Z", "larry", ""],
             ["Interrupted Bolus", "3.8 delivered, 4.0 expected", "2015-08-09T11:03:21.000Z", "larry", ""],
             ["Interrupted Bolus", "Two 60 wizard bolus events, 1.4 (expected 6.1), 2.95", "2015-05-27T03:03:21.000Z", "larry", ""],
-            ["Interrupted Bolus", "2.45 delivered, 2.5 expected", "2015-06-26T06:45:21.000Z", "larry", ""],
+            ["Interrupted Bolus", "2.45 delivered, 2.5 expected", "2014-06-26T06:45:21.000Z", "larry", ""],
             // Demo
             ["Three tacos", "with 15 chips & salsa", "2015-08-20T10:03:21.000Z", "238 Garrett St", "ThreeTacosDemoPic"],
             ["Three tacos", "after ballet", "2015-08-09T19:42:40.000Z", "238 Garrett St", "applejuicedemopic"],

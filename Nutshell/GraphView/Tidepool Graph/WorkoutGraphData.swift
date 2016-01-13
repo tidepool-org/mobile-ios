@@ -75,7 +75,9 @@ class WorkoutGraphDataLayer: GraphDataLayer {
         } catch let error as NSError {
             NSLog("Error: \(error)")
         }
-        NSLog("loaded \(dataArray.count) workout events")
+        if dataArray.count > 0 {
+            NSLog("loaded \(dataArray.count) workout events")
+        }
     }
 
     //

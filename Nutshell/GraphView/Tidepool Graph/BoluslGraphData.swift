@@ -149,7 +149,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             if layout.maxBolus < kBolusMinScaleValue {
                 layout.maxBolus = kBolusMinScaleValue
             }
-            NSLog("Prefetched \(dataArray.count) bolus items for graph")
+            //NSLog("Prefetched \(dataArray.count) bolus items for graph")
         }
         
         dataArray = []
@@ -167,7 +167,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                 }
             }
         }
-        NSLog("Copied \(dataArray.count) bolus items from graph cache for slice at offset \(dataLayerOffset/3600) hours")
+        //NSLog("Copied \(dataArray.count) bolus items from graph cache for slice at offset \(dataLayerOffset/3600) hours")
         
     }
 
@@ -217,7 +217,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             // See if there is a corresponding wizard datapoint
             let wizardPoint = getWizardForBolusId(bolus.id)
             if let wizardPoint = wizardPoint {
-                NSLog("found wizard with carb \(wizardPoint.value) for bolus of value \(bolusValue)")
+                //NSLog("found wizard with carb \(wizardPoint.value) for bolus of value \(bolusValue)")
                 if let recommended = wizardPoint.recommendedNet {
                     if recommended != bolusValue {
                         override = true
@@ -282,10 +282,10 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                     let originalRectHeight = ceil(pixelsPerValue * (originalValue - bolusValue))
 
                     // alt 1: draw light colored blue, though this blends with basal rect color!
-                    let originalRect2 = CGRect(x: rectLeft, y: originalYOffset, width: kBolusRectWidth, height: originalRectHeight)
-                    let originalRectPath2 = UIBezierPath(rect: originalRect2)
-                    kBolusOverrideRectColor.setFill()
-                    originalRectPath2.fill()
+                    //let originalRect2 = CGRect(x: rectLeft, y: originalYOffset, width: kBolusRectWidth, height: originalRectHeight)
+                    //let originalRectPath2 = UIBezierPath(rect: originalRect2)
+                    //kBolusOverrideRectColor.setFill()
+                    //originalRectPath2.fill()
 
                     // alt option: draw background colored border to separate the bolus from other objects
                     //layout.backgroundColor.setStroke()
@@ -402,8 +402,8 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
 
     private func drawBolusExtensionShape(originX: CGFloat, centerY: CGFloat, width: CGFloat, borderOnly: Bool = false) {
         let originY = centerY - (kExtensionEndshapeHeight/2.0)
-        var bottomLineY = centerY + (kExtensionLineHeight / 2.0)
-        var topLineY = centerY - (kExtensionLineHeight / 2.0)
+        let bottomLineY = centerY + (kExtensionLineHeight / 2.0)
+        let topLineY = centerY - (kExtensionLineHeight / 2.0)
         let rightSideX = originX + width
         
         //if borderOnly {
@@ -423,8 +423,8 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
         bezierPath.closePath()
         if borderOnly {
             // Alt 1: use light-color instead
-            kBolusOverrideRectColor.setFill()
-            bezierPath.fill()
+            //kBolusOverrideRectColor.setFill()
+            //bezierPath.fill()
             
             // Alt 2: use a border
             kBolusBlueRectColor.setStroke()

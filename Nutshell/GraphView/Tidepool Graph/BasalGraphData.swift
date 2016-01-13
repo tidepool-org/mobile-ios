@@ -119,7 +119,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
             if layout.maxBasal < kBasalMinScaleValue {
                 layout.maxBasal = kBasalMinScaleValue
             }
-            NSLog("Prefetched \(dataArray.count) basal items for graph")
+            //NSLog("Prefetched \(dataArray.count) basal items for graph")
         }
         
         dataArray = []

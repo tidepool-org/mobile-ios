@@ -61,7 +61,7 @@ class TidepoolGraphDataLayer: GraphDataLayer {
     
     func loadComplete() {
         let itemsLoaded = dataArray.count
-        NSLog("loaded \(itemsLoaded) \(typeString()) events")
+        //NSLog("loaded \(itemsLoaded) \(typeString()) events")
         if itemsLoaded > 0 {
             layout.dataDetected = true
         }
@@ -71,6 +71,7 @@ class TidepoolGraphDataLayer: GraphDataLayer {
         dataArray = []
         let earlyStartTime = loadStartTime()
         let lateEndTime = loadEndTime()
+        // TODO: adjust for time zone offset of meal here?
         
         do {
             let events = try DatabaseUtils.getTidepoolEvents(earlyStartTime, thruTime: lateEndTime, objectTypes: [typeString()])

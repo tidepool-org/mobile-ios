@@ -91,7 +91,7 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
         
         if dataPoint.value == 0.0 {
             // Don't plot nil or zero values - probably used for recommended bolus record!
-            NSLog("Skip plot of wizard with zero value!")
+            //NSLog("Skip plot of wizard with zero value!")
             return
         }
         
