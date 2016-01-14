@@ -237,9 +237,9 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             bolusValueRectPath.fill()
             
             // Alt option: Draw background colored border to separate the bolus from other objects
-            //layout.backgroundColor.setStroke()
-            //bolusValueRectPath.lineWidth = 1.0
-            //bolusValueRectPath.stroke()
+            layout.backgroundColor.setStroke()
+            bolusValueRectPath.lineWidth = 0.5
+            bolusValueRectPath.stroke()
 
             // Handle interrupted boluses
             if let expectedNormal = bolus.expectedNormal {
@@ -297,10 +297,10 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                     let originalRectPath = UIBezierPath(rect: originalRect)
                     kBolusBlueRectColor.setStroke()
                     originalRectPath.lineWidth = 1
-                    CGContextSaveGState(context)
-                    CGContextSetLineDash(context, 0, [2, 2], 2)
+                    originalRectPath.lineCapStyle = .Butt
+                    let pattern: [CGFloat] = [2.0, 2.0]
+                    originalRectPath.setLineDash(pattern, count: 2, phase: 0.0)
                     originalRectPath.stroke()
-                    CGContextRestoreGState(context)
                 }
                 if interrupted {
                     self.drawBolusInterruptBar(rectLeft, yOffset: yOriginOverrideIcon)
@@ -368,13 +368,14 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
         // Bar width matches width of bolus rect, height is 3.5 points
         let context = UIGraphicsGetCurrentContext()
         CGContextSaveGState(context)
-        CGContextTranslateCTM(context, xOffset, yOffset)
+        let barWidth = kBolusRectWidth - 1.0
+        CGContextTranslateCTM(context, xOffset + 0.5, yOffset)
         
         let bezierPath = UIBezierPath()
         bezierPath.moveToPoint(CGPointMake(0, 0))
         bezierPath.addLineToPoint(CGPointMake(0, 3.5))
-        bezierPath.addLineToPoint(CGPointMake(14, 3.5))
-        bezierPath.addLineToPoint(CGPointMake(14, 0))
+        bezierPath.addLineToPoint(CGPointMake(barWidth, 3.5))
+        bezierPath.addLineToPoint(CGPointMake(barWidth, 0))
         bezierPath.addLineToPoint(CGPointMake(0, 0))
         bezierPath.closePath()
         kBolusInterruptBarColor.setFill()
@@ -386,13 +387,14 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
         // Bar width is 3.5 points, height is same as extension end triangle, fits on the end of the delivered extension triangle
         let context = UIGraphicsGetCurrentContext()
         CGContextSaveGState(context)
-        CGContextTranslateCTM(context, xOffset, centerY-(kExtensionEndshapeHeight/2.0))
+        let barHeight = kExtensionEndshapeHeight - 1.0
+        CGContextTranslateCTM(context, xOffset, centerY-(barHeight/2.0))
         
         let bezierPath = UIBezierPath()
         bezierPath.moveToPoint(CGPointMake(0, 0))
         bezierPath.addLineToPoint(CGPointMake(3.5, 0))
-        bezierPath.addLineToPoint(CGPointMake(3.5, kExtensionEndshapeHeight))
-        bezierPath.addLineToPoint(CGPointMake(0, kExtensionEndshapeHeight))
+        bezierPath.addLineToPoint(CGPointMake(3.5, barHeight))
+        bezierPath.addLineToPoint(CGPointMake(0, barHeight))
         bezierPath.addLineToPoint(CGPointMake(0, 0))
         bezierPath.closePath()
         kBolusInterruptBarColor.setFill()
@@ -400,16 +402,12 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
         CGContextRestoreGState(context)
     }
 
-    private func drawBolusExtensionShape(originX: CGFloat, centerY: CGFloat, width: CGFloat, borderOnly: Bool = false) {
+    private func drawBolusExtensionShape(originX: CGFloat, var centerY: CGFloat, width: CGFloat, borderOnly: Bool = false) {
+        centerY = round(centerY)
         let originY = centerY - (kExtensionEndshapeHeight/2.0)
         let bottomLineY = centerY + (kExtensionLineHeight / 2.0)
         let topLineY = centerY - (kExtensionLineHeight / 2.0)
         let rightSideX = originX + width
-        
-        //if borderOnly {
-        //    topLineY -= 0.5
-        //    bottomLineY += 0.5
-        //}
         
         //// Bezier Drawing
         let bezierPath = UIBezierPath()
@@ -429,10 +427,10 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             // Alt 2: use a border
             kBolusBlueRectColor.setStroke()
             bezierPath.lineWidth = 1
-            CGContextSaveGState(context)
-            CGContextSetLineDash(context, 0, [2, 2], 2)
+            bezierPath.lineCapStyle = .Butt
+            let pattern: [CGFloat] = [2.0, 2.0]
+            bezierPath.setLineDash(pattern, count: 2, phase: 0.0)
             bezierPath.stroke()
-            CGContextRestoreGState(context)
         } else {
             kBolusBlueRectColor.setFill()
             bezierPath.fill()

@@ -190,20 +190,13 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
     }
     
     private func drawSuppressedLine() {
-        let context = UIGraphicsGetCurrentContext()
         if let linePath = suppressedLine {
-            let lineWidth: CGFloat = 2.0
-            linePath.miterLimit = 4;
-            linePath.lineCapStyle = .Square;
-            linePath.lineJoinStyle = .Round;
-            linePath.usesEvenOddFillRule = true;
-            
             kBasalDarkBlueRectColor.setStroke()
-            linePath.lineWidth = lineWidth
-            CGContextSaveGState(context)
-            CGContextSetLineDash(context, 0, [2, 4], 2)
+            linePath.lineWidth = 2.0
+            linePath.lineCapStyle = .Square // note this requires pattern change from 2, 2 to 2, 4!
+            let pattern: [CGFloat] = [2.0, 4.0]
+            linePath.setLineDash(pattern, count: 2, phase: 0.0)
             linePath.stroke()
-            CGContextRestoreGState(context)
             suppressedLine = nil
         }
     }
@@ -232,7 +225,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
                 let currentEnd = suppressedLine!.currentPoint
                 if abs(currentEnd.y - suppressedStart.y) > 4.0 {
                     suppressedLine!.addLineToPoint(suppressedStart)
-                    //NSLog("suppressed line to \(suppressedStart)")
+                    NSLog("suppressed line to \(suppressedStart)")
                 }
             }
             // add current line segment

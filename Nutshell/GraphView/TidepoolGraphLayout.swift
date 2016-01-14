@@ -137,15 +137,17 @@ class TidepoolGraphLayout: GraphLayout {
         self.axesLabelTextColor = UIColor(hex: 0x58595B)
         self.axesLabelTextFont = Styles.smallRegularFont
         
+        let graphViewHeight = ceil(graphViewSize.height) // often this is fractional
+        
         // Tweak: if height is less than 320 pixels, let the wizard circles drift up into the low area of the blood glucose data since that should be clear
-        let wizardHeight = graphViewSize.height < 320.0 ? 0.0 : kGraphWizardHeight
+        let wizardHeight = graphViewHeight < 320.0 ? 0.0 : kGraphWizardHeight
 
         // The pie to divide is what's left over after removing constant height areas
-        let graphHeight = graphViewSize.height - headerHeight - wizardHeight
+        let graphHeight = graphViewHeight - headerHeight - wizardHeight
         
         // Put the workout data at the top, over the X-axis
         yTopOfWorkout = 2.0
-        yBottomOfWorkout = graphViewSize.height
+        yBottomOfWorkout = graphViewHeight
         yPixelsWorkout = headerHeight - 4.0
         
         // The largest section is for the glucose readings just below the header
@@ -159,7 +161,7 @@ class TidepoolGraphLayout: GraphLayout {
         
         // At the bottom are the bolus and basal readings
         self.yTopOfBolus = self.yBottomOfWizard + kGraphWizardBaseOffset
-        self.yBottomOfBolus = graphViewSize.height
+        self.yBottomOfBolus = graphViewHeight
         self.yPixelsBolus = self.yBottomOfBolus - self.yTopOfBolus
         
         // Basal values sit just below the bolus readings

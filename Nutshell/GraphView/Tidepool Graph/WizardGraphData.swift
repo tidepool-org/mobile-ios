@@ -114,7 +114,7 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
             wizardOval.fill()
             // Draw background colored border to separate the circle from other objects
             layout.backgroundColor.setStroke()
-            wizardOval.lineWidth = 1.5
+            wizardOval.lineWidth = 0.5
             wizardOval.stroke()
             
             // Label Drawing
