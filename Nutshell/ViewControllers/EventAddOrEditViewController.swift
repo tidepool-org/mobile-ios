@@ -17,6 +17,7 @@
 import UIKit
 import CoreData
 import Photos
+import MobileCoreServices
 
 class EventAddOrEditViewController: BaseUIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
@@ -59,6 +60,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     private var eventTime = NSDate()
     private var pictureImageURLs: [String] = []
 
+    @IBOutlet weak var bottomSectionContainer: UIView!
     //
     // MARK: - Base methods
     //
@@ -118,6 +120,15 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         // Deal with possible delete/edit of photo from viewer...
         if segue.identifier == EventViewStoryboard.SegueIdentifiers.UnwindSegueFromShowPhoto {
             if let photoVC = segue.sourceViewController as? ShowPhotoViewController {
+                // handle the case of a new photo replacing a new (not yet saved) photo: the older one should be immediately deleted since will be no reference to it left!
+                for url in pictureImageURLs {
+                    if !preExistingPhoto(url) {
+                        if !photoVC.photoURLs.contains(url) {
+                            NutUtils.deleteLocalPhoto(url)
+                        }
+                    }
+                }
+                // new pending list of photos...
                 pictureImageURLs = photoVC.photoURLs
                 configurePhotos()
                 updateSaveButtonState()
@@ -463,10 +474,57 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if pictureUrlEmptySlots() == 0 {
             simpleInfoAlert(NSLocalizedString("photoSlotsFullTitle", comment:"No empty photo slot"), alertMessage: NSLocalizedString("photoSlotsFullMessage", comment:"Three photos are supported. Please discard one before adding a new photo."))
         } else {
+            //let pickerC = UIImagePickerController()
+            //pickerC.delegate = self
+            //self.presentViewController(pickerC, animated: true, completion: nil)
+            showPhotoActionSheet()
+        }
+    }
+
+    func showPhotoActionSheet() {
+        let photoActionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        photoActionSheet.modalPresentationStyle = .Popover
+
+        photoActionSheet.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+            return
+        }))
+
+        photoActionSheet.addAction(UIAlertAction(title: "Photo Library", style: .Default, handler: { Void in
             let pickerC = UIImagePickerController()
             pickerC.delegate = self
             self.presentViewController(pickerC, animated: true, completion: nil)
+        }))
+        
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            photoActionSheet.addAction(UIAlertAction(title: "Take Photo", style: .Default, handler: { Void in
+                let pickerC = UIImagePickerController()
+                pickerC.delegate = self
+                pickerC.sourceType = UIImagePickerControllerSourceType.Camera
+                pickerC.mediaTypes = [kUTTypeImage as String]
+                self.presentViewController(pickerC, animated: true, completion: nil)
+            }))
         }
+        
+        if let popoverController = photoActionSheet.popoverPresentationController {
+            popoverController.sourceView = self.photoIconButton
+            popoverController.sourceRect = self.photoIconButton.bounds
+        }
+        
+        // The following hack might be used to place a collection view of photos atop the alert: note this only works for Alert style, not ActionSheet...
+//        let backImage = Styles.backgroundImageofSize(CGSize(width: 100, height: 100), style: "darkBackground")
+//        photoActionSheet.addTextFieldWithConfigurationHandler() { (textField) -> Void in
+//            let photoCollectContainer = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+//            photoCollectContainer.backgroundColor = UIColor.grayColor()
+//            textField.font = UIFont.systemFontOfSize(96)
+//            textField.text = ""
+//            textField.borderStyle = UITextBorderStyle.None
+//            textField.background = backImage
+//            textField.enabled = false
+//            textField.addSubview(photoCollectContainer)
+//            NSLog("configure here")
+//        }
+        
+        self.presentViewController(photoActionSheet, animated: true, completion: nil)
     }
 
     //
@@ -477,10 +535,21 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         self.dismissViewControllerAnimated(true, completion: nil)
         print(info)
         
-        if let photoUrl = info[UIImagePickerControllerReferenceURL] as? NSURL {
-            appendPictureUrl(photoUrl.absoluteString)
-            updateSaveButtonState()
-            configurePhotos()
+        if let photoImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            //let compressedImage = NutUtils.compressImage(photoImage)
+            let photoUrl = NutUtils.urlForNewPhoto()
+            if let filePath = NutUtils.filePathForPhoto(photoUrl) {
+                // NOTE: we save photo with high compression, typically 0.2 to 0.4 MB
+                if let photoData = UIImageJPEGRepresentation(photoImage, 0.1) {
+                    let savedOk = photoData.writeToFile(filePath, atomically: true)
+                    if !savedOk {
+                        NSLog("Failed to save photo successfully!")
+                    }
+                    appendPictureUrl(photoUrl)
+                    updateSaveButtonState()
+                    configurePhotos()
+                }
+            }
         }
     }
     
@@ -575,6 +644,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             mealItem.time = eventTime
             mealItem.notes = notes
             mealItem.location = location
+            
+            // first delete any photos going away...
+            for url in mealItem.photoUrlArray() {
+                if !pictureImageURLs.contains(url) {
+                    NutUtils.deleteLocalPhoto(url)
+                }
+            }
+            // now update the event...
             mealItem.photo = itemToImageUrl(0)
             mealItem.photo2 = itemToImageUrl(1)
             mealItem.photo3 = itemToImageUrl(2)
@@ -669,7 +746,27 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         
     }
     
+    private func preExistingPhoto(url: String) -> Bool {
+        var preExisting = false
+        // if we are editing a current event, don't delete the photo if it already exists in the event
+        if let eventItem = eventItem {
+            preExisting = eventItem.photoUrlArray().contains(url)
+        }
+        return preExisting
+    }
+    
+    /// Delete new photos we may have created so we don't leave them orphaned in the local file system.
+    private func deleteNewPhotos() {
+        for url in pictureImageURLs {
+            if !preExistingPhoto(url) {
+                NutUtils.deleteLocalPhoto(url)
+            }
+        }
+        pictureImageURLs = []
+    }
+    
     private func deleteItemAndReturn(eventItem: NutEventItem, eventGroup: NutEvent) {
+        // TODO: deleteItem handles getting rid of any photos in the event. What if we have added new photos and now want to delete the item?
         if eventItem.deleteItem() {
             // now remove it from the group
             eventGroup.itemArray = eventGroup.itemArray.filter() {
@@ -681,9 +778,10 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             } else {
                 self.performSegueWithIdentifier("unwindSequeToEventGroup", sender: self)
             }
+        } else {
+            // TODO: handle delete error?
+            NSLog("Error: Failed to delete item!")
         }
-        // TODO: handle delete error?
-        NSLog("Error: Failed to delete item!")
     }
     
     //
@@ -706,6 +804,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             return
         }))
         alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+            self.deleteNewPhotos()
             self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
             self.dismissViewControllerAnimated(true, completion: nil)
         }))

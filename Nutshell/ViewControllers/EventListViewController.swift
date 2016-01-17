@@ -229,6 +229,46 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         
         sortedNutEvents = nutEvents.sort() { $0.1.mostRecent.compare($1.1.mostRecent) == NSComparisonResult.OrderedDescending }
         updateFilteredAndReload()
+        // One time orphan check after application load
+        EventListViewController.checkAndDeleteOrphans(sortedNutEvents)
+    }
+    
+    static var _checkedForOrphanPhotos = false
+    class func checkAndDeleteOrphans(allNutEvents: [(String, NutEvent)]) {
+        if _checkedForOrphanPhotos {
+            return
+        }
+        _checkedForOrphanPhotos = true
+        if let photoDirPath = NutUtils.photosDirectoryPath() {
+            var allLocalPhotos = [String: Bool]()
+            let fm = NSFileManager.defaultManager()
+            do {
+                let dirContents = try fm.contentsOfDirectoryAtPath(photoDirPath)
+                NSLog("Photos dir: \(dirContents)")
+                if !dirContents.isEmpty {
+                    for file in dirContents {
+                        allLocalPhotos[file] = false
+                    }
+                    for (_, nutEvent) in allNutEvents {
+                        for event in nutEvent.itemArray {
+                            for url in event.photoUrlArray() {
+                                if url.hasPrefix("file_") {
+                                    NSLog("\(NutUtils.photoInfo(url))")
+                                    allLocalPhotos[url] = true
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch let error as NSError {
+                NSLog("Error accessing photos at \(photoDirPath), error: \(error)")
+            }
+            let orphans = allLocalPhotos.filter() { $1 == false }
+            for (url, _) in orphans {
+                NSLog("Deleting orphaned photo: \(url)")
+                NutUtils.deleteLocalPhoto(url)
+            }
+        }
     }
     
     // MARK: - Search

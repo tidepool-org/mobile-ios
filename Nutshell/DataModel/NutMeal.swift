@@ -34,6 +34,15 @@ class NutMeal: NutEventItem {
     // MARK: - Overrides
     //
 
+    override func deleteItem() -> Bool {
+        // First delete any photos we have stored separately in the file system. Photos are associated with at most one Meal event, so if the meal event is deleted, the photo should also be deleted!
+        // TODO: when we sync meal events with Tidepool service, we'll need to be able to delete these events on the service as well!
+        for url in self.photoUrlArray() {
+            NutUtils.deleteLocalPhoto(url)
+        }
+        return super.deleteItem()
+    }
+    
     override func copyChanges() {
         if let meal = eventItem as? Meal {
             meal.location = location

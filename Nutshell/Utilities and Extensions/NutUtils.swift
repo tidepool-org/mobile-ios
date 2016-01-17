@@ -71,14 +71,93 @@ class NutUtils {
         return UIImage(data: imageData!)!
     }
     
+    class func photosDirectoryPath() -> String? {
+        let path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        var photoDirPath: String? = path + "/photos/" + NutDataController.controller().currentUserId! + "/"
+        
+        let fm = NSFileManager.defaultManager()
+        var dirExists = false
+        do {
+            _ = try fm.contentsOfDirectoryAtPath(photoDirPath!)
+            //NSLog("Photos dir: \(dirContents)")
+            dirExists = true
+        } catch let error as NSError {
+            NSLog("Need to create dir at \(photoDirPath), error: \(error)")
+        }
+        
+        if !dirExists {
+            do {
+                try fm.createDirectoryAtPath(photoDirPath!, withIntermediateDirectories: true, attributes: nil)
+            } catch let error as NSError {
+                NSLog("Failed to create dir at \(photoDirPath), error: \(error)")
+                photoDirPath = nil
+            }
+        }
+        return photoDirPath
+    }
+    
+    class func urlForNewPhoto() -> String {
+        let baseFilename = "file_" + NSUUID().UUIDString + ".jpg"
+        return baseFilename
+    }
+
+    class func filePathForPhoto(photoUrl: String) -> String? {
+        if let dirPath = NutUtils.photosDirectoryPath() {
+            return dirPath + photoUrl
+        }
+        return nil
+    }
+    
+    class func deleteLocalPhoto(url: String) {
+        if url.hasPrefix("file_") {
+            if let filePath = filePathForPhoto(url) {
+                let fm = NSFileManager.defaultManager()
+                do {
+                    try fm.removeItemAtPath(filePath)
+                    NSLog("Deleted photo: \(url)")
+                } catch let error as NSError {
+                    NSLog("Failed to delete photo at \(filePath), error: \(error)")
+                }
+            }
+        }
+    }
+
+    class func photoInfo(url: String) -> String {
+        var result = "url: " + url
+        if url.hasPrefix("file_") {
+            if let filePath = filePathForPhoto(url) {
+                let fm = NSFileManager.defaultManager()
+                do {
+                    let fileAttributes = try fm.attributesOfItemAtPath(filePath)
+                    result += "size: " + String(fileAttributes[NSFileSize])
+                    result += "created: " + String(fileAttributes[NSFileCreationDate])
+                } catch let error as NSError {
+                    NSLog("Failed to get attributes for file \(filePath), error: \(error)")
+                }
+            }
+        }
+        return result
+    }
+    
     class func loadImage(url: String, imageView: UIImageView) {
         if let image = UIImage(named: url) {
             imageView.image = image
             imageView.hidden = false
+        } else if url.hasPrefix("file_") {
+            if let filePath = filePathForPhoto(url) {
+                let image = UIImage(contentsOfFile: filePath)
+                if let image = image {
+                    imageView.hidden = false
+                    imageView.image = image
+                } else {
+                    NSLog("Failed to load photo from local file: \(url)!")
+                }
+            }
         } else {
             if let nsurl = NSURL(string:url) {
                 let fetchResult = PHAsset.fetchAssetsWithALAssetURLs([nsurl], options: nil)
                 if let asset = fetchResult.firstObject as? PHAsset {
+                    // TODO: move this to file system! Would need current event to update it as well!
                     var targetSize = imageView.frame.size
                     // bump up resolution...
                     targetSize.height *= 2.0
