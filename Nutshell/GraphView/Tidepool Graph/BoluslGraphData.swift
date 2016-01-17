@@ -84,7 +84,6 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
     private let kBolusBlueRectColor = Styles.blueColor
     private let kBolusOverrideIconColor = UIColor(hex: 0x0C6999)
     private let kBolusInterruptBarColor = Styles.peachColor
-    private let kBolusOverrideRectColor = Styles.lightBlueColor
     private let kBolusRectWidth: CGFloat = 14.0
     private let kBolusLabelToRectGap: CGFloat = 0.0
     private let kBolusLabelRectHeight: CGFloat = 12.0
@@ -236,7 +235,6 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             kBolusBlueRectColor.setFill()
             bolusValueRectPath.fill()
             
-            // Alt option: Draw background colored border to separate the bolus from other objects
             layout.backgroundColor.setStroke()
             bolusValueRectPath.lineWidth = 0.5
             bolusValueRectPath.stroke()
@@ -274,27 +272,18 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             if override  {
                 let originalYOffset = layout.yBottomOfBolus - ceil(pixelsPerValue * originalValue)
                 var yOriginOverrideIcon = originalYOffset
-                // if recommended value was higher than the bolus, first draw a light-colored rect at the recommended value
+                // if recommended value was higher than the bolus, first draw a light-colored rect with dashed outline at the recommended value
                 if originalValue > bolusValue {
                     yOriginOverrideIcon = yOriginBolusRect
-                    // comment the following to place the label on top of the bolus rect, over the recommended rect bottom
+                    // comment the following line to place the label on top of the bolus rect, over the recommended rect bottom
                     yOriginBolusRect = originalYOffset // bump to recommended height so label goes above this!
                     let originalRectHeight = ceil(pixelsPerValue * (originalValue - bolusValue))
-
-                    // alt 1: draw light colored blue, though this blends with basal rect color!
-                    //let originalRect2 = CGRect(x: rectLeft, y: originalYOffset, width: kBolusRectWidth, height: originalRectHeight)
-                    //let originalRectPath2 = UIBezierPath(rect: originalRect2)
-                    //kBolusOverrideRectColor.setFill()
-                    //originalRectPath2.fill()
-
-                    // alt option: draw background colored border to separate the bolus from other objects
-                    //layout.backgroundColor.setStroke()
-                    //originalRectPath2.lineWidth = 1.0
-                    //originalRectPath2.stroke()
-
-                    // alt 2: just draw dotted rect with no fill
                     let originalRect = CGRect(x: rectLeft+0.5, y: originalYOffset+0.5, width: kBolusRectWidth-1.0, height: originalRectHeight)
                     let originalRectPath = UIBezierPath(rect: originalRect)
+                    // fill with background color
+                    layout.backgroundColor.setFill()
+                    originalRectPath.fill()
+                    // then outline with a dashed line
                     kBolusBlueRectColor.setStroke()
                     originalRectPath.lineWidth = 1
                     originalRectPath.lineCapStyle = .Butt
@@ -420,11 +409,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
         bezierPath.addLineToPoint(CGPointMake(rightSideX, originY))
         bezierPath.closePath()
         if borderOnly {
-            // Alt 1: use light-color instead
-            //kBolusOverrideRectColor.setFill()
-            //bezierPath.fill()
-            
-            // Alt 2: use a border
+            // use a border, with no fill
             kBolusBlueRectColor.setStroke()
             bezierPath.lineWidth = 1
             bezierPath.lineCapStyle = .Butt
