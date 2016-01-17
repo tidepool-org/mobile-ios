@@ -62,7 +62,7 @@ public class Styles: NSObject {
         // event list table scene
         "eventListCellTitle": (mediumSemiboldFont, altDarkGreyColor),
         "eventListCellLocation": (smallSemiboldFont, altDarkGreyColor),
-        "eventListCellRepeatCount": (smallBoldFont, altDarkGreyColor),
+        "eventListCellRepeatCount": (mediumSemiboldFont, altDarkGreyColor),
         "searchPlaceholder": (mediumLightFont, blackColor),
         "searchText": (largeRegularFont, blackColor),
         // grouped event list table scene

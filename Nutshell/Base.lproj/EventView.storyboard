@@ -187,8 +187,8 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="x 4" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AXm-4M-f3M" userLabel="repeatCountLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="314" y="20" width="17" height="17"/>
-                                                            <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="12"/>
+                                                            <rect key="frame" x="307" y="16" width="24" height="24"/>
+                                                            <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                             <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <userDefinedRuntimeAttributes>
@@ -225,6 +225,7 @@
                                                         <constraint firstItem="qgH-gX-5GL" firstAttribute="leading" secondItem="UEv-bo-MOc" secondAttribute="leading" constant="46" id="rG8-Xk-9IT"/>
                                                         <constraint firstItem="AXm-4M-f3M" firstAttribute="centerY" secondItem="wlm-Sg-gWn" secondAttribute="centerY" id="s6T-ra-BZV"/>
                                                         <constraint firstAttribute="bottomMargin" secondItem="U9L-Zb-tOH" secondAttribute="bottom" constant="12" id="x7u-iC-K8F"/>
+                                                        <constraint firstItem="AXm-4M-f3M" firstAttribute="centerY" secondItem="VI8-TR-I9h" secondAttribute="centerY" id="yLm-Zn-Mqj"/>
                                                     </constraints>
                                                     <variation key="default">
                                                         <mask key="constraints">
@@ -1975,7 +1976,7 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="vDO-8u-VmA"/>
-        <segue reference="Yx2-qa-hve"/>
+        <segue reference="dFt-cX-XeW"/>
+        <segue reference="4IF-4C-2rf"/>
     </inferredMetricsTieBreakers>
 </document>
