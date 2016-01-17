@@ -803,36 +803,6 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="286"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rb4-Ot-jtC" userLabel="ZoomInLargeHitArea">
-                                                <rect key="frame" x="12" y="218" width="42" height="32"/>
-                                                <connections>
-                                                    <action selector="zoomInButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="2fk-NV-ODv"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ypb-MT-7BZ" userLabel="ZoomInButton">
-                                                <rect key="frame" x="22" y="228" width="22" height="22"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="22" id="1Vj-ek-yJs"/>
-                                                    <constraint firstAttribute="width" constant="22" id="7hJ-xG-FTV"/>
-                                                </constraints>
-                                                <state key="normal" image="increaseZoom"/>
-                                                <connections>
-                                                    <action selector="zoomInButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="XcA-VC-v6R"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qkI-Sp-hsq" userLabel="ZoomOutLargeHitArea">
-                                                <rect key="frame" x="12" y="250" width="42" height="32"/>
-                                                <connections>
-                                                    <action selector="zoomOutButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="6oW-BK-J6u"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xh7-4E-j8e" userLabel="ZoomOutButton">
-                                                <rect key="frame" x="22" y="250" width="22" height="22"/>
-                                                <state key="normal" image="decreaseZoom"/>
-                                                <connections>
-                                                    <action selector="zoomOutButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="vA8-Rg-ZYP"/>
-                                                </connections>
-                                            </button>
                                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cmJ-dI-KmZ" userLabel="MissingData">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="286"/>
                                                 <subviews>
@@ -904,28 +874,14 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="Xh7-4E-j8e" firstAttribute="leading" secondItem="Ypb-MT-7BZ" secondAttribute="leading" id="27w-uf-Bcr"/>
                                             <constraint firstItem="bkz-Fj-tdv" firstAttribute="leading" secondItem="INU-ti-JXM" secondAttribute="leading" id="2t4-Tr-mhN"/>
-                                            <constraint firstItem="rb4-Ot-jtC" firstAttribute="leading" secondItem="Ypb-MT-7BZ" secondAttribute="leading" constant="-10" id="EzH-NO-cvQ"/>
                                             <constraint firstAttribute="trailing" secondItem="bkz-Fj-tdv" secondAttribute="trailing" id="FR3-6r-CvL"/>
-                                            <constraint firstItem="Xh7-4E-j8e" firstAttribute="top" secondItem="Ypb-MT-7BZ" secondAttribute="bottom" id="GeX-3b-xXJ"/>
                                             <constraint firstItem="bkz-Fj-tdv" firstAttribute="top" secondItem="INU-ti-JXM" secondAttribute="top" id="H6s-4i-H94"/>
-                                            <constraint firstItem="Xh7-4E-j8e" firstAttribute="height" secondItem="Ypb-MT-7BZ" secondAttribute="height" id="HgO-z0-LMd"/>
-                                            <constraint firstItem="qkI-Sp-hsq" firstAttribute="leading" secondItem="Xh7-4E-j8e" secondAttribute="leading" constant="-10" id="Iuh-oj-hEH"/>
-                                            <constraint firstItem="Xh7-4E-j8e" firstAttribute="leading" secondItem="INU-ti-JXM" secondAttribute="leading" constant="22" id="K15-7t-yKQ"/>
-                                            <constraint firstItem="rb4-Ot-jtC" firstAttribute="trailing" secondItem="Ypb-MT-7BZ" secondAttribute="trailing" constant="10" id="KIy-W3-N6X"/>
-                                            <constraint firstItem="qkI-Sp-hsq" firstAttribute="top" secondItem="Xh7-4E-j8e" secondAttribute="top" id="NE3-8s-vuh"/>
                                             <constraint firstItem="cmJ-dI-KmZ" firstAttribute="leading" secondItem="INU-ti-JXM" secondAttribute="leading" id="ODb-WH-99X"/>
-                                            <constraint firstAttribute="bottom" secondItem="Xh7-4E-j8e" secondAttribute="bottom" constant="14" id="R0h-X9-VrR"/>
-                                            <constraint firstItem="rb4-Ot-jtC" firstAttribute="bottom" secondItem="Ypb-MT-7BZ" secondAttribute="bottom" id="TJn-zV-AjL"/>
                                             <constraint firstItem="cmJ-dI-KmZ" firstAttribute="top" secondItem="INU-ti-JXM" secondAttribute="top" id="Wb5-A1-Qd7"/>
-                                            <constraint firstItem="Xh7-4E-j8e" firstAttribute="width" secondItem="Ypb-MT-7BZ" secondAttribute="width" id="YaG-hJ-yZ1"/>
                                             <constraint firstAttribute="bottom" secondItem="cmJ-dI-KmZ" secondAttribute="bottom" id="ZeQ-NE-Nk2"/>
-                                            <constraint firstItem="rb4-Ot-jtC" firstAttribute="top" secondItem="Ypb-MT-7BZ" secondAttribute="top" constant="-10" id="eCY-Jh-JNJ"/>
-                                            <constraint firstItem="qkI-Sp-hsq" firstAttribute="bottom" secondItem="Xh7-4E-j8e" secondAttribute="bottom" constant="10" id="l7b-ew-tgq"/>
                                             <constraint firstAttribute="bottom" secondItem="bkz-Fj-tdv" secondAttribute="bottom" id="v4L-3N-SAI"/>
                                             <constraint firstAttribute="trailing" secondItem="cmJ-dI-KmZ" secondAttribute="trailing" id="vZs-7q-Irx"/>
-                                            <constraint firstItem="qkI-Sp-hsq" firstAttribute="trailing" secondItem="Xh7-4E-j8e" secondAttribute="trailing" constant="10" id="y5U-RD-bcf"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -981,8 +937,6 @@
                         <outlet property="nutCrackedLabel" destination="c32-24-Hp7" id="3xk-a1-qBU"/>
                         <outlet property="photoDisplayImageView" destination="4sc-ki-6ix" id="25x-RN-uNT"/>
                         <outlet property="topSectionContainer" destination="CGM-yQ-ne9" id="3zq-qw-jwW"/>
-                        <outlet property="zoomInButton" destination="Ypb-MT-7BZ" id="Fni-uM-kHp"/>
-                        <outlet property="zoomOutButton" destination="Xh7-4E-j8e" id="lmZ-i4-dfG"/>
                         <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSegueToCancel" unwindAction="cancel:" id="kPJ-Hz-YIi"/>
                         <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSegueToDone" unwindAction="done:" id="220-gi-taE"/>
                         <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSequeToEventList" unwindAction="nutEventChanged:" id="TzH-gF-xhj"/>
@@ -2004,8 +1958,6 @@
         <image name="backArrow" width="13" height="22"/>
         <image name="calendarIcon" width="15" height="17"/>
         <image name="cameraIcon" width="23" height="18"/>
-        <image name="decreaseZoom" width="22" height="22"/>
-        <image name="increaseZoom" width="22" height="22"/>
         <image name="menu-button" width="22" height="15"/>
         <image name="miniPicBackground" width="22" height="22"/>
         <image name="placeIcon" width="13" height="22"/>
