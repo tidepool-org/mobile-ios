@@ -199,7 +199,7 @@ class NutDataController
                     we.calories = workout.totalEnergyBurned?.doubleValueForUnit(HKUnit.kilocalorieUnit())
                     we.distance = workout.totalDistance?.doubleValueForUnit(HKUnit.mileUnit())
                     we.duration = workout.duration
-                    we.source = workout.source.name
+                    we.source = workout.sourceRevision.source.name
                     // NOTE: use the Open mHealth enum string here!
                     we.subType = Workout.enumStringForHKWorkoutActivityType(workout.workoutActivityType)
                     
