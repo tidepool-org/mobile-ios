@@ -193,7 +193,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     
     private func configureNutCracked() {
         if let eventItem = eventItem {
-            nutCrackedLabel.text = eventItem.nutCracked ? NSLocalizedString("successButtonTitle", comment:"Success!") : NSLocalizedString("nutCrackedButtonTitle", comment:"Nut cracked?")
+            nutCrackedLabel.text = eventItem.nutCracked ? NSLocalizedString("successButtonTitle", comment:"Success!") : NSLocalizedString("nutCrackedButtonTitle", comment:"Success?")
             nutCrackedButton.selected = eventItem.nutCracked
         }
     }

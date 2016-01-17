@@ -48,7 +48,7 @@
  */
 
 "successButtonTitle" = "Success!";
-"nutCrackedButtonTitle" = "Nut cracked?";
+"nutCrackedButtonTitle" = "Success?";
 
 /*
     Add/edit event view controller
