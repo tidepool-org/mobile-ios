@@ -90,12 +90,11 @@ public class Styles: NSObject {
         "addEditViewLocation": (smallRegularFont, whiteColor),
         "addEditViewSaveButton": (mediumBoldFont, whiteColor),
         // account configuration scene
-        "accountSettingUserName": (mediumLargeBoldFont, blackColor),
-        "accountSettingItem": (mediumRegularFont, darkGreyColor),
-        "accountSettingItemSmall": (mediumSmallRegularFont, darkGreyColor),
-        "largeTargetValueInactive": (veryLargeSemiboldFont, mediumLightGreyColor),
-        "largeTargetLow": (veryLargeSemiboldFont, peachColor),
-        "largeTargetHigh": (veryLargeSemiboldFont, purpleColor),
+        "sidebarSettingUserName": (mediumLargeBoldFont, blackColor),
+        "sidebarSettingItem": (mediumRegularFont, darkGreyColor),
+        "sidebarSettingItemSmall": (mediumSmallRegularFont, darkGreyColor),
+        "sidebarLogoutButton": (mediumSemiboldFont, darkGreyColor),
+        "sidebarOtherLinks": (mediumVerySmallSemiboldFont, darkGreyColor),
     ]
 
     class func backgroundImageofSize(size: CGSize, style: String) -> UIImage? {

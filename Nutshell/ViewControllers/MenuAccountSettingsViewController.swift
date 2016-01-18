@@ -39,7 +39,13 @@ class MenuAccountSettingsViewController: UIViewController {
         privacyTextField.attributedText = attributedString
         
     }
-    
+
+    @IBAction func supportButtonHandler(sender: AnyObject) {
+        let email = "support@tidepool.org"
+        let url = NSURL(string: "mailto:\(email)")
+        UIApplication.sharedApplication().openURL(url!)
+    }
+
     func menuWillOpen() {
         // Late binding here because profile fetch occurs after login complete!
         usernameLabel.text = NutDataController.controller().userFullName

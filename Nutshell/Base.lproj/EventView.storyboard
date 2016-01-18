@@ -30,6 +30,7 @@
             <string>OpenSans</string>
             <string>OpenSans</string>
             <string>OpenSans</string>
+            <string>OpenSans</string>
         </mutableArray>
         <mutableArray key="OpenSans-Semibold.ttf">
             <string>OpenSans-Semibold</string>
@@ -1782,20 +1783,20 @@
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="accountSettingUserName"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingUserName"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="john@doe.com" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9sA-Dh-xzl">
-                                                        <rect key="frame" x="0.0" y="59" width="375" height="21"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <rect key="frame" x="0.0" y="59" width="375" height="24"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M98-PL-e0L" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="157" y="95" width="62" height="36"/>
+                                                        <rect key="frame" x="157" y="98" width="62" height="36"/>
                                                         <state key="normal" title="Log out"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="advisoryText"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarLogoutButton"/>
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="logOutTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="Pyd-hq-8ve"/>
@@ -1847,11 +1848,11 @@
                                                     <constraint firstAttribute="height" constant="37" id="DpS-4Q-1po"/>
                                                     <constraint firstAttribute="width" constant="225" id="Vyn-Ff-NBK"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="13"/>
+                                                <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="9g5-rw-efz">
-                                                <rect key="frame" x="248" y="74" width="51" height="31"/>
+                                                <rect key="frame" x="238" y="72" width="51" height="31"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="49" id="oVg-zV-LGc"/>
                                                 </constraints>
@@ -1860,23 +1861,39 @@
                                                 </connections>
                                             </switch>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Link to Apple Health" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2n-bT-OD5" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="80" y="77" width="160" height="24"/>
+                                                <rect key="frame" x="89" y="77" width="141" height="21"/>
                                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
                                                 <color key="textColor" red="0.29019607843137252" green="0.29019607843137252" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="accountSettingItem"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingItemSmall"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kci-7b-geJ" userLabel="supportMailToLink" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="326" width="375" height="37"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="37" id="y7L-nb-Mhn"/>
+                                                </constraints>
+                                                <state key="normal" title="Tidepool Support"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarOtherLinks"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="supportButtonHandler:" destination="jOa-f6-dl3" eventType="touchUpInside" id="327-b0-GWQ"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="M2n-bT-OD5" firstAttribute="centerY" secondItem="9g5-rw-efz" secondAttribute="centerY" id="3jW-ih-RHr"/>
+                                            <constraint firstAttribute="trailing" secondItem="Kci-7b-geJ" secondAttribute="trailing" id="7Cw-2K-HjL"/>
                                             <constraint firstItem="9g5-rw-efz" firstAttribute="leading" secondItem="M2n-bT-OD5" secondAttribute="trailing" constant="8" id="RTX-7V-4uf"/>
                                             <constraint firstItem="Vvg-5y-QfG" firstAttribute="top" secondItem="9Ls-ZC-LIS" secondAttribute="top" constant="27" id="WhU-pB-Snh"/>
                                             <constraint firstItem="M2n-bT-OD5" firstAttribute="top" secondItem="Vvg-5y-QfG" secondAttribute="bottom" constant="13" id="gTs-xs-bad"/>
                                             <constraint firstItem="Vvg-5y-QfG" firstAttribute="centerX" secondItem="9Ls-ZC-LIS" secondAttribute="centerX" id="hCu-aM-LeR"/>
                                             <constraint firstItem="M2n-bT-OD5" firstAttribute="centerX" secondItem="Vvg-5y-QfG" secondAttribute="centerX" constant="-28" id="hw7-2V-IuD"/>
+                                            <constraint firstAttribute="bottom" secondItem="Kci-7b-geJ" secondAttribute="bottom" id="imd-cV-rhn"/>
+                                            <constraint firstItem="Kci-7b-geJ" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" id="xit-8Z-pWK"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7mt-7W-tG5" userLabel="bottomSettingsView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
@@ -1891,7 +1908,7 @@
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="accountSettingItemSmall"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingItemSmall"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                 </subviews>

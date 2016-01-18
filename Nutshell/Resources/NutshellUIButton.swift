@@ -17,6 +17,24 @@ import UIKit
 
 // This intermediate class is used to enable UITextField views in storyboards to have fonts and backgrounds determined by NutshellStyles data.
 
+@IBDesignable class NutshellSimpleUIButton: UIButton {
+    
+    @IBInspectable var usage: String = "" {
+        didSet {
+            updateStyling()
+        }
+    }
+    
+    private func updateStyling() {
+        if let (font, textColor) = Styles.usageToFontWithColor[usage] {
+            if let titleLabel = titleLabel {
+                titleLabel.textColor = textColor
+                titleLabel.font = font
+            }
+        }
+    }
+}
+
 @IBDesignable class NutshellUIButton: UIButton {
     
     @IBInspectable var usage: String = "" {
