@@ -581,7 +581,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 NSLog("title changed, enabling save")
                 return true
             }
-            if eventItem.notes != notesTextField.text {
+            if eventItem.notes != notesTextField.text && notesTextField.text != Styles.placeholderNotesString {
                 NSLog("notes changed, enabling save")
                 return true
             }
