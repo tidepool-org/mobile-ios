@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MenuAccountSettingsViewController: UIViewController {
+class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var loginAccount: UILabel!
     @IBOutlet weak var versionString: NutshellUILabel!
@@ -37,9 +37,9 @@ class MenuAccountSettingsViewController: UIViewController {
         attributedString.addAttribute(NSLinkAttributeName, value: NSURL(string: "http://developer.tidepool.io/privacy-policy/")!, range: NSRange(location: 0, length: 7))
         attributedString.addAttribute(NSLinkAttributeName, value: NSURL(string: "http://developer.tidepool.io/terms-of-use/")!, range: NSRange(location: attributedString.length - 12, length: 12))
         privacyTextField.attributedText = attributedString
-        
+        privacyTextField.delegate = self
     }
-
+    
     @IBAction func supportButtonHandler(sender: AnyObject) {
         let email = "support@tidepool.org"
         let url = NSURL(string: "mailto:\(email)")
@@ -60,6 +60,7 @@ class MenuAccountSettingsViewController: UIViewController {
     }
     
     @IBAction func logOutTapped(sender: AnyObject) {
+        APIConnector.connector().trackMetric("Clicked Log Out (Hamburger)")
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.logout()
     }
@@ -111,5 +112,18 @@ class MenuAccountSettingsViewController: UIViewController {
         }
     }
 
+    //
+    // MARK: - UITextView delegate
+    //
+    
+    // Intercept links in order to track metrics...
+    func textView(textView: UITextView, shouldInteractWithURL URL: NSURL, inRange characterRange: NSRange) -> Bool {
+        if URL.absoluteString.containsString("privacy-policy") {
+            APIConnector.connector().trackMetric("Clicked privacy (Hamburger)")
+        } else {
+            APIConnector.connector().trackMetric("Clicked Terms of Use (Hamburger)")
+        }
+        return true
+    }
     
 }

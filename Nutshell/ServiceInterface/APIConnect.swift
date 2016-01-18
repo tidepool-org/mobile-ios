@@ -206,6 +206,7 @@ class APIConnector {
  
     func fetchProfile(completion: (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user profile
+        // format is like: https://api.tidepool.org/metadata/f934a287c4/profile
         let endpoint = "metadata/" + NutDataController.controller().currentUserId! + "/profile"
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         sendRequest(Method.GET, endpoint: endpoint).responseJSON { (request, response, result) -> Void in
@@ -216,6 +217,43 @@ class APIConnector {
             } else {
                 // Failure
                 completion(Result.Failure(nil, result.error!))
+            }
+        }
+    }
+    
+    // When offline just stash metrics in metricsCache array
+    private var metricsCache: [String] = []
+    func trackMetric(metric: String) {
+        // Set our endpoint for the event tracking
+        // Format: https://api.tidepool.org/metrics/thisuser/urchin%20-%20Remember%20Me%20Used?source=urchin&sourceVersion=1.1
+        // Format: https://api.tidepool.org/metrics/thisuser/nutshell-Viewed%20Hamburger%20Menu?source=nutshell&sourceVersion=0%2E8%2E1
+
+        metricsCache.append(metric)
+        if !serviceAvailable() {
+            NSLog("Offline: trackMetric stashed: \(metric)")
+            return
+        }
+        
+        let nextMetric = metricsCache.removeFirst()
+        let endpoint = "metrics/thisuser/nutshell-" + nextMetric
+        let parameters = ["source": "nutshell", "sourceVersion": UIApplication.appVersion()]
+
+        sendRequest(Method.GET, endpoint: endpoint, parameters: parameters).responseJSON { (request, response, result) -> Void in
+            
+            if let response = response {
+                if response.statusCode == 200 {
+                    NSLog("Tracked metric: \(metric)")
+                    if !self.metricsCache.isEmpty {
+                        self.trackMetric(self.metricsCache.removeFirst())
+                    }
+                } else {
+                    NSLog("Failed status code: \(response.statusCode) for tracking metric: \(metric)")
+                    if let error = result.error as? NSError {
+                        NSLog("NSError: \(error)")
+                    }
+                }
+            } else {
+                NSLog("Invalid response for tracking metric")
             }
         }
     }
@@ -279,6 +317,7 @@ class APIConnector {
     func getReadOnlyUserData(startDate: NSDate? = nil, endDate: NSDate? = nil,completion: (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user data
         // TODO: centralize define of read-only events!
+        // request format is like: https://api.tidepool.org/data/f934a287c4?endDate=2015-11-17T08%3A00%3A00%2E000Z&startDate=2015-11-16T12%3A00%3A00%2E000Z&type=smbg%2Cbolus%2Ccbg%2Cwizard%2Cbasal
         let endpoint = "data/" + NutDataController.controller().currentUserId!
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         // TODO: Alamofire isn't escaping the periods, but service appears to expect this... right now I have Alamofire modified to do this.
@@ -298,12 +337,22 @@ class APIConnector {
                 let json = JSON(result.value!)
                 completion(Result.Success(json))
             } else {
-                // Failure
-                // TODO: Note we get here when no data is found as well - status code 200, NSCocoaErrorDomain Code 3840 "The operation couldn't be completed"
+                // Failure: typically, no data were found:
+                // Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.}
+                if let response = response {
+                    if response.statusCode != 200 {
+                        NSLog("Failure status code: \(response.statusCode) for getReadOnlyUserData")
+                    }
+                    // Otherwise, just indicates no data were found...
+                } else {
+                    NSLog("Invalid response for getReadOnlyUserData metric")
+                }
                 completion(Result.Failure(nil, result.error!))
             }
         }
     }
+    
+    
 
     func clearSessionToken() -> Void {
         NSUserDefaults.standardUserDefaults().removeObjectForKey(kSessionTokenDefaultKey)

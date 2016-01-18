@@ -138,6 +138,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
     func sideMenuDidOpen() {
         //NSLog("EventList sideMenuDidOpen")
         configureForMenuOpen(true)
+        APIConnector.connector().trackMetric("Viewed Hamburger Menu (Hamburger)")
     }
 
     //
