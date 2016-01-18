@@ -20,21 +20,18 @@
     Discard alert text: for edit and add item
  */
 
-"discardPhotoAlertTitle" = "Discard photo?";
-"discardPhotoAlertMessage" = "If you discard this photo, your photo will be lost.";
+"discardPhotoAlertTitle" = "Are you sure?";
+"discardPhotoAlertMessage" = "If you delete this photo, your photo will be lost.";
 
-"discardWorkoutAlertTitle" = "Discard workout?";
-"discardWorkoutAlertMessage" = "If you discard this workout, your workout will be lost.";
-"discardMealAlertTitle" = "Discard meal?";
-"discardMealAlertMessage" = "If you discard this meal, your meal will be lost.";
+"discardWorkoutAlertTitle" = "Are you sure?";
+"discardWorkoutAlertMessage" = "If you delete this workout, it will be gone forever.";
+"discardMealAlertTitle" = "Are you sure?";
+"discardMealAlertMessage" = "If you delete this meal, it will be gone forever.";
 
 
 "discardEditsAlertTitle" = "Discard changes?";
 "discardMealEditsAlertMessage" = "If you press discard, your changes to this meal will be lost.";
 "discardWorkoutEditsAlertMessage" = "If you press discard, your changes to this workout will be lost.";
-
-"closeMealAlertMessage" = "If you close this meal, your meal will be lost.";
-"closeWorkoutAlertMessage" = "If you close this workout, your workout will be lost.";
 
 "discardAlertCancel" = "Cancel";
 "discardAlertOkay" = "Discard";

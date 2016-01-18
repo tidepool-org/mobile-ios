@@ -380,11 +380,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         } else {
             // cancel of add
             if newEventChanged() {
-                var alertTitle = NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?")
-                var alertMessage = NSLocalizedString("closeMealAlertMessage", comment:"If you close this meal, your meal will be lost.")
+                var alertTitle = NSLocalizedString("discardMealAlertTitle", comment:"Are you sure?")
+                var alertMessage = NSLocalizedString("discardMealAlertMessage", comment:"If you delete this meal, it will be gone forever.")
                 if let _ = eventItem as? NutWorkout {
                     alertTitle = NSLocalizedString("discardWorkoutAlertTitle", comment:"Discard workout?")
-                    alertMessage = NSLocalizedString("closeWorkoutAlertMessage", comment:"If you close this workout, your workout will be lost.")
+                    alertMessage = NSLocalizedString("discardWorkoutAlertMessage", comment:"If you close this workout, your workout will be lost.")
                 }
                 alertOnCancelAndReturn(alertTitle, alertMessage: alertMessage)
             } else {
@@ -395,9 +395,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     
     @IBAction func deleteButtonHandler(sender: AnyObject) {
         // this is a delete for the role of editEvent
-        if let eventItem = eventItem, eventGroup = eventGroup {
-            alertOnDeleteAndReturn(eventItem, nutEvent: eventGroup)
-        }
+        alertOnDeleteAndReturn()
     }
     
     private func pictureUrlEmptySlots() -> Int {
@@ -687,7 +685,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     private func updateNewEvent() {
         if titleTextField.text!.localizedCaseInsensitiveCompare("testmode") == NSComparisonResult.OrderedSame  {
             AppDelegate.testMode = !AppDelegate.testMode
-            self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
             return
         }
 
@@ -695,7 +693,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             if #available(iOS 9, *) {
                 if !NutUtils.onIPad() {
                     AppDelegate.workoutInterfaceEnabled = !AppDelegate.workoutInterfaceEnabled
-                    self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+                    self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
                     return
                 }
             }
@@ -705,11 +703,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if titleTextField.text!.localizedCaseInsensitiveCompare("demo") == NSComparisonResult.OrderedSame {
             DatabaseUtils.deleteAllNutEvents()
             addDemoData()
-            self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
             return
         } else if titleTextField.text!.localizedCaseInsensitiveCompare("nodemo") == NSComparisonResult.OrderedSame {
             DatabaseUtils.deleteAllNutEvents()
-            self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
             return
         }
         
@@ -765,22 +763,30 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         pictureImageURLs = []
     }
     
-    private func deleteItemAndReturn(eventItem: NutEventItem, eventGroup: NutEvent) {
-        // TODO: deleteItem handles getting rid of any photos in the event. What if we have added new photos and now want to delete the item?
-        if eventItem.deleteItem() {
-            // now remove it from the group
-            eventGroup.itemArray = eventGroup.itemArray.filter() {
-                $0 != eventItem
-            }
-            // segue back to group or list, depending...
-            if eventGroup.itemArray.isEmpty {
-                self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+    private func deleteItemAndReturn() {
+        // first delete any new photos user may have added
+        deleteNewPhotos()
+        if let eventItem = eventItem, eventGroup = eventGroup {
+            if eventItem.deleteItem() {
+                // now remove it from the group
+                eventGroup.itemArray = eventGroup.itemArray.filter() {
+                    $0 != eventItem
+                }
+                
+                // mark it as deleted so controller we return to can handle correctly...
+                self.eventItem = nil
+                if eventGroup.itemArray.isEmpty {
+                    self.eventGroup = nil
+                    // segue back to home as there are no events remaining...
+                    self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+               } else {
+                    // segue back to home or group list viewer depending...
+                    self.performSegueWithIdentifier("unwindSegueToDoneItemDeleted", sender: self)
+                }
             } else {
-                self.performSegueWithIdentifier("unwindSequeToEventGroup", sender: self)
+                // TODO: handle delete error?
+                NSLog("Error: Failed to delete item!")
             }
-        } else {
-            // TODO: handle delete error?
-            NSLog("Error: Failed to delete item!")
         }
     }
     
@@ -811,23 +817,25 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
-    private func alertOnDeleteAndReturn(nutItem: NutEventItem, nutEvent: NutEvent) {
-        // use dialog to confirm delete with user!
-        var titleString = NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?")
-        var messageString = NSLocalizedString("discardMealAlertMessage", comment:"If you discard this meal, your meal will be lost.")
-        if let _ = nutItem as? NutWorkout {
-            titleString = NSLocalizedString("discardWorkoutAlertTitle", comment:"Discard workout?")
-            messageString = NSLocalizedString("discardWorkoutAlertMessage", comment:"If you discard this workout, your workout will be lost.")
+    private func alertOnDeleteAndReturn() {
+        if let nutItem = eventItem {
+            // use dialog to confirm delete with user!
+            var titleString = NSLocalizedString("discardMealAlertTitle", comment:"Are you sure?")
+            var messageString = NSLocalizedString("discardMealAlertMessage", comment:"If you delete this meal, it will be gone forever..")
+            if let _ = nutItem as? NutWorkout {
+                titleString = NSLocalizedString("discardWorkoutAlertTitle", comment:"Are you sure?")
+                messageString = NSLocalizedString("discardWorkoutAlertMessage", comment:"If you delete this workout, it will be gone forever.")
+            }
+            
+            let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+                return
+            }))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+                self.deleteItemAndReturn()
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
         }
-
-        let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
-            return
-        }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
-            self.deleteItemAndReturn(nutItem, eventGroup: nutEvent)
-        }))
-        self.presentViewController(alert, animated: true, completion: nil)
     }
 
     //
@@ -854,7 +862,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         NutUtils.delay(1.25) {
             if let newEventItem = self.newEventItem, eventGroup = self.eventGroup {
                 if newEventItem.nutEventIdString() != eventGroup.nutEventIdString() {
-                    self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+                    self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
                     return
                 }
             }

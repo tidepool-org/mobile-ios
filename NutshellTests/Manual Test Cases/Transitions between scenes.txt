@@ -1,0 +1,40 @@
+Test Cases for Scene Transitions
+
+These tests are for transitions between the event list (home) scene, group list scene, event detail scene, event add/edit scene, and photo view scene. (In progress).
+
+TRANSITIONS ON MEAL DELETION:
+TEST 1:
+- From event list scene, create a new meal.
+- View that meal; tap on meal to view; tap edit; tap trash icon
+- Verify: "Are you sure?", "If you delete this meal, it will be gone forever." alert is shown. Cancel should close alert, staying on edit meal.
+- Tap trash icon again, and this time tap discard.
+- Verify: with event gone, you are taken back to event list scene.
+
+TEST 2:
+- From event list view, create a new meal.
+- View that meal; tap "eat again" and create second meal
+- Verify: you are taken to detail scene for the new meal.
+- Edit, delete the new meal w/o returning to event list first.
+- Verify: you are taken to the event list scene, with item deleted.
+
+TRANSITIONS ON MEAL ADDITION:
+TEST 1:
+- From event list scene, create a new meal title A, notes 1.
+- View that meal; tap "eat again" and create second meal title A, notes 2.
+- Return to event list scene; tap A to go to group scene for A.
+- Tap "eat again?" to create a new meal, title it B, notes 1.
+- Verify: you are taken to the event group scene, for event B. Alternatively, might take you to event list...
+
+TRANSITIONS ON MEAL CHANGES:
+TEST 1:
+- From event list scene, create a new meal title A, notes 1.
+- View that meal; tap "eat again" and create second meal title A, notes 2.
+- Exit back to event list scene, tap the A "Nut" "event (which now has 2 meal events) to get to the group scene for A.
+- Tap meal 2 to view it, tap edit; change the title to B so the "Nut" event changes. Save.
+- Verify: you are taken back to the event view scene for B, note 2.
+- Tap back arrow.
+- Verify: you are taken to the group scene for "Nut" B, showing the single item B, note 2.
+- Note: It would be possible in the last step to take the user back to the event list view which would make some sense since there is now only a single item in the "Nut" event. However, for the scenario of someone deleting all events in a "Nut" event, this would be more awkward - they would repeatedly be going back to the group scene, picking the next event to view and delete, until all items are gone.
+
+TECH NOTES: The scenes flow from event list scene, to group list scene (if there are more than one events with the same title/location), to detail view scene. From any of these scenes you can add a new event; from the detail view scene you can edit/delete an event. You can't return to a scene you didn't go thru on the way to a scene: e.g., create a new item with the same title/location from the event detail scene for a nut event with only one item, resulting in viewing that new item. On return, you won't go to the group view scene because on the way to the detail scene you didn't originally go thru it.
+

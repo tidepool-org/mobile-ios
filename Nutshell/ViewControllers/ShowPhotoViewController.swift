@@ -92,7 +92,7 @@ class ShowPhotoViewController: UIViewController {
         if photoURLs.isEmpty {
             return
         }
-        let alert = UIAlertController(title: NSLocalizedString("discardPhotoAlertTitle", comment:"Discard photo?"), message: NSLocalizedString("discardPhotoAlertMessage", comment:"If you discard this photo, your photo will be lost."), preferredStyle: .Alert)
+        let alert = UIAlertController(title: NSLocalizedString("discardPhotoAlertTitle", comment:"Are you sure?"), message: NSLocalizedString("discardPhotoAlertMessage", comment:"If you delete this photo, your photo will be lost."), preferredStyle: .Alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
             return
         }))

@@ -591,7 +591,13 @@
                         </connections>
                     </tableView>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="gpn-pI-6nu"/>
+                    <navigationItem key="navigationItem" id="gpn-pI-6nu">
+                        <barButtonItem key="leftBarButtonItem" image="backArrow" id="Pir-Ij-wg5" userLabel="Bar button item">
+                            <connections>
+                                <action selector="backButtonHandler:" destination="gjn-FB-qdd" id="2kG-SW-avi"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
@@ -603,8 +609,8 @@
                         <outlet property="innerHeaderView" destination="oz1-hd-YVX" id="cNu-aa-0mH"/>
                         <outlet property="tableHeaderLocation" destination="SxI-OJ-qN3" id="CHZ-EG-cXp"/>
                         <outlet property="tableHeaderTitle" destination="Ptv-E0-A66" id="INm-mw-uf2"/>
-                        <segue destination="Q8R-td-OHu" kind="unwind" identifier="unwindSequeToEventList" unwindAction="nutEventChanged:" id="dAq-iI-8AI"/>
-                        <segue destination="Q8R-td-OHu" kind="unwind" identifier="unwindSegueToDone" unwindAction="done:" id="Lf0-GF-ZMV"/>
+                        <segue destination="Q8R-td-OHu" kind="unwind" identifier="unwindSegueToHome" unwindAction="home:" id="dAq-iI-8AI"/>
+                        <segue destination="Q8R-td-OHu" kind="unwind" identifier="unwindSegueToDone" unwindAction="done:" id="HVc-zu-Le5"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Y8-e3-eGs" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -938,9 +944,8 @@
                         <outlet property="nutCrackedLabel" destination="c32-24-Hp7" id="3xk-a1-qBU"/>
                         <outlet property="photoDisplayImageView" destination="4sc-ki-6ix" id="25x-RN-uNT"/>
                         <outlet property="topSectionContainer" destination="CGM-yQ-ne9" id="3zq-qw-jwW"/>
-                        <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSegueToCancel" unwindAction="cancel:" id="kPJ-Hz-YIi"/>
-                        <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSegueToDone" unwindAction="done:" id="220-gi-taE"/>
-                        <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSequeToEventList" unwindAction="nutEventChanged:" id="TzH-gF-xhj"/>
+                        <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSegueToHome" unwindAction="home:" id="2dM-WC-y11"/>
+                        <segue destination="wwi-fg-jwa" kind="unwind" identifier="unwindSegueToDone" unwindAction="done:" id="Zg4-R0-hag"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0lz-qm-Gfy" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1740,9 +1745,9 @@
                         <outlet property="titleHintLabel" destination="2gd-CX-jRH" id="aCz-il-Zk0"/>
                         <outlet property="titleTextField" destination="EOZ-el-4r9" id="7CS-fx-8cH"/>
                         <segue destination="O7p-z1-dYr" kind="unwind" identifier="unwindSegueToCancel" unwindAction="cancel:" id="HWs-0y-v5g"/>
-                        <segue destination="O7p-z1-dYr" kind="unwind" identifier="unwindSegueToDone" unwindAction="done:" id="vQo-NP-btX"/>
-                        <segue destination="O7p-z1-dYr" kind="unwind" identifier="unwindSequeToEventList" unwindAction="nutEventChanged:" id="xCU-3l-RAb"/>
-                        <segue destination="O7p-z1-dYr" kind="unwind" identifier="unwindSequeToEventGroup" unwindAction="nutGroupChanged:" id="mQX-k0-fkF"/>
+                        <segue destination="O7p-z1-dYr" kind="unwind" identifier="unwindSegueToDone" unwindAction="done:" id="Y2e-5i-elZ"/>
+                        <segue destination="O7p-z1-dYr" kind="unwind" identifier="unwindSegueToHome" unwindAction="home:" id="ZIm-1Q-oIF"/>
+                        <segue destination="O7p-z1-dYr" kind="unwind" identifier="unwindSegueToDoneItemDeleted" unwindAction="doneItemDeleted:" id="cEu-rX-SGa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N85-QH-5nS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1976,7 +1981,7 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dFt-cX-XeW"/>
-        <segue reference="4IF-4C-2rf"/>
+        <segue reference="vDO-8u-VmA"/>
+        <segue reference="Shc-Yg-1xe"/>
     </inferredMetricsTieBreakers>
 </document>

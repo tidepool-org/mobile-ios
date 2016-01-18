@@ -164,12 +164,19 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         }
     }
     
-    @IBAction func nutEventChanged(segue: UIStoryboardSegue) {
-        NSLog("unwind segue to eventList addedSomeNewEvent")
-    }
-
+    // Back button from group or detail viewer.
     @IBAction func done(segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventList done!")
+    }
+
+    // Multiple VC's on the navigation stack return all the way back to this initial VC via this segue, when nut events go away due to deletion, for test purposes, etc.
+    @IBAction func home(segue: UIStoryboardSegue) {
+        NSLog("unwind segue to eventList home!")
+    }
+
+    // The add/edit VC will return here when a meal event is deleted, and detail vc was transitioned to directly from this vc (i.e., the Nut event contained a single meal event which was deleted).
+    @IBAction func doneItemDeleted(segue: UIStoryboardSegue) {
+        NSLog("unwind segue to eventList doneItemDeleted")
     }
 
     @IBAction func cancel(segue: UIStoryboardSegue) {

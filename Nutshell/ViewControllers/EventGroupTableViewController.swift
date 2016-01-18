@@ -18,7 +18,7 @@ import CoreData
 
 class EventGroupTableViewController: BaseUITableViewController {
 
-    var eventGroup = NutEvent()
+    var eventGroup: NutEvent?
 
     @IBOutlet weak var tableHeaderTitle: NutshellUILabel!
     @IBOutlet weak var tableHeaderLocation: NutshellUILabel!
@@ -34,28 +34,24 @@ class EventGroupTableViewController: BaseUITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = ""
-
-        isWorkout = eventGroup.isWorkout
-        eatAgainButton.hidden = isWorkout
-        eatAgainLabel.hidden = isWorkout
-        eatAgainLargeHitArea.hidden = isWorkout
-        
-        tableHeaderTitle.text = eventGroup.title
-        tableHeaderLocation.text = eventGroup.location
-        headerViewLocIcon.hidden = (tableHeaderLocation.text?.isEmpty)!
-    }
+        self.navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsetsMake(0.0, -8.0, -1.0, 0.0)
+}
     
     override func viewWillAppear(animated: Bool) {
-        //NSLog("Event group viewWillAppear")
+        NSLog("Event group viewWillAppear")
         super.viewWillAppear(animated)
-        if eventGroup.itemArray.count <= 1 {
-            self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
-            return
+        
+        if let eventGroup = eventGroup {
+            if eventGroup.itemArray.count >= 1 {
+                configureGroupView()
+                eventGroup.sortEvents()
+                tableView.reloadData()
+                return
+            }
         }
         
-        eventGroup.sortEvents()
-        tableView.reloadData()
+        // empty group!
+        self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
     }
 
     override func viewDidLayoutSubviews() {
@@ -78,6 +74,21 @@ class EventGroupTableViewController: BaseUITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    private func configureGroupView() {
+        title = ""
+        
+        if let eventGroup = eventGroup {
+            isWorkout = eventGroup.isWorkout
+            eatAgainButton.hidden = isWorkout
+            eatAgainLabel.hidden = isWorkout
+            eatAgainLargeHitArea.hidden = isWorkout
+            
+            tableHeaderTitle.text = eventGroup.title
+            tableHeaderLocation.text = eventGroup.location
+            headerViewLocIcon.hidden = (tableHeaderLocation.text?.isEmpty)!
+        }
+    }
+    
     //
     // MARK: - Button handling
     //
@@ -86,6 +97,10 @@ class EventGroupTableViewController: BaseUITableViewController {
     @IBAction func disclosureTouchDownHandler(sender: AnyObject) {
     }
     
+    @IBAction func backButtonHandler(sender: AnyObject) {
+        self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
+    }
+
     //
     // MARK: - Navigation
     // 
@@ -112,23 +127,23 @@ class EventGroupTableViewController: BaseUITableViewController {
         }
     }
 
-    @IBAction func nutGroupChanged(segue: UIStoryboardSegue) {
-        print("unwind segue to eventGroup")
+    @IBAction func done(segue: UIStoryboardSegue) {
+        NSLog("unwind segue to eventGroup done")
+        doneCommon(segue)
     }
 
-    @IBAction func done(segue: UIStoryboardSegue) {
-        print("unwind segue to eventGroup done")
+    @IBAction func doneItemDeleted(segue: UIStoryboardSegue) {
+        NSLog("unwind segue to eventGroup doneItemDeleted")
+        doneCommon(segue)
+    }
+    
+    private func doneCommon(segue: UIStoryboardSegue) {
         // update group in case it has changed!
         if let eventDetailVC = segue.sourceViewController as? EventDetailViewController {
-            if let group = eventDetailVC.eventGroup {
-                self.eventGroup = group
-            }
+            self.eventGroup = eventDetailVC.eventGroup
         } else if let eventAddOrEditVC = segue.sourceViewController as? EventAddOrEditViewController {
-            if let group = eventAddOrEditVC.eventGroup {
-                self.eventGroup = group
-            }
+            self.eventGroup = eventAddOrEditVC.eventGroup
         }
-        
     }
     
     @IBAction func cancel(segue: UIStoryboardSegue) {
@@ -144,8 +159,8 @@ class EventGroupTableViewController: BaseUITableViewController {
 extension EventGroupTableViewController {
 
     private func itemAtIndexPathHasPhoto(indexPath: NSIndexPath) -> Bool {
-        if indexPath.item < eventGroup.itemArray.count {
-            let eventItem = eventGroup.itemArray[indexPath.item]
+        if indexPath.item < eventGroup!.itemArray.count {
+            let eventItem = eventGroup!.itemArray[indexPath.item]
             if let mealItem = eventItem as? NutMeal {
                 let photoUrl = mealItem.firstPictureUrl()
                 return !photoUrl.isEmpty
@@ -175,7 +190,7 @@ extension EventGroupTableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return eventGroup.itemArray.count
+        return eventGroup!.itemArray.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -184,8 +199,8 @@ extension EventGroupTableViewController {
         //NSLog("Event group cellForRowAtIndexPath: \(indexPath)")
        
         // Configure the cell...
-        if indexPath.item < eventGroup.itemArray.count {
-            let eventItem = eventGroup.itemArray[indexPath.item]
+        if indexPath.item < eventGroup!.itemArray.count {
+            let eventItem = eventGroup!.itemArray[indexPath.item]
             cell.configureCell(eventItem)
         }
         
@@ -196,19 +211,19 @@ extension EventGroupTableViewController {
         editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
             let rowAction = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: "delete") {_,indexPath in
                 // use dialog to confirm delete with user!
-                let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Discard meal?"), message: NSLocalizedString("discardMealAlertMessage", comment:"If you discard this meal, your meal will be lost."), preferredStyle: .Alert)
+                let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Are you sure?"), message: NSLocalizedString("discardMealAlertMessage", comment:"If you delete this meal, it will be gone forever."), preferredStyle: .Alert)
                 alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
                     return
                 }))
                 alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
                     // Delete the row from the data source
-                    let eventItem = self.eventGroup.itemArray[indexPath.item]
+                    let eventItem = self.eventGroup!.itemArray[indexPath.item]
                     if eventItem.deleteItem() {
                         // Delete the row...
                         tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-                        self.eventGroup.itemArray.removeAtIndex(indexPath.item)
-                        if self.eventGroup.itemArray.count == 0 {
-                            self.performSegueWithIdentifier("unwindSequeToEventList", sender: self)
+                        self.eventGroup!.itemArray.removeAtIndex(indexPath.item)
+                        if self.eventGroup!.itemArray.count == 0 {
+                            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
                         }
                     }
                     return

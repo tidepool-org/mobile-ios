@@ -161,6 +161,7 @@
 		487ED2511C3DA40A00EE36DF /* TidepoolGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */; };
 		489F3C501BB0AE1D00C95FDC /* NutMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */; };
 		48A150561C18E0A900ED800B /* Nutshell.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */; };
+		48A7925E1C4C0B39008D2244 /* Transitions between scenes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 48A7925D1C4C0B39008D2244 /* Transitions between scenes.txt */; };
 		48B127941BC4445500061483 /* NutEventItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127931BC4445500061483 /* NutEventItem.swift */; };
 		48B127951BC4445800061483 /* NutEventItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127931BC4445500061483 /* NutEventItem.swift */; };
 		48B127971BC4447100061483 /* NutWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127961BC4447100061483 /* NutWorkout.swift */; };
@@ -330,6 +331,7 @@
 		4899436D1C442837004774BA /* Nutshell_v5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v5.xcdatamodel; sourceTree = "<group>"; };
 		489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutMeal.swift; path = DataModel/NutMeal.swift; sourceTree = "<group>"; };
 		48A150551C18E0A200ED800B /* Nutshell_v4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v4.xcdatamodel; sourceTree = "<group>"; };
+		48A7925D1C4C0B39008D2244 /* Transitions between scenes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Transitions between scenes.txt"; path = "Manual Test Cases/Transitions between scenes.txt"; sourceTree = "<group>"; };
 		48B127931BC4445500061483 /* NutEventItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutEventItem.swift; path = DataModel/NutEventItem.swift; sourceTree = "<group>"; };
 		48B127961BC4447100061483 /* NutWorkout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutWorkout.swift; path = DataModel/NutWorkout.swift; sourceTree = "<group>"; };
 		48B127A41BC444FE00061483 /* applejuicedemopic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = applejuicedemopic.png; path = Images/applejuicedemopic.png; sourceTree = "<group>"; };
@@ -658,6 +660,7 @@
 		48BA1EA31C1885DE00C1B71C /* Manual Test Cases */ = {
 			isa = PBXGroup;
 			children = (
+				48A7925D1C4C0B39008D2244 /* Transitions between scenes.txt */,
 				48BA1EA41C18865100C1B71C /* Data Model.txt */,
 			);
 			name = "Manual Test Cases";
@@ -850,6 +853,7 @@
 				48B127AD1BC444FE00061483 /* ThreeTacosDemoPic.png in Resources */,
 				486F5E161BA0908900BA2A57 /* login_logo@2x.png in Resources */,
 				4854202D1BC4790D0020CFE1 /* Assets.xcassets in Resources */,
+				48A7925E1C4C0B39008D2244 /* Transitions between scenes.txt in Resources */,
 				48B127A91BC444FE00061483 /* applejuicedemopic.png in Resources */,
 				48D056931BDFDD16009D1591 /* Localizable.strings in Resources */,
 			);

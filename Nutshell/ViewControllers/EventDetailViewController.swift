@@ -83,7 +83,14 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     private var viewIsForeground: Bool = false
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        //NSLog("viewWillAppear")
+        NSLog("viewWillAppear")
+        
+        if eventItem == nil {
+            NSLog("Error: No Event at EventDetailVC viewWillAppear!")
+            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+            return
+        }
+
         viewIsForeground = true
         layoutHeaderView()
         checkUpdateGraph()
@@ -113,7 +120,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             // no existing item to pass along...
             eventAddVC.eventGroup = eventGroup
         } else {
-            NSLog("Unknown segue from eventDetail \(segue.identifier)")
+            NSLog("Other segue from eventDetail \(segue.identifier)")
         }
     }
     
@@ -121,11 +128,14 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         NSLog("unwind segue to eventDetail done")
         if let eventAddOrEditVC = segue.sourceViewController as? EventAddOrEditViewController {
             // update group and item!
-            if let group = eventAddOrEditVC.eventGroup, item = eventAddOrEditVC.eventItem {
-                self.eventGroup = group
-                self.eventItem = item
+            self.eventGroup = eventAddOrEditVC.eventGroup
+            self.eventItem = eventAddOrEditVC.eventItem
+            if eventAddOrEditVC.eventItem != nil {
+                reloadView()
+            } else {
+                NSLog("EventDetailVC detected deleted event at done!")
+                // Note: will segue out at ViewWillDisplay...
             }
-            reloadView()
         } else if let photoViewVC = segue.sourceViewController as? ShowPhotoViewController {
             let newPhotoIndex = photoViewVC.imageIndex
             if newPhotoIndex > 0 {
