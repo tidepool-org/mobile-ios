@@ -22,7 +22,7 @@ class GraphCollectionCell: UICollectionViewCell {
     private var graphView: GraphUIView?
     
     func updateViewSize() {
-        NSLog("GraphCollectionCell \(cellDebugId) updateViewSize frame \(self.frame.size)")
+        //NSLog("GraphCollectionCell \(cellDebugId) updateViewSize frame \(self.frame.size)")
         if let graphView = graphView {
             graphView.updateViewSize(self.frame.size)
         }

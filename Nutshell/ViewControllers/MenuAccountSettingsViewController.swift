@@ -41,6 +41,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     }
     
     @IBAction func supportButtonHandler(sender: AnyObject) {
+        APIConnector.connector().trackMetric("Clicked Tidepool Support (Hamburger)")
         let email = "support@tidepool.org"
         let url = NSURL(string: "mailto:\(email)")
         UIApplication.sharedApplication().openURL(url!)

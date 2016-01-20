@@ -29,6 +29,7 @@ struct EventViewStoryboard {
     
     struct SegueIdentifiers {
         static let EventItemDetailSegue = "EventItemDetailSegue"
+        static let HomeToAddEventSegue = "HomeToAddEventSegue"
         static let EventGroupSegue = "EventGroupSegue"
         static let EventItemAddSegue = "EventItemAddSegue"
         static let EventItemEditSegue = "EventItemEditSegue"

@@ -83,6 +83,13 @@ class EventPhotoCollectView: UIControl {
     func scrollViewDidScroll(scrollView: UIScrollView) {
         if let pageControl = pageControl {
             if let curIndexPath = currentCellIndex() {
+                
+                if curIndexPath.row > pageControl.currentPage {
+                    APIConnector.connector().trackMetric("Swiped Left on a Photo (Photo Screen)")
+                } else if curIndexPath.row < pageControl.currentPage {
+                    APIConnector.connector().trackMetric("Swiped Right on a Photo (Photo Screen)")
+                }
+
                 pageControl.currentPage = curIndexPath.row
             }
         }

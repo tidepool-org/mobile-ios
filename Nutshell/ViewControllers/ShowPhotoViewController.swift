@@ -28,6 +28,7 @@ class ShowPhotoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        APIConnector.connector().trackMetric("Viewed a Photo (Photo Screen)")
 
         if !modalPresentation {
             // Hide modal header when used as a nav view
@@ -37,7 +38,7 @@ class ShowPhotoViewController: UIViewController {
                     break
                 }
             }
-            // We use a custom back button so we can hide the photo to minimizing flashing. This tweaks the arrow positioning to match the iOS back arrow position. TODO: -> actually turned off right now!
+            // We use a custom back button, this tweaks the arrow positioning to match the iOS back arrow position.
             self.navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsetsMake(0.0, -8.0, -1.0, 0.0)
             if editAllowed {
                 navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonHandler:")
@@ -92,11 +93,14 @@ class ShowPhotoViewController: UIViewController {
         if photoURLs.isEmpty {
             return
         }
+        APIConnector.connector().trackMetric("Clicked Trashcan to Discard a Photo (Edit Screen)")
         let alert = UIAlertController(title: NSLocalizedString("discardPhotoAlertTitle", comment:"Are you sure?"), message: NSLocalizedString("discardPhotoAlertMessage", comment:"If you delete this photo, your photo will be lost."), preferredStyle: .Alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+            APIConnector.connector().trackMetric("Clicked Cancel Photo Discard (Edit Screen)")
             return
         }))
         alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+            APIConnector.connector().trackMetric("Clicked Discard to Confirm Photo Discard (Edit Screen)")
             self.removeCurrentPhoto()
         }))
         self.presentViewController(alert, animated: true, completion: nil)

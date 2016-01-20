@@ -83,6 +83,10 @@
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="searchText"/>
                                                 </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="searchEditingDidBegin:" destination="oVB-ry-Lwj" eventType="editingDidBegin" id="2Bg-hQ-Nok"/>
+                                                    <action selector="searchEditingDidEnd:" destination="oVB-ry-Lwj" eventType="editingDidEnd" id="xdQ-IE-mAR"/>
+                                                </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QuJ-Pq-qUA" userLabel="searchPlaceholder" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                 <rect key="frame" x="50" y="0.0" width="52" height="50"/>
@@ -291,7 +295,7 @@
                         <barButtonItem key="rightBarButtonItem" image="add-button" id="AjV-8Q-vYz">
                             <color key="tintColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <segue destination="wuR-Cf-1Tk" kind="presentation" id="dFt-cX-XeW"/>
+                                <segue destination="wuR-Cf-1Tk" kind="presentation" identifier="HomeToAddEventSegue" id="dFt-cX-XeW"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -811,7 +815,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="286"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                             </view>
-                                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cmJ-dI-KmZ" userLabel="MissingData">
+                                            <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cmJ-dI-KmZ" userLabel="MissingData">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="286"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCd-7V-eEl" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
@@ -1998,7 +2002,7 @@
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="vDO-8u-VmA"/>
-        <segue reference="Shc-Yg-1xe"/>
+        <segue reference="4IF-4C-2rf"/>
+        <segue reference="dFt-cX-XeW"/>
     </inferredMetricsTieBreakers>
 </document>

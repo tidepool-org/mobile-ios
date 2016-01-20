@@ -40,6 +40,7 @@ class EventGroupTableViewController: BaseUITableViewController {
     override func viewWillAppear(animated: Bool) {
         NSLog("Event group viewWillAppear")
         super.viewWillAppear(animated)
+        APIConnector.connector().trackMetric("Viewed Similar Meals Screen (Similar Meals Screen)")
         
         if let eventGroup = eventGroup {
             if eventGroup.itemArray.count >= 1 {
@@ -98,6 +99,7 @@ class EventGroupTableViewController: BaseUITableViewController {
     }
     
     @IBAction func backButtonHandler(sender: AnyObject) {
+        APIConnector.connector().trackMetric("Clicked Back to All Events (Similar Meals Screen)")
         self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
     }
 
@@ -118,10 +120,12 @@ class EventGroupTableViewController: BaseUITableViewController {
             } else if let collectCell = sender as? EventGroupRowCollectionCell {
                 eventItemVC.eventItem = collectCell.eventItem
             }
+            APIConnector.connector().trackMetric("Clicked a Meal Instance (Similar Meals Screen)")
          } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
             let eventItemVC = segue.destinationViewController as! EventAddOrEditViewController
             // no existing item to pass along...
             eventItemVC.eventGroup = eventGroup
+            APIConnector.connector().trackMetric("Clicked Eat Again (Similar Meals Screen)")
         } else {
             NSLog("Unknown segue from eventGroup \(segue.identifier)")
         }
@@ -202,6 +206,9 @@ extension EventGroupTableViewController {
         if indexPath.item < eventGroup!.itemArray.count {
             let eventItem = eventGroup!.itemArray[indexPath.item]
             cell.configureCell(eventItem)
+            if eventItem.nutCracked {
+                APIConnector.connector().trackMetric("Cracked Nut Badge Appears (Similar Meals Screen)")
+            }
         }
         
         return cell

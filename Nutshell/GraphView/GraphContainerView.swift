@@ -20,6 +20,7 @@ protocol GraphContainerViewDelegate {
     func containerCellUpdated()
     func pinchZoomEnded()
     func dataPointTapped(dataPoint: GraphDataType, tapLocationInView: CGPoint)
+    func willDisplayGraphCell(cell: Int)
 }
 
 class GraphContainerView: UIView {
@@ -262,8 +263,6 @@ class GraphContainerView: UIView {
                 var newCellSize = pinchStartCellSize
                 newCellSize.width = newCellSize.width * CGFloat(gesture.scale)
                 zoomCellSize(newCellSize, xOffsetInView: pinchLocationInView.x)
-                delegate?.pinchZoomEnded()
-                
                 return
             }
             if gesture.state == UIGestureRecognizerState.Ended {
@@ -300,6 +299,14 @@ extension GraphContainerView: UICollectionViewDataSource {
             cell.configureCell(cellStartTime, timeInterval: layout.cellTimeInterval)
             delegate?.containerCellUpdated()
             return cell
+    }
+}
+
+extension GraphContainerView: UICollectionViewDelegate {
+    
+    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+        //NSLog("collect view willDisplayCell at indexPath row: \(indexPath.row)")
+        delegate?.willDisplayGraphCell(indexPath.row)
     }
 }
 

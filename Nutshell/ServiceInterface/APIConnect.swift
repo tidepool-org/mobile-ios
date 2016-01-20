@@ -190,6 +190,7 @@ class APIConnector {
                 let moc = NutDataController.controller().mocForCurrentUser()
                 if let user = User.fromJSON(json, moc: moc) {
                     NutDataController.controller().loginUser(user)
+                    APIConnector.connector().trackMetric("Logged In")
                     completion(Result.Success(user))
                 } else {
                     NutDataController.controller().logoutUser()
@@ -223,13 +224,15 @@ class APIConnector {
     
     // When offline just stash metrics in metricsCache array
     private var metricsCache: [String] = []
+    // Turn on the following boolean to prevent logging metrics to the service...
+    private var noMetricReporting = false
     func trackMetric(metric: String) {
         // Set our endpoint for the event tracking
         // Format: https://api.tidepool.org/metrics/thisuser/urchin%20-%20Remember%20Me%20Used?source=urchin&sourceVersion=1.1
         // Format: https://api.tidepool.org/metrics/thisuser/nutshell-Viewed%20Hamburger%20Menu?source=nutshell&sourceVersion=0%2E8%2E1
 
         metricsCache.append(metric)
-        if !serviceAvailable() {
+        if !serviceAvailable() || noMetricReporting {
             NSLog("Offline: trackMetric stashed: \(metric)")
             return
         }
@@ -260,6 +263,8 @@ class APIConnector {
     
     func logout(completion: () -> (Void)) {
         // Clear our session token and remove entries from the db
+        APIConnector.connector().trackMetric("Logged Out")
+
         self.sessionToken = nil
         NutDataController.controller().logoutUser()
         completion()

@@ -56,7 +56,7 @@ class GraphUIView: UIView {
     }
     
     override func layoutSubviews() {
-        NSLog("GraphUIView layoutSubviews size: \(self.bounds.size)")
+        //NSLog("GraphUIView layoutSubviews size: \(self.bounds.size)")
     }
     
     func updateViewSize(newSize: CGSize) {
@@ -64,7 +64,7 @@ class GraphUIView: UIView {
         let currentSize = self.bounds.size
         NSLog("GraphUIView bounds: \(currentSize), size: \(viewSize), new size \(newSize)")
         if self.viewSize == newSize {
-            NSLog("updateViewSize skipped!")
+            //NSLog("updateViewSize skipped!")
             return
         }
         self.viewSize = newSize

@@ -74,7 +74,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         if sortedNutEvents.isEmpty || eventListNeedsUpdate {
             eventListNeedsUpdate = false
             getNutEvents()
-        }        
+        }
+        
+        APIConnector.connector().trackMetric("Viewed Home Screen (Home Screen)")
      }
     
     deinit {
@@ -94,6 +96,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
     }
 
     @IBAction func toggleSideMenu(sender: AnyObject) {
+        APIConnector.connector().trackMetric("Clicked Hamburger (Home Screen)")
         toggleSideMenuView()
     }
 
@@ -154,12 +157,16 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
             let cell = sender as! EventListTableViewCell
             let eventGroupVC = segue.destinationViewController as! EventGroupTableViewController
             eventGroupVC.eventGroup = cell.eventGroup!
+            APIConnector.connector().trackMetric("Clicked a Meal (Home screen)")
         } else if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue {
             let cell = sender as! EventListTableViewCell
             let eventDetailVC = segue.destinationViewController as! EventDetailViewController
             let group = cell.eventGroup!
             eventDetailVC.eventGroup = group
             eventDetailVC.eventItem = group.itemArray[0]
+            APIConnector.connector().trackMetric("Clicked a Meal (Home screen)")
+        } else if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.HomeToAddEventSegue {
+            APIConnector.connector().trackMetric("Click Add (Home screen)")
         } else {
             NSLog("Unprepped segue from eventList \(segue.identifier)")
         }
@@ -291,6 +298,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
     
     @IBAction func searchEditingDidBegin(sender: AnyObject) {
         configureSearchUI()
+        APIConnector.connector().trackMetric("Typed into Search (Home Screen)")
     }
     
     private func searchMode() -> Bool {
@@ -388,6 +396,9 @@ extension EventListViewController: UITableViewDataSource {
             let tuple = self.filteredNutEvents[indexPath.item]
             let nutEvent = tuple.1
             cell.configureCell(nutEvent)
+            if !cell.nutCrackedStar.hidden {
+                APIConnector.connector().trackMetric("Cracked Nut Badge Appears (Home Screen)")
+            }
         }
         
         return cell

@@ -24,7 +24,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     var eventItem: NutEventItem?
     var eventGroup: NutEvent?
     var newEventItem: EventItem?
-    private var viewExistingEvent = false
+    private var editExistingEvent = false
     private var isWorkout: Bool = false
     
     @IBOutlet weak var titleTextField: NutshellUITextField!
@@ -69,7 +69,8 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         super.viewDidLoad()
         var saveButtonTitle = NSLocalizedString("saveButtonTitle", comment:"Save")
         if let eventItem = eventItem {
-            viewExistingEvent = true
+            editExistingEvent = true
+            APIConnector.connector().trackMetric("Viewed Edit Screen (Edit Screen)")
             eventTime = eventItem.time
 
             // hide location and photo controls for workouts
@@ -120,6 +121,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         // Deal with possible delete/edit of photo from viewer...
         if segue.identifier == EventViewStoryboard.SegueIdentifiers.UnwindSegueFromShowPhoto {
             if let photoVC = segue.sourceViewController as? ShowPhotoViewController {
+
                 // handle the case of a new photo replacing a new (not yet saved) photo: the older one should be immediately deleted since will be no reference to it left!
                 for url in pictureImageURLs {
                     if !preExistingPhoto(url) {
@@ -214,7 +216,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     }
     
     private func updateSaveButtonState() {
-        if viewExistingEvent {
+        if editExistingEvent {
             saveButton.hidden = !existingEventChanged()
         } else {
             if !newEventChanged() || titleTextField.text?.characters.count == 0 ||  titleTextField.text == Styles.placeholderTitleString {
@@ -302,6 +304,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if titleTextField.text == Styles.placeholderTitleString {
             titleTextField.text = ""
         }
+        if editExistingEvent {
+            APIConnector.connector().trackMetric("Edited Meal Name (Edit Screen)")
+        } else {
+            APIConnector.connector().trackMetric("Clicked to Add Meal Name (Add Meal Screen)")
+        }
     }
     
     @IBAction func titleEditingDidEnd(sender: AnyObject) {
@@ -322,6 +329,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if notesTextField.text == Styles.placeholderNotesString {
             notesTextField.text = ""
         }
+        if editExistingEvent {
+            APIConnector.connector().trackMetric("Edited Notes (Edit Screen)")
+        } else {
+            APIConnector.connector().trackMetric("Clicked to Add Notes (Add Meal Screen)")
+        }
     }
     
     @IBAction func notesEditingDidEnd(sender: AnyObject) {
@@ -341,6 +353,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if locationTextField.text == Styles.placeholderLocationString {
             locationTextField.text = ""
         }
+        if editExistingEvent {
+            APIConnector.connector().trackMetric("Edited Location (Edit Screen)")
+        } else {
+            APIConnector.connector().trackMetric("Clicked to Add Location (Add Meal Screen)")
+        }
     }
     
     @IBAction func locationEditingDidEnd(sender: AnyObject) {
@@ -353,7 +370,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
 
     @IBAction func saveButtonHandler(sender: AnyObject) {
         
-        if viewExistingEvent {
+        if editExistingEvent {
             updateCurrentEvent()
             self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
             return
@@ -366,8 +383,9 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     @IBAction func backButtonHandler(sender: AnyObject) {
         // this is a cancel for the role of addEvent and editEvent
         // for viewEvent, we need to check whether the title has changed
-        if viewExistingEvent {
+        if editExistingEvent {
             // cancel of edit
+            APIConnector.connector().trackMetric("Clicked Cancel (Edit Screen)")
             if existingEventChanged() {
                 var alertString = NSLocalizedString("discardMealEditsAlertMessage", comment:"If you press discard, your changes to this meal will be lost.")
                 if let _ = eventItem as? NutWorkout {
@@ -379,6 +397,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             }
         } else {
             // cancel of add
+            APIConnector.connector().trackMetric("Clicked ‘X’ to Close (Add Screen)")
             if newEventChanged() {
                 var alertTitle = NSLocalizedString("discardMealAlertTitle", comment:"Are you sure?")
                 var alertMessage = NSLocalizedString("discardMealAlertMessage", comment:"If you delete this meal, it will be gone forever.")
@@ -395,6 +414,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     
     @IBAction func deleteButtonHandler(sender: AnyObject) {
         // this is a delete for the role of editEvent
+        APIConnector.connector().trackMetric("Clicked Trashcan to Discard (Edit Screen)")
         alertOnDeleteAndReturn()
     }
     
@@ -427,18 +447,29 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     private func appendPictureUrl(url: String) {
         if pictureImageURLs.count < 3 {
             pictureImageURLs.append(url)
+            if !editExistingEvent {
+                switch pictureImageURLs.count {
+                case 1: APIConnector.connector().trackMetric("First Photo Added (Add Meal Screen)")
+                case 2: APIConnector.connector().trackMetric("Second Photo Added (Add Meal Screen)")
+                case 3: APIConnector.connector().trackMetric("Third Photo Added (Add Meal Screen)")
+                default: break
+                }
+            }
         }
     }
 
     private func showPicture(itemNum: Int) -> Bool {
         let pictureUrl = itemToImageUrl(itemNum)
         if !pictureUrl.isEmpty {
+            if editExistingEvent {
+                APIConnector.connector().trackMetric("Clicked Photos (Edit Screen)")
+            }
             let storyboard = UIStoryboard(name: "EventView", bundle: nil)
             let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
             photoVC.photoURLs = pictureImageURLs
             photoVC.imageIndex = itemNum
             photoVC.editAllowed = true
-            if viewExistingEvent {
+            if editExistingEvent {
                 self.navigationController?.pushViewController(photoVC, animated: true)
             } else {
                 photoVC.modalPresentation = true
@@ -472,9 +503,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         if pictureUrlEmptySlots() == 0 {
             simpleInfoAlert(NSLocalizedString("photoSlotsFullTitle", comment:"No empty photo slot"), alertMessage: NSLocalizedString("photoSlotsFullMessage", comment:"Three photos are supported. Please discard one before adding a new photo."))
         } else {
-            //let pickerC = UIImagePickerController()
-            //pickerC.delegate = self
-            //self.presentViewController(pickerC, animated: true, completion: nil)
+            if !editExistingEvent {
+                switch pictureImageURLs.count {
+                case 0: APIConnector.connector().trackMetric("Clicked to Add First Photo (Add Meal Screen)")
+                case 1: APIConnector.connector().trackMetric("Clicked to Add Second Photo (Add Meal Screen)")
+                case 2: APIConnector.connector().trackMetric("Clicked to Add Third Photo (Add Meal Screen)")
+                default: break
+                }
+            }
             showPhotoActionSheet()
         }
     }
@@ -715,6 +751,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         newEventItem = NutEvent.createMealEvent(titleTextField.text!, notes: filteredNotesText(), location: filteredLocationText(), photo: itemToImageUrl(0), photo2: itemToImageUrl(1), photo3: itemToImageUrl(2), time: eventTime)
         
         if newEventItem != nil {
+            if eventGroup == nil {
+                APIConnector.connector().trackMetric("New Meal Added (Add Meal Screen)")
+            } else {
+                APIConnector.connector().trackMetric("New Instance of Existing Meal (Add Meal Screen)")
+            }
             updateItemAndGroupForNewEventItem()
             showSuccessView()
         } else {
@@ -807,9 +848,15 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         // use dialog to confirm cancel with user!
         let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .Alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+            if self.editExistingEvent {
+                APIConnector.connector().trackMetric("Clicked Cancel Cancel to Stay on Edit (Edit Screen)")
+            }
             return
         }))
         alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+            if self.editExistingEvent {
+                APIConnector.connector().trackMetric("Clicked Discard Changes to Cancel (Edit Screen)")
+            }
             self.deleteNewPhotos()
             self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -829,9 +876,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             
             let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+                APIConnector.connector().trackMetric("Clicked Cancel Discard (Edit Screen)")
                 return
             }))
             alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+                APIConnector.connector().trackMetric("Clicked Confirmed Discard (Edit Screen)")
                 self.deleteItemAndReturn()
             }))
             self.presentViewController(alert, animated: true, completion: nil)
@@ -883,6 +932,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             notesTextField.resignFirstResponder()
             locationTextField.resignFirstResponder()
             savedTime = eventTime
+            if editExistingEvent {
+                APIConnector.connector().trackMetric("Edited Datetime (Edit Screen)")
+            } else {
+                APIConnector.connector().trackMetric("Clicked to Update Datetime (Add Meal Screen)")
+            }
         }
     }
     

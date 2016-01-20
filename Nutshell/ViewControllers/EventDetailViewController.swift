@@ -54,6 +54,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         // remember original nut item we viewed, for return
+        APIConnector.connector().trackMetric("Viewed Data Screen")
         originalId = eventItem?.nutEventIdString()
         configureDetailView()
         // We use a custom back button so we can redirect back when the event has changed. This tweaks the arrow positioning to match the iOS back arrow position
@@ -86,7 +87,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     private var viewIsForeground: Bool = false
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        NSLog("viewWillAppear")
+        //NSLog("viewWillAppear")
         
         if eventItem == nil {
             NSLog("Error: No Event at EventDetailVC viewWillAppear!")
@@ -117,11 +118,13 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             let eventEditVC = segue.destinationViewController as! EventAddOrEditViewController
             eventEditVC.eventItem = eventItem
             eventEditVC.eventGroup = eventGroup
+            APIConnector.connector().trackMetric("Clicked Edit (Data Screen)")
         } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
             // "Eat again" case...
             let eventAddVC = segue.destinationViewController as! EventAddOrEditViewController
             // no existing item to pass along...
             eventAddVC.eventGroup = eventGroup
+            APIConnector.connector().trackMetric("Clicked Eat Again (Data Screen)")
         } else {
             NSLog("Other segue from eventDetail \(segue.identifier)")
         }
@@ -140,6 +143,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
                 // Note: will segue out at ViewWillDisplay...
             }
         } else if let photoViewVC = segue.sourceViewController as? ShowPhotoViewController {
+            APIConnector.connector().trackMetric("Clicked Back to Data Screen (Photo Screen)")
             let newPhotoIndex = photoViewVC.imageIndex
             if newPhotoIndex > 0 {
                 // Set image 0 as the last one viewed in the photo viewer...
@@ -176,7 +180,6 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             graphNeedsUpdate = false
             if let graphContainerView = graphContainerView {
                 graphContainerView.loadGraphData()
-                missingDataAdvisoryView.hidden = graphContainerView.dataFound()
             }
         }
     }
@@ -201,6 +204,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     //
 
     @IBAction func backButtonHandler(sender: AnyObject) {
+        APIConnector.connector().trackMetric("Clicked Back (Data Screen)")
         if self.eventItem?.nutEventIdString() == originalId {
             self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
         } else {
@@ -220,6 +224,11 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         nutCrackedButton.selected = !nutCrackedButton.selected
 
         if let eventItem = eventItem {
+            if nutCrackedButton.selected {
+                APIConnector.connector().trackMetric("Clicked to Crack the Nut")
+            } else {
+                APIConnector.connector().trackMetric("Clicked to Uncrack the Nut")
+            }
             eventItem.nutCracked = nutCrackedButton.selected
             // Save changes to database
             eventItem.saveChanges()
@@ -234,6 +243,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     @IBAction func photoOverlayTouchHandler(sender: AnyObject) {
         if let graphContainerView = graphContainerView {
             graphContainerView.centerGraphOnEvent(animated: true)
+            APIConnector.connector().trackMetric("Clicked Header to Re-Center Data (Data Screen)")
         }
     }
     
@@ -249,6 +259,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
                     photoVC.photoURLs = mealItem.photoUrlArray()
                     photoVC.imageIndex = 0
                     self.navigationController?.pushViewController(photoVC, animated: true)
+                    APIConnector.connector().trackMetric("Clicked Photos (Data Screen)")
                 }
             }
         }
@@ -550,7 +561,6 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             graphContainerView.configureGraph(edgeOffset)
             graphLayerContainer.addSubview(graphContainerView)
             graphContainerView.loadGraphData()
-            missingDataAdvisoryView.hidden = graphContainerView.dataFound()
        }
     }
     
@@ -558,10 +568,10 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         // self.view's direct subviews are laid out, force graph subview to layout its subviews:
         graphSectionView.setNeedsLayout()
         graphSectionView.layoutIfNeeded()
-        NSLog("EventDetailVC viewDidLayoutSubviews, graphSectionView: \(graphSectionView.frame.size)")
+        //NSLog("EventDetailVC viewDidLayoutSubviews, graphSectionView: \(graphSectionView.frame.size)")
         if let graphContainerView = graphContainerView {
             if (graphContainerView.frame.size == graphSectionView.frame.size) {
-                NSLog("graph reconfigure skipped!")
+                //NSLog("graph reconfigure skipped!")
                 return
             }
             NSLog("Reconfigure graph, graphContainerView: \(graphContainerView.frame.size)")
@@ -576,13 +586,31 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     //
     
     func containerCellUpdated() {
-        missingDataAdvisoryView.hidden = graphContainerView!.dataFound()
+        let graphHasData = graphContainerView!.dataFound()
+        if missingDataAdvisoryView.hidden && !graphHasData {
+            // about to show missing data message...
+            APIConnector.connector().trackMetric("Viewed 'No data' message")
+        }
+        missingDataAdvisoryView.hidden = graphHasData
     }
 
     func pinchZoomEnded() {
         //adjustZoomButtons()
+        APIConnector.connector().trackMetric("Pinched to Zoom (Data Screen)")
     }
     
+    private var currentCell: Int?
+    func willDisplayGraphCell(cell: Int) {
+        if let currentCell = currentCell {
+            if cell > currentCell {
+                APIConnector.connector().trackMetric("Swiped to Pan Left (Data Screen)")
+            } else if cell < currentCell {
+                APIConnector.connector().trackMetric("Swiped to Pan Right (Data Screen)")
+            }
+        }
+        currentCell = cell
+    }
+
     func dataPointTapped(dataPoint: GraphDataType, tapLocationInView: CGPoint) {
         if let mealDataPoint = dataPoint as? MealGraphDataType {
             NSLog("tapped on meal!")
