@@ -74,7 +74,7 @@ class GraphUIView: UIView {
         }
         graphData()
     }
-        
+    
     /// Return the non-changing part of the graph background
     ///
     /// Right now this is just the y axis with its values.
@@ -85,6 +85,18 @@ class GraphUIView: UIView {
         return graphUtils.imageOfFixedGraphBackground()
     }
     
+    /// Handle taps within this graph tile by letting layers check for hits - iterates thru layers in reverse order of drawing, last layer first. If a data point is found at the tap location, it is returned, otherwise nil.
+    func tappedAtPoint(point: CGPoint) -> GraphDataType? {
+        var layer = graphLayers.count
+        while layer > 0 {
+            if let dataPoint = graphLayers[layer-1].tappedAtPoint(point) {
+                return dataPoint
+            }
+            layer--
+        }
+        return nil
+    }
+
     //
     // MARK: - Private data
     //

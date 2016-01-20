@@ -28,6 +28,13 @@ class GraphCollectionCell: UICollectionViewCell {
         }
     }
     
+    func tappedAtPoint(point: CGPoint) -> GraphDataType? {
+        if let graphView = graphView {
+            return graphView.tappedAtPoint(point)
+        }
+        return nil
+    }
+    
     func configureCell(startTime: NSDate, timeInterval: NSTimeInterval) {
 
         //NSLog("GraphCollectionCell \(cellDebugId) configure centerTime \(centerTime), timeInterval \(timeInterval), frame \(self.frame.size)")

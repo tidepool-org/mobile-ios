@@ -21,6 +21,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     
     var eventItem: NutEventItem?
     var eventGroup: NutEvent?
+    private var originalId: String?
     private var isWorkout: Bool = false
     
     @IBOutlet weak var graphSectionView: UIView!
@@ -52,6 +53,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // remember original nut item we viewed, for return
+        originalId = eventItem?.nutEventIdString()
         configureDetailView()
         // We use a custom back button so we can redirect back when the event has changed. This tweaks the arrow positioning to match the iOS back arrow position
         self.navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsetsMake(0.0, -8.0, -1.0, 0.0)
@@ -198,7 +201,12 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     //
 
     @IBAction func backButtonHandler(sender: AnyObject) {
-        self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
+        if self.eventItem?.nutEventIdString() == originalId {
+            self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
+        } else {
+            // We have a new NutEvent, won't want to return to group event scene...
+            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+        }
     }
     
     private func configureNutCracked() {
@@ -225,7 +233,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     
     @IBAction func photoOverlayTouchHandler(sender: AnyObject) {
         if let graphContainerView = graphContainerView {
-            graphContainerView.centerGraphOnEvent(true)
+            graphContainerView.centerGraphOnEvent(animated: true)
         }
     }
     
@@ -532,29 +540,20 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     // MARK: - Graph view
     //
     
-    private func configureGraphContainer() {
+    private func configureGraphContainer(edgeOffset: CGFloat = 0.0) {
         if (graphContainerView != nil) {
             graphContainerView?.removeFromSuperview();
             graphContainerView = nil;
         }
         graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.bounds, delegate: self, eventItem: eventItem!)
         if let graphContainerView = graphContainerView {
-            graphContainerView.configureGraph()
+            graphContainerView.configureGraph(edgeOffset)
             graphLayerContainer.addSubview(graphContainerView)
             graphContainerView.loadGraphData()
             missingDataAdvisoryView.hidden = graphContainerView.dataFound()
        }
     }
     
-    // GraphContainerViewDelegate
-    func containerCellUpdated() {
-        missingDataAdvisoryView.hidden = graphContainerView!.dataFound()
-    }
-
-    func pinchZoomEnded() {
-        //adjustZoomButtons()
-    }
-
     override func viewDidLayoutSubviews() {
         // self.view's direct subviews are laid out, force graph subview to layout its subviews:
         graphSectionView.setNeedsLayout()
@@ -571,6 +570,43 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         configurePhotoBackground()
     }
     
+    //
+    // MARK: - GraphContainerViewDelegate
+    //
+    //
+    
+    func containerCellUpdated() {
+        missingDataAdvisoryView.hidden = graphContainerView!.dataFound()
+    }
+
+    func pinchZoomEnded() {
+        //adjustZoomButtons()
+    }
+    
+    func dataPointTapped(dataPoint: GraphDataType, tapLocationInView: CGPoint) {
+        if let mealDataPoint = dataPoint as? MealGraphDataType {
+            NSLog("tapped on meal!")
+            let meal = DatabaseUtils.getMealWithId(mealDataPoint.id)
+            if let meal = meal {
+                // if the user tapped on some other meal, switch to viewing that one instead!
+                if meal.time != eventTime {
+                    // conjure up a NutMeal and NutEvent for this new item!
+                    self.eventGroup = NutEvent(firstEvent: meal)
+                    self.eventItem = self.eventGroup?.itemArray[0]
+                    // update view to show the new event, centered...
+                    configureDetailView()
+                    // keep point that was tapped at the same offset in the view in the new graph by setting the graph center point to be at the same x offset in the view...
+                    configureGraphContainer(tapLocationInView.x)
+                    configurePhotoBackground()
+                    layoutHeaderView()
+                    checkUpdateGraph()
+                }
+            } else {
+                NSLog("Couldn't find meal with id \(mealDataPoint.id)")
+            }
+        }
+    }
+
     //
     // MARK: - Deal with layout changes
     //

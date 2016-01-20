@@ -19,6 +19,7 @@ protocol GraphContainerViewDelegate {
     // Notify caller that a cell has been updated...
     func containerCellUpdated()
     func pinchZoomEnded()
+    func dataPointTapped(dataPoint: GraphDataType, tapLocationInView: CGPoint)
 }
 
 class GraphContainerView: UIView {
@@ -133,9 +134,16 @@ class GraphContainerView: UIView {
         }
     }
     
-    func centerGraphOnEvent(animated: Bool = false) {
+    func centerGraphOnEvent(edgeOffset: CGFloat = 0.0, animated: Bool = false) {
         if let graphCollectionView = graphCollectionView {
             graphCollectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: layout.graphCenterCellInCollection, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: animated)
+            
+            // Setting an edge offset will put the center graph point at this x position within the graph view
+            if !animated && edgeOffset != 0.0 {
+                let targetOffsetX = graphCollectionView.contentOffset.x - edgeOffset + cellSize.width/2.0
+                let targetOffset = CGPoint(x: targetOffsetX, y: 0.0)
+                graphCollectionView.setContentOffset(targetOffset, animated: false)
+            }
         }
     }
 
@@ -156,7 +164,7 @@ class GraphContainerView: UIView {
     }
     
     private let collectCellReuseID = "graphViewCell"
-    func configureGraph() {
+    func configureGraph(edgeOffset: CGFloat = 0.0) {
         if graphCollectionView == nil {
             layout.configureGraph()
             
@@ -186,12 +194,15 @@ class GraphContainerView: UIView {
                 //graphCollectionView.contentSize = self.bounds.size
                 graphCollectionView.registerClass(GraphCollectionCell.self, forCellWithReuseIdentifier: collectCellReuseID)
                 // event is in the center cell, see cellForItemAtIndexPath below...
-                centerGraphOnEvent()
+                centerGraphOnEvent(edgeOffset)
                 self.addSubview(graphCollectionView)
                 
                 // add pinch gesture recognizer
                 let recognizer = UIPinchGestureRecognizer(target: self, action: "pinchGestureHandler:")
                 graphCollectionView.addGestureRecognizer(recognizer)
+                
+                let tapRecognizer = UITapGestureRecognizer(target: self, action: "tapGestureHandler:")
+                graphCollectionView.addGestureRecognizer(tapRecognizer)
             }
         }
     }
@@ -212,6 +223,31 @@ class GraphContainerView: UIView {
         return cellStartTime
     }
 
+    // Maps taps to a particular cell and location within the cell, then calls into the graph data structures to see if an active datapoint was tapped: if so, calls the graph delegate with that point.
+    func tapGestureHandler(sender: AnyObject) {
+        //NSLog("recognized tap!")
+        if let gesture = sender as? UITapGestureRecognizer {
+            if gesture.state == .Ended {
+                let tapLocation = gesture.locationInView(self)
+                NSLog("tap detected at location: \(tapLocation)")
+                if let collectView = graphCollectionView {
+                    // map to point within a cell
+                    let pointInCollection = CGPoint(x: tapLocation.x + collectView.contentOffset.x, y: tapLocation.y + collectView.contentOffset.y)
+                    if let indexPath = collectView.indexPathForItemAtPoint(pointInCollection) {
+                        if let cell = collectView.cellForItemAtIndexPath(indexPath) as? GraphCollectionCell {
+                            let xOffsetInCell: CGFloat = round(pointInCollection.x % cellSize.width)
+                            let pointInCell = CGPoint(x: xOffsetInCell, y: pointInCollection.y)
+                            //NSLog("Cell at index \(indexPath.row) tapped at point: \(pointInCell)")
+                            if let dataPoint = cell.tappedAtPoint(pointInCell) {
+                                delegate?.dataPointTapped(dataPoint, tapLocationInView: tapLocation)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     func pinchGestureHandler(sender: AnyObject) {
         //NSLog("recognized pinch!")
         if let gesture = sender as? UIPinchGestureRecognizer {

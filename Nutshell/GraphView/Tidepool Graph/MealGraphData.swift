@@ -18,10 +18,13 @@ import UIKit
 class MealGraphDataType: GraphDataType {
     
     var isMainEvent: Bool = false
+    var id: String
+    var rectInGraph: CGRect = CGRectZero
     
-    convenience init(timeOffset: NSTimeInterval, isMain: Bool) {
-        self.init(timeOffset: timeOffset)
+    init(timeOffset: NSTimeInterval, isMain: Bool, event: Meal) {
         isMainEvent = isMain
+        id = String(event.id!) // needed if user taps on this item...
+        super.init(timeOffset: timeOffset)
     }
     
     override func typeString() -> String {
@@ -33,7 +36,7 @@ class MealGraphDataType: GraphDataType {
 class MealGraphDataLayer: GraphDataLayer {
 
     var layout: TidepoolGraphLayout
-
+    
     init(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate, layout: TidepoolGraphLayout) {
         self.layout = layout
         super.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime)
@@ -62,7 +65,7 @@ class MealGraphDataLayer: GraphDataLayer {
                     let deltaTime = eventTime.timeIntervalSinceDate(startTime)
                     var isMainEvent = false
                     isMainEvent = mealEvent.time == layout.mainEventTime
-                    dataArray.append(MealGraphDataType(timeOffset: deltaTime, isMain: isMainEvent))
+                    dataArray.append(MealGraphDataType(timeOffset: deltaTime, isMain: isMainEvent, event: mealEvent))
                 }
             }
         } catch let error as NSError {
@@ -80,31 +83,49 @@ class MealGraphDataLayer: GraphDataLayer {
         var isMain = false
         if let mealDataType = dataPoint as? MealGraphDataType {
             isMain = mealDataType.isMainEvent
-        }
 
-        // eventLine Drawing
-        let lineColor = isMain ? kMealLineColor : kOtherMealColor
-        let triangleColor = isMain ? kMealTriangleColor : kOtherMealColor
-        let lineHeight: CGFloat = isMain ? cellViewSize.height : layout.headerHeight
-        let lineWidth: CGFloat = isMain ? 2.0 : 1.0
-        
-        let rect = CGRect(x: xOffset, y: 0.0, width: lineWidth, height: lineHeight)
-        let eventLinePath = UIBezierPath(rect: rect)
-        lineColor.setFill()
-        eventLinePath.fill()
-        
-        let trianglePath = UIBezierPath()
-        let centerX = rect.origin.x + lineWidth/2.0
-        let triangleSize: CGFloat = kMealTriangleTopWidth
-        let triangleOrgX = centerX - triangleSize/2.0
-        trianglePath.moveToPoint(CGPointMake(triangleOrgX, 0.0))
-        trianglePath.addLineToPoint(CGPointMake(triangleOrgX + triangleSize, 0.0))
-        trianglePath.addLineToPoint(CGPointMake(triangleOrgX + triangleSize/2.0, 13.5))
-        trianglePath.addLineToPoint(CGPointMake(triangleOrgX, 0))
-        trianglePath.closePath()
-        trianglePath.miterLimit = 4;
-        trianglePath.usesEvenOddFillRule = true;
-        triangleColor.setFill()
-        trianglePath.fill()
+            // eventLine Drawing
+            let lineColor = isMain ? kMealLineColor : kOtherMealColor
+            let triangleColor = isMain ? kMealTriangleColor : kOtherMealColor
+            let lineHeight: CGFloat = isMain ? cellViewSize.height : layout.headerHeight
+            let lineWidth: CGFloat = isMain ? 2.0 : 1.0
+            
+            let rect = CGRect(x: xOffset, y: 0.0, width: lineWidth, height: lineHeight)
+            let eventLinePath = UIBezierPath(rect: rect)
+            lineColor.setFill()
+            eventLinePath.fill()
+            
+            let trianglePath = UIBezierPath()
+            let centerX = rect.origin.x + lineWidth/2.0
+            let triangleSize: CGFloat = kMealTriangleTopWidth
+            let triangleOrgX = centerX - triangleSize/2.0
+            trianglePath.moveToPoint(CGPointMake(triangleOrgX, 0.0))
+            trianglePath.addLineToPoint(CGPointMake(triangleOrgX + triangleSize, 0.0))
+            trianglePath.addLineToPoint(CGPointMake(triangleOrgX + triangleSize/2.0, 13.5))
+            trianglePath.addLineToPoint(CGPointMake(triangleOrgX, 0))
+            trianglePath.closePath()
+            trianglePath.miterLimit = 4;
+            trianglePath.usesEvenOddFillRule = true;
+            triangleColor.setFill()
+            trianglePath.fill()
+            
+            if !isMain {
+                let mealRect = CGRect(x: triangleOrgX, y: 0.0, width: triangleSize, height: lineHeight)
+                mealDataType.rectInGraph = mealRect
+            }
+        }
     }
+    
+    // override to handle taps - return true if tap has been handled
+    override func tappedAtPoint(point: CGPoint) -> GraphDataType? {
+        for dataPoint in dataArray {
+            if let mealDataPoint = dataPoint as? MealGraphDataType {
+                if mealDataPoint.rectInGraph.contains(point) {
+                    return mealDataPoint
+                }
+            }
+        }
+        return nil
+    }
+
 }

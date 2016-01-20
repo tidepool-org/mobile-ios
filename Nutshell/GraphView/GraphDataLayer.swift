@@ -71,4 +71,10 @@ class GraphDataLayer {
     // override for any needed finish up...
     func finishDrawing() {
     }
+    
+    // override to handle taps - return true if tap has been handled
+    func tappedAtPoint(point: CGPoint) -> GraphDataType? {
+        return nil
+    }
+
 }
