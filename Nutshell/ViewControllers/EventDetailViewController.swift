@@ -600,6 +600,10 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
                     configurePhotoBackground()
                     layoutHeaderView()
                     checkUpdateGraph()
+                    // then animate to center...
+                    if let graphContainerView = graphContainerView {
+                        graphContainerView.centerGraphOnEvent(animated: true)
+                    }
                 }
             } else {
                 NSLog("Couldn't find meal with id \(mealDataPoint.id)")
