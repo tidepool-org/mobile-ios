@@ -329,11 +329,12 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
 
             locationLabel = addLabel(eventItem.location, labelStyle: "detailHeaderLocation", currentView: locationLabel)
             locationLabel!.hidden = eventItem.location.isEmpty
+            if locationIcon != nil {
+                locationIcon!.removeFromSuperview()
+                locationIcon = nil
+            }
             if !eventItem.location.isEmpty {
                 let icon = UIImage(named:"placeSmallIcon")
-                if let locationIcon = locationIcon {
-                    locationIcon.removeFromSuperview()
-                }
                 locationIcon = UIImageView(image: icon)
                 headerOverlayContainer.addSubview(locationIcon!)
             }
