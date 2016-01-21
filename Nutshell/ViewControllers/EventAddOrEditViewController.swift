@@ -40,6 +40,12 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     @IBOutlet weak var calendarControlContainer: UIView!
     @IBOutlet weak var photoControlContainer: UIView!
     
+    @IBOutlet weak var workoutCalorieContainer: UIView!
+    @IBOutlet weak var caloriesLabel: NutshellUILabel!
+    
+    @IBOutlet weak var workoutDurationContainer: UIView!
+    @IBOutlet weak var durationLabel: NutshellUILabel!
+    
     @IBOutlet weak var headerForModalView: NutshellUIView!
     @IBOutlet weak var sceneContainer: UIView!
     @IBOutlet weak var saveButton: UIButton!
@@ -77,10 +83,22 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             eventTimeOffsetSecs = eventItem.tzOffsetSecs
 
             // hide location and photo controls for workouts
-            if let _ = eventItem as? NutWorkout {
+            if let workout = eventItem as? NutWorkout {
                 isWorkout = true
                 placeControlContainer.hidden = true
                 photoControlContainer.hidden = true
+                if workout.duration > 0 {
+                    workoutDurationContainer.hidden = false
+                    let dateComponentsFormatter = NSDateComponentsFormatter()
+                    dateComponentsFormatter.unitsStyle = NSDateComponentsFormatterUnitsStyle.Abbreviated
+                    durationLabel.text = dateComponentsFormatter.stringFromTimeInterval(workout.duration)
+                }
+                if let calories = workout.calories {
+                    if calories > 0 {
+                        workoutCalorieContainer.hidden = false
+                        caloriesLabel.text = String(Int(calories)) + " Calories"
+                    }
+                }
             }
 
             // hide modal header when used as a nav view

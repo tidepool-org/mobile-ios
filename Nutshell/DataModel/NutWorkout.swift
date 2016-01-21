@@ -10,12 +10,14 @@ import Foundation
 
 class NutWorkout: NutEventItem {
     
-    var distance: NSNumber
+    var distance: NSNumber?
     var duration: NSTimeInterval
+    var calories: NSNumber?
     
     init(workout: Workout) {
-        self.distance = workout.distance ?? 0.0
+        self.distance = workout.distance
         self.duration = NSTimeInterval(workout.duration ?? 0.0)
+        self.calories = workout.calories
         super.init(eventItem: workout)
     }
 

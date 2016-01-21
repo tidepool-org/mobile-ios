@@ -1248,6 +1248,62 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D0q-NY-j3z" userLabel="LocationDatePhotos">
                                                 <rect key="frame" x="0.0" y="158" width="375" height="100"/>
                                                 <subviews>
+                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EeO-qt-XP9" userLabel="workoutCalorieContainer">
+                                                        <rect key="frame" x="0.0" y="0.0" width="150" height="100"/>
+                                                        <subviews>
+                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="caloriesIcon" translatesAutoresizingMaskIntoConstraints="NO" id="0AU-FJ-qqW">
+                                                                <rect key="frame" x="66" y="15" width="18" height="18"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="18" id="ExE-gZ-n8f"/>
+                                                                    <constraint firstAttribute="height" constant="18" id="ZRD-Xj-BER"/>
+                                                                </constraints>
+                                                            </imageView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="512 Calories" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uRf-Ey-oTw" userLabel="caloriesLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="41" y="43" width="69" height="17"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewDate"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </label>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstItem="0AU-FJ-qqW" firstAttribute="top" secondItem="EeO-qt-XP9" secondAttribute="top" constant="15" id="dXF-kZ-yiL"/>
+                                                            <constraint firstItem="uRf-Ey-oTw" firstAttribute="centerX" secondItem="EeO-qt-XP9" secondAttribute="centerX" id="mQO-RM-Ukq"/>
+                                                            <constraint firstItem="0AU-FJ-qqW" firstAttribute="centerX" secondItem="EeO-qt-XP9" secondAttribute="centerX" id="nlt-vh-zOp"/>
+                                                            <constraint firstItem="uRf-Ey-oTw" firstAttribute="top" secondItem="0AU-FJ-qqW" secondAttribute="bottom" constant="10" id="uBv-bk-0qw"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GpX-8Z-KKb" userLabel="workoutDurationContainer">
+                                                        <rect key="frame" x="225" y="0.0" width="150" height="100"/>
+                                                        <subviews>
+                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="timeIcon" translatesAutoresizingMaskIntoConstraints="NO" id="9Wa-Md-fk1" userLabel="durationIcon">
+                                                                <rect key="frame" x="66" y="15" width="18" height="18"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="18" id="SbN-Gy-QeW"/>
+                                                                    <constraint firstAttribute="height" constant="18" id="ZKn-sX-jbe"/>
+                                                                </constraints>
+                                                            </imageView>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="28 Minutes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="afu-eq-w1g" userLabel="durationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="44" y="43" width="63" height="17"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewDate"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </label>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstItem="9Wa-Md-fk1" firstAttribute="top" secondItem="GpX-8Z-KKb" secondAttribute="top" constant="15" id="A2o-c8-3CL"/>
+                                                            <constraint firstItem="afu-eq-w1g" firstAttribute="centerX" secondItem="GpX-8Z-KKb" secondAttribute="centerX" id="CP1-rs-WuL"/>
+                                                            <constraint firstItem="afu-eq-w1g" firstAttribute="top" secondItem="9Wa-Md-fk1" secondAttribute="bottom" constant="10" id="EZB-bu-UrU"/>
+                                                            <constraint firstItem="9Wa-Md-fk1" firstAttribute="centerX" secondItem="GpX-8Z-KKb" secondAttribute="centerX" id="EZq-fQ-VIx"/>
+                                                        </constraints>
+                                                    </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dff-cb-DT4" userLabel="locationControlContainer">
                                                         <rect key="frame" x="0.0" y="0.0" width="150" height="100"/>
                                                         <subviews>
@@ -1517,15 +1573,23 @@
                                                 <constraints>
                                                     <constraint firstItem="CSp-gg-CnP" firstAttribute="width" secondItem="D0q-NY-j3z" secondAttribute="width" multiplier="0.4" id="1jb-Mf-p85"/>
                                                     <constraint firstAttribute="bottom" secondItem="dff-cb-DT4" secondAttribute="bottom" id="Dym-Hy-lqK"/>
+                                                    <constraint firstAttribute="trailing" secondItem="GpX-8Z-KKb" secondAttribute="trailing" id="ODd-CM-LpB"/>
                                                     <constraint firstItem="gtn-VK-uRN" firstAttribute="top" secondItem="D0q-NY-j3z" secondAttribute="top" id="OgK-Vk-aRx"/>
                                                     <constraint firstAttribute="height" constant="100" id="PrQ-nx-xMn"/>
                                                     <constraint firstItem="dff-cb-DT4" firstAttribute="leading" secondItem="D0q-NY-j3z" secondAttribute="leading" id="WgE-qD-6Ux"/>
                                                     <constraint firstAttribute="bottom" secondItem="gtn-VK-uRN" secondAttribute="bottom" id="XDy-nx-EJQ"/>
+                                                    <constraint firstItem="GpX-8Z-KKb" firstAttribute="top" secondItem="D0q-NY-j3z" secondAttribute="top" id="Y6f-NA-3NX"/>
+                                                    <constraint firstItem="EeO-qt-XP9" firstAttribute="width" secondItem="D0q-NY-j3z" secondAttribute="width" multiplier="0.4" id="arG-kf-4BT"/>
+                                                    <constraint firstAttribute="bottom" secondItem="GpX-8Z-KKb" secondAttribute="bottom" id="bDc-u5-dEV"/>
+                                                    <constraint firstItem="GpX-8Z-KKb" firstAttribute="width" secondItem="D0q-NY-j3z" secondAttribute="width" multiplier="0.4" id="dFc-v0-4VU"/>
                                                     <constraint firstItem="dff-cb-DT4" firstAttribute="top" secondItem="D0q-NY-j3z" secondAttribute="top" id="hBe-gn-XqU"/>
+                                                    <constraint firstAttribute="bottom" secondItem="EeO-qt-XP9" secondAttribute="bottom" id="hCH-Yk-m9A"/>
                                                     <constraint firstItem="CSp-gg-CnP" firstAttribute="top" secondItem="D0q-NY-j3z" secondAttribute="top" id="oq3-aM-oZM"/>
+                                                    <constraint firstItem="EeO-qt-XP9" firstAttribute="top" secondItem="D0q-NY-j3z" secondAttribute="top" id="pOt-cD-VBi"/>
                                                     <constraint firstItem="gtn-VK-uRN" firstAttribute="centerX" secondItem="D0q-NY-j3z" secondAttribute="centerX" id="qFZ-z1-hPw"/>
                                                     <constraint firstAttribute="bottom" secondItem="CSp-gg-CnP" secondAttribute="bottom" id="sk6-AE-Ucl"/>
                                                     <constraint firstItem="dff-cb-DT4" firstAttribute="width" secondItem="D0q-NY-j3z" secondAttribute="width" multiplier="0.4" id="vG2-Nz-fHZ"/>
+                                                    <constraint firstItem="EeO-qt-XP9" firstAttribute="leading" secondItem="D0q-NY-j3z" secondAttribute="leading" id="vHL-Y3-HDa"/>
                                                     <constraint firstItem="gtn-VK-uRN" firstAttribute="width" secondItem="D0q-NY-j3z" secondAttribute="width" multiplier="0.3" id="wv6-bx-a9M"/>
                                                     <constraint firstAttribute="trailing" secondItem="CSp-gg-CnP" secondAttribute="trailing" id="zWL-hU-E10"/>
                                                 </constraints>
@@ -1730,10 +1794,12 @@
                         <outlet property="addSuccessView" destination="ejO-cF-P6G" id="S1d-ZX-pM4"/>
                         <outlet property="calendarControlContainer" destination="gtn-VK-uRN" id="YIQ-xX-siX"/>
                         <outlet property="calendarIconButton" destination="aaa-jg-7gn" id="KIj-aZ-AhJ"/>
+                        <outlet property="caloriesLabel" destination="uRf-Ey-oTw" id="45t-Od-JDH"/>
                         <outlet property="date1Label" destination="7bq-Jj-vtF" id="FLs-wM-Vbe"/>
                         <outlet property="date2Label" destination="OOd-y1-fQU" id="y4o-Jn-NPM"/>
                         <outlet property="datePicker" destination="7ie-Xi-2LD" id="Hvb-Nw-fD8"/>
                         <outlet property="datePickerView" destination="T6Z-E3-yFO" id="bvP-tK-PdQ"/>
+                        <outlet property="durationLabel" destination="afu-eq-w1g" id="qBi-dj-9Sq"/>
                         <outlet property="headerForModalView" destination="Jig-6N-30U" id="BZ4-lu-5o9"/>
                         <outlet property="locationTextField" destination="b5b-5h-R2Q" id="egJ-t5-SMt"/>
                         <outlet property="notesHintLabel" destination="QY4-ef-Zcn" id="8BT-yT-3Mn"/>
@@ -1749,6 +1815,8 @@
                         <outlet property="sceneContainer" destination="EJp-jb-Txw" id="iYn-B6-o7W"/>
                         <outlet property="titleHintLabel" destination="2gd-CX-jRH" id="aCz-il-Zk0"/>
                         <outlet property="titleTextField" destination="EOZ-el-4r9" id="7CS-fx-8cH"/>
+                        <outlet property="workoutCalorieContainer" destination="EeO-qt-XP9" id="E3d-RO-EUX"/>
+                        <outlet property="workoutDurationContainer" destination="GpX-8Z-KKb" id="Wzq-7y-jJN"/>
                         <segue destination="O7p-z1-dYr" kind="unwind" identifier="unwindSegueToCancel" unwindAction="cancel:" id="HWs-0y-v5g"/>
                         <segue destination="O7p-z1-dYr" kind="unwind" identifier="unwindSegueToDone" unwindAction="done:" id="Y2e-5i-elZ"/>
                         <segue destination="O7p-z1-dYr" kind="unwind" identifier="unwindSegueToHome" unwindAction="home:" id="ZIm-1Q-oIF"/>
@@ -1984,6 +2052,7 @@
         <image name="add-button" width="23" height="23"/>
         <image name="backArrow" width="13" height="22"/>
         <image name="calendarIcon" width="15" height="17"/>
+        <image name="caloriesIcon" width="20" height="20"/>
         <image name="cameraIcon" width="23" height="18"/>
         <image name="menu-button" width="22" height="15"/>
         <image name="miniPicBackground" width="22" height="22"/>
@@ -1999,6 +2068,7 @@
         <image name="starLargeSelectedBadge" width="22" height="30"/>
         <image name="starNormal" width="27" height="27"/>
         <image name="starSmallBadge" width="17" height="22"/>
+        <image name="timeIcon" width="20" height="20"/>
         <image name="xIcon" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
