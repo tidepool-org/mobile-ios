@@ -207,7 +207,8 @@ class NutDataController
                     // Default title format: "Run - 4.2 miles"
                     var title: String = Workout.userStringForHKWorkoutActivityTypeEnumString(we.subType!)
                     if let miles = we.distance {
-                        title = title + " - " + String(miles) + " miles"
+                        let floatMiles = Float(miles)
+                        title = title + " - " + String(format: "%.2f",floatMiles) + " miles"
                     }
                     we.title = title
                     // Default notes string is the application name sourcing the event

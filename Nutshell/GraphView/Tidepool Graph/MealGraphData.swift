@@ -110,7 +110,8 @@ class MealGraphDataLayer: GraphDataLayer {
             trianglePath.fill()
             
             if !isMain {
-                let mealRect = CGRect(x: triangleOrgX, y: 0.0, width: triangleSize, height: lineHeight)
+                let mealHitAreaWidth: CGFloat = max(triangleSize, 30.0)
+                let mealRect = CGRect(x: centerX - mealHitAreaWidth/2.0, y: 0.0, width: mealHitAreaWidth, height: lineHeight)
                 mealDataType.rectInGraph = mealRect
             }
         }

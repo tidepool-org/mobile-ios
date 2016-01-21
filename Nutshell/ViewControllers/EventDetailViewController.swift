@@ -22,6 +22,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     var eventItem: NutEventItem?
     var eventGroup: NutEvent?
     private var originalId: String?
+    private var switchedEvents: Bool = false
     private var isWorkout: Bool = false
     
     @IBOutlet weak var graphSectionView: UIView!
@@ -205,7 +206,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
 
     @IBAction func backButtonHandler(sender: AnyObject) {
         APIConnector.connector().trackMetric("Clicked Back (Data Screen)")
-        if self.eventItem?.nutEventIdString() == originalId {
+        if self.eventItem?.nutEventIdString() == originalId && !switchedEvents {
             self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
         } else {
             // We have a new NutEvent, won't want to return to group event scene...
@@ -619,6 +620,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             if let meal = meal {
                 // if the user tapped on some other meal, switch to viewing that one instead!
                 if meal.time != eventTime {
+                    switchedEvents = true
                     // conjure up a NutMeal and NutEvent for this new item!
                     self.eventGroup = NutEvent(firstEvent: meal)
                     self.eventItem = self.eventGroup?.itemArray[0]

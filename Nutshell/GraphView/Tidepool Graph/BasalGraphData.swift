@@ -213,7 +213,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
         basalValueRectPath.fill()
         
         if let suppressed = suppressed {
-            let suppressedStart = CGPoint(x: basalRect.origin.x + 1.0, y:layout.yBottomOfBasal - floor(pixelsPerValue * suppressed) + 1.0) // add 1.0 so suppressed line top is same as basal top
+            var suppressedStart = CGPoint(x: basalRect.origin.x + 1.0, y:layout.yBottomOfBasal - floor(pixelsPerValue * suppressed) + 1.0) // add 1.0 so suppressed line top is same as basal top
             let suppressedEnd = CGPoint(x: suppressedStart.x + basalRect.size.width - 2.0, y: suppressedStart.y)
             if suppressedLine == nil {
                 // start a new line path
@@ -223,10 +223,11 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
             } else {
                 // continue an existing suppressed line path by adding connecting line if it's at a different y
                 let currentEnd = suppressedLine!.currentPoint
-                if abs(currentEnd.y - suppressedStart.y) > 4.0 {
+                if abs(currentEnd.y - suppressedStart.y) > 1.0 {
                     suppressedLine!.addLineToPoint(suppressedStart)
                     NSLog("suppressed line to \(suppressedStart)")
                 }
+                suppressedStart.y = currentEnd.y
             }
             // add current line segment
             suppressedLine!.addLineToPoint(suppressedEnd)
