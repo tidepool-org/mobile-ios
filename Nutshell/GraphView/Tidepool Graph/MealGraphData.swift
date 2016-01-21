@@ -22,8 +22,8 @@ class MealGraphDataType: GraphDataType {
     var rectInGraph: CGRect = CGRectZero
     
     init(timeOffset: NSTimeInterval, isMain: Bool, event: Meal) {
-        isMainEvent = isMain
-        id = String(event.id!) // needed if user taps on this item...
+        self.isMainEvent = isMain
+        self.id = String(event.id!) // needed if user taps on this item...
         super.init(timeOffset: timeOffset)
     }
     

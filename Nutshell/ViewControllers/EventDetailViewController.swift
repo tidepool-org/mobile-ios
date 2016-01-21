@@ -615,15 +615,22 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     }
 
     func dataPointTapped(dataPoint: GraphDataType, tapLocationInView: CGPoint) {
+        var itemId: String?
         if let mealDataPoint = dataPoint as? MealGraphDataType {
             NSLog("tapped on meal!")
-            let meal = DatabaseUtils.getMealWithId(mealDataPoint.id)
-            if let meal = meal {
-                // if the user tapped on some other meal, switch to viewing that one instead!
-                if meal.time != eventTime {
+            itemId = mealDataPoint.id
+        } else if let workoutDataPoint = dataPoint as? WorkoutGraphDataType {
+            NSLog("tapped on workout!")
+            itemId = workoutDataPoint.id
+        }
+        if let itemId = itemId {
+            let nutEventItem = DatabaseUtils.getNutEventItemWithId(itemId)
+            if let nutEventItem = nutEventItem {
+                // if the user tapped on some other event, switch to viewing that one instead!
+                if nutEventItem.time != eventTime {
                     switchedEvents = true
-                    // conjure up a NutMeal and NutEvent for this new item!
-                    self.eventGroup = NutEvent(firstEvent: meal)
+                    // conjure up a NutWorkout and NutEvent for this new item!
+                    self.eventGroup = NutEvent(firstEvent: nutEventItem)
                     self.eventItem = self.eventGroup?.itemArray[0]
                     // update view to show the new event, centered...
                     configureDetailView()
@@ -638,7 +645,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
                     }
                 }
             } else {
-                NSLog("Couldn't find meal with id \(mealDataPoint.id)")
+                NSLog("Couldn't find nut event item with id \(itemId)")
             }
         }
     }

@@ -209,20 +209,21 @@ class DatabaseUtils {
         return try moc.executeFetchRequest(request) as! [EventItem]
     }
     
-    class func getMealWithId(id: String) -> Meal? {
+    class func getNutEventItemWithId(id: String) -> EventItem? {
         do {
-            let mealArray = try DatabaseUtils.getNutEvent(id) as? [Meal]
-            if mealArray != nil && mealArray!.count == 1 {
-                return mealArray![0]
+            let nutEventArray = try DatabaseUtils.getNutEvent(id)
+            if nutEventArray.count == 1 {
+                return nutEventArray[0]
             } else {
-                NSLog("getMealWithId returns nil")
+                NSLog("getNutEventItemWithId returns nil")
                 return nil
             }
         } catch let error as NSError {
-            NSLog("getMealWithId error: \(error)")
+            NSLog("getNutEventItemWithId error: \(error)")
             return nil
         }
     }
+
     // Note: This call has the side effect of fetching data from the service which may result in a future notification of database changes.
     // TODO: This will need to be reworked to sync data from the service when the service supports meal and workout events.
     class func getAllNutEvents() throws -> [EventItem] {

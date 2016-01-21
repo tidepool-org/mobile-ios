@@ -19,11 +19,14 @@ class WorkoutGraphDataType: GraphDataType {
     
     var isMainEvent: Bool = false
     var duration: NSTimeInterval = 0.0
+    var id: String
+    var rectInGraph: CGRect = CGRectZero
     
-    convenience init(timeOffset: NSTimeInterval, isMain: Bool, duration: NSTimeInterval) {
-        self.init(timeOffset: timeOffset)
+    init(timeOffset: NSTimeInterval, isMain: Bool, duration: NSTimeInterval, event: Workout) {
         self.isMainEvent = isMain
         self.duration = duration
+        self.id = String(event.id!) // needed if user taps on this item...
+        super.init(timeOffset: timeOffset)
     }
     
     override func typeString() -> String {
@@ -66,7 +69,7 @@ class WorkoutGraphDataLayer: GraphDataLayer {
                     var isMainEvent = false
                     isMainEvent = workoutEvent.time == layout.mainEventTime
                     if let duration = workoutEvent.duration {
-                        dataArray.append(WorkoutGraphDataType(timeOffset: deltaTime, isMain: isMainEvent, duration: NSTimeInterval(duration)))
+                        dataArray.append(WorkoutGraphDataType(timeOffset: deltaTime, isMain: isMainEvent, duration: NSTimeInterval(duration), event: workoutEvent))
                     } else {
                         NSLog("ignoring Workout event with nil duration")
                     }
@@ -110,6 +113,23 @@ class WorkoutGraphDataLayer: GraphDataLayer {
             let eventRectanglePath = UIBezierPath(rect: workoutRect)
             Styles.pinkColor.setFill()
             eventRectanglePath.fill()
+            
+            if !isMain {
+                workoutDataType.rectInGraph = workoutRect
+            }
         }
     }
+    
+    // override to handle taps - return true if tap has been handled
+    override func tappedAtPoint(point: CGPoint) -> GraphDataType? {
+        for dataPoint in dataArray {
+            if let workoutDataPoint = dataPoint as? WorkoutGraphDataType {
+                if workoutDataPoint.rectInGraph.contains(point) {
+                    return workoutDataPoint
+                }
+            }
+        }
+        return nil
+    }
+
 }
