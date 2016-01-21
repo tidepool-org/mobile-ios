@@ -193,12 +193,14 @@ class APIConnector {
                     APIConnector.connector().trackMetric("Logged In")
                     completion(Result.Success(user))
                 } else {
+                    APIConnector.connector().trackMetric("Log In Failed")
                     NutDataController.controller().logoutUser()
                     completion(Result.Failure(nil, NSError(domain: self.kNutshellErrorDomain,
                         code: -1,
                         userInfo: ["description":"Could not create user from JSON", "result":result.value!])))
                 }
             } else {
+                APIConnector.connector().trackMetric("Log In Failed")
                 NutDataController.controller().logoutUser()
                 completion(Result.Failure(nil, result.error!))
             }
@@ -226,13 +228,15 @@ class APIConnector {
     private var metricsCache: [String] = []
     // Turn on the following boolean to prevent logging metrics to the service...
     private var noMetricReporting = false
+    // Used so we only have one metric send in progress at a time, to help balance service load a bit...
+    private var metricSendInProgress = false
     func trackMetric(metric: String) {
         // Set our endpoint for the event tracking
         // Format: https://api.tidepool.org/metrics/thisuser/urchin%20-%20Remember%20Me%20Used?source=urchin&sourceVersion=1.1
         // Format: https://api.tidepool.org/metrics/thisuser/nutshell-Viewed%20Hamburger%20Menu?source=nutshell&sourceVersion=0%2E8%2E1
 
         metricsCache.append(metric)
-        if !serviceAvailable() || noMetricReporting {
+        if !serviceAvailable() || metricSendInProgress || noMetricReporting {
             NSLog("Offline: trackMetric stashed: \(metric)")
             return
         }
@@ -240,12 +244,12 @@ class APIConnector {
         let nextMetric = metricsCache.removeFirst()
         let endpoint = "metrics/thisuser/nutshell-" + nextMetric
         let parameters = ["source": "nutshell", "sourceVersion": UIApplication.appVersion()]
-
+        metricSendInProgress = true
+        NSLog("Tracked metric: \(nextMetric)")
         sendRequest(Method.GET, endpoint: endpoint, parameters: parameters).responseJSON { (request, response, result) -> Void in
-            
+            self.metricSendInProgress = false
             if let response = response {
                 if response.statusCode == 200 {
-                    NSLog("Tracked metric: \(metric)")
                     if !self.metricsCache.isEmpty {
                         self.trackMetric(self.metricsCache.removeFirst())
                     }
@@ -345,8 +349,10 @@ class APIConnector {
                 // Failure: typically, no data were found:
                 // Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.}
                 if let response = response {
-                    if response.statusCode != 200 {
-                        NSLog("Failure status code: \(response.statusCode) for getReadOnlyUserData")
+                    let statusCode = response.statusCode
+                    if statusCode != 200 {
+                        NSLog("Failure status code: \(statusCode) for getReadOnlyUserData")
+                        APIConnector.connector().trackMetric("Tidepool Data Fetch Failure - Code " + String(statusCode))
                     }
                     // Otherwise, just indicates no data were found...
                 } else {

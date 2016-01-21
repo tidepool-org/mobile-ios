@@ -396,9 +396,6 @@ extension EventListViewController: UITableViewDataSource {
             let tuple = self.filteredNutEvents[indexPath.item]
             let nutEvent = tuple.1
             cell.configureCell(nutEvent)
-            if !cell.nutCrackedStar.hidden {
-                APIConnector.connector().trackMetric("Cracked Nut Badge Appears (Home Screen)")
-            }
         }
         
         return cell
