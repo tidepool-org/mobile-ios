@@ -219,6 +219,15 @@ class NutUtils {
     }
 
     // NOTE: these date routines are not localized, and do not take into account user preferences for date display.
+
+    /// Call setFormatterTimezone to set time zone before calling standardUIDayString or standardUIDateString
+    class func setFormatterTimezone(timezoneOffsetSecs: Int) {
+        let df = NutUtils.dateFormatter
+        df.timeZone = NSTimeZone(forSecondsFromGMT:timezoneOffsetSecs)
+    }
+    
+    /// Returns strings like "Mar 17, 2016", "Today", "Yesterday"
+    /// Note: call setFormatterTimezone before this!
     class func standardUIDayString(date: NSDate) -> String {
         let df = NutUtils.dateFormatter
         df.dateFormat = "MMM d, yyyy"
@@ -239,21 +248,18 @@ class NutUtils {
         return dayString
     }
     
-    class func standardUIDateString(date: NSDate, relative: Bool = false) -> String {
+    /// Returns strings like "Yesterday at 9:17 am"
+    /// Note: call setFormatterTimezone before this!
+    class func standardUIDateString(date: NSDate) -> String {
         let df = NutUtils.dateFormatter
-        if (relative) {
-            let dayString = NutUtils.standardUIDayString(date)
-            // Figure the hour/minute part...
-            df.dateFormat = "h:mm a"
-            var hourString = df.stringFromDate(date)
-            // Replace uppercase PM and AM with lowercase versions
-            hourString = hourString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
-            hourString = hourString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
-            return dayString + " at " + hourString
-        } else {
-            df.dateFormat = Styles.uniformDateFormat
-            return df.stringFromDate(date)
-        }
+        let dayString = NutUtils.standardUIDayString(date)
+        // Figure the hour/minute part...
+        df.dateFormat = "h:mm a"
+        var hourString = df.stringFromDate(date)
+        // Replace uppercase PM and AM with lowercase versions
+        hourString = hourString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        hourString = hourString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        return dayString + " at " + hourString
     }
 
 }

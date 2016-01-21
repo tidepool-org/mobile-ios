@@ -22,6 +22,8 @@ class GraphLayout {
     let graphCenterTime: NSDate
     /// Time at x-origin of graph
     let graphStartTime: NSDate
+    /// Time is displayed in the timezone at this offset
+    var timezoneOffsetSecs: Int
     /// Time interval covered by the entire graph.
     let graphTimeInterval: NSTimeInterval
     /// Starts at size of graph view, but varies with zoom.
@@ -31,13 +33,14 @@ class GraphLayout {
     /// Density of time on x-axis
     var graphPixelsPerSec: CGFloat = 0.0
 
-    init (viewSize: CGSize, centerTime: NSDate) {
+    init (viewSize: CGSize, centerTime: NSDate, tzOffsetSecs: Int) {
         self.graphViewSize = viewSize
         self.cellViewSize = viewSize
         self.cellTimeInterval = NSTimeInterval(graphViewSize.width * 3600.0/initPixelsPerHour)
         self.graphTimeInterval = self.cellTimeInterval * NSTimeInterval(graphCellsInCollection)
         self.graphCenterTime = centerTime
         self.graphStartTime = centerTime.dateByAddingTimeInterval(-self.graphTimeInterval/2.0)
+        self.timezoneOffsetSecs = tzOffsetSecs
     }
     
     /// Call as graph is zoomed in or out!

@@ -22,7 +22,7 @@ class TidepoolGraphView: GraphContainerView {
 
     init(frame: CGRect, delegate: GraphContainerViewDelegate, eventItem: NutEventItem) {
         self.eventItem = eventItem
-        let layout = TidepoolGraphLayout(viewSize: frame.size, mainEventTime: eventItem.time)
+        let layout = TidepoolGraphLayout(viewSize: frame.size, mainEventTime: eventItem.time, tzOffsetSecs: eventItem.tzOffsetSecs)
         super.init(frame: frame, delegate: delegate, layout: layout)
         tidepoolLayout = layout
     }

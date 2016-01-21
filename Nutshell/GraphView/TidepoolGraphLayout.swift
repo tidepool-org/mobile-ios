@@ -21,9 +21,9 @@ class TidepoolGraphLayout: GraphLayout {
     var mainEventTime: NSDate
     var dataDetected = false
 
-    init (viewSize: CGSize, mainEventTime: NSDate) {
+    init (viewSize: CGSize, mainEventTime: NSDate, tzOffsetSecs: Int) {
         self.mainEventTime = mainEventTime
-        super.init(viewSize: viewSize, centerTime: mainEventTime)
+        super.init(viewSize: viewSize, centerTime: mainEventTime, tzOffsetSecs: tzOffsetSecs)
     }
 
     //

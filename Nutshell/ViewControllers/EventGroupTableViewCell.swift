@@ -75,7 +75,8 @@ class EventGroupTableViewCell: BaseUITableViewCell {
     private var photoContainerHeight: CGFloat = 79.0
     func configureCell(eventItem: NutEventItem) {
         titleString.text = eventItem.notes
-        timeString.text = NutUtils.standardUIDateString(eventItem.time, relative: true)
+        NutUtils.setFormatterTimezone(eventItem.tzOffsetSecs)
+        timeString.text = NutUtils.standardUIDateString(eventItem.time)
         self.eventItem = eventItem
 
         favoriteStarContainer.hidden = !eventItem.nutCracked

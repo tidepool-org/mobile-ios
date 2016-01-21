@@ -58,6 +58,8 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     @IBOutlet weak var picture2Image: UIImageView!
     
     private var eventTime = NSDate()
+    // Note: time zone offset is only used for display; new items are always created with the offset for the current calendar time zone, and time zones are not editable!
+    private var eventTimeOffsetSecs: Int = 0
     private var pictureImageURLs: [String] = []
 
     @IBOutlet weak var bottomSectionContainer: UIView!
@@ -72,6 +74,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             editExistingEvent = true
             APIConnector.connector().trackMetric("Viewed Edit Screen (Edit Screen)")
             eventTime = eventItem.time
+            eventTimeOffsetSecs = eventItem.tzOffsetSecs
 
             // hide location and photo controls for workouts
             if let _ = eventItem as? NutWorkout {
@@ -88,6 +91,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 }
             }
         }  else  {
+            eventTimeOffsetSecs = NSCalendar.currentCalendar().timeZone.secondsFromGMT
             locationTextField.text = Styles.placeholderLocationString
             saveButtonTitle = NSLocalizedString("saveAndEatButtonTitle", comment:"Save and eat!")
         }

@@ -203,6 +203,7 @@ public class GraphingUtils {
         
         let df = NSDateFormatter()
         df.dateFormat = "h a"
+        df.timeZone = NSTimeZone(forSecondsFromGMT: layout.timezoneOffsetSecs)
         let hourlabelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
         hourlabelStyle.alignment = .Center
         
@@ -227,6 +228,7 @@ public class GraphingUtils {
             var midnight = false
             if hourStr == "12 a" {
                 midnight = true
+                NutUtils.setFormatterTimezone(layout.timezoneOffsetSecs)
                 hourStr = NutUtils.standardUIDayString(curDate)
             }
             

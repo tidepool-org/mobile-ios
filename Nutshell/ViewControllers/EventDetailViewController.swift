@@ -325,7 +325,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             notesLabel!.hidden = eventItem.notes.isEmpty
 
             eventTime = eventItem.time
-            let dateLabelText = NutUtils.standardUIDateString(eventTime, relative: true)
+            NutUtils.setFormatterTimezone(eventItem.tzOffsetSecs)
+            let dateLabelText = NutUtils.standardUIDateString(eventTime)
             dateLabel = addLabel(dateLabelText, labelStyle: "detailHeaderDate", currentView: dateLabel)
 
             locationLabel = addLabel(eventItem.location, labelStyle: "detailHeaderLocation", currentView: locationLabel)
