@@ -57,22 +57,20 @@ class EventListTableViewCell: BaseUITableViewCell {
         
         // Configure the view for the highlighted state
         titleLabel.highlighted = highlighted
-        locationLabel.highlighted = highlighted
+        locationLabel?.highlighted = highlighted
         repeatCountLabel.highlighted = highlighted
         nutCrackedStar.highlighted = highlighted
-        placeIconView.highlighted = highlighted
+        placeIconView?.highlighted = highlighted
     }
 
     func configureCell(nutEvent: NutEvent) {
         titleLabel.text = nutEvent.title
-        locationLabel.text = nutEvent.location
         repeatCountLabel.text = "x " + String(nutEvent.itemArray.count)
         eventGroup = nutEvent
         nutCrackedStar.hidden = true
         
-        if nutEvent.location.isEmpty {
-            placeIconView.hidden = true
-        } else {
+        if !nutEvent.location.isEmpty {
+            locationLabel.text = nutEvent.location
             placeIconView.hidden = false
             placeIconView.image = EventListTableViewCell.defaultPlaceIconImage
             placeIconView.highlightedImage = EventListTableViewCell.highlightedPlaceIconImage

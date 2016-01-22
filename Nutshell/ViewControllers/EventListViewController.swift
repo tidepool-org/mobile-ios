@@ -390,14 +390,23 @@ extension EventListViewController: UITableViewDataSource {
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(EventViewStoryboard.TableViewCellIdentifiers.eventListCell, forIndexPath: indexPath) as! EventListTableViewCell
         
+        // Note: two different list cells are used depending upon whether a location will be shown or not. 
+        var cellId = EventViewStoryboard.TableViewCellIdentifiers.eventListCellNoLoc
+        var nutEvent: NutEvent?
         if (indexPath.item < filteredNutEvents.count) {
             let tuple = self.filteredNutEvents[indexPath.item]
-            let nutEvent = tuple.1
-            cell.configureCell(nutEvent)
+            nutEvent = tuple.1
+            
+            if !nutEvent!.location.isEmpty {
+                cellId = EventViewStoryboard.TableViewCellIdentifiers.eventListCellWithLoc
+            }
         }
         
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath: indexPath) as! EventListTableViewCell
+        if let nutEvent = nutEvent {
+            cell.configureCell(nutEvent)
+        }
         return cell
     }
 
