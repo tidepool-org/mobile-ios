@@ -87,10 +87,10 @@ class MealGraphDataLayer: GraphDataLayer {
             // eventLine Drawing
             let lineColor = isMain ? kMealLineColor : kOtherMealColor
             let triangleColor = isMain ? kMealTriangleColor : kOtherMealColor
-            let lineHeight: CGFloat = isMain ? cellViewSize.height : layout.headerHeight
+            let lineHeight: CGFloat = isMain ? layout.yBottomOfMeal - layout.yTopOfMeal : layout.headerHeight
             let lineWidth: CGFloat = isMain ? 2.0 : 1.0
             
-            let rect = CGRect(x: xOffset, y: 0.0, width: lineWidth, height: lineHeight)
+            let rect = CGRect(x: xOffset, y: layout.yTopOfMeal, width: lineWidth, height: lineHeight)
             let eventLinePath = UIBezierPath(rect: rect)
             lineColor.setFill()
             eventLinePath.fill()

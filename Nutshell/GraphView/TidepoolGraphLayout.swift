@@ -97,10 +97,12 @@ class TidepoolGraphLayout: GraphLayout {
     var yTopOfBasal: CGFloat = 0.0
     var yBottomOfBasal: CGFloat = 0.0
     var yPixelsBasal: CGFloat = 0.0
-    // Workout durations go in a section below Basal
+    // Workout durations go in the header sections
     var yTopOfWorkout: CGFloat = 0.0
     var yBottomOfWorkout: CGFloat = 0.0
     var yPixelsWorkout: CGFloat = 0.0
+    var yTopOfMeal: CGFloat = 0.0
+    var yBottomOfMeal: CGFloat = 0.0
 
     //
     // MARK: - Private constants
@@ -116,7 +118,8 @@ class TidepoolGraphLayout: GraphLayout {
     private let kGraphBolusBaseOffset: CGFloat = 2.0
     private let kGraphBasalBaseOffset: CGFloat = 2.0
     private let kGraphWorkoutBaseOffset: CGFloat = 2.0
-
+    private let kGraphBottomEdge: CGFloat = 5.0
+    
     //
     // MARK: - Configuration
     //
@@ -143,11 +146,14 @@ class TidepoolGraphLayout: GraphLayout {
         let wizardHeight = graphViewHeight < 320.0 ? 0.0 : kGraphWizardHeight
 
         // The pie to divide is what's left over after removing constant height areas
-        let graphHeight = graphViewHeight - headerHeight - wizardHeight
+        let graphHeight = graphViewHeight - headerHeight - wizardHeight - kGraphBottomEdge
         
         // Put the workout data at the top, over the X-axis
         yTopOfWorkout = 2.0
-        yBottomOfWorkout = graphViewHeight
+        yTopOfMeal = 2.0
+        yBottomOfWorkout = graphViewHeight - kGraphBottomEdge
+        yBottomOfMeal = yBottomOfWorkout
+        // Meal line goes from top to bottom as well
         yPixelsWorkout = headerHeight - 4.0
         
         // The largest section is for the glucose readings just below the header
@@ -161,7 +167,7 @@ class TidepoolGraphLayout: GraphLayout {
         
         // At the bottom are the bolus and basal readings
         self.yTopOfBolus = self.yBottomOfWizard + kGraphWizardBaseOffset
-        self.yBottomOfBolus = graphViewHeight
+        self.yBottomOfBolus = graphViewHeight - kGraphBottomEdge
         self.yPixelsBolus = self.yBottomOfBolus - self.yTopOfBolus
         
         // Basal values sit just below the bolus readings
