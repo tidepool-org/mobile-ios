@@ -62,7 +62,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         self.navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsetsMake(0.0, -8.0, -1.0, 0.0)
         topSectionContainer.backgroundColor = Styles.darkPurpleColor
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: "databaseChanged:", name: NewBlockRangeLoadedNotification, object: nil)
+        notificationCenter.addObserver(self, selector: "graphDataChanged:", name: NewBlockRangeLoadedNotification, object: nil)
         notificationCenter.addObserver(self, selector: "reachabilityChanged:", name: ReachabilityChangedNotification, object: nil)
         configureForReachability()
     }
@@ -88,7 +88,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     private var viewIsForeground: Bool = false
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        //NSLog("viewWillAppear")
+        //NSLog("EventDetailVC: viewWillAppear")
         
         if eventItem == nil {
             NSLog("Error: No Event at EventDetailVC viewWillAppear!")
@@ -138,7 +138,10 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             self.eventGroup = eventAddOrEditVC.eventGroup
             self.eventItem = eventAddOrEditVC.eventItem
             if eventAddOrEditVC.eventItem != nil {
-                reloadView()
+                // The event may have changed, so reload everything.
+                configureDetailView() // setup done at viewDidLoad time dependent upon the event
+                configureGraphContainer()
+                configurePhotoBackground()
             } else {
                 NSLog("EventDetailVC detected deleted event at done!")
                 // Note: will segue out at ViewWillDisplay...
@@ -176,6 +179,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         }
     }
     
+    /// Works with graphDataChanged to ensure graph is up-to-date after notification of database changes whether this VC is in the foreground or background.
     private func checkUpdateGraph() {
         if graphNeedsUpdate {
             graphNeedsUpdate = false
@@ -186,13 +190,13 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     }
     
     private var graphNeedsUpdate: Bool  = false
-    func databaseChanged(note: NSNotification) {
+    func graphDataChanged(note: NSNotification) {
         graphNeedsUpdate = true
         if viewIsForeground {
-            NSLog("EventDetailView: databaseChanged, reloading")
+            NSLog("EventDetailView: graphDataChanged, reloading")
             checkUpdateGraph()
         } else {
-            NSLog("EventDetailView: databaseChanged, in background")
+            NSLog("EventDetailView: graphDataChanged, in background")
         }
     }
 
@@ -297,6 +301,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     private var curPhotoDisplayedIndex = 0
     private func configurePhotoBackground() {
         if let eventItem = eventItem {
+            //NSLog("EventDetailVC: configurePhotoBackground")
             photoDisplayImageView.hidden = true
             let photoUrls = eventItem.photoUrlArray()
             topSectionContainer.setNeedsLayout()
@@ -313,6 +318,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     }
     
     private func configureDetailView() {
+        //NSLog("EventDetailVC: configureDetailView")
         if let eventItem = eventItem {
             configureNutCracked()
 
@@ -444,10 +450,11 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
 
     private func layoutHeaderView() {
         
-        //NSLog("EventDetailVC layoutHeaderView")
+        //NSLog("EventDetailVC: layoutHeaderView")
         headerOverlayContainer.setNeedsLayout()
         headerOverlayContainer.layoutIfNeeded()
-        var containerframe = headerOverlayContainer.bounds
+        // start with header aspect ratio of 2:1
+        var containerframe = growHeaderOverlayContainer(2.0)
         
         let titleHeightNeeded = sizeNeededForLabel(containerframe.width, availHeight: containerframe.height, label: titleLabel).height
         let dateHeightNeeded = sizeNeededForLabel(containerframe.width, availHeight: containerframe.height, label: dateLabel).height
@@ -555,7 +562,9 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     // MARK: - Graph view
     //
     
+    /// Reloads the graph - this should be called after the header has been laid out and the graph section size has been figured. Pass in edgeOffset to place the nut event other than in the center.
     private func configureGraphContainer(edgeOffset: CGFloat = 0.0) {
+        //NSLog("EventDetailVC: configureGraphContainer")
         if (graphContainerView != nil) {
             graphContainerView?.removeFromSuperview();
             graphContainerView = nil;
@@ -568,6 +577,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
        }
     }
     
+    /// Reloads the graph as well as photo header background, but only if the graph has not been loaded already, or if the size of the graph section has changed.
     override func viewDidLayoutSubviews() {
         // self.view's direct subviews are laid out, force graph subview to layout its subviews:
         graphSectionView.setNeedsLayout()
@@ -575,7 +585,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         //NSLog("EventDetailVC viewDidLayoutSubviews, graphSectionView: \(graphSectionView.frame.size)")
         if let graphContainerView = graphContainerView {
             if (graphContainerView.frame.size == graphSectionView.frame.size) {
-                //NSLog("graph reconfigure skipped!")
+                NSLog("graph reconfigure skipped!")
                 return
             }
             NSLog("Reconfigure graph, graphContainerView: \(graphContainerView.frame.size)")
@@ -625,6 +635,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             itemId = workoutDataPoint.id
         }
         if let itemId = itemId {
+            //NSLog("EventDetailVC: dataPointTapped")
             let nutEventItem = DatabaseUtils.getNutEventItemWithId(itemId)
             if let nutEventItem = nutEventItem {
                 // if the user tapped on some other event, switch to viewing that one instead!
@@ -635,11 +646,10 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
                     self.eventItem = self.eventGroup?.itemArray[0]
                     // update view to show the new event, centered...
                     configureDetailView()
+                    layoutHeaderView()
                     // keep point that was tapped at the same offset in the view in the new graph by setting the graph center point to be at the same x offset in the view...
                     configureGraphContainer(tapLocationInView.x)
                     configurePhotoBackground()
-                    layoutHeaderView()
-                    checkUpdateGraph()
                     // then animate to center...
                     if let graphContainerView = graphContainerView {
                         graphContainerView.centerGraphOnEvent(animated: true)
@@ -651,17 +661,6 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         }
     }
 
-    //
-    // MARK: - Deal with layout changes
-    //
-    
-    private func reloadView() {
-        configureDetailView()
-        configureGraphContainer()
-        configurePhotoBackground()
-    }
-
-    
 }
 
 
