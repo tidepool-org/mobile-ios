@@ -57,6 +57,8 @@ class LoginViewController: BaseUIViewController {
             let forgotStr = NSAttributedString(string: forgotText, attributes:[NSFontAttributeName: forgotPasswordLabel.font, NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue])
             forgotPasswordLabel.attributedText = forgotStr
         }
+        // TODO: hide for now until implemented!
+        forgotPasswordLabel.hidden = true
         
         notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
         notificationCenter.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
