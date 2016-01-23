@@ -489,6 +489,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             let storyboard = UIStoryboard(name: "EventView", bundle: nil)
             let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
             photoVC.photoURLs = pictureImageURLs
+            photoVC.mealTitle = titleTextField.text
             photoVC.imageIndex = itemNum
             photoVC.editAllowed = true
             if editExistingEvent {

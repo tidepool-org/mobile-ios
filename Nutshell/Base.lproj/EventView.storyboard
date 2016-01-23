@@ -1068,7 +1068,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k9o-aM-bCq" userLabel="HeaderView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="64" width="320" height="44"/>
                                 <subviews>
-                                    <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fue-7M-CfP">
+                                    <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fue-7M-CfP">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <items>
                                             <navigationItem title="Meal Photo" id="P0S-oj-7oj">
@@ -1099,8 +1099,12 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="fue-7M-CfP" firstAttribute="leading" secondItem="k9o-aM-bCq" secondAttribute="leading" id="2qe-DD-V5J"/>
+                                    <constraint firstAttribute="trailing" secondItem="fue-7M-CfP" secondAttribute="trailing" id="GRY-kr-M23"/>
+                                    <constraint firstItem="fue-7M-CfP" firstAttribute="top" secondItem="k9o-aM-bCq" secondAttribute="top" id="LpB-Dk-OrO"/>
                                     <constraint firstAttribute="trailing" secondItem="VUj-yP-j4o" secondAttribute="trailing" id="Qau-N4-Kxn"/>
                                     <constraint firstAttribute="height" constant="44" id="SE1-O0-oOt"/>
+                                    <constraint firstAttribute="bottom" secondItem="fue-7M-CfP" secondAttribute="bottom" id="gdA-EH-pde"/>
                                     <constraint firstAttribute="bottom" secondItem="VUj-yP-j4o" secondAttribute="bottom" id="h9I-Q4-acZ"/>
                                     <constraint firstItem="VUj-yP-j4o" firstAttribute="leading" secondItem="k9o-aM-bCq" secondAttribute="leading" id="hMX-1U-Phg"/>
                                 </constraints>
@@ -1133,7 +1137,7 @@
                                     <constraint firstAttribute="bottom" secondItem="BSi-Qd-onx" secondAttribute="bottom" id="qE6-Xf-knb"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
@@ -1160,6 +1164,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="headerForModalView" destination="k9o-aM-bCq" id="pol-7F-4t8"/>
+                        <outlet property="headerNavItem" destination="P0S-oj-7oj" id="uqW-bN-K0E"/>
                         <outlet property="pageControl" destination="H9s-Kb-o8V" id="rzh-z6-uQ2"/>
                         <outlet property="photoCollectView" destination="BSi-Qd-onx" id="RFH-LF-Xgz"/>
                         <segue destination="56N-PU-Tx1" kind="unwind" identifier="UnwindSegueFromShowPhoto" unwindAction="done:" id="4je-C3-qVV"/>

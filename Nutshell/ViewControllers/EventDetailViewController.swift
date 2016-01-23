@@ -257,6 +257,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
                     let storyboard = UIStoryboard(name: "EventView", bundle: nil)
                     let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
                     photoVC.editAllowed = false
+                    photoVC.mealTitle = mealItem.title
                     photoVC.photoURLs = mealItem.photoUrlArray()
                     photoVC.imageIndex = 0
                     self.navigationController?.pushViewController(photoVC, animated: true)

@@ -19,12 +19,14 @@ class ShowPhotoViewController: UIViewController {
 
     var editAllowed = false
     var photoURLs: [String] = []
+    var mealTitle: String?
     var imageIndex: Int = 0
     var modalPresentation = false
     
     @IBOutlet weak var photoCollectView: EventPhotoCollectView!
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var headerForModalView: NutshellUIView!
+    @IBOutlet weak var headerNavItem: UINavigationItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +45,11 @@ class ShowPhotoViewController: UIViewController {
             if editAllowed {
                 navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonHandler:")
             }
+        }
+        
+        if let mealTitle = mealTitle {
+            self.navigationItem.title = mealTitle
+            self.headerNavItem.title = mealTitle
         }
     }
 
