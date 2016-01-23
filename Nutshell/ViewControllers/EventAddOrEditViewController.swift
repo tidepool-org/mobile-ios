@@ -269,7 +269,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
 
     private func hideDateIfOpen() {
         if !datePickerView.hidden {
-            configureDateView()
+            cancelDatePickButtonHandler(self)
         }
     }
     
@@ -311,6 +311,13 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     //
     // MARK: - Button and text field handlers
     //
+    
+    @IBAction func dismissKeyboard(sender: AnyObject) {
+        titleTextField.resignFirstResponder()
+        notesTextField.resignFirstResponder()
+        locationTextField.resignFirstResponder()
+        hideDateIfOpen()
+    }
     
     @IBAction func titleTextLargeHitAreaButton(sender: AnyObject) {
         titleTextField.becomeFirstResponder()
@@ -915,10 +922,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     //
     
     private func showSuccessView() {
-        titleTextField.resignFirstResponder()
-        notesTextField.resignFirstResponder()
-        locationTextField.resignFirstResponder()
-        
+        dismissKeyboard(self)
         let animations: [UIImage]? = [UIImage(named: "addAnimation-01")!,
             UIImage(named: "addAnimation-02")!,
             UIImage(named: "addAnimation-03")!,
@@ -949,17 +953,17 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     private var savedTime: NSDate?
     @IBAction func dateButtonHandler(sender: AnyObject) {
         // user tapped on date, bring up date picker
-        datePickerView.hidden = !datePickerView.hidden
-        if !datePickerView.hidden {
-            titleTextField.resignFirstResponder()
-            notesTextField.resignFirstResponder()
-            locationTextField.resignFirstResponder()
+        if datePickerView.hidden {
+            dismissKeyboard(self)
+            datePickerView.hidden = false
             savedTime = eventTime
             if editExistingEvent {
                 APIConnector.connector().trackMetric("Edited Datetime (Edit Screen)")
             } else {
                 APIConnector.connector().trackMetric("Clicked to Update Datetime (Add Meal Screen)")
             }
+        } else {
+            cancelDatePickButtonHandler(self)
         }
     }
     

@@ -383,10 +383,19 @@
                             <constraint firstItem="Yu7-Gk-FTH" firstAttribute="top" secondItem="2ih-Oi-tIS" secondAttribute="bottom" id="w0t-01-pYQ"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="All events" id="h4z-iC-Yiv">
+                    <navigationItem key="navigationItem" id="h4z-iC-Yiv">
+                        <nil key="title"/>
                         <barButtonItem key="leftBarButtonItem" image="menu-button" id="k2Y-dm-3tk">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
+                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3hf-bE-obs" userLabel="dismissKeyboard">
+                            <rect key="frame" x="113" y="7" width="150" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                            <connections>
+                                <action selector="dismissKeyboard:" destination="oVB-ry-Lwj" eventType="touchUpInside" id="3fq-tn-APz"/>
+                            </connections>
+                        </button>
                         <barButtonItem key="rightBarButtonItem" image="add-button" id="AjV-8Q-vYz">
                             <color key="tintColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
@@ -1212,6 +1221,12 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jig-6N-30U" userLabel="HeaderView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="64" width="375" height="44"/>
                                 <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w74-Hf-mzX" userLabel="dismissKeyboard">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                        <connections>
+                                            <action selector="dismissKeyboard:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="mea-pc-ZRl"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pPw-PK-xkH" userLabel="cancelButton">
                                         <rect key="frame" x="16" y="10" width="24" height="24"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1234,12 +1249,16 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="w74-Hf-mzX" firstAttribute="leading" secondItem="Jig-6N-30U" secondAttribute="leading" id="Ahr-q1-vpN"/>
                                     <constraint firstItem="pPw-PK-xkH" firstAttribute="leading" secondItem="Jig-6N-30U" secondAttribute="leading" constant="16" id="FaT-Ha-rjh"/>
+                                    <constraint firstAttribute="trailing" secondItem="w74-Hf-mzX" secondAttribute="trailing" id="Fio-rF-CMT"/>
                                     <constraint firstItem="pPw-PK-xkH" firstAttribute="centerY" secondItem="Jig-6N-30U" secondAttribute="centerY" id="Qoa-LX-hFU"/>
                                     <constraint firstAttribute="trailing" secondItem="SdC-fO-FOS" secondAttribute="trailing" id="SER-93-jZe"/>
+                                    <constraint firstItem="w74-Hf-mzX" firstAttribute="top" secondItem="Jig-6N-30U" secondAttribute="top" id="VTM-MD-z0J"/>
                                     <constraint firstItem="SdC-fO-FOS" firstAttribute="leading" secondItem="Jig-6N-30U" secondAttribute="leading" id="fhL-KX-QiH"/>
                                     <constraint firstAttribute="bottom" secondItem="SdC-fO-FOS" secondAttribute="bottom" id="vod-XX-5LW"/>
                                     <constraint firstAttribute="height" constant="44" id="z2e-Mi-k3u"/>
+                                    <constraint firstAttribute="bottom" secondItem="w74-Hf-mzX" secondAttribute="bottom" id="zqh-If-1Ub"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
@@ -1264,6 +1283,30 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pqj-03-nXf" userLabel="TitleAndNotes">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="158"/>
                                                 <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Simple and repeatable" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2gd-CX-jRH" userLabel="titleHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="125" y="42" width="126" height="17"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
+                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewHint"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sides, dessert, anything else?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QY4-ef-Zcn" userLabel="notesHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="106" y="99" width="163" height="17"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
+                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewHint"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i1f-eW-9nB" userLabel="dismissKeyboard">
+                                                        <rect key="frame" x="0.0" y="0.0" width="375" height="158"/>
+                                                        <connections>
+                                                            <action selector="dismissKeyboard:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="8Rz-UH-rju"/>
+                                                        </connections>
+                                                    </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g3s-Sw-gxd" userLabel="titleTextLargeHitAreaButton">
                                                         <rect key="frame" x="12" y="16" width="351" height="43"/>
                                                         <connections>
@@ -1284,15 +1327,6 @@
                                                             <action selector="titleEditingDidEnd:" destination="wuR-Cf-1Tk" eventType="editingDidEnd" id="9Da-Vh-gSL"/>
                                                         </connections>
                                                     </textField>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Simple and repeatable" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2gd-CX-jRH" userLabel="titleHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="125" y="42" width="126" height="17"/>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewHint"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </label>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Xd-vE-tGN" userLabel="notesTextLargeHitAreaButton">
                                                         <rect key="frame" x="12" y="73" width="351" height="43"/>
                                                         <connections>
@@ -1313,24 +1347,17 @@
                                                             <action selector="notesEditingDidEnd:" destination="wuR-Cf-1Tk" eventType="editingDidEndOnExit" id="ldc-Yh-But"/>
                                                         </connections>
                                                     </textField>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sides, dessert, anything else?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QY4-ef-Zcn" userLabel="notesHintLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="106" y="99" width="163" height="17"/>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewHint"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </label>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
+                                                    <constraint firstAttribute="bottom" secondItem="i1f-eW-9nB" secondAttribute="bottom" id="20r-8U-gVi"/>
                                                     <constraint firstItem="HNf-3W-C8L" firstAttribute="width" secondItem="EOZ-el-4r9" secondAttribute="width" id="2JE-tn-OtR"/>
                                                     <constraint firstItem="1Xd-vE-tGN" firstAttribute="trailing" secondItem="HNf-3W-C8L" secondAttribute="trailing" id="90M-xr-XBu"/>
                                                     <constraint firstItem="1Xd-vE-tGN" firstAttribute="top" secondItem="HNf-3W-C8L" secondAttribute="top" id="BRn-Oo-iN1"/>
                                                     <constraint firstItem="HNf-3W-C8L" firstAttribute="top" secondItem="2gd-CX-jRH" secondAttribute="bottom" constant="14" id="FPe-ba-MQN"/>
                                                     <constraint firstItem="g3s-Sw-gxd" firstAttribute="trailing" secondItem="EOZ-el-4r9" secondAttribute="trailing" id="J14-De-RWr"/>
                                                     <constraint firstItem="2gd-CX-jRH" firstAttribute="top" secondItem="EOZ-el-4r9" secondAttribute="bottom" constant="2" id="Kbm-F3-KZn"/>
+                                                    <constraint firstItem="i1f-eW-9nB" firstAttribute="leading" secondItem="Pqj-03-nXf" secondAttribute="leading" id="LlS-2t-Y11"/>
                                                     <constraint firstItem="EOZ-el-4r9" firstAttribute="top" secondItem="Pqj-03-nXf" secondAttribute="top" constant="16" id="NhC-Sb-GvZ"/>
                                                     <constraint firstItem="EOZ-el-4r9" firstAttribute="leading" secondItem="Pqj-03-nXf" secondAttribute="leading" constant="12" id="Pr3-Qb-759"/>
                                                     <constraint firstAttribute="trailing" secondItem="EOZ-el-4r9" secondAttribute="trailing" constant="12" id="SnD-89-yPY"/>
@@ -1341,6 +1368,8 @@
                                                     <constraint firstItem="g3s-Sw-gxd" firstAttribute="top" secondItem="EOZ-el-4r9" secondAttribute="top" id="gG4-da-khg"/>
                                                     <constraint firstItem="g3s-Sw-gxd" firstAttribute="bottom" secondItem="2gd-CX-jRH" secondAttribute="bottom" id="gLg-dn-Exl"/>
                                                     <constraint firstItem="HNf-3W-C8L" firstAttribute="centerX" secondItem="Pqj-03-nXf" secondAttribute="centerX" id="tFQ-8V-P2Z"/>
+                                                    <constraint firstAttribute="trailing" secondItem="i1f-eW-9nB" secondAttribute="trailing" id="tfd-Zz-fxp"/>
+                                                    <constraint firstItem="i1f-eW-9nB" firstAttribute="top" secondItem="Pqj-03-nXf" secondAttribute="top" id="vyb-gs-SRc"/>
                                                     <constraint firstItem="2gd-CX-jRH" firstAttribute="centerX" secondItem="EOZ-el-4r9" secondAttribute="centerX" id="xUZ-0v-sZB"/>
                                                     <constraint firstItem="g3s-Sw-gxd" firstAttribute="leading" secondItem="EOZ-el-4r9" secondAttribute="leading" id="xfI-XY-eQS"/>
                                                 </constraints>
@@ -1348,7 +1377,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="D0q-NY-j3z" userLabel="LocationDatePhotos">
                                                 <rect key="frame" x="0.0" y="158" width="375" height="100"/>
                                                 <subviews>
-                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EeO-qt-XP9" userLabel="workoutCalorieContainer">
+                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EeO-qt-XP9" userLabel="workoutCalorieContainer" customClass="UIButton">
                                                         <rect key="frame" x="0.0" y="0.0" width="150" height="100"/>
                                                         <subviews>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="caloriesIcon" translatesAutoresizingMaskIntoConstraints="NO" id="0AU-FJ-qqW">
@@ -1375,8 +1404,11 @@
                                                             <constraint firstItem="0AU-FJ-qqW" firstAttribute="centerX" secondItem="EeO-qt-XP9" secondAttribute="centerX" id="nlt-vh-zOp"/>
                                                             <constraint firstItem="uRf-Ey-oTw" firstAttribute="top" secondItem="0AU-FJ-qqW" secondAttribute="bottom" constant="10" id="uBv-bk-0qw"/>
                                                         </constraints>
+                                                        <connections>
+                                                            <action selector="dismissKeyboard:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="Rtx-a0-2Py"/>
+                                                        </connections>
                                                     </view>
-                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GpX-8Z-KKb" userLabel="workoutDurationContainer">
+                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GpX-8Z-KKb" userLabel="workoutDurationContainer" customClass="UIButton">
                                                         <rect key="frame" x="225" y="0.0" width="150" height="100"/>
                                                         <subviews>
                                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="timeIcon" translatesAutoresizingMaskIntoConstraints="NO" id="9Wa-Md-fk1" userLabel="durationIcon">
@@ -1403,8 +1435,11 @@
                                                             <constraint firstItem="afu-eq-w1g" firstAttribute="top" secondItem="9Wa-Md-fk1" secondAttribute="bottom" constant="10" id="EZB-bu-UrU"/>
                                                             <constraint firstItem="9Wa-Md-fk1" firstAttribute="centerX" secondItem="GpX-8Z-KKb" secondAttribute="centerX" id="EZq-fQ-VIx"/>
                                                         </constraints>
+                                                        <connections>
+                                                            <action selector="dismissKeyboard:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="VMA-4l-Aul"/>
+                                                        </connections>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dff-cb-DT4" userLabel="locationControlContainer">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dff-cb-DT4" userLabel="locationControlContainer" customClass="UIButton">
                                                         <rect key="frame" x="0.0" y="0.0" width="150" height="100"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n3T-bo-EEn" userLabel="placeButtonLargeHitArea">
@@ -1457,63 +1492,11 @@
                                                             <constraint firstItem="b5b-5h-R2Q" firstAttribute="top" secondItem="dPf-QW-Qby" secondAttribute="bottom" id="uda-xh-ERw"/>
                                                             <constraint firstItem="b5b-5h-R2Q" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="dff-cb-DT4" secondAttribute="leading" constant="10" id="wjd-Fe-4qt"/>
                                                         </constraints>
+                                                        <connections>
+                                                            <action selector="dismissKeyboard:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="ZEZ-jo-ea5"/>
+                                                        </connections>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gtn-VK-uRN" userLabel="calendarControlContainer">
-                                                        <rect key="frame" x="131" y="0.0" width="113" height="100"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xAO-cS-MZQ" userLabel="calendarButtonLargeHitArea">
-                                                                <rect key="frame" x="17" y="0.0" width="80" height="100"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="80" id="yh8-j3-aQz"/>
-                                                                </constraints>
-                                                                <connections>
-                                                                    <action selector="dateButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="Ib0-nW-2TQ"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aaa-jg-7gn" userLabel="calendarButton">
-                                                                <rect key="frame" x="42" y="10" width="30" height="30"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="30" id="PRl-qv-J1m"/>
-                                                                    <constraint firstAttribute="width" constant="30" id="cs4-94-702"/>
-                                                                </constraints>
-                                                                <state key="normal" image="calendarIcon"/>
-                                                                <connections>
-                                                                    <action selector="dateButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="kRA-ZL-mac"/>
-                                                                </connections>
-                                                            </button>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7bq-Jj-vtF" userLabel="date1Label" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="21" y="41" width="72" height="17"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
-                                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                                <nil key="highlightedColor"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewDate"/>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4:21 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OOd-y1-fQU" userLabel="date2Label" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="35" y="58" width="45" height="17"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
-                                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                                <nil key="highlightedColor"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewDate"/>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </label>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="bottom" secondItem="xAO-cS-MZQ" secondAttribute="bottom" id="0WT-gX-u2Y"/>
-                                                            <constraint firstItem="OOd-y1-fQU" firstAttribute="top" secondItem="7bq-Jj-vtF" secondAttribute="bottom" id="GWq-YS-33K"/>
-                                                            <constraint firstItem="aaa-jg-7gn" firstAttribute="top" secondItem="gtn-VK-uRN" secondAttribute="top" constant="10" id="MTI-8B-U3w"/>
-                                                            <constraint firstItem="xAO-cS-MZQ" firstAttribute="centerX" secondItem="gtn-VK-uRN" secondAttribute="centerX" id="OvK-29-aXs"/>
-                                                            <constraint firstItem="7bq-Jj-vtF" firstAttribute="centerX" secondItem="aaa-jg-7gn" secondAttribute="centerX" id="WSg-Lz-9da"/>
-                                                            <constraint firstItem="aaa-jg-7gn" firstAttribute="centerX" secondItem="gtn-VK-uRN" secondAttribute="centerX" id="Zbp-GY-LbD"/>
-                                                            <constraint firstItem="xAO-cS-MZQ" firstAttribute="top" secondItem="gtn-VK-uRN" secondAttribute="top" id="b3w-fa-SVz"/>
-                                                            <constraint firstItem="7bq-Jj-vtF" firstAttribute="top" secondItem="aaa-jg-7gn" secondAttribute="bottom" constant="1" id="cR8-Pw-D2h"/>
-                                                            <constraint firstItem="OOd-y1-fQU" firstAttribute="centerX" secondItem="7bq-Jj-vtF" secondAttribute="centerX" id="feT-Ty-BsW"/>
-                                                        </constraints>
-                                                    </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CSp-gg-CnP" userLabel="photoControlContainer">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CSp-gg-CnP" userLabel="photoControlContainer" customClass="UIButton">
                                                         <rect key="frame" x="225" y="0.0" width="150" height="100"/>
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WCf-7M-VhS" userLabel="photoButtonLargeHitArea">
@@ -1667,6 +1650,64 @@
                                                             <constraint firstItem="5N1-re-QWk" firstAttribute="top" secondItem="hwh-Qu-UlE" secondAttribute="top" id="pYG-v8-LXz"/>
                                                             <constraint firstItem="WCf-7M-VhS" firstAttribute="top" secondItem="CSp-gg-CnP" secondAttribute="top" id="wy9-A3-B0I"/>
                                                         </constraints>
+                                                        <connections>
+                                                            <action selector="dismissKeyboard:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="42f-eM-Psn"/>
+                                                        </connections>
+                                                    </view>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gtn-VK-uRN" userLabel="calendarControlContainer" customClass="UIButton">
+                                                        <rect key="frame" x="131" y="0.0" width="113" height="100"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xAO-cS-MZQ" userLabel="calendarButtonLargeHitArea">
+                                                                <rect key="frame" x="17" y="0.0" width="80" height="100"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="80" id="yh8-j3-aQz"/>
+                                                                </constraints>
+                                                                <connections>
+                                                                    <action selector="dateButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="Ib0-nW-2TQ"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aaa-jg-7gn" userLabel="calendarButton">
+                                                                <rect key="frame" x="42" y="10" width="30" height="30"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="30" id="PRl-qv-J1m"/>
+                                                                    <constraint firstAttribute="width" constant="30" id="cs4-94-702"/>
+                                                                </constraints>
+                                                                <state key="normal" image="calendarIcon"/>
+                                                                <connections>
+                                                                    <action selector="dateButtonHandler:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="kRA-ZL-mac"/>
+                                                                </connections>
+                                                            </button>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Aug 28, 2015" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7bq-Jj-vtF" userLabel="date1Label" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="21" y="41" width="72" height="17"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
+                                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewDate"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4:21 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OOd-y1-fQU" userLabel="date2Label" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="35" y="58" width="45" height="17"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
+                                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                                <nil key="highlightedColor"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addEditViewDate"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </label>
+                                                        </subviews>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="bottom" secondItem="xAO-cS-MZQ" secondAttribute="bottom" id="0WT-gX-u2Y"/>
+                                                            <constraint firstItem="OOd-y1-fQU" firstAttribute="top" secondItem="7bq-Jj-vtF" secondAttribute="bottom" id="GWq-YS-33K"/>
+                                                            <constraint firstItem="aaa-jg-7gn" firstAttribute="top" secondItem="gtn-VK-uRN" secondAttribute="top" constant="10" id="MTI-8B-U3w"/>
+                                                            <constraint firstItem="xAO-cS-MZQ" firstAttribute="centerX" secondItem="gtn-VK-uRN" secondAttribute="centerX" id="OvK-29-aXs"/>
+                                                            <constraint firstItem="7bq-Jj-vtF" firstAttribute="centerX" secondItem="aaa-jg-7gn" secondAttribute="centerX" id="WSg-Lz-9da"/>
+                                                            <constraint firstItem="aaa-jg-7gn" firstAttribute="centerX" secondItem="gtn-VK-uRN" secondAttribute="centerX" id="Zbp-GY-LbD"/>
+                                                            <constraint firstItem="xAO-cS-MZQ" firstAttribute="top" secondItem="gtn-VK-uRN" secondAttribute="top" id="b3w-fa-SVz"/>
+                                                            <constraint firstItem="7bq-Jj-vtF" firstAttribute="top" secondItem="aaa-jg-7gn" secondAttribute="bottom" constant="1" id="cR8-Pw-D2h"/>
+                                                            <constraint firstItem="OOd-y1-fQU" firstAttribute="centerX" secondItem="7bq-Jj-vtF" secondAttribute="centerX" id="feT-Ty-BsW"/>
+                                                        </constraints>
                                                     </view>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -1715,6 +1756,12 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PUU-1V-UBf" userLabel="BottomSection">
                                         <rect key="frame" x="0.0" y="258" width="375" height="301"/>
                                         <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J6e-Lq-yJN" userLabel="dismissKeyboard">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="301"/>
+                                                <connections>
+                                                    <action selector="dismissKeyboard:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="7oD-PC-jBQ"/>
+                                                </connections>
+                                            </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T6Z-E3-yFO" userLabel="DatePickView">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="301"/>
                                                 <subviews>
@@ -1791,8 +1838,12 @@
                                         <constraints>
                                             <constraint firstItem="T6Z-E3-yFO" firstAttribute="centerY" secondItem="PUU-1V-UBf" secondAttribute="centerY" id="2W7-BX-XmE"/>
                                             <constraint firstItem="T6Z-E3-yFO" firstAttribute="centerX" secondItem="PUU-1V-UBf" secondAttribute="centerX" id="5B6-R6-DbC"/>
+                                            <constraint firstAttribute="trailing" secondItem="J6e-Lq-yJN" secondAttribute="trailing" id="HUj-l8-MrT"/>
                                             <constraint firstItem="T6Z-E3-yFO" firstAttribute="height" secondItem="PUU-1V-UBf" secondAttribute="height" id="K7a-In-VSq"/>
+                                            <constraint firstItem="J6e-Lq-yJN" firstAttribute="top" secondItem="PUU-1V-UBf" secondAttribute="top" id="PRE-Bs-bFA"/>
                                             <constraint firstItem="T6Z-E3-yFO" firstAttribute="width" secondItem="PUU-1V-UBf" secondAttribute="width" id="YBe-Xy-koV"/>
+                                            <constraint firstAttribute="bottom" secondItem="J6e-Lq-yJN" secondAttribute="bottom" id="jug-Xe-wE4"/>
+                                            <constraint firstItem="J6e-Lq-yJN" firstAttribute="leading" secondItem="PUU-1V-UBf" secondAttribute="leading" id="oFk-G3-66Z"/>
                                         </constraints>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="abX-6z-1bd" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
@@ -1878,6 +1929,13 @@
                                 <action selector="backButtonHandler:" destination="wuR-Cf-1Tk" id="Rj3-PD-WNi"/>
                             </connections>
                         </barButtonItem>
+                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3cY-A0-NZa" userLabel="dismissKeyboard">
+                            <rect key="frame" x="113" y="7" width="150" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <connections>
+                                <action selector="dismissKeyboard:" destination="wuR-Cf-1Tk" eventType="touchUpInside" id="5b9-8Z-ipL"/>
+                            </connections>
+                        </button>
                         <barButtonItem key="rightBarButtonItem" systemItem="trash" id="gyM-z8-o6g">
                             <connections>
                                 <action selector="deleteButtonHandler:" destination="wuR-Cf-1Tk" id="EEc-ms-dl8"/>

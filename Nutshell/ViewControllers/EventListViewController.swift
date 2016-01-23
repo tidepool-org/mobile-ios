@@ -259,7 +259,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
             let fm = NSFileManager.defaultManager()
             do {
                 let dirContents = try fm.contentsOfDirectoryAtPath(photoDirPath)
-                NSLog("Photos dir: \(dirContents)")
+                //NSLog("Photos dir: \(dirContents)")
                 if !dirContents.isEmpty {
                     for file in dirContents {
                         allLocalPhotos[file] = false
@@ -268,7 +268,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
                         for event in nutEvent.itemArray {
                             for url in event.photoUrlArray() {
                                 if url.hasPrefix("file_") {
-                                    NSLog("\(NutUtils.photoInfo(url))")
+                                    //NSLog("\(NutUtils.photoInfo(url))")
                                     allLocalPhotos[url] = true
                                 }
                             }
@@ -287,6 +287,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
     }
     
     // MARK: - Search
+    
+    @IBAction func dismissKeyboard(sender: AnyObject) {
+        searchTextField.resignFirstResponder()
+    }
     
     func textFieldDidChange() {
         updateFilteredAndReload()
