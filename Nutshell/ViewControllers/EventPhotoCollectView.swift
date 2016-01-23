@@ -24,6 +24,7 @@ class EventPhotoCollectView: UIControl {
     var pageControl: UIPageControl?
     var delegate: EventPhotoCollectViewDelegate?
     private var photoCollectionView: UICollectionView?
+    private var currentViewHeight: CGFloat = 0.0
 
     func reloadData() {
         photoCollectionView?.reloadData()
@@ -42,9 +43,14 @@ class EventPhotoCollectView: UIControl {
         }
         
         if photoCollectionView != nil {
-            reloadData()
-            configurePageControl()
-            return
+            if currentViewHeight == self.bounds.height {
+                reloadData()
+                configurePageControl()
+                return
+            }
+            // size has changed, need to redo...
+            photoCollectionView?.removeFromSuperview()
+            photoCollectionView = nil
         }
         
         let flow = UICollectionViewFlowLayout()
