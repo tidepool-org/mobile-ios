@@ -27,13 +27,7 @@ class HealthKitManager {
     }()
     
     let isHealthDataAvailable: Bool = {
-        // NOTE: For now we are relying on iOS 9 HealthKit support for better anchor query support, etc, but,
-        // Blip Notes still supports pre-9.0, hence this check.
-        if #available(iOS 9.0, *) {
-            return HKHealthStore.isHealthDataAvailable()
-        } else {
-            return false;
-        }
+        return HKHealthStore.isHealthDataAvailable()
     }()
     
     func authorizationRequestedForBloodGlucoseSamples() -> Bool {
@@ -44,7 +38,6 @@ class HealthKitManager {
         return NSUserDefaults.standardUserDefaults().boolForKey("authorizationRequestedForWorkoutSamples")
     }
     
-    @available(iOS 9, *)
     func authorize(shouldAuthorizeBloodGlucoseSamples shouldAuthorizeBloodGlucoseSamples: Bool, shouldAuthorizeWorkoutSamples: Bool, completion: ((success:Bool, error:NSError!) -> Void)!)
     {
         guard isHealthDataAvailable else {
@@ -91,7 +84,6 @@ class HealthKitManager {
     
     // MARK: Observation
     
-    @available(iOS 9, *)
     func startObservingBloodGlucoseSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!) {
         guard isHealthDataAvailable else {
             NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
@@ -122,7 +114,6 @@ class HealthKitManager {
         }
     }
     
-    @available(iOS 9, *)
     func stopObservingBloodGlucoseSamples() {
         guard isHealthDataAvailable else {
             NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
@@ -138,7 +129,6 @@ class HealthKitManager {
         }
     }
     
-    @available(iOS 9, *)
     func startObservingWorkoutSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!) {
         guard isHealthDataAvailable else {
             NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
@@ -170,7 +160,6 @@ class HealthKitManager {
         }
     }
     
-    @available(iOS 9, *)
     func stopObservingWorkoutSamples() {
         guard isHealthDataAvailable else {
             NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
@@ -188,7 +177,6 @@ class HealthKitManager {
     
     // MARK: Background delivery
     
-    @available(iOS 9, *)
     func enableBackgroundDeliveryBloodGlucoseSamples() {
         guard isHealthDataAvailable else {
             NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
@@ -210,7 +198,6 @@ class HealthKitManager {
         }
     }
     
-    @available(iOS 9, *)
     func disableBackgroundDeliveryBloodGlucoseSamples() {
         guard isHealthDataAvailable else {
             NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
@@ -230,7 +217,6 @@ class HealthKitManager {
         }
     }
     
-    @available(iOS 9, *)
     func enableBackgroundDeliveryWorkoutSamples() {
         guard isHealthDataAvailable else {
             NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
@@ -252,7 +238,6 @@ class HealthKitManager {
         }
     }
     
-    @available(iOS 9, *)
     func disableBackgroundDeliveryWorkoutSamples() {
         guard isHealthDataAvailable else {
             NSLog("\(__FUNCTION__): Unexpected HealthKitManager call when health data not available")
@@ -274,7 +259,6 @@ class HealthKitManager {
     
     // MARK: Private
     
-    @available(iOS 9, *)
     private func readBloodGlucoseSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!)
     {
         guard isHealthDataAvailable else {
@@ -315,7 +299,6 @@ class HealthKitManager {
         healthStore?.executeQuery(sampleQuery)
     }
     
-    @available(iOS 9, *)
     private func readWorkoutSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!)
     {
         guard isHealthDataAvailable else {
@@ -356,7 +339,6 @@ class HealthKitManager {
         healthStore?.executeQuery(sampleQuery)
     }
     
-    @available(iOS 9, *)
     private func logNewBloodGlucoseSamples(samples: [HKSample]?) {
         guard samples != nil else {
             return
@@ -384,7 +366,6 @@ class HealthKitManager {
         }
     }
     
-    @available(iOS 9, *)
     private func logNewWorkoutSamples(samples: [HKSample]?) {
         guard samples != nil else {
             return
@@ -399,7 +380,6 @@ class HealthKitManager {
 //        }
     }
     
-    @available(iOS 9, *)
     private func logDeletedWorkoutSamples(samples: [HKDeletedObject]?) {
         guard samples != nil else {
             return

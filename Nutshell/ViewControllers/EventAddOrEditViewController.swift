@@ -756,12 +756,10 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
 
         if titleTextField.text!.localizedCaseInsensitiveCompare("workoutInterface") == NSComparisonResult.OrderedSame  {
-            if #available(iOS 9, *) {
-                if !NutUtils.onIPad() {
-                    AppDelegate.workoutInterfaceEnabled = !AppDelegate.workoutInterfaceEnabled
-                    self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
-                    return
-                }
+            if !NutUtils.onIPad() {
+                AppDelegate.workoutInterfaceEnabled = !AppDelegate.workoutInterfaceEnabled
+                self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+                return
             }
         }
 

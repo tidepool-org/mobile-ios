@@ -104,10 +104,8 @@ class NutDataController
     /// Call this at startup if we already have a current user and token can be refreshed...
     func configureForCurrentUser() {
         if _currentUserId != nil {
-            if #available(iOS 9, *) {
-                if NSUserDefaults.standardUserDefaults().boolForKey("workoutSamplingEnabled") {
-                    monitorForWorkoutData(true)
-                }
+            if NSUserDefaults.standardUserDefaults().boolForKey("workoutSamplingEnabled") {
+                monitorForWorkoutData(true)
             }
         }
     }
@@ -128,14 +126,11 @@ class NutDataController
         self.deleteAnyTidepoolData()
         self.currentUser = nil
         _currentUserId = nil
-        if #available(iOS 9, *) {
-            if NSUserDefaults.standardUserDefaults().boolForKey("workoutSamplingEnabled") {
-                monitorForWorkoutData(false)
-            }
+        if NSUserDefaults.standardUserDefaults().boolForKey("workoutSamplingEnabled") {
+            monitorForWorkoutData(false)
         }
     }
 
-    @available(iOS 9, *)
     func monitorForWorkoutData(monitor: Bool) {
         // Set up HealthKit observation and background query.
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
@@ -186,7 +181,6 @@ class NutDataController
     // MARK: - Private methods
     //
 
-    @available(iOS 9.0, *)
     private func processWorkoutEvents(workouts: [HKSample]) {
         let moc = NutDataController.controller().mocForNutEvents()!
         if let entityDescription = NSEntityDescription.entityForName("Workout", inManagedObjectContext: moc) {
@@ -233,7 +227,6 @@ class NutDataController
         
     }
     
-    @available(iOS 9.0, *)
     private func processDeleteWorkoutEvents(workouts: [HKDeletedObject]) {
         for sample in workouts {
             NSLog("Processed deleted workout sample with UUID: \(sample.UUID)");

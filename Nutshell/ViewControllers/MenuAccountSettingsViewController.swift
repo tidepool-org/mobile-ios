@@ -92,23 +92,21 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     
     private func observeHealthData(observe: Bool) {
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            if #available(iOS 9, *) {
-                if observe {
-                    HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSamples: false, shouldAuthorizeWorkoutSamples: true) {
-                        success, error -> Void in
-                        if (error == nil) {
-                            NutDataController.controller().monitorForWorkoutData(true)
-                            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "workoutSamplingEnabled")
-                            NSUserDefaults.standardUserDefaults().synchronize()
-                        } else {
-                            NSLog("Error authorizing health data \(error), \(error!.userInfo)")
-                        }
+            if observe {
+                HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSamples: false, shouldAuthorizeWorkoutSamples: true) {
+                    success, error -> Void in
+                    if (error == nil) {
+                        NutDataController.controller().monitorForWorkoutData(true)
+                        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "workoutSamplingEnabled")
+                        NSUserDefaults.standardUserDefaults().synchronize()
+                    } else {
+                        NSLog("Error authorizing health data \(error), \(error!.userInfo)")
                     }
-                } else {
-                    NutDataController.controller().monitorForWorkoutData(false)
-                    NSUserDefaults.standardUserDefaults().setBool(false, forKey: "workoutSamplingEnabled")
-                    NSUserDefaults.standardUserDefaults().synchronize()
                 }
+            } else {
+                NutDataController.controller().monitorForWorkoutData(false)
+                NSUserDefaults.standardUserDefaults().setBool(false, forKey: "workoutSamplingEnabled")
+                NSUserDefaults.standardUserDefaults().synchronize()
             }
         }
     }
