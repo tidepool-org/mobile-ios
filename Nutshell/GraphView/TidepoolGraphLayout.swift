@@ -83,8 +83,8 @@ class TidepoolGraphLayout: GraphLayout {
     let kGlucoseMaxValue: CGFloat = 340.0
     let kGlucoseRange: CGFloat = 340.0
     let kGlucoseConversionToMgDl: CGFloat = 18.0
-    let highBoundary: NSNumber = 180.0
-    let lowBoundary: NSNumber = 80.0
+    let highBoundary: CGFloat = 180.0
+    let lowBoundary: CGFloat = 80.0
     // Colors
     let highColor = Styles.purpleColor
     let targetColor = Styles.greenColor

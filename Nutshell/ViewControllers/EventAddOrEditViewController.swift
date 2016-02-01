@@ -93,7 +93,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                     durationLabel.text = dateComponentsFormatter.stringFromTimeInterval(workout.duration)
                 }
                 if let calories = workout.calories {
-                    if calories > 0 {
+                    if Int(calories) > 0 {
                         workoutCalorieContainer.hidden = false
                         caloriesLabel.text = String(Int(calories)) + " Calories"
                     }
