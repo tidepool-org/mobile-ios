@@ -146,21 +146,21 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
                 NSLog("EventDetailVC detected deleted event at done!")
                 // Note: will segue out at ViewWillDisplay...
             }
-        } else if let photoViewVC = segue.sourceViewController as? ShowPhotoViewController {
+        } else if let _ = segue.sourceViewController as? ShowPhotoViewController {
             APIConnector.connector().trackMetric("Clicked Back to Data Screen (Photo Screen)")
-            let newPhotoIndex = photoViewVC.imageIndex
-            if newPhotoIndex > 0 {
-                // Set image 0 as the last one viewed in the photo viewer...
-                if let mealItem = eventItem as? NutMeal {
-                    shiftPhotoArrayLeft(mealItem)
-                    if newPhotoIndex > 1 {
-                        shiftPhotoArrayLeft(mealItem)
-                    }
-                    // Save changes to database
-                    mealItem.saveChanges()
-                    configurePhotoBackground()
-                }
-            }
+//            let newPhotoIndex = photoViewVC.imageIndex
+//            if newPhotoIndex > 0 {
+//                // Set image 0 as the last one viewed in the photo viewer...
+//                if let mealItem = eventItem as? NutMeal {
+//                    shiftPhotoArrayLeft(mealItem)
+//                    if newPhotoIndex > 1 {
+//                        shiftPhotoArrayLeft(mealItem)
+//                    }
+//                    // Save changes to database
+//                    mealItem.saveChanges()
+//                    configurePhotoBackground()
+//                }
+//            }
         }
      }
 
