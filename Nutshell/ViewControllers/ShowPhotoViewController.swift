@@ -105,12 +105,12 @@ class ShowPhotoViewController: UIViewController {
             return
         }
         APIConnector.connector().trackMetric("Clicked Trashcan to Discard a Photo (Edit Screen)")
-        let alert = UIAlertController(title: NSLocalizedString("discardPhotoAlertTitle", comment:"Are you sure?"), message: NSLocalizedString("discardPhotoAlertMessage", comment:"If you delete this photo, your photo will be lost."), preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
-            APIConnector.connector().trackMetric("Clicked Cancel Photo Discard (Edit Screen)")
+        let alert = UIAlertController(title: NSLocalizedString("deletePhotoAlertTitle", comment:"Are you sure?"), message: NSLocalizedString("deletePhotoAlertMessage", comment:"If you delete this photo, your photo will be lost."), preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+            APIConnector.connector().trackMetric("Clicked Cancel Photo Delete (Edit Screen)")
             return
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertOkay", comment:"Delete"), style: .Default, handler: { Void in
             APIConnector.connector().trackMetric("Clicked Discard to Confirm Photo Discard (Edit Screen)")
             self.removeCurrentPhoto()
         }))

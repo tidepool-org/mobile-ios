@@ -20,13 +20,17 @@
     Discard alert text: for edit and add item
  */
 
-"discardPhotoAlertTitle" = "Are you sure?";
-"discardPhotoAlertMessage" = "If you delete this photo, your photo will be lost.";
+"deletePhotoAlertTitle" = "Are you sure?";
+"deletePhotoAlertMessage" = "If you delete this photo, your photo will be lost.";
 
-"discardWorkoutAlertTitle" = "Are you sure?";
-"discardWorkoutAlertMessage" = "If you delete this workout, it will be gone forever.";
-"discardMealAlertTitle" = "Are you sure?";
-"discardMealAlertMessage" = "If you delete this meal, it will be gone forever.";
+"deleteWorkoutAlertTitle" = "Are you sure?";
+"deleteWorkoutAlertMessage" = "If you delete this workout, it will be gone forever.";
+
+"deleteMealAlertTitle" = "Are you sure?";
+"deleteMealAlertMessage" = "If you delete this meal, it will be gone forever.";
+
+"deleteAlertCancel" = "Cancel";
+"deleteAlertOkay" = "Delete";
 
 
 "discardEditsAlertTitle" = "Discard changes?";

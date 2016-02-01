@@ -424,7 +424,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 if let _ = eventItem as? NutWorkout {
                     alertString = NSLocalizedString("discardWorkoutEditsAlertMessage", comment:"If you press discard, your changes to this workout will be lost.")
                 }
-                alertOnCancelAndReturn(NSLocalizedString("discardEditsAlertTitle", comment:"Discard changes?"), alertMessage: alertString)
+                alertOnCancelAndReturn(NSLocalizedString("discardEditsAlertTitle", comment:"Discard changes?"), alertMessage: alertString, okayButtonString: NSLocalizedString("discardAlertOkay", comment:"Discard"))
             } else {
                 self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
             }
@@ -432,13 +432,13 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             // cancel of add
             APIConnector.connector().trackMetric("Clicked ‘X’ to Close (Add Screen)")
             if newEventChanged() {
-                var alertTitle = NSLocalizedString("discardMealAlertTitle", comment:"Are you sure?")
-                var alertMessage = NSLocalizedString("discardMealAlertMessage", comment:"If you delete this meal, it will be gone forever.")
+                var alertTitle = NSLocalizedString("deleteMealAlertTitle", comment:"Are you sure?")
+                var alertMessage = NSLocalizedString("deleteMealAlertMessage", comment:"If you delete this meal, it will be gone forever.")
                 if let _ = eventItem as? NutWorkout {
-                    alertTitle = NSLocalizedString("discardWorkoutAlertTitle", comment:"Discard workout?")
-                    alertMessage = NSLocalizedString("discardWorkoutAlertMessage", comment:"If you close this workout, your workout will be lost.")
+                    alertTitle = NSLocalizedString("deleteWorkoutAlertTitle", comment:"Discard workout?")
+                    alertMessage = NSLocalizedString("deleteWorkoutAlertMessage", comment:"If you close this workout, your workout will be lost.")
                 }
-                alertOnCancelAndReturn(alertTitle, alertMessage: alertMessage)
+                alertOnCancelAndReturn(alertTitle, alertMessage: alertMessage, okayButtonString: NSLocalizedString("deleteAlertOkay", comment:"Delete"))
             } else {
                 self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
             }
@@ -876,7 +876,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         self.presentViewController(alert, animated: true, completion: nil)
     }
    
-    private func alertOnCancelAndReturn(alertTitle: String, alertMessage: String) {
+    private func alertOnCancelAndReturn(alertTitle: String, alertMessage: String, okayButtonString: String) {
         // use dialog to confirm cancel with user!
         let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .Alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
@@ -885,7 +885,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             }
             return
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+        alert.addAction(UIAlertAction(title: okayButtonString, style: .Default, handler: { Void in
             if self.editExistingEvent {
                 APIConnector.connector().trackMetric("Clicked Discard Changes to Cancel (Edit Screen)")
             }
@@ -899,20 +899,20 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     private func alertOnDeleteAndReturn() {
         if let nutItem = eventItem {
             // use dialog to confirm delete with user!
-            var titleString = NSLocalizedString("discardMealAlertTitle", comment:"Are you sure?")
-            var messageString = NSLocalizedString("discardMealAlertMessage", comment:"If you delete this meal, it will be gone forever..")
+            var titleString = NSLocalizedString("deleteMealAlertTitle", comment:"Are you sure?")
+            var messageString = NSLocalizedString("deleteMealAlertMessage", comment:"If you delete this meal, it will be gone forever..")
             if let _ = nutItem as? NutWorkout {
-                titleString = NSLocalizedString("discardWorkoutAlertTitle", comment:"Are you sure?")
-                messageString = NSLocalizedString("discardWorkoutAlertMessage", comment:"If you delete this workout, it will be gone forever.")
+                titleString = NSLocalizedString("deleteWorkoutAlertTitle", comment:"Are you sure?")
+                messageString = NSLocalizedString("deleteWorkoutAlertMessage", comment:"If you delete this workout, it will be gone forever.")
             }
             
             let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
                 APIConnector.connector().trackMetric("Clicked Cancel Discard (Edit Screen)")
                 return
             }))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
-                APIConnector.connector().trackMetric("Clicked Confirmed Discard (Edit Screen)")
+            alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertOkay", comment:"Delete"), style: .Default, handler: { Void in
+                APIConnector.connector().trackMetric("Clicked Confirmed Delete (Edit Screen)")
                 self.deleteItemAndReturn()
             }))
             self.presentViewController(alert, animated: true, completion: nil)

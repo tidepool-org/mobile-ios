@@ -218,11 +218,11 @@ extension EventGroupTableViewController {
         editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
             let rowAction = UITableViewRowAction(style: UITableViewRowActionStyle.Normal, title: "delete") {_,indexPath in
                 // use dialog to confirm delete with user!
-                let alert = UIAlertController(title: NSLocalizedString("discardMealAlertTitle", comment:"Are you sure?"), message: NSLocalizedString("discardMealAlertMessage", comment:"If you delete this meal, it will be gone forever."), preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+                let alert = UIAlertController(title: NSLocalizedString("deleteMealAlertTitle", comment:"Are you sure?"), message: NSLocalizedString("deleteMealAlertMessage", comment:"If you delete this meal, it will be gone forever."), preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
                     return
                 }))
-                alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertOkay", comment:"Discard"), style: .Default, handler: { Void in
+                alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertOkay", comment:"Delete"), style: .Default, handler: { Void in
                     // Delete the row from the data source
                     let eventItem = self.eventGroup!.itemArray[indexPath.item]
                     if eventItem.deleteItem() {
