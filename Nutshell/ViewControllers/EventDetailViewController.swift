@@ -193,7 +193,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     func graphDataChanged(note: NSNotification) {
         graphNeedsUpdate = true
         if viewIsForeground {
-            NSLog("EventDetailView: graphDataChanged, reloading")
+            //NSLog("EventDetailView: graphDataChanged, reloading")
             checkUpdateGraph()
         } else {
             NSLog("EventDetailView: graphDataChanged, in background")

@@ -184,7 +184,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
    }
     
     // override!
-    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
+    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType) {
         
         if let bolus = dataPoint as? BolusGraphDataType {
             // Bolus rect is center-aligned to time start

@@ -21,6 +21,7 @@ class GraphUIView: UIView {
     private var graphUtils: GraphingUtils
     private var viewSize: CGSize = CGSizeZero
     private var graphLayers: [GraphDataLayer] = []
+    private var tileIndex: Int
 
     /// After init, call configure to create the graph.
     ///
@@ -33,12 +34,13 @@ class GraphUIView: UIView {
     /// - parameter layout:
     ///   Provides the various graph layers and layout parameters for drawing them.
     
-    init(frame: CGRect, startTime: NSDate, layout: GraphLayout) {
+    init(frame: CGRect, startTime: NSDate, layout: GraphLayout, tileIndex: Int) {
         self.viewSize = frame.size
         self.cellStartTime = startTime
         self.cellTimeInterval = layout.cellTimeInterval
         self.layout = layout
-        self.graphUtils = GraphingUtils(layout: layout, timeIntervalForView: layout.cellTimeInterval, startTime: startTime)
+        self.tileIndex = tileIndex
+        self.graphUtils = layout.graphUtilsForTimeInterval(layout.cellTimeInterval, startTime: startTime)
         super.init(frame: frame)
     }
 
@@ -51,7 +53,7 @@ class GraphUIView: UIView {
     /// Queries the core database for relevant events in the specified timeframe, and creates the graph view with that data.
     
     func configure() {
-        graphLayers = layout.graphLayers(viewSize, timeIntervalForView: cellTimeInterval, startTime: cellStartTime)
+        graphLayers = layout.graphLayers(viewSize, timeIntervalForView: cellTimeInterval, startTime: cellStartTime, tileIndex: tileIndex)
         graphData()
     }
     
@@ -73,16 +75,6 @@ class GraphUIView: UIView {
             layer.updateViewSize(newSize)
         }
         graphData()
-    }
-    
-    /// Return the non-changing part of the graph background
-    ///
-    /// Right now this is just the y axis with its values.
-    ///
-    /// - returns: A UIImageView the size of the current view, with static parts of the background. This should be placed in back of the graph...
-    
-    func fixedBackgroundImage() -> UIImage {
-        return graphUtils.imageOfFixedGraphBackground()
     }
     
     /// Handle taps within this graph tile by letting layers check for hits - iterates thru layers in reverse order of drawing, last layer first. If a data point is found at the tap location, it is returned, otherwise nil.
@@ -116,8 +108,11 @@ class GraphUIView: UIView {
             view.removeFromSuperview()
         }
         
-        let xAxisImageView = UIImageView(image:graphUtils.imageOfXAxisHeader())
-        addSubview(xAxisImageView)
+        let xAxisImage = graphUtils.imageOfXAxisHeader()
+        if let xAxisImage = xAxisImage {
+            let xAxisImageView = UIImageView(image:xAxisImage)
+            addSubview(xAxisImageView)
+        }
 
         // first load the data for all the layers in case there is any data inter-dependency
         for dataLayer in graphLayers {
@@ -125,7 +120,7 @@ class GraphUIView: UIView {
         }
         // then draw each layer, and add non-empty layers as subviews
         for dataLayer in graphLayers {
-            let imageView = dataLayer.imageView(graphUtils)
+            let imageView = dataLayer.imageView()
             if imageView != nil {
                 addSubview(imageView!)
             }

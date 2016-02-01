@@ -87,7 +87,7 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
    }
     
     // override!
-    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
+    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType) {
         
         if dataPoint.value == 0.0 {
             // Don't plot nil or zero values - probably used for recommended bolus record!

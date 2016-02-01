@@ -67,7 +67,7 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
    }
     
     // override!
-    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
+    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType) {
         
         let centerX = xOffset
         var value = round(dataPoint.value)

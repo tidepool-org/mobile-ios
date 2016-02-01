@@ -102,7 +102,7 @@ class DatabaseUtils {
         } catch let error as NSError {
             NSLog("Error in updateEventsForTimeRange deleting objects: \(error)")
         }
-        NSLog("updateEventsForTimeRange deleted \(deleteEventCounter) items")
+        //NSLog("updateEventsForTimeRange deleted \(deleteEventCounter) items")
 
         var insertEventCounter = 0
         for (_, subJson) in eventsJSON {
@@ -118,14 +118,14 @@ class DatabaseUtils {
                 }
             }
         }
-        NSLog("updateEventsForTimeRange updated \(insertEventCounter) items")
+        //NSLog("updateEventsForTimeRange updated \(insertEventCounter) items")
         if deleteEventCounter != 0 && insertEventCounter != deleteEventCounter {
             NSLog("NOTE: deletes were non-zero and did not match inserts!!!")
         }
         // Save the database
         do {
             try moc.save()
-            NSLog("updateEventsForTimeRange \(startTime) to \(endTime): Database saved!")
+            //NSLog("updateEventsForTimeRange \(startTime) to \(endTime): Database saved!")
             //dispatch_async(dispatch_get_main_queue()) {
             notifyOnDataLoad()
             //}

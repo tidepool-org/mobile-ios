@@ -17,12 +17,12 @@ import UIKit
 
 class GraphCollectionCell: UICollectionViewCell {
 
-    var cellDebugId = ""
+    var cellIndex: Int = 0
     var layout: GraphLayout?
     private var graphView: GraphUIView?
     
     func updateViewSize() {
-        //NSLog("GraphCollectionCell \(cellDebugId) updateViewSize frame \(self.frame.size)")
+        //NSLog("GraphCollectionCell \(cellIndex) updateViewSize frame \(self.frame.size)")
         if let graphView = graphView {
             graphView.updateViewSize(self.frame.size)
         }
@@ -35,12 +35,12 @@ class GraphCollectionCell: UICollectionViewCell {
         return nil
     }
     
-    func configureCell(startTime: NSDate, timeInterval: NSTimeInterval) {
+    func configureCell(startTime: NSDate, timeInterval: NSTimeInterval, cellIndex: Int) {
 
-        //NSLog("GraphCollectionCell \(cellDebugId) configure centerTime \(centerTime), timeInterval \(timeInterval), frame \(self.frame.size)")
+        NSLog("GraphCollectionCell \(cellIndex) configure startTime \(startTime), timeInterval \(timeInterval), frame \(self.frame.size)")
 
         graphView?.removeFromSuperview()
-        graphView = GraphUIView.init(frame: self.bounds, startTime: startTime, layout: layout!)
+        graphView = GraphUIView.init(frame: self.bounds, startTime: startTime, layout: layout!, tileIndex: cellIndex)
         if let graphView = graphView {
             graphView.configure()
             self.addSubview(graphView)

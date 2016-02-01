@@ -44,7 +44,7 @@ class Basal: CommonData {
                         suppressedRate = getScheduledSuppressed(suppressedRec)
                     }
                     if suppressedRate == nil {
-                        NSLog("DATA ERR: No suppressed rate in temp basal!")
+                        //NSLog("DATA ERR: No suppressed rate in temp basal!")
                     } else {
                         me.suppressedRate = suppressedRate
                     }

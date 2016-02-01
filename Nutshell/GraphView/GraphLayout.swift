@@ -23,30 +23,43 @@ class GraphLayout {
     /// Time at x-origin of graph
     let graphStartTime: NSDate
     /// Time is displayed in the timezone at this offset
-    var timezoneOffsetSecs: Int
+    var timezoneOffsetSecs: Int = 0
     /// Time interval covered by the entire graph.
     let graphTimeInterval: NSTimeInterval
     /// Starts at size of graph view, but varies with zoom.
     var cellViewSize: CGSize
     /// Time interval covered by one graph tile.
     let cellTimeInterval: NSTimeInterval
-    /// Density of time on x-axis
-    var graphPixelsPerSec: CGFloat = 0.0
+    ///
+    var graphCellsInCollection: Int
+    var graphCellFocusInCollection: Int
 
-    init (viewSize: CGSize, centerTime: NSDate, tzOffsetSecs: Int) {
+    /// Use this init to create a graph that starts at a point in time.
+    init(viewSize: CGSize, startTime: NSDate, timeIntervalPerTile: NSTimeInterval, numberOfTiles: Int, tilesInView: Int, tzOffsetSecs: Int) {
+        
+        self.graphStartTime = startTime
         self.graphViewSize = viewSize
-        self.cellViewSize = viewSize
-        self.cellTimeInterval = NSTimeInterval(graphViewSize.width * 3600.0/initPixelsPerHour)
-        self.graphTimeInterval = self.cellTimeInterval * NSTimeInterval(graphCellsInCollection)
-        self.graphCenterTime = centerTime
-        self.graphStartTime = centerTime.dateByAddingTimeInterval(-self.graphTimeInterval/2.0)
+        self.cellTimeInterval = timeIntervalPerTile
+        self.graphCellsInCollection = numberOfTiles
+        self.graphCellFocusInCollection = numberOfTiles / 2
+        self.graphTimeInterval = timeIntervalPerTile * NSTimeInterval(numberOfTiles)
+        self.cellViewSize = CGSize(width: viewSize.width/(CGFloat(tilesInView)), height: viewSize.height)
+        self.graphCenterTime = startTime.dateByAddingTimeInterval(self.graphTimeInterval/2.0)
         self.timezoneOffsetSecs = tzOffsetSecs
+    }
+
+    /// Use this init to create a graph centered around a point in time.
+    convenience init(viewSize: CGSize, centerTime: NSDate, startPixelsPerHour: Int, numberOfTiles: Int, tzOffsetSecs: Int) {
+        let cellViewSize = viewSize
+        let cellTI = NSTimeInterval(cellViewSize.width * 3600.0/CGFloat(startPixelsPerHour))
+        let graphTI = cellTI * NSTimeInterval(numberOfTiles)
+        let startTime = centerTime.dateByAddingTimeInterval(-graphTI/2.0)
+        self.init(viewSize: viewSize, startTime: startTime, timeIntervalPerTile: cellTI, numberOfTiles: numberOfTiles, tilesInView: 1, tzOffsetSecs: tzOffsetSecs)
     }
     
     /// Call as graph is zoomed in or out!
     func updateCellViewSize(newSize: CGSize) {
         self.cellViewSize = newSize
-        self.graphPixelsPerSec = newSize.width/CGFloat(cellTimeInterval)
     }
     
     // Override in configure()!
@@ -54,12 +67,33 @@ class GraphLayout {
     //
     // Graph sizing/tiling parameters
     //
-    var initPixelsPerHour: CGFloat = 80
     var zoomIncrement: CGFloat = 0.8
+    // Place x-axis ticks every 8 hours down to every 15 minutes, depending upon the zoom level
+    var xAxisLabelTickTimes: [NSTimeInterval] = [15*60, 30*60, 60*60, 2*60*60, 4*60*60, 8*60*60]
+    var curXAxisLabelTickTiming: NSTimeInterval = 60*60
     
-    let graphCellsInCollection = 7
-    let graphCenterCellInCollection = 3
-
+    let kMaxPixelsPerTick: CGFloat = 90
+    func figureXAxisTickTiming() {
+        // We are trying to have about 70-80 pixels per tick...
+        let maxTickIndex = xAxisLabelTickTimes.count - 1
+        let secondsPerPixel = CGFloat(cellTimeInterval) / cellViewSize.width
+        let secondsInGraphView = secondsPerPixel * graphViewSize.width
+        var result: NSTimeInterval = xAxisLabelTickTimes[0]
+        for var index = 0; index<=maxTickIndex; index++  {
+            let timePerTick = xAxisLabelTickTimes[index]
+            let ticksInView = secondsInGraphView / CGFloat(timePerTick)
+            let pixelsPerTick = graphViewSize.width / ticksInView
+            if pixelsPerTick > kMaxPixelsPerTick {
+                break
+            }
+            result = timePerTick
+        }
+        if curXAxisLabelTickTiming != result {
+            curXAxisLabelTickTiming = result
+            NSLog("New x-axis tick time interval = \(result)")
+        }
+    }
+    
     /// Somewhat arbitrary max cell width.
     func zoomInMaxCellWidth() -> CGFloat {
         return min((4 * graphViewSize.width), 2000.0)
@@ -97,19 +131,29 @@ class GraphLayout {
     //
     // X-axis configuration
     //
-    var hourMarkerStrokeColor = UIColor(hex: 0xe2e4e7)
-    var largestXAxisDateWidth: CGFloat = 30.0
-
+    var hourMarkerStrokeColor = UIColor.blackColor()
+    var largestXAxisDateWidth: CGFloat = 80.0
+    var xLabelRegularFont = UIFont.systemFontOfSize(9.0)
+    var xLabelLightFont = UIFont.systemFontOfSize(8.0)
+    
     //
     // Methods to override!
     //
 
+    func graphUtilsForGraphView() -> GraphingUtils {
+        return GraphingUtils(layout: self, timeIntervalForView: self.graphTimeInterval, startTime: self.graphStartTime, viewSize: self.graphViewSize)
+    }
+
+    func graphUtilsForTimeInterval(timeIntervalForView: NSTimeInterval, startTime: NSDate) -> GraphingUtils {
+        return GraphingUtils(layout: self, timeIntervalForView: timeIntervalForView, startTime: startTime, viewSize: self.cellViewSize)
+    }
+    
     func configureGraph() {
         
     }
     
     /// Returns the various layers used to compose the graph, other than the fixed background, and X-axis time values.
-    func graphLayers(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate) -> [GraphDataLayer] {
+    func graphLayers(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate, tileIndex: Int) -> [GraphDataLayer] {
         return []
     }
   

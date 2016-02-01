@@ -40,39 +40,39 @@ struct EventViewStoryboard {
     }
 }
 
-class SegueFromLeft: UIStoryboardSegue {
-    
-    override func perform() {
-        let src: UIViewController = self.sourceViewController
-        let dst: UIViewController = self.destinationViewController
-        let transition: CATransition = CATransition()
-        let timeFunc : CAMediaTimingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        transition.duration = 0.25
-        transition.timingFunction = timeFunc
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        src.navigationController!.view.layer.addAnimation(transition, forKey: kCATransition)
-        src.navigationController!.pushViewController(dst, animated: false)
-    }
-    
-}
-
-// Note: For iOS 9 you can just hook this up as an unwind segue, but prior iOS releases don't support this. For now, just hook this as a regular segue to another VC - which one shouldn't matter since this just does a pop, although the dest VC will be allocated, it's viewDidLoad won't be called.
-class UnwindSegueFromRight: UIStoryboardSegue {
-    
-    override func perform() {
-        let src: UIViewController = self.sourceViewController
-        let transition: CATransition = CATransition()
-        let timeFunc : CAMediaTimingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        transition.duration = 0.25
-        transition.timingFunction = timeFunc
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromRight
-        src.navigationController!.view.layer.addAnimation(transition, forKey: kCATransition)
-        src.navigationController!.popViewControllerAnimated(false)
-    }
-    
-}
+//class SegueFromLeft: UIStoryboardSegue {
+//    
+//    override func perform() {
+//        let src: UIViewController = self.sourceViewController
+//        let dst: UIViewController = self.destinationViewController
+//        let transition: CATransition = CATransition()
+//        let timeFunc : CAMediaTimingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+//        transition.duration = 0.25
+//        transition.timingFunction = timeFunc
+//        transition.type = kCATransitionPush
+//        transition.subtype = kCATransitionFromLeft
+//        src.navigationController!.view.layer.addAnimation(transition, forKey: kCATransition)
+//        src.navigationController!.pushViewController(dst, animated: false)
+//    }
+//    
+//}
+//
+//// Note: For iOS 9 you can just hook this up as an unwind segue, but prior iOS releases don't support this. For now, just hook this as a regular segue to another VC - which one shouldn't matter since this just does a pop, although the dest VC will be allocated, it's viewDidLoad won't be called.
+//class UnwindSegueFromRight: UIStoryboardSegue {
+//    
+//    override func perform() {
+//        let src: UIViewController = self.sourceViewController
+//        let transition: CATransition = CATransition()
+//        let timeFunc : CAMediaTimingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+//        transition.duration = 0.25
+//        transition.timingFunction = timeFunc
+//        transition.type = kCATransitionPush
+//        transition.subtype = kCATransitionFromRight
+//        src.navigationController!.view.layer.addAnimation(transition, forKey: kCATransition)
+//        src.navigationController!.popViewControllerAnimated(false)
+//    }
+//    
+//}
 
 
 

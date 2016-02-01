@@ -28,6 +28,7 @@ class GraphContainerView: UIView {
     var delegate: GraphContainerViewDelegate?
     var layout: GraphLayout
     var graphCollectionView: UICollectionView?
+    var graphUtils: GraphingUtils?
     
     init(frame: CGRect, delegate: GraphContainerViewDelegate, layout: GraphLayout) {
         self.delegate = delegate
@@ -137,7 +138,7 @@ class GraphContainerView: UIView {
     
     func centerGraphOnEvent(edgeOffset: CGFloat = 0.0, animated: Bool = false) {
         if let graphCollectionView = graphCollectionView {
-            graphCollectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: layout.graphCenterCellInCollection, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: animated)
+            graphCollectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: layout.graphCellFocusInCollection, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: animated)
             
             // Setting an edge offset will put the center graph point at this x position within the graph view
             if !animated && edgeOffset != 0.0 {
@@ -163,25 +164,37 @@ class GraphContainerView: UIView {
             graphCollectionView = nil;
         }
     }
+
+    /// Return the non-changing part of the graph background
+    ///
+    /// Right now this is just the y axis with its values.
+    ///
+    /// - returns: A UIImageView the size of the current view, with static parts of the background. This should be placed in back of the graph...
     
+    func fixedBackgroundImage() -> UIImage {
+        let graphUtils = layout.graphUtilsForGraphView()
+        return graphUtils.imageOfFixedGraphBackground()
+    }
+    
+
     private let collectCellReuseID = "graphViewCell"
     func configureGraph(edgeOffset: CGFloat = 0.0) {
         if graphCollectionView == nil {
             layout.configureGraph()
-            
+
             // first put in the fixed background
             if let fixedBackgroundImageView = fixedBackgroundImageView {
                 fixedBackgroundImageView.removeFromSuperview()
             }
             
-            // Note: for time-invariant background view generation, startTime can be anything!
-            let graphView = GraphUIView.init(frame: self.bounds, startTime: layout.graphStartTime, layout: layout)
-            fixedBackgroundImageView = UIImageView(image: graphView.fixedBackgroundImage())
+            // Get time-invariant background view generation
+            let graphUtils = layout.graphUtilsForGraphView()
+            fixedBackgroundImageView = UIImageView(image: graphUtils.imageOfFixedGraphBackground())
             
             self.addSubview(fixedBackgroundImageView!)
             
             let collectLayout = UICollectionViewFlowLayout()
-            self.cellSize = self.bounds.size
+            self.cellSize = layout.cellViewSize
             collectLayout.itemSize = self.cellSize
             collectLayout.scrollDirection = UICollectionViewScrollDirection.Horizontal
             graphCollectionView = UICollectionView(frame: self.bounds, collectionViewLayout: collectLayout)
@@ -291,12 +304,11 @@ extension GraphContainerView: UICollectionViewDataSource {
         cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(collectCellReuseID, forIndexPath: indexPath) as! GraphCollectionCell
 
-            //NSLog("GraphContainerView cellForItemAtIndexPath \(indexPath.row)")
+            NSLog("GraphContainerView cellForItemAtIndexPath \(indexPath.row)")
             // index determines center time...
             let cellStartTime = startTimeOfCellAtIndex(indexPath)
-            cell.cellDebugId = String(indexPath.row)
             cell.layout = layout
-            cell.configureCell(cellStartTime, timeInterval: layout.cellTimeInterval)
+            cell.configureCell(cellStartTime, timeInterval: layout.cellTimeInterval, cellIndex: indexPath.row)
             delegate?.containerCellUpdated()
             return cell
     }

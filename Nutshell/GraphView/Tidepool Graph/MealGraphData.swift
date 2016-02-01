@@ -71,14 +71,14 @@ class MealGraphDataLayer: GraphDataLayer {
         } catch let error as NSError {
             NSLog("Error: \(error)")
         }
-        NSLog("loaded \(dataArray.count) meal events")
+        //NSLog("loaded \(dataArray.count) meal events")
     }
  
     //
     // MARK: - Drawing data points
     //
 
-    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
+    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType) {
         
         var isMain = false
         if let mealDataType = dataPoint as? MealGraphDataType {

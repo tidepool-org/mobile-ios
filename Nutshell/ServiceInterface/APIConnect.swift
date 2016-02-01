@@ -237,7 +237,7 @@ class APIConnector {
 
         metricsCache.append(metric)
         if !serviceAvailable() || metricSendInProgress || noMetricReporting {
-            NSLog("Offline: trackMetric stashed: \(metric)")
+            //NSLog("Offline: trackMetric stashed: \(metric)")
             return
         }
         
@@ -245,7 +245,7 @@ class APIConnector {
         let endpoint = "metrics/thisuser/nutshell-" + nextMetric
         let parameters = ["source": "nutshell", "sourceVersion": UIApplication.appVersion()]
         metricSendInProgress = true
-        NSLog("Tracked metric: \(nextMetric)")
+        //NSLog("Tracked metric: \(nextMetric)")
         sendRequest(Method.GET, endpoint: endpoint, parameters: parameters).responseJSON { (request, response, result) -> Void in
             self.metricSendInProgress = false
             if let response = response {

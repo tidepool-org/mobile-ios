@@ -43,7 +43,7 @@ class GraphDataLayer {
     func loadDataItems() {
     }
 
-    func imageView(graphDraw: GraphingUtils) -> UIImageView? {
+    func imageView() -> UIImageView? {
         if dataArray.count == 0 {
             return nil
         }
@@ -51,7 +51,7 @@ class GraphDataLayer {
         configureForDrawing()
         for dataPoint in dataArray {
             let xOffset: CGFloat = floor(CGFloat(dataPoint.timeOffset) * viewPixelsPerSec)
-            drawDataPointAtXOffset(xOffset, dataPoint: dataPoint, graphDraw: graphDraw)
+            drawDataPointAtXOffset(xOffset, dataPoint: dataPoint)
         }
         finishDrawing()
         
@@ -65,7 +65,7 @@ class GraphDataLayer {
     }
 
     // override!
-    func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
+    func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType) {
     }
     
     // override for any needed finish up...

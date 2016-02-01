@@ -22,8 +22,14 @@ class TidepoolGraphLayout: GraphLayout {
     var dataDetected = false
 
     init (viewSize: CGSize, mainEventTime: NSDate, tzOffsetSecs: Int) {
+
         self.mainEventTime = mainEventTime
-        super.init(viewSize: viewSize, centerTime: mainEventTime, tzOffsetSecs: tzOffsetSecs)
+        let startPixelsPerHour = 80
+        let numberOfTiles = 7
+        let cellTI = NSTimeInterval(viewSize.width * 3600.0/CGFloat(startPixelsPerHour))
+        let graphTI = cellTI * NSTimeInterval(numberOfTiles)
+        let startTime = mainEventTime.dateByAddingTimeInterval(-graphTI/2.0)
+        super.init(viewSize: viewSize, startTime: startTime, timeIntervalPerTile: cellTI, numberOfTiles: numberOfTiles, tilesInView: 1, tzOffsetSecs: tzOffsetSecs)
     }
 
     //
@@ -31,7 +37,7 @@ class TidepoolGraphLayout: GraphLayout {
     //
 
     // create and return an array of GraphDataLayer objects, w/o data, ordered in view layer from back to front (i.e., last item in array will be drawn last)
-    override func graphLayers(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate) -> [GraphDataLayer] {
+    override func graphLayers(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate, tileIndex: Int) -> [GraphDataLayer] {
 
         let workoutLayer = WorkoutGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
         
@@ -139,6 +145,10 @@ class TidepoolGraphLayout: GraphLayout {
     
         self.axesLabelTextColor = UIColor(hex: 0x58595B)
         self.axesLabelTextFont = Styles.smallRegularFont
+        
+        self.hourMarkerStrokeColor = UIColor(hex: 0xe2e4e7)
+        self.xLabelRegularFont = Styles.smallRegularFont
+        self.xLabelLightFont = Styles.smallLightFont
         
         let graphViewHeight = ceil(graphViewSize.height) // often this is fractional
         

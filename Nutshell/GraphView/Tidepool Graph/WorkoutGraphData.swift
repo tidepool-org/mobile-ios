@@ -79,7 +79,7 @@ class WorkoutGraphDataLayer: GraphDataLayer {
             NSLog("Error: \(error)")
         }
         if dataArray.count > 0 {
-            NSLog("loaded \(dataArray.count) workout events")
+            //NSLog("loaded \(dataArray.count) workout events")
         }
     }
 
@@ -92,7 +92,7 @@ class WorkoutGraphDataLayer: GraphDataLayer {
         self.pixelsPerValue = layout.yPixelsGlucose/layout.kGlucoseRange
     }
     
-    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
+    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType) {
         
         var isMain = false
         if let workoutDataType = dataPoint as? WorkoutGraphDataType {

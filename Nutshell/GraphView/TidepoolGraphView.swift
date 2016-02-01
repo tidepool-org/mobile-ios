@@ -33,7 +33,7 @@ class TidepoolGraphView: GraphContainerView {
 
     override func loadGraphData() {
         // TODO: make sure we don't call this when unnecessary!
-        NSLog("TidepoolGraphView reloading data")
+        //NSLog("TidepoolGraphView reloading data")
         tidepoolLayout.invalidateCaches()
         super.loadGraphData()
     }

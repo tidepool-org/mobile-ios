@@ -151,7 +151,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
         suppressedLine = nil
    }
     
-    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType, graphDraw: GraphingUtils) {
+    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType) {
         
         if let basalPoint = dataPoint as? BasalGraphDataType {
             // skip over values before starting time, but remember last value...
@@ -225,7 +225,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
                 let currentEnd = suppressedLine!.currentPoint
                 if abs(currentEnd.y - suppressedStart.y) > 1.0 {
                     suppressedLine!.addLineToPoint(suppressedStart)
-                    NSLog("suppressed line to \(suppressedStart)")
+                    //NSLog("suppressed line to \(suppressedStart)")
                 }
                 suppressedStart.y = currentEnd.y
             }
