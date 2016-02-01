@@ -95,7 +95,7 @@
 		0334CAA91BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */; };
 		0334CAAB1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
 		0334CAAC1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
-		1ECDD320B170E25E19F57F8C /* Pods_NutshellTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A3109656497A8086C86BD31 /* Pods_NutshellTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		1ECDD320B170E25E19F57F8C /* Pods_NutshellTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A3109656497A8086C86BD31 /* Pods_NutshellTests.framework */; };
 		48103E961C1DE4CC0055C27A /* ENSideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E941C1DE4CC0055C27A /* ENSideMenu.swift */; };
 		48103E971C1DE4CC0055C27A /* ENSideMenuNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E951C1DE4CC0055C27A /* ENSideMenuNavigationController.swift */; };
 		48103E991C1DE7BC0055C27A /* EventViewNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E981C1DE7BC0055C27A /* EventViewNavController.swift */; };
@@ -208,7 +208,7 @@
 		48EDC2C91BD99141003049D9 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */; };
 		48FB1E4D1C17C38600C89F8E /* NutshellDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */; };
 		48FB1E4E1C17C38600C89F8E /* NutshellDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */; };
-		949A33B350C643B74EB54D43 /* Pods_Nutshell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		949A33B350C643B74EB54D43 /* Pods_Nutshell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */

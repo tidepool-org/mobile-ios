@@ -1,6 +1,0 @@
-framework module SwiftyJSON {
-  umbrella header "Pods-Nutshell-SwiftyJSON-umbrella.h"
-
-  export *
-  module * { export * }
-}
