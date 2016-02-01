@@ -86,10 +86,12 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
             let smallCirclePath = UIBezierPath(ovalInRect: circleRect)
             circleColor.setFill()
             smallCirclePath.fill()
+            // Draw border so circle stands out from other objects like meal lines
             layout.backgroundColor.setStroke()
             smallCirclePath.lineWidth = 1.5
             smallCirclePath.stroke()
         } else {
+            // Don't draw border when circles intersect as it creates a distracting pattern
             let smallCirclePath = UIBezierPath(ovalInRect: smallCircleRect)
             circleColor.setFill()
             smallCirclePath.fill()

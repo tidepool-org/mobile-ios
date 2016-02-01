@@ -1003,6 +1003,8 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             ["Temp Basal", "Higher than scheduled", "2015-12-14T18:57:00.000Z", "brandon", ""],
             ["Temp Basal", "Shift in scheduled during temp", "2015-12-16T05:00:00.000Z", "brandon", ""],
             ["Interrupted Bolus", "Both regular and extended", "2015-11-17T04:00:00.000Z", "brandon", ""],
+            ["Interrupted Bolus", "Extended, only 2%", "2015-10-11T08:00:00.000Z", "brandon", ""],
+            ["Interrupted Bolus", "Extended, 63% delivered", "2015-10-10T04:00:00.000Z", "brandon", ""],
             ["Different Time Zone", "Nutshell shows duplicate events, Blip does not", "2015-08-12T19:40:00.000Z", "brandon", ""],
             // larry account
             ["Overridden Bolus", "Suggested .15, delivered 1, suggested .2, delivered 2.5", "2015-08-15T04:47:00.000Z", "larry", ""],

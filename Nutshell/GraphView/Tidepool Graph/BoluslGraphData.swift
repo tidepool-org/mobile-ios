@@ -91,6 +91,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
     private let kExtensionLineHeight: CGFloat = 2.0
     private let kExtensionEndshapeWidth: CGFloat = 7.0
     private let kExtensionEndshapeHeight: CGFloat = 11.0
+    private let kExtensionInterruptBarWidth: CGFloat = 6.0
     private let kBolusMaxExtension: NSTimeInterval = 6*60*60 // Assume maximum bolus extension of 6 hours!
 
     // locals...
@@ -373,16 +374,17 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
     }
 
     private func drawBolusExtensionInterruptBar(xOffset: CGFloat, centerY: CGFloat) {
-        // Bar width is 3.5 points, height is same as extension end triangle, fits on the end of the delivered extension triangle
+        // Blip extension interrupt bar width is smaller than bolus interrupt bar by 10:24 ratio, x:14 here
+        // Bar width is 5 points, and fits on the end of the delivered extension bar
         let context = UIGraphicsGetCurrentContext()
         CGContextSaveGState(context)
-        let barHeight = kExtensionEndshapeHeight - 1.0
+        let barHeight = kExtensionLineHeight
         CGContextTranslateCTM(context, xOffset, centerY-(barHeight/2.0))
         
         let bezierPath = UIBezierPath()
         bezierPath.moveToPoint(CGPointMake(0, 0))
-        bezierPath.addLineToPoint(CGPointMake(3.5, 0))
-        bezierPath.addLineToPoint(CGPointMake(3.5, barHeight))
+        bezierPath.addLineToPoint(CGPointMake(kExtensionInterruptBarWidth, 0))
+        bezierPath.addLineToPoint(CGPointMake(kExtensionInterruptBarWidth, barHeight))
         bezierPath.addLineToPoint(CGPointMake(0, barHeight))
         bezierPath.addLineToPoint(CGPointMake(0, 0))
         bezierPath.closePath()
@@ -391,7 +393,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
         CGContextRestoreGState(context)
     }
 
-    private func drawBolusExtensionShape(originX: CGFloat, var centerY: CGFloat, width: CGFloat, borderOnly: Bool = false) {
+    private func drawBolusExtensionShape(originX: CGFloat, var centerY: CGFloat, width: CGFloat, borderOnly: Bool = false, noEndShape: Bool = false) {
         centerY = round(centerY)
         let originY = centerY - (kExtensionEndshapeHeight/2.0)
         let bottomLineY = centerY + (kExtensionLineHeight / 2.0)
@@ -400,13 +402,21 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
         
         //// Bezier Drawing
         let bezierPath = UIBezierPath()
-        bezierPath.moveToPoint(CGPointMake(rightSideX, originY))
-        bezierPath.addLineToPoint(CGPointMake(rightSideX, originY + kExtensionEndshapeHeight))
-        bezierPath.addLineToPoint(CGPointMake(rightSideX - kExtensionEndshapeWidth, bottomLineY))
-        bezierPath.addLineToPoint(CGPointMake(originX, bottomLineY))
-        bezierPath.addLineToPoint(CGPointMake(originX, topLineY))
-        bezierPath.addLineToPoint(CGPointMake(rightSideX - kExtensionEndshapeWidth, topLineY))
-        bezierPath.addLineToPoint(CGPointMake(rightSideX, originY))
+        if noEndShape {
+            bezierPath.moveToPoint(CGPointMake(rightSideX, topLineY))
+            bezierPath.addLineToPoint(CGPointMake(rightSideX, bottomLineY))
+            bezierPath.addLineToPoint(CGPointMake(originX, bottomLineY))
+            bezierPath.addLineToPoint(CGPointMake(originX, topLineY))
+            bezierPath.addLineToPoint(CGPointMake(rightSideX, topLineY))
+        } else {
+            bezierPath.moveToPoint(CGPointMake(rightSideX, originY))
+            bezierPath.addLineToPoint(CGPointMake(rightSideX, originY + kExtensionEndshapeHeight))
+            bezierPath.addLineToPoint(CGPointMake(rightSideX - kExtensionEndshapeWidth, bottomLineY))
+            bezierPath.addLineToPoint(CGPointMake(originX, bottomLineY))
+            bezierPath.addLineToPoint(CGPointMake(originX, topLineY))
+            bezierPath.addLineToPoint(CGPointMake(rightSideX - kExtensionEndshapeWidth, topLineY))
+            bezierPath.addLineToPoint(CGPointMake(rightSideX, originY))
+        }
         bezierPath.closePath()
         if borderOnly {
             // use a border, with no fill
@@ -428,15 +438,21 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             originX = originX - (kExtensionEndshapeWidth - width)
             width = kExtensionEndshapeWidth
         }
-        drawBolusExtensionShape(originX, centerY: centerY, width: width)
-        // handle interrupted extended bolus!
+        
+        // only draw original end shape if bolus was not interrupted!
+        drawBolusExtensionShape(originX, centerY: centerY, width: width, borderOnly: false, noEndShape: (originalWidth != nil))
+        
+        // handle interrupted extended bolus
         if let originalWidth = originalWidth {
-            // only draw original extension if it is at least as large as the end shape!
-            if originalWidth > (width + 3.5 + kExtensionEndshapeWidth) {
-                drawBolusExtensionShape(originX + width, centerY: centerY, width: (originalWidth - width), borderOnly: true)
+            // draw original extension, but make sure it is at least as large as the end shape!
+            var extensionWidth = originalWidth - width
+            if extensionWidth < kExtensionEndshapeWidth {
+                extensionWidth = kExtensionEndshapeWidth
             }
+            drawBolusExtensionShape(originX + width, centerY: centerY, width: extensionWidth, borderOnly: true)
+            
             // always draw an interrupt bar at the end of the delivered part of the extension
-            drawBolusExtensionInterruptBar(originX+width, centerY: centerY)
+            drawBolusExtensionInterruptBar(originX + width, centerY: centerY)
         }
     }
 
