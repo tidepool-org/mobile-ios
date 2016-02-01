@@ -30,7 +30,6 @@ class ShowPhotoViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        APIConnector.connector().trackMetric("Viewed a Photo (Photo Screen)")
 
         if !modalPresentation {
             // Hide modal header when used as a nav view
@@ -51,6 +50,11 @@ class ShowPhotoViewController: UIViewController {
             self.navigationItem.title = mealTitle
             self.headerNavItem.title = mealTitle
         }
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        APIConnector.connector().trackMetric("Viewed a Photo (Photo Screen)")
     }
 
     override func viewDidLayoutSubviews() {

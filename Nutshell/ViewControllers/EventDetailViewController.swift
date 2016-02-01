@@ -55,7 +55,6 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         // remember original nut item we viewed, for return
-        APIConnector.connector().trackMetric("Viewed Data Screen")
         originalId = eventItem?.nutEventIdString()
         configureDetailView()
         // We use a custom back button so we can redirect back when the event has changed. This tweaks the arrow positioning to match the iOS back arrow position
@@ -89,6 +88,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         //NSLog("EventDetailVC: viewWillAppear")
+        APIConnector.connector().trackMetric("Viewed Data Screen")
         
         if eventItem == nil {
             NSLog("Error: No Event at EventDetailVC viewWillAppear!")

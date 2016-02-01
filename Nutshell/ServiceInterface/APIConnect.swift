@@ -226,17 +226,15 @@ class APIConnector {
     
     // When offline just stash metrics in metricsCache array
     private var metricsCache: [String] = []
-    // Turn on the following boolean to prevent logging metrics to the service...
-    private var noMetricReporting = false
     // Used so we only have one metric send in progress at a time, to help balance service load a bit...
     private var metricSendInProgress = false
-    func trackMetric(metric: String) {
+    func trackMetric(metric: String, flushBuffer: Bool = false) {
         // Set our endpoint for the event tracking
         // Format: https://api.tidepool.org/metrics/thisuser/urchin%20-%20Remember%20Me%20Used?source=urchin&sourceVersion=1.1
         // Format: https://api.tidepool.org/metrics/thisuser/nutshell-Viewed%20Hamburger%20Menu?source=nutshell&sourceVersion=0%2E8%2E1
 
         metricsCache.append(metric)
-        if !serviceAvailable() || metricSendInProgress || noMetricReporting {
+        if !serviceAvailable() || (metricSendInProgress && !flushBuffer) {
             //NSLog("Offline: trackMetric stashed: \(metric)")
             return
         }
@@ -245,13 +243,13 @@ class APIConnector {
         let endpoint = "metrics/thisuser/nutshell-" + nextMetric
         let parameters = ["source": "nutshell", "sourceVersion": UIApplication.appVersion()]
         metricSendInProgress = true
-        //NSLog("Tracked metric: \(nextMetric)")
         sendRequest(Method.GET, endpoint: endpoint, parameters: parameters).responseJSON { (request, response, result) -> Void in
             self.metricSendInProgress = false
             if let response = response {
                 if response.statusCode == 200 {
+                    NSLog("Tracked metric: \(nextMetric)")
                     if !self.metricsCache.isEmpty {
-                        self.trackMetric(self.metricsCache.removeFirst())
+                        self.trackMetric(self.metricsCache.removeFirst(), flushBuffer: flushBuffer)
                     }
                 } else {
                     NSLog("Failed status code: \(response.statusCode) for tracking metric: \(metric)")
@@ -267,7 +265,7 @@ class APIConnector {
     
     func logout(completion: () -> (Void)) {
         // Clear our session token and remove entries from the db
-        APIConnector.connector().trackMetric("Logged Out")
+        APIConnector.connector().trackMetric("Logged Out", flushBuffer: true)
 
         self.sessionToken = nil
         NutDataController.controller().logoutUser()

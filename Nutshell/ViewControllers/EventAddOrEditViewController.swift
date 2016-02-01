@@ -78,7 +78,6 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         var saveButtonTitle = NSLocalizedString("saveButtonTitle", comment:"Save")
         if let eventItem = eventItem {
             editExistingEvent = true
-            APIConnector.connector().trackMetric("Viewed Edit Screen (Edit Screen)")
             eventTime = eventItem.time
             eventTimeOffsetSecs = eventItem.tzOffsetSecs
 
@@ -129,6 +128,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         nc.removeObserver(self, name: nil, object: nil)
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        APIConnector.connector().trackMetric("Viewed Edit Screen (Edit Screen)")
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
