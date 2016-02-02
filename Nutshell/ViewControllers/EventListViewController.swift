@@ -88,7 +88,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         searchTextField.resignFirstResponder()
         viewIsForeground = false
         if let sideMenu = self.sideMenuController()?.sideMenu {
-            NSLog("swipe disabled")
+            //NSLog("swipe disabled")
             sideMenu.allowLeftSwipe = false
             sideMenu.allowRightSwipe = false
             sideMenu.allowPanGesture = false

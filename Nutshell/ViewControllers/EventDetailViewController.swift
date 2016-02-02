@@ -585,7 +585,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         //NSLog("EventDetailVC viewDidLayoutSubviews, graphSectionView: \(graphSectionView.frame.size)")
         if let graphContainerView = graphContainerView {
             if (graphContainerView.frame.size == graphSectionView.frame.size) {
-                NSLog("graph reconfigure skipped!")
+                //NSLog("graph reconfigure skipped!")
                 return
             }
             NSLog("Reconfigure graph, graphContainerView: \(graphContainerView.frame.size)")

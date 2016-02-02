@@ -142,7 +142,7 @@ class LoginViewController: BaseUIViewController {
         
         APIConnector.connector().login(emailTextField.text!,
             password: passwordTextField.text!, remember: rememberMeButton.selected) { (result:Alamofire.Result<User, NSError>) -> (Void) in
-                NSLog("Login result: \(result)")
+                //NSLog("Login result: \(result)")
                 self.processLoginResult(result)
         }
     }
@@ -152,7 +152,7 @@ class LoginViewController: BaseUIViewController {
         self.loginIndicator.stopAnimating()
         if (result.isSuccess) {
             if let user=result.value {
-                NSLog("login success: \(user)")
+                NSLog("Login success: \(user)")
                 APIConnector.connector().fetchProfile() { (result:Alamofire.Result<JSON, NSError>) -> (Void) in
                         NSLog("Profile fetch result: \(result)")
                     if (result.isSuccess) {

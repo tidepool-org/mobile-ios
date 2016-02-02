@@ -331,7 +331,6 @@ class NutDataController
             NSLog("Store url is \(url)")
             // TODO: use NSInMemoryStoreType for test databases!
             try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: pscOptions)
-            NSLog("Using database file \(url)")
         } catch {
             // Report any error we got.
             var dict = [String: AnyObject]()

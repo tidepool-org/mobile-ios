@@ -304,7 +304,7 @@ extension GraphContainerView: UICollectionViewDataSource {
         cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
             let cell = collectionView.dequeueReusableCellWithReuseIdentifier(collectCellReuseID, forIndexPath: indexPath) as! GraphCollectionCell
 
-            NSLog("GraphContainerView cellForItemAtIndexPath \(indexPath.row)")
+            //NSLog("GraphContainerView cellForItemAtIndexPath \(indexPath.row)")
             // index determines center time...
             let cellStartTime = startTimeOfCellAtIndex(indexPath)
             cell.layout = layout

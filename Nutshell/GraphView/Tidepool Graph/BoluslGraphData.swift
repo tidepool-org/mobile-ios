@@ -312,7 +312,11 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             
             if let extendedValue = bolus.extendedValue, duration = bolus.duration {
                 let width = floor(CGFloat(duration) * viewPixelsPerSec)
-                let height = extendedValue * pixelsPerValue
+                var height = ceil(extendedValue * pixelsPerValue)
+                if height < kExtensionLineHeight/2.0 {
+                    // tweak to align extension rect with bottom of bolus rect
+                    height = kExtensionLineHeight/2.0
+                }
                 var originalWidth: CGFloat?
                 if let _ = bolus.expectedExtended, expectedDuration = bolus.expectedDuration {
                     // extension was interrupted...
@@ -322,7 +326,12 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                         NSLog("UNEXPECTED DATA - expectedDuration \(expectedDuration) not > duration \(duration)")
                     }
                 }
-                drawBolusExtension(bolusValueRect.origin.x + bolusValueRect.width, centerY: layout.yBottomOfBolus - height, width: width, originalWidth: originalWidth)
+                var yOrigin = layout.yBottomOfBolus - height
+                if yOrigin == bolusValueRect.origin.y {
+                // tweak to align extension rect with top of bolus rect
+                   yOrigin = yOrigin + kExtensionLineHeight/2.0
+                }
+                drawBolusExtension(bolusValueRect.origin.x + bolusValueRect.width, centerY: yOrigin, width: width, originalWidth: originalWidth)
                 //NSLog("bolus extension duration \(bolus.duration/60) minutes, extended value \(bolus.extendedValue), total value: \(bolus.value)")
             }
             

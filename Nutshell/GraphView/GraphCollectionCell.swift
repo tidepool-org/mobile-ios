@@ -37,7 +37,7 @@ class GraphCollectionCell: UICollectionViewCell {
     
     func configureCell(startTime: NSDate, timeInterval: NSTimeInterval, cellIndex: Int) {
 
-        NSLog("GraphCollectionCell \(cellIndex) configure startTime \(startTime), timeInterval \(timeInterval), frame \(self.frame.size)")
+        //NSLog("GraphCollectionCell \(cellIndex) configure startTime \(startTime), timeInterval \(timeInterval), frame \(self.frame.size)")
 
         graphView?.removeFromSuperview()
         graphView = GraphUIView.init(frame: self.bounds, startTime: startTime, layout: layout!, tileIndex: cellIndex)
