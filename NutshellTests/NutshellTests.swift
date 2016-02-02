@@ -40,9 +40,9 @@ class NutshellTests: XCTestCase {
         super.tearDown()
     }
     
-    func login(username: String, password: String, remember: Bool, completion: (Result<User>) -> (Void)) {
+    func login(username: String, password: String, remember: Bool, completion: (Result<User, NSError>) -> (Void)) {
         APIConnector.connector().login(email,
-            password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
+            password: pass, remember: false) { (result:(Alamofire.Result<User, NSError>)) -> (Void) in
                 print("Login result: \(result)")
                 completion(result)
         }
@@ -55,7 +55,7 @@ class NutshellTests: XCTestCase {
         if email == "test username goes here!" {
             XCTFail("Fatal error: please edit NutshellTests.swift and add a test account!")
         }
-        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
+        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User, NSError>)) -> (Void) in
                 print("Login result: \(result)")
                 if ( result.isSuccess ) {
                     if let user=result.value {
@@ -68,7 +68,7 @@ class NutshellTests: XCTestCase {
                     }
                 } else {
                     var errorCode = ""
-                    if let error = result.error as? NSError {
+                    if let error = result.error {
                         errorCode = String(error.code)
                     }
                     XCTFail("login failed! Error: " + errorCode + result.error.debugDescription)
@@ -82,10 +82,10 @@ class NutshellTests: XCTestCase {
     func test02FetchUserProfile() {
         let expectation = expectationWithDescription("User profile fetch successful")
         
-        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
+        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User, NSError>)) -> (Void) in
             print("Login for profile result: \(result)")
 
-             APIConnector.connector().fetchProfile() { (result:Alamofire.Result<JSON>) -> (Void) in
+             APIConnector.connector().fetchProfile() { (result:Alamofire.Result<JSON, NSError>) -> (Void) in
                 NSLog("Profile fetch result: \(result)")
                 if (result.isSuccess) {
                     if let json = result.value {
@@ -94,7 +94,7 @@ class NutshellTests: XCTestCase {
                     expectation.fulfill()
                 } else {
                     var errorCode = ""
-                    if let error = result.error as? NSError {
+                    if let error = result.error {
                         errorCode = String(error.code)
                     }
                     XCTFail("profile fetch failed! Error: " + errorCode + result.error.debugDescription)
@@ -109,14 +109,14 @@ class NutshellTests: XCTestCase {
     func test03FetchUserData() {
         let expectation = expectationWithDescription("User profile fetch successful")
         
-        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
+        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User, NSError>)) -> (Void) in
             print("Login for fetch user data result: \(result)")
             
             // Look at events in July 2015...
             let startDate = NutUtils.dateFromJSON("2015-07-01T00:00:00.000Z")!
             let endDate = NutUtils.dateFromJSON("2015-07-31T23:59:59.000Z")!
             
-            APIConnector.connector().getReadOnlyUserData(startDate, endDate: endDate) { (result:Alamofire.Result<JSON>) -> (Void) in
+            APIConnector.connector().getReadOnlyUserData(startDate, endDate: endDate) { (result:Alamofire.Result<JSON, NSError>) -> (Void) in
                 NSLog("FetchUserData result: \(result)")
                 if (result.isSuccess) {
                     if let json = result.value {
@@ -129,7 +129,7 @@ class NutshellTests: XCTestCase {
                     expectation.fulfill()
                 } else {
                     var errorCode = ""
-                    if let error = result.error as? NSError {
+                    if let error = result.error {
                         errorCode = String(error.code)
                     }
                     XCTFail("user data fetch failed! Error: " + errorCode + result.error.debugDescription)
@@ -143,14 +143,14 @@ class NutshellTests: XCTestCase {
     func test04FetchUserData2() {
         let expectation = expectationWithDescription("User profile fetch successful")
         
-        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
+        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User, NSError>)) -> (Void) in
             print("Login for fetch user data result: \(result)")
             
             // Look at events in July 2015...
             let startDate = NutUtils.dateFromJSON("2015-07-01T00:00:00.000Z")!
             let endDate = NutUtils.dateFromJSON("2015-07-31T23:59:59.000Z")!
             
-            APIConnector.connector().getReadOnlyUserData(startDate, endDate: endDate) { (result:Alamofire.Result<JSON>) -> (Void) in
+            APIConnector.connector().getReadOnlyUserData(startDate, endDate: endDate) { (result:Alamofire.Result<JSON, NSError>) -> (Void) in
                 NSLog("FetchUserData2 result: \(result)")
                 if (result.isSuccess) {
                     if let json = result.value {
@@ -163,7 +163,7 @@ class NutshellTests: XCTestCase {
                     expectation.fulfill()
                 } else {
                     var errorCode = ""
-                    if let error = result.error as? NSError {
+                    if let error = result.error {
                         errorCode = String(error.code)
                     }
                     XCTFail("user data fetch failed! Error: " + errorCode + result.error.debugDescription)

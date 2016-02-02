@@ -141,19 +141,19 @@ class LoginViewController: BaseUIViewController {
         loginIndicator.startAnimating()
         
         APIConnector.connector().login(emailTextField.text!,
-            password: passwordTextField.text!, remember: rememberMeButton.selected) { (result:Alamofire.Result<User>) -> (Void) in
+            password: passwordTextField.text!, remember: rememberMeButton.selected) { (result:Alamofire.Result<User, NSError>) -> (Void) in
                 NSLog("Login result: \(result)")
                 self.processLoginResult(result)
         }
     }
     
-    private func processLoginResult(result: Alamofire.Result<User>) {
+    private func processLoginResult(result: Alamofire.Result<User, NSError>) {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         self.loginIndicator.stopAnimating()
         if (result.isSuccess) {
             if let user=result.value {
                 NSLog("login success: \(user)")
-                APIConnector.connector().fetchProfile() { (result:Alamofire.Result<JSON>) -> (Void) in
+                APIConnector.connector().fetchProfile() { (result:Alamofire.Result<JSON, NSError>) -> (Void) in
                         NSLog("Profile fetch result: \(result)")
                     if (result.isSuccess) {
                         if let json = result.value {
@@ -169,7 +169,7 @@ class LoginViewController: BaseUIViewController {
         } else {
             NSLog("login failed! Error: " + result.error.debugDescription)
             var errorText = NSLocalizedString("loginErrUserOrPassword", comment: "Wrong email or password!")
-            if let error = result.error as? NSError {
+            if let error = result.error {
                 NSLog("NSError: \(error)")
                 if error.code == -1009 {
                     errorText = NSLocalizedString("loginErrOffline", comment: "The Internet connection appears to be offline!")

@@ -163,7 +163,7 @@ class APIConnector {
     }
     
     /// Logs in the user and obtains the session token for the session (stored internally)
-    func login(username: String, password: String, remember: Bool, completion: (Result<User>) -> (Void)) {
+    func login(username: String, password: String, remember: Bool, completion: (Result<User, NSError>) -> (Void)) {
         // Set our endpoint for login
         let endpoint = "auth/login"
         _rememberToken = remember
@@ -178,12 +178,12 @@ class APIConnector {
         
         // Send the request and deal with the response as JSON
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        sendRequest(Method.POST, endpoint: endpoint, headers:headers).responseJSON { (request, response, result) -> (Void) in
+        sendRequest(Method.POST, endpoint: endpoint, headers:headers).responseJSON { response in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            if ( result.isSuccess ) {
+            if ( response.result.isSuccess ) {
                 // Look for the auth token
-                self.sessionToken = response!.allHeaderFields[self.kSessionIdHeader] as! String?
-                let json = JSON(result.value!)
+                self.sessionToken = response.response!.allHeaderFields[self.kSessionIdHeader] as! String?
+                let json = JSON(response.result.value!)
                 
                 // Create the User object
                 // TODO: Should this call be made in NutshellDataController?
@@ -195,31 +195,31 @@ class APIConnector {
                 } else {
                     APIConnector.connector().trackMetric("Log In Failed")
                     NutDataController.controller().logoutUser()
-                    completion(Result.Failure(nil, NSError(domain: self.kNutshellErrorDomain,
+                    completion(Result.Failure(NSError(domain: self.kNutshellErrorDomain,
                         code: -1,
-                        userInfo: ["description":"Could not create user from JSON", "result":result.value!])))
+                        userInfo: ["description":"Could not create user from JSON", "result":response.result.value!])))
                 }
             } else {
                 APIConnector.connector().trackMetric("Log In Failed")
                 NutDataController.controller().logoutUser()
-                completion(Result.Failure(nil, result.error!))
+                completion(Result.Failure(response.result.error!))
             }
         }
     }
  
-    func fetchProfile(completion: (Result<JSON>) -> (Void)) {
+    func fetchProfile(completion: (Result<JSON, NSError>) -> (Void)) {
         // Set our endpoint for the user profile
         // format is like: https://api.tidepool.org/metadata/f934a287c4/profile
         let endpoint = "metadata/" + NutDataController.controller().currentUserId! + "/profile"
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        sendRequest(Method.GET, endpoint: endpoint).responseJSON { (request, response, result) -> Void in
+        sendRequest(Method.GET, endpoint: endpoint).responseJSON { response in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            if ( result.isSuccess ) {
-                let json = JSON(result.value!)
+            if ( response.result.isSuccess ) {
+                let json = JSON(response.result.value!)
                 completion(Result.Success(json))
             } else {
                 // Failure
-                completion(Result.Failure(nil, result.error!))
+                completion(Result.Failure(response.result.error!))
             }
         }
     }
@@ -243,17 +243,17 @@ class APIConnector {
         let endpoint = "metrics/thisuser/nutshell-" + nextMetric
         let parameters = ["source": "nutshell", "sourceVersion": UIApplication.appVersion()]
         metricSendInProgress = true
-        sendRequest(Method.GET, endpoint: endpoint, parameters: parameters).responseJSON { (request, response, result) -> Void in
+        sendRequest(Method.GET, endpoint: endpoint, parameters: parameters).responseJSON { response in
             self.metricSendInProgress = false
-            if let response = response {
-                if response.statusCode == 200 {
+            if let theResponse = response.response {
+                if theResponse.statusCode == 200 {
                     NSLog("Tracked metric: \(nextMetric)")
                     if !self.metricsCache.isEmpty {
                         self.trackMetric(self.metricsCache.removeFirst(), flushBuffer: flushBuffer)
                     }
                 } else {
-                    NSLog("Failed status code: \(response.statusCode) for tracking metric: \(metric)")
-                    if let error = result.error as? NSError {
+                    NSLog("Failed status code: \(theResponse.statusCode) for tracking metric: \(metric)")
+                    if let error = response.result.error {
                         NSLog("NSError: \(error)")
                     }
                 }
@@ -284,15 +284,15 @@ class APIConnector {
         
         // Post the request.
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        self.sendRequest(Method.GET, endpoint:endpoint).responseJSON { (request, response, result) -> Void in
+        self.sendRequest(Method.GET, endpoint:endpoint).responseJSON { response in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            if ( result.isSuccess ) {
+            if ( response.result.isSuccess ) {
                 NSLog("Session token updated")
-                self.sessionToken = response!.allHeaderFields[self.kSessionIdHeader] as! String?
+                self.sessionToken = response.response!.allHeaderFields[self.kSessionIdHeader] as! String?
                 completion(succeeded: true)
             } else {
-                NSLog("Session token update failed: \(result)")
-                if let error = result.error as? NSError {
+                NSLog("Session token update failed: \(response.result)")
+                if let error = response.result.error {
                     print("NSError: \(error)")
                     // TODO: handle network offline!
                 }
@@ -304,24 +304,24 @@ class APIConnector {
     /** For now this method returns the result as a JSON object. The result set can be huge, and we want processing to
      *  happen outside of this method until we have something a little less firehose-y.
      */
-    func getUserData(completion: (Result<JSON>) -> (Void)) {
+    func getUserData(completion: (Result<JSON, NSError>) -> (Void)) {
         // Set our endpoint for the user data
         let endpoint = "data/" + NutDataController.controller().currentUserId!;
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        sendRequest(Method.GET, endpoint: endpoint).responseJSON { (request, response, result) -> Void in
+        sendRequest(Method.GET, endpoint: endpoint).responseJSON { response in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            if ( result.isSuccess ) {
-                let json = JSON(result.value!)
+            if ( response.result.isSuccess ) {
+                let json = JSON(response.result.value!)
                 completion(Result.Success(json))
             } else {
                 // Failure
-                completion(Result.Failure(nil, result.error!))
+                completion(Result.Failure(response.result.error!))
             }
         }
     }
     
-    func getReadOnlyUserData(startDate: NSDate? = nil, endDate: NSDate? = nil,completion: (Result<JSON>) -> (Void)) {
+    func getReadOnlyUserData(startDate: NSDate? = nil, endDate: NSDate? = nil,completion: (Result<JSON, NSError>) -> (Void)) {
         // Set our endpoint for the user data
         // TODO: centralize define of read-only events!
         // request format is like: https://api.tidepool.org/data/f934a287c4?endDate=2015-11-17T08%3A00%3A00%2E000Z&startDate=2015-11-16T12%3A00%3A00%2E000Z&type=smbg%2Cbolus%2Ccbg%2Cwizard%2Cbasal
@@ -338,16 +338,16 @@ class APIConnector {
             // NOTE: end date is included (i.e., dates <= end date)
             parameters.updateValue(NutUtils.dateToJSON(endDate), forKey: "endDate")
         }
-        sendRequest(Method.GET, endpoint: endpoint, parameters: parameters).responseJSON { (request, response, result) -> Void in
+        sendRequest(Method.GET, endpoint: endpoint, parameters: parameters).responseJSON { response in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            if ( result.isSuccess ) {
-                let json = JSON(result.value!)
+            if ( response.result.isSuccess ) {
+                let json = JSON(response.result.value!)
                 completion(Result.Success(json))
             } else {
                 // Failure: typically, no data were found:
                 // Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.}
-                if let response = response {
-                    let statusCode = response.statusCode
+                if let theResponse = response.response {
+                    let statusCode = theResponse.statusCode
                     if statusCode != 200 {
                         NSLog("Failure status code: \(statusCode) for getReadOnlyUserData")
                         APIConnector.connector().trackMetric("Tidepool Data Fetch Failure - Code " + String(statusCode))
@@ -356,7 +356,7 @@ class APIConnector {
                 } else {
                     NSLog("Invalid response for getReadOnlyUserData metric")
                 }
-                completion(Result.Failure(nil, result.error!))
+                completion(Result.Failure(response.result.error!))
             }
         }
     }
