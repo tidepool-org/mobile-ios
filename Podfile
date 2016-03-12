@@ -1,17 +1,20 @@
-# Uncomment this line to define a global platform for your project
-platform :ios, '9.0'
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'Nutshell' do
+platform :ios, '9.0'
+
 use_frameworks!
-pod 'Alamofire', '3.1.5'
-pod 'SwiftyJSON', '2.3.2'
+
+def available_pods
+  pod 'Alamofire', '3.1.5'
+  pod 'SwiftyJSON', '2.3.2'
+  pod 'CocoaLumberjack/Swift', '~> 2.2.0'
+  pod 'RealmSwift', '~> 0.98.4'
+end
+
+target 'Nutshell' do
+  available_pods
 end
 
 target 'NutshellTests' do
-use_frameworks!
-pod 'Alamofire', '3.1.5'
-pod 'SwiftyJSON', '2.3.2'
+  available_pods
 end
-
-

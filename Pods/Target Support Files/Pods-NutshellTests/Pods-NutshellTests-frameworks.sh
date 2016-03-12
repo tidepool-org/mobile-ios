@@ -85,9 +85,15 @@ strip_invalid_archs() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-NutshellTests/Alamofire.framework"
+  install_framework "Pods-NutshellTests/CocoaLumberjack.framework"
+  install_framework "Pods-NutshellTests/Realm.framework"
+  install_framework "Pods-NutshellTests/RealmSwift.framework"
   install_framework "Pods-NutshellTests/SwiftyJSON.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-NutshellTests/Alamofire.framework"
+  install_framework "Pods-NutshellTests/CocoaLumberjack.framework"
+  install_framework "Pods-NutshellTests/Realm.framework"
+  install_framework "Pods-NutshellTests/RealmSwift.framework"
   install_framework "Pods-NutshellTests/SwiftyJSON.framework"
 fi
