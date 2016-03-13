@@ -447,7 +447,7 @@ class APIConnector {
         if (self.isConnectedToNetwork()) {
             preRequest()
             
-            let baseURL = kUploadServers[currentService!]!
+            let baseURL = kServers[currentService!]!
             let baseUrlWithSubdomainRootOverride = baseURL.stringByReplacingOccurrencesOfString("api", withString: subdomainRootOverride)
             var urlString = baseUrlWithSubdomainRootOverride + urlExtension
             urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
