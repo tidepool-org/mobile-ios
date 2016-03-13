@@ -103,6 +103,16 @@
 		4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
 		4820ED6A1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
 		4820ED6B1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
+		482ECC801C94BB9D002A015D /* HealthKitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7C1C94BB9D002A015D /* HealthKitData.swift */; };
+		482ECC811C94BB9D002A015D /* HealthKitDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7D1C94BB9D002A015D /* HealthKitDataCache.swift */; };
+		482ECC821C94BB9D002A015D /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */; };
+		482ECC831C94BB9D002A015D /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */; };
+		482ECC861C94BC47002A015D /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC851C94BC47002A015D /* LogFormatter.swift */; };
+		482ECC871C94BDE8002A015D /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC851C94BC47002A015D /* LogFormatter.swift */; };
+		482ECC881C94BFC4002A015D /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */; };
+		482ECC891C94C376002A015D /* HealthKitDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7D1C94BB9D002A015D /* HealthKitDataCache.swift */; };
+		482ECC8A1C94C379002A015D /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */; };
+		482ECC8B1C94C37E002A015D /* HealthKitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7C1C94BB9D002A015D /* HealthKitData.swift */; };
 		4837C1661C11F9FC00D29B64 /* GraphContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837C1651C11F9FC00D29B64 /* GraphContainerView.swift */; };
 		4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */; };
 		4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */; };
@@ -137,8 +147,6 @@
 		4859FCD11B9A4DE5000C1269 /* NutshellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCD01B9A4DE5000C1269 /* NutshellTests.swift */; };
 		486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */; };
 		486283B41BA48B1500547BE3 /* EventViewStoryboardTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */; };
-		486EAA751C304A86003B4497 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486EAA741C304A86003B4497 /* HealthKitManager.swift */; };
-		486EAA761C304A86003B4497 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486EAA741C304A86003B4497 /* HealthKitManager.swift */; };
 		486EAA7A1C305E38003B4497 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 486EAA791C305E38003B4497 /* HealthKit.framework */; };
 		486F5DF21B9F874A00BA2A57 /* LaBelleAurore.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DEE1B9F874A00BA2A57 /* LaBelleAurore.ttf */; };
 		486F5DF51B9F874A00BA2A57 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DEF1B9F874A00BA2A57 /* OpenSans-Bold.ttf */; };
@@ -276,6 +284,11 @@
 		48103E9C1C1E05660055C27A /* Nutshell-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Nutshell-Bridging-Header.h"; sourceTree = "<group>"; };
 		4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/Pods-Nutshell/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		4820ED691C21E8E3008C754A /* GraphDataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataTypes.swift; path = GraphView/GraphDataTypes.swift; sourceTree = "<group>"; };
+		482ECC7C1C94BB9D002A015D /* HealthKitData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitData.swift; path = DataModel/HealthKit/HealthKitData.swift; sourceTree = "<group>"; };
+		482ECC7D1C94BB9D002A015D /* HealthKitDataCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataCache.swift; path = DataModel/HealthKit/HealthKitDataCache.swift; sourceTree = "<group>"; };
+		482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataUploader.swift; path = DataModel/HealthKit/HealthKitDataUploader.swift; sourceTree = "<group>"; };
+		482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = DataModel/HealthKit/HealthKitManager.swift; sourceTree = "<group>"; };
+		482ECC851C94BC47002A015D /* LogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogFormatter.swift; sourceTree = "<group>"; };
 		483475B11BE9CE2E00EE9106 /* Nutshell_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v2.xcdatamodel; sourceTree = "<group>"; };
 		4837C1651C11F9FC00D29B64 /* GraphContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphContainerView.swift; path = GraphView/GraphContainerView.swift; sourceTree = "<group>"; };
 		4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUITextField.swift; path = Resources/NutshellUITextField.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -308,7 +321,6 @@
 		4859FCD01B9A4DE5000C1269 /* NutshellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutshellTests.swift; sourceTree = "<group>"; };
 		4859FCD21B9A4DE5000C1269 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventViewStoryboardTypes.swift; path = ViewControllers/EventViewStoryboardTypes.swift; sourceTree = "<group>"; };
-		486EAA741C304A86003B4497 /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = DataModel/HealthKitManager.swift; sourceTree = "<group>"; };
 		486EAA791C305E38003B4497 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		486EAA7B1C305E39003B4497 /* Nutshell.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Nutshell.entitlements; sourceTree = "<group>"; };
 		486F5DEE1B9F874A00BA2A57 /* LaBelleAurore.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = LaBelleAurore.ttf; path = Resources/LaBelleAurore.ttf; sourceTree = "<group>"; };
@@ -464,6 +476,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		482ECC841C94BBA5002A015D /* HealthKit */ = {
+			isa = PBXGroup;
+			children = (
+				482ECC7C1C94BB9D002A015D /* HealthKitData.swift */,
+				482ECC7D1C94BB9D002A015D /* HealthKitDataCache.swift */,
+				482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */,
+				482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */,
+			);
+			name = HealthKit;
+			sourceTree = "<group>";
+		};
 		483E3C331B9F4A3000DA49E7 /* LoginViewControllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -545,6 +568,7 @@
 		4859FCB71B9A4DE4000C1269 /* Nutshell */ = {
 			isa = PBXGroup;
 			children = (
+				482ECC851C94BC47002A015D /* LogFormatter.swift */,
 				486EAA7B1C305E39003B4497 /* Nutshell.entitlements */,
 				48AEB7C71C1CE33F00B2A214 /* Third Party */,
 				4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */,
@@ -624,13 +648,13 @@
 		486F5E221BA0DB7400BA2A57 /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
+				482ECC841C94BBA5002A015D /* HealthKit */,
 				0334C9E51BA8DDFC00013096 /* CoreData */,
 				486F5E291BA0DC6700BA2A57 /* NutEvent.swift */,
 				48B127931BC4445500061483 /* NutEventItem.swift */,
 				489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */,
 				48B127961BC4447100061483 /* NutWorkout.swift */,
 				48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */,
-				486EAA741C304A86003B4497 /* HealthKitManager.swift */,
 			);
 			name = DataModel;
 			sourceTree = "<group>";
@@ -985,7 +1009,9 @@
 				0334CA341BA8DDFC00013096 /* CommonData.swift in Sources */,
 				486F5E091B9FB1C600BA2A57 /* NutshellStyles.swift in Sources */,
 				486F5E6C1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift in Sources */,
+				482ECC821C94BB9D002A015D /* HealthKitDataUploader.swift in Sources */,
 				485922A41B9A639B0056E605 /* EventGroupTableViewController.swift in Sources */,
+				482ECC801C94BB9D002A015D /* HealthKitData.swift in Sources */,
 				0334CA431BA8DDFC00013096 /* Food+CoreDataProperties.swift in Sources */,
 				0334CA8B1BA8DDFC00013096 /* User.swift in Sources */,
 				48B127971BC4447100061483 /* NutWorkout.swift in Sources */,
@@ -1015,9 +1041,11 @@
 				48C491511C38738A00F34630 /* GraphDataLayer.swift in Sources */,
 				0334CA221BA8DDFC00013096 /* Basal.swift in Sources */,
 				0334CA6A1BA8DDFC00013096 /* Settings+CoreDataProperties.swift in Sources */,
+				482ECC811C94BB9D002A015D /* HealthKitDataCache.swift in Sources */,
 				0334CA581BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,
 				0334CA4F1BA8DDFC00013096 /* GrabBag.swift in Sources */,
 				48C491661C3B2DEE00F34630 /* SmbgGraphData.swift in Sources */,
+				482ECC831C94BB9D002A015D /* HealthKitManager.swift in Sources */,
 				48B127941BC4445500061483 /* NutEventItem.swift in Sources */,
 				0334CA521BA8DDFC00013096 /* Note+CoreDataProperties.swift in Sources */,
 				0334CA401BA8DDFC00013096 /* DeviceMetadata.swift in Sources */,
@@ -1054,7 +1082,6 @@
 				486F5E601BA1EBE100BA2A57 /* EventListTableViewCell.swift in Sources */,
 				0334CA5B1BA8DDFC00013096 /* Prime.swift in Sources */,
 				48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */,
-				486EAA751C304A86003B4497 /* HealthKitManager.swift in Sources */,
 				4851C6921BA6281800F8E0EE /* NutshellUIView.swift in Sources */,
 				487ED2511C3DA40A00EE36DF /* TidepoolGraphData.swift in Sources */,
 				48FB1E4D1C17C38600C89F8E /* NutshellDataController.swift in Sources */,
@@ -1062,6 +1089,7 @@
 				48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */,
 				48C4916A1C3B59B400F34630 /* BoluslGraphData.swift in Sources */,
 				4854202B1BC44D290020CFE1 /* EventItem.swift in Sources */,
+				482ECC861C94BC47002A015D /* LogFormatter.swift in Sources */,
 				48C4916E1C3B816700F34630 /* WorkoutGraphData.swift in Sources */,
 				48C491531C38750900F34630 /* TidepoolGraphView.swift in Sources */,
 			);
@@ -1083,7 +1111,9 @@
 				0334CA3B1BA8DDFC00013096 /* ContinuousGlucose.swift in Sources */,
 				0334CA441BA8DDFC00013096 /* Food+CoreDataProperties.swift in Sources */,
 				0334CA621BA8DDFC00013096 /* ReservoirChange.swift in Sources */,
+				482ECC871C94BDE8002A015D /* LogFormatter.swift in Sources */,
 				0334CA831BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift in Sources */,
+				482ECC8A1C94C379002A015D /* HealthKitDataUploader.swift in Sources */,
 				4854202A1BC44D290020CFE1 /* EventItem+CoreDataProperties.swift in Sources */,
 				0334CA7D1BA8DDFC00013096 /* Upload+CoreDataProperties.swift in Sources */,
 				48B127951BC4445800061483 /* NutEventItem.swift in Sources */,
@@ -1102,6 +1132,7 @@
 				48B127981BC4447100061483 /* NutWorkout.swift in Sources */,
 				4859FCD11B9A4DE5000C1269 /* NutshellTests.swift in Sources */,
 				0334CA801BA8DDFC00013096 /* Upload.swift in Sources */,
+				482ECC8B1C94C37E002A015D /* HealthKitData.swift in Sources */,
 				486F5E3B1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
 				0334CA5C1BA8DDFC00013096 /* Prime.swift in Sources */,
 				0334CAAC1BA8E22E00013096 /* Bolus.swift in Sources */,
@@ -1132,7 +1163,8 @@
 				48A150561C18E0A900ED800B /* Nutshell.xcdatamodeld in Sources */,
 				486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */,
 				485420281BC44D290020CFE1 /* Meal.swift in Sources */,
-				486EAA761C304A86003B4497 /* HealthKitManager.swift in Sources */,
+				482ECC891C94C376002A015D /* HealthKitDataCache.swift in Sources */,
+				482ECC881C94BFC4002A015D /* HealthKitManager.swift in Sources */,
 				485420241BC44D290020CFE1 /* Workout.swift in Sources */,
 				0334CA291BA8DDFC00013096 /* BloodKetone.swift in Sources */,
 				0334CA6E1BA8DDFC00013096 /* Settings.swift in Sources */,
@@ -1283,6 +1315,7 @@
 				INFOPLIST_FILE = Nutshell/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"  \"-D\" \"DEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.nutshell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -1303,6 +1336,7 @@
 				INFOPLIST_FILE = Nutshell/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"  \"-D\" \"RELEASE\"";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.nutshell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

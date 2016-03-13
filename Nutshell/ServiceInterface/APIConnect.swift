@@ -18,6 +18,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 import CoreData
+import CocoaLumberjack
 
 /// APIConnector is a singleton object with the main responsibility of communicating to the Tidepool service:
 /// - Given a username and password, login.
@@ -404,4 +405,72 @@ class APIConnector {
         }
         return nil
     }
+    
+
+    func doUpload(body: NSData, completion: (NSError?) -> (Void)) {
+        guard let currentUserId = NutDataController.controller().currentUserId else {
+            DDLogError("No logged in user, unable to upload")
+            return
+        }
+        
+        let urlExtension = "/data/" + currentUserId
+        
+        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
+        
+        let preRequest = { () -> Void in
+            // nothing to do in prerequest
+        }
+        
+        let handleRequestCompletion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
+            if let httpResponse = response as? NSHTTPURLResponse {
+                if data != nil {
+                    let statusCode = httpResponse.statusCode
+                    let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
+                    DDLogInfo("status Code: \(statusCode), response data: \(dataString)")
+                }
+            }
+            
+            if error != nil {
+                DDLogError("Upload failed: \(error), \(error?.userInfo)")
+            }
+            
+            completion(error)
+        }
+        
+        uploadRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, subdomainRootOverride: "uploads", completion: handleRequestCompletion)
+        
+    }
+    
+
+    func uploadRequest(method: String, urlExtension: String, headerDict: [String: String], body: NSData?, preRequest: () -> Void, subdomainRootOverride: String = "api", completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
+        
+        if (self.isConnectedToNetwork()) {
+            preRequest()
+            
+            let baseURL = kUploadServers[currentService!]!
+            let baseUrlWithSubdomainRootOverride = baseURL.stringByReplacingOccurrencesOfString("api", withString: subdomainRootOverride)
+            var urlString = baseUrlWithSubdomainRootOverride + urlExtension
+            urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+            let url = NSURL(string: urlString)
+            let request = NSMutableURLRequest(URL: url!)
+            request.HTTPMethod = method
+            for (field, value) in headerDict {
+                request.setValue(value, forHTTPHeaderField: field)
+            }
+            request.HTTPBody = body
+            
+            let task = NSURLSession.sharedSession().dataTaskWithRequest(
+                request,
+                completionHandler: {
+                    (data, response, error) -> Void in
+                    dispatch_async(dispatch_get_main_queue(), {
+                        completion(response: response, data: data, error: error)
+                    })
+            })
+            task.resume()
+        } else {
+            DDLogInfo("Not connected to network")
+        }
+    }
+
  }

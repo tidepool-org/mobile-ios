@@ -15,6 +15,9 @@
 
 import UIKit
 import CoreData
+import CocoaLumberjack
+
+var fileLogger: DDFileLogger!
 
 /// AppDelegate deals with app startup, restart, termination:
 /// - Switches UI between login and event controllers.
@@ -28,6 +31,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static var workoutInterfaceEnabled: Bool = false
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        // Set up logging
+        DDTTYLogger.sharedInstance().logFormatter = LogFormatter()
+        DDLog.addLogger(DDTTYLogger.sharedInstance())
+        fileLogger = DDFileLogger()
+        fileLogger.logFormatter = LogFormatter()
+        fileLogger.rollingFrequency = 60 * 60 * 4; // 2 hour rolling
+        fileLogger.logFileManager.maximumNumberOfLogFiles = 12;
+        DDLog.addLogger(fileLogger);
+        #if DEBUG
+            defaultDebugLevel = DDLogLevel.Verbose
+        #else
+            if NSUserDefaults.standardUserDefaults().boolForKey("LoggingEnabled") {
+                defaultDebugLevel = DDLogLevel.Verbose
+            } else {
+                defaultDebugLevel = DDLogLevel.Off
+            }
+        #endif
+        DDLogVerbose("trace")
+
         AppDelegate.testMode = false
         // Keep workout interface on if it is currently enabled!
         AppDelegate.workoutInterfaceEnabled = NSUserDefaults.standardUserDefaults().boolForKey("workoutSamplingEnabled")
@@ -48,6 +71,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         APIConnector.connector().configure()
         attemptTokenLogin()
         
+        // Turn on background blood glucose HealthKit monitoring
+        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
+            HealthKitDataCache.sharedInstance.startCaching(
+                shouldCacheBloodGlucoseSamples: true,
+                shouldCacheWorkoutSamples: false)
+        }
+
         NSLog("did finish launching")
         return true
     }

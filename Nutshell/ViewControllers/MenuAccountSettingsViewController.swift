@@ -93,7 +93,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     private func observeHealthData(observe: Bool) {
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
             if observe {
-                HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSamples: false, shouldAuthorizeWorkoutSamples: true) {
+                HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSamples: true, shouldAuthorizeWorkoutSamples: true) {
                     success, error -> Void in
                     if (error == nil) {
                         NutDataController.controller().monitorForWorkoutData(true)
@@ -103,6 +103,9 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
                         NSLog("Error authorizing health data \(error), \(error!.userInfo)")
                     }
                 }
+                HealthKitDataCache.sharedInstance.authorizeAndStartCaching(
+                    shouldCacheBloodGlucoseSamples: true,
+                    shouldCacheWorkoutSamples: false)
             } else {
                 NutDataController.controller().monitorForWorkoutData(false)
                 NSUserDefaults.standardUserDefaults().setBool(false, forKey: "workoutSamplingEnabled")

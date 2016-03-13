@@ -106,10 +106,50 @@ class NutDataController
         if _currentUserId != nil {
             if NSUserDefaults.standardUserDefaults().boolForKey("workoutSamplingEnabled") {
                 monitorForWorkoutData(true)
+                doUploadIfNecessary()
             }
         }
     }
 
+    func doUploadIfNecessary() {
+        if currentUserId != nil && HealthKitDataUploader.sharedInstance.hasSamplesToUpload{
+            // TODO: my - 0 - do this in background fetch
+            HealthKitDataUploader.sharedInstance.startBatchUpload(userId: currentUserId!) {
+                (postBody: NSData, remainingSampleCount: Int) -> Void in
+                
+                // Do the initial upload to start the batch
+                APIConnector.connector().doUpload(postBody) {
+                    (error: NSError?) -> Void in
+                    
+                    if error == nil {
+                        self.uploadNextForBatch(remainingSampleCount)
+                    }
+                }
+            }
+        } else {
+            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(120 * Double(NSEC_PER_SEC)))
+            dispatch_after(delayTime, dispatch_get_main_queue()) {
+                self.doUploadIfNecessary()
+            }
+        }
+    }
+
+    func uploadNextForBatch(remainingSampleCount: Int) {
+        HealthKitDataUploader.sharedInstance.uploadNextForBatch({ (postBody: NSData, sampleCount: Int, remainingSampleCount: Int, completion: (NSError?) -> (Void)) -> Void in
+            
+            APIConnector.connector().doUpload(postBody) {
+                (error: NSError?) -> Void in
+                
+                completion(error)
+                
+                // Upload next batch of data
+                if HealthKitDataUploader.sharedInstance.hasSamplesToUpload {
+                    self.uploadNextForBatch(remainingSampleCount)
+                }
+            }
+        })
+    }
+    
     /// Call this after logging into a service account to set up the current user and configure the data model for the user.
     ///
     /// - parameter newUser:
