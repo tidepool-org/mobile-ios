@@ -859,6 +859,8 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             } else {
                 // TODO: handle delete error?
                 NSLog("Error: Failed to delete item!")
+                // segue back to home as this event probably was deleted out from under us...
+                self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
             }
         }
     }

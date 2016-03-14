@@ -235,7 +235,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         do {
             let nutEvents = try DatabaseUtils.getAllNutEvents()
             for event in nutEvents {
-                //NSLog("Event type: \(event.type), time: \(event.time), title: \(event.title), notes: \(event.notes), userid: \(event.userid), timezone offset:\(event.timezoneOffset)")
+                //if let event = event as? Workout {
+                //  NSLog("Event type: \(event.type), id: \(event.id), time: \(event.time), created time: \(event.createdTime!.timeIntervalSinceDate(event.time!)), duration: \(event.duration), title: \(event.title), notes: \(event.notes), userid: \(event.userid), timezone offset:\(event.timezoneOffset)")
+                //}
                 addNewEvent(event)
             }
         } catch let error as NSError {

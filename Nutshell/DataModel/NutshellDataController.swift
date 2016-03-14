@@ -257,7 +257,28 @@ class NutDataController
                     we.createdTime = now
                     we.modifiedTime = now
                     we.timezoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT/60
+                    
+                    // Check to see if we already have this one, with possibly a different id
+                    if let time = we.time, userId = we.userid {
+                        let request = NSFetchRequest(entityName: "Workout")
+                        request.predicate = NSPredicate(format: "(time == %@) AND (userid = %@)", time, userId)
+                        do {
+                            let existingWorkouts = try moc.executeFetchRequest(request) as! [Workout]
+                            for workout: Workout in existingWorkouts {
+                                if workout.duration == we.duration &&
+                                workout.title == we.title &&
+                                workout.notes == we.notes {
+                                NSLog("Deleting existing workout of same time and duration: \(workout)")
+                                    moc.deleteObject(workout)
+                                }
+                            }
+                        } catch {
+                            NSLog("Workout dupe query failed!")
+                        }
+                    }
+                    
                     moc.insertObject(we)
+                    NSLog("added workout: \(we)")
                 } else {
                     NSLog("ERROR: \(__FUNCTION__): Expected HKWorkout!")
                 }
@@ -268,9 +289,24 @@ class NutDataController
     }
     
     private func processDeleteWorkoutEvents(workouts: [HKDeletedObject]) {
-        for sample in workouts {
-            NSLog("Processed deleted workout sample with UUID: \(sample.UUID)");
+        let moc = NutDataController.controller().mocForNutEvents()!
+        for workout in workouts {
+            NSLog("Processed deleted workout sample with UUID: \(workout.UUID)");
             // TODO: delete workout item with healthkit UUID == workout.uuid
+            let id = workout.UUID.UUIDString
+            let request = NSFetchRequest(entityName: "Workout")
+            // Note: look for any workout with this id, regardless of current user - we should only see it for one user, but multiple user operation is not yet completely defined.
+            request.predicate = NSPredicate(format: "(id == %@)", id)
+            do {
+                let existingWorkouts = try moc.executeFetchRequest(request) as! [Workout]
+                for workout: Workout in existingWorkouts {
+                    NSLog("Deleting workout: \(workout)")
+                    moc.deleteObject(workout)
+                }
+                DatabaseUtils.databaseSave(moc)
+            } catch {
+                NSLog("Existing workout query failed!")
+            }
         }
     }
     
