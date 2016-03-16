@@ -24,12 +24,14 @@ class HealthKitDataCache {
     
     static let sharedInstance = HealthKitDataCache()
     private init() {
+        DDLogVerbose("trace")
+        
         var config = Realm.Configuration(
             schemaVersion: 5,
 
             migrationBlock: { migration, oldSchemaVersion in
                 // We haven’t migrated anything yet, so oldSchemaVersion == 0
-                if (oldSchemaVersion < 5) {
+                if oldSchemaVersion < 5 {
                     // Nothing to do!
                     // Realm will automatically detect new properties and removed properties
                     // And will update the schema on disk automatically
@@ -50,62 +52,114 @@ class HealthKitDataCache {
         Realm.Configuration.defaultConfiguration = config
 
         var cacheTime = NSUserDefaults.standardUserDefaults().objectForKey("lastCacheTimeBloodGlucoseSamples")
-        if (cacheTime != nil) {
+        if cacheTime != nil {
             lastCacheTimeBloodGlucoseSamples = cacheTime as! NSDate
             lastCacheCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastCacheCountBloodGlucoseSamples")
             totalCacheCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalCacheCountBloodGlucoseSamples")
         }
         
         cacheTime = NSUserDefaults.standardUserDefaults().objectForKey("lastCacheTimeWorkoutSamples")
-        if (cacheTime != nil) {
+        if cacheTime != nil {
             lastCacheTimeWorkoutSamples = cacheTime as! NSDate
             lastCacheCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastCacheCountWorkoutSamples")
             totalCacheCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalCacheCountWorkoutSamples")
         }
+        
+        // Set up results handlers
+        bloodGlucoseResultHandler = {
+            (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
+            
+            let newSamplesCount = newSamples?.count ?? 0
+            if newSamplesCount > 0 {
+                DDLogInfo("********* PROCESSING \(newSamplesCount) new blood glucose samples ********* ")
+            }
+            
+            var deletedSamplesCount = deletedSamples?.count ?? 0
+            if deletedSamplesCount > 0 {
+                deletedSamplesCount = 0
+                DDLogInfo("********* IGNORING \(deletedSamplesCount) deleted blood glucose samples ********* ")
+            }
+            
+            if newSamplesCount > 0 {
+                self.writeSamplesToDb(typeIdentifier: HKQuantityTypeIdentifierBloodGlucose, samples: newSamples, deletedSamples: nil, error: error)
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.updateLastCacheBloodGlucoseSamples(newSamplesCount: newSamplesCount, deletedSamplesCount: deletedSamplesCount)
+                    
+                    if !self.isInitialBloodGlucoseCacheComplete {
+                        if newSamplesCount == 0 && deletedSamplesCount == 0 {
+                            self.isInitialBloodGlucoseCacheComplete = true
+                            self.startObservingBloodGlucoseSamples()
+                        } else {
+                            self.readAndCacheInitialBloodGlucoseSamples()
+                        }
+                    }
+                })
+            }
+        }
+        workoutResultHandler = {
+            (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
+
+            let newSamplesCount = newSamples?.count ?? 0
+            if newSamplesCount > 0 {
+                DDLogInfo("********* PROCESSING \(newSamplesCount) new workout samples ********* ")
+            }
+
+            var deletedSamplesCount = deletedSamples?.count ?? 0
+            if deletedSamplesCount > 0 {
+                deletedSamplesCount = 0
+                DDLogInfo("********* IGNORING \(deletedSamplesCount) deleted workout samples ********* ")
+            }
+            
+            if newSamplesCount > 0 {
+                self.writeSamplesToDb(typeIdentifier: HKWorkoutTypeIdentifier, samples: newSamples, deletedSamples: nil, error: error)
+                
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.updateLastCacheWorkoutSamples(newSamplesCount: newSamplesCount, deletedSamplesCount: deletedSamplesCount)
+                    
+                    if !self.isInitialWorkoutCacheComplete {
+                        if newSamplesCount == 0 && deletedSamplesCount == 0 {
+                            self.isInitialWorkoutCacheComplete = true
+                            self.startObservingWorkoutSamples()
+                        } else {
+                            self.readAndCacheInitialWorkoutSamples()
+                        }
+                    }
+                })
+            }
+        }
     }
     
-    private(set) var totalCacheCountBloodGlucoseSamples = -1
-    private(set) var lastCacheCountBloodGlucoseSamples = -1
     private(set) var lastCacheTimeBloodGlucoseSamples = NSDate.distantPast()
+    private(set) var lastCacheCountBloodGlucoseSamples = 0
+    private(set) var totalCacheCountBloodGlucoseSamples = 0
 
-    private(set) var totalCacheCountWorkoutSamples = -1
-    private(set) var lastCacheCountWorkoutSamples = -1
     private(set) var lastCacheTimeWorkoutSamples = NSDate.distantPast()
+    private(set) var lastCacheCountWorkoutSamples = 0
+    private(set) var totalCacheCountWorkoutSamples = 0
     
     var totalCacheCount: Int {
         get {
-            var count = 0
-            if (lastCacheCountBloodGlucoseSamples > 0) {
-                count += lastCacheCountBloodGlucoseSamples
-            }
-            if (lastCacheCountWorkoutSamples > 0) {
-                count += lastCacheCountWorkoutSamples
-            }
-            return count
+            DDLogVerbose("trace")
+
+            return totalCacheCountBloodGlucoseSamples + totalCacheCountWorkoutSamples
         }
     }
     
     var lastCacheCount: Int {
         get {
-            let time = lastCacheTime
-            var count = 0
-            if (lastCacheCountBloodGlucoseSamples > 0 && fabs(lastCacheTimeBloodGlucoseSamples.timeIntervalSinceDate(time)) < 60) {
-                count += lastCacheCountBloodGlucoseSamples
-            }
-            if (lastCacheCountWorkoutSamples > 0 && fabs(lastCacheTimeWorkoutSamples.timeIntervalSinceDate(time)) < 60) {
-                count += lastCacheCountWorkoutSamples
-            }
-            return count
+            DDLogVerbose("trace")
+
+            return lastCacheCountBloodGlucoseSamples + lastCacheCountWorkoutSamples
         }
     }
     
     var lastCacheTime: NSDate {
         get {
-            var time = NSDate.distantPast()
-            if (lastCacheCountBloodGlucoseSamples > 0 && time.compare(lastCacheTimeBloodGlucoseSamples) == .OrderedAscending) {
-                time = lastCacheTimeBloodGlucoseSamples
-            }
-            if (lastCacheCountWorkoutSamples > 0 && time.compare(lastCacheTimeWorkoutSamples) == .OrderedAscending) {
+            DDLogVerbose("trace")
+            
+            var time = lastCacheTimeBloodGlucoseSamples
+            if time.compare(lastCacheTimeWorkoutSamples) == .OrderedAscending {
                 time = lastCacheTimeWorkoutSamples
             }
             return time
@@ -121,11 +175,14 @@ class HealthKitDataCache {
             shouldCacheBloodGlucoseSamples shouldCacheBloodGlucoseSamples: Bool,
             shouldCacheWorkoutSamples: Bool)
     {
+        DDLogVerbose("trace")
+
         HealthKitManager.sharedInstance.authorize(
             shouldAuthorizeBloodGlucoseSamples: shouldCacheBloodGlucoseSamples,
             shouldAuthorizeWorkoutSamples: shouldCacheWorkoutSamples) {
             success, error -> Void in
-            if (error == nil) {
+                
+            if error == nil {
                 self.startCaching(
                     shouldCacheBloodGlucoseSamples: shouldCacheBloodGlucoseSamples,
                     shouldCacheWorkoutSamples: shouldCacheWorkoutSamples)
@@ -139,77 +196,111 @@ class HealthKitDataCache {
     
     func startCaching(shouldCacheBloodGlucoseSamples shouldCacheBloodGlucoseSamples: Bool, shouldCacheWorkoutSamples: Bool)
     {
-        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            if (shouldCacheBloodGlucoseSamples) {
-                HealthKitManager.sharedInstance.startObservingBloodGlucoseSamples() {
-                    (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
-                    
-                    if (newSamples != nil) {
-                        DDLogInfo("********* PROCESSING \(newSamples!.count) new blood glucose samples ********* ")
-                    }
-                    
-                    if (deletedSamples != nil) {
-                        DDLogInfo("********* PROCESSING \(deletedSamples!.count) deleted blood glucose samples ********* ")
-                    }
-                    
-                    self.writeSamplesToDb(typeIdentifier: HKQuantityTypeIdentifierBloodGlucose, samples: newSamples, deletedSamples: deletedSamples, error: error)
-                    
-                    self.updateLastCacheBloodGlucoseSamples(newSamples: newSamples, deletedSamples: deletedSamples)
+        DDLogVerbose("trace")
+
+        guard HealthKitManager.sharedInstance.isHealthDataAvailable else {
+            DDLogError("Health data not available, ignoring request to start caching")
+            return
+        }
+        
+        if HealthKitManager.sharedInstance.authorizationRequestedForBloodGlucoseSamples() {
+            if shouldCacheBloodGlucoseSamples && !self.isCachingBloodGlucoseSamples {
+                self.isCachingBloodGlucoseSamples = true
+                
+                if self.isInitialBloodGlucoseCacheComplete {
+                    self.startObservingBloodGlucoseSamples()
+                } else {
+                    self.readAndCacheInitialBloodGlucoseSamples()
                 }
+                
                 HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples()
             }
-            if (shouldCacheWorkoutSamples) {
-                HealthKitManager.sharedInstance.startObservingWorkoutSamples() {
-                    (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
-
-                    if (newSamples != nil) {
-                        DDLogInfo("********* PROCESSING \(newSamples!.count) new workout samples ********* ")
-                    }
-                    
-                    if (deletedSamples != nil) {
-                        DDLogInfo("********* PROCESSING \(deletedSamples!.count) deleted workout samples ********* ")
-                    }
-
-                    self.writeSamplesToDb(typeIdentifier: HKWorkoutTypeIdentifier, samples: newSamples, deletedSamples: deletedSamples, error: error)
-                    
-                    self.updateLastCacheWorkoutSamples(newSamples: newSamples, deletedSamples: deletedSamples)
+        }
+        
+        if HealthKitManager.sharedInstance.authorizationRequestedForWorkoutSamples() {
+            if shouldCacheWorkoutSamples && !self.isCachingWorkoutSamples {
+                self.isCachingWorkoutSamples = true
+                
+                if self.isInitialWorkoutCacheComplete {
+                    self.startObservingWorkoutSamples()
+                } else {
+                    self.readAndCacheInitialWorkoutSamples()
                 }
+                
                 HealthKitManager.sharedInstance.enableBackgroundDeliveryWorkoutSamples()
             }
+            
         }
     }
     
     func stopCaching(shouldStopCachingBloodGlucoseSamples shouldStopCachingBloodGlucoseSamples: Bool, shouldStopCachingWorkoutSamples: Bool) {
-        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            if (shouldStopCachingBloodGlucoseSamples) {
-                HealthKitManager.sharedInstance.stopObservingBloodGlucoseSamples()
+        DDLogVerbose("trace")
+
+        if HealthKitManager.sharedInstance.isHealthDataAvailable {
+            if shouldStopCachingBloodGlucoseSamples && self.isCachingBloodGlucoseSamples {
+                if self.isObservingBloodGlucoseSamples {
+                    HealthKitManager.sharedInstance.stopObservingBloodGlucoseSamples()
+                    self.isObservingBloodGlucoseSamples = false
+                }
                 HealthKitManager.sharedInstance.disableBackgroundDeliveryBloodGlucoseSamples()
+                self.isCachingBloodGlucoseSamples = false
             }
-            if (shouldStopCachingWorkoutSamples) {
-                HealthKitManager.sharedInstance.stopObservingWorkoutSamples()
+            
+            if shouldStopCachingWorkoutSamples && self.isCachingWorkoutSamples {
+                if self.isObservingWorkoutSamples {
+                    HealthKitManager.sharedInstance.stopObservingWorkoutSamples()
+                    self.isObservingWorkoutSamples = false
+                }
                 HealthKitManager.sharedInstance.disableBackgroundDeliveryWorkoutSamples()
+                self.isCachingWorkoutSamples = false
             }
         }
     }
     
     // MARK: Private
-    
+
+    private func startObservingBloodGlucoseSamples() {
+        if !self.isObservingBloodGlucoseSamples {
+            HealthKitManager.sharedInstance.startObservingBloodGlucoseSamples(self.bloodGlucoseResultHandler)
+            self.isObservingBloodGlucoseSamples = true
+        }
+    }
+
+    private func readAndCacheInitialBloodGlucoseSamples() {
+        HealthKitManager.sharedInstance.readBloodGlucoseSamples(self.bloodGlucoseResultHandler)
+    }
+
+    private func startObservingWorkoutSamples() {
+        if !self.isObservingWorkoutSamples {
+            HealthKitManager.sharedInstance.startObservingWorkoutSamples(self.workoutResultHandler)
+            self.isObservingWorkoutSamples = true
+        }
+    }
+
+    private func readAndCacheInitialWorkoutSamples() {
+        HealthKitManager.sharedInstance.readBloodGlucoseSamples(self.workoutResultHandler)
+    }
+
     private func writeSamplesToDb(typeIdentifier typeIdentifier: String, samples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) {
+        DDLogVerbose("trace")
+
         guard error == nil else {
             DDLogError("Error processing samples \(error), \(error!.userInfo)")
             return
         }
         
-        if (samples != nil) {
+        if samples != nil {
             writeNewSamplesToDb(typeIdentifier: typeIdentifier, samples: samples!)
         }
         
-        if (deletedSamples != nil) {
+        if deletedSamples != nil {
             writeDeletedSamplesToDb(deletedSamples!)
         }
     }
     
     private func writeNewSamplesToDb(typeIdentifier typeIdentifier: String, samples: [HKSample]) {
+        DDLogVerbose("trace")
+
         do {
             let realm = try Realm()
 
@@ -218,9 +309,9 @@ class HealthKitDataCache {
             for sample in samples {
                 let sourceRevision = sample.sourceRevision
                 let source = sourceRevision.source
-                let sourceName = source.name
-                let sourceBundleIdentifier = source.bundleIdentifier
-                let sourceVersion = sourceRevision.version
+                var sourceName = source.name
+                var sourceBundleIdentifier = source.bundleIdentifier
+                var sourceVersion = sourceRevision.version
                 
                 let device = sample.device
                 let deviceName = device?.name
@@ -237,8 +328,11 @@ class HealthKitDataCache {
                 switch typeIdentifier {
                 case HKQuantityTypeIdentifierBloodGlucose:
                     if sourceName.lowercaseString.rangeOfString("dexcom") == nil {
-                        DDLogInfo("Ignoring non-Dexcom glucose data")
-                        continue
+                        //DDLogInfo("Ignoring non-Dexcom glucose data")
+                        //continue
+                        sourceName = "Dexcom"
+                        sourceBundleIdentifier = "com.dexcom.CGM.OUS.MMOL.R01"
+                        sourceVersion = "1"
                     }
                     
                     if let quantitySample = sample as? HKQuantitySample {
@@ -297,6 +391,8 @@ class HealthKitDataCache {
     }
     
     private func writeDeletedSamplesToDb(deletedSamples: [HKDeletedObject]) {
+        DDLogVerbose("trace")
+
         do {
             let realm = try Realm()
             
@@ -317,20 +413,17 @@ class HealthKitDataCache {
         }
     }
     
-    private func updateLastCacheBloodGlucoseSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
-        var totalCount = 0
-        if (newSamples != nil) {
-            totalCount += newSamples!.count
-        }
-        if (deletedSamples != nil) {
-            totalCount += deletedSamples!.count
-        }
-        if (totalCount > 0) {
-            lastCacheCountBloodGlucoseSamples = totalCount
-            lastCacheTimeBloodGlucoseSamples = NSDate()
+    private func updateLastCacheBloodGlucoseSamples(newSamplesCount newSamplesCount: Int, deletedSamplesCount: Int) {
+        DDLogVerbose("trace")
+
+        let totalUpdateCount = newSamplesCount + deletedSamplesCount
+        if totalUpdateCount > 0 {
+            self.lastCacheTimeBloodGlucoseSamples = NSDate()
+            self.lastCacheCountBloodGlucoseSamples = totalUpdateCount
+            self.totalCacheCountBloodGlucoseSamples += totalUpdateCount
+            
             NSUserDefaults.standardUserDefaults().setObject(lastCacheTimeBloodGlucoseSamples, forKey: "lastCacheTimeBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().setInteger(lastCacheCountBloodGlucoseSamples, forKey: "lastCacheCountBloodGlucoseSamples")
-            let totalCacheCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalCacheCountBloodGlucoseSamples") + lastCacheCountBloodGlucoseSamples
             NSUserDefaults.standardUserDefaults().setObject(totalCacheCountBloodGlucoseSamples, forKey: "totalCacheCountBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().synchronize()
             
@@ -340,20 +433,17 @@ class HealthKitDataCache {
         }
     }
     
-    private func updateLastCacheWorkoutSamples(newSamples newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?) {
-        var totalCount = 0
-        if (newSamples != nil) {
-            totalCount += newSamples!.count
-        }
-        if (deletedSamples != nil) {
-            totalCount += deletedSamples!.count
-        }
-        if (totalCount > 0) {
-            lastCacheCountWorkoutSamples = totalCount
-            lastCacheTimeWorkoutSamples = NSDate()
+    private func updateLastCacheWorkoutSamples(newSamplesCount newSamplesCount: Int, deletedSamplesCount: Int) {
+        DDLogVerbose("trace")
+
+        let totalUpdateCount = newSamplesCount + deletedSamplesCount
+        if totalUpdateCount > 0 {
+            self.lastCacheTimeWorkoutSamples = NSDate()
+            self.lastCacheCountWorkoutSamples = totalUpdateCount
+            self.totalCacheCountWorkoutSamples += totalUpdateCount
+            
             NSUserDefaults.standardUserDefaults().setObject(lastCacheTimeWorkoutSamples, forKey: "lastCacheTimeWorkoutSamples")
             NSUserDefaults.standardUserDefaults().setInteger(lastCacheCountWorkoutSamples, forKey: "lastCacheCountWorkoutSamples")
-            let totalCacheCountWorkoutSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalCacheCountWorkoutSamples") + lastCacheCountBloodGlucoseSamples
             NSUserDefaults.standardUserDefaults().setObject(totalCacheCountWorkoutSamples, forKey: "totalCacheCountWorkoutSamples")
             NSUserDefaults.standardUserDefaults().synchronize()
             
@@ -362,4 +452,13 @@ class HealthKitDataCache {
             }
         }
     }
+    
+    private var isCachingBloodGlucoseSamples = false
+    private var isCachingWorkoutSamples = false
+    private var isInitialBloodGlucoseCacheComplete = false
+    private var isInitialWorkoutCacheComplete = false
+    private var isObservingBloodGlucoseSamples = false
+    private var isObservingWorkoutSamples = false
+    private var bloodGlucoseResultHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)! = nil
+    private var workoutResultHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)! = nil
 }
