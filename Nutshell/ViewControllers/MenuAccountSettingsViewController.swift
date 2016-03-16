@@ -50,9 +50,9 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     func menuWillOpen() {
         // Late binding here because profile fetch occurs after login complete!
         usernameLabel.text = NutDataController.controller().userFullName
-        healthKitSwitch.on = HealthKitManager.sharedInstance.authorizationRequestedForWorkoutSamples()
-        healthKitSwitch.hidden = !AppDelegate.workoutInterfaceEnabled
-        healthKitLabel.hidden = !AppDelegate.workoutInterfaceEnabled
+        healthKitSwitch.on = NutDataController.controller().healthKitInterfaceEnabledForCurrentUser()
+        healthKitSwitch.hidden = !AppDelegate.healthKitUIEnabled
+        healthKitLabel.hidden = !AppDelegate.healthKitUIEnabled
     }
 
     override func didReceiveMemoryWarning() {
@@ -83,37 +83,34 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     @IBAction func enableHealthData(sender: AnyObject) {
         if let enableSwitch = sender as? UISwitch {
             if enableSwitch.on {
-                observeHealthData(true)
+                enableHealthKitInterfaceForCurrentUser()
             } else {
-                observeHealthData(false)
+                NutDataController.controller().disableHealthKitInterface()
             }
         }
     }
     
-    private func observeHealthData(observe: Bool) {
-        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            if observe {
-                HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSamples: true, shouldAuthorizeWorkoutSamples: true) {
-                    success, error -> Void in
-                    if (error == nil) {
-                        NutDataController.controller().monitorForWorkoutData(true)
-                        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "workoutSamplingEnabled")
-                        NSUserDefaults.standardUserDefaults().synchronize()
-                    } else {
-                        NSLog("Error authorizing health data \(error), \(error!.userInfo)")
-                    }
-                }
-                HealthKitDataCache.sharedInstance.authorizeAndStartCaching(
-                    shouldCacheBloodGlucoseSamples: true,
-                    shouldCacheWorkoutSamples: false)
-            } else {
-                NutDataController.controller().monitorForWorkoutData(false)
-                NSUserDefaults.standardUserDefaults().setBool(false, forKey: "workoutSamplingEnabled")
-                NSUserDefaults.standardUserDefaults().synchronize()
-            }
+    private func enableHealthKitInterfaceForCurrentUser() {
+        let dataController = NutDataController.controller()
+        if dataController.healthKitInterfaceConfiguredForOtherUser() {
+            // use dialog to confirm delete with user!
+            let curHKUserName = NutDataController.controller().healthKitUserTidepoolUsername() ?? "Unknown"
+            let curUserName = usernameLabel.text!
+            let titleString = "Are you sure?"
+            let messageString = "Change HealthKit user from ‘" + curHKUserName + "’ to ‘" + curUserName + "’?"
+            let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { Void in
+                return
+            }))
+            alert.addAction(UIAlertAction(title: "Change", style: .Default, handler: { Void in
+                NutDataController.controller().enableHealthKitInterface()
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        } else {
+            NutDataController.controller().enableHealthKitInterface()
         }
     }
-
+    
     //
     // MARK: - UITextView delegate
     //

@@ -177,7 +177,11 @@ class NutUtils {
 
     class func dateFromJSON(json: String?) -> NSDate? {
         if let json = json {
-            return jsonDateFormatter.dateFromString(json)
+            var result = jsonDateFormatter.dateFromString(json)
+            if result == nil {
+                result = jsonAltDateFormatter.dateFromString(json)
+            }
+            return result
         }
         return nil
     }
@@ -205,6 +209,19 @@ class NutUtils {
         }
         return Static.instance
     }
+    
+    class var jsonAltDateFormatter : NSDateFormatter {
+        struct Static {
+            static let instance: NSDateFormatter = {
+                let dateFormatter = NSDateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+                dateFormatter.timeZone = NSTimeZone(name: "GMT")
+                return dateFormatter
+            }()
+        }
+        return Static.instance
+    }
+
     
     /** Date formatter for date strings in the UI */
     private class var dateFormatter : NSDateFormatter {

@@ -316,7 +316,10 @@ class HealthKitManager {
             anchor: queryAnchor,
             limit: Int(HKObjectQueryNoLimit)) {
                 (query, newSamples, deletedSamples, newAnchor, error) -> Void in
-                
+                if (resultsHandler != nil) {
+                     resultsHandler(newSamples, deletedSamples, error)
+                }
+                // TODO: Wait to update workoutQueryAnchor until we have completely handled the event... but this doesn't seem to help keep us from missing events in the case our resultsHandler does not complete!
                 if (newAnchor != nil) {
                     let queryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
                     // TODO: my - We should allow caller control of this in case caller, which provides resultsHandler,
@@ -324,10 +327,6 @@ class HealthKitManager {
                     // updating the anchor if the batch processing fails.
                     NSUserDefaults.standardUserDefaults().setObject(queryAnchorData, forKey: "workoutQueryAnchor")
                     NSUserDefaults.standardUserDefaults().synchronize()
-                }
-                
-                if (resultsHandler != nil) {
-                     resultsHandler(newSamples, deletedSamples, error)
                 }
         }
         healthStore?.executeQuery(sampleQuery)

@@ -28,10 +28,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     static var testMode: Bool = false
-    static var workoutInterfaceEnabled: Bool = false
+    static var healthKitUIEnabled: Bool = true
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
+        NSLog("Nutshell didFinishLaunchingWithOptions")
         // Set up logging
         DDTTYLogger.sharedInstance().logFormatter = LogFormatter()
         DDLog.addLogger(DDTTYLogger.sharedInstance())
@@ -52,8 +53,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DDLogVerbose("trace")
 
         AppDelegate.testMode = false
-        // Keep workout interface on if it is currently enabled!
-        AppDelegate.workoutInterfaceEnabled = NSUserDefaults.standardUserDefaults().boolForKey("workoutSamplingEnabled")
+        // Default HealthKit UI enable UI to on...
+        NSUserDefaults.standardUserDefaults().registerDefaults(["kHealthKitUIEnabled_Key": true])
+        AppDelegate.healthKitUIEnabled = NSUserDefaults.standardUserDefaults().boolForKey("kHealthKitUIEnabled_Key")
         
         // Override point for customization after application launch.
         UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor
@@ -71,15 +73,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         APIConnector.connector().configure()
         attemptTokenLogin()
         
-        // Turn on background blood glucose HealthKit monitoring
-        if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
-            HealthKitDataCache.sharedInstance.startCaching(
-                shouldCacheBloodGlucoseSamples: true,
-                shouldCacheWorkoutSamples: false)
-        }
-
         NSLog("did finish launching")
         return true
+    }
+    
+    class func configureHealthKitUIEnable(enable: Bool) {
+        NSUserDefaults.standardUserDefaults().setBool(enable, forKey: "kHealthKitUIEnabled_Key")
+        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
     func attemptTokenLogin() {
@@ -100,7 +100,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSLog("AppDelegate: attempting to refresh token...")
         api.refreshToken() { succeeded -> (Void) in
             if succeeded {
-                NutDataController.controller().configureForCurrentUser()
+                NutDataController.controller().configureHealthKitInterface()
+                // TODO: only if app is in the foreground?
                 self.setupUIForLoginSuccess()
             } else {
                 NSLog("Refresh token failed, need to log in normally")
@@ -133,16 +134,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillResignActive(application: UIApplication) {
+        NSLog("Nutshell applicationWillResignActive")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
+        NSLog("Nutshell applicationDidEnterBackground")
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
+        NSLog("Nutshell applicationWillEnterForeground")
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 
         // TODO: This prevents offline usage; is that desirable? Should we only refresh after a certain delay, or if "remember me" was not checked?
@@ -158,12 +162,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        NSLog("Nutshell applicationDidBecomeActive")
     }
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         NutDataController.controller().appWillTerminate()
+        NSLog("Nutshell applicationWillTerminate")
     }
 
 

@@ -761,7 +761,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
 
         if titleTextField.text!.localizedCaseInsensitiveCompare("workoutInterface") == NSComparisonResult.OrderedSame  {
             if !NutUtils.onIPad() {
-                AppDelegate.workoutInterfaceEnabled = !AppDelegate.workoutInterfaceEnabled
+                AppDelegate.configureHealthKitUIEnable(!AppDelegate.healthKitUIEnabled)
                 self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
                 return
             }
@@ -1080,7 +1080,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             }
         }
         
-        if AppDelegate.workoutInterfaceEnabled {
+        if AppDelegate.healthKitUIEnabled {
             if let entityDescription = NSEntityDescription.entityForName("Workout", inManagedObjectContext: moc) {
                 for event in demoWorkouts {
                     let we = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Workout

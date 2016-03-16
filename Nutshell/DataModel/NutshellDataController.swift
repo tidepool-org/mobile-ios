@@ -18,6 +18,7 @@ import UIKit
 import CoreData
 import SwiftyJSON
 import HealthKit
+import CocoaLumberjack
 
 /// Provides NSManagedObjectContext's for local and tidepool data stored locally. Manages the persistent object representing the current user.
 ///
@@ -47,7 +48,7 @@ class NutDataController
         }
         return _controller!
     }
-    
+
     /// Coordinator/store for current userId, token, etc. Should always be available.
     func mocForCurrentUser() -> NSManagedObjectContext {
         return self.mocForLocalObjects!
@@ -101,53 +102,32 @@ class NutDataController
         }
     }
     
-    /// Call this at startup if we already have a current user and token can be refreshed...
-    func configureForCurrentUser() {
-        if _currentUserId != nil {
-            if NSUserDefaults.standardUserDefaults().boolForKey("workoutSamplingEnabled") {
-                monitorForWorkoutData(true)
-                doUploadIfNecessary()
-            }
+    /// Call this at login/logout, token refresh(?), and upon enabling or disabling the HealthKit interface.
+    func configureHealthKitInterface() {
+        if !HealthKitManager.sharedInstance.isHealthDataAvailable {
+            return
         }
-    }
-
-    func doUploadIfNecessary() {
-        if currentUserId != nil && HealthKitDataUploader.sharedInstance.hasSamplesToUpload{
-            // TODO: my - 0 - do this in background fetch
-            HealthKitDataUploader.sharedInstance.startBatchUpload(userId: currentUserId!) {
-                (postBody: NSData, remainingSampleCount: Int) -> Void in
-                
-                // Do the initial upload to start the batch
-                APIConnector.connector().doUpload(postBody) {
-                    (error: NSError?) -> Void in
-                    
-                    if error == nil {
-                        self.uploadNextForBatch(remainingSampleCount)
-                    }
-                }
-            }
+        
+        var interfaceEnabled = true
+        if currentUserId != nil  {
+            interfaceEnabled = healthKitInterfaceEnabledForCurrentUser()
         } else {
-            let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(120 * Double(NSEC_PER_SEC)))
-            dispatch_after(delayTime, dispatch_get_main_queue()) {
-                self.doUploadIfNecessary()
-            }
+            interfaceEnabled = false
         }
-    }
-
-    func uploadNextForBatch(remainingSampleCount: Int) {
-        HealthKitDataUploader.sharedInstance.uploadNextForBatch({ (postBody: NSData, sampleCount: Int, remainingSampleCount: Int, completion: (NSError?) -> (Void)) -> Void in
-            
-            APIConnector.connector().doUpload(postBody) {
-                (error: NSError?) -> Void in
-                
-                completion(error)
-                
-                // Upload next batch of data
-                if HealthKitDataUploader.sharedInstance.hasSamplesToUpload {
-                    self.uploadNextForBatch(remainingSampleCount)
-                }
-            }
-        })
+        
+        if interfaceEnabled {
+            // Turn on background blood glucose HealthKit monitoring, if available on this device
+            HealthKitDataCache.sharedInstance.startCaching(
+                shouldCacheBloodGlucoseSamples: true,
+                shouldCacheWorkoutSamples: false)
+            monitorForWorkoutData(true)
+            doUploadIfNecessary()
+        } else {
+            NSLog("Shut down healthkit interface")
+            // TODO: ARE THESE THE RIGHT CALLS? Need to work even if we aren't currently monitoring...
+            monitorForWorkoutData(false)
+            HealthKitManager.sharedInstance.stopObservingBloodGlucoseSamples()
+        }
     }
     
     /// Call this after logging into a service account to set up the current user and configure the data model for the user.
@@ -158,7 +138,7 @@ class NutDataController
         self.deleteAnyTidepoolData()
         self.currentUser = newUser
         _currentUserId = newUser.userid
-        configureForCurrentUser()
+        configureHealthKitInterface()
     }
 
     /// Call this after logging out of the service to deconfigure the data model and clear the persisted user. Only the Meal and Workout events should remain persisted after this.
@@ -166,9 +146,7 @@ class NutDataController
         self.deleteAnyTidepoolData()
         self.currentUser = nil
         _currentUserId = nil
-        if NSUserDefaults.standardUserDefaults().boolForKey("workoutSamplingEnabled") {
-            monitorForWorkoutData(false)
-        }
+        configureHealthKitInterface()
     }
 
     func monitorForWorkoutData(monitor: Bool) {
@@ -218,7 +196,163 @@ class NutDataController
     }
     
     //
-    // MARK: - Private methods
+    // MARK: - HealthKit user info
+    //
+
+    private let kHealthKitInterfaceEnabledKey = "workoutSamplingEnabled"
+    private let kHealthKitInterfaceUserIdKey = "kUserIdForHealthKitInterfaceKey"
+    private let kHealthKitInterfaceUserNameKey = "kUserNameForHealthKitInterfaceKey"
+    
+
+    /// Enables HealthKit for current user
+    ///
+    /// Note: This sets the current tidepool user as the HealthKit user!
+    func enableHealthKitInterface() {
+        guard let _ = currentUserId else {
+            DDLogError("No logged in user at enableHealthKitInterface!")
+            return
+        }
+        
+        HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSamples: true, shouldAuthorizeWorkoutSamples: true) {
+            success, error -> Void in
+            if (error == nil) {
+                self.configureCurrentHealthKitUser()
+                self.configureHealthKitInterface()
+            } else {
+                NSLog("Error authorizing health data \(error), \(error!.userInfo)")
+            }
+        }
+    }
+    
+    private func configureCurrentHealthKitUser() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setBool(true, forKey:self.kHealthKitInterfaceEnabledKey)
+        if !self.healthKitInterfaceEnabledForCurrentUser() {
+            defaults.setValue(currentUserId!, forKey: kHealthKitInterfaceUserIdKey)
+            // may be nil...
+            defaults.setValue(userFullName, forKey: kHealthKitInterfaceUserNameKey)
+        }
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
+    /// Disables HealthKit for current user
+    ///
+    /// Note: This does not NOT clear the current HealthKit user!
+    func disableHealthKitInterface() {
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey:kHealthKitInterfaceEnabledKey)
+        NSUserDefaults.standardUserDefaults().synchronize()
+        configureHealthKitInterface()
+    }
+
+    /// Returns true only if the HealthKit interface is enabled and configured for the current user
+    func healthKitInterfaceEnabledForCurrentUser() -> Bool {
+        if healthKitInterfaceEnabled() == false {
+            return false
+        }
+        if let curHealthKitUserId = healthKitUserTidepoolId(), curId = currentUserId {
+            if curId == curHealthKitUserId {
+                return true
+            }
+        }
+        return false
+    }
+
+    /// Returns true if the HealthKit interface has been configured for a tidepool id different from the current user - ignores whether the interface is currently enabled.
+    func healthKitInterfaceConfiguredForOtherUser() -> Bool {
+        if let curHealthKitUserId = healthKitUserTidepoolId() {
+            if let curId = currentUserId {
+                if curId != curHealthKitUserId {
+                    return true
+                }
+            } else {
+                DDLogError("No logged in user at healthKitInterfaceEnabledForOtherUser!")
+                return true
+            }
+        }
+        return false
+    }
+
+    /// Returns whether authorization for HealthKit has been requested, and the HealthKit interface is currently enabled, regardless of user it is enabled for.
+    ///
+    /// Note: separately, we may enable/disable the current interface to HealthKit.
+    private func healthKitInterfaceEnabled() -> Bool {
+        return HealthKitManager.sharedInstance.authorizationRequestedForWorkoutSamples()
+        && NSUserDefaults.standardUserDefaults().boolForKey(kHealthKitInterfaceEnabledKey)
+    }
+
+    /// If HealthKit interface is enabled, returns associated Tidepool account id
+    func healthKitUserTidepoolId() -> String? {
+        let result = NSUserDefaults.standardUserDefaults().stringForKey(kHealthKitInterfaceUserIdKey)
+        return result
+    }
+    
+    /// If HealthKit interface is enabled, returns associated Tidepool account id
+    func healthKitUserTidepoolUsername() -> String? {
+        let result = NSUserDefaults.standardUserDefaults().stringForKey(kHealthKitInterfaceUserNameKey)
+        return result
+    }
+    
+    //
+    // MARK: - Healthkit uploading to Tidepool
+    //
+
+    private var uploadTimerRunning = false
+    private func doUploadIfNecessary(uploadNow: Bool = false) {
+        NSLog("doUploadIfNecessary, uploadNow = \(uploadNow)")
+        if currentUserId != nil && HealthKitDataUploader.sharedInstance.hasSamplesToUpload {
+            if uploadNow {
+                // TODO: my - 0 - do this in background fetch
+                NSLog("doUploadIfNecessary: start batch upload")
+                HealthKitDataUploader.sharedInstance.startBatchUpload(userId: currentUserId!) {
+                    (postBody: NSData, remainingSampleCount: Int) -> Void in
+                    
+                    // Do the initial upload to start the batch
+                    APIConnector.connector().doUpload(postBody) {
+                        (error: NSError?) -> Void in
+                        
+                        if error == nil {
+                            self.uploadNextForBatch(remainingSampleCount)
+                        }
+                    }
+                }
+            } else {
+                NSLog("doUploadIfNecessary: uploadNow is false, delay upload until delay expires")
+            }
+        }
+        
+        if !uploadTimerRunning {
+            if NSUserDefaults.standardUserDefaults().boolForKey(kHealthKitInterfaceEnabledKey) {
+                // Run every 2 minutes while HealthKit data monitoring is enabled...
+                let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(120 * Double(NSEC_PER_SEC)))
+                uploadTimerRunning = true
+                NSLog("doUploadIfNecessary: set to try again after 2 minutes!")
+                dispatch_after(delayTime, dispatch_get_main_queue()) {
+                    self.doUploadIfNecessary(true)
+                }
+            }
+        } else {
+            NSLog("doUploadIfNecessary: skip reset of timer since uploadTimerRunning")
+        }
+    }
+    
+    private func uploadNextForBatch(remainingSampleCount: Int) {
+        HealthKitDataUploader.sharedInstance.uploadNextForBatch({ (postBody: NSData, sampleCount: Int, remainingSampleCount: Int, completion: (NSError?) -> (Void)) -> Void in
+            
+            APIConnector.connector().doUpload(postBody) {
+                (error: NSError?) -> Void in
+                
+                completion(error)
+                
+                // Upload next batch of data
+                if HealthKitDataUploader.sharedInstance.hasSamplesToUpload {
+                    self.uploadNextForBatch(remainingSampleCount)
+                }
+            }
+        })
+    }
+
+    //
+    // MARK: - Loading workout events from Healthkit
     //
 
     private func processWorkoutEvents(workouts: [HKSample]) {
@@ -226,6 +360,15 @@ class NutDataController
         if let entityDescription = NSEntityDescription.entityForName("Workout", inManagedObjectContext: moc) {
             for event in workouts {
                 if let workout = event as? HKWorkout {
+                    NSLog("*** processing workout id: \(event.UUID.UUIDString)")
+                    if let metadata = workout.metadata {
+                        NSLog(" metadata: \(metadata)")
+                    }
+                    if let wkoutEvents = workout.workoutEvents {
+                        if !wkoutEvents.isEmpty {
+                            NSLog(" workout events: \(wkoutEvents)")
+                        }
+                    }
                     let we = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Workout
                     
                     // Workout fields
@@ -291,8 +434,7 @@ class NutDataController
     private func processDeleteWorkoutEvents(workouts: [HKDeletedObject]) {
         let moc = NutDataController.controller().mocForNutEvents()!
         for workout in workouts {
-            NSLog("Processed deleted workout sample with UUID: \(workout.UUID)");
-            // TODO: delete workout item with healthkit UUID == workout.uuid
+            NSLog("Processing deleted workout sample with UUID: \(workout.UUID)");
             let id = workout.UUID.UUIDString
             let request = NSFetchRequest(entityName: "Workout")
             // Note: look for any workout with this id, regardless of current user - we should only see it for one user, but multiple user operation is not yet completely defined.
