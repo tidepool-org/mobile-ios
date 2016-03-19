@@ -27,16 +27,30 @@ class HealthKitDataCache {
         DDLogVerbose("trace")
         
         var config = Realm.Configuration(
-            schemaVersion: 5,
+            schemaVersion: 7,
 
             migrationBlock: { migration, oldSchemaVersion in
-                // We haven’t migrated anything yet, so oldSchemaVersion == 0
-                if oldSchemaVersion < 5 {
-                    // Nothing to do!
-                    // Realm will automatically detect new properties and removed properties
-                    // And will update the schema on disk automatically
+                if oldSchemaVersion < 7 {
+                    DDLogInfo("Migrating Realm to schema version 7")
+                    
+                    migration.deleteData("HealthKitData")
+                    DDLogInfo("Deleted all realm objects during migration")
+                    
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadTimeBloodGlucoseSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadCountBloodGlucoseSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("totalUploadCountBloodGlucoseSamples")
+                
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("bloodGlucoseQueryAnchor")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastCacheTimeBloodGlucoseSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastCacheCountBloodGlucoseSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("totalCacheCountBloodGlucoseSamples")
 
-                    DDLogInfo("Migrating Realm from 0 to 5")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("workoutQueryAnchor")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastCacheTimeWorkoutSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("lastCacheCountWorkoutSamples")
+                    NSUserDefaults.standardUserDefaults().removeObjectForKey("totalCacheCountWorkoutSamples")
+
+                    DDLogInfo("Reset cache and upload stats and HealthKit query anchors during migration")
                 }
             }
         )
@@ -50,6 +64,13 @@ class HealthKitDataCache {
         
         // Set this as the configuration used for the default Realm
         Realm.Configuration.defaultConfiguration = config
+
+        // Force early migration (if needed)
+        do {
+            let _ = try Realm()
+        } catch let error as NSError {
+            DDLogError("Failed initializing realm: \(error)")
+        }
 
         var cacheTime = NSUserDefaults.standardUserDefaults().objectForKey("lastCacheTimeBloodGlucoseSamples")
         if cacheTime != nil {
@@ -82,19 +103,15 @@ class HealthKitDataCache {
             
             if newSamplesCount > 0 {
                 self.writeSamplesToDb(typeIdentifier: HKQuantityTypeIdentifierBloodGlucose, samples: newSamples, deletedSamples: nil, error: error)
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.updateLastCacheBloodGlucoseSamples(newSamplesCount: newSamplesCount, deletedSamplesCount: deletedSamplesCount)
-                    
-                    if !self.isInitialBloodGlucoseCacheComplete {
-                        if newSamplesCount == 0 && deletedSamplesCount == 0 {
-                            self.isInitialBloodGlucoseCacheComplete = true
-                            self.startObservingBloodGlucoseSamples()
-                        } else {
-                            self.readAndCacheInitialBloodGlucoseSamples()
-                        }
-                    }
-                })
+                self.updateLastCacheBloodGlucoseSamples(newSamplesCount: newSamplesCount, deletedSamplesCount: deletedSamplesCount)
+                if !self.isInitialBloodGlucoseCacheComplete {
+                    self.readAndCacheInitialBloodGlucoseSamples()
+                }
+            } else {
+                if !self.isInitialBloodGlucoseCacheComplete {
+                    self.isInitialBloodGlucoseCacheComplete = true
+                    self.startObservingBloodGlucoseSamples()
+                }
             }
         }
         workoutResultHandler = {
@@ -113,19 +130,15 @@ class HealthKitDataCache {
             
             if newSamplesCount > 0 {
                 self.writeSamplesToDb(typeIdentifier: HKWorkoutTypeIdentifier, samples: newSamples, deletedSamples: nil, error: error)
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.updateLastCacheWorkoutSamples(newSamplesCount: newSamplesCount, deletedSamplesCount: deletedSamplesCount)
-                    
-                    if !self.isInitialWorkoutCacheComplete {
-                        if newSamplesCount == 0 && deletedSamplesCount == 0 {
-                            self.isInitialWorkoutCacheComplete = true
-                            self.startObservingWorkoutSamples()
-                        } else {
-                            self.readAndCacheInitialWorkoutSamples()
-                        }
-                    }
-                })
+                self.updateLastCacheWorkoutSamples(newSamplesCount: newSamplesCount, deletedSamplesCount: deletedSamplesCount)                
+                if !self.isInitialWorkoutCacheComplete {
+                    self.readAndCacheInitialWorkoutSamples()
+                }
+            } else {
+                if !self.isInitialWorkoutCacheComplete {
+                    self.isInitialWorkoutCacheComplete = true
+                    self.startObservingWorkoutSamples()
+                }
             }
         }
     }
@@ -309,9 +322,9 @@ class HealthKitDataCache {
             for sample in samples {
                 let sourceRevision = sample.sourceRevision
                 let source = sourceRevision.source
-                var sourceName = source.name
-                var sourceBundleIdentifier = source.bundleIdentifier
-                var sourceVersion = sourceRevision.version
+                let sourceName = source.name
+                let sourceBundleIdentifier = source.bundleIdentifier
+                let sourceVersion = sourceRevision.version
                 
                 let device = sample.device
                 let deviceName = device?.name
@@ -328,11 +341,12 @@ class HealthKitDataCache {
                 switch typeIdentifier {
                 case HKQuantityTypeIdentifierBloodGlucose:
                     if sourceName.lowercaseString.rangeOfString("dexcom") == nil {
-                        //DDLogInfo("Ignoring non-Dexcom glucose data")
-                        //continue
-                        sourceName = "Dexcom"
-                        sourceBundleIdentifier = "com.dexcom.CGM.OUS.MMOL.R01"
-                        sourceVersion = "1"
+                        DDLogInfo("Ignoring non-Dexcom glucose data")
+                        continue
+                        //Debug/Test: uncomment the following and turn into var's from let's above to allow posting manually entered HealthKit blood glucose samples to be sent to service as Dexcom values. (Dangerous!).
+                        //sourceName = "Dexcom"
+                        //sourceBundleIdentifier = "com.dexcom.CGM.OUS.MMOL.R01"
+                        //sourceVersion = "1"
                     }
                     
                     if let quantitySample = sample as? HKQuantitySample {
@@ -424,7 +438,7 @@ class HealthKitDataCache {
             
             NSUserDefaults.standardUserDefaults().setObject(lastCacheTimeBloodGlucoseSamples, forKey: "lastCacheTimeBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().setInteger(lastCacheCountBloodGlucoseSamples, forKey: "lastCacheCountBloodGlucoseSamples")
-            NSUserDefaults.standardUserDefaults().setObject(totalCacheCountBloodGlucoseSamples, forKey: "totalCacheCountBloodGlucoseSamples")
+            NSUserDefaults.standardUserDefaults().setInteger(totalCacheCountBloodGlucoseSamples, forKey: "totalCacheCountBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().synchronize()
             
             dispatch_async(dispatch_get_main_queue()) {

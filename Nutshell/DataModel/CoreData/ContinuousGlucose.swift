@@ -23,6 +23,15 @@ class ContinuousGlucose: CommonData {
                 return nil
             }
 
+            if let units = json["units"].string {
+                if units != "mmol/L" {
+                    print("cbg record with incorrect units skipped: \(units)")
+                    return nil
+                }
+            } else {
+                print("cbg record with no units field, assuming mmol/L - value: \(me.value)")
+            }
+            
             me.isig = json["isig"].string
             
             return me

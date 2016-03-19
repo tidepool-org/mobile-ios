@@ -100,6 +100,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
             let messageString = "Change HealthKit user from ‘" + curHKUserName + "’ to ‘" + curUserName + "’?"
             let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { Void in
+                self.healthKitSwitch.on = false
                 return
             }))
             alert.addAction(UIAlertAction(title: "Change", style: .Default, handler: { Void in

@@ -29,7 +29,7 @@ import CocoaLumberjack
 /// The local data store is allocated when the application starts, if not already allocated, and never deleted. Meal and Workout events in this store are tagged with the service userId string; queries against this database for these events always include the userid as a match criteria.
 ///
 /// The Tidepool data store is only allocated at login, and is deleted at logout. It is named so it won't be backed up to iCloud if the user has application backup to cloud configured.
-class NutDataController
+class NutDataController: NSObject
 {
 
     // MARK: - Constants
@@ -111,22 +111,35 @@ class NutDataController
         var interfaceEnabled = true
         if currentUserId != nil  {
             interfaceEnabled = healthKitInterfaceEnabledForCurrentUser()
+            if !interfaceEnabled {
+                NSLog("configureHealthKitInterface: disable because not enabled for current user!")
+            }
         } else {
             interfaceEnabled = false
+            NSLog("configureHealthKitInterface: disable because no current user!")
         }
         
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        
         if interfaceEnabled {
+            
+            NSLog("configureHealthKitInterface: enable!")
+            // Start upload after every notification of new cached blood glucose samples
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "startUploadIfNecessary", name: HealthKitDataCache.Notifications.CachedBloodGlucoseSamples, object: nil)
+
             // Turn on background blood glucose HealthKit monitoring, if available on this device
             HealthKitDataCache.sharedInstance.startCaching(
                 shouldCacheBloodGlucoseSamples: true,
                 shouldCacheWorkoutSamples: false)
             monitorForWorkoutData(true)
-            doUploadIfNecessary()
+            startUploadIfNecessary()
+            HealthKitDataPusher.sharedInstance.enablePushToHealthKit(true)
         } else {
-            NSLog("Shut down healthkit interface")
-            // TODO: ARE THESE THE RIGHT CALLS? Need to work even if we aren't currently monitoring...
+            NSLog("configureHealthKitInterface: disable!")
             monitorForWorkoutData(false)
-            HealthKitManager.sharedInstance.stopObservingBloodGlucoseSamples()
+            HealthKitDataCache.sharedInstance.stopCaching(shouldStopCachingBloodGlucoseSamples: true, shouldStopCachingWorkoutSamples: true)
+            stopUploadIfNecessary()
+            HealthKitDataPusher.sharedInstance.enablePushToHealthKit(false)
         }
     }
     
@@ -296,59 +309,77 @@ class NutDataController
     // MARK: - Healthkit uploading to Tidepool
     //
 
-    private var uploadTimerRunning = false
-    private func doUploadIfNecessary(uploadNow: Bool = false) {
-        NSLog("doUploadIfNecessary, uploadNow = \(uploadNow)")
-        if currentUserId != nil && HealthKitDataUploader.sharedInstance.hasSamplesToUpload {
-            if uploadNow {
-                // TODO: my - 0 - do this in background fetch
-                NSLog("doUploadIfNecessary: start batch upload")
-                HealthKitDataUploader.sharedInstance.startBatchUpload(userId: currentUserId!) {
-                    (postBody: NSData, remainingSampleCount: Int) -> Void in
-                    
-                    // Do the initial upload to start the batch
-                    APIConnector.connector().doUpload(postBody) {
-                        (error: NSError?) -> Void in
-                        
-                        if error == nil {
-                            self.uploadNextForBatch(remainingSampleCount)
-                        }
-                    }
-                }
-            } else {
-                NSLog("doUploadIfNecessary: uploadNow is false, delay upload until delay expires")
-            }
+    // Upload timer
+    private var uploadTimer: NSTimer?
+
+    // TODO: my - 0 - Ideally we should also do upload in background after processing background delivered samples from HealthKit and to complete any initial upload
+    func startUploadIfNecessary() {
+        NSLog("startUploadIfNecessary")
+        
+        guard currentUserId != nil && !HealthKitDataUploader.sharedInstance.isUploading else {
+            return
         }
         
-        if !uploadTimerRunning {
-            if NSUserDefaults.standardUserDefaults().boolForKey(kHealthKitInterfaceEnabledKey) {
-                // Run every 2 minutes while HealthKit data monitoring is enabled...
-                let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(120 * Double(NSEC_PER_SEC)))
-                uploadTimerRunning = true
-                NSLog("doUploadIfNecessary: set to try again after 2 minutes!")
-                dispatch_after(delayTime, dispatch_get_main_queue()) {
-                    self.doUploadIfNecessary(true)
-                }
-            }
-        } else {
-            NSLog("doUploadIfNecessary: skip reset of timer since uploadTimerRunning")
+        // Start upload timer to check for new samples every minute
+        if uploadTimer == nil {
+            uploadTimer = NSTimer.scheduledTimerWithTimeInterval(
+                60,
+                target: self,
+                selector: "startUploadIfNecessary",
+                userInfo: nil,
+                repeats: true)
         }
-    }
-    
-    private func uploadNextForBatch(remainingSampleCount: Int) {
-        HealthKitDataUploader.sharedInstance.uploadNextForBatch({ (postBody: NSData, sampleCount: Int, remainingSampleCount: Int, completion: (NSError?) -> (Void)) -> Void in
+
+        guard HealthKitDataUploader.sharedInstance.hasSamplesToUpload else {
+            return
+        }
+        
+        HealthKitDataUploader.sharedInstance.startBatchUpload(userId: currentUserId!) {
+            (postBody: NSData, remainingSamplesCount: Int) -> Void in
             
             APIConnector.connector().doUpload(postBody) {
                 (error: NSError?) -> Void in
                 
-                completion(error)
-                
-                // Upload next batch of data
-                if HealthKitDataUploader.sharedInstance.hasSamplesToUpload {
-                    self.uploadNextForBatch(remainingSampleCount)
+                self.uploadNextOrFinishBatch(error: error, remainingSamplesCount: remainingSamplesCount)
+            }
+        }
+    }
+    
+    private func uploadNextOrFinishBatch(error error: NSError?, remainingSamplesCount: Int) {
+        guard error == nil &&
+            remainingSamplesCount > 0 &&
+            currentUserId != nil else {
+                HealthKitDataUploader.sharedInstance.finishBatchUpload()
+                return
+        }
+        
+        HealthKitDataUploader.sharedInstance.uploadNextForBatch({ (error: NSError?, postBody: NSData?, samplesToUploadCount: Int, remainingSamplesCount: Int, completion: (NSError?) -> (Void)) -> Void in
+            
+            if error == nil && samplesToUploadCount > 0 {
+                APIConnector.connector().doUpload(postBody!) {
+                    (error: NSError?) -> Void in
+                    
+                    completion(error)
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.uploadNextOrFinishBatch(error: error, remainingSamplesCount: remainingSamplesCount)
+                    }
                 }
+            } else {
+                HealthKitDataUploader.sharedInstance.finishBatchUpload()
             }
         })
+    }
+    
+    private func stopUploadIfNecessary() {
+        if uploadTimer != nil {
+            uploadTimer!.invalidate()
+            uploadTimer = nil
+        }
+        
+        if HealthKitDataUploader.sharedInstance.isUploading {
+            HealthKitDataUploader.sharedInstance.finishBatchUpload()
+        }
     }
 
     //
@@ -455,7 +486,7 @@ class NutDataController
 
     private var runningUnitTests: Bool
     // no instances allowed..
-    private init() {
+    override private init() {
         self.runningUnitTests = false
         if let _ = NSClassFromString("XCTest") {
             self.runningUnitTests = true

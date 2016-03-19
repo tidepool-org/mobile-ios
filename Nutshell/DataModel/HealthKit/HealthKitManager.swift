@@ -63,21 +63,29 @@ class HealthKitManager {
             return
         }
         
-        var readTypes = Set<HKSampleType>()
-        if shouldAuthorizeBloodGlucoseSamples {
-            readTypes.insert(HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!)
+        var readTypes: Set<HKSampleType>?
+        var writeTypes: Set<HKSampleType>?
+        if (shouldAuthorizeBloodGlucoseSamples) {
+            readTypes = Set<HKSampleType>()
+            readTypes!.insert(HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!)
+            writeTypes = Set<HKSampleType>()
+            writeTypes!.insert(HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!)
         }
-        if shouldAuthorizeWorkoutSamples {
-            readTypes.insert(HKObjectType.workoutType())
+        if (shouldAuthorizeWorkoutSamples) {
+            if readTypes == nil {
+                readTypes = Set<HKSampleType>()
+            }
+            readTypes!.insert(HKObjectType.workoutType())
         }
-        guard readTypes.count > 0 else {
-            error = NSError(domain: "HealthKitManager", code: -2, userInfo: [NSLocalizedDescriptionKey:"No health data authorization requested, ignoring"])
+        guard readTypes != nil || writeTypes != nil else {
+            DDLogVerbose("No health data authorization requested, ignoring")
             return
         }
         
-        healthStore!.requestAuthorizationToShareTypes(nil, readTypes: readTypes) { (success, error) -> Void in
-            if error == nil {
-                if shouldAuthorizeBloodGlucoseSamples {
+        if (isHealthDataAvailable) {
+            healthStore!.requestAuthorizationToShareTypes(writeTypes, readTypes: readTypes) { (success, error) -> Void in
+                if (shouldAuthorizeBloodGlucoseSamples) {
+
                     NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForBloodGlucoseSamples");
                 }
                 if shouldAuthorizeWorkoutSamples {

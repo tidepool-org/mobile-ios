@@ -50,19 +50,21 @@ class DatabaseUtils {
         return date
     }
 
-    class func checkLoadDataForDateRange(startDate: NSDate, endDate: NSDate) {
+    class func checkLoadDataForDateRange(startDate: NSDate, endDate: NSDate, completion: ((Int) -> Void)?) {
         let now = NSDate()
         let startBucket = DatabaseUtils.dateToBucketNumber(startDate)
         let endBucket = DatabaseUtils.dateToBucketNumber(endDate)
+        var netItemsAdded = 0
         for bucket in startBucket...endBucket {
             
             if let lastFetchDate = serverBlocks[bucket] {
                 if now.timeIntervalSinceDate(lastFetchDate) < 60*10 {
                     // don't check more often than every 10 minutes...
-                    //NSLog("checkLoadDataForDateRange: skip load of bucket \(bucket)")
+                    NSLog("checkLoadDataForDateRange: skip load of bucket \(bucket)")
                     continue
                 }
             }
+            NSLog("checkLoadDataForDateRange: fetch server data for bucket \(bucket)")
             // kick off a fetch if we are online...
             if APIConnector.connector().serviceAvailable() {
                 // TODO: if fetch fails, should we wait less time before retrying? 
@@ -71,16 +73,21 @@ class DatabaseUtils {
                 let endTime = DatabaseUtils.bucketNumberToDate(bucket+1)
                 APIConnector.connector().getReadOnlyUserData(startTime, endDate:endTime, completion: { (result) -> (Void) in
                     if result.isSuccess {
-                        DatabaseUtils.updateEventsForTimeRange(startTime, endTime: endTime, moc: NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: result.value!)
+                        let netAdds = DatabaseUtils.updateEventsForTimeRange(startTime, endTime: endTime, moc: NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: result.value!)
+                        netItemsAdded += netAdds
                     } else {
                         NSLog("No events in range \(startTime) to \(endTime)")
                     }
                 })
             }
         }
+        // Call optional completion routine with estimate of items added (net of adds less deletes)
+        if let completion = completion {
+            completion(netItemsAdded)
+        }
     }
     
-    class func updateEventsForTimeRange(startTime: NSDate, endTime: NSDate, moc: NSManagedObjectContext, eventsJSON: JSON) {
+    class func updateEventsForTimeRange(startTime: NSDate, endTime: NSDate, moc: NSManagedObjectContext, eventsJSON: JSON) -> Int {
         
         // NSLog("Events from \(startTime) to \(endTime): \(eventsJSON)")
         var deleteEventCounter = 0
@@ -133,6 +140,8 @@ class DatabaseUtils {
             NSLog("Failed to save MOC: \(error)")
         }
         
+        // return net events added...
+        return insertEventCounter - deleteEventCounter
     }
     
     class func updateEvents(moc: NSManagedObjectContext, eventsJSON: JSON) {
@@ -181,11 +190,13 @@ class DatabaseUtils {
     }
     
     // Note: This call has the side effect of fetching data from the service which may result in a future notification of database changes.
-    class func getTidepoolEvents(afterTime: NSDate, thruTime: NSDate, objectTypes: [String]? = nil) throws -> [NSManagedObject] {
+    class func getTidepoolEvents(afterTime: NSDate, thruTime: NSDate, objectTypes: [String]? = nil, skipCheckLoad: Bool = false) throws -> [NSManagedObject] {
         let moc = NutDataController.controller().mocForTidepoolEvents()!
 
         // load on-demand: if data has not been loaded, a notification will come later!
-        DatabaseUtils.checkLoadDataForDateRange(afterTime, endDate: thruTime)
+        if !skipCheckLoad {
+            DatabaseUtils.checkLoadDataForDateRange(afterTime, endDate: thruTime, completion: nil)
+        }
 
         let request = NSFetchRequest(entityName: "CommonData")
         

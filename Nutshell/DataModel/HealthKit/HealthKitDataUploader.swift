@@ -256,7 +256,7 @@ class HealthKitDataUploader {
 
             NSUserDefaults.standardUserDefaults().setObject(lastUploadTimeBloodGlucoseSamples, forKey: "lastUploadTimeBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().setInteger(lastUploadCountBloodGlucoseSamples, forKey: "lastUploadCountBloodGlucoseSamples")
-            NSUserDefaults.standardUserDefaults().setObject(totalUploadCountBloodGlucoseSamples, forKey: "totalUploadCountBloodGlucoseSamples")
+            NSUserDefaults.standardUserDefaults().setInteger(totalUploadCountBloodGlucoseSamples, forKey: "totalUploadCountBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().synchronize()
             
             dispatch_async(dispatch_get_main_queue()) {

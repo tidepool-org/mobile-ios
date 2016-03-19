@@ -328,7 +328,6 @@ class APIConnector {
         // request format is like: https://api.tidepool.org/data/f934a287c4?endDate=2015-11-17T08%3A00%3A00%2E000Z&startDate=2015-11-16T12%3A00%3A00%2E000Z&type=smbg%2Cbolus%2Ccbg%2Cwizard%2Cbasal
         let endpoint = "data/" + NutDataController.controller().currentUserId!
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        // TODO: Alamofire isn't escaping the periods, but service appears to expect this... right now I have Alamofire modified to do this.
         // TODO: If there is no data returned, I get a failure case with status code 200, and error FAILURE: Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.} ] Maybe an Alamofire issue?
         var parameters: Dictionary = ["type":"smbg,bolus,cbg,wizard,basal"]
         if let startDate = startDate {
@@ -406,27 +405,44 @@ class APIConnector {
         return nil
     }
     
-
     func doUpload(body: NSData, completion: (NSError?) -> (Void)) {
-        guard let currentUserId = NutDataController.controller().currentUserId else {
-            DDLogError("No logged in user, unable to upload")
+        DDLogVerbose("trace")
+        
+        var error: NSError?
+        
+        defer {
+            if error != nil {
+                DDLogError("Upload failed: \(error), \(error?.userInfo)")
+                
+                completion(error)
+            }
+        }
+        
+        guard self.isConnectedToNetwork() else {
+            error = NSError(domain: "APIConnect-doUpload", code: -1, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, not connected to network"])
             return
         }
         
-        let urlExtension = "/data/" + currentUserId
-        
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
-        
-        let preRequest = { () -> Void in
-            // nothing to do in prerequest
+        guard let currentUserId = NutDataController.controller().currentUserId else {
+            error = NSError(domain: "APIConnect-doUpload", code: -2, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, no user is logged in"])
+            return
         }
+
+        let urlExtension = "/data/" + currentUserId
+        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
+        let preRequest = { () -> Void in }
         
-        let handleRequestCompletion = { (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void in
-            if let httpResponse = response as? NSHTTPURLResponse {
-                if data != nil {
-                    let statusCode = httpResponse.statusCode
-                    let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
-                    DDLogInfo("status Code: \(statusCode), response data: \(dataString)")
+        let handleRequestCompletion = { (response: NSURLResponse!, data: NSData!, requestError: NSError!) -> Void in
+            var error = requestError
+            if error == nil {
+                if let httpResponse = response as? NSHTTPURLResponse {
+                    if data != nil {
+                        let statusCode = httpResponse.statusCode
+                        let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
+                        if statusCode >= 400 && statusCode < 600 {
+                            error = NSError(domain: "APIConnect-doUpload", code: -2, userInfo: [NSLocalizedDescriptionKey:"Upload failed with status code: \(statusCode), error message: \(dataString)"])
+                        }
+                    }
                 }
             }
             
@@ -436,11 +452,10 @@ class APIConnector {
             
             completion(error)
         }
-        
+
         uploadRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, subdomainRootOverride: "uploads", completion: handleRequestCompletion)
-        
     }
-    
+
 
     func uploadRequest(method: String, urlExtension: String, headerDict: [String: String], body: NSData?, preRequest: () -> Void, subdomainRootOverride: String = "api", completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
         
@@ -472,5 +487,5 @@ class APIConnector {
             DDLogInfo("Not connected to network")
         }
     }
-
+    
  }

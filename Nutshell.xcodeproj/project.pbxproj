@@ -120,6 +120,8 @@
 		4837CC6B1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */; };
 		483E3C361B9F4A6300DA49E7 /* BaseUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */; };
 		483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */; };
+		484365C91C9DB3960046A2C5 /* HealthKitDataPusher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484365C81C9DB3950046A2C5 /* HealthKitDataPusher.swift */; };
+		484365CA1C9DB3970046A2C5 /* HealthKitDataPusher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484365C81C9DB3950046A2C5 /* HealthKitDataPusher.swift */; };
 		48501BF01C1FC5EC00A7ADA8 /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */; };
 		4851C6921BA6281800F8E0EE /* NutshellUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851C6911BA6281800F8E0EE /* NutshellUIView.swift */; };
 		4851C6951BA689FC00F8E0EE /* NutshellUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851C6941BA689FC00F8E0EE /* NutshellUITableView.swift */; };
@@ -297,6 +299,7 @@
 		4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuAccountSettingsViewController.swift; path = ViewControllers/MenuAccountSettingsViewController.swift; sourceTree = "<group>"; };
 		483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUIViewController.swift; path = ViewControllers/BaseUIViewController.swift; sourceTree = "<group>"; };
 		483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewController.swift; path = ViewControllers/BaseUITableViewController.swift; sourceTree = "<group>"; };
+		484365C81C9DB3950046A2C5 /* HealthKitDataPusher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataPusher.swift; path = DataModel/HealthKit/HealthKitDataPusher.swift; sourceTree = "<group>"; };
 		48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListViewController.swift; path = ViewControllers/EventListViewController.swift; sourceTree = "<group>"; };
 		4851C6911BA6281800F8E0EE /* NutshellUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUIView.swift; path = Resources/NutshellUIView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4851C6931BA628A500F8E0EE /* UIDesignNotes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = UIDesignNotes.rtf; path = Resources/UIDesignNotes.rtf; sourceTree = "<group>"; };
@@ -483,6 +486,7 @@
 				482ECC7D1C94BB9D002A015D /* HealthKitDataCache.swift */,
 				482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */,
 				482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */,
+				484365C81C9DB3950046A2C5 /* HealthKitDataPusher.swift */,
 			);
 			name = HealthKit;
 			sourceTree = "<group>";
@@ -998,6 +1002,7 @@
 				4859FCC11B9A4DE4000C1269 /* Nutshell.xcdatamodeld in Sources */,
 				4851C6951BA689FC00F8E0EE /* NutshellUITableView.swift in Sources */,
 				485420211BC44D290020CFE1 /* Workout+CoreDataProperties.swift in Sources */,
+				484365C91C9DB3960046A2C5 /* HealthKitDataPusher.swift in Sources */,
 				0334CA671BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
 				0334CA791BA8DDFC00013096 /* TimeChange.swift in Sources */,
 				48EDC2C61BD6B403003049D9 /* EventAddOrEditViewController.swift in Sources */,
@@ -1106,6 +1111,7 @@
 				0334CA171BA8DDFC00013096 /* Activity.swift in Sources */,
 				0334CA5F1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift in Sources */,
 				0334CA651BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift in Sources */,
+				484365CA1C9DB3970046A2C5 /* HealthKitDataPusher.swift in Sources */,
 				0334CA1A1BA8DDFC00013096 /* Alarm+CoreDataProperties.swift in Sources */,
 				0334CA141BA8DDFC00013096 /* Activity+CoreDataProperties.swift in Sources */,
 				485420221BC44D290020CFE1 /* Workout+CoreDataProperties.swift in Sources */,
