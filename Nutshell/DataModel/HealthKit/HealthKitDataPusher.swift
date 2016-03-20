@@ -229,16 +229,21 @@ class HealthKitDataPusher: NSObject {
         if !itemsAlreadyInHK.isEmpty {
             // first add id's of these HealthKit items to our exclusion list
             for item in itemsAlreadyInHK {
+                var value: Double = -1
+                if let item = item as? HKQuantitySample {
+                    let unit = HKUnit(fromString: "mg/dL")
+                    value = item.quantity.doubleValueForUnit(unit)
+                }
                 if let metaDataDict = item.metadata {
                     if let tidepoolId = metaDataDict["tidepoolId"] {
                         self.tidepoolIdsPushedToHealthKit.insert(tidepoolId as! String)
                         tidepoolItemsInHKCount++
-                        DDLogVerbose("added HK item \(item.UUID.UUIDString) with tidepool id: \(tidepoolId) to exclusion list")
+                        DDLogVerbose("added HK item at time \(item.startDate) and value: \(value) with tidepool id: \(tidepoolId) to exclusion list")
                     } else {
-                        DDLogVerbose("ignoring HK item with no tidepoolId metadata: \(item.UUID.UUIDString)")
+                        DDLogVerbose("ignoring HK item with no tidepoolId metadata: time \(item.startDate) and value: \(value)")
                     }
                 } else {
-                    DDLogVerbose("ignoring HK item with no metaDataDict: \(item.UUID.UUIDString)")
+                    DDLogVerbose("ignoring HK item with no metaDataDict: time \(item.startDate) and value: \(value)")
                 }
             }
             // next filter out any items in our push array that match items in the exclusion list
@@ -266,7 +271,7 @@ class HealthKitDataPusher: NSObject {
                     return
                 }
                 if( error != nil ) {
-                    DDLogError("Error pushing glucose samples to HealthKit: \(error!.localizedDescription)")
+                    DDLogError("Error pushing \(self.itemsToPush.count) glucose samples to HealthKit: \(error!.localizedDescription)")
                     self.finishSync(syncGen, itemsSynced: -1, completion: completion)
                 } else {
                     DDLogVerbose("\(self.itemsToPush.count) Blood glucose samples pushed to HealthKit successfully!")
