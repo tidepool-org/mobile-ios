@@ -127,6 +127,7 @@ class APIConnector {
     
     /// Creator of APIConnector must call this function after init!
     func configure() -> APIConnector {
+        HealthKitDataUploader.sharedInstance.uploadHandler = self.doUpload
         self.baseUrl = NSURL(string: kServers[currentService!]!)!
         NSLog("Using service: \(self.baseUrl)")
         self.sessionToken = NSUserDefaults.standardUserDefaults().stringForKey(kSessionTokenDefaultKey)

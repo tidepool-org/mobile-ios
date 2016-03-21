@@ -8,8 +8,8 @@ def available_pods
   pod 'Alamofire', '3.1.5'
   pod 'SwiftyJSON', '2.3.2'
   pod 'CocoaLumberjack/Swift', '~> 2.2.0'
-  pod 'RealmSwift', '~> 0.98.4'
-end
+  pod 'CryptoSwift', '~> 0.2.3'
+ end
 
 target 'Nutshell' do
   available_pods

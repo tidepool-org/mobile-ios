@@ -103,16 +103,12 @@
 		4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
 		4820ED6A1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
 		4820ED6B1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
-		482ECC801C94BB9D002A015D /* HealthKitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7C1C94BB9D002A015D /* HealthKitData.swift */; };
-		482ECC811C94BB9D002A015D /* HealthKitDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7D1C94BB9D002A015D /* HealthKitDataCache.swift */; };
 		482ECC821C94BB9D002A015D /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */; };
 		482ECC831C94BB9D002A015D /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */; };
 		482ECC861C94BC47002A015D /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC851C94BC47002A015D /* LogFormatter.swift */; };
 		482ECC871C94BDE8002A015D /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC851C94BC47002A015D /* LogFormatter.swift */; };
 		482ECC881C94BFC4002A015D /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */; };
-		482ECC891C94C376002A015D /* HealthKitDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7D1C94BB9D002A015D /* HealthKitDataCache.swift */; };
 		482ECC8A1C94C379002A015D /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */; };
-		482ECC8B1C94C37E002A015D /* HealthKitData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7C1C94BB9D002A015D /* HealthKitData.swift */; };
 		4837C1661C11F9FC00D29B64 /* GraphContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837C1651C11F9FC00D29B64 /* GraphContainerView.swift */; };
 		4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */; };
 		4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */; };
@@ -286,8 +282,6 @@
 		48103E9C1C1E05660055C27A /* Nutshell-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Nutshell-Bridging-Header.h"; sourceTree = "<group>"; };
 		4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/Pods-Nutshell/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		4820ED691C21E8E3008C754A /* GraphDataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataTypes.swift; path = GraphView/GraphDataTypes.swift; sourceTree = "<group>"; };
-		482ECC7C1C94BB9D002A015D /* HealthKitData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitData.swift; path = DataModel/HealthKit/HealthKitData.swift; sourceTree = "<group>"; };
-		482ECC7D1C94BB9D002A015D /* HealthKitDataCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataCache.swift; path = DataModel/HealthKit/HealthKitDataCache.swift; sourceTree = "<group>"; };
 		482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataUploader.swift; path = DataModel/HealthKit/HealthKitDataUploader.swift; sourceTree = "<group>"; };
 		482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = DataModel/HealthKit/HealthKitManager.swift; sourceTree = "<group>"; };
 		482ECC851C94BC47002A015D /* LogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogFormatter.swift; sourceTree = "<group>"; };
@@ -482,8 +476,6 @@
 		482ECC841C94BBA5002A015D /* HealthKit */ = {
 			isa = PBXGroup;
 			children = (
-				482ECC7C1C94BB9D002A015D /* HealthKitData.swift */,
-				482ECC7D1C94BB9D002A015D /* HealthKitDataCache.swift */,
 				482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */,
 				482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */,
 				484365C81C9DB3950046A2C5 /* HealthKitDataPusher.swift */,
@@ -1019,7 +1011,6 @@
 				486F5E6C1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift in Sources */,
 				482ECC821C94BB9D002A015D /* HealthKitDataUploader.swift in Sources */,
 				485922A41B9A639B0056E605 /* EventGroupTableViewController.swift in Sources */,
-				482ECC801C94BB9D002A015D /* HealthKitData.swift in Sources */,
 				0334CA431BA8DDFC00013096 /* Food+CoreDataProperties.swift in Sources */,
 				0334CA8B1BA8DDFC00013096 /* User.swift in Sources */,
 				48B127971BC4447100061483 /* NutWorkout.swift in Sources */,
@@ -1049,7 +1040,6 @@
 				48C491511C38738A00F34630 /* GraphDataLayer.swift in Sources */,
 				0334CA221BA8DDFC00013096 /* Basal.swift in Sources */,
 				0334CA6A1BA8DDFC00013096 /* Settings+CoreDataProperties.swift in Sources */,
-				482ECC811C94BB9D002A015D /* HealthKitDataCache.swift in Sources */,
 				0334CA581BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,
 				0334CA4F1BA8DDFC00013096 /* GrabBag.swift in Sources */,
 				48C491661C3B2DEE00F34630 /* SmbgGraphData.swift in Sources */,
@@ -1141,7 +1131,6 @@
 				48B127981BC4447100061483 /* NutWorkout.swift in Sources */,
 				4859FCD11B9A4DE5000C1269 /* NutshellTests.swift in Sources */,
 				0334CA801BA8DDFC00013096 /* Upload.swift in Sources */,
-				482ECC8B1C94C37E002A015D /* HealthKitData.swift in Sources */,
 				486F5E3B1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
 				0334CA5C1BA8DDFC00013096 /* Prime.swift in Sources */,
 				0334CAAC1BA8E22E00013096 /* Bolus.swift in Sources */,
@@ -1172,7 +1161,6 @@
 				48A150561C18E0A900ED800B /* Nutshell.xcdatamodeld in Sources */,
 				486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */,
 				485420281BC44D290020CFE1 /* Meal.swift in Sources */,
-				482ECC891C94C376002A015D /* HealthKitDataCache.swift in Sources */,
 				482ECC881C94BFC4002A015D /* HealthKitManager.swift in Sources */,
 				485420241BC44D290020CFE1 /* Workout.swift in Sources */,
 				0334CA291BA8DDFC00013096 /* BloodKetone.swift in Sources */,

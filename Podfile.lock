@@ -7,24 +7,19 @@ PODS:
     - CocoaLumberjack/Default
   - CocoaLumberjack/Swift (2.2.0):
     - CocoaLumberjack/Extensions
-  - Realm (0.98.4):
-    - Realm/Headers (= 0.98.4)
-  - Realm/Headers (0.98.4)
-  - RealmSwift (0.98.4):
-    - Realm (= 0.98.4)
+  - CryptoSwift (0.2.3)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
   - Alamofire (= 3.1.5)
   - CocoaLumberjack/Swift (~> 2.2.0)
-  - RealmSwift (~> 0.98.4)
+  - CryptoSwift (~> 0.2.3)
   - SwiftyJSON (= 2.3.2)
 
 SPEC CHECKSUMS:
   Alamofire: 5f730ba29fd113b7ddd71c1e65d0c630acf5d7b0
   CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
-  Realm: 7745674cb1b7cb2a84a655bfd420b86efdaad36e
-  RealmSwift: 18742f4f13f98117aeec53b92058918ac93bf38f
+  CryptoSwift: b2bf37b8e7cc6d682ef3365cb966bc5ae5174aa5
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
 COCOAPODS: 0.39.0

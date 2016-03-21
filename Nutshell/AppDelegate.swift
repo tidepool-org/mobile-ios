@@ -77,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSLog("did finish launching")
         return true
         
-        // Note: for non-background launches, this will continue in applicationWillEnterForeground...
+        // Note: for non-background launches, this will continue in applicationDidBecomeActive...
     }
     
     class func configureHealthKitUIEnable(enable: Bool) {

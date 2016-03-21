@@ -14,8 +14,8 @@
 */
 
 import HealthKit
-import RealmSwift
 import CocoaLumberjack
+import CryptoSwift
 
 class HealthKitDataUploader {
     // MARK: Access, authorization
@@ -23,6 +23,23 @@ class HealthKitDataUploader {
     static let sharedInstance = HealthKitDataUploader()
     private init() {
         DDLogVerbose("trace")
+        
+        let latestUploaderVersion = 1
+        
+        let lastExecutedUploaderVersion = NSUserDefaults.standardUserDefaults().integerForKey("lastExecutedUploaderVersion")
+        if latestUploaderVersion != lastExecutedUploaderVersion {
+            DDLogInfo("Migrating uploader to \(latestUploaderVersion)")
+            
+            NSUserDefaults.standardUserDefaults().removeObjectForKey("bloodGlucoseQueryAnchor")
+            NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadTimeBloodGlucoseSamples")
+            NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadCountBloodGlucoseSamples")
+            NSUserDefaults.standardUserDefaults().removeObjectForKey("totalUploadCountBloodGlucoseSamples")
+
+            NSUserDefaults.standardUserDefaults().setInteger(latestUploaderVersion, forKey: "lastExecutedUploaderVersion")
+            NSUserDefaults.standardUserDefaults().synchronize()
+
+            DDLogInfo("Reset upload stats and HealthKit query anchor during migration")
+        }
 
         let lastUploadTime = NSUserDefaults.standardUserDefaults().objectForKey("lastUploadTimeBloodGlucoseSamples")
         if lastUploadTime != nil {
@@ -32,228 +49,356 @@ class HealthKitDataUploader {
         }
     }
     
-    private(set) var lastUploadTimeBloodGlucoseSamples = NSDate.distantPast()
-    private(set) var lastUploadCountBloodGlucoseSamples = 0
-    private(set) var totalUploadCountBloodGlucoseSamples = 0
-    
-    private(set) var isUploading = false
-    
     enum Notifications {
         static let UploadedBloodGlucoseSamples = "HealthKitDataUpload-uploaded-\(HKQuantityTypeIdentifierBloodGlucose)"
     }
     
-    // MARK: Upload    
+    private(set) var isUploading = false
     
-    var hasSamplesToUpload: Bool {
-        get {
-            var hasSamplesToUpload = false
+    private(set) var lastUploadTimeBloodGlucoseSamples = NSDate.distantPast()
+    private(set) var lastUploadCountBloodGlucoseSamples = 0
+    private(set) var totalUploadCountBloodGlucoseSamples = 0
+    
+    var uploadHandler: ((postBody: NSData, completion: (NSError?) -> (Void)) -> (Void)) = {(postBody, completion) in }
 
-            if HealthKitManager.sharedInstance.isHealthDataAvailable {
-                do {
-                    let realm = try Realm()
-                    
-                    let samples = realm.objects(HealthKitData).filter("healthKitTypeIdentifier = '\(HKQuantityTypeIdentifierBloodGlucose)'")
-                    let sampleCount = samples.count
-                    hasSamplesToUpload = sampleCount > 0
-                    if hasSamplesToUpload {
-                        DDLogInfo("There are \(sampleCount) samples available to upload")
-                    }
-                } catch let error as NSError! {
-                    DDLogError("Error gathering samples to upload \(error), \(error.userInfo)")
+    func authorizeAndStartUploading(currentUserId currentUserId: String)
+    {
+        DDLogVerbose("trace")
+        
+        HealthKitManager.sharedInstance.authorize(
+            shouldAuthorizeBloodGlucoseSamples: true,
+            shouldAuthorizeWorkoutSamples: false) {
+                success, error -> Void in
+                
+                if error == nil {
+                    self.startUploading(currentUserId: currentUserId)
+                } else {
+                    DDLogError("Error authorizing health data \(error), \(error!.userInfo)")
                 }
-            }
-            
-            return hasSamplesToUpload
         }
     }
     
-    func finishBatchUpload() {
+    func startUploading(currentUserId currentUserId: String?) {
         DDLogVerbose("trace")
-
-        guard isUploading else {
-            DDLogInfo("Not currently uploading, ignoring request to stop uploading")
+        
+        guard currentUserId != nil else {
+            DDLogInfo("No logged in user, unable to upload")
             return
         }
-
-        isUploading = false
-    }
-    
-    func startBatchUpload(userId userId: String, startBatchUploadHandler: (postBody: NSData, availableSamplesCount: Int) -> (Void)) {
-        DDLogVerbose("trace")
         
         guard HealthKitManager.sharedInstance.isHealthDataAvailable else {
             DDLogError("Health data not available, ignoring request to upload")
             return
         }
 
-        guard !isUploading else {
-            DDLogError("Already uploading, ignoring subsequent request to upload")
+        // Remember the user id for the uploads
+        self.currentUserId = currentUserId
+        
+        // Start observing samples. We don't really start uploading until we've successsfully started observing
+        HealthKitManager.sharedInstance.startObservingBloodGlucoseSamples(self.bloodGlucoseObservationHandler)
+        
+        // If already observing / uploading and we are asked to start uploading, then start reading samples. This
+        // will handle the situation where after initially declining read permissions, then going to Health app to
+        // enable read permissions, then switching back to app, should start reading and uploading available 
+        // glucose data
+        if self.isUploading {
+            DDLogInfo("start reading samples - start uploading")
+            self.startReadingBloodGlucoseSamples()
+        }
+    }
+    
+    func stopUploading() {
+        DDLogVerbose("trace")
+        
+        guard isUploading else {
+            DDLogInfo("Not currently uploading, ignoring request to stop uploading")
             return
         }
         
-        do {
-            let realm = try Realm()
-            
-            let samples = realm.objects(HealthKitData).filter("healthKitTypeIdentifier = '\(HKQuantityTypeIdentifierBloodGlucose)'").sorted("createdAt")
-            let samplesCount = samples.count
-            guard samplesCount > 0 else {
-                DDLogError("Unexpected call to startBatchUpload, no samples available to upload")
-                return
-            }
-            let firstSample = samples[0]
-            
-            let now = NSDate()
-            let dateFormatter = NSDateFormatter()
-            let timeZoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT / 60
-            let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
-            let appBuild = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey as String) as! String
-            let appBundleIdentifier = NSBundle.mainBundle().bundleIdentifier!
-            let version = "\(appBundleIdentifier):\(appVersion):\(appBuild)"
-            let time = dateFormatter.isoStringFromDate(now)
-            let uploadId = "upid_HealthKit_\(version)_\(time)"
-            
-            self.batchUploadDict = [String: AnyObject]()
-            self.batchUploadDict["type"] = "upload"
-            self.batchUploadDict["computerTime"] = dateFormatter.isoStringFromDate(now, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateNoTimeZone)
-            self.batchUploadDict["time"] = time
-            self.batchUploadDict["timezoneOffset"] = timeZoneOffset
-            self.batchUploadDict["timezone"] = NSTimeZone.localTimeZone().name
-            self.batchUploadDict["timeProcessing"] = "none"
-            self.batchUploadDict["version"] = version
-            self.batchUploadDict["guid"] = NSUUID().UUIDString
-            self.batchUploadDict["uploadId"] = uploadId
-            self.batchUploadDict["byUser"] = userId
-            self.batchUploadDict["deviceTags"] = ["cgm"]
-            self.batchUploadDict["deviceManufacturers"] = ["Dexcom"]
-            self.batchUploadDict["deviceSerialNumber"] = ""
-            self.batchUploadDict["deviceId"] = UIDevice.currentDevice().identifierForVendor!.UUIDString
-            self.batchUploadDict["deviceModel"] = "DexHealthKit_\(firstSample.sourceName):\(firstSample.sourceBundleIdentifier):\(firstSample.sourceVersion)" // TODO: my - 0 - If we are using a deviceModel with source name/bundle/version, then we probably need to be batching uploads from the same deviceModel, as chrome-uploader does.
-            
-            let postBody: NSData?
-            do {
-                postBody = try NSJSONSerialization.dataWithJSONObject(self.batchUploadDict, options: NSJSONWritingOptions.PrettyPrinted)
-                if defaultDebugLevel != DDLogLevel.Off {
-                    let postBodyString = NSString(data: postBody!, encoding: NSUTF8StringEncoding)! as String
-                    DDLogVerbose("Start batch upload JSON: \(postBodyString)")
-                }
-                
-                // Delegate the upload
-                self.isUploading = true
-                startBatchUploadHandler(postBody: postBody!, availableSamplesCount: samplesCount)
-            } catch let error as NSError! {
-                DDLogError("Error creating post body for start of batch upload: \(error.userInfo)")
-            }
-        } catch let error as NSError! {
-            DDLogError("Error gathering samples to upload \(error), \(error.userInfo)")
-        }
+        self.isUploading = false
+        self.currentUserId = nil
+        HealthKitManager.sharedInstance.disableBackgroundDeliveryWorkoutSamples()
+        HealthKitManager.sharedInstance.stopObservingBloodGlucoseSamples()
     }
 
-    func uploadNextForBatch(uploadHandler: (error: NSError?, postBody: NSData?, samplesCount: Int, remainingSamplesCount: Int, completion: (NSError?) -> (Void)) -> Void) {
-        DDLogVerbose("trace")
+    // MARK: Private
+    
+    private func startReadingBloodGlucoseSamples() {
+        dispatch_async(dispatch_get_main_queue(), {
+            if !self.isReadingBloodGlucoseSamples {
+                self.isReadingBloodGlucoseSamples = true
+                HealthKitManager.sharedInstance.readBloodGlucoseSamples(self.bloodGlucoseResultHandler)
+            } else {
+                DDLogVerbose("Already reading blood glucose samples, ignoring subsequent request to read")
+            }
+        })
+    }
+
+    private func stopReadingBloodGlucoseSamples(completion completion: (NSError?) -> (Void), error: NSError?) {
+        dispatch_async(dispatch_get_main_queue(), {
+            completion(error)
+            self.isReadingBloodGlucoseSamples = false
+        })
+    }
+    
+
+    private func bloodGlucoseObservationHandler(error: NSError?) {
+        if error == nil {
+            self.isUploading = true
+            HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples()
+            DDLogInfo("start reading samples - observe samples")
+            self.startReadingBloodGlucoseSamples()
+        }
+    }
+    
+    private func bloodGlucoseResultHandler(newSamples: [HKSample]?, completion: (NSError?) -> (Void)) {
+        DDLogInfo("trace")
         
-        var error: NSError?
-        var postBody: NSData?
-        var samplesToUploadCount = 0
-        var remainingSamplesToUploadCount = 0
-        var completion = { (error: NSError?) -> Void in }
+        var samplesAvailableToUpload = false
         
         defer {
-            if error != nil {
-                DDLogError("Error preparing to upload: \(error), \(error?.userInfo)")
-            } else {
-                if defaultDebugLevel != DDLogLevel.Off {
-                    let postBodyString = NSString(data: postBody!, encoding: NSUTF8StringEncoding)! as String
-                    DDLogVerbose("Samples to upload JSON: \(postBodyString)")
-                }
+            if !samplesAvailableToUpload {
+                DDLogInfo("stop reading samples - no new samples available to upload")
+                self.stopReadingBloodGlucoseSamples(completion: completion, error: nil)
             }
-            uploadHandler(error: error, postBody: postBody, samplesCount: samplesToUploadCount, remainingSamplesCount: remainingSamplesToUploadCount, completion: completion)
         }
         
-        guard HealthKitManager.sharedInstance.isHealthDataAvailable else {
-            error = NSError(domain: "HealthKitDataUploader", code: -1, userInfo: [NSLocalizedDescriptionKey:"Health data not available, ignoring request to upload"])
+        guard let samples = newSamples where samples.count > 0 else {
             return
         }
-
-        guard isUploading else {
-            error = NSError(domain: "HealthKitDataUploader", code: -2, userInfo: [NSLocalizedDescriptionKey:"Unexpected call to uploadNextForBatch without initial call to startBatchUpload"])
-            return
+        
+        // Group by source
+        self.currentSamplesToUploadBySource = self.filteredSamplesGroupedBySource(samples)
+        if let (_, samples) = self.currentSamplesToUploadBySource.popFirst() {
+            samplesAvailableToUpload = true
+            
+            // Start first batch upload for groups
+            startBatchUpload(samples: samples, completion: completion)
         }
+    }
+ 
+    private func startBatchUpload(samples samples: [HKSample], completion: (NSError?) -> (Void)) {
+        DDLogVerbose("trace")
+        
+        let firstSample = samples[0]
+        let sourceRevision = firstSample.sourceRevision
+        let source = sourceRevision.source
+        let sourceBundleIdentifier = source.bundleIdentifier
+        let deviceModel = deviceModelForSourceBundleIdentifier(sourceBundleIdentifier)
+        let deviceId = "\(deviceModel)_\(UIDevice.currentDevice().identifierForVendor!.UUIDString)"
+        let now = NSDate()
+        let dateFormatter = NSDateFormatter()
+        let timeZoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT / 60
+        let appVersion = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString") as! String
+        let appBuild = NSBundle.mainBundle().objectForInfoDictionaryKey(kCFBundleVersionKey as String) as! String
+        let appBundleIdentifier = NSBundle.mainBundle().bundleIdentifier!
+        let version = "\(appBundleIdentifier):\(appVersion):\(appBuild)"
+        let time = dateFormatter.isoStringFromDate(now)
+        let guid = NSUUID().UUIDString
+        let uploadIdSuffix = "\(deviceId)_\(time)_\(guid)"
+        var uploadIdSuffixMd5Hash = uploadIdSuffix.md5()
+        uploadIdSuffixMd5Hash = uploadIdSuffixMd5Hash.substringToIndex(uploadIdSuffixMd5Hash.startIndex.advancedBy(12))
+        let uploadId = "upid_HealthKit_\(uploadIdSuffixMd5Hash)"
+        
+        self.currentBatchUploadDict = [String: AnyObject]()
+        self.currentBatchUploadDict["type"] = "upload"
+        self.currentBatchUploadDict["uploadId"] = uploadId
+        self.currentBatchUploadDict["computerTime"] = dateFormatter.isoStringFromDate(now, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateNoTimeZone)
+        self.currentBatchUploadDict["time"] = time
+        self.currentBatchUploadDict["timezoneOffset"] = timeZoneOffset
+        self.currentBatchUploadDict["timezone"] = NSTimeZone.localTimeZone().name
+        self.currentBatchUploadDict["timeProcessing"] = "none"
+        self.currentBatchUploadDict["version"] = version
+        self.currentBatchUploadDict["guid"] = guid
+        self.currentBatchUploadDict["byUser"] = currentUserId
+        self.currentBatchUploadDict["deviceTags"] = ["cgm"]
+        self.currentBatchUploadDict["deviceManufacturers"] = ["Dexcom"]
+        self.currentBatchUploadDict["deviceSerialNumber"] = ""
+        self.currentBatchUploadDict["deviceModel"] = deviceModel
+        self.currentBatchUploadDict["deviceId"] = deviceId
 
         do {
-            let realm = try Realm()
-
-            // Determine which samples to upload
-            let samples = realm.objects(HealthKitData).filter("healthKitTypeIdentifier = '\(HKQuantityTypeIdentifierBloodGlucose)'").sorted("createdAt")
-            let samplesCount = samples.count
-            samplesToUploadCount = min(100, samples.count)
-            remainingSamplesToUploadCount = samples.count - samplesToUploadCount
-            var samplesToUpload = [HealthKitData]()
-            for i in 0..<samplesToUploadCount {
-                samplesToUpload.append(samples[i])
+            let postBody = try NSJSONSerialization.dataWithJSONObject(self.currentBatchUploadDict, options: NSJSONWritingOptions.PrettyPrinted)
+            if defaultDebugLevel != DDLogLevel.Off {
+                let postBodyString = NSString(data: postBody, encoding: NSUTF8StringEncoding)! as String
+                DDLogVerbose("Start batch upload JSON: \(postBodyString)")
             }
-            DDLogInfo("Attempting to upload \(samplesToUploadCount) of \(samplesCount) samples")
-
-            // Set up completion
-            completion = { (error: NSError?) -> Void in
+            
+            self.uploadHandler(postBody: postBody) {
+                (error: NSError?) in
                 if error == nil {
-                    DDLogInfo("Successfully uploaded \(samplesToUploadCount) of \(samplesCount) samples")
-                    do {
-                        let realm = try Realm()
-
-                        // If successful, delete from realm
-                        try realm.write {
-                            for sample in samplesToUpload {
-                                realm.delete(sample)
-                            }
-                            DDLogInfo("Deleted \(samplesToUpload.count) samples from db after uploading to server")
-                        }
-                        
-                        self.updateLastUploadBloodGlucoseSamples(samplesToUploadCount)
-                    } catch let error as NSError! {
-                        DDLogError("Error removing samples from cache after successful upload: \(error), \(error.userInfo)")
-                    }
+                    self.uploadSamplesForBatch(samples: samples, completion: completion)
                 } else {
-                    DDLogError("Error uploading samples: \(error), \(error?.userInfo)")
+                    DDLogError("stop reading samples - error starting batch upload of samples: \(error)")
+                    self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
                 }
             }
-            
-            // Prepare upload post body
-            let dateFormatter = NSDateFormatter()
-            var samplesToUploadDictArray = [[String: AnyObject]]()
-            for sample in samplesToUpload {
-                var sampleToUploadDict = [String: AnyObject]()
-                sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
-                // sampleToUploadDict["timezoneOffset"] = sample.timeZoneOffset // Don't include this since really sourced from local time of phone at time sample is cached
-                // sampleToUploadDict["deviceTime"] = dateFormatter.isoStringFromDate(sample.startDate, zone: NSTimeZone.localTimeZone(), dateFormat: iso8601dateNoTimeZone) // TODO: my - consider adding this back if we have "receiver display time" metadata (e.g. from Dexcom Share / G4)
-                sampleToUploadDict["deviceId"] = self.batchUploadDict["deviceId"]
-                sampleToUploadDict["type"] = "cbg"
-                sampleToUploadDict["value"] = sample.value
-                sampleToUploadDict["units"] = sample.units
-                sampleToUploadDict["uploadId"] = self.batchUploadDict["uploadId"]
-                sampleToUploadDict["guid"] = sample.id
-                sampleToUploadDict["payload"] = sample.metadataDict
-                
-                samplesToUploadDictArray.append(sampleToUploadDict)
-            }
-            
-            postBody = try NSJSONSerialization.dataWithJSONObject(samplesToUploadDictArray, options: NSJSONWritingOptions.PrettyPrinted)
-        } catch let internalError as NSError? {
-            error = internalError
+        } catch let error as NSError! {
+            DDLogError("stop reading samples - error creating post body for start of batch upload: \(error)")
+            self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
         }
     }
     
-    // MARK: Private
-
-    private var batchUploadDict = [String: AnyObject]()
-    
-    private func updateLastUploadBloodGlucoseSamples(samplesUploadedCount: Int) {
+    private func uploadSamplesForBatch(samples samples: [HKSample], completion: (NSError?) -> (Void)) {
         DDLogVerbose("trace")
 
+        // Prepare upload post body
+        let dateFormatter = NSDateFormatter()
+        var samplesToUploadDictArray = [[String: AnyObject]]()
+        for sample in samples {
+            var sampleToUploadDict = [String: AnyObject]()
+            
+            sampleToUploadDict["uploadId"] = self.currentBatchUploadDict["uploadId"]
+            sampleToUploadDict["type"] = "cbg"
+            sampleToUploadDict["deviceId"] = self.currentBatchUploadDict["deviceId"]
+            sampleToUploadDict["guid"] = sample.UUID.UUIDString
+            sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
+            
+            if let quantitySample = sample as? HKQuantitySample {
+                let units = "mg/dL"
+                sampleToUploadDict["units"] = units
+                let unit = HKUnit(fromString: units)
+                let value = quantitySample.quantity.doubleValueForUnit(unit)
+                sampleToUploadDict["value"] = value
+                
+                // Add out-of-range annotation if needed
+                var annotationCode: String?
+                var annotationValue: String?
+                var annotationThreshold = 0
+                if (value < 40) {
+                    annotationCode = "bg/out-of-range"
+                    annotationValue = "low"
+                    annotationThreshold = 40
+                } else if (value > 400) {
+                    annotationCode = "bg/out-of-range"
+                    annotationValue = "high"
+                    annotationThreshold = 400
+                }
+                if let annotationCode = annotationCode,
+                       annotationValue = annotationValue {
+                    let annotations = [
+                        [
+                            "annotationCode": annotationCode,
+                            "annotationValue": annotationValue,
+                            "annotationThreshold": annotationThreshold
+                        ]
+                    ]
+                    sampleToUploadDict["annotations"] = annotations
+                }
+            }
+            
+            // Add sample metadata payload props
+            if var metadata = sample.metadata {
+                for (key, value) in metadata {
+                    if let dateValue = value as? NSDate {
+                        if key == "Receiver Display Time" {
+                            metadata[key] = dateFormatter.isoStringFromDate(dateValue, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateNoTimeZone)
+                            
+                        } else {
+                            metadata[key] = dateFormatter.isoStringFromDate(dateValue, zone: NSTimeZone(forSecondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
+                        }
+                    }
+                }
+                
+                // If "Receiver Display Time" exists, use that as deviceTime and remove from metadata payload
+                if let receiverDisplayTime = metadata["Receiver Display Time"] {
+                    sampleToUploadDict["deviceTime"] = receiverDisplayTime
+                    metadata.removeValueForKey("Receiver Display Time")
+                }
+                sampleToUploadDict["payload"] = metadata
+            }
+            
+            // Add sample
+            samplesToUploadDictArray.append(sampleToUploadDict)
+        }
+
+        do {
+            let postBody = try NSJSONSerialization.dataWithJSONObject(samplesToUploadDictArray, options: NSJSONWritingOptions.PrettyPrinted)
+            if defaultDebugLevel != DDLogLevel.Off {
+                let postBodyString = NSString(data: postBody, encoding: NSUTF8StringEncoding)! as String
+                DDLogVerbose("Samples to upload: \(postBodyString)")
+            }
+            
+            self.uploadHandler(postBody: postBody) {
+                (error: NSError?) in
+                if error == nil {
+                    self.updateStats(samples.count)
+                    
+                    if let (_, samples) = self.currentSamplesToUploadBySource.popFirst() {
+                        // Start next batch upload for groups
+                        self.startBatchUpload(samples: samples, completion: completion)
+                    } else {
+                        // Stop reading
+                        DDLogInfo("stop reading samples - finished uploading batch")
+                        self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
+
+                        // Try to read more samples    
+                        DDLogInfo("start reading samples - finished uploading batch - check for more samples")
+                        self.startReadingBloodGlucoseSamples()
+                    }
+                } else {
+                    DDLogError("stop reading samples - error uploading samples: \(error)")
+                    self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
+                }
+            }
+        } catch let error as NSError! {
+            DDLogError("stop reading samples - error creating post body for start of batch upload: \(error)")
+            self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
+        }
+    }
+    
+    private func deviceModelForSourceBundleIdentifier(sourceBundleIdentifier: String) -> String {
+        var deviceModel = ""
+        
+        if sourceBundleIdentifier.lowercaseString.rangeOfString("com.dexcom.cgm") != nil {
+            deviceModel = "DexG5"
+        } else if sourceBundleIdentifier.lowercaseString.rangeOfString("com.dexcom.share2") != nil {
+            deviceModel = "DexG4"
+        } else {
+            DDLogError("Unknown Dexcom sourceBundleIdentifier: \(sourceBundleIdentifier)")
+            deviceModel = "DexUnknown"
+        }
+        
+        return "HealthKit_\(deviceModel)"
+    }
+    
+    private func filteredSamplesGroupedBySource(var samples: [HKSample]) -> [String: [HKSample]] {
+        var filteredSamplesBySource = [String: [HKSample]]()
+        
+        samples.sortInPlace({x, y in
+            return x.startDate.compare(y.startDate) == .OrderedAscending
+        })
+        
+        // Group by source
+        for sample in samples {
+            let sourceRevision = sample.sourceRevision
+            let source = sourceRevision.source
+            let sourceBundleIdentifier = source.bundleIdentifier
+
+            if source.name.lowercaseString.rangeOfString("dexcom") == nil {
+                DDLogInfo("Ignoring non-Dexcom glucose data")
+                continue
+            }
+
+            if filteredSamplesBySource[sourceBundleIdentifier] == nil {
+                filteredSamplesBySource[sourceBundleIdentifier] = [HKSample]()
+            }
+            filteredSamplesBySource[sourceBundleIdentifier]?.append(sample)
+        }
+    
+        return filteredSamplesBySource
+    }
+    
+    private func updateStats(samplesUploadedCount: Int) {
+        DDLogVerbose("trace")
+        
         if samplesUploadedCount > 0 {
+            DDLogInfo("Successfully uploaded \(samplesUploadedCount) samples")
+            
             self.lastUploadTimeBloodGlucoseSamples = NSDate()
             self.lastUploadCountBloodGlucoseSamples = samplesUploadedCount
             self.totalUploadCountBloodGlucoseSamples += samplesUploadedCount
-
+            
             NSUserDefaults.standardUserDefaults().setObject(lastUploadTimeBloodGlucoseSamples, forKey: "lastUploadTimeBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().setInteger(lastUploadCountBloodGlucoseSamples, forKey: "lastUploadCountBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().setInteger(totalUploadCountBloodGlucoseSamples, forKey: "totalUploadCountBloodGlucoseSamples")
@@ -264,4 +409,9 @@ class HealthKitDataUploader {
             }
         }
     }
+    
+    private var currentUserId: String?
+    private var currentSamplesToUploadBySource = [String: [HKSample]]()
+    private var currentBatchUploadDict = [String: AnyObject]()
+    private var isReadingBloodGlucoseSamples = false
 }

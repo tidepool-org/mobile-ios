@@ -104,7 +104,7 @@ class HealthKitManager {
     
     // MARK: Observation
     
-    func startObservingBloodGlucoseSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!) {
+    func startObservingBloodGlucoseSamples(observationHandler: (NSError?) -> (Void)) {
         DDLogVerbose("trace")
 
         guard isHealthDataAvailable else {
@@ -112,28 +112,24 @@ class HealthKitManager {
             return
         }
         
-        if !bloodGlucoseObservationSuccessful {
-            if bloodGlucoseObservationQuery != nil {
-                healthStore?.stopQuery(bloodGlucoseObservationQuery!)
-            }
-            
-            let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
-            bloodGlucoseObservationQuery = HKObserverQuery(sampleType: sampleType, predicate: nil) {
-                [unowned self](query, observerQueryCompletion, error) in
-                if error == nil {
-                    self.bloodGlucoseObservationSuccessful = true
-                    self.readBloodGlucoseSamples(resultsHandler)
-                } else {
-                    DDLogError("HealthKit observation error \(error), \(error!.userInfo)")
-                    if resultsHandler != nil {
-                        resultsHandler(nil, nil, error);
-                    }
-                }
-                
-                observerQueryCompletion()
-            }
-            healthStore?.executeQuery(bloodGlucoseObservationQuery!)
+        if bloodGlucoseObservationQuery != nil {
+            healthStore?.stopQuery(bloodGlucoseObservationQuery!)
+            bloodGlucoseObservationQuery = nil
         }
+        
+        let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
+        bloodGlucoseObservationQuery = HKObserverQuery(sampleType: sampleType, predicate: nil) {
+            (query, observerQueryCompletion, error) in
+            
+            DDLogVerbose("Observation query called")
+
+            observationHandler(error)
+            
+            if error != nil {
+                DDLogError("HealthKit observation error \(error), \(error!.userInfo)")
+            }
+        }
+        healthStore?.executeQuery(bloodGlucoseObservationQuery!)
     }
     
     func stopObservingBloodGlucoseSamples() {
@@ -144,12 +140,9 @@ class HealthKitManager {
             return
         }
         
-        if bloodGlucoseObservationSuccessful {
-            if bloodGlucoseObservationQuery != nil {
-                healthStore?.stopQuery(bloodGlucoseObservationQuery!)
-                bloodGlucoseObservationQuery = nil
-            }
-            bloodGlucoseObservationSuccessful = false
+        if bloodGlucoseObservationQuery != nil {
+            healthStore?.stopQuery(bloodGlucoseObservationQuery!)
+            bloodGlucoseObservationQuery = nil
         }
     }
     
@@ -293,7 +286,7 @@ class HealthKitManager {
         }
     }
     
-    func readBloodGlucoseSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!)
+    func readBloodGlucoseSamples(resultsHandler: (([HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
     {
         DDLogVerbose("trace")
         
@@ -314,9 +307,13 @@ class HealthKitManager {
             anchor: queryAnchor,
             limit: 100) {
                 (query, newSamples, deletedSamples, newAnchor, error) -> Void in
+
+                if error != nil {
+                    DDLogError("Error observing samples: \(error)")
+                }
                 
-                if resultsHandler != nil {
-                    resultsHandler(newSamples, deletedSamples, error)
+                resultsHandler(newSamples) {
+                    (error: NSError?) in
                     
                     if error == nil && newAnchor != nil {
                         let queryAnchorData = NSKeyedArchiver.archivedDataWithRootObject(newAnchor!)
@@ -347,7 +344,7 @@ class HealthKitManager {
         let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
             predicate: nil,
             anchor: queryAnchor,
-            limit: Int(HKObjectQueryNoLimit /* 100 */)) { // TODO: my - 0 - need to limit to like 100 or so once clients are properly handling the "more" case like we do for observing/caching blood glucose data
+            limit: Int(HKObjectQueryNoLimit /* 100 */)) { // TODO: need to limit to like 100 or so once clients are properly handling the "more" case like we do for observing/caching blood glucose data
                 
                 (query, newSamples, deletedSamples, newAnchor, error) -> Void in
                 
@@ -366,7 +363,6 @@ class HealthKitManager {
     
     // MARK: Private
     
-    private var bloodGlucoseObservationSuccessful = false
     private var bloodGlucoseObservationQuery: HKObserverQuery?
     private var bloodGlucoseBackgroundDeliveryEnabled = false
     private var bloodGlucoseQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)

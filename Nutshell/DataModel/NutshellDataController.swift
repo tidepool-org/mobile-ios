@@ -112,33 +112,22 @@ class NutDataController: NSObject
         if currentUserId != nil  {
             interfaceEnabled = healthKitInterfaceEnabledForCurrentUser()
             if !interfaceEnabled {
-                NSLog("configureHealthKitInterface: disable because not enabled for current user!")
+                DDLogVerbose("disable because not enabled for current user!")
             }
         } else {
             interfaceEnabled = false
-            NSLog("configureHealthKitInterface: disable because no current user!")
+            DDLogVerbose("disable because no current user!")
         }
         
-        NSNotificationCenter.defaultCenter().removeObserver(self)
-        
         if interfaceEnabled {
-            
-            NSLog("configureHealthKitInterface: enable!")
-            // Start upload after every notification of new cached blood glucose samples
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: "startUploadIfNecessary", name: HealthKitDataCache.Notifications.CachedBloodGlucoseSamples, object: nil)
-
-            // Turn on background blood glucose HealthKit monitoring, if available on this device
-            HealthKitDataCache.sharedInstance.startCaching(
-                shouldCacheBloodGlucoseSamples: true,
-                shouldCacheWorkoutSamples: false)
+            DDLogVerbose("enable!")
+            HealthKitDataUploader.sharedInstance.startUploading(currentUserId: currentUserId)
             monitorForWorkoutData(true)
-            startUploadIfNecessary()
             HealthKitDataPusher.sharedInstance.enablePushToHealthKit(true)
         } else {
-            NSLog("configureHealthKitInterface: disable!")
+            DDLogVerbose("disable!")
+            HealthKitDataUploader.sharedInstance.stopUploading()
             monitorForWorkoutData(false)
-            HealthKitDataCache.sharedInstance.stopCaching(shouldStopCachingBloodGlucoseSamples: true, shouldStopCachingWorkoutSamples: true)
-            stopUploadIfNecessary()
             HealthKitDataPusher.sharedInstance.enablePushToHealthKit(false)
         }
     }
@@ -225,27 +214,27 @@ class NutDataController: NSObject
             DDLogError("No logged in user at enableHealthKitInterface!")
             return
         }
-        
+
+        func configureCurrentHealthKitUser() {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.setBool(true, forKey:self.kHealthKitInterfaceEnabledKey)
+            if !self.healthKitInterfaceEnabledForCurrentUser() {
+                defaults.setValue(currentUserId!, forKey: kHealthKitInterfaceUserIdKey)
+                // may be nil...
+                defaults.setValue(userFullName, forKey: kHealthKitInterfaceUserNameKey)
+            }
+            NSUserDefaults.standardUserDefaults().synchronize()
+        }
+
         HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSamples: true, shouldAuthorizeWorkoutSamples: true) {
             success, error -> Void in
             if (error == nil) {
-                self.configureCurrentHealthKitUser()
+                configureCurrentHealthKitUser()
                 self.configureHealthKitInterface()
             } else {
                 NSLog("Error authorizing health data \(error), \(error!.userInfo)")
             }
         }
-    }
-    
-    private func configureCurrentHealthKitUser() {
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setBool(true, forKey:self.kHealthKitInterfaceEnabledKey)
-        if !self.healthKitInterfaceEnabledForCurrentUser() {
-            defaults.setValue(currentUserId!, forKey: kHealthKitInterfaceUserIdKey)
-            // may be nil...
-            defaults.setValue(userFullName, forKey: kHealthKitInterfaceUserNameKey)
-        }
-        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
     /// Disables HealthKit for current user
@@ -305,83 +294,6 @@ class NutDataController: NSObject
         return result
     }
     
-    //
-    // MARK: - Healthkit uploading to Tidepool
-    //
-
-    // Upload timer
-    private var uploadTimer: NSTimer?
-
-    // TODO: my - 0 - Ideally we should also do upload in background after processing background delivered samples from HealthKit and to complete any initial upload
-    func startUploadIfNecessary() {
-        NSLog("startUploadIfNecessary")
-        
-        guard currentUserId != nil && !HealthKitDataUploader.sharedInstance.isUploading else {
-            return
-        }
-        
-        // Start upload timer to check for new samples every minute
-        if uploadTimer == nil {
-            uploadTimer = NSTimer.scheduledTimerWithTimeInterval(
-                60,
-                target: self,
-                selector: "startUploadIfNecessary",
-                userInfo: nil,
-                repeats: true)
-        }
-
-        guard HealthKitDataUploader.sharedInstance.hasSamplesToUpload else {
-            return
-        }
-        
-        HealthKitDataUploader.sharedInstance.startBatchUpload(userId: currentUserId!) {
-            (postBody: NSData, remainingSamplesCount: Int) -> Void in
-            
-            APIConnector.connector().doUpload(postBody) {
-                (error: NSError?) -> Void in
-                
-                self.uploadNextOrFinishBatch(error: error, remainingSamplesCount: remainingSamplesCount)
-            }
-        }
-    }
-    
-    private func uploadNextOrFinishBatch(error error: NSError?, remainingSamplesCount: Int) {
-        guard error == nil &&
-            remainingSamplesCount > 0 &&
-            currentUserId != nil else {
-                HealthKitDataUploader.sharedInstance.finishBatchUpload()
-                return
-        }
-        
-        HealthKitDataUploader.sharedInstance.uploadNextForBatch({ (error: NSError?, postBody: NSData?, samplesToUploadCount: Int, remainingSamplesCount: Int, completion: (NSError?) -> (Void)) -> Void in
-            
-            if error == nil && samplesToUploadCount > 0 {
-                APIConnector.connector().doUpload(postBody!) {
-                    (error: NSError?) -> Void in
-                    
-                    completion(error)
-                    
-                    dispatch_async(dispatch_get_main_queue()) {
-                        self.uploadNextOrFinishBatch(error: error, remainingSamplesCount: remainingSamplesCount)
-                    }
-                }
-            } else {
-                HealthKitDataUploader.sharedInstance.finishBatchUpload()
-            }
-        })
-    }
-    
-    private func stopUploadIfNecessary() {
-        if uploadTimer != nil {
-            uploadTimer!.invalidate()
-            uploadTimer = nil
-        }
-        
-        if HealthKitDataUploader.sharedInstance.isUploading {
-            HealthKitDataUploader.sharedInstance.finishBatchUpload()
-        }
-    }
-
     //
     // MARK: - Loading workout events from Healthkit
     //
