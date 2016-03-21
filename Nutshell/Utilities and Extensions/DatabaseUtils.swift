@@ -93,8 +93,8 @@ class DatabaseUtils {
         }
     }
     
-    class func updateEventsForTimeRange(startTime: NSDate, endTime: NSDate, moc: NSManagedObjectContext, eventsJSON: JSON) -> (Int, Int) {
-        NSLog("updateEventsForTimeRange from \(startTime) to \(endTime)")
+    class func updateEventsForTimeRange(startTime: NSDate, endTime: NSDate, objectTypes: [String] = ["smbg","bolus","cbg","wizard","basal"], moc: NSManagedObjectContext, eventsJSON: JSON) -> (Int, Int) {
+        NSLog("updateEventsForTimeRange from \(startTime) to \(endTime) for types \(objectTypes)")
         // NSLog("Events from \(startTime) to \(endTime): \(eventsJSON)")
         var deleteEventCounter = 0
         // Delete all tidepool items in range before adding the new ones...
@@ -102,7 +102,7 @@ class DatabaseUtils {
             let request = NSFetchRequest(entityName: "CommonData")
             // Return all objects in the requested range, exclusive of start time and inclusive of end time, to match server fetch
             // NOTE: This would include Meal and Workout items if they were part of this database!
-            request.predicate = NSPredicate(format: "(time > %@) AND (time <= %@)", startTime, endTime)
+            request.predicate = NSPredicate(format: "(type IN %@) AND (time > %@) AND (time <= %@)", objectTypes, startTime, endTime)
             request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
             let events = try moc.executeFetchRequest(request) as! [NSManagedObject]
             for obj: NSManagedObject in events {
@@ -121,7 +121,7 @@ class DatabaseUtils {
         for (_, subJson) in eventsJSON {
             //NSLog("updateEvents next subJson: \(subJson)")
             if let obj = CommonData.fromJSON(subJson, moc: moc) {
-                // Remove existing object with the same ID
+                // add objects
                 if let _=obj.id {
                     insertEventCounter++
                     moc.insertObject(obj)

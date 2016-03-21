@@ -145,7 +145,13 @@ class HealthKitDataPusher: NSObject {
             completion(0)
             return
         }
-        
+
+        if !APIConnector.connector().serviceAvailable() {
+            DDLogVerbose("skipping sync, no service available!")
+            completion(-1)
+            return
+        }
+
         let currentTime = NSDate()
         if let lastPushToHK = lastPushToHK {
             let timeIntervalSinceLastSync = currentTime.timeIntervalSinceDate(lastPushToHK)
@@ -163,16 +169,23 @@ class HealthKitDataPusher: NSObject {
         let generationForThisSync = self.currentSyncGeneration
         
         // first load up data from Tidepool service for this timeframe
-        DatabaseUtils.checkLoadDataForDateRange(startTime, endDate: currentTime) { netLoadCount -> Void in
-            DDLogVerbose("net load count: \(netLoadCount)")
-            // Note: even if no net new items were loaded, they may have already been in the Tidepool item database, so we still want to do the HealthKit sync...
-            if generationForThisSync == self.currentSyncGeneration {
-                self.fetchLatestCachedData(generationForThisSync, fromTime: startTime, thruTime: currentTime, completion: completion)
-            } else {
-                DDLogVerbose("assuming current sync was aborted!")
-                self.finishSync(generationForThisSync, itemsSynced: 0, completion: completion)
-            }
-        }
+        APIConnector.connector().getReadOnlyUserData(startTime, endDate: currentTime, objectTypes: "smbg", completion: { (result) -> (Void) in
+                if result.isSuccess {
+                    let (adds, deletes) = DatabaseUtils.updateEventsForTimeRange(startTime, endTime: currentTime, objectTypes: ["smbg"], moc: NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: result.value!)
+                    DDLogVerbose("Adds: \(adds), deletes: \(deletes) in range \(startTime) to \(currentTime)")
+                } else {
+                    DDLogVerbose("No events in range \(startTime) to \(currentTime)")
+                }
+                
+                // Note: even if no net new items were loaded, they may have already been in the Tidepool item database, so we still want to do the HealthKit sync...
+                if generationForThisSync == self.currentSyncGeneration {
+                    self.fetchLatestCachedData(generationForThisSync, fromTime: startTime, thruTime: currentTime, completion: completion)
+                } else {
+                    DDLogVerbose("assuming current sync was aborted!")
+                    self.finishSync(generationForThisSync, itemsSynced: 0, completion: completion)
+                }
+
+            })
         // The background fetch continues next, in fetchLatestCachedData
     }
 

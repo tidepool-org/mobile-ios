@@ -323,14 +323,14 @@ class APIConnector {
         }
     }
     
-    func getReadOnlyUserData(startDate: NSDate? = nil, endDate: NSDate? = nil,completion: (Result<JSON, NSError>) -> (Void)) {
+    func getReadOnlyUserData(startDate: NSDate? = nil, endDate: NSDate? = nil,  objectTypes: String = "smbg,bolus,cbg,wizard,basal", completion: (Result<JSON, NSError>) -> (Void)) {
         // Set our endpoint for the user data
         // TODO: centralize define of read-only events!
         // request format is like: https://api.tidepool.org/data/f934a287c4?endDate=2015-11-17T08%3A00%3A00%2E000Z&startDate=2015-11-16T12%3A00%3A00%2E000Z&type=smbg%2Cbolus%2Ccbg%2Cwizard%2Cbasal
         let endpoint = "data/" + NutDataController.controller().currentUserId!
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
         // TODO: If there is no data returned, I get a failure case with status code 200, and error FAILURE: Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.} ] Maybe an Alamofire issue?
-        var parameters: Dictionary = ["type":"smbg,bolus,cbg,wizard,basal"]
+        var parameters: Dictionary = ["type": objectTypes]
         if let startDate = startDate {
             // NOTE: start date is excluded (i.e., dates > start date)
             parameters.updateValue(NutUtils.dateToJSON(startDate), forKey: "startDate")
