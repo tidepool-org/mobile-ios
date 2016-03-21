@@ -29,6 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     static var testMode: Bool = false
     static var healthKitUIEnabled: Bool = true
+    // one shot, true until we go to foreground...
+    private var freshLaunch = true
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -71,45 +73,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Set up the API connection
         APIConnector.connector().configure()
-        attemptTokenLogin()
         
         NSLog("did finish launching")
         return true
+        
+        // Note: for non-background launches, this will continue in applicationWillEnterForeground...
     }
     
     class func configureHealthKitUIEnable(enable: Bool) {
         NSUserDefaults.standardUserDefaults().setBool(enable, forKey: "kHealthKitUIEnabled_Key")
         NSUserDefaults.standardUserDefaults().synchronize()
-    }
-    
-    func attemptTokenLogin() {
-        let api = APIConnector.connector()
-        if api.sessionToken == nil {
-            NSLog("No token available, clear any data in case user did not log out normally")
-            api.logout() {
-                self.setupUIForLogin()
-            }
-            return
-        }
-        
-        if !api.isConnectedToNetwork() {
-            setupUIForLogin()
-            return
-        }
-        
-        NSLog("AppDelegate: attempting to refresh token...")
-        api.refreshToken() { succeeded -> (Void) in
-            if succeeded {
-                NutDataController.controller().configureHealthKitInterface()
-                // TODO: only if app is in the foreground?
-                self.setupUIForLoginSuccess()
-            } else {
-                NSLog("Refresh token failed, need to log in normally")
-                api.logout() {
-                    self.setupUIForLogin()
-                }
-            }
-        }
     }
     
     func setupUIForLogin() {
@@ -132,10 +105,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.rootViewController = vc
         }
     }
-
+    
     // Support for background fetch
     func application(application: UIApplication, performFetchWithCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         NSLog("performFetchWithCompletionHandler")
+        // first make sure we are logged in and have connectivity
+        
+        let api = APIConnector.connector()
+        if api.sessionToken == nil {
+            NSLog("No token available, user will need to log in!")
+            completionHandler(.Failed)
+            return
+        }
+        
+        if !api.isConnectedToNetwork() {
+            NSLog("No network available!")
+            completionHandler(.Failed)
+            return
+        }
+        // make sure HK interface is configured...
+        // TODO: this can kick off a lot of activity! Review...
+        // Note: configureHealthKitInterface is somewhat background-aware...
+        NutDataController.controller().configureHealthKitInterface()
+        // then call it...
         HealthKitDataPusher.sharedInstance.backgroundFetch { (fetchResult) -> Void in
             completionHandler(fetchResult)
         }
@@ -156,21 +148,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(application: UIApplication) {
         NSLog("Nutshell applicationWillEnterForeground")
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-
-        // TODO: This prevents offline usage; is that desirable? Should we only refresh after a certain delay, or if "remember me" was not checked?
-        
-        // Refresh the auth token
-//        API?.refreshToken({ (succeeded) -> (Void) in
-//            if ( !succeeded ) {
-//                // We need to log the user out and have them log in again
-//                self.logout()
-//            }
-//        })
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         NSLog("Nutshell applicationDidBecomeActive")
+        if freshLaunch {
+            freshLaunch = false
+            let api = APIConnector.connector()
+            if api.sessionToken == nil {
+                NSLog("No token available, clear any data in case user did not log out normally")
+                api.logout() {
+                    self.setupUIForLogin()
+                }
+                return
+            }
+            
+            if !api.isConnectedToNetwork() {
+                setupUIForLogin()
+                return
+            }
+            
+            NSLog("AppDelegate: attempting to refresh token...")
+            api.refreshToken() { succeeded -> (Void) in
+                if succeeded {
+                    NutDataController.controller().configureHealthKitInterface()
+                    // TODO: only if app is in the foreground?
+                    self.setupUIForLoginSuccess()
+                } else {
+                    NSLog("Refresh token failed, need to log in normally")
+                    api.logout() {
+                        self.setupUIForLogin()
+                    }
+                }
+            }
+        }
     }
 
     func applicationWillTerminate(application: UIApplication) {

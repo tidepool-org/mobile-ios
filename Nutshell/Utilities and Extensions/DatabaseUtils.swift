@@ -54,7 +54,8 @@ class DatabaseUtils {
         let now = NSDate()
         let startBucket = DatabaseUtils.dateToBucketNumber(startDate)
         let endBucket = DatabaseUtils.dateToBucketNumber(endDate)
-        var netItemsAdded = 0
+        var itemsAdded = 0
+        var itemsDeleted = 0
         for bucket in startBucket...endBucket {
             
             if let lastFetchDate = serverBlocks[bucket] {
@@ -73,22 +74,27 @@ class DatabaseUtils {
                 let endTime = DatabaseUtils.bucketNumberToDate(bucket+1)
                 APIConnector.connector().getReadOnlyUserData(startTime, endDate:endTime, completion: { (result) -> (Void) in
                     if result.isSuccess {
-                        let netAdds = DatabaseUtils.updateEventsForTimeRange(startTime, endTime: endTime, moc: NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: result.value!)
-                        netItemsAdded += netAdds
+                        let (adds, deletes) = DatabaseUtils.updateEventsForTimeRange(startTime, endTime: endTime, moc: NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: result.value!)
+                        itemsAdded += adds
+                        itemsDeleted += deletes
                     } else {
                         NSLog("No events in range \(startTime) to \(endTime)")
                     }
                 })
+            } else {
+                NSLog("skipping: serviceAvailable is false")
             }
+            
         }
         // Call optional completion routine with estimate of items added (net of adds less deletes)
+        NSLog("items added: \(itemsAdded), deleted: \(itemsDeleted), net: \(itemsAdded-itemsDeleted)")
         if let completion = completion {
-            completion(netItemsAdded)
+            completion(itemsAdded-itemsDeleted)
         }
     }
     
-    class func updateEventsForTimeRange(startTime: NSDate, endTime: NSDate, moc: NSManagedObjectContext, eventsJSON: JSON) -> Int {
-        
+    class func updateEventsForTimeRange(startTime: NSDate, endTime: NSDate, moc: NSManagedObjectContext, eventsJSON: JSON) -> (Int, Int) {
+        NSLog("updateEventsForTimeRange from \(startTime) to \(endTime)")
         // NSLog("Events from \(startTime) to \(endTime): \(eventsJSON)")
         var deleteEventCounter = 0
         // Delete all tidepool items in range before adding the new ones...
@@ -133,15 +139,13 @@ class DatabaseUtils {
         do {
             try moc.save()
             //NSLog("updateEventsForTimeRange \(startTime) to \(endTime): Database saved!")
-            //dispatch_async(dispatch_get_main_queue()) {
             notifyOnDataLoad()
-            //}
         } catch let error as NSError {
             NSLog("Failed to save MOC: \(error)")
         }
         
         // return net events added...
-        return insertEventCounter - deleteEventCounter
+        return (insertEventCounter, deleteEventCounter)
     }
     
     class func updateEvents(moc: NSManagedObjectContext, eventsJSON: JSON) {

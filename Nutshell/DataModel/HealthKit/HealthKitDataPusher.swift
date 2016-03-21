@@ -79,13 +79,21 @@ class HealthKitDataPusher: NSObject {
     ///
     /// TODO: this will not disable a push in progress.
     func enablePushToHealthKit(enable: Bool) {
+        DDLogVerbose("")
         if enable {
             UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(
                 kMinTimeIntervalBetweenSyncs)
             NSLog("Min fetch is \(kMinTimeIntervalBetweenSyncs)")
-            downloadNewItemsForHealthKit() { (itemsDownloaded) -> Void in
-                DDLogVerbose("Non-background fetch push completed with itemcount = \(itemsDownloaded)")
-                return
+            
+            // kick off a download now if we are in the foreground...
+            let state = UIApplication.sharedApplication().applicationState
+            if state != .Background {
+                downloadNewItemsForHealthKit() { (itemsDownloaded) -> Void in
+                    DDLogVerbose("Non-background fetch push completed with itemcount = \(itemsDownloaded)")
+                    return
+                }
+            } else {
+                DDLogVerbose("app in background, download happens later")
             }
         } else {
             UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(
@@ -238,7 +246,7 @@ class HealthKitDataPusher: NSObject {
                     if let tidepoolId = metaDataDict["tidepoolId"] {
                         self.tidepoolIdsPushedToHealthKit.insert(tidepoolId as! String)
                         tidepoolItemsInHKCount++
-                        DDLogVerbose("added HK item at time \(item.startDate) and value: \(value) with tidepool id: \(tidepoolId) to exclusion list")
+                        DDLogVerbose("existing HK item at time \(item.startDate), value: \(value)")
                     } else {
                         DDLogVerbose("ignoring HK item with no tidepoolId metadata: time \(item.startDate) and value: \(value)")
                     }
@@ -343,7 +351,7 @@ class HealthKitDataPusher: NSObject {
             // TODO: add guid to metadata as well, need to rev data model to add this...
             let metadata = ["tidepoolId": itemId, "deviceId": deviceId, "type": type]
             let bgSample = HKQuantitySample(type: bgType!, quantity: bgQuantity, startDate: time, endDate: time, metadata: metadata)
-            DDLogVerbose("adding candidate Tidepool item with id \(itemId), time: \(time), type: \(type)")
+            DDLogVerbose("candidate Tidepool item at time: \(time), value: \(bgQuantity)")
             itemsToPush.append(bgSample)
         } else {
             DDLogError("item missing id, type, or time!")
