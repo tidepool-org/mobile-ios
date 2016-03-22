@@ -30,7 +30,6 @@ class LoginViewController: BaseUIViewController {
     @IBOutlet weak var passwordTextField: NutshellUITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var loginIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var rememberMeButton: UIButton!
     @IBOutlet weak var errorFeedbackLabel: NutshellUILabel!
     @IBOutlet weak var forgotPasswordLabel: NutshellUILabel!
     
@@ -132,16 +131,12 @@ class LoginViewController: BaseUIViewController {
         passwordTextField.becomeFirstResponder()
     }
     
-    @IBAction func rememberMeButtonTapped(sender: AnyObject) {
-        rememberMeButton.selected = !rememberMeButton.selected
-    }
-    
     @IBAction func login_button_tapped(sender: AnyObject) {
         updateButtonStates()
         loginIndicator.startAnimating()
         
         APIConnector.connector().login(emailTextField.text!,
-            password: passwordTextField.text!, remember: rememberMeButton.selected) { (result:Alamofire.Result<User, NSError>) -> (Void) in
+            password: passwordTextField.text!) { (result:Alamofire.Result<User, NSError>) -> (Void) in
                 //NSLog("Login result: \(result)")
                 self.processLoginResult(result)
         }

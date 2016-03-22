@@ -48,11 +48,10 @@ class APIConnector {
     
     // Session token, acquired on login and saved in NSUserDefaults
     // TODO: save in database?
-    private var _rememberToken = true
     private var _sessionToken: String?
     var sessionToken: String? {
         set(newToken) {
-            if ( newToken != nil  && _rememberToken) {
+            if ( newToken != nil ) {
                 NSUserDefaults.standardUserDefaults().setValue(newToken, forKey:kSessionTokenDefaultKey)
             } else {
                 NSUserDefaults.standardUserDefaults().removeObjectForKey(kSessionTokenDefaultKey)
@@ -165,10 +164,9 @@ class APIConnector {
     }
     
     /// Logs in the user and obtains the session token for the session (stored internally)
-    func login(username: String, password: String, remember: Bool, completion: (Result<User, NSError>) -> (Void)) {
+    func login(username: String, password: String, completion: (Result<User, NSError>) -> (Void)) {
         // Set our endpoint for login
         let endpoint = "auth/login"
-        _rememberToken = remember
         
         // Create the authorization string (user:pass base-64 encoded)
         let base64LoginString = NSString(format: "%@:%@", username, password)

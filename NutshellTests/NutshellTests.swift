@@ -42,7 +42,7 @@ class NutshellTests: XCTestCase {
     
     func login(username: String, password: String, remember: Bool, completion: (Result<User, NSError>) -> (Void)) {
         APIConnector.connector().login(email,
-            password: pass, remember: false) { (result:(Alamofire.Result<User, NSError>)) -> (Void) in
+            password: pass) { (result:(Alamofire.Result<User, NSError>)) -> (Void) in
                 print("Login result: \(result)")
                 completion(result)
         }
