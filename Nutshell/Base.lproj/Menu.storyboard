@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <mutableArray key="OpenSans-Bold.ttf">
+            <string>OpenSans-Bold</string>
+        </mutableArray>
+        <mutableArray key="OpenSans-Regular.ttf">
+            <string>OpenSans</string>
+            <string>OpenSans</string>
+        </mutableArray>
+        <mutableArray key="OpenSans-Semibold.ttf">
+            <string>OpenSans-Semibold</string>
+        </mutableArray>
+    </customFonts>
+    <scenes>
+        <!--Menu Account Settings View Controller-->
+        <scene sceneID="Tz8-D7-tVt">
+            <objects>
+                <viewController storyboardIdentifier="sidebarController" id="jOa-f6-dl3" customClass="MenuAccountSettingsViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Yfg-jr-ctW"/>
+                        <viewControllerLayoutGuide type="bottom" id="Ijt-Qt-Glr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Msq-rR-Cxe" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9OQ-uM-nfY" userLabel="SIdebarContainerView">
+                                <rect key="frame" x="0.0" y="44" width="320" height="460"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wmi-HA-2WR" userLabel="TopSection">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AkY-6Y-8Cr" userLabel="logoutView">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
+                                                <subviews>
+                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Name Here" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8eU-B6-eOM" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="25" width="320" height="24"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingUserName"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="john@doe.com" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9sA-Dh-xzl">
+                                                        <rect key="frame" x="0.0" y="59" width="320" height="24"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M98-PL-e0L" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="130" y="98" width="62" height="36"/>
+                                                        <state key="normal" title="Log out"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarLogoutButton"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="logOutTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="Pyd-hq-8ve"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="9sA-Dh-xzl" firstAttribute="top" secondItem="8eU-B6-eOM" secondAttribute="bottom" constant="10" id="6R9-S5-2h9"/>
+                                                    <constraint firstItem="M98-PL-e0L" firstAttribute="top" secondItem="9sA-Dh-xzl" secondAttribute="bottom" constant="15" id="Cs7-gR-5Tu"/>
+                                                    <constraint firstItem="9sA-Dh-xzl" firstAttribute="width" secondItem="AkY-6Y-8Cr" secondAttribute="width" id="E4c-pJ-uW5"/>
+                                                    <constraint firstItem="8eU-B6-eOM" firstAttribute="top" secondItem="AkY-6Y-8Cr" secondAttribute="top" constant="25" id="JfD-yC-7gb"/>
+                                                    <constraint firstItem="8eU-B6-eOM" firstAttribute="centerX" secondItem="AkY-6Y-8Cr" secondAttribute="centerX" id="PMu-U3-46m"/>
+                                                    <constraint firstItem="M98-PL-e0L" firstAttribute="centerX" secondItem="AkY-6Y-8Cr" secondAttribute="centerX" id="ZOE-yx-5MW"/>
+                                                    <constraint firstItem="9sA-Dh-xzl" firstAttribute="centerX" secondItem="AkY-6Y-8Cr" secondAttribute="centerX" id="orC-Le-pAu"/>
+                                                    <constraint firstItem="8eU-B6-eOM" firstAttribute="width" secondItem="AkY-6Y-8Cr" secondAttribute="width" id="pXm-rD-KRL"/>
+                                                </constraints>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Rq-xO-II6" userLabel="line separator" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="67" y="148" width="187" height="1"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="187" id="ZnI-lJ-ftw"/>
+                                                    <constraint firstAttribute="height" constant="1" id="zLG-cE-aHd"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="AkY-6Y-8Cr" firstAttribute="leading" secondItem="Wmi-HA-2WR" secondAttribute="leading" id="5EP-RC-Meb"/>
+                                            <constraint firstItem="AkY-6Y-8Cr" firstAttribute="top" secondItem="Wmi-HA-2WR" secondAttribute="top" id="UQ4-Yb-nvB"/>
+                                            <constraint firstAttribute="bottom" secondItem="AkY-6Y-8Cr" secondAttribute="bottom" id="Vig-iR-Ka6"/>
+                                            <constraint firstAttribute="trailing" secondItem="AkY-6Y-8Cr" secondAttribute="trailing" id="cyo-hc-7Ln"/>
+                                            <constraint firstAttribute="bottom" secondItem="9Rq-xO-II6" secondAttribute="bottom" constant="1" id="h6V-Ib-FCX"/>
+                                            <constraint firstItem="9Rq-xO-II6" firstAttribute="centerX" secondItem="Wmi-HA-2WR" secondAttribute="centerX" id="jNm-dX-MGh"/>
+                                            <constraint firstAttribute="height" constant="150" id="ype-nj-ENU"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ls-ZC-LIS" userLabel="MiddleSection">
+                                        <rect key="frame" x="0.0" y="150" width="320" height="264"/>
+                                        <subviews>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Privacy and Terms of Use" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Vvg-5y-QfG" userLabel="privacyTextField">
+                                                <rect key="frame" x="48" y="27" width="225" height="37"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="37" id="DpS-4Q-1po"/>
+                                                    <constraint firstAttribute="width" constant="225" id="Vyn-Ff-NBK"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="9g5-rw-efz">
+                                                <rect key="frame" x="211" y="72" width="51" height="31"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="49" id="oVg-zV-LGc"/>
+                                                </constraints>
+                                                <connections>
+                                                    <action selector="enableHealthData:" destination="jOa-f6-dl3" eventType="valueChanged" id="fFy-Am-V5h"/>
+                                                </connections>
+                                            </switch>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Link to Apple Health" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2n-bT-OD5" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="62" y="77" width="141" height="21"/>
+                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
+                                                <color key="textColor" red="0.29019607843137252" green="0.29019607843137252" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingItemSmall"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kci-7b-geJ" userLabel="supportMailToLink" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="227" width="320" height="37"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="37" id="y7L-nb-Mhn"/>
+                                                </constraints>
+                                                <state key="normal" title="Tidepool Support"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarOtherLinks"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="supportButtonHandler:" destination="jOa-f6-dl3" eventType="touchUpInside" id="327-b0-GWQ"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="M2n-bT-OD5" firstAttribute="centerY" secondItem="9g5-rw-efz" secondAttribute="centerY" id="3jW-ih-RHr"/>
+                                            <constraint firstAttribute="trailing" secondItem="Kci-7b-geJ" secondAttribute="trailing" id="7Cw-2K-HjL"/>
+                                            <constraint firstItem="9g5-rw-efz" firstAttribute="leading" secondItem="M2n-bT-OD5" secondAttribute="trailing" constant="8" id="RTX-7V-4uf"/>
+                                            <constraint firstItem="Vvg-5y-QfG" firstAttribute="top" secondItem="9Ls-ZC-LIS" secondAttribute="top" constant="27" id="WhU-pB-Snh"/>
+                                            <constraint firstItem="M2n-bT-OD5" firstAttribute="top" secondItem="Vvg-5y-QfG" secondAttribute="bottom" constant="13" id="gTs-xs-bad"/>
+                                            <constraint firstItem="Vvg-5y-QfG" firstAttribute="centerX" secondItem="9Ls-ZC-LIS" secondAttribute="centerX" id="hCu-aM-LeR"/>
+                                            <constraint firstItem="M2n-bT-OD5" firstAttribute="centerX" secondItem="Vvg-5y-QfG" secondAttribute="centerX" constant="-28" id="hw7-2V-IuD"/>
+                                            <constraint firstAttribute="bottom" secondItem="Kci-7b-geJ" secondAttribute="bottom" id="imd-cV-rhn"/>
+                                            <constraint firstItem="Kci-7b-geJ" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" id="xit-8Z-pWK"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7mt-7W-tG5" userLabel="bottomSettingsView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="414" width="320" height="30"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mA2-zl-vsY" userLabel="versionView">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.3 on Production" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FRD-xW-MeJ" userLabel="versionString" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="98" y="5" width="125" height="21"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingItemSmall"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="FRD-xW-MeJ" firstAttribute="centerX" secondItem="mA2-zl-vsY" secondAttribute="centerX" id="5fV-oV-mYm"/>
+                                                    <constraint firstItem="FRD-xW-MeJ" firstAttribute="centerY" secondItem="mA2-zl-vsY" secondAttribute="centerY" id="xr3-4N-tJa"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="2nh-z0-mbz"/>
+                                            <constraint firstItem="mA2-zl-vsY" firstAttribute="leading" secondItem="7mt-7W-tG5" secondAttribute="leading" id="85E-S8-TxO"/>
+                                            <constraint firstItem="mA2-zl-vsY" firstAttribute="top" secondItem="7mt-7W-tG5" secondAttribute="top" id="Cpg-Yp-Snz"/>
+                                            <constraint firstAttribute="bottom" secondItem="mA2-zl-vsY" secondAttribute="bottom" id="QXg-3Q-Ml8"/>
+                                            <constraint firstAttribute="trailing" secondItem="mA2-zl-vsY" secondAttribute="trailing" id="iQI-ht-lPJ"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="9Ls-ZC-LIS" firstAttribute="top" secondItem="Wmi-HA-2WR" secondAttribute="bottom" id="6JZ-Qc-S71"/>
+                                    <constraint firstItem="9Ls-ZC-LIS" firstAttribute="leading" secondItem="9OQ-uM-nfY" secondAttribute="leading" id="FpF-9Y-mri"/>
+                                    <constraint firstItem="7mt-7W-tG5" firstAttribute="leading" secondItem="9OQ-uM-nfY" secondAttribute="leading" id="JfJ-Xv-5tI"/>
+                                    <constraint firstItem="7mt-7W-tG5" firstAttribute="top" secondItem="9Ls-ZC-LIS" secondAttribute="bottom" id="aZ8-bo-3Bw"/>
+                                    <constraint firstAttribute="bottom" secondItem="7mt-7W-tG5" secondAttribute="bottom" constant="16" id="d1j-Wo-Ryk"/>
+                                    <constraint firstItem="Wmi-HA-2WR" firstAttribute="leading" secondItem="9OQ-uM-nfY" secondAttribute="leading" id="glI-cl-qgN"/>
+                                    <constraint firstAttribute="trailing" secondItem="Wmi-HA-2WR" secondAttribute="trailing" id="lYc-rm-QEP"/>
+                                    <constraint firstAttribute="trailing" secondItem="7mt-7W-tG5" secondAttribute="trailing" id="n7C-D0-eeO"/>
+                                    <constraint firstAttribute="trailing" secondItem="9Ls-ZC-LIS" secondAttribute="trailing" id="t2w-q5-4GB"/>
+                                    <constraint firstItem="Wmi-HA-2WR" firstAttribute="top" secondItem="9OQ-uM-nfY" secondAttribute="top" id="yjQ-jX-vb1"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="9OQ-uM-nfY" firstAttribute="top" secondItem="Yfg-jr-ctW" secondAttribute="bottom" constant="44" id="AGR-7F-OzU"/>
+                            <constraint firstItem="9OQ-uM-nfY" firstAttribute="leading" secondItem="Msq-rR-Cxe" secondAttribute="leading" id="Ivg-Mt-Qa5"/>
+                            <constraint firstAttribute="trailing" secondItem="9OQ-uM-nfY" secondAttribute="trailing" id="P92-yY-zjn"/>
+                            <constraint firstItem="Ijt-Qt-Glr" firstAttribute="top" secondItem="9OQ-uM-nfY" secondAttribute="bottom" id="o3f-By-lSR"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <connections>
+                        <outlet property="healthKitLabel" destination="M2n-bT-OD5" id="pNF-Z4-sE2"/>
+                        <outlet property="healthKitSwitch" destination="9g5-rw-efz" id="toA-sJ-BKW"/>
+                        <outlet property="loginAccount" destination="9sA-Dh-xzl" id="2XT-bE-ria"/>
+                        <outlet property="privacyTextField" destination="Vvg-5y-QfG" id="Rbe-uQ-Aru"/>
+                        <outlet property="sidebarView" destination="9OQ-uM-nfY" id="Ix6-bv-TsQ"/>
+                        <outlet property="usernameLabel" destination="8eU-B6-eOM" id="iCh-s4-6Aa"/>
+                        <outlet property="versionString" destination="FRD-xW-MeJ" id="XGz-45-lWe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XvS-Cr-aVr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="440.5" y="235.5"/>
+        </scene>
+    </scenes>
+</document>

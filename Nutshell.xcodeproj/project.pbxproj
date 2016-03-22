@@ -118,6 +118,11 @@
 		483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */; };
 		484365C91C9DB3960046A2C5 /* HealthKitDataPusher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484365C81C9DB3950046A2C5 /* HealthKitDataPusher.swift */; };
 		484365CA1C9DB3970046A2C5 /* HealthKitDataPusher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484365C81C9DB3950046A2C5 /* HealthKitDataPusher.swift */; };
+		484365CD1CA10F650046A2C5 /* EventAddEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 484365CB1CA10F640046A2C5 /* EventAddEdit.storyboard */; };
+		484365D01CA10FBB0046A2C5 /* EventDetail.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 484365CE1CA10FBB0046A2C5 /* EventDetail.storyboard */; };
+		484365D31CA1103E0046A2C5 /* MealPhoto.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 484365D11CA1103E0046A2C5 /* MealPhoto.storyboard */; };
+		484365D61CA1106F0046A2C5 /* EventGroup.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 484365D41CA1106F0046A2C5 /* EventGroup.storyboard */; };
+		484365D91CA1118A0046A2C5 /* Menu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 484365D71CA1118A0046A2C5 /* Menu.storyboard */; };
 		48501BF01C1FC5EC00A7ADA8 /* EventListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */; };
 		4851C6921BA6281800F8E0EE /* NutshellUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851C6911BA6281800F8E0EE /* NutshellUIView.swift */; };
 		4851C6951BA689FC00F8E0EE /* NutshellUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4851C6941BA689FC00F8E0EE /* NutshellUITableView.swift */; };
@@ -294,6 +299,11 @@
 		483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUIViewController.swift; path = ViewControllers/BaseUIViewController.swift; sourceTree = "<group>"; };
 		483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewController.swift; path = ViewControllers/BaseUITableViewController.swift; sourceTree = "<group>"; };
 		484365C81C9DB3950046A2C5 /* HealthKitDataPusher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataPusher.swift; path = DataModel/HealthKit/HealthKitDataPusher.swift; sourceTree = "<group>"; };
+		484365CC1CA10F640046A2C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EventAddEdit.storyboard; sourceTree = "<group>"; };
+		484365CF1CA10FBB0046A2C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EventDetail.storyboard; sourceTree = "<group>"; };
+		484365D21CA1103E0046A2C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MealPhoto.storyboard; sourceTree = "<group>"; };
+		484365D51CA1106F0046A2C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EventGroup.storyboard; sourceTree = "<group>"; };
+		484365D81CA1118A0046A2C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Menu.storyboard; sourceTree = "<group>"; };
 		48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListViewController.swift; path = ViewControllers/EventListViewController.swift; sourceTree = "<group>"; };
 		4851C6911BA6281800F8E0EE /* NutshellUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUIView.swift; path = Resources/NutshellUIView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4851C6931BA628A500F8E0EE /* UIDesignNotes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = UIDesignNotes.rtf; path = Resources/UIDesignNotes.rtf; sourceTree = "<group>"; };
@@ -506,6 +516,11 @@
 			isa = PBXGroup;
 			children = (
 				4859FCBC1B9A4DE4000C1269 /* EventView.storyboard */,
+				484365D71CA1118A0046A2C5 /* Menu.storyboard */,
+				484365D41CA1106F0046A2C5 /* EventGroup.storyboard */,
+				484365D11CA1103E0046A2C5 /* MealPhoto.storyboard */,
+				484365CE1CA10FBB0046A2C5 /* EventDetail.storyboard */,
+				484365CB1CA10F640046A2C5 /* EventAddEdit.storyboard */,
 				486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */,
 				48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */,
 				486F5E5F1BA1EBE100BA2A57 /* EventListTableViewCell.swift */,
@@ -849,15 +864,20 @@
 				486F5DF21B9F874A00BA2A57 /* LaBelleAurore.ttf in Resources */,
 				48ED0D401BAF22CC009D0D6F /* addAnimation-05.png in Resources */,
 				485922A81B9C98420056E605 /* splash_logo@2x.png in Resources */,
+				484365D61CA1106F0046A2C5 /* EventGroup.storyboard in Resources */,
 				4859229B1B9A61510056E605 /* Login.storyboard in Resources */,
+				484365D91CA1118A0046A2C5 /* Menu.storyboard in Resources */,
+				484365D31CA1103E0046A2C5 /* MealPhoto.storyboard in Resources */,
 				486F5DFB1B9F874A00BA2A57 /* OpenSans-Semibold.ttf in Resources */,
 				486F5E151BA0908900BA2A57 /* login_logo@2x.png in Resources */,
+				484365D01CA10FBB0046A2C5 /* EventDetail.storyboard in Resources */,
 				4859FCC61B9A4DE4000C1269 /* LaunchScreen.storyboard in Resources */,
 				486F5DF51B9F874A00BA2A57 /* OpenSans-Bold.ttf in Resources */,
 				486F5DF81B9F874A00BA2A57 /* OpenSans-Regular.ttf in Resources */,
 				48ED0D3C1BAF22CC009D0D6F /* addAnimation-01.png in Resources */,
 				48ED0D3E1BAF22CC009D0D6F /* addAnimation-03.png in Resources */,
 				48B127AC1BC444FE00061483 /* ThreeTacosDemoPic.png in Resources */,
+				484365CD1CA10F650046A2C5 /* EventAddEdit.storyboard in Resources */,
 				48ED0D411BAF22CC009D0D6F /* addAnimation-06.png in Resources */,
 				48ED0D3D1BAF22CC009D0D6F /* addAnimation-02.png in Resources */,
 				4859FCC31B9A4DE4000C1269 /* Assets.xcassets in Resources */,
@@ -1181,6 +1201,46 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		484365CB1CA10F640046A2C5 /* EventAddEdit.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				484365CC1CA10F640046A2C5 /* Base */,
+			);
+			name = EventAddEdit.storyboard;
+			sourceTree = "<group>";
+		};
+		484365CE1CA10FBB0046A2C5 /* EventDetail.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				484365CF1CA10FBB0046A2C5 /* Base */,
+			);
+			name = EventDetail.storyboard;
+			sourceTree = "<group>";
+		};
+		484365D11CA1103E0046A2C5 /* MealPhoto.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				484365D21CA1103E0046A2C5 /* Base */,
+			);
+			name = MealPhoto.storyboard;
+			sourceTree = "<group>";
+		};
+		484365D41CA1106F0046A2C5 /* EventGroup.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				484365D51CA1106F0046A2C5 /* Base */,
+			);
+			name = EventGroup.storyboard;
+			sourceTree = "<group>";
+		};
+		484365D71CA1118A0046A2C5 /* Menu.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				484365D81CA1118A0046A2C5 /* Base */,
+			);
+			name = Menu.storyboard;
+			sourceTree = "<group>";
+		};
 		485922991B9A61510056E605 /* Login.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
