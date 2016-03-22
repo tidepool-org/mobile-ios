@@ -16,6 +16,7 @@
 import UIKit
 import CoreData
 import CocoaLumberjack
+import HealthKit
 
 var fileLogger: DDFileLogger!
 
@@ -60,9 +61,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DDLogVerbose("trace")
 
         AppDelegate.testMode = false
-        // Default HealthKit UI enable UI to on...
-        NSUserDefaults.standardUserDefaults().registerDefaults(["kHealthKitUIEnabled_Key": true])
-        AppDelegate.healthKitUIEnabled = NSUserDefaults.standardUserDefaults().boolForKey("kHealthKitUIEnabled_Key")
+        // Default HealthKit UI enable UI to on unless iPad
+        AppDelegate.healthKitUIEnabled = HKHealthStore.isHealthDataAvailable()
         
         // Override point for customization after application launch.
         UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor
@@ -83,11 +83,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
         
         // Note: for non-background launches, this will continue in applicationDidBecomeActive...
-    }
-    
-    class func configureHealthKitUIEnable(enable: Bool) {
-        NSUserDefaults.standardUserDefaults().setBool(enable, forKey: "kHealthKitUIEnabled_Key")
-        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
     func setupUIForLogin() {

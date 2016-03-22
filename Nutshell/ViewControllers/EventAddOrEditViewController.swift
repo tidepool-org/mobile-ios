@@ -578,20 +578,6 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             popoverController.sourceRect = self.photoIconButton.bounds
         }
         
-        // The following hack might be used to place a collection view of photos atop the alert: note this only works for Alert style, not ActionSheet...
-//        let backImage = Styles.backgroundImageofSize(CGSize(width: 100, height: 100), style: "darkBackground")
-//        photoActionSheet.addTextFieldWithConfigurationHandler() { (textField) -> Void in
-//            let photoCollectContainer = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
-//            photoCollectContainer.backgroundColor = UIColor.grayColor()
-//            textField.font = UIFont.systemFontOfSize(96)
-//            textField.text = ""
-//            textField.borderStyle = UITextBorderStyle.None
-//            textField.background = backImage
-//            textField.enabled = false
-//            textField.addSubview(photoCollectContainer)
-//            NSLog("configure here")
-//        }
-        
         self.presentViewController(photoActionSheet, animated: true, completion: nil)
     }
 
@@ -757,14 +743,6 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             AppDelegate.testMode = !AppDelegate.testMode
             self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
             return
-        }
-
-        if titleTextField.text!.localizedCaseInsensitiveCompare("workoutInterface") == NSComparisonResult.OrderedSame  {
-            if !NutUtils.onIPad() {
-                AppDelegate.configureHealthKitUIEnable(!AppDelegate.healthKitUIEnabled)
-                self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
-                return
-            }
         }
 
         // This is a good place to splice in demo and test data. For now, entering "demo" as the title will result in us adding a set of demo events to the model, and "delete" will delete all food events.
