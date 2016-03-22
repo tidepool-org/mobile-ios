@@ -68,11 +68,19 @@ class HealthKitDataPusher: NSObject {
     /// Called by background fetch code in app delegate, and will kick off a sync if enough time has elapsed and currently HealthKit user is logged in.
     func backgroundFetch(completion: (UIBackgroundFetchResult) -> Void) {
         downloadNewItemsForHealthKit() { (itemsDownloaded) -> Void in
-            DDLogVerbose("Background fetch push completed with itemcount = \(itemsDownloaded)")
+            let msg = "Nutshell downloaded \(itemsDownloaded) blood glucose readings from Tidepool to the Health app."
+            DDLogVerbose(msg)
+            if itemsDownloaded > 0 {
+                // TODO: determine whether local notification feed back is appropriate here!
+                let debugMsg = UILocalNotification()
+                debugMsg.alertBody = msg
+                UIApplication.sharedApplication().presentLocalNotificationNow(debugMsg)
+            }
             completion(itemsDownloaded == 0 ? .NoData : .NewData)
         }
     }
-    
+
+
     /// Enable/disable push process; can be called multiple times. 
     ///
     /// On enable, process will proceed immediately if this is the first enable, otherwise only if kMinTimeIntervalBetweenSyncs has passed since the last sync.
@@ -86,6 +94,10 @@ class HealthKitDataPusher: NSObject {
             UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(
                 kTimeIntervalForBackgroundFetch)
             NSLog("Background fetch interval is \(kTimeIntervalForBackgroundFetch)")
+
+            // TODO: register to send local notifications is for debug only!
+            let notifySettings = UIUserNotificationSettings(forTypes: .Alert, categories: nil)
+            UIApplication.sharedApplication().registerUserNotificationSettings(notifySettings)
             
             // kick off a download now if we are in the foreground...
             let state = UIApplication.sharedApplication().applicationState

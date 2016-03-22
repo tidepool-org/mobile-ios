@@ -114,12 +114,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let api = APIConnector.connector()
         if api.sessionToken == nil {
             NSLog("No token available, user will need to log in!")
+            // Uncomment to debug background fetch using local notifications...
+            //self.localNotifyMessage("Nutshell was unable to download items from Tidepool: log in required!")
             completionHandler(.Failed)
             return
         }
         
         if !api.isConnectedToNetwork() {
             NSLog("No network available!")
+            // Uncomment to debug background fetch using local notifications...
+            //self.localNotifyMessage("Nutshell was unable to download items from Tidepool: no network available!")
             completionHandler(.Failed)
             return
         }
@@ -133,6 +137,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
+    private func localNotifyMessage(msg: String) {
+        NSLog("localNotifyMessage: \(msg)")
+        let debugMsg = UILocalNotification()
+        debugMsg.alertBody = msg
+        UIApplication.sharedApplication().presentLocalNotificationNow(debugMsg)
+    }
+    
+    
     func applicationWillResignActive(application: UIApplication) {
         NSLog("Nutshell applicationWillResignActive")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
