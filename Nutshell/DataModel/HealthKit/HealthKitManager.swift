@@ -36,12 +36,16 @@ class HealthKitManager {
     func authorizationRequestedForBloodGlucoseSamples() -> Bool {
         return NSUserDefaults.standardUserDefaults().boolForKey("authorizationRequestedForBloodGlucoseSamples")
     }
-    
+
+    func authorizationRequestedForBloodGlucoseSampleWrites() -> Bool {
+        return NSUserDefaults.standardUserDefaults().boolForKey("authorizationRequestedForBloodGlucoseSampleWrites")
+    }
+
     func authorizationRequestedForWorkoutSamples() -> Bool {
         return NSUserDefaults.standardUserDefaults().boolForKey("authorizationRequestedForWorkoutSamples")
     }
     
-    func authorize(shouldAuthorizeBloodGlucoseSamples shouldAuthorizeBloodGlucoseSamples: Bool, shouldAuthorizeWorkoutSamples: Bool, completion: ((success:Bool, error:NSError!) -> Void)!)
+    func authorize(shouldAuthorizeBloodGlucoseSampleReads shouldAuthorizeBloodGlucoseSampleReads: Bool, shouldAuthorizeBloodGlucoseSampleWrites: Bool, shouldAuthorizeWorkoutSamples: Bool, completion: ((success:Bool, error:NSError!) -> Void)!)
     {
         DDLogVerbose("trace")
 
@@ -65,9 +69,11 @@ class HealthKitManager {
         
         var readTypes: Set<HKSampleType>?
         var writeTypes: Set<HKSampleType>?
-        if (shouldAuthorizeBloodGlucoseSamples) {
+        if (shouldAuthorizeBloodGlucoseSampleReads) {
             readTypes = Set<HKSampleType>()
             readTypes!.insert(HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!)
+        }
+        if (shouldAuthorizeBloodGlucoseSampleWrites) {
             writeTypes = Set<HKSampleType>()
             writeTypes!.insert(HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!)
         }
@@ -84,9 +90,11 @@ class HealthKitManager {
         
         if (isHealthDataAvailable) {
             healthStore!.requestAuthorizationToShareTypes(writeTypes, readTypes: readTypes) { (success, error) -> Void in
-                if (shouldAuthorizeBloodGlucoseSamples) {
-
+                if (shouldAuthorizeBloodGlucoseSampleReads) {
                     NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForBloodGlucoseSamples");
+                }
+                if (shouldAuthorizeBloodGlucoseSampleWrites) {
+                    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForBloodGlucoseSampleWrites");
                 }
                 if shouldAuthorizeWorkoutSamples {
                     NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForWorkoutSamples");

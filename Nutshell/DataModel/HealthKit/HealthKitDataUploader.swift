@@ -66,7 +66,8 @@ class HealthKitDataUploader {
         DDLogVerbose("trace")
         
         HealthKitManager.sharedInstance.authorize(
-            shouldAuthorizeBloodGlucoseSamples: true,
+            shouldAuthorizeBloodGlucoseSampleReads: true,
+            shouldAuthorizeBloodGlucoseSampleWrites: false,
             shouldAuthorizeWorkoutSamples: false) {
                 success, error -> Void in
                 
@@ -278,9 +279,9 @@ class HealthKitDataUploader {
                        annotationValue = annotationValue {
                     let annotations = [
                         [
-                            "annotationCode": annotationCode,
-                            "annotationValue": annotationValue,
-                            "annotationThreshold": annotationThreshold
+                            "code": annotationCode,
+                            "value": annotationValue,
+                            "threshold": annotationThreshold
                         ]
                     ]
                     sampleToUploadDict["annotations"] = annotations

@@ -226,7 +226,7 @@ class NutDataController: NSObject
             NSUserDefaults.standardUserDefaults().synchronize()
         }
 
-        HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSamples: true, shouldAuthorizeWorkoutSamples: true) {
+        HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSampleReads: true, shouldAuthorizeBloodGlucoseSampleWrites: true, shouldAuthorizeWorkoutSamples: true) {
             success, error -> Void in
             if (error == nil) {
                 configureCurrentHealthKitUser()
