@@ -38,10 +38,12 @@ class HealthKitDataPusher: NSObject {
 
     // MARK: - Config
 
-    /// Sync last 7 days of data
-    let kTimeIntervalOfDataToSyncToHK: NSTimeInterval = 60*60*24*7
+    /// Sync last 10 days of data
+    let kTimeIntervalOfDataToSyncToHK: NSTimeInterval = 60*60*24*10
     /// Check at most every 4 hours...
     let kMinTimeIntervalBetweenSyncs: NSTimeInterval = 60*60*4
+    /// But ask for background time every 6 hours...
+    let kTimeIntervalForBackgroundFetch: NSTimeInterval = 60*60*6
     
     /// Last time we checked for and pushed data to HealthKit or nil if never pushed
     var lastPushToHK: NSDate? {
@@ -82,8 +84,8 @@ class HealthKitDataPusher: NSObject {
         DDLogVerbose("")
         if enable {
             UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(
-                kMinTimeIntervalBetweenSyncs)
-            NSLog("Min fetch is \(kMinTimeIntervalBetweenSyncs)")
+                kTimeIntervalForBackgroundFetch)
+            NSLog("Background fetch interval is \(kTimeIntervalForBackgroundFetch)")
             
             // kick off a download now if we are in the foreground...
             let state = UIApplication.sharedApplication().applicationState
@@ -141,7 +143,7 @@ class HealthKitDataPusher: NSObject {
         }
         
         if syncInProgress {
-            DDLogVerbose("ignoring call, already syncing?")
+            DDLogVerbose("ignoring call, already syncing!")
             completion(0)
             return
         }
