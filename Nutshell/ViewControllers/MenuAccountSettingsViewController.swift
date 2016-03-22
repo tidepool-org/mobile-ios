@@ -95,15 +95,15 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         if dataController.healthKitInterfaceConfiguredForOtherUser() {
             // use dialog to confirm delete with user!
             let curHKUserName = NutDataController.controller().healthKitUserTidepoolUsername() ?? "Unknown"
-            let curUserName = usernameLabel.text!
+            //let curUserName = usernameLabel.text!
             let titleString = "Are you sure?"
-            let messageString = "Change HealthKit user from ‘" + curHKUserName + "’ to ‘" + curUserName + "’?"
+            let messageString = "A different account (" + curHKUserName + ") is currently associated with Health Data on this device"
             let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
             alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { Void in
                 self.healthKitSwitch.on = false
                 return
             }))
-            alert.addAction(UIAlertAction(title: "Change", style: .Default, handler: { Void in
+            alert.addAction(UIAlertAction(title: "Change Account", style: .Default, handler: { Void in
                 NutDataController.controller().enableHealthKitInterface()
             }))
             self.presentViewController(alert, animated: true, completion: nil)

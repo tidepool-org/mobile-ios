@@ -36,13 +36,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         NSLog("Nutshell didFinishLaunchingWithOptions")
         // Set up logging
+        DDASLLogger.sharedInstance().logFormatter = LogFormatter()
         DDTTYLogger.sharedInstance().logFormatter = LogFormatter()
+        DDLog.addLogger(DDASLLogger.sharedInstance())
         DDLog.addLogger(DDTTYLogger.sharedInstance())
-        fileLogger = DDFileLogger()
-        fileLogger.logFormatter = LogFormatter()
-        fileLogger.rollingFrequency = 60 * 60 * 4; // 2 hour rolling
-        fileLogger.logFileManager.maximumNumberOfLogFiles = 12;
-        DDLog.addLogger(fileLogger);
+        
+//        // Set up file logs
+//        fileLogger = DDFileLogger()
+//        fileLogger.logFormatter = LogFormatter()
+//        fileLogger.rollingFrequency = 60 * 60 * 4; // 2 hour rolling
+//        fileLogger.logFileManager.maximumNumberOfLogFiles = 12;
+//        DDLog.addLogger(fileLogger);
+        
         #if DEBUG
             defaultDebugLevel = DDLogLevel.Verbose
         #else
