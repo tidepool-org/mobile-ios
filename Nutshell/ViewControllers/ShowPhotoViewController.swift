@@ -42,7 +42,7 @@ class ShowPhotoViewController: UIViewController {
             // We use a custom back button, this tweaks the arrow positioning to match the iOS back arrow position.
             self.navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsetsMake(0.0, -8.0, -1.0, 0.0)
             if editAllowed {
-                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: "deleteButtonHandler:")
+                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: #selector(ShowPhotoViewController.deleteButtonHandler(_:)))
             }
         }
         

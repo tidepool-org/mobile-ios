@@ -84,7 +84,7 @@ class GraphUIView: UIView {
             if let dataPoint = graphLayers[layer-1].tappedAtPoint(point) {
                 return dataPoint
             }
-            layer--
+            layer -= 1
         }
         return nil
     }

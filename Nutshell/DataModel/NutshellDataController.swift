@@ -366,7 +366,7 @@ class NutDataController: NSObject
                     moc.insertObject(we)
                     NSLog("added workout: \(we)")
                 } else {
-                    NSLog("ERROR: \(__FUNCTION__): Expected HKWorkout!")
+                    NSLog("ERROR: \(#function): Expected HKWorkout!")
                 }
             }
         }

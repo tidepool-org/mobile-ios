@@ -42,13 +42,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         // Add a notification for when the database changes
         let moc = NutDataController.controller().mocForNutEvents()
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: "databaseChanged:", name: NSManagedObjectContextObjectsDidChangeNotification, object: moc)
-        notificationCenter.addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.databaseChanged(_:)), name: NSManagedObjectContextObjectsDidChangeNotification, object: moc)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChange), name: UITextFieldTextDidChangeNotification, object: nil)
 
         if let sideMenu = self.sideMenuController()?.sideMenu {
             sideMenu.delegate = self
             menuButton.target = self
-            menuButton.action = "toggleSideMenu:"
+            menuButton.action = #selector(EventListViewController.toggleSideMenu(_:))
             let revealWidth = min(ceil((240.0/320.0) * self.view.bounds.width), 281.0)
             sideMenu.menuWidth = revealWidth
             sideMenu.bouncingEnabled = false

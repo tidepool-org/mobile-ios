@@ -402,8 +402,8 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
         CGContextRestoreGState(context)
     }
 
-    private func drawBolusExtensionShape(originX: CGFloat, var centerY: CGFloat, width: CGFloat, borderOnly: Bool = false, noEndShape: Bool = false) {
-        centerY = round(centerY)
+    private func drawBolusExtensionShape(originX: CGFloat, centerY: CGFloat, width: CGFloat, borderOnly: Bool = false, noEndShape: Bool = false) {
+        let centerY = round(centerY)
         let originY = centerY - (kExtensionEndshapeHeight/2.0)
         let bottomLineY = centerY + (kExtensionLineHeight / 2.0)
         let topLineY = centerY - (kExtensionLineHeight / 2.0)
@@ -441,7 +441,9 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
         }
     }
 
-    private func drawBolusExtension(var originX: CGFloat, centerY: CGFloat, var width: CGFloat, originalWidth: CGFloat?) {
+    private func drawBolusExtension( originX: CGFloat, centerY: CGFloat, width: CGFloat, originalWidth: CGFloat?) {
+        var width = width
+        var originX = originX
         if width < kExtensionEndshapeWidth {
             // If extension is shorter than the end trapezoid shape, only draw that shape, backing it into the bolus rect
             originX = originX - (kExtensionEndshapeWidth - width)

@@ -61,8 +61,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         self.navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsetsMake(0.0, -8.0, -1.0, 0.0)
         topSectionContainer.backgroundColor = Styles.darkPurpleColor
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: "graphDataChanged:", name: NewBlockRangeLoadedNotification, object: nil)
-        notificationCenter.addObserver(self, selector: "reachabilityChanged:", name: ReachabilityChangedNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventDetailViewController.graphDataChanged(_:)), name: NewBlockRangeLoadedNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventDetailViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
         configureForReachability()
     }
  

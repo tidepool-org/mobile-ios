@@ -118,9 +118,9 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         notesHintLabel.text = Styles.noteHintString
         
         let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
-        notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        notificationCenter.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddOrEditViewController.textFieldDidChange), name: UITextFieldTextDidChangeNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddOrEditViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddOrEditViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
     }
 
     deinit {

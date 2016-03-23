@@ -272,7 +272,7 @@ class HealthKitDataPusher: NSObject {
                 if let metaDataDict = item.metadata {
                     if let tidepoolId = metaDataDict["tidepoolId"] {
                         self.tidepoolIdsPushedToHealthKit.insert(tidepoolId as! String)
-                        tidepoolItemsInHKCount++
+                        tidepoolItemsInHKCount += 1
                         DDLogVerbose("existing HK item at time \(item.startDate), value: \(value)")
                     } else {
                         DDLogVerbose("ignoring HK item with no tidepoolId metadata: time \(item.startDate) and value: \(value)")

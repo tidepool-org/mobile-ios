@@ -48,7 +48,7 @@ class LoginViewController: BaseUIViewController {
 
         let notificationCenter = NSNotificationCenter.defaultCenter()
 
-        notificationCenter.addObserver(self, selector: "textFieldDidChange", name: UITextFieldTextDidChangeNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginViewController.textFieldDidChange), name: UITextFieldTextDidChangeNotification, object: nil)
         updateButtonStates()
         
         // forgot password text needs an underline...
@@ -59,10 +59,10 @@ class LoginViewController: BaseUIViewController {
         // TODO: hide for now until implemented!
         forgotPasswordLabel.hidden = true
         
-        notificationCenter.addObserver(self, selector: "keyboardWillShow:", name: UIKeyboardWillShowNotification, object: nil)
-        notificationCenter.addObserver(self, selector: "keyboardWillHide:", name: UIKeyboardWillHideNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reachabilityChanged:", name: ReachabilityChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
         configureForReachability()
         
         // Tap all four corners to bring up server selection action sheet
@@ -72,7 +72,7 @@ class LoginViewController: BaseUIViewController {
         corners.append(CGRect(x: self.view.frame.width - width, y: 0, width: width, height: height))
         corners.append(CGRect(x: 0, y: self.view.frame.height - height, width: width, height: height))
         corners.append(CGRect(x: self.view.frame.width - width, y: self.view.frame.height - height, width: width, height: height))
-        for (var i = 0; i < corners.count; i++) {
+        for _ in 0 ..< corners.count {
             cornersBool.append(false)
         }
     }
@@ -251,7 +251,7 @@ class LoginViewController: BaseUIViewController {
                     return
                 }
                 
-                i++
+                i += 1
             }
         }
     }
@@ -267,7 +267,7 @@ class LoginViewController: BaseUIViewController {
     }
     
     func showServerActionSheet() {
-        for (var i = 0; i < corners.count; i++) {
+        for i in 0 ..< corners.count {
             cornersBool[i] = false
         }
         let api = APIConnector.connector()

@@ -110,7 +110,7 @@ class DatabaseUtils {
 //                    NSLog("deleting event id: \(tObj.id) with time: \(tObj.time)")
 //                }
                 moc.deleteObject(obj)
-                deleteEventCounter++
+                deleteEventCounter += 1
             }
         } catch let error as NSError {
             NSLog("Error in updateEventsForTimeRange deleting objects: \(error)")
@@ -123,7 +123,7 @@ class DatabaseUtils {
             if let obj = CommonData.fromJSON(subJson, moc: moc) {
                 // add objects
                 if let _=obj.id {
-                    insertEventCounter++
+                    insertEventCounter += 1
                     moc.insertObject(obj)
                     //NSLog("inserting event id: \(obj.id) with time: \(obj.time)")
                 } else {
@@ -158,7 +158,7 @@ class DatabaseUtils {
             if let obj = CommonData.fromJSON(subJson, moc: moc) {
                 // Remove existing object with the same ID
                 if let id=obj.id {
-                    eventCounter++
+                    eventCounter += 1
                     request.predicate = NSPredicate(format: "id = %@", id)
                     
                     do {

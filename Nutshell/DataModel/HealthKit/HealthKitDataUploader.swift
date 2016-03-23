@@ -363,15 +363,15 @@ class HealthKitDataUploader {
         return "HealthKit_\(deviceModel)"
     }
     
-    private func filteredSamplesGroupedBySource(var samples: [HKSample]) -> [String: [HKSample]] {
+    private func filteredSamplesGroupedBySource(samples: [HKSample]) -> [String: [HKSample]] {
         var filteredSamplesBySource = [String: [HKSample]]()
         
-        samples.sortInPlace({x, y in
+        let sortedSamples = samples.sort({x, y in
             return x.startDate.compare(y.startDate) == .OrderedAscending
         })
         
         // Group by source
-        for sample in samples {
+        for sample in sortedSamples {
             let sourceRevision = sample.sourceRevision
             let source = sourceRevision.source
             let sourceBundleIdentifier = source.bundleIdentifier

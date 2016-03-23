@@ -79,7 +79,7 @@ class GraphLayout {
         let secondsPerPixel = CGFloat(cellTimeInterval) / cellViewSize.width
         let secondsInGraphView = secondsPerPixel * graphViewSize.width
         var result: NSTimeInterval = xAxisLabelTickTimes[0]
-        for var index = 0; index<=maxTickIndex; index++  {
+        for index in 0...maxTickIndex  {
             let timePerTick = xAxisLabelTickTimes[index]
             let ticksInView = secondsInGraphView / CGFloat(timePerTick)
             let pixelsPerTick = graphViewSize.width / ticksInView

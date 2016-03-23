@@ -74,8 +74,9 @@ class GraphContainerView: UIView {
         return self.cellSize.width > layout.zoomOutMinCellWidth()
     }
 
-    private func zoomCellSize(var size: CGSize, xOffsetInView: CGFloat) {
-
+    private func zoomCellSize( zoomToSize: CGSize, xOffsetInView: CGFloat) {
+        var size = zoomToSize
+        
         // First check against limits, return if we are already there
         let maxWidth = layout.zoomInMaxCellWidth()
         if size.width >= maxWidth {
@@ -212,10 +213,10 @@ class GraphContainerView: UIView {
                 self.addSubview(graphCollectionView)
                 
                 // add pinch gesture recognizer
-                let recognizer = UIPinchGestureRecognizer(target: self, action: "pinchGestureHandler:")
+                let recognizer = UIPinchGestureRecognizer(target: self, action: #selector(GraphContainerView.pinchGestureHandler(_:)))
                 graphCollectionView.addGestureRecognizer(recognizer)
                 
-                let tapRecognizer = UITapGestureRecognizer(target: self, action: "tapGestureHandler:")
+                let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(GraphContainerView.tapGestureHandler(_:)))
                 graphCollectionView.addGestureRecognizer(tapRecognizer)
             }
         }
