@@ -85,7 +85,7 @@ class NutDataController: NSObject
             return _currentUserId
         }
     }
-
+    
     /// Used mainly for display, this is the login name for the currently logged in user, or nil.
     ///
     /// Read only - returns nil string if no user set.
@@ -197,6 +197,17 @@ class NutDataController: NSObject
         }
     }
     
+    /// This is set after user profile fetch is complete upon log-in. When non-nil, it indicates whether the current user logged in is associated with a Data Service Account
+    var isDSAUser: Bool? {
+        get {
+            var result: Bool?
+            if let isDSA = currentUser?.accountIsDSA {
+                result = Bool(isDSA)
+            }
+            return result
+        }
+    }
+
     //
     // MARK: - HealthKit user info
     //

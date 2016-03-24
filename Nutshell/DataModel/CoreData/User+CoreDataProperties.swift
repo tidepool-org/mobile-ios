@@ -2,7 +2,7 @@
 //  User+CoreDataProperties.swift
 //  
 //
-//  Created by Larry Kenyon on 12/9/15.
+//  Created by Larry Kenyon on 3/24/16.
 //
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -15,8 +15,9 @@ import CoreData
 extension User {
 
     @NSManaged var fullName: String?
+    @NSManaged var token: String?
     @NSManaged var userid: String?
     @NSManaged var username: String?
-    @NSManaged var token: String?
+    @NSManaged var accountIsDSA: NSNumber?
 
 }

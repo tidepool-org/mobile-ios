@@ -27,10 +27,14 @@ class User: NSManagedObject {
     }
     
     func processProfileJSON(json: JSON) {
+        NSLog("profile json: \(json)")
         fullName = json["fullName"].string
         if fullName != nil {
             self.managedObjectContext?.refreshObject(self, mergeChanges: true)
             NSLog("Added full name from profile: \(fullName)")
         }
+        let patient = json["patient"]
+        let isDSA = patient != nil
+        accountIsDSA = NSNumber.init(bool: isDSA)
     }
 }

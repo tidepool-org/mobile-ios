@@ -51,8 +51,19 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         // Late binding here because profile fetch occurs after login complete!
         usernameLabel.text = NutDataController.controller().userFullName
         healthKitSwitch.on = NutDataController.controller().healthKitInterfaceEnabledForCurrentUser()
-        healthKitSwitch.hidden = !AppDelegate.healthKitUIEnabled
-        healthKitLabel.hidden = !AppDelegate.healthKitUIEnabled
+        var hideHealthKitUI = false
+        // Note: Right now this is hard-wired true
+        if !AppDelegate.healthKitUIEnabled {
+            hideHealthKitUI = true
+        }
+        // The isDSAUser variable only becomes valid after user profile fetch, so if it is not set, assume true. Otherwise use it as main control of whether we show the HealthKit UI.
+        if let isDSAUser = NutDataController.controller().isDSAUser {
+            if !isDSAUser {
+                hideHealthKitUI = true
+            }
+        }
+        healthKitSwitch.hidden = hideHealthKitUI
+        healthKitLabel.hidden = hideHealthKitUI
     }
 
     override func didReceiveMemoryWarning() {

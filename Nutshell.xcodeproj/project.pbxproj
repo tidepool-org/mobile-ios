@@ -373,6 +373,7 @@
 		48C4916B1C3B771200F34630 /* WizardGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WizardGraphData.swift; path = "GraphView/Tidepool Graph/WizardGraphData.swift"; sourceTree = "<group>"; };
 		48C4916D1C3B816700F34630 /* WorkoutGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutGraphData.swift; path = "GraphView/Tidepool Graph/WorkoutGraphData.swift"; sourceTree = "<group>"; };
 		48D056961BDFDD20009D1591 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		48D62CFF1CA457FE00E063A4 /* Nutshell_v6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v6.xcdatamodel; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
 		48E490BE1BE198BF004F33E4 /* ShowPhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShowPhotoViewController.swift; path = ViewControllers/ShowPhotoViewController.swift; sourceTree = "<group>"; };
 		48E4A4451BF015CE001A7B35 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = ServiceInterface/Reachability.swift; sourceTree = "<group>"; };
@@ -1465,12 +1466,13 @@
 		4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				48D62CFF1CA457FE00E063A4 /* Nutshell_v6.xcdatamodel */,
 				4899436D1C442837004774BA /* Nutshell_v5.xcdatamodel */,
 				48A150551C18E0A200ED800B /* Nutshell_v4.xcdatamodel */,
 				483475B11BE9CE2E00EE9106 /* Nutshell_v2.xcdatamodel */,
 				4859FCC01B9A4DE4000C1269 /* Nutshell.xcdatamodel */,
 			);
-			currentVersion = 4899436D1C442837004774BA /* Nutshell_v5.xcdatamodel */;
+			currentVersion = 48D62CFF1CA457FE00E063A4 /* Nutshell_v6.xcdatamodel */;
 			path = Nutshell.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
