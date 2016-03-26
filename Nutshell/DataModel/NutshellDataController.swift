@@ -197,7 +197,7 @@ class NutDataController: NSObject
         }
     }
     
-    /// This is set after user profile fetch is complete upon log-in. When non-nil, it indicates whether the current user logged in is associated with a Data Service Account
+    /// This is set after user profile fetch is complete upon log-in. When non-nil, it indicates whether the current user logged in is associated with a Data Storage Account
     var isDSAUser: Bool? {
         get {
             var result: Bool?

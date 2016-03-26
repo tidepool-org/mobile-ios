@@ -68,7 +68,7 @@ class HealthKitDataPusher: NSObject {
     /// Called by background fetch code in app delegate, and will kick off a sync if enough time has elapsed and currently HealthKit user is logged in.
     func backgroundFetch(completion: (UIBackgroundFetchResult) -> Void) {
         downloadNewItemsForHealthKit() { (itemsDownloaded) -> Void in
-            let msg = "Nutshell downloaded \(itemsDownloaded) blood glucose readings from Tidepool to the Health app."
+            let msg = "Nutshell added \(itemsDownloaded) blood glucose readings from Tidepool to the Health app."
             DDLogVerbose(msg)
             if itemsDownloaded > 0 {
                 // TODO: determine whether local notification feed back is appropriate here!
@@ -79,7 +79,6 @@ class HealthKitDataPusher: NSObject {
             completion(itemsDownloaded == 0 ? .NoData : .NewData)
         }
     }
-
 
     /// Enable/disable push process; can be called multiple times. 
     ///
