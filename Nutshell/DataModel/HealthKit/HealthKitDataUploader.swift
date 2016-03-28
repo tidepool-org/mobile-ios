@@ -27,28 +27,44 @@ class HealthKitDataUploader {
         let latestUploaderVersion = 1
         
         let lastExecutedUploaderVersion = NSUserDefaults.standardUserDefaults().integerForKey("lastExecutedUploaderVersion")
+        var resetPersistentData = false
         if latestUploaderVersion != lastExecutedUploaderVersion {
             DDLogInfo("Migrating uploader to \(latestUploaderVersion)")
-            
+            NSUserDefaults.standardUserDefaults().setInteger(latestUploaderVersion, forKey: "lastExecutedUploaderVersion")
+            resetPersistentData = true
+        }
+        
+        initState(resetPersistentData)
+     }
+    
+    private func initState(resetUser: Bool = false) {
+        
+        if resetUser {
             NSUserDefaults.standardUserDefaults().removeObjectForKey("bloodGlucoseQueryAnchor")
             NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadTimeBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadCountBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().removeObjectForKey("totalUploadCountBloodGlucoseSamples")
-
-            NSUserDefaults.standardUserDefaults().setInteger(latestUploaderVersion, forKey: "lastExecutedUploaderVersion")
             NSUserDefaults.standardUserDefaults().synchronize()
-
+            
             DDLogInfo("Reset upload stats and HealthKit query anchor during migration")
         }
-
+        
         let lastUploadTime = NSUserDefaults.standardUserDefaults().objectForKey("lastUploadTimeBloodGlucoseSamples")
         if lastUploadTime != nil {
             self.lastUploadTimeBloodGlucoseSamples = lastUploadTime as! NSDate
             self.lastUploadCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastUploadCountBloodGlucoseSamples")
             self.totalUploadCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalUploadCountBloodGlucoseSamples")
         }
+        
+        if NSUserDefaults.standardUserDefaults().objectForKey("bloodGlucoseQueryAnchor") == nil {
+            DDLogInfo("Anchor does not exist, we'll upload last 24 hours of data first")
+            self.shouldUploadLast24Hours = true
+        } else {
+            DDLogInfo("Anchor exists, we'll upload samples from anchor query")
+        }
+        
     }
-    
+
     enum Notifications {
         static let UploadedBloodGlucoseSamples = "HealthKitDataUpload-uploaded-\(HKQuantityTypeIdentifierBloodGlucose)"
     }
@@ -66,15 +82,15 @@ class HealthKitDataUploader {
         DDLogVerbose("trace")
         
         HealthKitManager.sharedInstance.authorize(
-            shouldAuthorizeBloodGlucoseSampleReads: true,
-            shouldAuthorizeBloodGlucoseSampleWrites: false,
+            shouldAuthorizeBloodGlucoseSampleReads: true, shouldAuthorizeBloodGlucoseSampleWrites: false,
             shouldAuthorizeWorkoutSamples: false) {
                 success, error -> Void in
                 
                 if error == nil {
+                    DDLogInfo("Authorization did not have an error (though we don't know whether permission was given), start uploading if possible")
                     self.startUploading(currentUserId: currentUserId)
                 } else {
-                    DDLogError("Error authorizing health data \(error), \(error!.userInfo)")
+                    DDLogError("Error authorizing health data, success: \(success), \(error))")
                 }
         }
     }
@@ -97,15 +113,11 @@ class HealthKitDataUploader {
         
         // Start observing samples. We don't really start uploading until we've successsfully started observing
         HealthKitManager.sharedInstance.startObservingBloodGlucoseSamples(self.bloodGlucoseObservationHandler)
+
+        DDLogInfo("start reading samples - start uploading")
+        self.startReadingSamples()
         
-        // If already observing / uploading and we are asked to start uploading, then start reading samples. This
-        // will handle the situation where after initially declining read permissions, then going to Health app to
-        // enable read permissions, then switching back to app, should start reading and uploading available 
-        // glucose data
-        if self.isUploading {
-            DDLogInfo("start reading samples - start uploading")
-            self.startReadingBloodGlucoseSamples()
-        }
+        isUploading = true
     }
     
     func stopUploading() {
@@ -122,46 +134,41 @@ class HealthKitDataUploader {
         HealthKitManager.sharedInstance.stopObservingBloodGlucoseSamples()
     }
 
-    // MARK: Private
-    
-    private func startReadingBloodGlucoseSamples() {
-        dispatch_async(dispatch_get_main_queue(), {
-            if !self.isReadingBloodGlucoseSamples {
-                self.isReadingBloodGlucoseSamples = true
-                HealthKitManager.sharedInstance.readBloodGlucoseSamples(self.bloodGlucoseResultHandler)
-            } else {
-                DDLogVerbose("Already reading blood glucose samples, ignoring subsequent request to read")
-            }
-        })
+    // TODO: review; should only be called when a non-current HK user is logged in!
+    func resetHealthKitUploaderForNewUser() {
+        DDLogVerbose("Switching healthkit user, need to reset anchors!")
+        initState(true)
     }
+    
 
-    private func stopReadingBloodGlucoseSamples(completion completion: (NSError?) -> (Void), error: NSError?) {
-        dispatch_async(dispatch_get_main_queue(), {
-            completion(error)
-            self.isReadingBloodGlucoseSamples = false
-        })
-    }
-    
+    // MARK: Private - observation and results handlers
 
     private func bloodGlucoseObservationHandler(error: NSError?) {
+        DDLogVerbose("trace")
+
         if error == nil {
-            self.isUploading = true
-            HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples()
-            DDLogInfo("start reading samples - observe samples")
-            self.startReadingBloodGlucoseSamples()
+            dispatch_async(dispatch_get_main_queue(), {
+                HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples()
+
+                DDLogInfo("start reading samples - started observing blood glucose samples")
+                self.startReadingSamples()
+            })
         }
     }
     
-    private func bloodGlucoseResultHandler(newSamples: [HKSample]?, completion: (NSError?) -> (Void)) {
-        DDLogInfo("trace")
+    private func bloodGlucoseResultHandler(error: NSError?, newSamples: [HKSample]?, completion: (NSError?) -> (Void)) {
+        DDLogVerbose("trace")
         
         var samplesAvailableToUpload = false
         
         defer {
             if !samplesAvailableToUpload {
-                DDLogInfo("stop reading samples - no new samples available to upload")
-                self.stopReadingBloodGlucoseSamples(completion: completion, error: nil)
+                self.handleNoResultsToUpload(error: error, completion: completion)
             }
+        }
+        
+        guard error == nil else {
+            return
         }
         
         guard let samples = newSamples where samples.count > 0 else {
@@ -170,14 +177,18 @@ class HealthKitDataUploader {
         
         // Group by source
         self.currentSamplesToUploadBySource = self.filteredSamplesGroupedBySource(samples)
+        let groupCount = currentSamplesToUploadBySource.count
         if let (_, samples) = self.currentSamplesToUploadBySource.popFirst() {
             samplesAvailableToUpload = true
             
             // Start first batch upload for groups
+            DDLogInfo("Start batch upload for \(groupCount) remaining distinct-source-app-groups of samples")
             startBatchUpload(samples: samples, completion: completion)
         }
     }
  
+    // MARK: Private - upload
+
     private func startBatchUpload(samples samples: [HKSample], completion: (NSError?) -> (Void)) {
         DDLogVerbose("trace")
         
@@ -197,9 +208,8 @@ class HealthKitDataUploader {
         let time = dateFormatter.isoStringFromDate(now)
         let guid = NSUUID().UUIDString
         let uploadIdSuffix = "\(deviceId)_\(time)_\(guid)"
-        var uploadIdSuffixMd5Hash = uploadIdSuffix.md5()
-        uploadIdSuffixMd5Hash = uploadIdSuffixMd5Hash.substringToIndex(uploadIdSuffixMd5Hash.startIndex.advancedBy(12))
-        let uploadId = "upid_HealthKit_\(uploadIdSuffixMd5Hash)"
+        let uploadIdSuffixMd5Hash = uploadIdSuffix.md5()
+        let uploadId = "upid_\(uploadIdSuffixMd5Hash)"
         
         self.currentBatchUploadDict = [String: AnyObject]()
         self.currentBatchUploadDict["type"] = "upload"
@@ -231,12 +241,12 @@ class HealthKitDataUploader {
                     self.uploadSamplesForBatch(samples: samples, completion: completion)
                 } else {
                     DDLogError("stop reading samples - error starting batch upload of samples: \(error)")
-                    self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
+                    self.stopReadingSamples(completion: completion, error: error)
                 }
             }
         } catch let error as NSError! {
             DDLogError("stop reading samples - error creating post body for start of batch upload: \(error)")
-            self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
+            self.stopReadingSamples(completion: completion, error: error)
         }
     }
     
@@ -325,26 +335,23 @@ class HealthKitDataUploader {
                 if error == nil {
                     self.updateStats(samples.count)
                     
+                    let groupCount = self.currentSamplesToUploadBySource.count
                     if let (_, samples) = self.currentSamplesToUploadBySource.popFirst() {
                         // Start next batch upload for groups
+                        DDLogInfo("Start next upload for \(groupCount) remaining distinct-source-app-groups of samples")
                         self.startBatchUpload(samples: samples, completion: completion)
                     } else {
-                        // Stop reading
-                        DDLogInfo("stop reading samples - finished uploading batch")
-                        self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
-
-                        // Try to read more samples    
-                        DDLogInfo("start reading samples - finished uploading batch - check for more samples")
-                        self.startReadingBloodGlucoseSamples()
+                        DDLogInfo("stop reading samples - finished uploading groups from last read")
+                        self.readMore(completion: completion)
                     }
                 } else {
                     DDLogError("stop reading samples - error uploading samples: \(error)")
-                    self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
+                    self.stopReadingSamples(completion: completion, error: error)
                 }
             }
         } catch let error as NSError! {
             DDLogError("stop reading samples - error creating post body for start of batch upload: \(error)")
-            self.stopReadingBloodGlucoseSamples(completion: completion, error: error)
+            self.stopReadingSamples(completion: completion, error: error)
         }
     }
     
@@ -364,6 +371,8 @@ class HealthKitDataUploader {
     }
     
     private func filteredSamplesGroupedBySource(samples: [HKSample]) -> [String: [HKSample]] {
+        DDLogVerbose("trace")
+
         var filteredSamplesBySource = [String: [HKSample]]()
         
         let sortedSamples = samples.sort({x, y in
@@ -390,6 +399,124 @@ class HealthKitDataUploader {
         return filteredSamplesBySource
     }
     
+    // MARK: Private - upload phases (last 24 hours or anchor)
+    
+    private func startReadingSamples() {
+        DDLogVerbose("trace")
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            if self.shouldUploadLast24Hours {
+                self.startReadingSamplesFromLast24Hours()
+            } else {
+                self.startReadingSamplesFromAnchor()
+            }
+        })
+    }
+    
+    private func stopReadingSamples(completion completion: (NSError?) -> (Void), error: NSError?) {
+        DDLogVerbose("trace")
+
+        dispatch_async(dispatch_get_main_queue(), {
+            if self.isReadingSamplesFromLast24Hours {
+                self.stopReadingSamplesFromLast24Hours(completion: completion, error: error)
+            } else if self.isReadingSamplesFromAnchor {
+                self.stopReadingSamplesFromAnchor(completion: completion, error: error)
+            }
+        })
+    }
+    
+    private func handleNoResultsToUpload(error error: NSError?, completion: (NSError?) -> (Void)) {
+        DDLogVerbose("trace")
+
+        dispatch_async(dispatch_get_main_queue(), {
+            if self.isReadingSamplesFromLast24Hours {
+                if error == nil {
+                    DDLogInfo("stop reading samples from last 24 hours - no samples found to upload for last 24 hours - transitioning to reading samples from anchor")
+                    self.stopReadingSamplesFromLast24Hours(completion: completion, error: error)
+                    self.shouldUploadLast24Hours = false
+                    self.startReadingSamplesFromAnchor()
+                } else {
+                    DDLogInfo("stop reading samples from last 24 hours due to error: \(error)")
+                    self.stopReadingSamplesFromLast24Hours(completion: completion, error: error)
+                }
+            } else if self.isReadingSamplesFromAnchor {
+                if error == nil {
+                    DDLogInfo("stop reading samples from anchor - no new samples available to upload")
+                    self.stopReadingSamplesFromAnchor(completion: completion, error: nil)
+                } else {
+                    DDLogInfo("stop reading samples from anchor due to error: \(error)")
+                    self.stopReadingSamplesFromAnchor(completion: completion, error: nil)
+                }
+            }
+        })
+    }
+    
+    private func readMore(completion completion: (NSError?) -> (Void)) {
+        DDLogVerbose("trace")
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            if self.isReadingSamplesFromLast24Hours {
+                DDLogInfo("finished reading samples from last 24 hours - transitioning to reading samples from anchor")
+                self.stopReadingSamplesFromLast24Hours(completion: completion, error: nil)
+                self.shouldUploadLast24Hours = false
+            } else if self.isReadingSamplesFromAnchor {
+                self.stopReadingSamplesFromAnchor(completion: completion, error: nil)
+            }
+
+            self.startReadingSamplesFromAnchor()
+        })
+    }
+    
+    // MARK: Private - anchor phase
+
+    private func startReadingSamplesFromAnchor() {
+        DDLogVerbose("trace")
+        
+        if !self.isReadingSamplesFromAnchor {
+            self.isReadingSamplesFromAnchor = true
+            HealthKitManager.sharedInstance.readBloodGlucoseSamplesFromAnchor(self.bloodGlucoseResultHandler)
+        } else {
+            DDLogVerbose("Already reading blood glucose samples from anchor, ignoring subsequent request to read")
+        }
+    }
+    
+    private func stopReadingSamplesFromAnchor(completion completion: (NSError?) -> (Void), error: NSError?) {
+        DDLogVerbose("trace")
+
+        if self.isReadingSamplesFromAnchor {
+            completion(error)
+            self.isReadingSamplesFromAnchor = false
+        } else {
+            DDLogVerbose("Unexpected call to stopReadingSamplesFromAnchor when not reading samples")
+        }
+    }
+    
+    // MARK: Private - last 24 hours phase
+    
+    private func startReadingSamplesFromLast24Hours() {
+        DDLogVerbose("trace")
+        
+        if !self.isReadingSamplesFromLast24Hours {
+            self.isReadingSamplesFromLast24Hours = true
+            HealthKitManager.sharedInstance.readBloodGlucoseSamplesForLast24Hours(self.bloodGlucoseResultHandler)
+        } else {
+            DDLogVerbose("Already reading blood glucose samples from last 24 hours, ignoring subsequent request to read")
+        }
+    }
+    
+    private func stopReadingSamplesFromLast24Hours(completion completion: (NSError?) -> (Void), error: NSError?) {
+        DDLogVerbose("trace")
+        
+        if self.isReadingSamplesFromLast24Hours {
+            completion(error)
+            self.isReadingSamplesFromLast24Hours = false
+        } else {
+            DDLogVerbose("Unexpected call to stopReadingSamplesFromLast24Hours when not reading samples")
+        }
+    }
+    
+    // MARK: Private - stats
+    
     private func updateStats(samplesUploadedCount: Int) {
         DDLogVerbose("trace")
         
@@ -414,5 +541,7 @@ class HealthKitDataUploader {
     private var currentUserId: String?
     private var currentSamplesToUploadBySource = [String: [HKSample]]()
     private var currentBatchUploadDict = [String: AnyObject]()
-    private var isReadingBloodGlucoseSamples = false
+    private var isReadingSamplesFromAnchor = false
+    private var isReadingSamplesFromLast24Hours = false
+    private var shouldUploadLast24Hours = false
 }

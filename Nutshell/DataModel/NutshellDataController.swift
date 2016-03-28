@@ -230,6 +230,10 @@ class NutDataController: NSObject
             let defaults = NSUserDefaults.standardUserDefaults()
             defaults.setBool(true, forKey:self.kHealthKitInterfaceEnabledKey)
             if !self.healthKitInterfaceEnabledForCurrentUser() {
+                if self.healthKitInterfaceConfiguredForOtherUser() {
+                    // switching healthkit users! reset anchors!
+                    HealthKitDataUploader.sharedInstance.resetHealthKitUploaderForNewUser()
+                }
                 defaults.setValue(currentUserId!, forKey: kHealthKitInterfaceUserIdKey)
                 // may be nil...
                 defaults.setValue(userFullName, forKey: kHealthKitInterfaceUserNameKey)
