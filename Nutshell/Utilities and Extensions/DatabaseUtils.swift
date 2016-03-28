@@ -59,8 +59,8 @@ class DatabaseUtils {
         for bucket in startBucket...endBucket {
             
             if let lastFetchDate = serverBlocks[bucket] {
-                if now.timeIntervalSinceDate(lastFetchDate) < 60*10 {
-                    // don't check more often than every 10 minutes...
+                if now.timeIntervalSinceDate(lastFetchDate) < 60 {
+                    // don't check more often than every minute...
                     NSLog("checkLoadDataForDateRange: skip load of bucket \(bucket)")
                     continue
                 }

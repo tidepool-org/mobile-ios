@@ -43,7 +43,7 @@ class HealthKitDataPusher: NSObject {
     /// Check at most every 4 hours...
     let kMinTimeIntervalBetweenSyncs: NSTimeInterval = 60*60*4
     /// But ask for background time every 6 hours...
-    let kTimeIntervalForBackgroundFetch: NSTimeInterval = 60*60*6
+    let kTimeIntervalForBackgroundFetch: NSTimeInterval = 60*60*4
     
     /// Last time we checked for and pushed data to HealthKit or nil if never pushed
     var lastPushToHK: NSDate? {
@@ -68,7 +68,10 @@ class HealthKitDataPusher: NSObject {
     /// Called by background fetch code in app delegate, and will kick off a sync if enough time has elapsed and currently HealthKit user is logged in.
     func backgroundFetch(completion: (UIBackgroundFetchResult) -> Void) {
         downloadNewItemsForHealthKit() { (itemsDownloaded) -> Void in
-            let msg = "Nutshell added \(itemsDownloaded) blood glucose readings from Tidepool to the Health app."
+            var msg = "Nutshell added \(itemsDownloaded) blood glucose readings from Tidepool to the Health app."
+            if itemsDownloaded == 1 {
+                msg = "Nutshell added a blood glucose reading from Tidepool to the Health app."
+            }
             DDLogVerbose(msg)
             if itemsDownloaded > 0 {
                 // TODO: determine whether local notification feed back is appropriate here!
@@ -115,7 +118,6 @@ class HealthKitDataPusher: NSObject {
             lastPushToHK = nil
             itemsLastPushedCount = 0
             self.itemsToPush = [HKQuantitySample]()
-            self.tidepoolIdsPushedToHealthKit = Set<String>()
         }
     }
     
@@ -125,8 +127,6 @@ class HealthKitDataPusher: NSObject {
     
     // increment each time we turn off the interface in order to kill off async processes
     private var currentSyncGeneration = 0
-    // set of Tidepool id's successfully pushed. Persists until app is relaunched.
-    private var tidepoolIdsPushedToHealthKit = Set<String>()
     // temp cache of items from service (via our Tidepool DB) to push to HK, for the last 7 days
     private var itemsToPush = [HKQuantitySample]()
     // response from HK of items already in HK for the last 7 days, used to prevent push of duplicate items to HK
@@ -237,13 +237,15 @@ class HealthKitDataPusher: NSObject {
                         self.finishSync(syncGen, itemsSynced: 0, completion: completion)
                         return
                     }
+                    // Note: bail on errors so we avoid pushing duplicate data to HealthKit!
+                    if let error = error {
+                        DDLogError("Error reading bg samples from HealthKit Store: \(error.localizedDescription)")
+                        self.finishSync(syncGen, itemsSynced: 0, completion: completion)
+                        return
+                    }
                     if let samples = samples {
                         self.itemsAlreadyInHK = samples
                         DDLogVerbose("successfully read \(self.itemsAlreadyInHK.count) HealthKit items to compare")
-                    }
-                    // Note: the user may only authorize writes to HealthKit in which case we won't be able to read and avoid pushing duplicates in all cases. Push on in either case.
-                    if let error = error {
-                        DDLogError("Error reading bg samples from HealthKit Store: \(error.localizedDescription)")
                     }
                     self.pushNewItemsToHealthKit(syncGen, processStartTime: thruTime, completion: completion)
                 })
@@ -260,6 +262,8 @@ class HealthKitDataPusher: NSObject {
         // Remove samples in itemsToPush that match items in itemsAlreadyInHK
         DDLogVerbose("check existing healthkit items for matches...")
         var tidepoolItemsInHKCount = 0
+        // set of Tidepool id's successfully pushed
+        var tidepoolIdsPushedToHealthKit = Set<String>()
         if !itemsAlreadyInHK.isEmpty {
             // first add id's of these HealthKit items to our exclusion list
             for item in itemsAlreadyInHK {
@@ -270,7 +274,7 @@ class HealthKitDataPusher: NSObject {
                 }
                 if let metaDataDict = item.metadata {
                     if let tidepoolId = metaDataDict["tidepoolId"] {
-                        self.tidepoolIdsPushedToHealthKit.insert(tidepoolId as! String)
+                        tidepoolIdsPushedToHealthKit.insert(tidepoolId as! String)
                         tidepoolItemsInHKCount += 1
                         DDLogVerbose("existing HK item at time \(item.startDate), value: \(value)")
                     } else {
@@ -285,7 +289,7 @@ class HealthKitDataPusher: NSObject {
                 self.itemsToPush = self.itemsToPush.filter() {item in
                     if let metaDataDict = item.metadata {
                         if let tidepoolId = metaDataDict["tidepoolId"] {
-                            if self.tidepoolIdsPushedToHealthKit.contains(tidepoolId as! String) {
+                            if tidepoolIdsPushedToHealthKit.contains(tidepoolId as! String) {
                                 DDLogVerbose("filtered out item with tidepool id: \(tidepoolId)")
                                 return false
                             }
@@ -310,15 +314,6 @@ class HealthKitDataPusher: NSObject {
                 } else {
                     DDLogVerbose("\(self.itemsToPush.count) Blood glucose samples pushed to HealthKit successfully!")
                     self.lastPushToHK = processStartTime
-                    // remember items we already pushed during this app lifetime
-                    // Note: since we pre-fetch HealthKit items to filter out existing items, this is an optimization allowing us to skip that pre-fetch if we have no "new" items from Tidepool
-                    for item in self.itemsToPush {
-                        if let metaDataDict = item.metadata {
-                            if let tidepoolId = metaDataDict["tidepoolId"] {
-                                self.tidepoolIdsPushedToHealthKit.insert(tidepoolId as! String)
-                            }
-                        }
-                    }
                     self.itemsLastPushedCount = self.itemsToPush.count
                     self.finishSync(syncGen, itemsSynced: self.itemsLastPushedCount, completion: completion)
                 }
@@ -366,11 +361,6 @@ class HealthKitDataPusher: NSObject {
         }
         
         if let itemId = event.id as? String, let time = event.time, let type = event.type as? String {
-            if tidepoolIdsPushedToHealthKit.contains(itemId) {
-                // already pushed this item, ignore...
-                DDLogVerbose("skipping item with id \(itemId) - already pushed")
-                return
-            }
             let bgType = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)
             let bgQuantity = HKQuantity(unit: HKUnit(fromString: "mg/dL"), doubleValue: bgValue!)
             let deviceId = event.deviceId ?? ""
