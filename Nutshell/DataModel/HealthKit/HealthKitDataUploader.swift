@@ -44,6 +44,7 @@ class HealthKitDataUploader {
             NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadTimeBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadCountBloodGlucoseSamples")
             NSUserDefaults.standardUserDefaults().removeObjectForKey("totalUploadCountBloodGlucoseSamples")
+            NSUserDefaults.standardUserDefaults().removeObjectForKey("workoutQueryAnchor")
             NSUserDefaults.standardUserDefaults().synchronize()
             
             DDLogInfo("Reset upload stats and HealthKit query anchor during migration")
