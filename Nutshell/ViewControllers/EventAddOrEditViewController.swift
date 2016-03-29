@@ -242,6 +242,10 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     }
     
     private func updateSaveButtonState() {
+        if !datePickerView.hidden {
+            saveButton.hidden = true
+            return
+        }
         if editExistingEvent {
             saveButton.hidden = !existingEventChanged()
         } else {
@@ -939,6 +943,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             dismissKeyboard(self)
             datePickerView.hidden = false
             savedTime = eventTime
+            updateSaveButtonState()
             if editExistingEvent {
                 APIConnector.connector().trackMetric("Edited Datetime (Edit Screen)")
             } else {
