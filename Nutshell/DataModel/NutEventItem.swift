@@ -28,13 +28,18 @@ class NutEventItem {
             self.nutCracked = Bool(eventItem.nutCracked!)
         }
         
-        if let eventTime = eventItem.time, zoneOffset = eventItem.timezoneOffset {
+        if let eventTime = eventItem.time {
             self.time = eventTime
-            self.tzOffsetSecs = Int(zoneOffset) * 60
         } else {
             self.time = NSDate()
-            self.tzOffsetSecs = NSCalendar.currentCalendar().timeZone.secondsFromGMT
             NSLog("ERROR: nil time leaked in for event \(self.title)")
+        }
+            
+        if let zoneOffset = eventItem.timezoneOffset {
+            self.tzOffsetSecs = Int(zoneOffset) * 60
+        } else {
+            self.tzOffsetSecs = NSCalendar.currentCalendar().timeZone.secondsFromGMT
+            NSLog("ERROR: nil time zone offset for \(self.title)")
         }
     }
     

@@ -357,7 +357,9 @@ class NutDataController: NSObject
                     let now = NSDate()
                     we.createdTime = now
                     we.modifiedTime = now
-                    we.timezoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT/60
+                    // TODO: we set a time zone offset for this event, ASSUMING the workout was done in the same time zone location. We do adjust for times in a different daylight savings zone offset. Should we just leave this field nil unless we can be reasonably clear about the time zone (e.g., events very recently created)?
+                    let dstAdjust = NutUtils.dayLightSavingsAdjust(workout.startDate)
+                    we.timezoneOffset = (NSCalendar.currentCalendar().timeZone.secondsFromGMT + dstAdjust)/60
                     
                     // Check to see if we already have this one, with possibly a different id
                     if let time = we.time, userId = we.userid {

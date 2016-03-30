@@ -290,6 +290,8 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     
     private func updateDateLabels() {
         let df = NSDateFormatter()
+        // Note: Time zones created with this method never have daylight savings, and the offset is constant no matter the date
+        df.timeZone = NSTimeZone(forSecondsFromGMT:eventTimeOffsetSecs)
         df.dateFormat = "MMM d, yyyy"
         date1Label.attributedText = boldFirstPartOfDateString(df.stringFromDate(eventTime), suffixCnt: 6)
         df.dateFormat = "h:mm a"
@@ -299,6 +301,8 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     private func configureDateView() {
         updateDateLabels()
         datePicker.date = eventTime
+        // Note: Time zones created with this method never have daylight savings, and the offset is constant no matter the date
+        datePicker.timeZone = NSTimeZone(forSecondsFromGMT: eventTimeOffsetSecs)
         datePickerView.hidden = true
     }
 
@@ -762,7 +766,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
         
         // Note: we only create meal events in this app - workout events come from other apps via HealthKit...
-        newEventItem = NutEvent.createMealEvent(titleTextField.text!, notes: filteredNotesText(), location: filteredLocationText(), photo: itemToImageUrl(0), photo2: itemToImageUrl(1), photo3: itemToImageUrl(2), time: eventTime)
+        newEventItem = NutEvent.createMealEvent(titleTextField.text!, notes: filteredNotesText(), location: filteredLocationText(), photo: itemToImageUrl(0), photo2: itemToImageUrl(1), photo3: itemToImageUrl(2), time: eventTime, timeZoneOffset: eventTimeOffsetSecs)
         
         if newEventItem != nil {
             if eventGroup == nil {
@@ -963,6 +967,16 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     
     @IBAction func doneDatePickButtonHandler(sender: AnyObject) {
         eventTime = datePicker.date
+        
+        // Note: for new events, if the user creates a time in the past that crosses a daylight savings time zone boundary, we want to adjust the time zone offset from the local one, ASSUMING THE USER IS EDITING IN THE SAME TIME ZONE IN WHICH THEY HAD THE MEAL. 
+        // Without this adjustment, they would create the time in the past, say at 9 pm, and return to the meal view and see it an hour different, because we show event times in the UI in the time zone offset in which the event is created.
+        // This is the one case we are basically allowing an event to be created in a different time zone offset from the present: if we provided a UI to allow the user to select a time zone, this might be handled more easily.
+        // We truly only know the actual time zone of meals when they are created and their times are not edited (well, unless they are on a plane): allowing this edit, while practical, does put in some question the actual time zone of the event! What is key is the GMT time since that is what will be used to show the meal relatively to the blood glucose and insulin events.
+        if !editExistingEvent {
+            let dstAdjust = NutUtils.dayLightSavingsAdjust(datePicker.date)
+            eventTimeOffsetSecs = NSCalendar.currentCalendar().timeZone.secondsFromGMT + dstAdjust
+        }
+        
         configureDateView()
         updateSaveButtonState()
     }
@@ -1023,6 +1037,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             let now = NSDate()
             me.createdTime = now
             me.modifiedTime = now
+            // TODO: really should specify time zone offset in the data so we can test some time zone related issues
             me.timezoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT/60
         }
         

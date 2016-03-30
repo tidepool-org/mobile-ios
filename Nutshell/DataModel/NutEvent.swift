@@ -69,7 +69,7 @@ class NutEvent {
         return newItem
     }
     
-    class func createMealEvent(title: String, notes: String, location: String, photo: String, photo2: String, photo3: String, time: NSDate) -> EventItem? {
+    class func createMealEvent(title: String, notes: String, location: String, photo: String, photo2: String, photo3: String, time: NSDate, timeZoneOffset: Int) -> EventItem? {
         let moc = NutDataController.controller().mocForNutEvents()!
         if let entityDescription = NSEntityDescription.entityForName("Meal", inManagedObjectContext: moc) {
             let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal
@@ -84,7 +84,7 @@ class NutEvent {
             let now = NSDate()
             me.createdTime = now
             me.modifiedTime = now
-            me.timezoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT/60
+            me.timezoneOffset = timeZoneOffset/60
             // TODO: Determine policy for local id creation!
             me.id = NSUUID().UUIDString
             me.userid = NutDataController.controller().currentUserId // critical!

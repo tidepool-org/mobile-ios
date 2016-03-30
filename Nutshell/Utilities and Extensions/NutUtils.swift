@@ -243,6 +243,15 @@ class NutUtils {
         df.timeZone = NSTimeZone(forSecondsFromGMT:timezoneOffsetSecs)
     }
     
+    /// Returns delta time different due to a different daylight savings time setting for a date different from the current time, assuming the location-based time zone is the same as the current default.
+    class func dayLightSavingsAdjust(dateInPast: NSDate) -> Int {
+        let thisTimeZone = NSTimeZone.localTimeZone()
+        let dstOffsetForThisDate = thisTimeZone.daylightSavingTimeOffsetForDate(NSDate())
+        let dstOffsetForPickerDate = thisTimeZone.daylightSavingTimeOffsetForDate(dateInPast)
+        let dstAdjust = dstOffsetForPickerDate - dstOffsetForThisDate
+        return Int(dstAdjust)
+    }
+    
     /// Returns strings like "Mar 17, 2016", "Today", "Yesterday"
     /// Note: call setFormatterTimezone before this!
     class func standardUIDayString(date: NSDate) -> String {
