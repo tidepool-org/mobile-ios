@@ -765,6 +765,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             return
         }
         
+        if titleTextField.text!.localizedCaseInsensitiveCompare("test crash") == NSComparisonResult.OrderedSame {
+            // force crash to test crash reporting
+            assertionFailure()
+        }
+        
         // Note: we only create meal events in this app - workout events come from other apps via HealthKit...
         newEventItem = NutEvent.createMealEvent(titleTextField.text!, notes: filteredNotesText(), location: filteredLocationText(), photo: itemToImageUrl(0), photo2: itemToImageUrl(1), photo3: itemToImageUrl(2), time: eventTime, timeZoneOffset: eventTimeOffsetSecs)
         
