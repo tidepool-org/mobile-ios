@@ -148,7 +148,8 @@ class HealthKitDataPusher: NSObject {
     private func downloadNewItemsForHealthKit(completion: (Int) -> Void) {
         DDLogVerbose("")
         itemsLastPushedCount = 0
-        if !NutDataController.controller().healthKitInterfaceEnabledForCurrentUser() {
+        
+        if !appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser() {
             completion(0)
             return
         }

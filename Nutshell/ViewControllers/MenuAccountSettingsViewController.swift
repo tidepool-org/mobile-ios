@@ -50,7 +50,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     func menuWillOpen() {
         // Late binding here because profile fetch occurs after login complete!
         usernameLabel.text = NutDataController.controller().userFullName
-        healthKitSwitch.on = NutDataController.controller().healthKitInterfaceEnabledForCurrentUser()
+        healthKitSwitch.on = appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
         var hideHealthKitUI = false
         // Note: Right now this is hard-wired true
         if !AppDelegate.healthKitUIEnabled {
@@ -102,10 +102,9 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     }
     
     private func enableHealthKitInterfaceForCurrentUser() {
-        let dataController = NutDataController.controller()
-        if dataController.healthKitInterfaceConfiguredForOtherUser() {
+        if appHealthKitConfiguration.healthKitInterfaceConfiguredForOtherUser() {
             // use dialog to confirm delete with user!
-            let curHKUserName = NutDataController.controller().healthKitUserTidepoolUsername() ?? "Unknown"
+            let curHKUserName = appHealthKitConfiguration.healthKitUserTidepoolUsername() ?? "Unknown"
             //let curUserName = usernameLabel.text!
             let titleString = "Are you sure?"
             let messageString = "A different account (" + curHKUserName + ") is currently associated with Health Data on this device"

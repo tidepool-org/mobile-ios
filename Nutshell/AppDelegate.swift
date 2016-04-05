@@ -20,6 +20,9 @@ import HealthKit
 
 var fileLogger: DDFileLogger!
 
+/// Set up health kit configuration singleton, specialized version of HealthKitConfiguration
+let appHealthKitConfiguration = NutshellHealthKitConfiguration()
+
 /// AppDelegate deals with app startup, restart, termination:
 /// - Switches UI between login and event controllers.
 /// - Initializes the UI appearance defaults.
