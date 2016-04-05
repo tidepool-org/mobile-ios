@@ -62,7 +62,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         AppDelegate.testMode = false
         // Default HealthKit UI enable UI to on unless iPad
-        AppDelegate.healthKitUIEnabled = HKHealthStore.isHealthDataAvailable()
+        // TODO: remove, for v0.8.6.0 release only!
+        AppDelegate.healthKitUIEnabled = false // HKHealthStore.isHealthDataAvailable()
         
         // Override point for customization after application launch.
         UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor
