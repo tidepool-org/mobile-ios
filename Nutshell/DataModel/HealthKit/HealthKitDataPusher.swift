@@ -344,6 +344,7 @@ class HealthKitDataPusher: NSObject {
     private func nextItemForHealthKit(event: CommonData) {
         let kGlucoseConversionToMgDl: Double = 18.0
         var bgValue: Double?
+        var userEntered: NSNumber?
         
         if let cbgEvent = event as? ContinuousGlucose {
             if let cbgValue = cbgEvent.value {
@@ -352,6 +353,11 @@ class HealthKitDataPusher: NSObject {
         } else if let smbgEvent = event as? SelfMonitoringGlucose {
             if let smbgValue = smbgEvent.value {
                 bgValue = round(Double(smbgValue.floatValue) * kGlucoseConversionToMgDl)
+            }
+            if let subType = smbgEvent.subType {
+                if subType == "manual" {
+                    userEntered = 1
+                }
             }
         }
         
@@ -365,7 +371,10 @@ class HealthKitDataPusher: NSObject {
             let bgQuantity = HKQuantity(unit: HKUnit(fromString: "mg/dL"), doubleValue: bgValue!)
             let deviceId = event.deviceId ?? ""
             // TODO: add guid to metadata as well, need to rev data model to add this...
-            let metadata = ["tidepoolId": itemId, "deviceId": deviceId, "type": type]
+            var metadata: [String: AnyObject] = ["tidepoolId": itemId, "deviceId": deviceId, "type": type]
+            if let userEntered = userEntered {
+                metadata[HKMetadataKeyWasUserEntered] = userEntered
+            }
             let bgSample = HKQuantitySample(type: bgType!, quantity: bgQuantity, startDate: time, endDate: time, metadata: metadata)
             DDLogVerbose("candidate Tidepool item at time: \(time), value: \(bgQuantity)")
             itemsToPush.append(bgSample)
