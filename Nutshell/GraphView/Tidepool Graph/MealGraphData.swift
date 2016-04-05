@@ -18,12 +18,18 @@ import UIKit
 class MealGraphDataType: GraphDataType {
     
     var isMainEvent: Bool = false
-    var id: String
+    var id: String?
     var rectInGraph: CGRect = CGRectZero
     
     init(timeOffset: NSTimeInterval, isMain: Bool, event: Meal) {
         self.isMainEvent = isMain
-        self.id = String(event.id!) // needed if user taps on this item...
+        // id needed if user taps on this item...
+        if let eventId = event.id as? String {
+            self.id = eventId
+        } else {
+            // historically may be nil...
+            self.id = nil
+        }
         super.init(timeOffset: timeOffset)
     }
     

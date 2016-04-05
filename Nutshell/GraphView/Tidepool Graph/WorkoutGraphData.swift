@@ -19,13 +19,19 @@ class WorkoutGraphDataType: GraphDataType {
     
     var isMainEvent: Bool = false
     var duration: NSTimeInterval = 0.0
-    var id: String
+    var id: String?
     var rectInGraph: CGRect = CGRectZero
     
     init(timeOffset: NSTimeInterval, isMain: Bool, duration: NSTimeInterval, event: Workout) {
         self.isMainEvent = isMain
         self.duration = duration
-        self.id = String(event.id!) // needed if user taps on this item...
+        // id needed if user taps on this item...
+        if let eventId = event.id as? String {
+            self.id = eventId
+        } else {
+            // historically may be nil...
+            self.id = nil
+        }
         super.init(timeOffset: timeOffset)
     }
     
