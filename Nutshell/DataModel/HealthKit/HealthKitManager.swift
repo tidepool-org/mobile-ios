@@ -30,9 +30,7 @@ class HealthKitManager {
     }()
     
     let isHealthDataAvailable: Bool = {
-        // TODO: remove, for v0.8.6.0 release only!
-        return false
-        //return HKHealthStore.isHealthDataAvailable()
+        return HKHealthStore.isHealthDataAvailable()
     }()
     
     func authorizationRequestedForBloodGlucoseSamples() -> Bool {
