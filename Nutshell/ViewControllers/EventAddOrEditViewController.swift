@@ -747,6 +747,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     }
 
     var crashValue: String?
+    func testCrash() {
+        // force crash to test crash reporting...
+        if crashValue! == "crash" {
+            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+            return
+        }
+    }
+    
     private func updateNewEvent() {
         if titleTextField.text!.localizedCaseInsensitiveCompare("test mode") == NSComparisonResult.OrderedSame  {
             AppDelegate.testMode = !AppDelegate.testMode
@@ -767,11 +775,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
         
         if titleTextField.text!.localizedCaseInsensitiveCompare("test crash") == NSComparisonResult.OrderedSame {
-            // force crash to test crash reporting
-            if crashValue! == "crash" {
-                self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
-                return
-            }
+            self.testCrash()
         }
         
         // Note: we only create meal events in this app - workout events come from other apps via HealthKit...
