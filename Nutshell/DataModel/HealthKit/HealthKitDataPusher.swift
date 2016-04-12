@@ -73,8 +73,7 @@ class HealthKitDataPusher: NSObject {
                 msg = "Nutshell added a blood glucose reading from Tidepool to the Health app."
             }
             DDLogVerbose(msg)
-            if itemsDownloaded > 0 {
-                // TODO: determine whether local notification feed back is appropriate here!
+            if AppDelegate.testMode {
                 let debugMsg = UILocalNotification()
                 debugMsg.alertBody = msg
                 UIApplication.sharedApplication().presentLocalNotificationNow(debugMsg)
@@ -97,9 +96,11 @@ class HealthKitDataPusher: NSObject {
                 kTimeIntervalForBackgroundFetch)
             NSLog("Background fetch interval is \(kTimeIntervalForBackgroundFetch)")
 
-            // TODO: register to send local notifications is for debug only!
-            let notifySettings = UIUserNotificationSettings(forTypes: .Alert, categories: nil)
-            UIApplication.sharedApplication().registerUserNotificationSettings(notifySettings)
+            // Use local notifications to test background activity...
+            if AppDelegate.testMode {
+                let notifySettings = UIUserNotificationSettings(forTypes: .Alert, categories: nil)
+                UIApplication.sharedApplication().registerUserNotificationSettings(notifySettings)
+            }
             
             // kick off a download now if we are in the foreground...
             let state = UIApplication.sharedApplication().applicationState
@@ -167,9 +168,14 @@ class HealthKitDataPusher: NSObject {
         }
 
         let currentTime = NSDate()
+        var minTimeIntervalBetweenSyncs = kMinTimeIntervalBetweenSyncs
+        if AppDelegate.testMode {
+            // for testing, knock this down to every minute!
+            minTimeIntervalBetweenSyncs = 60
+        }
         if let lastPushToHK = lastPushToHK {
             let timeIntervalSinceLastSync = currentTime.timeIntervalSinceDate(lastPushToHK)
-            if timeIntervalSinceLastSync < kMinTimeIntervalBetweenSyncs {
+            if timeIntervalSinceLastSync < minTimeIntervalBetweenSyncs {
                 DDLogVerbose("skipping sync, time interval since last sync is only \(timeIntervalSinceLastSync)")
                 completion(0)
                 return

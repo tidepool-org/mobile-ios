@@ -38,7 +38,6 @@ class HealthKitDataUploader {
      }
     
     private func initState(resetUser: Bool = false) {
-        
         if resetUser {
             NSUserDefaults.standardUserDefaults().removeObjectForKey("bloodGlucoseQueryAnchor")
             NSUserDefaults.standardUserDefaults().removeObjectForKey("lastUploadTimeBloodGlucoseSamples")
@@ -55,15 +54,24 @@ class HealthKitDataUploader {
             self.lastUploadTimeBloodGlucoseSamples = lastUploadTime as! NSDate
             self.lastUploadCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("lastUploadCountBloodGlucoseSamples")
             self.totalUploadCountBloodGlucoseSamples = NSUserDefaults.standardUserDefaults().integerForKey("totalUploadCountBloodGlucoseSamples")
+        } else {
+            self.lastUploadTimeBloodGlucoseSamples = NSDate.distantPast()
+            self.lastUploadCountBloodGlucoseSamples = 0
+            self.totalUploadCountBloodGlucoseSamples = 0
+        }
+        
+        if resetUser {
+            dispatch_async(dispatch_get_main_queue()) {
+                NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: Notifications.UploadedBloodGlucoseSamples, object: nil))
+            }
         }
         
         if NSUserDefaults.standardUserDefaults().objectForKey("bloodGlucoseQueryAnchor") == nil {
-            DDLogInfo("Anchor does not exist, we'll upload last 24 hours of data first")
-            self.shouldUploadLast24Hours = true
+            DDLogInfo("Anchor does not exist, we'll upload most recent samples first")
+            self.shouldUploadMostRecentFirst = true
         } else {
             DDLogInfo("Anchor exists, we'll upload samples from anchor query")
         }
-        
     }
 
     enum Notifications {
@@ -400,14 +408,14 @@ class HealthKitDataUploader {
         return filteredSamplesBySource
     }
     
-    // MARK: Private - upload phases (last 24 hours or anchor)
+    // MARK: Private - upload phases (more recent, or anchor)
     
     private func startReadingSamples() {
         DDLogVerbose("trace")
         
         dispatch_async(dispatch_get_main_queue(), {
-            if self.shouldUploadLast24Hours {
-                self.startReadingSamplesFromLast24Hours()
+            if self.shouldUploadMostRecentFirst {
+                self.startReadingMostRecentSamples()
             } else {
                 self.startReadingSamplesFromAnchor()
             }
@@ -418,8 +426,8 @@ class HealthKitDataUploader {
         DDLogVerbose("trace")
 
         dispatch_async(dispatch_get_main_queue(), {
-            if self.isReadingSamplesFromLast24Hours {
-                self.stopReadingSamplesFromLast24Hours(completion: completion, error: error)
+            if self.isReadingMostRecentSamples {
+                self.stopReadingMostRecentSamples(completion: completion, error: error)
             } else if self.isReadingSamplesFromAnchor {
                 self.stopReadingSamplesFromAnchor(completion: completion, error: error)
             }
@@ -430,15 +438,15 @@ class HealthKitDataUploader {
         DDLogVerbose("trace")
 
         dispatch_async(dispatch_get_main_queue(), {
-            if self.isReadingSamplesFromLast24Hours {
+            if self.isReadingMostRecentSamples {
                 if error == nil {
-                    DDLogInfo("stop reading samples from last 24 hours - no samples found to upload for last 24 hours - transitioning to reading samples from anchor")
-                    self.stopReadingSamplesFromLast24Hours(completion: completion, error: error)
-                    self.shouldUploadLast24Hours = false
+                    DDLogInfo("stop reading most recent - transitioning to reading samples from anchor")
+                    self.stopReadingMostRecentSamples(completion: completion, error: error)
+                    self.shouldUploadMostRecentFirst = false
                     self.startReadingSamplesFromAnchor()
                 } else {
-                    DDLogInfo("stop reading samples from last 24 hours due to error: \(error)")
-                    self.stopReadingSamplesFromLast24Hours(completion: completion, error: error)
+                    DDLogInfo("stop reading most recent due to error: \(error)")
+                    self.stopReadingMostRecentSamples(completion: completion, error: error)
                 }
             } else if self.isReadingSamplesFromAnchor {
                 if error == nil {
@@ -456,10 +464,10 @@ class HealthKitDataUploader {
         DDLogVerbose("trace")
         
         dispatch_async(dispatch_get_main_queue(), {
-            if self.isReadingSamplesFromLast24Hours {
-                DDLogInfo("finished reading samples from last 24 hours - transitioning to reading samples from anchor")
-                self.stopReadingSamplesFromLast24Hours(completion: completion, error: nil)
-                self.shouldUploadLast24Hours = false
+            if self.isReadingMostRecentSamples {
+                DDLogInfo("finished reading most recent samples - transitioning to reading samples from anchor")
+                self.stopReadingMostRecentSamples(completion: completion, error: nil)
+                self.shouldUploadMostRecentFirst = false
             } else if self.isReadingSamplesFromAnchor {
                 self.stopReadingSamplesFromAnchor(completion: completion, error: nil)
             }
@@ -492,27 +500,27 @@ class HealthKitDataUploader {
         }
     }
     
-    // MARK: Private - last 24 hours phase
+    // MARK: Private - most recent samples phase
     
-    private func startReadingSamplesFromLast24Hours() {
+    private func startReadingMostRecentSamples() {
         DDLogVerbose("trace")
         
-        if !self.isReadingSamplesFromLast24Hours {
-            self.isReadingSamplesFromLast24Hours = true
-            HealthKitManager.sharedInstance.readBloodGlucoseSamplesForLast24Hours(self.bloodGlucoseResultHandler)
+        if !self.isReadingMostRecentSamples {
+            self.isReadingMostRecentSamples = true
+            HealthKitManager.sharedInstance.readMostRecentBloodGlucoseSamples(self.bloodGlucoseResultHandler)
         } else {
-            DDLogVerbose("Already reading blood glucose samples from last 24 hours, ignoring subsequent request to read")
+            DDLogVerbose("Already reading most recent blood glucose samples, ignoring subsequent request to read")
         }
     }
     
-    private func stopReadingSamplesFromLast24Hours(completion completion: (NSError?) -> (Void), error: NSError?) {
+    private func stopReadingMostRecentSamples(completion completion: (NSError?) -> (Void), error: NSError?) {
         DDLogVerbose("trace")
         
-        if self.isReadingSamplesFromLast24Hours {
+        if self.isReadingMostRecentSamples {
             completion(error)
-            self.isReadingSamplesFromLast24Hours = false
+            self.isReadingMostRecentSamples = false
         } else {
-            DDLogVerbose("Unexpected call to stopReadingSamplesFromLast24Hours when not reading samples")
+            DDLogVerbose("Unexpected call to stopReadingMostRecentSamples when not reading samples")
         }
     }
     
@@ -543,6 +551,6 @@ class HealthKitDataUploader {
     private var currentSamplesToUploadBySource = [String: [HKSample]]()
     private var currentBatchUploadDict = [String: AnyObject]()
     private var isReadingSamplesFromAnchor = false
-    private var isReadingSamplesFromLast24Hours = false
-    private var shouldUploadLast24Hours = false
+    private var isReadingMostRecentSamples = false
+    private var shouldUploadMostRecentFirst = false
 }

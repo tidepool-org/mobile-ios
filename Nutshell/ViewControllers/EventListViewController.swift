@@ -76,8 +76,25 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
             getNutEvents()
         }
         
+        checkNotifyUserOfTestMode()
+        
         APIConnector.connector().trackMetric("Viewed Home Screen (Home Screen)")
-     }
+    }
+    
+    // each first time launch of app, let user know we are still in test mode!
+    private func checkNotifyUserOfTestMode() {
+        if AppDelegate.testMode && !AppDelegate.testModeNotification {
+            AppDelegate.testModeNotification = true
+            let alert = UIAlertController(title: "Test Mode", message: "Nutshell has Test Mode enabled!", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: { Void in
+                return
+            }))
+            alert.addAction(UIAlertAction(title: "Turn Off", style: .Default, handler: { Void in
+                AppDelegate.testMode = false
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+    }
     
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)

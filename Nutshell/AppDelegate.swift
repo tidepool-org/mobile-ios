@@ -31,10 +31,11 @@ let appHealthKitConfiguration = NutshellHealthKitConfiguration()
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    static var testMode: Bool = false
-    static var healthKitUIEnabled: Bool = true
+    static var healthKitUIEnabled = true
     // one shot, true until we go to foreground...
     private var freshLaunch = true
+    // one shot, UI should put up dialog letting user know we are in test mode!
+    static var testModeNotification = false
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -63,7 +64,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #endif
         DDLogVerbose("trace")
 
-        AppDelegate.testMode = false
         // Default HealthKit UI enable UI to on unless iPad
         // TODO: remove, for v0.8.6.0 release only!
         AppDelegate.healthKitUIEnabled = HKHealthStore.isHealthDataAvailable()
@@ -89,6 +89,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Note: for non-background launches, this will continue in applicationDidBecomeActive...
     }
     
+    static var testMode: Bool {
+        set(newValue) {
+            NSUserDefaults.standardUserDefaults().setBool(newValue, forKey: kTestModeSettingKey)
+            NSUserDefaults.standardUserDefaults().synchronize()
+            _testMode = nil
+        }
+        get {
+            if _testMode == nil {
+                _testMode = NSUserDefaults.standardUserDefaults().boolForKey(kTestModeSettingKey)
+            }
+            return _testMode!
+        }
+    }
+    static let kTestModeSettingKey = "kTestModeSettingKey"
+    static var _testMode: Bool?
+
     func setupUIForLogin() {
         let sb = UIStoryboard(name: "Login", bundle: nil)
         if let vc = sb.instantiateInitialViewController() {
@@ -118,16 +134,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let api = APIConnector.connector()
         if api.sessionToken == nil {
             NSLog("No token available, user will need to log in!")
-            // Uncomment to debug background fetch using local notifications...
-            //self.localNotifyMessage("Nutshell was unable to download items from Tidepool: log in required!")
+            // Use local notifications to test background activity...
+            if AppDelegate.testMode {
+                self.localNotifyMessage("Nutshell was unable to download items from Tidepool: log in required!")
+            }
             completionHandler(.Failed)
             return
         }
         
         if !api.isConnectedToNetwork() {
             NSLog("No network available!")
-            // Uncomment to debug background fetch using local notifications...
-            //self.localNotifyMessage("Nutshell was unable to download items from Tidepool: no network available!")
+            // Use local notifications to test background activity...
+            if AppDelegate.testMode {
+                self.localNotifyMessage("Nutshell was unable to download items from Tidepool: no network available!")
+            }
             completionHandler(.Failed)
             return
         }

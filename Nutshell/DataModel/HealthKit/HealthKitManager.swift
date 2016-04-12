@@ -49,21 +49,21 @@ class HealthKitManager {
     {
         DDLogVerbose("trace")
         
-        var success = false
-        var error: NSError?
+        var authorizationSuccess = false
+        var authorizationError: NSError?
         
         defer {
-            if error != nil {
-                DDLogInfo("authorization error: \(error)")
+            if authorizationError != nil {
+                DDLogInfo("authorization error: \(authorizationError)")
                 
                 if completion != nil {
-                    completion(success:success, error:error)
+                    completion(success:authorizationSuccess, error:authorizationError)
                 }
             }
         }
         
         guard isHealthDataAvailable else {
-            error = NSError(domain: "HealthKitManager", code: -1, userInfo: [NSLocalizedDescriptionKey:"HealthKit is not available on this device"])
+            authorizationError = NSError(domain: "HealthKitManager", code: -1, userInfo: [NSLocalizedDescriptionKey:"HealthKit is not available on this device"])
             return
         }
         
@@ -90,22 +90,28 @@ class HealthKitManager {
         
         if (isHealthDataAvailable) {
             healthStore!.requestAuthorizationToShareTypes(writeTypes, readTypes: readTypes) { (success, error) -> Void in
-                if (shouldAuthorizeBloodGlucoseSampleReads) {
-                    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForBloodGlucoseSamples");
+                
+                if success {
+                    if (shouldAuthorizeBloodGlucoseSampleReads) {
+                        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForBloodGlucoseSamples");
+                    }
+                    if (shouldAuthorizeBloodGlucoseSampleWrites) {
+                        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForBloodGlucoseSampleWrites");
+                    }
+                    if shouldAuthorizeWorkoutSamples {
+                        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForWorkoutSamples");
+                    }
+                    NSUserDefaults.standardUserDefaults().synchronize()
                 }
-                if (shouldAuthorizeBloodGlucoseSampleWrites) {
-                    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForBloodGlucoseSampleWrites");
+                
+                authorizationSuccess = success
+                authorizationError = error
+                
+                DDLogInfo("authorization success: \(authorizationSuccess), error: \(authorizationError)")
+                
+                if completion != nil {
+                    completion(success:authorizationSuccess, error:authorizationError)
                 }
-                if shouldAuthorizeWorkoutSamples {
-                    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "authorizationRequestedForWorkoutSamples");
-                }
-                NSUserDefaults.standardUserDefaults().synchronize()
-            }
-            
-            DDLogInfo("authorization success: \(success), error: \(error)")
-            
-            if completion != nil {
-                completion(success:success, error:error)
             }
         }
     }
@@ -333,7 +339,7 @@ class HealthKitManager {
         healthStore?.executeQuery(sampleQuery)
     }
     
-    func readBloodGlucoseSamplesForLast24Hours(resultsHandler: ((NSError?, [HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
+    func readMostRecentBloodGlucoseSamples(resultsHandler: ((NSError?, [HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
     {
         DDLogVerbose("trace")
         
@@ -343,10 +349,10 @@ class HealthKitManager {
         }
         
         let now = NSDate()
-        let oneDayAgo = now.dateByAddingTimeInterval(-60 * 60 * 240) // TODO: my - 0 - put back to 24
+        let oneDayAgo = now.dateByAddingTimeInterval(-60 * 60 * 24 * 10) // Query most recent 10 days
+        let limit = 288 // Limit to 288 samples (about one day of samples at 5 minute intervals)
         let lastDayPredicate = HKQuery.predicateForSamplesWithStartDate(oneDayAgo, endDate: now, options: .None)
         let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
-        let limit = 288 // About one day of samples at 5 minute intervals
         
         let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
         let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: lastDayPredicate, limit: limit, sortDescriptors: [sortDescriptor]) {
