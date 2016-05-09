@@ -126,11 +126,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    private var deviceIsLocked = false
+    func applicationProtectedDataDidBecomeAvailable(application: UIApplication) {
+        DDLogVerbose("Device unlocked!")
+        deviceIsLocked = false
+    }
+    
+    func applicationProtectedDataWillBecomeUnavailable(application: UIApplication) {
+        DDLogVerbose("Device locked!")
+        deviceIsLocked = true
+    }
+    
     // Support for background fetch
     func application(application: UIApplication, performFetchWithCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
         NSLog("performFetchWithCompletionHandler")
-        // first make sure we are logged in and have connectivity
         
+        // if device is locked, bail now because we can't read HealthKit data
+        if deviceIsLocked {
+            if AppDelegate.testMode {
+                self.localNotifyMessage("Nutshell skipping background fetch: device is locked!")
+            }
+            completionHandler(.Failed)
+            return
+        }
+        
+        // next make sure we are logged in and have connectivity
         let api = APIConnector.connector()
         if api.sessionToken == nil {
             NSLog("No token available, user will need to log in!")

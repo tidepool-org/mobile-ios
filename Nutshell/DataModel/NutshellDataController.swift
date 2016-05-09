@@ -353,11 +353,10 @@ class NutDataController: NSObject
                     return results[0]
                 }
             }
-            return  nil
         } catch let error as NSError {
             print("Error getting user: \(error)")
-            return nil
         }
+        return nil
     }
     
     private func updateUser(currentUser: User?, newUser: User?) {
