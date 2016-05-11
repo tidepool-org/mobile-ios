@@ -27,7 +27,7 @@ let appHealthKitConfiguration = NutshellHealthKitConfiguration()
 /// - Switches UI between login and event controllers.
 /// - Initializes the UI appearance defaults.
 /// - Initializes data model and api connector.
-@UIApplicationMain
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
@@ -39,29 +39,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        NSLog("Nutshell didFinishLaunchingWithOptions")
-        // Set up logging
-        DDASLLogger.sharedInstance().logFormatter = LogFormatter()
-        DDTTYLogger.sharedInstance().logFormatter = LogFormatter()
-        DDLog.addLogger(DDASLLogger.sharedInstance())
-        DDLog.addLogger(DDTTYLogger.sharedInstance())
-        
-//        // Set up file logs
-//        fileLogger = DDFileLogger()
-//        fileLogger.logFormatter = LogFormatter()
-//        fileLogger.rollingFrequency = 60 * 60 * 4; // 2 hour rolling
-//        fileLogger.logFileManager.maximumNumberOfLogFiles = 12;
-//        DDLog.addLogger(fileLogger);
-        
-        #if DEBUG
-            defaultDebugLevel = DDLogLevel.Verbose
-        #else
-            if NSUserDefaults.standardUserDefaults().boolForKey("LoggingEnabled") {
-                defaultDebugLevel = DDLogLevel.Verbose
-            } else {
-                defaultDebugLevel = DDLogLevel.Off
-            }
-        #endif
         DDLogVerbose("trace")
 
         // Default HealthKit UI enable UI to on unless iPad

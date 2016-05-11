@@ -118,12 +118,14 @@ class HealthKitConfiguration
         
         HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSampleReads: needsGlucoseReads, shouldAuthorizeBloodGlucoseSampleWrites: needsGlucoseWrites, shouldAuthorizeWorkoutSamples: needsWorkoutReads) {
             success, error -> Void in
-            if (error == nil) {
-                configureCurrentHealthKitUser()
-                self.configureHealthKitInterface(self.currentUserId, isDSAUser: self.isDSAUser)
-            } else {
-                DDLogVerbose("Error authorizing health data \(error), \(error!.userInfo)")
-            }
+            dispatch_async(dispatch_get_main_queue(), {
+                if (error == nil) {
+                    configureCurrentHealthKitUser()
+                    self.configureHealthKitInterface(self.currentUserId, isDSAUser: self.isDSAUser)
+                } else {
+                    DDLogVerbose("Error authorizing health data \(error), \(error!.userInfo)")
+                }
+            })
         }
     }
     

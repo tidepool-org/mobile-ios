@@ -142,6 +142,8 @@ class HealthKitManager {
             }
 
             observationHandler(error)
+            
+            observerQueryCompletion()
         }
         healthStore?.executeQuery(bloodGlucoseObservationQuery!)
     }
@@ -317,9 +319,9 @@ class HealthKitManager {
         
         let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
         let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
-            predicate: nil,
+            predicate: nil, // TODO: my - We should probably use a LIKE predicate with wildcard to have the query filter Dexcom samples rather than filtering results as we receive them
             anchor: queryAnchor,
-            limit: 100) {
+            limit: 288) { // Limit to 288 samples (about one day of samples at 5 minute intervals)
                 (query, newSamples, deletedSamples, newAnchor, error) -> Void in
 
                 if error != nil {
@@ -339,23 +341,20 @@ class HealthKitManager {
         healthStore?.executeQuery(sampleQuery)
     }
     
-    func readMostRecentBloodGlucoseSamples(resultsHandler: ((NSError?, [HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
+    func readBloodGlucoseSamples(startDate startDate: NSDate, endDate: NSDate, limit: Int, resultsHandler: ((NSError?, [HKSample]?, completion: (NSError?) -> (Void)) -> Void)!)
     {
-        DDLogVerbose("trace")
+        DDLogInfo("readBloodGlucoseSamples startDate: \(startDate), endDate: \(endDate), limit: \(limit)")
         
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
             return
         }
         
-        let now = NSDate()
-        let oneDayAgo = now.dateByAddingTimeInterval(-60 * 60 * 24 * 10) // Query most recent 10 days
-        let limit = 288 // Limit to 288 samples (about one day of samples at 5 minute intervals)
-        let lastDayPredicate = HKQuery.predicateForSamplesWithStartDate(oneDayAgo, endDate: now, options: .None)
+        let predicate = HKQuery.predicateForSamplesWithStartDate(startDate, endDate: endDate, options: [.StrictEndDate, .StrictEndDate])
         let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
         
         let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
-        let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: lastDayPredicate, limit: limit, sortDescriptors: [sortDescriptor]) {
+        let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: limit, sortDescriptors: [sortDescriptor]) {
             (query, newSamples, error) -> Void in
             
             if error != nil {
@@ -368,6 +367,68 @@ class HealthKitManager {
             }
         }
         healthStore?.executeQuery(sampleQuery)
+    }
+    
+    func countBloodGlucoseSamples(completion: (error: NSError?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) -> (Void)) {
+        let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
+        let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: nil, limit: HKObjectQueryNoLimit, sortDescriptors: nil) {
+            (query, newSamples, error) -> Void in
+            
+            var totalSamplesCount = 0
+            var totalDexcomSamplesCount = 0
+            if newSamples != nil {
+                for sample in newSamples! {
+                    let sourceRevision = sample.sourceRevision
+                    let source = sourceRevision.source
+                    totalSamplesCount += 1
+                    if source.name.lowercaseString.rangeOfString("dexcom") != nil {
+                        totalDexcomSamplesCount += 1
+                    }
+                }
+            }
+            
+            completion(error: error, totalSamplesCount: totalSamplesCount, totalDexcomSamplesCount: totalDexcomSamplesCount)
+        }
+        healthStore?.executeQuery(sampleQuery)
+    }
+    
+    func findSampleDateRange(sampleType sampleType: HKSampleType, completion: (error: NSError?, startDate: NSDate?, endDate: NSDate?) -> Void)
+    {
+        DDLogVerbose("trace")
+
+        var startDate: NSDate? = nil
+        var endDate: NSDate? = nil
+        
+        let predicate = HKQuery.predicateForSamplesWithStartDate(NSDate.distantPast(), endDate: NSDate.distantFuture(), options: [])
+        let startDateSortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: true)
+        let endDateSortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
+
+        // Kick of query to find startDate
+        let startDateSampleQuery = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: 1, sortDescriptors: [startDateSortDescriptor]) {
+            (query: HKSampleQuery, samples: [HKSample]?, error: NSError?) -> Void in
+            
+            if error == nil && samples != nil {
+                // Get startDate of oldest sample
+                if samples?.count > 0 {
+                    startDate = samples![0].startDate
+                }
+
+                // Kick of query to find endDate
+                let endDateSampleQuery = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: 1, sortDescriptors: [endDateSortDescriptor]) {
+                    (query: HKSampleQuery, samples: [HKSample]?, error: NSError?) -> Void in
+
+                    if error == nil && samples?.count > 0 {
+                        endDate = samples![0].endDate
+                    }
+                    
+                    completion(error: error, startDate: startDate, endDate: endDate)
+                }
+                self.healthStore?.executeQuery(endDateSampleQuery)
+            } else {
+                completion(error: error, startDate: startDate, endDate: endDate)
+            }
+        }
+        healthStore?.executeQuery(startDateSampleQuery)
     }
     
     func readWorkoutSamples(resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!)
