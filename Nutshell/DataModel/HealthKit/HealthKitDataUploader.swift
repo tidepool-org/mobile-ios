@@ -116,9 +116,7 @@ class HealthKitDataUploader {
             self.totalUploadCountBloodGlucoseSamplesWithoutDuplicates = 0
         }
         
-        dispatch_async(dispatch_get_main_queue()) {
-            self.transitionToPhase(phase)
-        }
+        self.transitionToPhase(phase)
     }
 
     enum Notifications {
@@ -142,7 +140,7 @@ class HealthKitDataUploader {
     private(set) var currentDayHistoricalBloodGlucoseSamples = 0
     private(set) var totalUploadCountBloodGlucoseSamples = 0
     
-    var uploadHandler: ((postBody: NSData, completion: (error: NSError?, duplicateItemCount: Int) -> (Void)) -> (Void)) = {(postBody, completion) in }
+    var uploadHandler: ((postBody: NSData, completion: (error: NSError?, duplicateSampleCount: Int) -> (Void)) -> (Void)) = {(postBody, completion) in }
 
     func authorizeAndStartUploading(currentUserId currentUserId: String)
     {
@@ -321,7 +319,7 @@ class HealthKitDataUploader {
             }
             
             self.uploadHandler(postBody: postBody) {
-                (error: NSError?, duplicateItemCount: Int) in
+                (error: NSError?, duplicateSampleCount: Int) in
                 if error == nil {
                     guard self.isUploading else {
                         DDLogInfo("Not currently uploading, ignoring")
@@ -421,14 +419,14 @@ class HealthKitDataUploader {
             }
             
             self.uploadHandler(postBody: postBody) {
-                (error: NSError?, duplicateItemCount: Int) in
+                (error: NSError?, duplicateSampleCount: Int) in
                 if error == nil {
                     guard self.isUploading else {
                         DDLogInfo("Not currently uploading, ignoring")
                         return
                     }
                     
-                    self.updateStats(samples: samples, duplicateItemCount: duplicateItemCount)
+                    self.updateStats(sampleCount: samples.count, duplicateSampleCount: duplicateSampleCount)
                     
                     let groupCount = self.currentSamplesToUploadBySource.count
                     if let (_, samples) = self.currentSamplesToUploadBySource.popFirst() {
@@ -519,7 +517,7 @@ class HealthKitDataUploader {
 
         dispatch_async(dispatch_get_main_queue(), {
             if self.isReadingMostRecentSamples {
-                self.stopReadingMostRecentSamples(completion: completion, error: error)
+                self.stopReadingMostRecentSamples()
             } else if self.isReadingSamplesFromAnchor {
                 self.stopReadingSamplesFromAnchor(completion: completion, error: error)
             }
@@ -535,7 +533,7 @@ class HealthKitDataUploader {
                     self.readMore(completion: completion)
                 } else {
                     DDLogInfo("stop reading most recent samples due to error: \(error)")
-                    self.stopReadingMostRecentSamples(completion: completion, error: error)
+                    self.stopReadingMostRecentSamples()
                 }
             } else if self.isReadingSamplesFromAnchor {
                 if error == nil {
@@ -555,7 +553,7 @@ class HealthKitDataUploader {
         
         dispatch_async(dispatch_get_main_queue(), {
             if self.isReadingMostRecentSamples {
-                self.stopReadingMostRecentSamples(completion: completion, error: nil)
+                self.stopReadingMostRecentSamples()
 
                 let bloodGlucoseUploadRecentEndDate = NSUserDefaults.standardUserDefaults().objectForKey("bloodGlucoseUploadRecentStartDate") as! NSDate
                 let bloodGlucoseUploadRecentStartDate = bloodGlucoseUploadRecentEndDate.dateByAddingTimeInterval(-60 * 60 * 8)
@@ -581,7 +579,10 @@ class HealthKitDataUploader {
         if !self.isReadingSamplesFromAnchor {
             self.isReadingSamplesFromAnchor = true
             
-            updateHistoricalSamplesDateRange()
+            // Update historical samples date range every time we start reading samples from anchor so
+            // that we can have most up-to-date date range, in case there are writers to HealthKit during
+            // the historical data upload phase.
+            updateHistoricalSamplesDateRangeAsync()
             
             HealthKitManager.sharedInstance.readBloodGlucoseSamplesFromAnchor(self.bloodGlucoseResultHandler)
         } else {
@@ -625,8 +626,9 @@ class HealthKitDataUploader {
                 bloodGlucoseUploadRecentStartDateFinal = bloodGlucoseUploadRecentStartDateFinalSetting as! NSDate
             }
             
-            // Do this here so we have are more likely to have the days range ready for progress UI when we enter the historical samples phase
-            updateHistoricalSamplesDateRange()
+            // Do this here so we have are more likely to have the days range ready for progress UI when 
+            // we enter the historical samples phase
+            updateHistoricalSamplesDateRangeAsync()
 
             HealthKitManager.sharedInstance.readBloodGlucoseSamples(startDate: bloodGlucoseUploadRecentStartDate, endDate: bloodGlucoseUploadRecentEndDate, limit: 288, resultsHandler: self.bloodGlucoseResultHandler)
         } else {
@@ -634,11 +636,10 @@ class HealthKitDataUploader {
         }
     }
     
-    private func stopReadingMostRecentSamples(completion completion: ((NSError?) -> (Void))?, error: NSError?) {
+    private func stopReadingMostRecentSamples() {
         DDLogVerbose("trace")
         
         if self.isReadingMostRecentSamples {
-            completion?(error)
             self.isReadingMostRecentSamples = false
         } else {
             DDLogVerbose("Unexpected call to stopReadingMostRecentSamples when not reading samples")
@@ -654,7 +655,7 @@ class HealthKitDataUploader {
     
     // MARK: Private - stats
     
-    private func updateHistoricalSamplesDateRange() {
+    private func updateHistoricalSamplesDateRangeAsync() {
         DDLogVerbose("trace")
         
         let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
@@ -677,20 +678,20 @@ class HealthKitDataUploader {
         }
     }
     
-    private func updateStats(samples samples: [HKSample], duplicateItemCount: Int) {
+    private func updateStats(sampleCount sampleCount: Int, duplicateSampleCount: Int) {
         DDLogVerbose("trace")
         
         let lastUploadSampleTimeBloodGlucoseSamples = currentSamplesToUploadLatestSampleTimeBySource.popFirst()!.1
         
         switch self.uploadPhaseBloodGlucoseSamples {
         case .MostRecentSamples:
-            self.totalUploadCountMostRecentBloodGlucoseSamples += samples.count
-            self.totalUploadCountMostRecentBloodGlucoseSamplesWithoutDuplicates += (samples.count - duplicateItemCount)
+            self.totalUploadCountMostRecentBloodGlucoseSamples += sampleCount
+            self.totalUploadCountMostRecentBloodGlucoseSamplesWithoutDuplicates += (sampleCount - duplicateSampleCount)
         case .HistoricalSamples:
-            self.totalUploadCountBloodGlucoseSamples += samples.count
-            self.totalUploadCountBloodGlucoseSamplesWithoutDuplicates += (samples.count - duplicateItemCount)
-            self.totalUploadCountHistoricalBloodGlucoseSamples += samples.count
-            self.totalUploadCountHistoricalBloodGlucoseSamplesWithoutDuplicates += (samples.count - duplicateItemCount)
+            self.totalUploadCountBloodGlucoseSamples += sampleCount
+            self.totalUploadCountBloodGlucoseSamplesWithoutDuplicates += (sampleCount - duplicateSampleCount)
+            self.totalUploadCountHistoricalBloodGlucoseSamples += sampleCount
+            self.totalUploadCountHistoricalBloodGlucoseSamplesWithoutDuplicates += (sampleCount - duplicateSampleCount)
             self.lastUploadTimeBloodGlucoseSamples = NSDateFormatter().dateFromISOString(self.currentBatchUploadDict["time"] as! String)
             if self.lastUploadSampleTimeBloodGlucoseSamples.compare(lastUploadSampleTimeBloodGlucoseSamples) == .OrderedAscending {
                 self.lastUploadSampleTimeBloodGlucoseSamples = lastUploadSampleTimeBloodGlucoseSamples
@@ -702,10 +703,10 @@ class HealthKitDataUploader {
                     "Uploaded \(currentDayHistoricalBloodGlucoseSamples) of \(totalDaysHistoricalBloodGlucoseSamples) days of historical data");
             }
         case .CurrentSamples:
-            self.totalUploadCountBloodGlucoseSamples += samples.count
-            self.totalUploadCountBloodGlucoseSamplesWithoutDuplicates += (samples.count - duplicateItemCount)
-            self.totalUploadCountCurrentBloodGlucoseSamples += samples.count
-            self.totalUploadCountCurrentBloodGlucoseSamplesWithoutDuplicates += (samples.count - duplicateItemCount)
+            self.totalUploadCountBloodGlucoseSamples += sampleCount
+            self.totalUploadCountBloodGlucoseSamplesWithoutDuplicates += (sampleCount - duplicateSampleCount)
+            self.totalUploadCountCurrentBloodGlucoseSamples += sampleCount
+            self.totalUploadCountCurrentBloodGlucoseSamplesWithoutDuplicates += (sampleCount - duplicateSampleCount)
             self.lastUploadTimeBloodGlucoseSamples = NSDateFormatter().dateFromISOString(self.currentBatchUploadDict["time"] as! String)
             if self.lastUploadSampleTimeBloodGlucoseSamples.compare(lastUploadSampleTimeBloodGlucoseSamples) == .OrderedAscending {
                 self.lastUploadSampleTimeBloodGlucoseSamples = lastUploadSampleTimeBloodGlucoseSamples
@@ -713,7 +714,7 @@ class HealthKitDataUploader {
         }
         
         DDLogInfo(
-            "Successfully uploaded \(samples.count) samples of which \(duplicateItemCount) were duplicates.\n" +
+            "Successfully uploaded \(sampleCount) samples of which \(duplicateSampleCount) were duplicates.\n" +
             "\ttotalUploadCountMostRecentBloodGlucoseSamples: \(totalUploadCountMostRecentBloodGlucoseSamples)\n" +
             "\ttotalUploadCountMostRecentBloodGlucoseSamplesWithoutDuplicates: \(totalUploadCountMostRecentBloodGlucoseSamplesWithoutDuplicates)\n" +
             "\ttotalUploadCountHistoricalBloodGlucoseSamples: \(totalUploadCountHistoricalBloodGlucoseSamples)\n" +

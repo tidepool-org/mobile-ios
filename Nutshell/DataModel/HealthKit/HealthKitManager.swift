@@ -143,6 +143,7 @@ class HealthKitManager {
 
             observationHandler(error)
             
+            // Per HealthKit docs: Calling this block tells HealthKit that you have successfully received the background data. If you do not call this block, HealthKit continues to attempt to launch your app using a back off algorithm. If your app fails to respond three times, HealthKit assumes that your app cannot receive data, and stops sending you background updates            
             observerQueryCompletion()
         }
         healthStore?.executeQuery(bloodGlucoseObservationQuery!)
