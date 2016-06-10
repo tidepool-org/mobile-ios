@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="OpenSans-Bold.ttf">
             <string>OpenSans-Bold</string>
+            <string>OpenSans-Bold</string>
         </mutableArray>
         <mutableArray key="OpenSans-Regular.ttf">
-            <string>OpenSans</string>
             <string>OpenSans</string>
         </mutableArray>
         <mutableArray key="OpenSans-Semibold.ttf">
@@ -112,7 +112,7 @@
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="9g5-rw-efz">
-                                                <rect key="frame" x="211" y="72" width="51" height="31"/>
+                                                <rect key="frame" x="220" y="74" width="51" height="31"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="49" id="oVg-zV-LGc"/>
                                                 </constraints>
@@ -120,13 +120,13 @@
                                                     <action selector="enableHealthData:" destination="jOa-f6-dl3" eventType="valueChanged" id="fFy-Am-V5h"/>
                                                 </connections>
                                             </switch>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Link to Apple Health" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2n-bT-OD5" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="62" y="77" width="141" height="21"/>
-                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect to Health" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2n-bT-OD5" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="53" y="77" width="159" height="24"/>
+                                                <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
                                                 <color key="textColor" red="0.29019607843137252" green="0.29019607843137252" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingItemSmall"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKEnable"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kci-7b-geJ" userLabel="supportMailToLink" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
@@ -142,13 +142,48 @@
                                                     <action selector="supportButtonHandler:" destination="jOa-f6-dl3" eventType="touchUpInside" id="327-b0-GWQ"/>
                                                 </connections>
                                             </button>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6Yq-ge-9W3" userLabel="healthStatusContainerView">
+                                                <rect key="frame" x="8" y="117" width="304" height="83"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Uploading complete history of Dexcom data" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gp0-ie-YG8" userLabel="healthStatusLine1" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="304" height="41"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMainStatus"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3 of 10 days" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9S2-IE-Dpc" userLabel="healthStatusLine2" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="41" width="304" height="21"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMinorStatus"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FYI upload pauses when phone is locked" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IYw-eg-MRt" userLabel="healthStatusLine3" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="62" width="304" height="21"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMinorStatus"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="M2n-bT-OD5" firstAttribute="centerY" secondItem="9g5-rw-efz" secondAttribute="centerY" id="3jW-ih-RHr"/>
                                             <constraint firstAttribute="trailing" secondItem="Kci-7b-geJ" secondAttribute="trailing" id="7Cw-2K-HjL"/>
+                                            <constraint firstItem="6Yq-ge-9W3" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" constant="8" id="NTx-xk-Ryg"/>
                                             <constraint firstItem="9g5-rw-efz" firstAttribute="leading" secondItem="M2n-bT-OD5" secondAttribute="trailing" constant="8" id="RTX-7V-4uf"/>
+                                            <constraint firstItem="6Yq-ge-9W3" firstAttribute="top" secondItem="M2n-bT-OD5" secondAttribute="bottom" constant="16" id="UOc-mh-89v"/>
                                             <constraint firstItem="Vvg-5y-QfG" firstAttribute="top" secondItem="9Ls-ZC-LIS" secondAttribute="top" constant="27" id="WhU-pB-Snh"/>
+                                            <constraint firstAttribute="trailing" secondItem="6Yq-ge-9W3" secondAttribute="trailing" constant="8" id="XeX-Pe-74o"/>
                                             <constraint firstItem="M2n-bT-OD5" firstAttribute="top" secondItem="Vvg-5y-QfG" secondAttribute="bottom" constant="13" id="gTs-xs-bad"/>
                                             <constraint firstItem="Vvg-5y-QfG" firstAttribute="centerX" secondItem="9Ls-ZC-LIS" secondAttribute="centerX" id="hCu-aM-LeR"/>
                                             <constraint firstItem="M2n-bT-OD5" firstAttribute="centerX" secondItem="Vvg-5y-QfG" secondAttribute="centerX" constant="-28" id="hw7-2V-IuD"/>
@@ -224,6 +259,10 @@
                     <connections>
                         <outlet property="healthKitLabel" destination="M2n-bT-OD5" id="pNF-Z4-sE2"/>
                         <outlet property="healthKitSwitch" destination="9g5-rw-efz" id="toA-sJ-BKW"/>
+                        <outlet property="healthStatusContainerView" destination="6Yq-ge-9W3" id="vxl-OS-wxW"/>
+                        <outlet property="healthStatusLine1" destination="Gp0-ie-YG8" id="LwV-cg-nwK"/>
+                        <outlet property="healthStatusLine2" destination="9S2-IE-Dpc" id="Fc5-NR-lsv"/>
+                        <outlet property="healthStatusLine3" destination="IYw-eg-MRt" id="Wco-Dv-hDa"/>
                         <outlet property="loginAccount" destination="9sA-Dh-xzl" id="2XT-bE-ria"/>
                         <outlet property="privacyTextField" destination="Vvg-5y-QfG" id="Rbe-uQ-Aru"/>
                         <outlet property="sidebarView" destination="9OQ-uM-nfY" id="Ix6-bv-TsQ"/>

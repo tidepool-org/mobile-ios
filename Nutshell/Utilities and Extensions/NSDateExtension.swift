@@ -28,10 +28,8 @@ extension NSDate {
         let timeAgoInSeconds = round(abs(date.timeIntervalSinceDate(self)))
         
         switch timeAgoInSeconds {
-        case 0...1:
-            return "1 second ago"
-        case 2...59:
-            return "\(Int(timeAgoInSeconds))" + " seconds ago"
+        case 0...59:
+            return "less than a minute ago"
         default:
             break
         }

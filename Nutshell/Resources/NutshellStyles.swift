@@ -95,6 +95,9 @@ public class Styles: NSObject {
         "sidebarSettingItemSmall": (mediumSmallRegularFont, darkGreyColor),
         "sidebarLogoutButton": (mediumSemiboldFont, darkGreyColor),
         "sidebarOtherLinks": (mediumVerySmallSemiboldFont, darkGreyColor),
+        "sidebarSettingHKEnable": (mediumLargeBoldFont, darkGreyColor),
+        "sidebarSettingHKMainStatus": (mediumSmallSemiboldFont, darkGreyColor),
+        "sidebarSettingHKMinorStatus": (mediumSmallRegularFont, darkGreyColor),
     ]
 
     class func backgroundImageofSize(size: CGSize, style: String) -> UIImage? {
