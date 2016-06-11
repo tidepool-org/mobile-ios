@@ -111,9 +111,10 @@ class EventPhotoCollectView: UIControl {
 
 }
 
-class EventPhotoCollectionCell: UICollectionViewCell {
+class EventPhotoCollectionCell: UICollectionViewCell, UIScrollViewDelegate {
     
     static let cellReuseID = "EventPhotoCollectionCell"
+    var scrollView: UIScrollView?
     var photoView: UIImageView?
     var photoUrl = ""
     var photoDisplayMode: UIViewContentMode = .ScaleAspectFit
@@ -121,14 +122,28 @@ class EventPhotoCollectionCell: UICollectionViewCell {
     func configureCell(photoUrl: String) {
         if (photoView != nil) {
             photoView?.removeFromSuperview();
-            photoView = nil;
+            photoView = nil
         }
+        if (scrollView != nil) {
+            scrollView?.removeFromSuperview()
+            scrollView = nil
+        }
+        self.scrollView = UIScrollView(frame: self.bounds)
+        self.addSubview(scrollView!)
+        self.scrollView?.minimumZoomScale = 1.0
+        self.scrollView?.maximumZoomScale = 4.0
+        self.scrollView?.delegate = self
+        
         self.photoUrl = photoUrl
         photoView = UIImageView(frame: self.bounds)
         photoView!.contentMode = photoDisplayMode
         photoView!.backgroundColor = UIColor.clearColor()
         NutUtils.loadImage(photoUrl, imageView: photoView!)
-        self.addSubview(photoView!)
+        self.scrollView!.addSubview(photoView!)
+    }
+    
+    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+        return self.photoView
     }
 }
 
