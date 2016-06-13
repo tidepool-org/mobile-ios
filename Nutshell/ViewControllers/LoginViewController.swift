@@ -471,4 +471,9 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         
         HKHealthStore().executeQuery(sampleQuery)
     }
+    
+    func mailComposeController(controller: MFMailComposeViewController, result: MFMailComposeResult, error: NSError?) {
+        controller.dismissViewControllerAnimated(true, completion: nil)
+    }
+
 }
