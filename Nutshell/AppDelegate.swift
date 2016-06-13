@@ -181,10 +181,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(application: UIApplication) {
         NSLog("Nutshell applicationWillEnterForeground")
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        if !freshLaunch {
+            checkConnection()
+        }
     }
+    
+    func checkConnection() {
+        NSLog("Nutshell checkConnection")
+        let api = APIConnector.connector()
+        var doCheck = refreshTokenNextActive
+        if let lastError = api.lastNetworkError {
+            if lastError == 401 || lastError == 403 {
+                NSLog("AppDelegate: last network error is \(lastError)")
+                doCheck = true
+            }
+        }
+        if doCheck {
+             if api.isConnectedToNetwork() {
+                refreshTokenNextActive = false
+                api.lastNetworkError = nil
+                NSLog("AppDelegate: attempting to refresh token in checkConnection")
+                api.refreshToken() { succeeded -> (Void) in
+                    if !succeeded {
+                        NSLog("Refresh token failed, force login at this point...")
+                        api.logout() {
+                            self.setupUIForLogin()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private var refreshTokenNextActive: Bool = false
 
     func applicationDidBecomeActive(application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        // When app is launched, either go to login, or if we have a valid token, go to main UI after optionally refreshing the token. 
+        // Note: We attempt token refresh each time the app is launched; it might make more sense to do it periodically when app is brought to foreground, or just let the service control token timeout.
         NSLog("Nutshell applicationDidBecomeActive")
         if freshLaunch {
             freshLaunch = false
@@ -198,7 +230,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
             if !api.isConnectedToNetwork() {
-                setupUIForLogin()
+                // Set to refresh next time we come to foreground...
+                NSLog("Offline, set to refresh token next time app enters foreground")
+                self.refreshTokenNextActive = true
+                self.setupUIForLoginSuccess()
                 return
             }
             
@@ -206,7 +241,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             api.refreshToken() { succeeded -> (Void) in
                 if succeeded {
                     NutDataController.controller().configureHealthKitInterface()
-                    // TODO: only if app is in the foreground?
                     self.setupUIForLoginSuccess()
                 } else {
                     NSLog("Refresh token failed, need to log in normally")

@@ -78,7 +78,7 @@ class DatabaseUtils {
                         itemsAdded += adds
                         itemsDeleted += deletes
                     } else {
-                        NSLog("No events in range \(startTime) to \(endTime)")
+                        NSLog("Failed to fetch events in range \(startTime) to \(endTime)")
                     }
                 })
             } else {

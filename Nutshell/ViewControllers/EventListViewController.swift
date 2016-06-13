@@ -77,7 +77,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         }
         
         checkNotifyUserOfTestMode()
-        
+        // periodically check for authentication issues in case we need to force a new login
+        let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
+        appDelegate?.checkConnection()
         APIConnector.connector().trackMetric("Viewed Home Screen (Home Screen)")
     }
     

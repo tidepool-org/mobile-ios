@@ -772,6 +772,10 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             DatabaseUtils.deleteAllNutEvents()
             self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
             return
+        } else if titleTextField.text!.localizedCaseInsensitiveCompare("kill token") == NSComparisonResult.OrderedSame {
+            APIConnector.connector().sessionToken = "xxxx"
+            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+            return
         }
         
         if titleTextField.text!.localizedCaseInsensitiveCompare("test crash") == NSComparisonResult.OrderedSame {

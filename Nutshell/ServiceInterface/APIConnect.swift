@@ -165,6 +165,8 @@ class APIConnector {
     
     /// Logs in the user and obtains the session token for the session (stored internally)
     func login(username: String, password: String, completion: (Result<User, NSError>) -> (Void)) {
+        // Clear in case it was set while logged out...
+        self.lastNetworkError = nil
         // Set our endpoint for login
         let endpoint = "auth/login"
         
@@ -246,13 +248,15 @@ class APIConnector {
         sendRequest(Method.GET, endpoint: endpoint, parameters: parameters).responseJSON { response in
             self.metricSendInProgress = false
             if let theResponse = response.response {
-                if theResponse.statusCode == 200 {
+                let statusCode = theResponse.statusCode
+                if statusCode == 200 {
                     NSLog("Tracked metric: \(nextMetric)")
                     if !self.metricsCache.isEmpty {
                         self.trackMetric(self.metricsCache.removeFirst(), flushBuffer: flushBuffer)
                     }
                 } else {
-                    NSLog("Failed status code: \(theResponse.statusCode) for tracking metric: \(metric)")
+                    NSLog("Failed status code: \(statusCode) for tracking metric: \(metric)")
+                    self.lastNetworkError = statusCode
                     if let error = response.result.error {
                         NSLog("NSError: \(error)")
                     }
@@ -263,10 +267,12 @@ class APIConnector {
         }
     }
     
+    /// Remembers last network error for authorization problem monitoring
+    var lastNetworkError: Int?
     func logout(completion: () -> (Void)) {
         // Clear our session token and remove entries from the db
         APIConnector.connector().trackMetric("Logged Out", flushBuffer: true)
-
+        self.lastNetworkError = nil
         self.sessionToken = nil
         NutDataController.controller().logoutUser()
         completion()
@@ -339,9 +345,24 @@ class APIConnector {
         }
         sendRequest(Method.GET, endpoint: endpoint, parameters: parameters).responseJSON { response in
             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-            if ( response.result.isSuccess ) {
+            if (response.result.isSuccess) {
                 let json = JSON(response.result.value!)
-                completion(Result.Success(json))
+                var validResult = true
+                if let status = json["status"].number {
+                    let statusCode = Int(status)
+                    NSLog("getReadOnlyUserData includes status field: \(statusCode)")
+                    // TODO: determine if any status is indicative of failure here! Note that if call was successful, there will be no status field in the json result. The only verified error response is 403 which happens when we pass an invalid token.
+                    if statusCode == 401 || statusCode == 403 {
+                        validResult = false
+                        self.lastNetworkError = statusCode
+                        completion(Result.Failure(NSError(domain: self.kNutshellErrorDomain,
+                            code: statusCode,
+                            userInfo: nil)))
+                    }
+                }
+                if validResult {
+                    completion(Result.Success(json))
+                }
             } else {
                 // Failure: typically, no data were found:
                 // Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.}
