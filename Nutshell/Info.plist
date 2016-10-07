@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Nutshell reads exercise and Dexcom glucose data from HealthKit so you can view that data in Tidepool apps and other apps that connect to your Tidepool account.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Nutshell writes glucose data to HealthKit so you can view data you&apos;ve uploaded to Tidepool using other apps on your iPhone.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -19,7 +23,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.8.7.4</string>
+	<string>0.8.7.5</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
