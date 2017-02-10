@@ -29,14 +29,14 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
     // vars for drawing datapoints of this type
     var pixelsPerValue: CGFloat = 0.0
     let circleRadius: CGFloat = 3.5
-    var lastCircleDrawn = CGRectNull
+    var lastCircleDrawn = CGRect.null
 
 
     override func typeString() -> String {
         return "cbg"
     }
 
-    private let kGlucoseConversionToMgDl: CGFloat = 18.0
+    fileprivate let kGlucoseConversionToMgDl: CGFloat = 18.0
 
     //
     // MARK: - Loading data
@@ -46,7 +46,7 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
         return circleRadius * 2
     }
     
-    override func loadEvent(event: CommonData, timeOffset: NSTimeInterval) {
+    override func loadEvent(_ event: CommonData, timeOffset: TimeInterval) {
         if let cbgEvent = event as? ContinuousGlucose {
             //NSLog("Adding Cbg event: \(event)")
             if let value = cbgEvent.value {
@@ -64,11 +64,11 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
 
     override func configureForDrawing() {
         self.pixelsPerValue = layout.yPixelsGlucose/layout.kGlucoseRange
-        lastCircleDrawn = CGRectNull
+        lastCircleDrawn = CGRect.null
     }
     
     // override!
-    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType) {
+    override func drawDataPointAtXOffset(_ xOffset: CGFloat, dataPoint: GraphDataType) {
         
         let centerX = xOffset
         var value = round(dataPoint.value)
@@ -79,11 +79,11 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
         let centerY: CGFloat = layout.yTopOfGlucose + layout.yPixelsGlucose - floor(value * pixelsPerValue)
         
         let circleColor = value < layout.lowBoundary ? layout.lowColor : value < layout.highBoundary ? layout.targetColor : layout.highColor
-        let circleRect = CGRectMake(centerX-circleRadius, centerY-circleRadius, circleRadius*2, circleRadius*2)
+        let circleRect = CGRect(x: centerX-circleRadius, y: centerY-circleRadius, width: circleRadius*2, height: circleRadius*2)
         let smallCircleRect = circleRect.insetBy(dx: 1.0, dy: 1.0)
         
         if !lastCircleDrawn.intersects(circleRect) {
-            let smallCirclePath = UIBezierPath(ovalInRect: circleRect)
+            let smallCirclePath = UIBezierPath(ovalIn: circleRect)
             circleColor.setFill()
             smallCirclePath.fill()
             // Draw border so circle stands out from other objects like meal lines
@@ -92,7 +92,7 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
             smallCirclePath.stroke()
         } else {
             // Don't draw border when circles intersect as it creates a distracting pattern
-            let smallCirclePath = UIBezierPath(ovalInRect: smallCircleRect)
+            let smallCirclePath = UIBezierPath(ovalIn: smallCircleRect)
             circleColor.setFill()
             smallCirclePath.fill()
         }

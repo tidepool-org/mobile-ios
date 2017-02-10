@@ -11,9 +11,9 @@ import CoreData
 import SwiftyJSON
 
 class GrabBag: CommonData {
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> GrabBag? {
-        if let entityDescription = NSEntityDescription.entityForName("GrabBag", inManagedObjectContext: moc) {
-            let me = GrabBag(entity: entityDescription, insertIntoManagedObjectContext: nil)
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> GrabBag? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "GrabBag", in: moc) {
+            let me = GrabBag(entity: entityDescription, insertInto: nil)
             
             me.subType = json["subType"].string
             

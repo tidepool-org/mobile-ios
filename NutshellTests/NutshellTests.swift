@@ -31,7 +31,7 @@ class NutshellTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         // Initialize database by referencing username. This must be done before using the APIConnector!
         let _ = NutDataController.controller().currentUserName
-        APIConnector.connector().configure()
+        _ = APIConnector.connector().configure()
         APIConnector.connector().switchToServer(server)
     }
     
@@ -40,9 +40,9 @@ class NutshellTests: XCTestCase {
         super.tearDown()
     }
     
-    func login(username: String, password: String, remember: Bool, completion: (Result<User, NSError>) -> (Void)) {
+    func login(_ username: String, password: String, remember: Bool, completion: @escaping (Result<User>) -> (Void)) {
         APIConnector.connector().login(email,
-            password: pass) { (result:(Alamofire.Result<User, NSError>)) -> (Void) in
+            password: pass) { (result:(Alamofire.Result<User>)) -> (Void) in
                 print("Login result: \(result)")
                 completion(result)
         }
@@ -51,11 +51,11 @@ class NutshellTests: XCTestCase {
     func test01LoginOut() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        let expectation = expectationWithDescription("Login successful")
+        let expectation = self.expectation(description: "Login successful")
         if email == "test username goes here!" {
             XCTFail("Fatal error: please edit NutshellTests.swift and add a test account!")
         }
-        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User, NSError>)) -> (Void) in
+        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
                 print("Login result: \(result)")
                 if ( result.isSuccess ) {
                     if let user=result.value {
@@ -69,23 +69,23 @@ class NutshellTests: XCTestCase {
                 } else {
                     var errorCode = ""
                     if let error = result.error {
-                        errorCode = String(error.code)
+                        errorCode = String(error._code)
                     }
                     XCTFail("login failed! Error: " + errorCode + result.error.debugDescription)
                 }
         }
         // Wait 5.0 seconds until expectation has been fulfilled. If not, fail.
-        waitForExpectationsWithTimeout(5.0, handler: nil)
+        waitForExpectations(timeout: 5.0, handler: nil)
 
     }
 
     func test02FetchUserProfile() {
-        let expectation = expectationWithDescription("User profile fetch successful")
+        let expectation = self.expectation(description: "User profile fetch successful")
         
-        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User, NSError>)) -> (Void) in
+        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
             print("Login for profile result: \(result)")
 
-             APIConnector.connector().fetchProfile() { (result:Alamofire.Result<JSON, NSError>) -> (Void) in
+             APIConnector.connector().fetchProfile() { (result:Alamofire.Result<JSON>) -> (Void) in
                 NSLog("Profile fetch result: \(result)")
                 if (result.isSuccess) {
                     if let json = result.value {
@@ -95,7 +95,7 @@ class NutshellTests: XCTestCase {
                 } else {
                     var errorCode = ""
                     if let error = result.error {
-                        errorCode = String(error.code)
+                        errorCode = String(error._code)
                     }
                     XCTFail("profile fetch failed! Error: " + errorCode + result.error.debugDescription)
                 }
@@ -103,20 +103,20 @@ class NutshellTests: XCTestCase {
         }
         
         // Wait 5.0 seconds until expectation has been fulfilled. If not, fail.
-        waitForExpectationsWithTimeout(5.0, handler: nil)
+        waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func test03FetchUserData() {
-        let expectation = expectationWithDescription("User profile fetch successful")
+        let expectation = self.expectation(description: "User profile fetch successful")
         
-        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User, NSError>)) -> (Void) in
+        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
             print("Login for fetch user data result: \(result)")
             
             // Look at events in July 2015...
             let startDate = NutUtils.dateFromJSON("2015-07-01T00:00:00.000Z")!
             let endDate = NutUtils.dateFromJSON("2015-07-31T23:59:59.000Z")!
             
-            APIConnector.connector().getReadOnlyUserData(startDate, endDate: endDate) { (result:Alamofire.Result<JSON, NSError>) -> (Void) in
+            APIConnector.connector().getReadOnlyUserData(startDate, endDate: endDate) { (result:Alamofire.Result<JSON>) -> (Void) in
                 NSLog("FetchUserData result: \(result)")
                 if (result.isSuccess) {
                     if let json = result.value {
@@ -130,32 +130,32 @@ class NutshellTests: XCTestCase {
                 } else {
                     var errorCode = ""
                     if let error = result.error {
-                        errorCode = String(error.code)
+                        errorCode = String(error._code)
                     }
                     XCTFail("user data fetch failed! Error: " + errorCode + result.error.debugDescription)
                 }
             }
         }
         // Wait 5.0 seconds until expectation has been fulfilled. If not, fail.
-        waitForExpectationsWithTimeout(5.0, handler: nil)
+        waitForExpectations(timeout: 5.0, handler: nil)
     }
     
     func test04FetchUserData2() {
-        let expectation = expectationWithDescription("User profile fetch successful")
+        let expectation = self.expectation(description: "User profile fetch successful")
         
-        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User, NSError>)) -> (Void) in
+        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
             print("Login for fetch user data result: \(result)")
             
             // Look at events in July 2015...
             let startDate = NutUtils.dateFromJSON("2015-07-01T00:00:00.000Z")!
             let endDate = NutUtils.dateFromJSON("2015-07-31T23:59:59.000Z")!
             
-            APIConnector.connector().getReadOnlyUserData(startDate, endDate: endDate) { (result:Alamofire.Result<JSON, NSError>) -> (Void) in
+            APIConnector.connector().getReadOnlyUserData(startDate, endDate: endDate) { (result:Alamofire.Result<JSON>) -> (Void) in
                 NSLog("FetchUserData2 result: \(result)")
                 if (result.isSuccess) {
                     if let json = result.value {
                         if result.isSuccess {
-                            DatabaseUtils.updateEventsForTimeRange(startDate, endTime: endDate, moc:NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: json)
+                            _ = DatabaseUtils.updateEventsForTimeRange(startDate, endTime: endDate, moc:NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: json)
                         } else {
                             NSLog("No user data events!")
                         }
@@ -164,19 +164,19 @@ class NutshellTests: XCTestCase {
                 } else {
                     var errorCode = ""
                     if let error = result.error {
-                        errorCode = String(error.code)
+                        errorCode = String(error._code)
                     }
                     XCTFail("user data fetch failed! Error: " + errorCode + result.error.debugDescription)
                 }
             }
         }
         // Wait 5.0 seconds until expectation has been fulfilled. If not, fail.
-        waitForExpectationsWithTimeout(5.0, handler: nil)
+        waitForExpectations(timeout: 5.0, handler: nil)
     }
 
     func testPerformanceExample() {
         // This is an example of a performance test case.
-        self.measureBlock {
+        self.measure {
             // Put the code you want to measure the time of here.
         }
     }

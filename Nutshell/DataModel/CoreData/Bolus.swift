@@ -12,9 +12,9 @@ import SwiftyJSON
 
 class Bolus: CommonData {
 
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Bolus? {
-        if let entityDescription = NSEntityDescription.entityForName("Bolus", inManagedObjectContext: moc) {
-            let me = Bolus(entity: entityDescription, insertIntoManagedObjectContext: nil)
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> Bolus? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "Bolus", in: moc) {
+            let me = Bolus(entity: entityDescription, insertInto: nil)
             
             me.normal = json["normal"].number
             me.extended = json["extended"].number
@@ -32,7 +32,7 @@ class Bolus: CommonData {
             if let extended = me.extended {
                 value = value + Float(extended)
             }
-            me.value = NSNumber(float: value)
+            me.value = NSNumber(value: value as Float)
             // The following are unused...
             me.subType = json["subType"].string
             me.insulin = json["insulin"].string

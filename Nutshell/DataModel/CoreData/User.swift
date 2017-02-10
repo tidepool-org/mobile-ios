@@ -12,9 +12,9 @@ import SwiftyJSON
 
 
 class User: NSManagedObject {
-    class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> User? {
-        if let entityDescription = NSEntityDescription.entityForName("User", inManagedObjectContext: moc) {
-            let me = User(entity: entityDescription, insertIntoManagedObjectContext: nil)
+    class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> User? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "User", in: moc) {
+            let me = User(entity: entityDescription, insertInto: nil)
             
             me.userid = json["userid"].string
             me.username = json["username"].string
@@ -26,15 +26,15 @@ class User: NSManagedObject {
         return nil
     }
     
-    func processProfileJSON(json: JSON) {
+    func processProfileJSON(_ json: JSON) {
         NSLog("profile json: \(json)")
         fullName = json["fullName"].string
         if fullName != nil {
-            self.managedObjectContext?.refreshObject(self, mergeChanges: true)
+            self.managedObjectContext?.refresh(self, mergeChanges: true)
             NSLog("Added full name from profile: \(fullName)")
         }
         let patient = json["patient"]
-        let isDSA = patient != nil
-        accountIsDSA = NSNumber.init(bool: isDSA)
+        let isDSA = patient != JSON.null
+        accountIsDSA = NSNumber.init(value: isDSA)
     }
 }

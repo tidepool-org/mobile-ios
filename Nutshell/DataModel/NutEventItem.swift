@@ -14,7 +14,7 @@ class NutEventItem {
     var title: String
     var location: String
     var notes: String
-    var time: NSDate
+    var time: Date
     var tzOffsetSecs: Int
     var nutCracked: Bool = false
     var eventItem: EventItem
@@ -29,16 +29,16 @@ class NutEventItem {
         }
         
         if let eventTime = eventItem.time {
-            self.time = eventTime
+            self.time = eventTime as Date
         } else {
-            self.time = NSDate()
+            self.time = Date()
             NSLog("ERROR: nil time leaked in for event \(self.title)")
         }
             
         if let zoneOffset = eventItem.timezoneOffset {
             self.tzOffsetSecs = Int(zoneOffset) * 60
         } else {
-            self.tzOffsetSecs = NSCalendar.currentCalendar().timeZone.secondsFromGMT
+            self.tzOffsetSecs = NSCalendar.current.timeZone.secondsFromGMT()
             NSLog("ERROR: nil time zone offset for \(self.title)")
         }
     }
@@ -56,8 +56,8 @@ class NutEventItem {
         return ""
     }
     
-    func containsSearchString(searchString: String) -> Bool {
-        if notes.localizedCaseInsensitiveContainsString(searchString) {
+    func containsSearchString(_ searchString: String) -> Bool {
+        if notes.localizedCaseInsensitiveContains(searchString) {
             return true
         }
         return false;
@@ -68,9 +68,9 @@ class NutEventItem {
         if changed() {
             copyChanges()
             if let moc = eventItem.managedObjectContext {
-                eventItem.modifiedTime = NSDate()
+                eventItem.modifiedTime = Date()
                 eventItem.userid = NutDataController.controller().currentUserId // Should already be set but can't hurt
-                moc.refreshObject(eventItem, mergeChanges: true)
+                moc.refresh(eventItem, mergeChanges: true)
                 return DatabaseUtils.databaseSave(moc)
             }
         }
@@ -79,7 +79,7 @@ class NutEventItem {
 
     func deleteItem() -> Bool {
         if let moc = eventItem.managedObjectContext {
-            moc.deleteObject(self.eventItem)
+            moc.delete(self.eventItem)
             return DatabaseUtils.databaseSave(moc)
         }
         return false
@@ -114,7 +114,7 @@ class NutEventItem {
     func copyChanges() {
         eventItem.title = title
         eventItem.notes = notes
-        eventItem.nutCracked = nutCracked
+        eventItem.nutCracked = nutCracked as NSNumber?
         eventItem.time = time
     }
     

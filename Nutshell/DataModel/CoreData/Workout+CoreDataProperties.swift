@@ -14,7 +14,7 @@ import CoreData
 
 extension Workout {
 
-    @NSManaged var appleHealthDate: NSDate?
+    @NSManaged var appleHealthDate: Date?
     @NSManaged var calories: NSNumber?
     @NSManaged var distance: NSNumber?
     @NSManaged var duration: NSNumber?

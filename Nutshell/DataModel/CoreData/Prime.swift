@@ -11,9 +11,9 @@ import CoreData
 import SwiftyJSON
 
 class Prime: DeviceMetadata {
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Prime? {
-        if let entityDescription = NSEntityDescription.entityForName("Prime", inManagedObjectContext: moc) {
-            let me = Prime(entity: entityDescription, insertIntoManagedObjectContext: nil) 
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> Prime? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "Prime", in: moc) {
+            let me = Prime(entity: entityDescription, insertInto: nil) 
             
             me.primeTarget = json["primeTarget"].string
             me.volume = NutUtils.decimalFromJSON(json["volume"].string)

@@ -23,9 +23,9 @@ class EventGroupRowCollectionCell: UICollectionViewCell {
     var photoUrl = ""
     var eventItem: NutEventItem?
     
-    private var photoView: UIImageView?
+    fileprivate var photoView: UIImageView?
 
-    func configureCell(photoUrl: String, eventItem: NutEventItem?) {
+    func configureCell(_ photoUrl: String, eventItem: NutEventItem?) {
         if (photoView != nil) {
             photoView?.removeFromSuperview();
             photoView = nil;
@@ -36,8 +36,8 @@ class EventGroupRowCollectionCell: UICollectionViewCell {
         // leave a gap between photos
         imageFrame.size.width -= 3.0
         photoView = UIImageView(frame: imageFrame)
-        photoView!.contentMode = .ScaleAspectFill
-        photoView!.backgroundColor = UIColor.clearColor()
+        photoView!.contentMode = .scaleAspectFill
+        photoView!.backgroundColor = UIColor.clear
         NutUtils.loadImage(photoUrl, imageView: photoView!)
         self.addSubview(photoView!)
     }
@@ -52,34 +52,34 @@ class EventGroupTableViewCell: BaseUITableViewCell {
     @IBOutlet weak var timeString: NutshellUILabel!
     @IBOutlet weak var photoCollectionViewContainer: UIView!
     @IBOutlet weak var photoCollectView: UICollectionView!
-    private var photoUrls: [String] = []
+    fileprivate var photoUrls: [String] = []
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
     }
 
-    override func setHighlighted(highlighted: Bool, animated: Bool) {
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated:animated)
         
         // Configure the view for the highlighted state
-        titleString.highlighted = highlighted
-        timeString.highlighted = highlighted
+        titleString.isHighlighted = highlighted
+        timeString.isHighlighted = highlighted
     }
 
-    private var photoContainerHeight: CGFloat = 79.0
-    func configureCell(eventItem: NutEventItem) {
+    fileprivate var photoContainerHeight: CGFloat = 79.0
+    func configureCell(_ eventItem: NutEventItem) {
         titleString.text = eventItem.notes
         NutUtils.setFormatterTimezone(eventItem.tzOffsetSecs)
         timeString.text = NutUtils.standardUIDateString(eventItem.time)
         self.eventItem = eventItem
 
-        favoriteStarContainer.hidden = !eventItem.nutCracked
+        favoriteStarContainer.isHidden = !eventItem.nutCracked
 
         photoUrls = eventItem.photoUrlArray()
     
@@ -88,10 +88,10 @@ class EventGroupTableViewCell: BaseUITableViewCell {
             photoCollectView.reloadData()
         }
         
-        photoCollectionViewContainer.hidden = photoCount == 0
+        photoCollectionViewContainer.isHidden = photoCount == 0
         // collapse photo container if there are no photos...
         for c in photoCollectionViewContainer.constraints {
-            if c.firstAttribute == NSLayoutAttribute.Height {
+            if c.firstAttribute == NSLayoutAttribute.height {
                 if c.constant != 0.0 {
                     photoContainerHeight = c.constant
                 }
@@ -101,7 +101,7 @@ class EventGroupTableViewCell: BaseUITableViewCell {
         }
         for c in photoCollectionViewContainer.constraints {
             // let the width shrink if there is only one photo, so tapping past the one photo will segue to the detail view...
-            if c.firstAttribute == NSLayoutAttribute.Width {
+            if c.firstAttribute == NSLayoutAttribute.width {
                 c.priority = photoCount == 1 ? 751 : 749
                 break
             }
@@ -111,13 +111,13 @@ class EventGroupTableViewCell: BaseUITableViewCell {
 
 extension EventGroupTableViewCell: UICollectionViewDataSource {
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photoUrls.count
     }
     
-    func collectionView(collectionView: UICollectionView,
-        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(EventGroupRowCollectionCell.cellReuseID, forIndexPath: indexPath) as! EventGroupRowCollectionCell
+    func collectionView(_ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventGroupRowCollectionCell.cellReuseID, for: indexPath) as! EventGroupRowCollectionCell
             
             // index determines center time...
             let photoIndex = indexPath.row
@@ -134,9 +134,9 @@ extension EventGroupTableViewCell: UICollectionViewDelegate {
 
 extension EventGroupTableViewCell: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
-        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat
+        minimumLineSpacingForSectionAt section: Int) -> CGFloat
     {
         return 0.0
     }

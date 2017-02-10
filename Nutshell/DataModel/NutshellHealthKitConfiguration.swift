@@ -37,7 +37,7 @@ class NutshellHealthKitConfiguration: HealthKitConfiguration
     // MARK: - Loading workout events from Healthkit
     //
     
-    func monitorForWorkoutData(monitor: Bool) {
+    func monitorForWorkoutData(_ monitor: Bool) {
         // Set up HealthKit observation and background query.
         if (HealthKitManager.sharedInstance.isHealthDataAvailable) {
             if monitor {
@@ -46,14 +46,14 @@ class NutshellHealthKitConfiguration: HealthKitConfiguration
                     
                     if (newSamples != nil) {
                         NSLog("********* PROCESSING \(newSamples!.count) new workout samples ********* ")
-                        dispatch_async(dispatch_get_main_queue()) {
+                        DispatchQueue.main.async {
                             self.processWorkoutEvents(newSamples!)
                         }
                     }
                     
                     if (deletedSamples != nil) {
                         NSLog("********* PROCESSING \(deletedSamples!.count) deleted workout samples ********* ")
-                        dispatch_async(dispatch_get_main_queue()) {
+                        DispatchQueue.main.async {
                             self.processDeleteWorkoutEvents(deletedSamples!)
                         }
                     }
@@ -64,12 +64,12 @@ class NutshellHealthKitConfiguration: HealthKitConfiguration
         }
     }
     
-    private func processWorkoutEvents(workouts: [HKSample]) {
+    fileprivate func processWorkoutEvents(_ workouts: [HKSample]) {
         let moc = NutDataController.controller().mocForNutEvents()!
-        if let entityDescription = NSEntityDescription.entityForName("Workout", inManagedObjectContext: moc) {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "Workout", in: moc) {
             for event in workouts {
                 if let workout = event as? HKWorkout {
-                    NSLog("*** processing workout id: \(event.UUID.UUIDString)")
+                    NSLog("*** processing workout id: \(event.uuid.uuidString)")
                     if let metadata = workout.metadata {
                         NSLog(" metadata: \(metadata)")
                     }
@@ -78,13 +78,13 @@ class NutshellHealthKitConfiguration: HealthKitConfiguration
                             NSLog(" workout events: \(wkoutEvents)")
                         }
                     }
-                    let we = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Workout
+                    let we = NSManagedObject(entity: entityDescription, insertInto: nil) as! Workout
                     
                     // Workout fields
                     we.appleHealthDate = workout.startDate
-                    we.calories = workout.totalEnergyBurned?.doubleValueForUnit(HKUnit.kilocalorieUnit())
-                    we.distance = workout.totalDistance?.doubleValueForUnit(HKUnit.mileUnit())
-                    we.duration = workout.duration
+                    we.calories = workout.totalEnergyBurned?.doubleValue(for: HKUnit.kilocalorie()) as NSNumber?
+                    we.distance = workout.totalDistance?.doubleValue(for: HKUnit.mile()) as NSNumber?
+                    we.duration = workout.duration as NSNumber?
                     we.source = workout.sourceRevision.source.name
                     // NOTE: use the Open mHealth enum string here!
                     we.subType = Workout.enumStringForHKWorkoutActivityType(workout.workoutActivityType)
@@ -103,27 +103,27 @@ class NutshellHealthKitConfiguration: HealthKitConfiguration
                     // Common fields
                     we.time = workout.startDate
                     we.type = "workout"
-                    we.id = event.UUID.UUIDString
+                    we.id = event.uuid.uuidString as NSString?
                     we.userid = NutDataController.controller().currentUserId
-                    let now = NSDate()
+                    let now = Date()
                     we.createdTime = now
                     we.modifiedTime = now
                     // TODO: we set a time zone offset for this event, ASSUMING the workout was done in the same time zone location. We do adjust for times in a different daylight savings zone offset. Should we just leave this field nil unless we can be reasonably clear about the time zone (e.g., events very recently created)?
                     let dstAdjust = NutUtils.dayLightSavingsAdjust(workout.startDate)
-                    we.timezoneOffset = (NSCalendar.currentCalendar().timeZone.secondsFromGMT + dstAdjust)/60
+                    we.timezoneOffset = NSNumber(value:(NSCalendar.current.timeZone.secondsFromGMT() + dstAdjust)/60)
                     
                     // Check to see if we already have this one, with possibly a different id
-                    if let time = we.time, userId = we.userid {
-                        let request = NSFetchRequest(entityName: "Workout")
-                        request.predicate = NSPredicate(format: "(time == %@) AND (userid = %@)", time, userId)
+                    if let time = we.time, let userId = we.userid {
+                        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Workout")
+                        request.predicate = NSPredicate(format: "(time == %@) AND (userid = %@)", time as CVarArg, userId)
                         do {
-                            let existingWorkouts = try moc.executeFetchRequest(request) as! [Workout]
+                            let existingWorkouts = try moc.fetch(request) as! [Workout]
                             for workout: Workout in existingWorkouts {
                                 if workout.duration == we.duration &&
                                     workout.title == we.title &&
                                     workout.notes == we.notes {
                                     NSLog("Deleting existing workout of same time and duration: \(workout)")
-                                    moc.deleteObject(workout)
+                                    moc.delete(workout)
                                 }
                             }
                         } catch {
@@ -131,32 +131,32 @@ class NutshellHealthKitConfiguration: HealthKitConfiguration
                         }
                     }
                     
-                    moc.insertObject(we)
+                    moc.insert(we)
                     NSLog("added workout: \(we)")
                 } else {
                     NSLog("ERROR: \(#function): Expected HKWorkout!")
                 }
             }
         }
-        DatabaseUtils.databaseSave(moc)
+        _ = DatabaseUtils.databaseSave(moc)
         
     }
     
-    private func processDeleteWorkoutEvents(workouts: [HKDeletedObject]) {
+    fileprivate func processDeleteWorkoutEvents(_ workouts: [HKDeletedObject]) {
         let moc = NutDataController.controller().mocForNutEvents()!
         for workout in workouts {
-            NSLog("Processing deleted workout sample with UUID: \(workout.UUID)");
-            let id = workout.UUID.UUIDString
-            let request = NSFetchRequest(entityName: "Workout")
+            NSLog("Processing deleted workout sample with UUID: \(workout.uuid)");
+            let id = workout.uuid.uuidString
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Workout")
             // Note: look for any workout with this id, regardless of current user - we should only see it for one user, but multiple user operation is not yet completely defined.
             request.predicate = NSPredicate(format: "(id == %@)", id)
             do {
-                let existingWorkouts = try moc.executeFetchRequest(request) as! [Workout]
+                let existingWorkouts = try moc.fetch(request) as! [Workout]
                 for workout: Workout in existingWorkouts {
                     NSLog("Deleting workout: \(workout)")
-                    moc.deleteObject(workout)
+                    moc.delete(workout)
                 }
-                DatabaseUtils.databaseSave(moc)
+                _ = DatabaseUtils.databaseSave(moc)
             } catch {
                 NSLog("Existing workout query failed!")
             }

@@ -25,7 +25,7 @@ import UIKit
         }
     }
     
-    private func updateStyling() {
+    fileprivate func updateStyling() {
         if let backColor = Styles.usageToBackgroundColor[usage] {
             self.backgroundColor = backColor
         }

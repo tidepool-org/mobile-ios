@@ -13,9 +13,9 @@ import SwiftyJSON
 class Basal: CommonData {
 
     
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Basal? {
-        if let entityDescription = NSEntityDescription.entityForName("Basal", inManagedObjectContext: moc) {
-            let me = Basal(entity: entityDescription, insertIntoManagedObjectContext: nil)
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> Basal? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "Basal", in: moc) {
+            let me = Basal(entity: entityDescription, insertInto: nil)
             
             me.deliveryType = json["deliveryType"].string
             me.value = json["rate"].number
@@ -24,7 +24,7 @@ class Basal: CommonData {
             me.suppressedRate = nil
  
             // Deal with nested suppressed arrays - need to march up them to find the innermost value. Data may have a temp rate of 0, and multiple suppressions all at zero. Only innermost will have a delivery type of 'scheduled'.
-            func getScheduledSuppressed(json: [String: JSON]) -> NSNumber? {
+            func getScheduledSuppressed(_ json: [String: JSON]) -> NSNumber? {
                 if let devType = json["deliveryType"]?.string {
                     if devType == "scheduled" {
                         return json["rate"]?.number

@@ -18,6 +18,6 @@ extension Note {
     @NSManaged var text: String?
     @NSManaged var creatorId: String?
     @NSManaged var reference: String?
-    @NSManaged var displayTime: NSDate?
+    @NSManaged var displayTime: Date?
 
 }

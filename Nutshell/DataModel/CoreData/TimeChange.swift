@@ -11,9 +11,9 @@ import CoreData
 import SwiftyJSON
 
 class TimeChange: DeviceMetadata {
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> TimeChange? {
-        if let entityDescription = NSEntityDescription.entityForName("TimeChange", inManagedObjectContext: moc) {
-            let me = TimeChange(entity: entityDescription, insertIntoManagedObjectContext: nil)
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> TimeChange? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "TimeChange", in: moc) {
+            let me = TimeChange(entity: entityDescription, insertInto: nil)
             
             me.changeFrom = NutUtils.dateFromJSON(json["changeFrom"].string)
             me.changeTo = NutUtils.dateFromJSON(json["changeTo"].string)

@@ -11,9 +11,9 @@ import CoreData
 import SwiftyJSON
 
 class Calibration: DeviceMetadata {
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Calibration? {
-        if let entityDescription = NSEntityDescription.entityForName("Calibration", inManagedObjectContext: moc) {
-            let me = Calibration(entity: entityDescription, insertIntoManagedObjectContext: nil)
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> Calibration? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "Calibration", in: moc) {
+            let me = Calibration(entity: entityDescription, insertInto: nil)
             
             me.value = NutUtils.decimalFromJSON(json["value"].string)
             

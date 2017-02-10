@@ -95,7 +95,6 @@
 		0334CAA91BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */; };
 		0334CAAB1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
 		0334CAAC1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
-		1ECDD320B170E25E19F57F8C /* Pods_NutshellTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A3109656497A8086C86BD31 /* Pods_NutshellTests.framework */; };
 		48103E961C1DE4CC0055C27A /* ENSideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E941C1DE4CC0055C27A /* ENSideMenu.swift */; };
 		48103E971C1DE4CC0055C27A /* ENSideMenuNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E951C1DE4CC0055C27A /* ENSideMenuNavigationController.swift */; };
 		48103E991C1DE7BC0055C27A /* EventViewNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E981C1DE7BC0055C27A /* EventViewNavController.swift */; };
@@ -188,6 +187,7 @@
 		48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B3C9F01C35ADC400E00E7B /* EventPhotoCollectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B3C9EF1C35ADC400E00E7B /* EventPhotoCollectView.swift */; };
+		48BA05B01E53911500212486 /* GraphCursorLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BA05AF1E53911500212486 /* GraphCursorLayer.swift */; };
 		48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */; };
 		48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */; };
 		48C491511C38738A00F34630 /* GraphDataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491501C38738A00F34630 /* GraphDataLayer.swift */; };
@@ -226,7 +226,8 @@
 		48EDC2C91BD99141003049D9 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */; };
 		48FB1E4D1C17C38600C89F8E /* NutshellDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */; };
 		48FB1E4E1C17C38600C89F8E /* NutshellDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */; };
-		949A33B350C643B74EB54D43 /* Pods_Nutshell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */; };
+		54CE4788EE12555DB927C2E3 /* Pods_Nutshell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71627230DDF0C03F73CA817F /* Pods_Nutshell.framework */; };
+		7BD350EBD22869AA496C9405 /* Pods_NutshellTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7522442303E8F83231E1B3B2 /* Pods_NutshellTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -285,9 +286,7 @@
 		0334CA101BA8DDFC00013096 /* Wizard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wizard.swift; sourceTree = "<group>"; };
 		0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bolus+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		0334CAA71BA8E22E00013096 /* Bolus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bolus.swift; sourceTree = "<group>"; };
-		11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nutshell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		33D967222B6D1D56CDE3B479 /* Pods-NutshellTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NutshellTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests.debug.xcconfig"; sourceTree = "<group>"; };
-		39056528E4E50304C2030C72 /* Pods-NutshellTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NutshellTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests.release.xcconfig"; sourceTree = "<group>"; };
+		063572F169F60C9A48179678 /* Pods-Nutshell.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.release.xcconfig"; sourceTree = "<group>"; };
 		48103E941C1DE4CC0055C27A /* ENSideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ENSideMenu.swift; path = "Third Party/ENSideMenu/ENSideMenu.swift"; sourceTree = "<group>"; };
 		48103E951C1DE4CC0055C27A /* ENSideMenuNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ENSideMenuNavigationController.swift; path = "Third Party/ENSideMenu/ENSideMenuNavigationController.swift"; sourceTree = "<group>"; };
 		48103E981C1DE7BC0055C27A /* EventViewNavController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventViewNavController.swift; path = ViewControllers/EventViewNavController.swift; sourceTree = "<group>"; };
@@ -366,6 +365,7 @@
 		48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ThreeTacosDemoPic.png; path = Images/ThreeTacosDemoPic.png; sourceTree = "<group>"; };
 		48B127B01BC4466E00061483 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseUtils.swift; path = "Utilities and Extensions/DatabaseUtils.swift"; sourceTree = "<group>"; };
 		48B3C9EF1C35ADC400E00E7B /* EventPhotoCollectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventPhotoCollectView.swift; path = ViewControllers/EventPhotoCollectView.swift; sourceTree = "<group>"; };
+		48BA05AF1E53911500212486 /* GraphCursorLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCursorLayer.swift; path = GraphView/GraphCursorLayer.swift; sourceTree = "<group>"; };
 		48BA1EA41C18865100C1B71C /* Data Model.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Data Model.txt"; path = "Manual Test Cases/Data Model.txt"; sourceTree = "<group>"; };
 		48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
 		48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutShellUIViewWithHighlight.swift; path = Resources/NutShellUIViewWithHighlight.swift; sourceTree = "<group>"; };
@@ -398,9 +398,11 @@
 		48EDC2C51BD6B403003049D9 /* EventAddOrEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventAddOrEditViewController.swift; path = ViewControllers/EventAddOrEditViewController.swift; sourceTree = "<group>"; };
 		48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutshellDataController.swift; path = DataModel/NutshellDataController.swift; sourceTree = "<group>"; };
-		5A3109656497A8086C86BD31 /* Pods_NutshellTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NutshellTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		691EA93AF2D5DC902113C37D /* Pods-Nutshell.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.debug.xcconfig"; sourceTree = "<group>"; };
-		A08B5E3A2659E0859F53527E /* Pods-Nutshell.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.release.xcconfig"; sourceTree = "<group>"; };
+		71627230DDF0C03F73CA817F /* Pods_Nutshell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nutshell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7522442303E8F83231E1B3B2 /* Pods_NutshellTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NutshellTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D211F0C6BBA742F1DD37BE8 /* Pods-NutshellTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NutshellTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests.release.xcconfig"; sourceTree = "<group>"; };
+		A293DE222348F348DC0730D6 /* Pods-Nutshell.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.debug.xcconfig"; sourceTree = "<group>"; };
+		F93088C441543869CF6AD7D7 /* Pods-NutshellTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NutshellTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -410,7 +412,7 @@
 			files = (
 				486EAA7A1C305E38003B4497 /* HealthKit.framework in Frameworks */,
 				0334C8941BA7814700013096 /* CoreData.framework in Frameworks */,
-				949A33B350C643B74EB54D43 /* Pods_Nutshell.framework in Frameworks */,
+				54CE4788EE12555DB927C2E3 /* Pods_Nutshell.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,7 +420,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1ECDD320B170E25E19F57F8C /* Pods_NutshellTests.framework in Frameworks */,
+				7BD350EBD22869AA496C9405 /* Pods_NutshellTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,8 +491,8 @@
 				486EAA791C305E38003B4497 /* HealthKit.framework */,
 				4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */,
 				0334C8931BA7814700013096 /* CoreData.framework */,
-				11F2595C220F59CE15CFFD78 /* Pods_Nutshell.framework */,
-				5A3109656497A8086C86BD31 /* Pods_NutshellTests.framework */,
+				71627230DDF0C03F73CA817F /* Pods_Nutshell.framework */,
+				7522442303E8F83231E1B3B2 /* Pods_NutshellTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -575,8 +577,8 @@
 				4859FCB71B9A4DE4000C1269 /* Nutshell */,
 				4859FCCF1B9A4DE5000C1269 /* NutshellTests */,
 				4859FCB61B9A4DE4000C1269 /* Products */,
-				8B1414A3E58F828463AFF25F /* Pods */,
 				0B896CBEA8D0BFD3140D313E /* Frameworks */,
+				5DDCC4F4B91F286431C02C8A /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -720,6 +722,7 @@
 		48C4915B1C39DBF600F34630 /* Graphing Package */ = {
 			isa = PBXGroup;
 			children = (
+				48BA05AF1E53911500212486 /* GraphCursorLayer.swift */,
 				48A839021C596A1D00FAFE1B /* GraphCollectionCell.swift */,
 				48C491541C38798E00F34630 /* GraphLayout.swift */,
 				4837C1651C11F9FC00D29B64 /* GraphContainerView.swift */,
@@ -770,13 +773,13 @@
 			name = AddAnimation;
 			sourceTree = "<group>";
 		};
-		8B1414A3E58F828463AFF25F /* Pods */ = {
+		5DDCC4F4B91F286431C02C8A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				691EA93AF2D5DC902113C37D /* Pods-Nutshell.debug.xcconfig */,
-				A08B5E3A2659E0859F53527E /* Pods-Nutshell.release.xcconfig */,
-				33D967222B6D1D56CDE3B479 /* Pods-NutshellTests.debug.xcconfig */,
-				39056528E4E50304C2030C72 /* Pods-NutshellTests.release.xcconfig */,
+				A293DE222348F348DC0730D6 /* Pods-Nutshell.debug.xcconfig */,
+				063572F169F60C9A48179678 /* Pods-Nutshell.release.xcconfig */,
+				F93088C441543869CF6AD7D7 /* Pods-NutshellTests.debug.xcconfig */,
+				8D211F0C6BBA742F1DD37BE8 /* Pods-NutshellTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -788,12 +791,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4859FCE01B9A4DE5000C1269 /* Build configuration list for PBXNativeTarget "Nutshell" */;
 			buildPhases = (
-				1786D06C2DABABAA4963A7C4 /* Check Pods Manifest.lock */,
+				8D29B92685CED5FC17AC117B /* [CP] Check Pods Manifest.lock */,
 				4859FCB11B9A4DE4000C1269 /* Sources */,
 				4859FCB21B9A4DE4000C1269 /* Frameworks */,
 				4859FCB31B9A4DE4000C1269 /* Resources */,
-				838E70CEDBB762B0F806261D /* Copy Pods Resources */,
-				D6925E0BAEF72ACB60DED46B /* Embed Pods Frameworks */,
+				DA97F439745BB4E48E8FCA3A /* [CP] Embed Pods Frameworks */,
+				606FCE6FE4B3B08459023F47 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -808,12 +811,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4859FCE31B9A4DE5000C1269 /* Build configuration list for PBXNativeTarget "NutshellTests" */;
 			buildPhases = (
-				02585AF15FE6723964368679 /* Check Pods Manifest.lock */,
+				EA39DC8E43BB352ED10B1485 /* [CP] Check Pods Manifest.lock */,
 				4859FCC81B9A4DE5000C1269 /* Sources */,
 				4859FCC91B9A4DE5000C1269 /* Frameworks */,
 				4859FCCA1B9A4DE5000C1269 /* Resources */,
-				528DE039F394786502CAA980 /* Embed Pods Frameworks */,
-				6F9E108131C19BE30E839FBA /* Copy Pods Resources */,
+				FE346F8173E80A40070E61C7 /* [CP] Embed Pods Frameworks */,
+				BF7E561E74787058E135BA57 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -832,12 +835,14 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Tidepool;
 				TargetAttributes = {
 					4859FCB41B9A4DE4000C1269 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 75U4X84TEG;
+						LastSwiftMigration = 0820;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -849,6 +854,7 @@
 					};
 					4859FCCB1B9A4DE5000C1269 = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0820;
 						TestTargetID = 4859FCB41B9A4DE4000C1269;
 					};
 				};
@@ -921,74 +927,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		02585AF15FE6723964368679 /* Check Pods Manifest.lock */ = {
+		606FCE6FE4B3B08459023F47 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		1786D06C2DABABAA4963A7C4 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		528DE039F394786502CAA980 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6F9E108131C19BE30E839FBA /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		838E70CEDBB762B0F806261D /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -996,19 +942,79 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D6925E0BAEF72ACB60DED46B /* Embed Pods Frameworks */ = {
+		8D29B92685CED5FC17AC117B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		BF7E561E74787058E135BA57 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DA97F439745BB4E48E8FCA3A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EA39DC8E43BB352ED10B1485 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		FE346F8173E80A40070E61C7 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1092,6 +1098,7 @@
 				483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */,
 				4892996B1CB4297B001F24D6 /* NutshellHealthKitConfiguration.swift in Sources */,
 				0334CA1C1BA8DDFC00013096 /* Alarm.swift in Sources */,
+				48BA05B01E53911500212486 /* GraphCursorLayer.swift in Sources */,
 				0334CA911BA8DDFC00013096 /* Wizard.swift in Sources */,
 				48C491551C38798E00F34630 /* GraphLayout.swift in Sources */,
 				489299681CB4290D001F24D6 /* HealthKitConfiguration.swift in Sources */,
@@ -1313,8 +1320,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1358,8 +1367,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -1378,6 +1389,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1385,13 +1397,15 @@
 		};
 		4859FCE11B9A4DE5000C1269 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 691EA93AF2D5DC902113C37D /* Pods-Nutshell.debug.xcconfig */;
+			baseConfigurationReference = A293DE222348F348DC0730D6 /* Pods-Nutshell.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Nutshell/Nutshell.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Nutshell/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1399,20 +1413,24 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.nutshell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Nutshell/Nutshell-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		4859FCE21B9A4DE5000C1269 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A08B5E3A2659E0859F53527E /* Pods-Nutshell.release.xcconfig */;
+			baseConfigurationReference = 063572F169F60C9A48179678 /* Pods-Nutshell.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Nutshell/Nutshell.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Tidepool Project (75U4X84TEG)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Tidepool Project (75U4X84TEG)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Nutshell/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1420,34 +1438,40 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.nutshell;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Nutshell/Nutshell-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
 		4859FCE41B9A4DE5000C1269 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 33D967222B6D1D56CDE3B479 /* Pods-NutshellTests.debug.xcconfig */;
+			baseConfigurationReference = F93088C441543869CF6AD7D7 /* Pods-NutshellTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NutshellTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.NutshellTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nutshell.app/Nutshell";
 			};
 			name = Debug;
 		};
 		4859FCE51B9A4DE5000C1269 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39056528E4E50304C2030C72 /* Pods-NutshellTests.release.xcconfig */;
+			baseConfigurationReference = 8D211F0C6BBA742F1DD37BE8 /* Pods-NutshellTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NutshellTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.NutshellTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nutshell.app/Nutshell";
 			};
 			name = Release;

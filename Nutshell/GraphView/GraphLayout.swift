@@ -19,46 +19,46 @@ import UIKit
 class GraphLayout {
     
     let graphViewSize: CGSize
-    let graphCenterTime: NSDate
+    let graphCenterTime: Date
     /// Time at x-origin of graph
-    let graphStartTime: NSDate
+    let graphStartTime: Date
     /// Time is displayed in the timezone at this offset
     var timezoneOffsetSecs: Int = 0
     /// Time interval covered by the entire graph.
-    let graphTimeInterval: NSTimeInterval
+    let graphTimeInterval: TimeInterval
     /// Starts at size of graph view, but varies with zoom.
     var cellViewSize: CGSize
     /// Time interval covered by one graph tile.
-    let cellTimeInterval: NSTimeInterval
+    let cellTimeInterval: TimeInterval
     ///
     var graphCellsInCollection: Int
     var graphCellFocusInCollection: Int
 
     /// Use this init to create a graph that starts at a point in time.
-    init(viewSize: CGSize, startTime: NSDate, timeIntervalPerTile: NSTimeInterval, numberOfTiles: Int, tilesInView: Int, tzOffsetSecs: Int) {
+    init(viewSize: CGSize, startTime: Date, timeIntervalPerTile: TimeInterval, numberOfTiles: Int, tilesInView: CGFloat, tzOffsetSecs: Int) {
         
         self.graphStartTime = startTime
         self.graphViewSize = viewSize
         self.cellTimeInterval = timeIntervalPerTile
         self.graphCellsInCollection = numberOfTiles
         self.graphCellFocusInCollection = numberOfTiles / 2
-        self.graphTimeInterval = timeIntervalPerTile * NSTimeInterval(numberOfTiles)
-        self.cellViewSize = CGSize(width: viewSize.width/(CGFloat(tilesInView)), height: viewSize.height)
-        self.graphCenterTime = startTime.dateByAddingTimeInterval(self.graphTimeInterval/2.0)
+        self.graphTimeInterval = timeIntervalPerTile * TimeInterval(numberOfTiles)
+        self.cellViewSize = CGSize(width: viewSize.width/tilesInView, height: viewSize.height)
+        self.graphCenterTime = startTime.addingTimeInterval(self.graphTimeInterval/2.0)
         self.timezoneOffsetSecs = tzOffsetSecs
     }
 
     /// Use this init to create a graph centered around a point in time.
-    convenience init(viewSize: CGSize, centerTime: NSDate, startPixelsPerHour: Int, numberOfTiles: Int, tzOffsetSecs: Int) {
+    convenience init(viewSize: CGSize, centerTime: Date, startPixelsPerHour: Int, numberOfTiles: Int, tzOffsetSecs: Int) {
         let cellViewSize = viewSize
-        let cellTI = NSTimeInterval(cellViewSize.width * 3600.0/CGFloat(startPixelsPerHour))
-        let graphTI = cellTI * NSTimeInterval(numberOfTiles)
-        let startTime = centerTime.dateByAddingTimeInterval(-graphTI/2.0)
+        let cellTI = TimeInterval(cellViewSize.width * 3600.0/CGFloat(startPixelsPerHour))
+        let graphTI = cellTI * TimeInterval(numberOfTiles)
+        let startTime = centerTime.addingTimeInterval(-graphTI/2.0)
         self.init(viewSize: viewSize, startTime: startTime, timeIntervalPerTile: cellTI, numberOfTiles: numberOfTiles, tilesInView: 1, tzOffsetSecs: tzOffsetSecs)
     }
     
     /// Call as graph is zoomed in or out!
-    func updateCellViewSize(newSize: CGSize) {
+    func updateCellViewSize(_ newSize: CGSize) {
         self.cellViewSize = newSize
     }
     
@@ -69,8 +69,9 @@ class GraphLayout {
     //
     var zoomIncrement: CGFloat = 0.8
     // Place x-axis ticks every 8 hours down to every 15 minutes, depending upon the zoom level
-    var xAxisLabelTickTimes: [NSTimeInterval] = [15*60, 30*60, 60*60, 2*60*60, 4*60*60, 8*60*60]
-    var curXAxisLabelTickTiming: NSTimeInterval = 60*60
+    var xAxisLabelTickTimes: [TimeInterval] = [15*60, 30*60, 60*60, 2*60*60, 4*60*60, 8*60*60]
+    var curXAxisLabelTickTiming: TimeInterval = 60*60
+    var useRelativeTimes: Bool = false
     
     let kMaxPixelsPerTick: CGFloat = 90
     func figureXAxisTickTiming() {
@@ -78,7 +79,7 @@ class GraphLayout {
         let maxTickIndex = xAxisLabelTickTimes.count - 1
         let secondsPerPixel = CGFloat(cellTimeInterval) / cellViewSize.width
         let secondsInGraphView = secondsPerPixel * graphViewSize.width
-        var result: NSTimeInterval = xAxisLabelTickTimes[0]
+        var result: TimeInterval = xAxisLabelTickTimes[0]
         for index in 0...maxTickIndex  {
             let timePerTick = xAxisLabelTickTimes[index]
             let ticksInView = secondsInGraphView / CGFloat(timePerTick)
@@ -108,33 +109,40 @@ class GraphLayout {
     // Header and background configuration
     //
     var headerHeight: CGFloat = 32.0
-    var backgroundColor: UIColor = UIColor.grayColor()
+    var backgroundColor: UIColor = UIColor.gray
 
     //
     // Y-axis configuration
     //
     var yAxisLineLeftMargin: CGFloat = 20.0
     var yAxisLineRightMargin: CGFloat = 10.0
-    var yAxisLineColor: UIColor = UIColor.blackColor()
+    var yAxisLineColor: UIColor = UIColor.black
     var yAxisValuesWithLines: [Int] = []
+    // left side labels, corresponding to yAxisRange and yAxisBase
     var yAxisValuesWithLabels: [Int] = []
     var yAxisRange: CGFloat = 0.0
     var yAxisBase: CGFloat = 0.0
     var yAxisPixels: CGFloat = 0.0
-    
+    // right side labels can have a different range and base
+    var yAxisValuesWithRightEdgeLabels: [Int] = []
+    var yAxisRightRange: CGFloat = 0.0
+    var yAxisRightBase: CGFloat = 0.0
+
     //
     // Y-axis and X-axis configuration
     //
-    var axesLabelTextColor: UIColor = UIColor.blackColor()
-    var axesLabelTextFont: UIFont = UIFont.systemFontOfSize(12.0)
+    var axesLabelTextColor: UIColor = UIColor.black
+    var axesLabelTextFont: UIFont = UIFont.systemFont(ofSize: 12.0)
+    var axesLeftLabelTextColor: UIColor = UIColor.black
+    var axesRightLabelTextColor: UIColor = UIColor.black
     
     //
     // X-axis configuration
     //
-    var hourMarkerStrokeColor = UIColor.blackColor()
-    var largestXAxisDateWidth: CGFloat = 80.0
-    var xLabelRegularFont = UIFont.systemFontOfSize(9.0)
-    var xLabelLightFont = UIFont.systemFontOfSize(8.0)
+    var hourMarkerStrokeColor = UIColor.black
+    var largestXAxisDateWidth: CGFloat = 30.0
+    var xLabelRegularFont = UIFont.systemFont(ofSize: 9.0)
+    var xLabelLightFont = UIFont.systemFont(ofSize: 8.0)
     
     //
     // Methods to override!
@@ -144,7 +152,7 @@ class GraphLayout {
         return GraphingUtils(layout: self, timeIntervalForView: self.graphTimeInterval, startTime: self.graphStartTime, viewSize: self.graphViewSize)
     }
 
-    func graphUtilsForTimeInterval(timeIntervalForView: NSTimeInterval, startTime: NSDate) -> GraphingUtils {
+    func graphUtilsForTimeInterval(_ timeIntervalForView: TimeInterval, startTime: Date) -> GraphingUtils {
         return GraphingUtils(layout: self, timeIntervalForView: timeIntervalForView, startTime: startTime, viewSize: self.cellViewSize)
     }
     
@@ -153,7 +161,7 @@ class GraphLayout {
     }
     
     /// Returns the various layers used to compose the graph, other than the fixed background, and X-axis time values.
-    func graphLayers(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate, tileIndex: Int) -> [GraphDataLayer] {
+    func graphLayers(_ viewSize: CGSize, timeIntervalForView: TimeInterval, startTime: Date, tileIndex: Int) -> [GraphDataLayer] {
         return []
     }
   

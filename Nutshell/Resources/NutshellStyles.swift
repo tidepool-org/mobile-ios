@@ -30,7 +30,7 @@ extension UIColor {
     }
 }
 
-public class Styles: NSObject {
+open class Styles: NSObject {
 
     // This table determines the background style design to color mapping in the UI. Setting "usage" variables in storyboards will determine color settings via this table; actual colors are defined below and can be changed globally there.
     static var usageToBackgroundColor = [
@@ -100,11 +100,11 @@ public class Styles: NSObject {
         "sidebarSettingHKMinorStatus": (mediumSmallRegularFont, darkGreyColor),
     ]
 
-    class func backgroundImageofSize(size: CGSize, style: String) -> UIImage? {
+    class func backgroundImageofSize(_ size: CGSize, style: String) -> UIImage? {
         if let backColor = Styles.usageToBackgroundColor[style] {
             UIGraphicsBeginImageContextWithOptions(size, false, 0)
             // draw background
-            let rectanglePath = UIBezierPath(rect: CGRectMake(0, 0, size.width, size.height))
+            let rectanglePath = UIBezierPath(rect: CGRect(x: 0, y: 0, width: size.width, height: size.height))
             backColor.setFill()
             rectanglePath.fill()
             let backgroundImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -121,7 +121,7 @@ public class Styles: NSObject {
 
     //// Cache
     
-    private struct FontCache {
+    fileprivate struct FontCache {
         static let verySmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 10.0)!
         static let smallRegularFont: UIFont = UIFont(name: "OpenSans", size: 12.0)!
         static let mediumRegularFont: UIFont = UIFont(name: "OpenSans", size: 17.0)!
@@ -152,32 +152,32 @@ public class Styles: NSObject {
     
     static let uniformDateFormat: String = "MMM d, yyyy    h:mm a"
 
-    public class var smallRegularFont: UIFont { return FontCache.smallRegularFont }
-    public class var mediumRegularFont: UIFont { return FontCache.mediumRegularFont }
-    public class var mediumSmallRegularFont: UIFont { return FontCache.mediumSmallRegularFont }
-    public class var largeRegularFont: UIFont { return FontCache.largeRegularFont }
+    open class var smallRegularFont: UIFont { return FontCache.smallRegularFont }
+    open class var mediumRegularFont: UIFont { return FontCache.mediumRegularFont }
+    open class var mediumSmallRegularFont: UIFont { return FontCache.mediumSmallRegularFont }
+    open class var largeRegularFont: UIFont { return FontCache.largeRegularFont }
 
-    public class var smallSemiboldFont: UIFont { return FontCache.smallSemiboldFont }
-    public class var mediumSemiboldFont: UIFont { return FontCache.mediumSemiboldFont }
-    public class var mediumSmallSemiboldFont: UIFont { return FontCache.mediumSmallSemiboldFont }
-    public class var mediumVerySmallSemiboldFont: UIFont { return FontCache.mediumVerySmallSemiboldFont }
-    public class var veryLargeSemiboldFont: UIFont { return FontCache.veryLargeSemiboldFont }
+    open class var smallSemiboldFont: UIFont { return FontCache.smallSemiboldFont }
+    open class var mediumSemiboldFont: UIFont { return FontCache.mediumSemiboldFont }
+    open class var mediumSmallSemiboldFont: UIFont { return FontCache.mediumSmallSemiboldFont }
+    open class var mediumVerySmallSemiboldFont: UIFont { return FontCache.mediumVerySmallSemiboldFont }
+    open class var veryLargeSemiboldFont: UIFont { return FontCache.veryLargeSemiboldFont }
 
-    public class var smallBoldFont: UIFont { return FontCache.smallBoldFont }
-    public class var mediumSmallBoldFont: UIFont { return FontCache.mediumSmallBoldFont }
-    public class var mediumBoldFont: UIFont { return FontCache.mediumBoldFont }
-    public class var mediumLargeBoldFont: UIFont { return FontCache.mediumLargeBoldFont }
-    public class var navTitleBoldFont: UIFont { return FontCache.navTitleBoldFont }
+    open class var smallBoldFont: UIFont { return FontCache.smallBoldFont }
+    open class var mediumSmallBoldFont: UIFont { return FontCache.mediumSmallBoldFont }
+    open class var mediumBoldFont: UIFont { return FontCache.mediumBoldFont }
+    open class var mediumLargeBoldFont: UIFont { return FontCache.mediumLargeBoldFont }
+    open class var navTitleBoldFont: UIFont { return FontCache.navTitleBoldFont }
 
-    public class var smallLightFont: UIFont { return FontCache.smallLightFont }
-    public class var mediumLightFont: UIFont { return FontCache.mediumLightFont }
+    open class var smallLightFont: UIFont { return FontCache.smallLightFont }
+    open class var mediumLightFont: UIFont { return FontCache.mediumLightFont }
 
     // Fonts for special graph view
     
-    public class var verySmallRegularFont: UIFont { return FontCache.verySmallRegularFont }
-    public class var tinyRegularFont: UIFont { return FontCache.tinyRegularFont }
-    public class var verySmallSemiboldFont: UIFont { return FontCache.verySmallSemiboldFont }
-    public class var veryTinySemiboldFont: UIFont { return FontCache.veryTinySemiboldFont }
+    open class var verySmallRegularFont: UIFont { return FontCache.verySmallRegularFont }
+    open class var tinyRegularFont: UIFont { return FontCache.tinyRegularFont }
+    open class var verySmallSemiboldFont: UIFont { return FontCache.verySmallSemiboldFont }
+    open class var veryTinySemiboldFont: UIFont { return FontCache.veryTinySemiboldFont }
 
     //
     // MARK: - Background Colors
@@ -185,7 +185,7 @@ public class Styles: NSObject {
 
     //// Cache
     
-    private struct ColorCache {
+    fileprivate struct ColorCache {
         static let darkPurpleColor: UIColor = UIColor(hex: 0x281946)
         static let brightBlueColor: UIColor = UIColor(hex: 0x627cff) 
         static let lightGreyColor: UIColor = UIColor(hex: 0xeaeff0) 
@@ -215,30 +215,30 @@ public class Styles: NSObject {
         static let dimmedDarkGreyColor: UIColor = UIColor(hex: 0x979797, opacity: 0.5)
     }
 
-    public class var darkPurpleColor: UIColor { return ColorCache.darkPurpleColor }
-    public class var brightBlueColor: UIColor { return ColorCache.brightBlueColor }
-    public class var lightGreyColor: UIColor { return ColorCache.lightGreyColor }
-    public class var veryLightGreyColor: UIColor { return ColorCache.veryLightGreyColor }
+    open class var darkPurpleColor: UIColor { return ColorCache.darkPurpleColor }
+    open class var brightBlueColor: UIColor { return ColorCache.brightBlueColor }
+    open class var lightGreyColor: UIColor { return ColorCache.lightGreyColor }
+    open class var veryLightGreyColor: UIColor { return ColorCache.veryLightGreyColor }
 
     //
     // MARK: - Text Colors
     //
     
-    public class var pinkColor: UIColor { return ColorCache.pinkColor }
-    public class var redErrorColor: UIColor { return ColorCache.redErrorColor }
-    public class var darkGreyColor: UIColor { return ColorCache.darkGreyColor }
-    public class var lightDarkGreyColor: UIColor { return ColorCache.lightDarkGreyColor }
-    public class var altDarkGreyColor: UIColor { return ColorCache.altDarkGreyColor }
-    public class var mediumLightGreyColor: UIColor { return ColorCache.mediumLightGreyColor }
-    public class var mediumGreyColor: UIColor { return ColorCache.mediumGreyColor }
-    public class var whiteColor: UIColor { return ColorCache.whiteColor }
-    public class var dimmedWhiteColor: UIColor { return ColorCache.dimmedWhiteColor }
-    public class var blackColor: UIColor { return ColorCache.blackColor }
-    public class var peachColor: UIColor { return ColorCache.peachColor }
-    public class var peachDeleteColor: UIColor { return ColorCache.peachDeleteColor }
-    public class var purpleColor: UIColor { return ColorCache.purpleColor }
-    public class var greenColor: UIColor { return ColorCache.greenColor }
-    public class var lightGreenColor: UIColor { return ColorCache.lightGreenColor }
+    open class var pinkColor: UIColor { return ColorCache.pinkColor }
+    open class var redErrorColor: UIColor { return ColorCache.redErrorColor }
+    open class var darkGreyColor: UIColor { return ColorCache.darkGreyColor }
+    open class var lightDarkGreyColor: UIColor { return ColorCache.lightDarkGreyColor }
+    open class var altDarkGreyColor: UIColor { return ColorCache.altDarkGreyColor }
+    open class var mediumLightGreyColor: UIColor { return ColorCache.mediumLightGreyColor }
+    open class var mediumGreyColor: UIColor { return ColorCache.mediumGreyColor }
+    open class var whiteColor: UIColor { return ColorCache.whiteColor }
+    open class var dimmedWhiteColor: UIColor { return ColorCache.dimmedWhiteColor }
+    open class var blackColor: UIColor { return ColorCache.blackColor }
+    open class var peachColor: UIColor { return ColorCache.peachColor }
+    open class var peachDeleteColor: UIColor { return ColorCache.peachDeleteColor }
+    open class var purpleColor: UIColor { return ColorCache.purpleColor }
+    open class var greenColor: UIColor { return ColorCache.greenColor }
+    open class var lightGreenColor: UIColor { return ColorCache.lightGreenColor }
 
     //
     // MARK: - Graph Colors
@@ -252,10 +252,10 @@ public class Styles: NSObject {
     // public class var darkGreyColor: UIColor { return darkGreyColor }
     
     // insulin bar
-    public class var lightBlueColor: UIColor { return ColorCache.lightBlueColor }
-    public class var blueColor: UIColor { return ColorCache.blueColor }
+    open class var lightBlueColor: UIColor { return ColorCache.lightBlueColor }
+    open class var blueColor: UIColor { return ColorCache.blueColor }
     // Open Sans Semibold 10:   custom graph insulin amount text
-    public class var mediumBlueColor: UIColor { return ColorCache.mediumBlueColor }
+    open class var mediumBlueColor: UIColor { return ColorCache.mediumBlueColor }
     
     
     // blood glucose data
@@ -264,28 +264,28 @@ public class Styles: NSObject {
     // public class var greenColor: UIColor { return greenColor }
     
     // event carb amount circle and vertical line
-    public class var goldColor: UIColor { return ColorCache.goldColor }
-    public class var lineColor: UIColor { return ColorCache.lineColor }
+    open class var goldColor: UIColor { return ColorCache.goldColor }
+    open class var lineColor: UIColor { return ColorCache.lineColor }
     
     //
     // MARK: - Misc Colors
     //
     
     // Icon:    favorite star colors
-    public class var goldStarColor: UIColor { return ColorCache.goldStarColor }
-    public class var greyStarColor: UIColor { return ColorCache.greyStarColor }
+    open class var goldStarColor: UIColor { return ColorCache.goldStarColor }
+    open class var greyStarColor: UIColor { return ColorCache.greyStarColor }
 
     // View:    table row line separator
-    public class var dimmedDarkGreyColor: UIColor { return ColorCache.dimmedDarkGreyColor }
+    open class var dimmedDarkGreyColor: UIColor { return ColorCache.dimmedDarkGreyColor }
 
     //
     // MARK: - Strings
     //
     
-    public class var placeholderTitleString: String { return "Meal name" }
-    public class var titleHintString: String { return "Simple and repeatable" }
-    public class var placeholderNotesString: String { return "Notes" }
-    public class var noteHintString: String { return "Sides, dessert, anything else?" }
-    public class var placeholderLocationString: String { return "Location" }
+    open class var placeholderTitleString: String { return "Meal name" }
+    open class var titleHintString: String { return "Simple and repeatable" }
+    open class var placeholderNotesString: String { return "Notes" }
+    open class var noteHintString: String { return "Sides, dessert, anything else?" }
+    open class var placeholderLocationString: String { return "Location" }
     
 }

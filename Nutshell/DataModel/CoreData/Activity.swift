@@ -12,9 +12,9 @@ import SwiftyJSON
 
 class Activity: CommonData {
 
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Activity? {
-        if let entityDescription = NSEntityDescription.entityForName("Activity", inManagedObjectContext: moc) {
-            let me = Activity(entity: entityDescription, insertIntoManagedObjectContext: nil) 
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> Activity? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "Activity", in: moc) {
+            let me = Activity(entity: entityDescription, insertInto: nil) 
             
             me.subType = json["subType"].string
             me.duration = json["duration"].number

@@ -24,9 +24,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
     @IBOutlet weak var tableView: NutshellUITableView!
     @IBOutlet weak var coverView: UIControl!
     
-    private var sortedNutEvents = [(String, NutEvent)]()
-    private var filteredNutEvents = [(String, NutEvent)]()
-    private var filterString = ""
+    fileprivate var sortedNutEvents = [(String, NutEvent)]()
+    fileprivate var filteredNutEvents = [(String, NutEvent)]()
+    fileprivate var filterString = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,9 +41,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
 
         // Add a notification for when the database changes
         let moc = NutDataController.controller().mocForNutEvents()
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.databaseChanged(_:)), name: NSManagedObjectContextObjectsDidChangeNotification, object: moc)
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChange), name: UITextFieldTextDidChangeNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.databaseChanged(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: moc)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChange), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
 
         if let sideMenu = self.sideMenuController()?.sideMenu {
             sideMenu.delegate = self
@@ -60,8 +60,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         // Dispose of any resources that can be recreated.
     }
 
-    private var viewIsForeground: Bool = false
-    override func viewWillAppear(animated: Bool) {
+    fileprivate var viewIsForeground: Bool = false
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewIsForeground = true
         configureSearchUI()
@@ -78,31 +78,31 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         
         checkNotifyUserOfTestMode()
         // periodically check for authentication issues in case we need to force a new login
-        let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
         appDelegate?.checkConnection()
         APIConnector.connector().trackMetric("Viewed Home Screen (Home Screen)")
     }
     
     // each first time launch of app, let user know we are still in test mode!
-    private func checkNotifyUserOfTestMode() {
+    fileprivate func checkNotifyUserOfTestMode() {
         if AppDelegate.testMode && !AppDelegate.testModeNotification {
             AppDelegate.testModeNotification = true
-            let alert = UIAlertController(title: "Test Mode", message: "Nutshell has Test Mode enabled!", preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: { Void in
+            let alert = UIAlertController(title: "Test Mode", message: "Nutshell has Test Mode enabled!", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { Void in
                 return
             }))
-            alert.addAction(UIAlertAction(title: "Turn Off", style: .Default, handler: { Void in
+            alert.addAction(UIAlertAction(title: "Turn Off", style: .default, handler: { Void in
                 AppDelegate.testMode = false
             }))
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         searchTextField.resignFirstResponder()
         viewIsForeground = false
@@ -114,7 +114,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         }
     }
 
-    @IBAction func toggleSideMenu(sender: AnyObject) {
+    @IBAction func toggleSideMenu(_ sender: AnyObject) {
         APIConnector.connector().trackMetric("Clicked Hamburger (Home Screen)")
         toggleSideMenuView()
     }
@@ -123,7 +123,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
     // MARK: - ENSideMenu Delegate
     //
 
-    private func configureForMenuOpen(open: Bool) {
+    fileprivate func configureForMenuOpen(_ open: Bool) {
          if open {
             if let sideMenuController = self.sideMenuController()?.sideMenu?.menuViewController as? MenuAccountSettingsViewController {
                 // give sidebar a chance to update
@@ -132,9 +132,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
             }
         }
         
-        tableView.userInteractionEnabled = !open
-        self.navigationItem.rightBarButtonItem?.enabled = !open
-        coverView.hidden = !open
+        tableView.isUserInteractionEnabled = !open
+        self.navigationItem.rightBarButtonItem?.isEnabled = !open
+        coverView.isHidden = !open
     }
     
     func sideMenuWillOpen() {
@@ -168,18 +168,18 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
     //
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        super.prepareForSegue(segue, sender: sender)
+        super.prepare(for: segue, sender: sender)
         if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventGroupSegue {
             let cell = sender as! EventListTableViewCell
-            let eventGroupVC = segue.destinationViewController as! EventGroupTableViewController
+            let eventGroupVC = segue.destination as! EventGroupTableViewController
             eventGroupVC.eventGroup = cell.eventGroup!
             APIConnector.connector().trackMetric("Clicked a Meal (Home screen)")
         } else if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue {
             let cell = sender as! EventListTableViewCell
-            let eventDetailVC = segue.destinationViewController as! EventDetailViewController
+            let eventDetailVC = segue.destination as! EventDetailViewController
             let group = cell.eventGroup!
             eventDetailVC.eventGroup = group
             eventDetailVC.eventItem = group.itemArray[0]
@@ -192,26 +192,26 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
     }
     
     // Back button from group or detail viewer.
-    @IBAction func done(segue: UIStoryboardSegue) {
+    @IBAction func done(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventList done!")
     }
 
     // Multiple VC's on the navigation stack return all the way back to this initial VC via this segue, when nut events go away due to deletion, for test purposes, etc.
-    @IBAction func home(segue: UIStoryboardSegue) {
+    @IBAction func home(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventList home!")
     }
 
     // The add/edit VC will return here when a meal event is deleted, and detail vc was transitioned to directly from this vc (i.e., the Nut event contained a single meal event which was deleted).
-    @IBAction func doneItemDeleted(segue: UIStoryboardSegue) {
+    @IBAction func doneItemDeleted(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventList doneItemDeleted")
     }
 
-    @IBAction func cancel(segue: UIStoryboardSegue) {
+    @IBAction func cancel(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventList cancel")
     }
 
-    private var eventListNeedsUpdate: Bool  = false
-    func databaseChanged(note: NSNotification) {
+    fileprivate var eventListNeedsUpdate: Bool  = false
+    func databaseChanged(_ note: Notification) {
         NSLog("EventList: Database Change Notification")
         if viewIsForeground {
             getNutEvents()
@@ -224,21 +224,21 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
 
         var nutEvents = [String: NutEvent]()
 
-        func addNewEvent(newEvent: EventItem) {
+        func addNewEvent(_ newEvent: EventItem) {
             /// TODO: TEMP UPGRADE CODE, REMOVE BEFORE SHIPPING!
             if newEvent.userid == nil {
                 newEvent.userid = NutDataController.controller().currentUserId
                 if let moc = newEvent.managedObjectContext {
                     NSLog("NOTE: Updated nil userid to \(newEvent.userid)")
-                    moc.refreshObject(newEvent, mergeChanges: true)
-                    DatabaseUtils.databaseSave(moc)
+                    moc.refresh(newEvent, mergeChanges: true)
+                    _ = DatabaseUtils.databaseSave(moc)
                 }
             }
             /// TODO: TEMP UPGRADE CODE, REMOVE BEFORE SHIPPING!
 
             let newEventId = newEvent.nutEventIdString()
             if let existingNutEvent = nutEvents[newEventId] {
-                existingNutEvent.addEvent(newEvent)
+                _ = existingNutEvent.addEvent(newEvent)
                 //NSLog("appending new event: \(newEvent.notes)")
                 //existingNutEvent.printNutEvent()
             } else {
@@ -263,23 +263,23 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
             NSLog("Error: \(error)")
         }
         
-        sortedNutEvents = nutEvents.sort() { $0.1.mostRecent.compare($1.1.mostRecent) == NSComparisonResult.OrderedDescending }
+        sortedNutEvents = nutEvents.sorted() { $0.1.mostRecent.compare($1.1.mostRecent as Date) == ComparisonResult.orderedDescending }
         updateFilteredAndReload()
         // One time orphan check after application load
         EventListViewController.checkAndDeleteOrphans(sortedNutEvents)
     }
     
     static var _checkedForOrphanPhotos = false
-    class func checkAndDeleteOrphans(allNutEvents: [(String, NutEvent)]) {
+    class func checkAndDeleteOrphans(_ allNutEvents: [(String, NutEvent)]) {
         if _checkedForOrphanPhotos {
             return
         }
         _checkedForOrphanPhotos = true
         if let photoDirPath = NutUtils.photosDirectoryPath() {
             var allLocalPhotos = [String: Bool]()
-            let fm = NSFileManager.defaultManager()
+            let fm = FileManager.default
             do {
-                let dirContents = try fm.contentsOfDirectoryAtPath(photoDirPath)
+                let dirContents = try fm.contentsOfDirectory(atPath: photoDirPath)
                 //NSLog("Photos dir: \(dirContents)")
                 if !dirContents.isEmpty {
                     for file in dirContents {
@@ -309,7 +309,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
     
     // MARK: - Search
     
-    @IBAction func dismissKeyboard(sender: AnyObject) {
+    @IBAction func dismissKeyboard(_ sender: AnyObject) {
         searchTextField.resignFirstResponder()
     }
     
@@ -317,18 +317,18 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         updateFilteredAndReload()
     }
 
-    @IBAction func searchEditingDidEnd(sender: AnyObject) {
+    @IBAction func searchEditingDidEnd(_ sender: AnyObject) {
         configureSearchUI()
     }
     
-    @IBAction func searchEditingDidBegin(sender: AnyObject) {
+    @IBAction func searchEditingDidBegin(_ sender: AnyObject) {
         configureSearchUI()
         APIConnector.connector().trackMetric("Typed into Search (Home Screen)")
     }
     
-    private func searchMode() -> Bool {
+    fileprivate func searchMode() -> Bool {
         var searchMode = false
-        if searchTextField.isFirstResponder() {
+        if searchTextField.isFirstResponder {
             searchMode = true
         } else if let searchText = searchTextField.text {
             if !searchText.isEmpty {
@@ -338,19 +338,19 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         return searchMode
     }
     
-    private func configureSearchUI() {
+    fileprivate func configureSearchUI() {
         let searchOn = searchMode()
-        searchPlaceholderLabel.hidden = searchOn
+        searchPlaceholderLabel.isHidden = searchOn
         self.title = searchOn && !filterString.isEmpty ? "Events" : "All events"
     }
 
-    private func updateFilteredAndReload() {
+    fileprivate func updateFilteredAndReload() {
         if !searchMode() {
             filteredNutEvents = sortedNutEvents
             filterString = ""
         } else if let searchText = searchTextField.text {
             if !searchText.isEmpty {
-                if searchText.localizedCaseInsensitiveContainsString(filterString) {
+                if searchText.localizedCaseInsensitiveContains(filterString) {
                     // if the search is just getting longer, no need to check already filtered out items
                     filteredNutEvents = filteredNutEvents.filter() {
                         $1.containsSearchString(searchText)
@@ -378,23 +378,23 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
 
 extension EventListViewController: UITableViewDelegate {
     
-    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt estimatedHeightForRowAtIndexPath: IndexPath) -> CGFloat {
         return 102.0;
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt heightForRowAtIndexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension;
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let tuple = self.filteredNutEvents[indexPath.item]
         let nutEvent = tuple.1
-        let cell = tableView.cellForRowAtIndexPath(indexPath)
+        let cell = tableView.cellForRow(at: indexPath)
         if nutEvent.itemArray.count == 1 {
-            self.performSegueWithIdentifier(EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue, sender: cell)
+            self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue, sender: cell)
         } else if nutEvent.itemArray.count > 1 {
-            self.performSegueWithIdentifier(EventViewStoryboard.SegueIdentifiers.EventGroupSegue, sender: cell)
+            self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventGroupSegue, sender: cell)
         }
     }
 
@@ -406,15 +406,15 @@ extension EventListViewController: UITableViewDelegate {
 
 extension EventListViewController: UITableViewDataSource {
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredNutEvents.count
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Note: two different list cells are used depending upon whether a location will be shown or not. 
         var cellId = EventViewStoryboard.TableViewCellIdentifiers.eventListCellNoLoc
@@ -428,7 +428,7 @@ extension EventListViewController: UITableViewDataSource {
             }
         }
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath: indexPath) as! EventListTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! EventListTableViewCell
         if let nutEvent = nutEvent {
             cell.configureCell(nutEvent)
         }

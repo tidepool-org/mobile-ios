@@ -18,11 +18,11 @@ import UIKit
 class WorkoutGraphDataType: GraphDataType {
     
     var isMainEvent: Bool = false
-    var duration: NSTimeInterval = 0.0
+    var duration: TimeInterval = 0.0
     var id: String?
-    var rectInGraph: CGRect = CGRectZero
+    var rectInGraph: CGRect = CGRect.zero
     
-    init(timeOffset: NSTimeInterval, isMain: Bool, duration: NSTimeInterval, event: Workout) {
+    init(timeOffset: TimeInterval, isMain: Bool, duration: TimeInterval, event: Workout) {
         self.isMainEvent = isMain
         self.duration = duration
         // id needed if user taps on this item...
@@ -46,16 +46,16 @@ class WorkoutGraphDataLayer: GraphDataLayer {
     // vars for drawing datapoints of this type
     var pixelsPerValue: CGFloat = 0.0
  
-    private var layout: TidepoolGraphLayout
+    fileprivate var layout: TidepoolGraphLayout
     
-    init(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate, layout: TidepoolGraphLayout) {
+    init(viewSize: CGSize, timeIntervalForView: TimeInterval, startTime: Date, layout: TidepoolGraphLayout) {
         self.layout = layout
         super.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime)
     }
 
     // Assume maximum workout length of 3 hours for prefetch!
-    private let maxWorkoutDuration: NSTimeInterval = 3*60*60
-    private let minPixelWidth: CGFloat = 2.0
+    fileprivate let maxWorkoutDuration: TimeInterval = 3*60*60
+    fileprivate let minPixelWidth: CGFloat = 2.0
 
     //
     // MARK: - Loading data
@@ -63,19 +63,19 @@ class WorkoutGraphDataLayer: GraphDataLayer {
 
     override func loadDataItems() {
         dataArray = []
-        let endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
-        let timeExtensionForDataFetch = NSTimeInterval(minPixelWidth/viewPixelsPerSec)
-        let earlyStartTime = startTime.dateByAddingTimeInterval(-maxWorkoutDuration)
-        let lateEndTime = endTime.dateByAddingTimeInterval(timeExtensionForDataFetch)
+        let endTime = startTime.addingTimeInterval(timeIntervalForView)
+        let timeExtensionForDataFetch = TimeInterval(minPixelWidth/viewPixelsPerSec)
+        let earlyStartTime = startTime.addingTimeInterval(-maxWorkoutDuration)
+        let lateEndTime = endTime.addingTimeInterval(timeExtensionForDataFetch)
         do {
             let events = try DatabaseUtils.getWorkoutEvents(earlyStartTime, toTime: lateEndTime)
             for workoutEvent in events {
                 if let eventTime = workoutEvent.time {
-                    let deltaTime = eventTime.timeIntervalSinceDate(startTime)
+                    let deltaTime = eventTime.timeIntervalSince(startTime)
                     var isMainEvent = false
                     isMainEvent = workoutEvent.time == layout.mainEventTime
                     if let duration = workoutEvent.duration {
-                        dataArray.append(WorkoutGraphDataType(timeOffset: deltaTime, isMain: isMainEvent, duration: NSTimeInterval(duration), event: workoutEvent))
+                        dataArray.append(WorkoutGraphDataType(timeOffset: deltaTime, isMain: isMainEvent, duration: TimeInterval(duration), event: workoutEvent))
                     } else {
                         NSLog("ignoring Workout event with nil duration")
                     }
@@ -98,7 +98,7 @@ class WorkoutGraphDataLayer: GraphDataLayer {
         self.pixelsPerValue = layout.yPixelsGlucose/layout.kGlucoseRange
     }
     
-    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType) {
+    override func drawDataPointAtXOffset(_ xOffset: CGFloat, dataPoint: GraphDataType) {
         
         var isMain = false
         if let workoutDataType = dataPoint as? WorkoutGraphDataType {
@@ -127,7 +127,7 @@ class WorkoutGraphDataLayer: GraphDataLayer {
     }
     
     // override to handle taps - return true if tap has been handled
-    override func tappedAtPoint(point: CGPoint) -> GraphDataType? {
+    override func tappedAtPoint(_ point: CGPoint) -> GraphDataType? {
         for dataPoint in dataArray {
             if let workoutDataPoint = dataPoint as? WorkoutGraphDataType {
                 if workoutDataPoint.rectInGraph.contains(point) {

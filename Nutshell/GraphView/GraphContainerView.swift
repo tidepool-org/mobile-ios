@@ -19,8 +19,9 @@ protocol GraphContainerViewDelegate {
     // Notify caller that a cell has been updated...
     func containerCellUpdated()
     func pinchZoomEnded()
-    func dataPointTapped(dataPoint: GraphDataType, tapLocationInView: CGPoint)
-    func willDisplayGraphCell(cell: Int)
+    func dataPointTapped(_ dataPoint: GraphDataType, tapLocationInView: CGPoint)
+    func willDisplayGraphCell(_ cell: Int)
+    func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval)
 }
 
 class GraphContainerView: UIView {
@@ -41,11 +42,11 @@ class GraphContainerView: UIView {
     }
     
     // private
-    private var cellSize = CGSizeZero
-    private var pinchStartCellSize = CGSizeZero
-    private var pinchLocationInView = CGPointZero
-    private var fixedBackgroundImageView: UIImageView?
-    private var graphPixelsPerHour: CGFloat = 80
+    fileprivate var cellSize = CGSize.zero
+    fileprivate var pinchStartCellSize = CGSize.zero
+    fileprivate var pinchLocationInView = CGPoint.zero
+    fileprivate var fixedBackgroundImageView: UIImageView?
+    fileprivate var graphPixelsPerHour: CGFloat = 80
     
     func loadGraphData() {
         //NSLog("GraphContainerView reloading data")
@@ -54,7 +55,7 @@ class GraphContainerView: UIView {
         }
     }
     
-    func zoomInOut(zoomIn: Bool) {
+    func zoomInOut(_ zoomIn: Bool) {
         var size = self.cellSize
         
         if zoomIn {
@@ -74,9 +75,9 @@ class GraphContainerView: UIView {
         return self.cellSize.width > layout.zoomOutMinCellWidth()
     }
 
-    private func zoomCellSize( zoomToSize: CGSize, xOffsetInView: CGFloat) {
+    fileprivate func zoomCellSize(_ zoomToSize: CGSize, xOffsetInView: CGFloat) {
+
         var size = zoomToSize
-        
         // First check against limits, return if we are already there
         let maxWidth = layout.zoomInMaxCellWidth()
         if size.width >= maxWidth {
@@ -121,25 +122,26 @@ class GraphContainerView: UIView {
             
             let collectLayout = UICollectionViewFlowLayout()
             collectLayout.itemSize = size
-            collectLayout.targetContentOffsetForProposedContentOffset(targetOffset)
-            collectLayout.scrollDirection = UICollectionViewScrollDirection.Horizontal
+            collectLayout.targetContentOffset(forProposedContentOffset: targetOffset)
+            collectLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
             graphCollectionView.setCollectionViewLayout(collectLayout, animated: false)
             //NSLog("End content offset & size: \(graphCollectionView.contentOffset) & \(graphCollectionView.contentSize)")
             
             // Since we aren't changing the timeframe or time offset covered by each cell, we only need to have each visible cell redraw itself with its new sizing
             layout.updateCellViewSize(size)
-            for cell in graphCollectionView.visibleCells() {
+            for cell in graphCollectionView.visibleCells {
                 if let graphCell = cell as? GraphCollectionCell {
                     graphCell.updateViewSize()
                 }
             }
             graphCollectionView.setContentOffset(targetOffset, animated: false)
+            graphCollectionView.delegate = self
         }
     }
     
-    func centerGraphOnEvent(edgeOffset: CGFloat = 0.0, animated: Bool = false) {
+    func centerGraphOnEvent(_ edgeOffset: CGFloat = 0.0, animated: Bool = false) {
         if let graphCollectionView = graphCollectionView {
-            graphCollectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: layout.graphCellFocusInCollection, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: animated)
+            graphCollectionView.scrollToItem(at: IndexPath(row: layout.graphCellFocusInCollection, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: animated)
             
             // Setting an edge offset will put the center graph point at this x position within the graph view
             if !animated && edgeOffset != 0.0 {
@@ -150,16 +152,44 @@ class GraphContainerView: UIView {
         }
     }
 
+    func centerGraphAtTimeOffset(_ timeOffset: TimeInterval, animated: Bool = false) {
+        if let graphCollectionView = graphCollectionView {
+            
+            var xOffset = CGFloat(timeOffset/layout.graphTimeInterval) * graphCollectionView.contentSize.width
+            let centerOffset = layout.graphViewSize.width/2.0
+            if xOffset < centerOffset {
+                xOffset = centerOffset
+            }
+            let targetOffsetX = xOffset - centerOffset
+            let targetOffset = CGPoint(x: targetOffsetX, y: 0.0)
+            graphCollectionView.setContentOffset(targetOffset, animated: true)
+         }
+    }
+
+    func updateCursorView(_ cursorTimeOffset: TimeInterval?, cursorColor: UIColor) {
+        if let graphCollectionView = graphCollectionView {
+            for cell in graphCollectionView.visibleCells {
+                if let graphCell = cell as? GraphCollectionCell {
+                    var cursorTime: Date?
+                    if let cursorTimeOffset = cursorTimeOffset {
+                        cursorTime = layout.graphStartTime.addingTimeInterval(cursorTimeOffset) as Date
+                    }
+                    graphCell.updateCursorView(cursorTime, cursorColor: cursorColor)
+                }
+            }
+        }
+    }
+    
     //
     // MARK: - Private methods
     //
 
-    private func viewXOffsetToTimeOffset(viewXOffset: CGFloat) -> NSTimeInterval {
+    fileprivate func viewXOffsetToTimeOffset(_ viewXOffset: CGFloat) -> TimeInterval {
         let viewWidth = graphCollectionView!.contentSize.width
-        return layout.graphTimeInterval * NSTimeInterval(viewXOffset / viewWidth)
+        return layout.graphTimeInterval * TimeInterval(viewXOffset / viewWidth)
     }
     
-    private func deleteGraphView() {
+    fileprivate func deleteGraphView() {
         if (graphCollectionView != nil) {
             graphCollectionView?.removeFromSuperview();
             graphCollectionView = nil;
@@ -178,8 +208,8 @@ class GraphContainerView: UIView {
     }
     
 
-    private let collectCellReuseID = "graphViewCell"
-    func configureGraph(edgeOffset: CGFloat = 0.0) {
+    fileprivate let collectCellReuseID = "graphViewCell"
+    func configureGraph(_ edgeOffset: CGFloat = 0.0) {
         if graphCollectionView == nil {
             layout.configureGraph()
 
@@ -197,17 +227,17 @@ class GraphContainerView: UIView {
             let collectLayout = UICollectionViewFlowLayout()
             self.cellSize = layout.cellViewSize
             collectLayout.itemSize = self.cellSize
-            collectLayout.scrollDirection = UICollectionViewScrollDirection.Horizontal
+            collectLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
             graphCollectionView = UICollectionView(frame: self.bounds, collectionViewLayout: collectLayout)
             if let graphCollectionView = graphCollectionView {
-                graphCollectionView.backgroundColor = UIColor.clearColor()
+                graphCollectionView.backgroundColor = UIColor.clear
                 graphCollectionView.showsHorizontalScrollIndicator = false
                 graphCollectionView.showsVerticalScrollIndicator = false
                 graphCollectionView.dataSource = self
                 graphCollectionView.delegate = self
-                graphCollectionView.pagingEnabled = false
+                graphCollectionView.isPagingEnabled = false
                 //graphCollectionView.contentSize = self.bounds.size
-                graphCollectionView.registerClass(GraphCollectionCell.self, forCellWithReuseIdentifier: collectCellReuseID)
+                graphCollectionView.register(GraphCollectionCell.self, forCellWithReuseIdentifier: collectCellReuseID)
                 // event is in the center cell, see cellForItemAtIndexPath below...
                 centerGraphOnEvent(edgeOffset)
                 self.addSubview(graphCollectionView)
@@ -222,67 +252,74 @@ class GraphContainerView: UIView {
         }
     }
     
-    func currentCellIndex(collectView: UICollectionView) -> NSIndexPath? {
+    func currentCellIndex(_ collectView: UICollectionView) -> IndexPath? {
         let centerPoint = collectView.center
         let pointInCell = CGPoint(x: centerPoint.x + collectView.contentOffset.x, y: centerPoint.y + collectView.contentOffset.y)
-        return collectView.indexPathForItemAtPoint(pointInCell)
+        return collectView.indexPathForItem(at: pointInCell)
     }
     
-    func startTimeOfCellAtIndex(indexPath: NSIndexPath) -> NSDate {
+    func startTimeOfCellAtIndex(_ indexPath: IndexPath) -> Date {
         var cellStartTime = layout.graphStartTime
         let collectionOffset = indexPath.row
         
         if collectionOffset != 0 {
-            cellStartTime = NSDate(timeInterval: layout.cellTimeInterval*Double(collectionOffset), sinceDate: cellStartTime)
+            cellStartTime = Date(timeInterval: layout.cellTimeInterval*Double(collectionOffset), since: cellStartTime)
         }
-        return cellStartTime
+        return cellStartTime as Date
     }
 
     // Maps taps to a particular cell and location within the cell, then calls into the graph data structures to see if an active datapoint was tapped: if so, calls the graph delegate with that point.
-    func tapGestureHandler(sender: AnyObject) {
+    func tapGestureHandler(_ sender: AnyObject) {
         //NSLog("recognized tap!")
         if let gesture = sender as? UITapGestureRecognizer {
-            if gesture.state == .Ended {
-                let tapLocation = gesture.locationInView(self)
+            if gesture.state == .ended {
+                let tapLocation = gesture.location(in: self)
                 NSLog("tap detected at location: \(tapLocation)")
                 if let collectView = graphCollectionView {
                     // map to point within a cell
+                    var handledTap = false
                     let pointInCollection = CGPoint(x: tapLocation.x + collectView.contentOffset.x, y: tapLocation.y + collectView.contentOffset.y)
-                    if let indexPath = collectView.indexPathForItemAtPoint(pointInCollection) {
-                        if let cell = collectView.cellForItemAtIndexPath(indexPath) as? GraphCollectionCell {
-                            let xOffsetInCell: CGFloat = round(pointInCollection.x % cellSize.width)
+                    if let indexPath = collectView.indexPathForItem(at: pointInCollection) {
+                        if let cell = collectView.cellForItem(at: indexPath) as? GraphCollectionCell {
+                            let xOffsetInCell: CGFloat = round(pointInCollection.x.truncatingRemainder(dividingBy: cellSize.width))
                             let pointInCell = CGPoint(x: xOffsetInCell, y: pointInCollection.y)
                             //NSLog("Cell at index \(indexPath.row) tapped at point: \(pointInCell)")
                             if let dataPoint = cell.tappedAtPoint(pointInCell) {
                                 delegate?.dataPointTapped(dataPoint, tapLocationInView: tapLocation)
+                                handledTap = true
                             }
                         }
+                    }
+                    if !handledTap {
+                        let contentOffsetToTapX = collectView.contentOffset.x + tapLocation.x
+                        let graphTimeOffset = viewXOffsetToTimeOffset(contentOffsetToTapX)
+                        delegate?.unhandledTapAtLocation(tapLocation, graphTimeOffset: graphTimeOffset)
                     }
                 }
             }
         }
     }
     
-    func pinchGestureHandler(sender: AnyObject) {
+    func pinchGestureHandler(_ sender: AnyObject) {
         //NSLog("recognized pinch!")
         if let gesture = sender as? UIPinchGestureRecognizer {
-            if gesture.state == UIGestureRecognizerState.Began {
+            if gesture.state == UIGestureRecognizerState.began {
                 //NSLog("gesture started: start cell size: \(cellSize)")
                 pinchStartCellSize = cellSize
-                pinchLocationInView = gesture.locationInView(self)
+                pinchLocationInView = gesture.location(in: self)
                 return
             }
-            if gesture.state == UIGestureRecognizerState.Changed {
+            if gesture.state == UIGestureRecognizerState.changed {
                 //NSLog("gesture state changed scale: \(gesture.scale)")
                 var newCellSize = pinchStartCellSize
-                newCellSize.width = newCellSize.width * CGFloat(gesture.scale)
+                newCellSize.width = round(newCellSize.width * CGFloat(gesture.scale))
                 zoomCellSize(newCellSize, xOffsetInView: pinchLocationInView.x)
                 return
             }
-            if gesture.state == UIGestureRecognizerState.Ended {
+            if gesture.state == UIGestureRecognizerState.ended {
                 //NSLog("gesture ended with scale: \(gesture.scale)")
                 var newCellSize = pinchStartCellSize
-                newCellSize.width = newCellSize.width * CGFloat(gesture.scale)
+                newCellSize.width = round(newCellSize.width * CGFloat(gesture.scale))
                 zoomCellSize(newCellSize, xOffsetInView: pinchLocationInView.x)
                 delegate?.pinchZoomEnded()
                 return
@@ -297,13 +334,13 @@ class GraphContainerView: UIView {
 
 extension GraphContainerView: UICollectionViewDataSource {
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return layout.graphCellsInCollection
     }
     
-    func collectionView(collectionView: UICollectionView,
-        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(collectCellReuseID, forIndexPath: indexPath) as! GraphCollectionCell
+    func collectionView(_ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectCellReuseID, for: indexPath) as! GraphCollectionCell
 
             //NSLog("GraphContainerView cellForItemAtIndexPath \(indexPath.row)")
             // index determines center time...
@@ -317,10 +354,11 @@ extension GraphContainerView: UICollectionViewDataSource {
 
 extension GraphContainerView: UICollectionViewDelegate {
     
-    func collectionView(collectionView: UICollectionView, willDisplayCell cell: UICollectionViewCell, forItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         //NSLog("collect view willDisplayCell at indexPath row: \(indexPath.row)")
         delegate?.willDisplayGraphCell(indexPath.row)
     }
+    
 }
 
 //
@@ -329,9 +367,9 @@ extension GraphContainerView: UICollectionViewDelegate {
 
 extension GraphContainerView: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
-        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat
+        minimumLineSpacingForSectionAt section: Int) -> CGFloat
     {
         return 0.0
     }

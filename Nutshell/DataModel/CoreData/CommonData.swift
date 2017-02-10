@@ -12,7 +12,7 @@ import SwiftyJSON
 
 class CommonData: NSManagedObject {
     // TODO: add code to download "meal" and "workout" items from service once they are supported and we upload them
-    class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> CommonData? {
+    class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> CommonData? {
         // The type of object we create is based on the "type" field
         var newObject: CommonData? = nil
         if let type = json["type"].string {
@@ -42,12 +42,12 @@ class CommonData: NSManagedObject {
             if let newObject = newObject {
                 
                 if let id = json["id"].string {
-                    newObject.id = id
+                    newObject.id = id as NSString?
                 } else {
                      print("skipped record of type \(type) missing id")
                     return nil
                 }
-                newObject.type = type
+                newObject.type = type as NSString?
                 
                 if let timeString = json["time"].string {
                     if let time = NutUtils.dateFromJSON(timeString) {

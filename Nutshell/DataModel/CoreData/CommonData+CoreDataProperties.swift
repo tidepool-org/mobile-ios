@@ -16,15 +16,15 @@ extension CommonData {
 
     @NSManaged var id: NSString?
     @NSManaged var type: NSString?
-    @NSManaged var time: NSDate?
+    @NSManaged var time: Date?
     @NSManaged var deviceId: String?
     @NSManaged var uploadId: String?
     @NSManaged var previous: String?
     @NSManaged var timezoneOffset: NSNumber?
-    @NSManaged var deviceTime: NSDate?
+    @NSManaged var deviceTime: Date?
     @NSManaged var units: String?
-    @NSManaged var createdTime: NSDate?
-    @NSManaged var modifiedTime: NSDate?
+    @NSManaged var createdTime: Date?
+    @NSManaged var modifiedTime: Date?
     @NSManaged var payload: String?
     @NSManaged var annotations: String?
 

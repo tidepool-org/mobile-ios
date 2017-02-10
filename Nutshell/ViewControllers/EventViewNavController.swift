@@ -22,15 +22,15 @@ class EventViewNavController: ENSideMenuNavigationController, ENSideMenuDelegate
 
         // Do any additional setup after loading the view.
         let storyboard = UIStoryboard(name: "EventView", bundle: nil)
-        let menuController = storyboard.instantiateViewControllerWithIdentifier("sidebarController") as! MenuAccountSettingsViewController
-        sideMenu = ENSideMenu(sourceView: self.view, menuViewController: menuController, menuPosition:.Left)
+        let menuController = storyboard.instantiateViewController(withIdentifier: "sidebarController") as! MenuAccountSettingsViewController
+        sideMenu = ENSideMenu(sourceView: self.view, menuViewController: menuController, menuPosition:.left)
 
         //sideMenu?.delegate = self //optional
         sideMenu?.menuWidth = 235.0 // optional, default is 160
         //sideMenu?.bouncingEnabled = false
         //sideMenu?.allowPanGesture = false
         // make navigation bar showing over side menu
-        view.bringSubviewToFront(navigationBar)
+        view.bringSubview(toFront: navigationBar)
     }
 
     override func didReceiveMemoryWarning() {

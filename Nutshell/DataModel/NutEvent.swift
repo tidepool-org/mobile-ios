@@ -21,14 +21,14 @@ class NutEvent {
     
     var title: String
     var location: String
-    var mostRecent: NSDate
+    var mostRecent: Date
     var itemArray: [NutEventItem]
     var isWorkout: Bool = false
 
     init(firstEvent: EventItem) {
         self.title = firstEvent.title!
         self.location = ""
-        self.mostRecent = firstEvent.time!
+        self.mostRecent = firstEvent.time! as Date
         if let meal = firstEvent as? Meal {
             let firstItem = NutMeal(meal: meal)
             if let loc = meal.location {
@@ -47,21 +47,21 @@ class NutEvent {
     init() {
         self.title = ""
         self.location = ""
-        self.mostRecent = NSDate()
+        self.mostRecent = Date()
         self.itemArray = []
     }
     
-    func addEvent(newEvent: EventItem) -> NutEventItem? {
+    func addEvent(_ newEvent: EventItem) -> NutEventItem? {
         var newItem: NutEventItem? = nil
         if (newEvent.nutEventIdString() == self.nutEventIdString()) {
             if let meal = newEvent as? Meal {
                 newItem = NutMeal(meal: meal)
                 self.itemArray.append(newItem!)
-                mostRecent = newItem!.time.laterDate(mostRecent)
+                mostRecent = (newItem!.time as NSDate).laterDate(mostRecent)
             } else if let workout = newEvent as? Workout {
                 newItem = NutWorkout(workout: workout)
                 self.itemArray.append(newItem!)
-                mostRecent = newItem!.time.laterDate(mostRecent)
+                mostRecent = (newItem!.time as NSDate).laterDate(mostRecent)
             }
         } else {
             NSLog("attempting to add item with non-matching title and location to NutEvent!")
@@ -69,10 +69,10 @@ class NutEvent {
         return newItem
     }
     
-    class func createMealEvent(title: String, notes: String, location: String, photo: String, photo2: String, photo3: String, time: NSDate, timeZoneOffset: Int) -> EventItem? {
+    class func createMealEvent(_ title: String, notes: String, location: String, photo: String, photo2: String, photo3: String, time: Date, timeZoneOffset: Int) -> EventItem? {
         let moc = NutDataController.controller().mocForNutEvents()!
-        if let entityDescription = NSEntityDescription.entityForName("Meal", inManagedObjectContext: moc) {
-            let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "Meal", in: moc) {
+            let me = NSManagedObject(entity: entityDescription, insertInto: nil) as! Meal
             me.title = title
             me.notes = notes
             me.location = location
@@ -81,14 +81,14 @@ class NutEvent {
             me.photo3 = photo3
             me.time = time
             me.type = "meal"
-            let now = NSDate()
+            let now = Date()
             me.createdTime = now
             me.modifiedTime = now
-            me.timezoneOffset = timeZoneOffset/60
+            me.timezoneOffset = NSNumber(value: timeZoneOffset/60)
             // TODO: Determine policy for local id creation!
-            me.id = NSUUID().UUIDString
+            me.id = UUID().uuidString as NSString?
             me.userid = NutDataController.controller().currentUserId // critical!
-            moc.insertObject(me)
+            moc.insert(me)
             if DatabaseUtils.databaseSave(moc) {
                 return me
             }
@@ -97,8 +97,8 @@ class NutEvent {
     }
     
     func sortEvents() {
-        itemArray = itemArray.sort() {
-            $0.time.compare($1.time) == NSComparisonResult.OrderedDescending }
+        itemArray = itemArray.sorted() {
+            $0.time.compare($1.time as Date) == ComparisonResult.orderedDescending }
     }
 
     func nutEventIdString() -> String {
@@ -110,11 +110,11 @@ class NutEvent {
         return prefix + title + location
     }
 
-    func containsSearchString(searchString: String) -> Bool {
-        if title.localizedCaseInsensitiveContainsString(searchString) {
+    func containsSearchString(_ searchString: String) -> Bool {
+        if title.localizedCaseInsensitiveContains(searchString) {
             return true
         }
-        if location.localizedCaseInsensitiveContainsString(searchString) {
+        if location.localizedCaseInsensitiveContains(searchString) {
             return true
         }
         for nutItem in itemArray {

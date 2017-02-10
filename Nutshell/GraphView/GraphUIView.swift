@@ -18,10 +18,11 @@ import UIKit
 class GraphUIView: UIView {
 
     var layout: GraphLayout
-    private var graphUtils: GraphingUtils
-    private var viewSize: CGSize = CGSizeZero
-    private var graphLayers: [GraphDataLayer] = []
-    private var tileIndex: Int
+    fileprivate var graphUtils: GraphingUtils
+    fileprivate var viewSize: CGSize = CGSize.zero
+    fileprivate var graphLayers: [GraphDataLayer] = []
+    fileprivate var tileIndex: Int
+    fileprivate var cursorView: UIImageView?
 
     /// After init, call configure to create the graph.
     ///
@@ -34,7 +35,7 @@ class GraphUIView: UIView {
     /// - parameter layout:
     ///   Provides the various graph layers and layout parameters for drawing them.
     
-    init(frame: CGRect, startTime: NSDate, layout: GraphLayout, tileIndex: Int) {
+    init(frame: CGRect, startTime: Date, layout: GraphLayout, tileIndex: Int) {
         self.viewSize = frame.size
         self.cellStartTime = startTime
         self.cellTimeInterval = layout.cellTimeInterval
@@ -61,7 +62,7 @@ class GraphUIView: UIView {
         //NSLog("GraphUIView layoutSubviews size: \(self.bounds.size)")
     }
     
-    func updateViewSize(newSize: CGSize) {
+    func updateViewSize(_ newSize: CGSize) {
         // Quick way to update when data haven't changed...
         let currentSize = self.bounds.size
         NSLog("GraphUIView bounds: \(currentSize), size: \(viewSize), new size \(newSize)")
@@ -78,7 +79,7 @@ class GraphUIView: UIView {
     }
     
     /// Handle taps within this graph tile by letting layers check for hits - iterates thru layers in reverse order of drawing, last layer first. If a data point is found at the tap location, it is returned, otherwise nil.
-    func tappedAtPoint(point: CGPoint) -> GraphDataType? {
+    func tappedAtPoint(_ point: CGPoint) -> GraphDataType? {
         var layer = graphLayers.count
         while layer > 0 {
             if let dataPoint = graphLayers[layer-1].tappedAtPoint(point) {
@@ -89,18 +90,34 @@ class GraphUIView: UIView {
         return nil
     }
 
+    /// Update cursor in view if cursor time range overlaps view, otherwise remove any cursor layer. Pass nil to remove.
+    // TODO: If cursor image already exists, just adjust view offset rather than redraw? Probably not worth it if this is just adjusted once a second.
+    func updateCursorView(_ cursorTime: Date?, cursorColor: UIColor) {
+        if cursorView != nil {
+            cursorView!.removeFromSuperview()
+            cursorView = nil
+        }
+        if let cursorTime = cursorTime {
+            let graphCursorLayer = GraphCursorLayer(viewSize: self.viewSize, timeIntervalForView: cellTimeInterval, startTime: cellStartTime, cursorTime: cursorTime)
+            cursorView = graphCursorLayer.imageView(cursorColor)
+            if cursorView != nil {
+                addSubview(cursorView!)
+            }
+        }
+    }
+    
     //
     // MARK: - Private data
     //
     
-    var cellStartTime: NSDate
-    var cellTimeInterval: NSTimeInterval
+    var cellStartTime: Date
+    var cellTimeInterval: TimeInterval
 
     //
     // MARK: - Private funcs
     //
 
-    private func graphData() {
+    fileprivate func graphData() {
         // At this point data should be loaded, and we just need to plot the data
         // First remove any previously graphed data in case this is a resizing..
         let views = self.subviews
@@ -125,6 +142,8 @@ class GraphUIView: UIView {
                 addSubview(imageView!)
             }
         }
-}
+        // add optional cursor layer...
+        
+    }
 
 }

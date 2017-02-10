@@ -11,9 +11,9 @@ import CoreData
 import SwiftyJSON
 
 class Note: CommonData {
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Note? {
-        if let entityDescription = NSEntityDescription.entityForName("Note", inManagedObjectContext: moc) {
-            let me = Note(entity: entityDescription, insertIntoManagedObjectContext: nil)
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> Note? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "Note", in: moc) {
+            let me = Note(entity: entityDescription, insertInto: nil)
             
             me.shortText = json["shortText"].string
             me.text = json["text"].string

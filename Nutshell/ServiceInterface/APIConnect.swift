@@ -38,25 +38,25 @@ class APIConnector {
     
     // MARK: - Constants
     
-    private let kSessionTokenDefaultKey = "SToken"
-    private let kCurrentServiceDefaultKey = "SCurrentService"
-    private let kSessionIdHeader = "x-tidepool-session-token"
+    fileprivate let kSessionTokenDefaultKey = "SToken"
+    fileprivate let kCurrentServiceDefaultKey = "SCurrentService"
+    fileprivate let kSessionIdHeader = "x-tidepool-session-token"
 
     // Error domain and codes
-    private let kNutshellErrorDomain = "NutshellErrorDomain"
-    private let kNoSessionTokenErrorCode = -1
+    fileprivate let kNutshellErrorDomain = "NutshellErrorDomain"
+    fileprivate let kNoSessionTokenErrorCode = -1
     
     // Session token, acquired on login and saved in NSUserDefaults
     // TODO: save in database?
-    private var _sessionToken: String?
+    fileprivate var _sessionToken: String?
     var sessionToken: String? {
         set(newToken) {
             if ( newToken != nil ) {
-                NSUserDefaults.standardUserDefaults().setValue(newToken, forKey:kSessionTokenDefaultKey)
+                UserDefaults.standard.setValue(newToken, forKey:kSessionTokenDefaultKey)
             } else {
-                NSUserDefaults.standardUserDefaults().removeObjectForKey(kSessionTokenDefaultKey)
+                UserDefaults.standard.removeObject(forKey: kSessionTokenDefaultKey)
             }
-            NSUserDefaults.standardUserDefaults().synchronize()
+            UserDefaults.standard.synchronize()
             _sessionToken = newToken
         }
         get {
@@ -70,26 +70,26 @@ class APIConnector {
         "Staging" :      "https://stg-api.tidepool.org",
         "Development" :  "https://dev-api.tidepool.org",
     ]
-    private let kDefaultServerName = "Production"
+    fileprivate let kDefaultServerName = "Production"
 
-    private var _currentService: String?
+    fileprivate var _currentService: String?
     var currentService: String? {
         set(newService) {
             if newService == nil {
-                NSUserDefaults.standardUserDefaults().removeObjectForKey(kCurrentServiceDefaultKey)
-                NSUserDefaults.standardUserDefaults().synchronize()
+                UserDefaults.standard.removeObject(forKey: kCurrentServiceDefaultKey)
+                UserDefaults.standard.synchronize()
                 _currentService = nil
             } else {
                 if kServers[newService!] != nil {
-                    NSUserDefaults.standardUserDefaults().setValue(newService, forKey: kCurrentServiceDefaultKey)
-                    NSUserDefaults.standardUserDefaults().synchronize()
+                    UserDefaults.standard.setValue(newService, forKey: kCurrentServiceDefaultKey)
+                    UserDefaults.standard.synchronize()
                     _currentService = newService
                 }
             }
         }
         get {
             if _currentService == nil {
-                if let service = NSUserDefaults.standardUserDefaults().stringForKey(kCurrentServiceDefaultKey) {
+                if let service = UserDefaults.standard.string(forKey: kCurrentServiceDefaultKey) {
                     _currentService = service
                 }
             }
@@ -101,14 +101,14 @@ class APIConnector {
     }
     
     // Base URL for API calls, set during initialization
-    var baseUrl: NSURL?
+    var baseUrl: URL?
  
     // Reachability object, valid during lifetime of this APIConnector, and convenience function that uses this
     // Register for ReachabilityChangedNotification to monitor reachability changes             
     var reachability: Reachability?
     func isConnectedToNetwork() -> Bool {
         if let reachability = reachability {
-            return reachability.isReachable()
+            return reachability.isReachable
         } else {
             NSLog("Error: reachability object not configured!")
             return true
@@ -127,20 +127,13 @@ class APIConnector {
     /// Creator of APIConnector must call this function after init!
     func configure() -> APIConnector {
         HealthKitDataUploader.sharedInstance.uploadHandler = self.doUpload
-        self.baseUrl = NSURL(string: kServers[currentService!]!)!
+        self.baseUrl = URL(string: kServers[currentService!]!)!
         NSLog("Using service: \(self.baseUrl)")
-        self.sessionToken = NSUserDefaults.standardUserDefaults().stringForKey(kSessionTokenDefaultKey)
+        self.sessionToken = UserDefaults.standard.string(forKey: kSessionTokenDefaultKey)
         if let reachability = reachability {
             reachability.stopNotifier()
         }
-        do {
-            let reachability = try Reachability.reachabilityForInternetConnection()
-            self.reachability = reachability
-        } catch ReachabilityError.FailedToCreateWithAddress(let address) {
-            NSLog("Unable to create\nReachability with address:\n\(address)")
-        } catch {
-                NSLog("Other reachability error!")
-        }
+        self.reachability = Reachability()
         
         do {
            try reachability?.startNotifier()
@@ -154,17 +147,17 @@ class APIConnector {
         reachability?.stopNotifier()
     }
     
-    func switchToServer(serverName: String) {
+    func switchToServer(_ serverName: String) {
         if (currentService != serverName) {
             currentService = serverName
             // refresh connector since there is a new service...
-            configure()
+            _ = configure()
             NSLog("Switched to \(serverName) server")
         }
     }
     
     /// Logs in the user and obtains the session token for the session (stored internally)
-    func login(username: String, password: String, completion: (Result<User, NSError>) -> (Void)) {
+    func login(_ username: String, password: String, completion: @escaping (Result<User>) -> (Void)) {
         // Clear in case it was set while logged out...
         self.lastNetworkError = nil
         // Set our endpoint for login
@@ -172,16 +165,16 @@ class APIConnector {
         
         // Create the authorization string (user:pass base-64 encoded)
         let base64LoginString = NSString(format: "%@:%@", username, password)
-            .dataUsingEncoding(NSUTF8StringEncoding)?
-            .base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+            .data(using: String.Encoding.utf8.rawValue)?
+            .base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
         
         // Set our headers with the login string
         let headers = ["Authorization" : "Basic " + base64LoginString!]
         
         // Send the request and deal with the response as JSON
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        sendRequest(Method.POST, endpoint: endpoint, headers:headers).responseJSON { response in
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        sendRequest(.post, endpoint: endpoint, headers:headers).responseJSON { response in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if ( response.result.isSuccess ) {
                 // Look for the auth token
                 self.sessionToken = response.response!.allHeaderFields[self.kSessionIdHeader] as! String?
@@ -193,44 +186,44 @@ class APIConnector {
                 if let user = User.fromJSON(json, moc: moc) {
                     NutDataController.controller().loginUser(user)
                     APIConnector.connector().trackMetric("Logged In")
-                    completion(Result.Success(user))
+                    completion(Result.success(user))
                 } else {
                     APIConnector.connector().trackMetric("Log In Failed")
                     NutDataController.controller().logoutUser()
-                    completion(Result.Failure(NSError(domain: self.kNutshellErrorDomain,
+                    completion(Result.failure(NSError(domain: self.kNutshellErrorDomain,
                         code: -1,
                         userInfo: ["description":"Could not create user from JSON", "result":response.result.value!])))
                 }
             } else {
                 APIConnector.connector().trackMetric("Log In Failed")
                 NutDataController.controller().logoutUser()
-                completion(Result.Failure(response.result.error!))
+                completion(Result.failure(response.result.error!))
             }
         }
     }
  
-    func fetchProfile(completion: (Result<JSON, NSError>) -> (Void)) {
+    func fetchProfile(_ completion: @escaping (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user profile
         // format is like: https://api.tidepool.org/metadata/f934a287c4/profile
         let endpoint = "metadata/" + NutDataController.controller().currentUserId! + "/profile"
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        sendRequest(Method.GET, endpoint: endpoint).responseJSON { response in
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        sendRequest(.get, endpoint: endpoint).responseJSON { response in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if ( response.result.isSuccess ) {
                 let json = JSON(response.result.value!)
-                completion(Result.Success(json))
+                completion(Result.success(json))
             } else {
                 // Failure
-                completion(Result.Failure(response.result.error!))
+                completion(Result.failure(response.result.error!))
             }
         }
     }
     
     // When offline just stash metrics in metricsCache array
-    private var metricsCache: [String] = []
+    fileprivate var metricsCache: [String] = []
     // Used so we only have one metric send in progress at a time, to help balance service load a bit...
-    private var metricSendInProgress = false
-    func trackMetric(metric: String, flushBuffer: Bool = false) {
+    fileprivate var metricSendInProgress = false
+    func trackMetric(_ metric: String, flushBuffer: Bool = false) {
         // Set our endpoint for the event tracking
         // Format: https://api.tidepool.org/metrics/thisuser/urchin%20-%20Remember%20Me%20Used?source=urchin&sourceVersion=1.1
         // Format: https://api.tidepool.org/metrics/thisuser/nutshell-Viewed%20Hamburger%20Menu?source=nutshell&sourceVersion=0%2E8%2E1
@@ -245,7 +238,7 @@ class APIConnector {
         let endpoint = "metrics/thisuser/nutshell-" + nextMetric
         let parameters = ["source": "nutshell", "sourceVersion": UIApplication.appVersion()]
         metricSendInProgress = true
-        sendRequest(Method.GET, endpoint: endpoint, parameters: parameters).responseJSON { response in
+        sendRequest(.get, endpoint: endpoint, parameters: parameters as [String : AnyObject]?).responseJSON { response in
             self.metricSendInProgress = false
             if let theResponse = response.response {
                 let statusCode = theResponse.statusCode
@@ -269,7 +262,7 @@ class APIConnector {
     
     /// Remembers last network error for authorization problem monitoring
     var lastNetworkError: Int?
-    func logout(completion: () -> (Void)) {
+    func logout(_ completion: () -> (Void)) {
         // Clear our session token and remove entries from the db
         APIConnector.connector().trackMetric("Logged Out", flushBuffer: true)
         self.lastNetworkError = nil
@@ -278,31 +271,31 @@ class APIConnector {
         completion()
     }
     
-    func refreshToken(completion: (succeeded: Bool) -> (Void)) {
+    func refreshToken(_ completion: @escaping (_ succeeded: Bool) -> (Void)) {
         
         let endpoint = "/auth/login"
         
         if self.sessionToken == nil || NutDataController.controller().currentUserId == nil {
             // We don't have a session token to refresh.
-            completion(succeeded: false)
+            completion(false)
             return
         }
         
         // Post the request.
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        self.sendRequest(Method.GET, endpoint:endpoint).responseJSON { response in
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        self.sendRequest(.get, endpoint:endpoint).responseJSON { response in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if ( response.result.isSuccess ) {
                 NSLog("Session token updated")
                 self.sessionToken = response.response!.allHeaderFields[self.kSessionIdHeader] as! String?
-                completion(succeeded: true)
+                completion(true)
             } else {
                 NSLog("Session token update failed: \(response.result)")
                 if let error = response.result.error {
                     print("NSError: \(error)")
                     // TODO: handle network offline!
                 }
-                completion(succeeded: false)
+                completion(false)
             }
         }
     }
@@ -310,29 +303,29 @@ class APIConnector {
     /** For now this method returns the result as a JSON object. The result set can be huge, and we want processing to
      *  happen outside of this method until we have something a little less firehose-y.
      */
-    func getUserData(completion: (Result<JSON, NSError>) -> (Void)) {
+    func getUserData(_ completion: @escaping (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user data
         let endpoint = "data/" + NutDataController.controller().currentUserId!;
         
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        sendRequest(Method.GET, endpoint: endpoint).responseJSON { response in
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        sendRequest(.get, endpoint: endpoint).responseJSON { response in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if ( response.result.isSuccess ) {
                 let json = JSON(response.result.value!)
-                completion(Result.Success(json))
+                completion(Result.success(json))
             } else {
                 // Failure
-                completion(Result.Failure(response.result.error!))
+                completion(Result.failure(response.result.error!))
             }
         }
     }
     
-    func getReadOnlyUserData(startDate: NSDate? = nil, endDate: NSDate? = nil,  objectTypes: String = "smbg,bolus,cbg,wizard,basal", completion: (Result<JSON, NSError>) -> (Void)) {
+    func getReadOnlyUserData(_ startDate: Date? = nil, endDate: Date? = nil,  objectTypes: String = "smbg,bolus,cbg,wizard,basal", completion: @escaping (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user data
         // TODO: centralize define of read-only events!
         // request format is like: https://api.tidepool.org/data/f934a287c4?endDate=2015-11-17T08%3A00%3A00%2E000Z&startDate=2015-11-16T12%3A00%3A00%2E000Z&type=smbg%2Cbolus%2Ccbg%2Cwizard%2Cbasal
         let endpoint = "data/" + NutDataController.controller().currentUserId!
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         // TODO: If there is no data returned, I get a failure case with status code 200, and error FAILURE: Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.} ] Maybe an Alamofire issue?
         var parameters: Dictionary = ["type": objectTypes]
         if let startDate = startDate {
@@ -343,8 +336,8 @@ class APIConnector {
             // NOTE: end date is included (i.e., dates <= end date)
             parameters.updateValue(NutUtils.dateToJSON(endDate), forKey: "endDate")
         }
-        sendRequest(Method.GET, endpoint: endpoint, parameters: parameters).responseJSON { response in
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+        sendRequest(.get, endpoint: endpoint, parameters: parameters as [String : AnyObject]?).responseJSON { response in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if (response.result.isSuccess) {
                 let json = JSON(response.result.value!)
                 var validResult = true
@@ -355,13 +348,13 @@ class APIConnector {
                     if statusCode == 401 || statusCode == 403 {
                         validResult = false
                         self.lastNetworkError = statusCode
-                        completion(Result.Failure(NSError(domain: self.kNutshellErrorDomain,
+                        completion(Result.failure(NSError(domain: self.kNutshellErrorDomain,
                             code: statusCode,
                             userInfo: nil)))
                     }
                 }
                 if validResult {
-                    completion(Result.Success(json))
+                    completion(Result.success(json))
                 }
             } else {
                 // Failure: typically, no data were found:
@@ -376,7 +369,7 @@ class APIConnector {
                 } else {
                     NSLog("Invalid response for getReadOnlyUserData metric")
                 }
-                completion(Result.Failure(response.result.error!))
+                completion(Result.failure(response.result.error!))
             }
         }
     }
@@ -384,8 +377,8 @@ class APIConnector {
     
 
     func clearSessionToken() -> Void {
-        NSUserDefaults.standardUserDefaults().removeObjectForKey(kSessionTokenDefaultKey)
-        NSUserDefaults.standardUserDefaults().synchronize()
+        UserDefaults.standard.removeObject(forKey: kSessionTokenDefaultKey)
+        UserDefaults.standard.synchronize()
         sessionToken = nil
     }
 
@@ -394,19 +387,19 @@ class APIConnector {
     /**
      * Sends a request to the specified endpoint
     */
-    private func sendRequest(requestType: (Alamofire.Method)? = Method.GET,
+    fileprivate func sendRequest(_ requestType: HTTPMethod? = .get,
         endpoint: (String),
         parameters: [String: AnyObject]? = nil,
-        headers: [String: String]? = nil) -> (Request)
+        headers: [String: String]? = nil) -> (DataRequest)
     {
-        let url = baseUrl!.URLByAppendingPathComponent(endpoint)
+        let url = baseUrl!.appendingPathComponent(endpoint)
         
         // Get our API headers (the session token) and add any headers supplied by the caller
         var apiHeaders = getApiHeaders()
         if ( apiHeaders != nil ) {
             if ( headers != nil ) {
                 for(k, v) in headers! {
-                    apiHeaders?.updateValue(v, forKey: k)
+                    _ = apiHeaders?.updateValue(v, forKey: k)
                 }
             }
         } else {
@@ -415,7 +408,7 @@ class APIConnector {
         }
         
         // Fire off the network request
-        return Alamofire.request(requestType!, url, headers: apiHeaders, parameters:parameters).validate()
+        return Alamofire.request(url, method: requestType!, parameters: parameters, headers: apiHeaders).validate()
     }
     
     func getApiHeaders() -> [String: String]? {
@@ -425,7 +418,7 @@ class APIConnector {
         return nil
     }
     
-    func doUpload(body: NSData, completion: (error: NSError?, duplicateSampleCount: Int) -> (Void)) {
+    func doUpload(_ body: Data, completion: @escaping (_ error: NSError?, _ duplicateSampleCount: Int) -> (Void)) -> (Void) {
         DDLogVerbose("trace")
         
         var error: NSError?
@@ -434,7 +427,7 @@ class APIConnector {
             if error != nil {
                 DDLogError("Upload failed: \(error), \(error?.userInfo)")
                 
-                completion(error: error, duplicateSampleCount: 0)
+                completion(error, 0)
             }
         }
         
@@ -452,19 +445,19 @@ class APIConnector {
         let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
         let preRequest = { () -> Void in }
         
-        let handleRequestCompletion = { (response: NSURLResponse!, data: NSData!, requestError: NSError!) -> Void in
+        let handleRequestCompletion = { (response: URLResponse!, data: Data!, requestError: NSError!) -> Void in
             // TODO: Per this Trello card (https://trello.com/c/ixKq9mHM/102-ios-bg-uploader-when-updating-uploader-to-new-upload-service-api-consider-that-the-duplicate-item-indices-may-be-going-away), this dup item indices response may be going away in future version of upload service, so we may need to revisit this when we move to the upload service API.
             var error = requestError
             var duplicateSampleCount = 0
             if error == nil {
-                if let httpResponse = response as? NSHTTPURLResponse {
+                if let httpResponse = response as? HTTPURLResponse {
                     if data != nil {
                         let statusCode = httpResponse.statusCode
-                        let duplicateItemIndices: NSArray? = (try? NSJSONSerialization.JSONObjectWithData(data!, options: [])) as? NSArray
+                        let duplicateItemIndices: NSArray? = (try? JSONSerialization.jsonObject(with: data!, options: [])) as? NSArray
                         duplicateSampleCount = duplicateItemIndices?.count ?? 0
                         
                         if statusCode >= 400 && statusCode < 600 {
-                            let dataString = NSString(data: data!, encoding: NSUTF8StringEncoding)! as String
+                            let dataString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! as String
                             error = NSError(domain: "APIConnect-doUpload", code: -2, userInfo: [NSLocalizedDescriptionKey:"Upload failed with status code: \(statusCode), error message: \(dataString)"])
                         }
                     }
@@ -475,38 +468,37 @@ class APIConnector {
                 DDLogError("Upload failed: \(error), \(error?.userInfo)")
             }
             
-            completion(error: error, duplicateSampleCount: duplicateSampleCount)
+            completion(error, duplicateSampleCount)
         }
 
-        uploadRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, subdomainRootOverride: "uploads", completion: handleRequestCompletion)
+        uploadRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, subdomainRootOverride: "uploads", completion: handleRequestCompletion as! (URLResponse?, Data?, NSError?) -> Void)
     }
 
 
-    func uploadRequest(method: String, urlExtension: String, headerDict: [String: String], body: NSData?, preRequest: () -> Void, subdomainRootOverride: String = "api", completion: (response: NSURLResponse!, data: NSData!, error: NSError!) -> Void) {
+    func uploadRequest(_ method: String, urlExtension: String, headerDict: [String: String], body: Data?, preRequest: () -> Void, subdomainRootOverride: String = "api", completion: @escaping (_ response: URLResponse?, _ data: Data?, _ error: NSError?) -> Void) {
         
         if (self.isConnectedToNetwork()) {
             preRequest()
             
             let baseURL = kServers[currentService!]!
-            let baseUrlWithSubdomainRootOverride = baseURL.stringByReplacingOccurrencesOfString("api", withString: subdomainRootOverride)
+            let baseUrlWithSubdomainRootOverride = baseURL.replacingOccurrences(of: "api", with: subdomainRootOverride)
             var urlString = baseUrlWithSubdomainRootOverride + urlExtension
-            urlString = urlString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-            let url = NSURL(string: urlString)
-            let request = NSMutableURLRequest(URL: url!)
-            request.HTTPMethod = method
+            urlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+            let url = URL(string: urlString)
+            let request = NSMutableURLRequest(url: url!)
+            request.httpMethod = method
             for (field, value) in headerDict {
                 request.setValue(value, forHTTPHeaderField: field)
             }
-            request.HTTPBody = body
+            request.httpBody = body
             
-            let task = NSURLSession.sharedSession().dataTaskWithRequest(
-                request,
-                completionHandler: {
-                    (data, response, error) -> Void in
-                    dispatch_async(dispatch_get_main_queue(), {
-                        completion(response: response, data: data, error: error)
-                    })
-            })
+            let task = URLSession.shared.dataTask(with: request as URLRequest) {
+                (data, response, error) -> Void in
+                DispatchQueue.main.async(execute: {
+                    completion(response, data, (error as? NSError))
+                })
+                return
+            }
             task.resume()
         } else {
             DDLogInfo("Not connected to network")

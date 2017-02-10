@@ -34,10 +34,10 @@ class NutDataController: NSObject
 
     // MARK: - Constants
     
-    private let kLocalObjectsStoreFilename = "SingleViewCoreData.sqlite"
+    fileprivate let kLocalObjectsStoreFilename = "SingleViewCoreData.sqlite"
     // Appending .nosync should prevent this file from being backed to the cloud
-    private let kTidepoolObjectsStoreFilename = "TidepoolObjects.sqlite.nosync"
-    private let kTestFilePrefix = "Test-"
+    fileprivate let kTidepoolObjectsStoreFilename = "TidepoolObjects.sqlite.nosync"
+    fileprivate let kTestFilePrefix = "Test-"
     
 
     static var _controller: NutDataController?
@@ -74,7 +74,7 @@ class NutDataController: NSObject
         return nil;
     }
     
-    private var _currentUserId: String?
+    fileprivate var _currentUserId: String?
     /// Service userid for the currently logged in account, or nil. 
     /// 
     /// Read only - set indirectly via loginUser/logoutUser calls. Needed to tag nut events in database.
@@ -111,7 +111,7 @@ class NutDataController: NSObject
     ///
     /// - parameter newUser:
     ///   The User object newly created from service login response.
-    func loginUser(newUser: User) {
+    func loginUser(_ newUser: User) {
         self.deleteAnyTidepoolData()
         self.currentUser = newUser
         _currentUserId = newUser.userid
@@ -126,10 +126,10 @@ class NutDataController: NSObject
         configureHealthKitInterface()
     }
 
-    func processProfileFetch(json: JSON) {
+    func processProfileFetch(_ json: JSON) {
         if let user = self.currentUser {
             user.processProfileJSON(json)
-            DatabaseUtils.databaseSave(user.managedObjectContext!)
+            _ = DatabaseUtils.databaseSave(user.managedObjectContext!)
         }
     }
     
@@ -178,9 +178,9 @@ class NutDataController: NSObject
     // MARK: - Private
     //
 
-    private var runningUnitTests: Bool
+    fileprivate var runningUnitTests: Bool
     // no instances allowed..
-    override private init() {
+    override fileprivate init() {
         self.runningUnitTests = false
         if let _ = NSClassFromString("XCTest") {
             self.runningUnitTests = true
@@ -188,8 +188,8 @@ class NutDataController: NSObject
         }
     }
 
-    private var _currentUser: User?
-    private var currentUser: User? {
+    fileprivate var _currentUser: User?
+    fileprivate var currentUser: User? {
         get {
             if _currentUser == nil {
                 if let user = self.getUser() {
@@ -214,13 +214,13 @@ class NutDataController: NSObject
         }
     }
 
-    private var _managedObjectModel: NSManagedObjectModel?
-    private var managedObjectModel: NSManagedObjectModel {
+    fileprivate var _managedObjectModel: NSManagedObjectModel?
+    fileprivate var managedObjectModel: NSManagedObjectModel {
         get {
             if _managedObjectModel == nil {
                 // The managed object model for the application. This property is not optional. It is a fatal error for the application not to be able to find and load its model.
-                let modelURL = NSBundle.mainBundle().URLForResource("Nutshell", withExtension: "momd")!
-                _managedObjectModel = NSManagedObjectModel(contentsOfURL: modelURL)!
+                let modelURL = Bundle.main.url(forResource: "Nutshell", withExtension: "momd")!
+                _managedObjectModel = NSManagedObjectModel(contentsOf: modelURL)!
             }
             return _managedObjectModel!
         }
@@ -229,14 +229,14 @@ class NutDataController: NSObject
         }
     }
     
-    lazy var applicationDocumentsDirectory: NSURL = {
+    lazy var applicationDocumentsDirectory: URL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "org.tidepool.Nutshell" in the application's documents Application Support directory.
-        let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return urls[urls.count-1]
     }()
 
-    private var _pscForLocalObjects: NSPersistentStoreCoordinator?
-    private var pscForLocalObjects: NSPersistentStoreCoordinator? {
+    fileprivate var _pscForLocalObjects: NSPersistentStoreCoordinator?
+    fileprivate var pscForLocalObjects: NSPersistentStoreCoordinator? {
         get {
             if _pscForLocalObjects == nil {
                 _pscForLocalObjects = createPSC(kLocalObjectsStoreFilename)
@@ -245,8 +245,8 @@ class NutDataController: NSObject
         }
     }
 
-    private var _pscForTidepoolObjects: NSPersistentStoreCoordinator?
-    private var pscForTidepoolObjects: NSPersistentStoreCoordinator? {
+    fileprivate var _pscForTidepoolObjects: NSPersistentStoreCoordinator?
+    fileprivate var pscForTidepoolObjects: NSPersistentStoreCoordinator? {
         get {
             if _pscForTidepoolObjects == nil {
                 _pscForTidepoolObjects = createPSC(kTidepoolObjectsStoreFilename)
@@ -255,7 +255,7 @@ class NutDataController: NSObject
         }
     }
     
-    private func filenameAdjustedForTest(filename: String) -> String {
+    fileprivate func filenameAdjustedForTest(_ filename: String) -> String {
         if self.runningUnitTests {
             // NOTE: if we are running unit tests, the store objects will be incompatible!
             return kTestFilePrefix + filename
@@ -264,21 +264,21 @@ class NutDataController: NSObject
         }
     }
     
-    private func createPSC(storeBaseFileName: String) -> NSPersistentStoreCoordinator {
+    fileprivate func createPSC(_ storeBaseFileName: String) -> NSPersistentStoreCoordinator {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         var url = applicationDocumentsDirectory
-        url = url.URLByAppendingPathComponent(filenameAdjustedForTest(storeBaseFileName))
+        url = url.appendingPathComponent(filenameAdjustedForTest(storeBaseFileName))
         let failureReason = "There was an error creating or loading the application's saved data."
         let pscOptions = [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true]
         do {
             NSLog("Store url is \(url)")
             // TODO: use NSInMemoryStoreType for test databases!
-            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: pscOptions)
+            try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: pscOptions)
         } catch {
             // Report any error we got.
             var dict = [String: AnyObject]()
-            dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
-            dict[NSLocalizedFailureReasonErrorKey] = failureReason
+            dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data" as AnyObject?
+            dict[NSLocalizedFailureReasonErrorKey] = failureReason as AnyObject?
             
             dict[NSUnderlyingErrorKey] = error as NSError
             let wrappedError = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
@@ -290,12 +290,12 @@ class NutDataController: NSObject
         return coordinator
     }
 
-    private var _mocForLocalObjects: NSManagedObjectContext?
-    private var mocForLocalObjects: NSManagedObjectContext? {
+    fileprivate var _mocForLocalObjects: NSManagedObjectContext?
+    fileprivate var mocForLocalObjects: NSManagedObjectContext? {
         get {
             if _mocForLocalObjects == nil {
                 let coordinator = self.pscForLocalObjects
-                let managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+                let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
                 managedObjectContext.persistentStoreCoordinator = coordinator
                 _mocForLocalObjects = managedObjectContext
                 
@@ -304,12 +304,12 @@ class NutDataController: NSObject
         }
     }
     
-    private var _mocForTidepoolObjects: NSManagedObjectContext?
-    private var mocForTidepoolObjects: NSManagedObjectContext? {
+    fileprivate var _mocForTidepoolObjects: NSManagedObjectContext?
+    fileprivate var mocForTidepoolObjects: NSManagedObjectContext? {
         get {
             if _mocForTidepoolObjects == nil {
                 let coordinator = self.pscForTidepoolObjects
-                let managedObjectContext = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+                let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
                 managedObjectContext.persistentStoreCoordinator = coordinator
                 _mocForTidepoolObjects = managedObjectContext
             }
@@ -317,7 +317,7 @@ class NutDataController: NSObject
         }
     }
     
-    private func saveContext() {
+    fileprivate func saveContext() {
         if let mocForLocalObjects = mocForLocalObjects {
             self.saveContextIfChanged(mocForLocalObjects)
         }
@@ -326,7 +326,7 @@ class NutDataController: NSObject
         }
     }
 
-    private func saveContextIfChanged(moc: NSManagedObjectContext) {
+    fileprivate func saveContextIfChanged(_ moc: NSManagedObjectContext) {
         if moc.hasChanges {
             do {
                 try moc.save()
@@ -344,11 +344,11 @@ class NutDataController: NSObject
     // MARK: - Manage current user
     //
 
-    private func getUser() -> User? {
+    fileprivate func getUser() -> User? {
         let moc = self.mocForCurrentUser()
-        let request = NSFetchRequest(entityName: "User")
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
         do {
-            if let results = try moc.executeFetchRequest(request) as? [User] {
+            if let results = try moc.fetch(request) as? [User] {
                 if results.count > 0 {
                     return results[0]
                 }
@@ -359,17 +359,17 @@ class NutDataController: NSObject
         return nil
     }
     
-    private func updateUser(currentUser: User?, newUser: User?) {
+    fileprivate func updateUser(_ currentUser: User?, newUser: User?) {
         let moc = self.mocForCurrentUser()
         // Remove existing user if passed in
         if let currentUser = currentUser {
-            let request = NSFetchRequest(entityName: "User")
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
             request.predicate = NSPredicate(format: "userid==%@", currentUser.userid!)
             do {
-                let results = try moc.executeFetchRequest(request) as? [User]
+                let results = try moc.fetch(request) as? [User]
                 if results != nil {
                     for result in results! {
-                        moc.deleteObject(result)
+                        moc.delete(result)
                     }
                 }
             } catch let error as NSError {
@@ -378,7 +378,7 @@ class NutDataController: NSObject
         }
         
         if let newUser = newUser {
-            moc.insertObject(newUser)
+            moc.insert(newUser)
         }
         
         // Save the database
@@ -390,20 +390,20 @@ class NutDataController: NSObject
     }
 
     /// Resets the tidepool object database by deleting the underlying file!
-    private func deleteAnyTidepoolData() {
+    fileprivate func deleteAnyTidepoolData() {
         // Delete the underlying file
         var url = self.applicationDocumentsDirectory
-        url = url.URLByAppendingPathComponent(filenameAdjustedForTest(kTidepoolObjectsStoreFilename))
+        url = url.appendingPathComponent(filenameAdjustedForTest(kTidepoolObjectsStoreFilename))
         var error: NSError?
-        let fileExists = url.checkResourceIsReachableAndReturnError(&error)
+        let fileExists = (url as NSURL).checkResourceIsReachableAndReturnError(&error)
         if (fileExists) {
             // First nil out locals so a new psc and moc will be created on demand
             _pscForTidepoolObjects = nil
             _mocForTidepoolObjects = nil
             DatabaseUtils.resetTidepoolEventLoader() // reset cache as well!
-            let fm = NSFileManager.defaultManager()
+            let fm = FileManager.default
             do {
-                try fm.removeItemAtURL(url)
+                try fm.removeItem(at: url)
                 NSLog("Deleted database at \(url)")
             } catch let error as NSError {
                 NSLog("Failed to delete \(url), error: \(error)")

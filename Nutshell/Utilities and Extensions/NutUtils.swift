@@ -20,26 +20,22 @@ import Photos
 class NutUtils {
 
     class func onIPad() -> Bool {
-        return UIDevice.currentDevice().userInterfaceIdiom == .Pad
+        return UIDevice.current.userInterfaceIdiom == .pad
     }
 
-    class func dispatchBoolToVoidAfterSecs(secs: Float, result: Bool, boolToVoid: (Bool) -> (Void)) {
-        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(secs * Float(NSEC_PER_SEC)))
-        dispatch_after(time, dispatch_get_main_queue()){
+    class func dispatchBoolToVoidAfterSecs(_ secs: Float, result: Bool, boolToVoid: @escaping (Bool) -> (Void)) {
+        let time = DispatchTime.now() + Double(Int64(secs * Float(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: time){
             boolToVoid(result)
         }
     }
     
-    class func delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
+    class func delay(_ delay:Double, closure:@escaping ()->()) {
+        DispatchQueue.main.asyncAfter(
+            deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
     }
     
-    class func compressImage(image: UIImage) -> UIImage {
+    class func compressImage(_ image: UIImage) -> UIImage {
         var actualHeight : CGFloat = image.size.height
         var actualWidth : CGFloat = image.size.width
         let maxHeight : CGFloat = 600.0
@@ -61,24 +57,24 @@ class NutUtils {
             }
         }
         
-        let rect = CGRectMake(0.0, 0.0, actualWidth, actualHeight)
+        let rect = CGRect(x: 0.0, y: 0.0, width: actualWidth, height: actualHeight)
         UIGraphicsBeginImageContext(rect.size)
-        image.drawInRect(rect)
-        let img : UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        image.draw(in: rect)
+        let img : UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         let imageData = UIImageJPEGRepresentation(img, compressionQuality)
         UIGraphicsEndImageContext()
-        NSLog("Compressed length: \(imageData!.length)")
+        NSLog("Compressed length: \(imageData!.count)")
         return UIImage(data: imageData!)!
     }
     
     class func photosDirectoryPath() -> String? {
-        let path = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         var photoDirPath: String? = path + "/photos/" + NutDataController.controller().currentUserId! + "/"
         
-        let fm = NSFileManager.defaultManager()
+        let fm = FileManager.default
         var dirExists = false
         do {
-            _ = try fm.contentsOfDirectoryAtPath(photoDirPath!)
+            _ = try fm.contentsOfDirectory(atPath: photoDirPath!)
             //NSLog("Photos dir: \(dirContents)")
             dirExists = true
         } catch let error as NSError {
@@ -87,7 +83,7 @@ class NutUtils {
         
         if !dirExists {
             do {
-                try fm.createDirectoryAtPath(photoDirPath!, withIntermediateDirectories: true, attributes: nil)
+                try fm.createDirectory(atPath: photoDirPath!, withIntermediateDirectories: true, attributes: nil)
             } catch let error as NSError {
                 NSLog("Failed to create dir at \(photoDirPath), error: \(error)")
                 photoDirPath = nil
@@ -97,23 +93,23 @@ class NutUtils {
     }
     
     class func urlForNewPhoto() -> String {
-        let baseFilename = "file_" + NSUUID().UUIDString + ".jpg"
+        let baseFilename = "file_" + UUID().uuidString + ".jpg"
         return baseFilename
     }
 
-    class func filePathForPhoto(photoUrl: String) -> String? {
+    class func filePathForPhoto(_ photoUrl: String) -> String? {
         if let dirPath = NutUtils.photosDirectoryPath() {
             return dirPath + photoUrl
         }
         return nil
     }
     
-    class func deleteLocalPhoto(url: String) {
+    class func deleteLocalPhoto(_ url: String) {
         if url.hasPrefix("file_") {
             if let filePath = filePathForPhoto(url) {
-                let fm = NSFileManager.defaultManager()
+                let fm = FileManager.default
                 do {
-                    try fm.removeItemAtPath(filePath)
+                    try fm.removeItem(atPath: filePath)
                     NSLog("Deleted photo: \(url)")
                 } catch let error as NSError {
                     NSLog("Failed to delete photo at \(filePath), error: \(error)")
@@ -122,15 +118,15 @@ class NutUtils {
         }
     }
 
-    class func photoInfo(url: String) -> String {
+    class func photoInfo(_ url: String) -> String {
         var result = "url: " + url
         if url.hasPrefix("file_") {
             if let filePath = filePathForPhoto(url) {
-                let fm = NSFileManager.defaultManager()
+                let fm = FileManager.default
                 do {
-                    let fileAttributes = try fm.attributesOfItemAtPath(filePath)
-                    result += "size: " + String(fileAttributes[NSFileSize])
-                    result += "created: " + String(fileAttributes[NSFileCreationDate])
+                    let fileAttributes = try fm.attributesOfItem(atPath: filePath)
+                    result += "size: " + String(describing: fileAttributes[FileAttributeKey.size])
+                    result += "created: " + String(describing: fileAttributes[FileAttributeKey.creationDate])
                 } catch let error as NSError {
                     NSLog("Failed to get attributes for file \(filePath), error: \(error)")
                 }
@@ -139,34 +135,34 @@ class NutUtils {
         return result
     }
     
-    class func loadImage(url: String, imageView: UIImageView) {
+    class func loadImage(_ url: String, imageView: UIImageView) {
         if let image = UIImage(named: url) {
             imageView.image = image
-            imageView.hidden = false
+            imageView.isHidden = false
         } else if url.hasPrefix("file_") {
             if let filePath = filePathForPhoto(url) {
                 let image = UIImage(contentsOfFile: filePath)
                 if let image = image {
-                    imageView.hidden = false
+                    imageView.isHidden = false
                     imageView.image = image
                 } else {
                     NSLog("Failed to load photo from local file: \(url)!")
                 }
             }
         } else {
-            if let nsurl = NSURL(string:url) {
-                let fetchResult = PHAsset.fetchAssetsWithALAssetURLs([nsurl], options: nil)
-                if let asset = fetchResult.firstObject as? PHAsset {
+            if let nsurl = URL(string:url) {
+                let fetchResult = PHAsset.fetchAssets(withALAssetURLs: [nsurl], options: nil)
+                if let asset = fetchResult.firstObject {
                     // TODO: move this to file system! Would need current event to update it as well!
                     var targetSize = imageView.frame.size
                     // bump up resolution...
                     targetSize.height *= 2.0
                     targetSize.width *= 2.0
                     let options = PHImageRequestOptions()
-                    PHImageManager.defaultManager().requestImageForAsset(asset, targetSize: targetSize, contentMode: PHImageContentMode.AspectFit, options: options) {
+                    PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: PHImageContentMode.aspectFit, options: options) {
                         (result, info) in
                         if let result = result {
-                            imageView.hidden = false
+                            imageView.isHidden = false
                             imageView.image = result
                         }
                     }
@@ -175,22 +171,22 @@ class NutUtils {
         }
     }
 
-    class func dateFromJSON(json: String?) -> NSDate? {
+    class func dateFromJSON(_ json: String?) -> Date? {
         if let json = json {
-            var result = jsonDateFormatter.dateFromString(json)
+            var result = jsonDateFormatter.date(from: json)
             if result == nil {
-                result = jsonAltDateFormatter.dateFromString(json)
+                result = jsonAltDateFormatter.date(from: json)
             }
             return result
         }
         return nil
     }
     
-    class func dateToJSON(date: NSDate) -> String {
-        return jsonDateFormatter.stringFromDate(date)
+    class func dateToJSON(_ date: Date) -> String {
+        return jsonDateFormatter.string(from: date)
     }
 
-    class func decimalFromJSON(json: String?) -> NSDecimalNumber? {
+    class func decimalFromJSON(_ json: String?) -> NSDecimalNumber? {
         if let json = json {
             return NSDecimalNumber(string: json)
         }
@@ -198,24 +194,24 @@ class NutUtils {
     }
 
     /** Date formatter for JSON date strings */
-    class var jsonDateFormatter : NSDateFormatter {
+    class var jsonDateFormatter : DateFormatter {
         struct Static {
-            static let instance: NSDateFormatter = {
-                let dateFormatter = NSDateFormatter()
+            static let instance: DateFormatter = {
+                let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-                dateFormatter.timeZone = NSTimeZone(name: "GMT")
+                dateFormatter.timeZone = TimeZone(identifier: "GMT")
                 return dateFormatter
                 }()
         }
         return Static.instance
     }
     
-    class var jsonAltDateFormatter : NSDateFormatter {
+    class var jsonAltDateFormatter : DateFormatter {
         struct Static {
-            static let instance: NSDateFormatter = {
-                let dateFormatter = NSDateFormatter()
+            static let instance: DateFormatter = {
+                let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-                dateFormatter.timeZone = NSTimeZone(name: "GMT")
+                dateFormatter.timeZone = TimeZone(identifier: "GMT")
                 return dateFormatter
             }()
         }
@@ -224,10 +220,10 @@ class NutUtils {
 
     
     /** Date formatter for date strings in the UI */
-    private class var dateFormatter : NSDateFormatter {
+    fileprivate class var dateFormatter : DateFormatter {
         struct Static {
-            static let instance: NSDateFormatter = {
-                let df = NSDateFormatter()
+            static let instance: DateFormatter = {
+                let df = DateFormatter()
                 df.dateFormat = Styles.uniformDateFormat
                 return df
             }()
@@ -238,36 +234,36 @@ class NutUtils {
     // NOTE: these date routines are not localized, and do not take into account user preferences for date display.
 
     /// Call setFormatterTimezone to set time zone before calling standardUIDayString or standardUIDateString
-    class func setFormatterTimezone(timezoneOffsetSecs: Int) {
+    class func setFormatterTimezone(_ timezoneOffsetSecs: Int) {
         let df = NutUtils.dateFormatter
-        df.timeZone = NSTimeZone(forSecondsFromGMT:timezoneOffsetSecs)
+        df.timeZone = TimeZone(secondsFromGMT:timezoneOffsetSecs)
     }
     
     /// Returns delta time different due to a different daylight savings time setting for a date different from the current time, assuming the location-based time zone is the same as the current default.
-    class func dayLightSavingsAdjust(dateInPast: NSDate) -> Int {
-        let thisTimeZone = NSTimeZone.localTimeZone()
-        let dstOffsetForThisDate = thisTimeZone.daylightSavingTimeOffsetForDate(NSDate())
-        let dstOffsetForPickerDate = thisTimeZone.daylightSavingTimeOffsetForDate(dateInPast)
+    class func dayLightSavingsAdjust(_ dateInPast: Date) -> Int {
+        let thisTimeZone = TimeZone.autoupdatingCurrent
+        let dstOffsetForThisDate = thisTimeZone.daylightSavingTimeOffset(for: Date())
+        let dstOffsetForPickerDate = thisTimeZone.daylightSavingTimeOffset(for: dateInPast)
         let dstAdjust = dstOffsetForPickerDate - dstOffsetForThisDate
         return Int(dstAdjust)
     }
     
     /// Returns strings like "Mar 17, 2016", "Today", "Yesterday"
     /// Note: call setFormatterTimezone before this!
-    class func standardUIDayString(date: NSDate) -> String {
+    class func standardUIDayString(_ date: Date) -> String {
         let df = NutUtils.dateFormatter
         df.dateFormat = "MMM d, yyyy"
-        var dayString = df.stringFromDate(date)
+        var dayString = df.string(from: date)
         // If this year, remove year.
         df.dateFormat = ", yyyy"
-        let thisYearString = df.stringFromDate(NSDate())
-        dayString = dayString.stringByReplacingOccurrencesOfString(thisYearString, withString: "")
+        let thisYearString = df.string(from: Date())
+        dayString = dayString.replacingOccurrences(of: thisYearString, with: "")
         // Replace with today, yesterday if appropriate: only check if it's in the last 48 hours
         // TODO: look at using NSCalendar.startOfDayForDate and then time intervals to determine today, yesterday, Saturday, etc., back a week.
         if (date.timeIntervalSinceNow > -48 * 60 * 60) {
-            if NSCalendar.currentCalendar().isDateInToday(date) {
+            if Calendar.current.isDateInToday(date) {
                 dayString = "Today"
-            } else if NSCalendar.currentCalendar().isDateInYesterday(date) {
+            } else if Calendar.current.isDateInYesterday(date) {
                 dayString = "Yesterday"
             }
         }
@@ -276,15 +272,15 @@ class NutUtils {
     
     /// Returns strings like "Yesterday at 9:17 am"
     /// Note: call setFormatterTimezone before this!
-    class func standardUIDateString(date: NSDate) -> String {
+    class func standardUIDateString(_ date: Date) -> String {
         let df = NutUtils.dateFormatter
         let dayString = NutUtils.standardUIDayString(date)
         // Figure the hour/minute part...
         df.dateFormat = "h:mm a"
-        var hourString = df.stringFromDate(date)
+        var hourString = df.string(from: date)
         // Replace uppercase PM and AM with lowercase versions
-        hourString = hourString.stringByReplacingOccurrencesOfString("PM", withString: "pm", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        hourString = hourString.stringByReplacingOccurrencesOfString("AM", withString: "am", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        hourString = hourString.replacingOccurrences(of: "PM", with: "pm", options: NSString.CompareOptions.literal, range: nil)
+        hourString = hourString.replacingOccurrences(of: "AM", with: "am", options: NSString.CompareOptions.literal, range: nil)
         return dayString + " at " + hourString
     }
 

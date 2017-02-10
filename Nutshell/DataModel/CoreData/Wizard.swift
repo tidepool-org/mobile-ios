@@ -11,9 +11,9 @@ import CoreData
 import SwiftyJSON
 
 class Wizard: CommonData {
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Wizard? {
-        if let entityDescription = NSEntityDescription.entityForName("Wizard", inManagedObjectContext: moc) {
-            let me = Wizard(entity: entityDescription, insertIntoManagedObjectContext: nil) 
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> Wizard? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "Wizard", in: moc) {
+            let me = Wizard(entity: entityDescription, insertInto: nil) 
             me.bgInput = json["bgInput"].number
             me.carbInput = json["carbInput"].number
             me.insulinOnBoard = json["insulinOnBoard"].number

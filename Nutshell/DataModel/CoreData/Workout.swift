@@ -23,7 +23,7 @@ class Workout: EventItem {
     }
 
     // Convert Open mHealth enum to display string
-    class func userStringForHKWorkoutActivityTypeEnumString(typeEnumString: String) -> String {
+    class func userStringForHKWorkoutActivityTypeEnumString(_ typeEnumString: String) -> String {
         
         switch (typeEnumString) {
         case "HKWorkoutActivityTypeAmericanFootball":
@@ -148,127 +148,128 @@ class Workout: EventItem {
     }
 
     // Convert HKWorkoutActivityType enum to Open mHealth enum string...
-    class func enumStringForHKWorkoutActivityType(type: HKWorkoutActivityType) -> String {
+    class func enumStringForHKWorkoutActivityType(_ type: HKWorkoutActivityType) -> String {
         
         switch( type ){
-        case HKWorkoutActivityType.AmericanFootball:
+        case HKWorkoutActivityType.americanFootball:
             return "HKWorkoutActivityTypeAmericanFootball"
-        case HKWorkoutActivityType.Archery:
+        case HKWorkoutActivityType.archery:
             return "HKWorkoutActivityTypeArchery"
-        case HKWorkoutActivityType.AustralianFootball:
+        case HKWorkoutActivityType.australianFootball:
             return "HKWorkoutActivityTypeAustralianFootball"
-        case HKWorkoutActivityType.Badminton:
+        case HKWorkoutActivityType.badminton:
             return "HKWorkoutActivityTypeBadminton"
-        case HKWorkoutActivityType.Baseball:
+        case HKWorkoutActivityType.baseball:
             return "HKWorkoutActivityTypeBaseball"
-        case HKWorkoutActivityType.Basketball:
+        case HKWorkoutActivityType.basketball:
             return "HKWorkoutActivityTypeBasketball"
-        case HKWorkoutActivityType.Bowling:
+        case HKWorkoutActivityType.bowling:
             return "HKWorkoutActivityTypeBowling"
-        case HKWorkoutActivityType.Boxing:
+        case HKWorkoutActivityType.boxing:
             return "HKWorkoutActivityTypeBoxing"
-        case HKWorkoutActivityType.Climbing:
+        case HKWorkoutActivityType.climbing:
             return "HKWorkoutActivityTypeClimbing"
-        case HKWorkoutActivityType.Cricket:
+        case HKWorkoutActivityType.cricket:
             return "HKWorkoutActivityTypeCricket"
-        case HKWorkoutActivityType.CrossTraining:
+        case HKWorkoutActivityType.crossTraining:
             return "HKWorkoutActivityTypeCrossTraining"
-        case HKWorkoutActivityType.Curling:
+        case HKWorkoutActivityType.curling:
             return "HKWorkoutActivityTypeCurling"
-        case HKWorkoutActivityType.Cycling:
+        case HKWorkoutActivityType.cycling:
             return "HKWorkoutActivityTypeCycling"
-        case HKWorkoutActivityType.Dance:
+        case HKWorkoutActivityType.dance:
             return "HKWorkoutActivityTypeDance"
-        case HKWorkoutActivityType.DanceInspiredTraining:
+        case HKWorkoutActivityType.danceInspiredTraining:
             return "HKWorkoutActivityTypeDanceInspiredTraining"
-        case HKWorkoutActivityType.Elliptical:
+        case HKWorkoutActivityType.elliptical:
             return "HKWorkoutActivityTypeElliptical"
-        case HKWorkoutActivityType.EquestrianSports:
+        case HKWorkoutActivityType.equestrianSports:
             return "HKWorkoutActivityTypeEquestrianSports"
-        case HKWorkoutActivityType.Fencing:
+        case HKWorkoutActivityType.fencing:
             return "HKWorkoutActivityTypeFencing"
-        case HKWorkoutActivityType.Fishing:
+        case HKWorkoutActivityType.fishing:
             return "HKWorkoutActivityTypeFishing"
-        case HKWorkoutActivityType.FunctionalStrengthTraining:
+        case HKWorkoutActivityType.functionalStrengthTraining:
             return "HKWorkoutActivityTypeFunctionalStrengthTraining"
-        case HKWorkoutActivityType.Golf:
+        case HKWorkoutActivityType.golf:
             return "HKWorkoutActivityTypeGolf"
-        case HKWorkoutActivityType.Gymnastics:
+        case HKWorkoutActivityType.gymnastics:
             return "HKWorkoutActivityTypeGymnastics"
-        case HKWorkoutActivityType.Handball:
+        case HKWorkoutActivityType.handball:
             return "HKWorkoutActivityTypeHandball"
-        case HKWorkoutActivityType.Hiking:
+        case HKWorkoutActivityType.hiking:
             return "HKWorkoutActivityTypeHiking"
-        case HKWorkoutActivityType.Hockey:
+        case HKWorkoutActivityType.hockey:
             return "HKWorkoutActivityTypeHockey"
-        case HKWorkoutActivityType.Hunting:
+        case HKWorkoutActivityType.hunting:
             return "HKWorkoutActivityTypeHunting"
-        case HKWorkoutActivityType.Lacrosse:
+        case HKWorkoutActivityType.lacrosse:
             return "HKWorkoutActivityTypeLacrosse"
-        case HKWorkoutActivityType.MartialArts:
+        case HKWorkoutActivityType.martialArts:
             return "HKWorkoutActivityTypeMartialArts"
-        case HKWorkoutActivityType.MindAndBody:
+        case HKWorkoutActivityType.mindAndBody:
             return "HKWorkoutActivityTypeMindAndBody"
-        case HKWorkoutActivityType.MixedMetabolicCardioTraining:
+        case HKWorkoutActivityType.mixedMetabolicCardioTraining:
             return "HKWorkoutActivityTypeMixedMetabolicCardioTraining"
-        case HKWorkoutActivityType.PaddleSports:
+        case HKWorkoutActivityType.paddleSports:
             return "HKWorkoutActivityTypePaddleSports"
-        case HKWorkoutActivityType.Play:
+        case HKWorkoutActivityType.play:
             return "HKWorkoutActivityTypePlay"
-        case HKWorkoutActivityType.PreparationAndRecovery:
+        case HKWorkoutActivityType.preparationAndRecovery:
             return "HKWorkoutActivityTypePreparationAndRecovery"
-        case HKWorkoutActivityType.Racquetball:
+        case HKWorkoutActivityType.racquetball:
             return "HKWorkoutActivityTypeRacquetball"
-        case HKWorkoutActivityType.Rowing:
+        case HKWorkoutActivityType.rowing:
             return "HKWorkoutActivityTypeRowing"
-        case HKWorkoutActivityType.Rugby:
+        case HKWorkoutActivityType.rugby:
             return "HKWorkoutActivityTypeRugby"
-        case HKWorkoutActivityType.Running:
+        case HKWorkoutActivityType.running:
             return "HKWorkoutActivityTypeRunning"
-        case HKWorkoutActivityType.Sailing:
+        case HKWorkoutActivityType.sailing:
             return "HKWorkoutActivityTypeSailing"
-        case HKWorkoutActivityType.SkatingSports:
+        case HKWorkoutActivityType.skatingSports:
             return "HKWorkoutActivityTypeSkatingSports"
-        case HKWorkoutActivityType.SnowSports:
+        case HKWorkoutActivityType.snowSports:
             return "HKWorkoutActivityTypeSnowSports"
-        case HKWorkoutActivityType.Soccer:
+        case HKWorkoutActivityType.soccer:
             return "HKWorkoutActivityTypeSoccer"
-        case HKWorkoutActivityType.Softball:
+        case HKWorkoutActivityType.softball:
             return "HKWorkoutActivityTypeSoftball"
-        case HKWorkoutActivityType.Squash:
+        case HKWorkoutActivityType.squash:
             return "HKWorkoutActivityTypeSquash"
-        case HKWorkoutActivityType.StairClimbing:
+        case HKWorkoutActivityType.stairClimbing:
             return "HKWorkoutActivityTypeStairClimbing"
-        case HKWorkoutActivityType.SurfingSports:
+        case HKWorkoutActivityType.surfingSports:
             return "HKWorkoutActivityTypeSurfingSports"
-        case HKWorkoutActivityType.Swimming:
+        case HKWorkoutActivityType.swimming:
             return "HKWorkoutActivityTypeSwimming"
-        case HKWorkoutActivityType.TableTennis:
+        case HKWorkoutActivityType.tableTennis:
             return "HKWorkoutActivityTypeTableTennis"
-        case HKWorkoutActivityType.Tennis:
+        case HKWorkoutActivityType.tennis:
             return "HKWorkoutActivityTypeTennis"
-        case HKWorkoutActivityType.TrackAndField:
+        case HKWorkoutActivityType.trackAndField:
             return "HKWorkoutActivityTypeTrackAndField"
-        case HKWorkoutActivityType.TraditionalStrengthTraining:
+        case HKWorkoutActivityType.traditionalStrengthTraining:
             return "HKWorkoutActivityTypeTraditionalStrengthTraining"
-        case HKWorkoutActivityType.Volleyball:
+        case HKWorkoutActivityType.volleyball:
             return "HKWorkoutActivityTypeVolleyball"
-        case HKWorkoutActivityType.Walking:
+        case HKWorkoutActivityType.walking:
             return "HKWorkoutActivityTypeWalking"
-        case HKWorkoutActivityType.WaterFitness:
+        case HKWorkoutActivityType.waterFitness:
             return "HKWorkoutActivityTypeWaterFitness"
-        case HKWorkoutActivityType.WaterPolo:
+        case HKWorkoutActivityType.waterPolo:
             return "HKWorkoutActivityTypeWaterPolo"
-        case HKWorkoutActivityType.WaterSports:
+        case HKWorkoutActivityType.waterSports:
             return "HKWorkoutActivityTypeWaterSports"
-        case HKWorkoutActivityType.Wrestling:
+        case HKWorkoutActivityType.wrestling:
             return "HKWorkoutActivityTypeWrestling"
-        case HKWorkoutActivityType.Yoga:
+        case HKWorkoutActivityType.yoga:
             return "HKWorkoutActivityTypeYoga"
-        case HKWorkoutActivityType.Other:
+        case HKWorkoutActivityType.other:
             return "HKWorkoutActivityTypeOther"
-//        default:
-//            return "HKWorkoutActivityTypeOther"
+        // TODO: add new iOS 10 activities
+        default:
+            return "HKWorkoutActivityTypeOther"
         }
     }
 

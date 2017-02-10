@@ -17,9 +17,9 @@ import UIKit
 
 class GraphDataLayer {
     // size in pixels and time for this layer
-    var cellViewSize: CGSize = CGSizeZero
-    var timeIntervalForView: NSTimeInterval
-    var startTime: NSDate
+    var cellViewSize: CGSize = CGSize.zero
+    var timeIntervalForView: TimeInterval
+    var startTime: Date
 
     // dataPoint array, configured later by GraphDataSource
     var dataArray: [GraphDataType] = []
@@ -27,14 +27,14 @@ class GraphDataLayer {
     // useful variables for subclasses and data source
     var viewPixelsPerSec: CGFloat = 0.0
 
-    init(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate) {
+    init(viewSize: CGSize, timeIntervalForView: TimeInterval, startTime: Date) {
         self.cellViewSize = viewSize
         self.timeIntervalForView = timeIntervalForView
         self.startTime = startTime
         self.viewPixelsPerSec = viewSize.width/CGFloat(timeIntervalForView)
     }
 
-    func updateViewSize(newSize: CGSize) {
+    func updateViewSize(_ newSize: CGSize) {
         self.cellViewSize = newSize
         self.viewPixelsPerSec = newSize.width/CGFloat(timeIntervalForView)
     }
@@ -65,7 +65,7 @@ class GraphDataLayer {
     }
 
     // override!
-    func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType) {
+    func drawDataPointAtXOffset(_ xOffset: CGFloat, dataPoint: GraphDataType) {
     }
     
     // override for any needed finish up...
@@ -73,7 +73,7 @@ class GraphDataLayer {
     }
     
     // override to handle taps - return true if tap has been handled
-    func tappedAtPoint(point: CGPoint) -> GraphDataType? {
+    func tappedAtPoint(_ point: CGPoint) -> GraphDataType? {
         return nil
     }
 

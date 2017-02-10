@@ -19,12 +19,12 @@ import UIKit
 class EventPhotoCollectView: UIControl {
 
     var photoURLs: [String] = []
-    var photoDisplayMode: UIViewContentMode = .ScaleAspectFit
+    var photoDisplayMode: UIViewContentMode = .scaleAspectFit
     var imageIndex: Int = 0
     var pageControl: UIPageControl?
     var delegate: EventPhotoCollectViewDelegate?
-    private var photoCollectionView: UICollectionView?
-    private var currentViewHeight: CGFloat = 0.0
+    fileprivate var photoCollectionView: UICollectionView?
+    fileprivate var currentViewHeight: CGFloat = 0.0
 
     func reloadData() {
         photoCollectionView?.reloadData()
@@ -34,7 +34,7 @@ class EventPhotoCollectView: UIControl {
         if photoURLs.count == 0 {
             if photoCollectionView != nil {
                 if let pageControl = pageControl {
-                    pageControl.hidden = true
+                    pageControl.isHidden = true
                 }
                 photoCollectionView?.removeFromSuperview()
                 photoCollectionView = nil
@@ -55,38 +55,38 @@ class EventPhotoCollectView: UIControl {
         
         let flow = UICollectionViewFlowLayout()
         flow.itemSize = self.bounds.size
-        flow.scrollDirection = UICollectionViewScrollDirection.Horizontal
+        flow.scrollDirection = UICollectionViewScrollDirection.horizontal
         photoCollectionView = UICollectionView(frame: self.bounds, collectionViewLayout: flow)
         if let photoCollectionView = photoCollectionView {
-            photoCollectionView.backgroundColor = UIColor.clearColor()
+            photoCollectionView.backgroundColor = UIColor.clear
             photoCollectionView.showsHorizontalScrollIndicator = false
             photoCollectionView.showsVerticalScrollIndicator = false
             photoCollectionView.dataSource = self
             photoCollectionView.delegate = self
-            photoCollectionView.pagingEnabled = true
-            photoCollectionView.registerClass(EventPhotoCollectionCell.self, forCellWithReuseIdentifier: EventPhotoCollectionCell.cellReuseID)
+            photoCollectionView.isPagingEnabled = true
+            photoCollectionView.register(EventPhotoCollectionCell.self, forCellWithReuseIdentifier: EventPhotoCollectionCell.cellReuseID)
             // scroll to current photo...
-            photoCollectionView.scrollToItemAtIndexPath(NSIndexPath(forRow: imageIndex, inSection: 0), atScrollPosition: UICollectionViewScrollPosition.CenteredHorizontally, animated: false)
-            self.insertSubview(photoCollectionView, atIndex: 0)
+            photoCollectionView.scrollToItem(at: IndexPath(row: imageIndex, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: false)
+            self.insertSubview(photoCollectionView, at: 0)
             if let pageControl = pageControl {
-                pageControl.hidden = false
-                self.bringSubviewToFront(pageControl)
+                pageControl.isHidden = false
+                self.bringSubview(toFront: pageControl)
             }
             photoCollectionView.reloadData()
             configurePageControl()
         }
     }
 
-    func currentCellIndex() -> NSIndexPath? {
+    func currentCellIndex() -> IndexPath? {
         if let collectView = photoCollectionView {
             let centerPoint = collectView.center
             let pointInCell = CGPoint(x: centerPoint.x + collectView.contentOffset.x, y: centerPoint.y + collectView.contentOffset.y)
-            return collectView.indexPathForItemAtPoint(pointInCell)
+            return collectView.indexPathForItem(at: pointInCell)
         }
         return nil
     }
     
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if let pageControl = pageControl {
             if let curIndexPath = currentCellIndex() {
                 
@@ -101,9 +101,9 @@ class EventPhotoCollectView: UIControl {
         }
     }
 
-    private func configurePageControl() {
+    fileprivate func configurePageControl() {
         if let pageControl = pageControl {
-            pageControl.hidden = photoURLs.count <= 1
+            pageControl.isHidden = photoURLs.count <= 1
             pageControl.numberOfPages = photoURLs.count
             pageControl.currentPage = imageIndex
         }
@@ -117,9 +117,9 @@ class EventPhotoCollectionCell: UICollectionViewCell, UIScrollViewDelegate {
     var scrollView: UIScrollView?
     var photoView: UIImageView?
     var photoUrl = ""
-    var photoDisplayMode: UIViewContentMode = .ScaleAspectFit
+    var photoDisplayMode: UIViewContentMode = .scaleAspectFit
     
-    func configureCell(photoUrl: String) {
+    func configureCell(_ photoUrl: String) {
         if (photoView != nil) {
             photoView?.removeFromSuperview();
             photoView = nil
@@ -137,23 +137,23 @@ class EventPhotoCollectionCell: UICollectionViewCell, UIScrollViewDelegate {
         self.photoUrl = photoUrl
         photoView = UIImageView(frame: self.bounds)
         photoView!.contentMode = photoDisplayMode
-        photoView!.backgroundColor = UIColor.clearColor()
+        photoView!.backgroundColor = UIColor.clear
         NutUtils.loadImage(photoUrl, imageView: photoView!)
         self.scrollView!.addSubview(photoView!)
     }
     
-    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return self.photoView
     }
 }
 
 protocol EventPhotoCollectViewDelegate {
-    func didSelectItemAtIndexPath(indexPath: NSIndexPath)
+    func didSelectItemAtIndexPath(_ indexPath: IndexPath)
 }
 
 extension EventPhotoCollectView: UICollectionViewDelegate {
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         delegate?.didSelectItemAtIndexPath(indexPath)
     }
     
@@ -161,13 +161,13 @@ extension EventPhotoCollectView: UICollectionViewDelegate {
 
 extension EventPhotoCollectView: UICollectionViewDataSource {
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photoURLs.count
     }
     
-    func collectionView(collectionView: UICollectionView,
-        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(EventPhotoCollectionCell.cellReuseID, forIndexPath: indexPath) as! EventPhotoCollectionCell
+    func collectionView(_ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventPhotoCollectionCell.cellReuseID, for: indexPath) as! EventPhotoCollectionCell
             
             // index determines center time...
             let photoIndex = indexPath.row
@@ -181,9 +181,9 @@ extension EventPhotoCollectView: UICollectionViewDataSource {
 
 extension EventPhotoCollectView: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(collectionView: UICollectionView,
+    func collectionView(_ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
-        minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat
+        minimumLineSpacingForSectionAt section: Int) -> CGFloat
     {
         return 0.0
     }

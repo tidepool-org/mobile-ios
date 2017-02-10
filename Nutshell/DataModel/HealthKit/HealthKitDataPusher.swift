@@ -32,41 +32,41 @@ class HealthKitDataPusher: NSObject {
 
     static let sharedInstance = HealthKitDataPusher()
 
-    private override init() {
+    fileprivate override init() {
         DDLogVerbose("")
     }
 
     // MARK: - Config
 
     /// Sync last 10 days of data
-    let kTimeIntervalOfDataToSyncToHK: NSTimeInterval = 60*60*24*10
+    let kTimeIntervalOfDataToSyncToHK: TimeInterval = 60*60*24*10
     /// Check at most every 4 hours...
-    let kMinTimeIntervalBetweenSyncs: NSTimeInterval = 60*60*4
+    let kMinTimeIntervalBetweenSyncs: TimeInterval = 60*60*4
     /// But ask for background time every 6 hours...
-    let kTimeIntervalForBackgroundFetch: NSTimeInterval = 60*60*4
+    let kTimeIntervalForBackgroundFetch: TimeInterval = 60*60*4
     
     /// Last time we checked for and pushed data to HealthKit or nil if never pushed
-    var lastPushToHK: NSDate? {
+    var lastPushToHK: Date? {
         set(newValue) {
-            NSUserDefaults.standardUserDefaults().setObject(newValue, forKey: kLastPushOfDataToHKKey)
-            NSUserDefaults.standardUserDefaults().synchronize()
+            UserDefaults.standard.set(newValue, forKey: kLastPushOfDataToHKKey)
+            UserDefaults.standard.synchronize()
             _lastPushToHK = nil
         }
         get {
             if _lastPushToHK == nil {
-                let curValue = NSUserDefaults.standardUserDefaults().objectForKey(kLastPushOfDataToHKKey)
-                if let date = curValue as? NSDate {
+                let curValue = UserDefaults.standard.object(forKey: kLastPushOfDataToHKKey)
+                if let date = curValue as? Date {
                     _lastPushToHK = date
                 }
             }
             return _lastPushToHK
         }
     }
-    private var _lastPushToHK: NSDate?
-    private let kLastPushOfDataToHKKey = "kLastPushOfDataToHKKey"
+    fileprivate var _lastPushToHK: Date?
+    fileprivate let kLastPushOfDataToHKKey = "kLastPushOfDataToHKKey"
    
     /// Called by background fetch code in app delegate, and will kick off a sync if enough time has elapsed and currently HealthKit user is logged in.
-    func backgroundFetch(completion: (UIBackgroundFetchResult) -> Void) {
+    func backgroundFetch(_ completion: @escaping (UIBackgroundFetchResult) -> Void) {
         downloadNewItemsForHealthKit() { (itemsDownloaded) -> Void in
             var msg = "Nutshell added \(itemsDownloaded) blood glucose readings from Tidepool to the Health app."
             if itemsDownloaded == 1 {
@@ -76,9 +76,9 @@ class HealthKitDataPusher: NSObject {
             if AppDelegate.testMode {
                 let debugMsg = UILocalNotification()
                 debugMsg.alertBody = msg
-                UIApplication.sharedApplication().presentLocalNotificationNow(debugMsg)
+                UIApplication.shared.presentLocalNotificationNow(debugMsg)
             }
-            completion(itemsDownloaded == 0 ? .NoData : .NewData)
+            completion(itemsDownloaded == 0 ? .noData : .newData)
         }
     }
 
@@ -89,22 +89,22 @@ class HealthKitDataPusher: NSObject {
     /// On disable, the last time variable will be cleared, so disable followed by enable will kick off a new sync.
     ///
     /// TODO: this will not disable a push in progress.
-    func enablePushToHealthKit(enable: Bool) {
+    func enablePushToHealthKit(_ enable: Bool) {
         DDLogVerbose("")
         if enable {
-            UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(
+            UIApplication.shared.setMinimumBackgroundFetchInterval(
                 kTimeIntervalForBackgroundFetch)
             NSLog("Background fetch interval is \(kTimeIntervalForBackgroundFetch)")
 
             // Use local notifications to test background activity...
             if AppDelegate.testMode {
-                let notifySettings = UIUserNotificationSettings(forTypes: .Alert, categories: nil)
-                UIApplication.sharedApplication().registerUserNotificationSettings(notifySettings)
+                let notifySettings = UIUserNotificationSettings(types: .alert, categories: nil)
+                UIApplication.shared.registerUserNotificationSettings(notifySettings)
             }
             
             // kick off a download now if we are in the foreground...
-            let state = UIApplication.sharedApplication().applicationState
-            if state != .Background {
+            let state = UIApplication.shared.applicationState
+            if state != .background {
                 downloadNewItemsForHealthKit() { (itemsDownloaded) -> Void in
                     DDLogVerbose("Non-background fetch push completed with itemcount = \(itemsDownloaded)")
                     return
@@ -113,7 +113,7 @@ class HealthKitDataPusher: NSObject {
                 DDLogVerbose("app in background, download happens later")
             }
         } else {
-            UIApplication.sharedApplication().setMinimumBackgroundFetchInterval(
+            UIApplication.shared.setMinimumBackgroundFetchInterval(
                 UIApplicationBackgroundFetchIntervalNever)
             // reset our last push date so that it happens immediately upon reenable
             lastPushToHK = nil
@@ -127,15 +127,15 @@ class HealthKitDataPusher: NSObject {
     //
     
     // increment each time we turn off the interface in order to kill off async processes
-    private var currentSyncGeneration = 0
+    fileprivate var currentSyncGeneration = 0
     // temp cache of items from service (via our Tidepool DB) to push to HK, for the last 7 days
-    private var itemsToPush = [HKQuantitySample]()
+    fileprivate var itemsToPush = [HKQuantitySample]()
     // response from HK of items already in HK for the last 7 days, used to prevent push of duplicate items to HK
-    private var itemsAlreadyInHK = [HKSample]()
+    fileprivate var itemsAlreadyInHK = [HKSample]()
     // set after a push, cleared by background fetch handler
-    private var itemsLastPushedCount: Int = 0
+    fileprivate var itemsLastPushedCount: Int = 0
     // set during a sync to prevent another sync being kicked off...
-    private var syncInProgress = false
+    fileprivate var syncInProgress = false
     
     //
     // Private Methods
@@ -146,7 +146,7 @@ class HealthKitDataPusher: NSObject {
     /// Starts an async load of data from the Tidepool service, and on completion continues the sync process by calling fetchLatestCachedData. Note that all Tidepool data is downloaded, not just the blood glucose samples, so this also serves to refresh the local database cache of Tidepool items for the application.
     ///
     /// Completion is called with: -1 on errors, 0 if no data was pushed, or positive count of new items sent to HealthKit.
-    private func downloadNewItemsForHealthKit(completion: (Int) -> Void) {
+    fileprivate func downloadNewItemsForHealthKit(_ completion: @escaping (Int) -> Void) {
         DDLogVerbose("")
         itemsLastPushedCount = 0
         
@@ -167,14 +167,14 @@ class HealthKitDataPusher: NSObject {
             return
         }
 
-        let currentTime = NSDate()
+        let currentTime = Date()
         var minTimeIntervalBetweenSyncs = kMinTimeIntervalBetweenSyncs
         if AppDelegate.testMode {
             // for testing, knock this down to every minute!
             minTimeIntervalBetweenSyncs = 60
         }
         if let lastPushToHK = lastPushToHK {
-            let timeIntervalSinceLastSync = currentTime.timeIntervalSinceDate(lastPushToHK)
+            let timeIntervalSinceLastSync = currentTime.timeIntervalSince(lastPushToHK)
             if timeIntervalSinceLastSync < minTimeIntervalBetweenSyncs {
                 DDLogVerbose("skipping sync, time interval since last sync is only \(timeIntervalSinceLastSync)")
                 completion(0)
@@ -184,7 +184,7 @@ class HealthKitDataPusher: NSObject {
         
         // Start sync - from this point forward use finishSync to turn off syncInProgress when finished!
         syncInProgress = true
-        let startTime = currentTime.dateByAddingTimeInterval(-kTimeIntervalOfDataToSyncToHK)
+        let startTime = currentTime.addingTimeInterval(-kTimeIntervalOfDataToSyncToHK)
         self.itemsToPush = [HKQuantitySample]()
         let generationForThisSync = self.currentSyncGeneration
         
@@ -209,7 +209,7 @@ class HealthKitDataPusher: NSObject {
         // The background fetch continues next, in fetchLatestCachedData
     }
 
-    private func finishSync(syncGen: Int, itemsSynced: Int, completion: (Int) -> Void) {
+    fileprivate func finishSync(_ syncGen: Int, itemsSynced: Int, completion: (Int) -> Void) {
         if syncGen == currentSyncGeneration {
             syncInProgress = false
         }
@@ -219,7 +219,7 @@ class HealthKitDataPusher: NSObject {
     /// Step 2. Fetch the latest blood glucose samples from the local Tidepool item database cache (now that it has been refreshed), and turn them into an array of HKQuantitySample items for HealthKit.
     ///
     /// Kick off an async HealthKit query to get current samples already in HealthKit to compare so we don't push duplicates.
-    private func fetchLatestCachedData(syncGen: Int, fromTime: NSDate, thruTime: NSDate, completion: (Int) -> Void) {
+    fileprivate func fetchLatestCachedData(_ syncGen: Int, fromTime: Date, thruTime: Date, completion: @escaping (Int) -> Void) {
         DDLogVerbose("")
         do {
             let events = try DatabaseUtils.getTidepoolEvents(fromTime, thruTime: thruTime, objectTypes: ["smbg"], skipCheckLoad: true)
@@ -238,7 +238,7 @@ class HealthKitDataPusher: NSObject {
             // Before pushing to HK, read what HK already has to avoid pushing duplicates
             itemsAlreadyInHK = [HKSample]()
             readBGSamplesFromHealthKit(fromTime, thruTime: thruTime) { (samples, error) -> Void in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     if syncGen != self.currentSyncGeneration {
                         DDLogVerbose("assuming current sync was aborted!")
                         self.finishSync(syncGen, itemsSynced: 0, completion: completion)
@@ -265,7 +265,7 @@ class HealthKitDataPusher: NSObject {
     }
     
     /// Filter out any duplicates in HealthKit, then push any remaining new samples to HealthKit, completing the process with a call to the original completion routine that kicked it off.
-    private func pushNewItemsToHealthKit(syncGen: Int, processStartTime: NSDate, completion: (Int) -> Void) {
+    fileprivate func pushNewItemsToHealthKit(_ syncGen: Int, processStartTime: Date, completion: @escaping (Int) -> Void) {
         // Remove samples in itemsToPush that match items in itemsAlreadyInHK
         DDLogVerbose("check existing healthkit items for matches...")
         var tidepoolItemsInHKCount = 0
@@ -276,8 +276,8 @@ class HealthKitDataPusher: NSObject {
             for item in itemsAlreadyInHK {
                 var value: Double = -1
                 if let item = item as? HKQuantitySample {
-                    let unit = HKUnit(fromString: "mg/dL")
-                    value = item.quantity.doubleValueForUnit(unit)
+                    let unit = HKUnit(from: "mg/dL")
+                    value = item.quantity.doubleValue(for: unit)
                 }
                 if let metaDataDict = item.metadata {
                     if let tidepoolId = metaDataDict["tidepoolId"] {
@@ -309,7 +309,7 @@ class HealthKitDataPusher: NSObject {
         
         // Finally, if there are any new items, push them to HealthKit now...
         if !itemsToPush.isEmpty {
-            HealthKitManager.sharedInstance.healthStore!.saveObjects(itemsToPush) { (success, error) -> Void in
+            HealthKitManager.sharedInstance.healthStore!.save(itemsToPush, withCompletion: { (success, error) -> Void in
                 if syncGen != self.currentSyncGeneration {
                     DDLogVerbose("assuming current sync was aborted!")
                     self.finishSync(syncGen, itemsSynced: 0, completion: completion)
@@ -324,7 +324,7 @@ class HealthKitDataPusher: NSObject {
                     self.itemsLastPushedCount = self.itemsToPush.count
                     self.finishSync(syncGen, itemsSynced: self.itemsLastPushedCount, completion: completion)
                 }
-            }
+            }) 
         } else {
             DDLogVerbose("no new items to push to HealthKit!")
             self.finishSync(syncGen, itemsSynced: 0, completion: completion)
@@ -332,23 +332,23 @@ class HealthKitDataPusher: NSObject {
     }
     
     /// Do an async read of current blood glucose samples from HealthKit for a date range, passing along results to the completion method.
-    private func readBGSamplesFromHealthKit(fromTime: NSDate, thruTime: NSDate, completion: ([HKSample]?, NSError?) -> Void)
+    fileprivate func readBGSamplesFromHealthKit(_ fromTime: Date, thruTime: Date, completion: @escaping ([HKSample]?, NSError?) -> Void)
     {
         DDLogVerbose("")
         
-        let sampleType = HKObjectType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)!
-        let timeRangePredicate = HKQuery.predicateForSamplesWithStartDate(fromTime, endDate: thruTime, options: .None)
+        let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
+        let timeRangePredicate = HKQuery.predicateForSamples(withStart: fromTime, end: thruTime, options: HKQueryOptions())
         let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: true)
         let limit = Int(HKObjectQueryNoLimit)
         let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: timeRangePredicate, limit: limit, sortDescriptors: [sortDescriptor])
             { (sampleQuery, results, error ) -> Void in
-                completion(results, error)
+                completion(results, error as NSError?)
         }
-        HealthKitManager.sharedInstance.healthStore!.executeQuery(sampleQuery)
+        HealthKitManager.sharedInstance.healthStore!.execute(sampleQuery)
     }
     
     /// Turns a Tidepool event into an HKQuantitySample event for HealthKit, adding it to the itemsToPush array.
-    private func nextItemForHealthKit(event: CommonData) {
+    fileprivate func nextItemForHealthKit(_ event: CommonData) {
         let kGlucoseConversionToMgDl: Double = 18.0
         var bgValue: Double?
         var userEntered: NSNumber?
@@ -374,15 +374,15 @@ class HealthKitDataPusher: NSObject {
         }
         
         if let itemId = event.id as? String, let time = event.time, let type = event.type as? String {
-            let bgType = HKQuantityType.quantityTypeForIdentifier(HKQuantityTypeIdentifierBloodGlucose)
-            let bgQuantity = HKQuantity(unit: HKUnit(fromString: "mg/dL"), doubleValue: bgValue!)
+            let bgType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)
+            let bgQuantity = HKQuantity(unit: HKUnit(from: "mg/dL"), doubleValue: bgValue!)
             let deviceId = event.deviceId ?? ""
             // TODO: add guid to metadata as well, need to rev data model to add this...
-            var metadata: [String: AnyObject] = ["tidepoolId": itemId, "deviceId": deviceId, "type": type]
+            var metadata: [String: AnyObject] = ["tidepoolId": itemId as AnyObject, "deviceId": deviceId as AnyObject, "type": type as AnyObject]
             if let userEntered = userEntered {
                 metadata[HKMetadataKeyWasUserEntered] = userEntered
             }
-            let bgSample = HKQuantitySample(type: bgType!, quantity: bgQuantity, startDate: time, endDate: time, metadata: metadata)
+            let bgSample = HKQuantitySample(type: bgType!, quantity: bgQuantity, start: time as Date, end: time as Date, metadata: metadata)
             DDLogVerbose("candidate Tidepool item at time: \(time), value: \(bgQuantity)")
             itemsToPush.append(bgSample)
         } else {

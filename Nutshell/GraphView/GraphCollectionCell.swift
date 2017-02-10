@@ -19,7 +19,7 @@ class GraphCollectionCell: UICollectionViewCell {
 
     var cellIndex: Int = 0
     var layout: GraphLayout?
-    private var graphView: GraphUIView?
+    fileprivate var graphView: GraphUIView?
     
     func updateViewSize() {
         //NSLog("GraphCollectionCell \(cellIndex) updateViewSize frame \(self.frame.size)")
@@ -28,14 +28,18 @@ class GraphCollectionCell: UICollectionViewCell {
         }
     }
     
-    func tappedAtPoint(point: CGPoint) -> GraphDataType? {
+    func tappedAtPoint(_ point: CGPoint) -> GraphDataType? {
         if let graphView = graphView {
             return graphView.tappedAtPoint(point)
         }
         return nil
     }
     
-    func configureCell(startTime: NSDate, timeInterval: NSTimeInterval, cellIndex: Int) {
+    func updateCursorView(_ cursorTime: Date?, cursorColor: UIColor) {
+        graphView?.updateCursorView(cursorTime, cursorColor: cursorColor)
+    }
+    
+    func configureCell(_ startTime: Date, timeInterval: TimeInterval, cellIndex: Int) {
 
         //NSLog("GraphCollectionCell \(cellIndex) configure startTime \(startTime), timeInterval \(timeInterval), frame \(self.frame.size)")
 

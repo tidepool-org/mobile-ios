@@ -11,12 +11,12 @@ import Foundation
 class NutWorkout: NutEventItem {
     
     var distance: NSNumber?
-    var duration: NSTimeInterval
+    var duration: TimeInterval
     var calories: NSNumber?
     
     init(workout: Workout) {
         self.distance = workout.distance
-        self.duration = NSTimeInterval(workout.duration ?? 0.0)
+        self.duration = TimeInterval(workout.duration ?? 0.0)
         self.calories = workout.calories
         super.init(eventItem: workout)
     }
@@ -33,7 +33,7 @@ class NutWorkout: NutEventItem {
     override func copyChanges() {
         if let workout = eventItem as? Workout {
             workout.distance = distance
-            workout.duration = duration
+            workout.duration = duration as NSNumber?
         }
         super.copyChanges()
     }
@@ -45,7 +45,7 @@ class NutWorkout: NutEventItem {
                 return true
             }
             let currentDuration = workout.duration ?? 0.0
-            if duration != currentDuration {
+            if duration != currentDuration.doubleValue {
                 return true
             }
         }

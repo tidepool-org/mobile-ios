@@ -14,6 +14,30 @@
 */
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 
 class WizardGraphDataType: GraphDataType {
@@ -22,7 +46,7 @@ class WizardGraphDataType: GraphDataType {
     var recommendedNet: NSNumber?
     var bolusTopY: CGFloat?
     
-    init(value: CGFloat, timeOffset: NSTimeInterval, bolusId: String?, recommendedNet: NSNumber?) {
+    init(value: CGFloat, timeOffset: TimeInterval, bolusId: String?, recommendedNet: NSNumber?) {
         super.init(value: value, timeOffset: timeOffset)
         self.bolusId = bolusId
         self.recommendedNet = recommendedNet
@@ -39,13 +63,13 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
     // vars for drawing datapoints of this type
     var pixelsPerValue: CGFloat = 0.0
     let circleRadius: CGFloat = 9.0
-    var lastCircleDrawn = CGRectNull
+    var lastCircleDrawn = CGRect.null
     var context: CGContext?
     
     // Bolus drawing will store rects here. E.g., Wizard circles are drawn just over associated Bolus labels.
     var bolusRects: [CGRect] = []
     
-    private let kWizardCircleDiameter: CGFloat = 31.0
+    fileprivate let kWizardCircleDiameter: CGFloat = 31.0
 
     //
     // MARK: - Loading data
@@ -59,7 +83,7 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
         return "wizard"
     }
     
-    override func loadEvent(event: CommonData, timeOffset: NSTimeInterval) {
+    override func loadEvent(_ event: CommonData, timeOffset: TimeInterval) {
         if let event = event as? Wizard {
             let value = event.carbInput ?? 0.0
             let floatValue = round(CGFloat(value))
@@ -87,7 +111,7 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
    }
     
     // override!
-    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType) {
+    override func drawDataPointAtXOffset(_ xOffset: CGFloat, dataPoint: GraphDataType) {
         
         if dataPoint.value == 0.0 {
             // Don't plot nil or zero values - probably used for recommended bolus record!
@@ -109,7 +133,7 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
             if let yAtBolusTop = yAtBolusTop {
                 wizardRect.origin.y = yAtBolusTop - circleDiameter
             }
-            let wizardOval = UIBezierPath(ovalInRect: wizardRect)
+            let wizardOval = UIBezierPath(ovalIn: wizardRect)
             Styles.goldColor.setFill()
             wizardOval.fill()
             // Draw background colored border to separate the circle from other objects
@@ -120,17 +144,17 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
             // Label Drawing
             let labelRect = wizardRect
             let labelText = String(Int(value))
-            let labelStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-            labelStyle.alignment = .Center
+            let labelStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+            labelStyle.alignment = .center
             
             let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: Styles.darkPurpleColor, NSParagraphStyleAttributeName: labelStyle])
             
-            let labelTextHeight: CGFloat = ceil(labelAttrStr.boundingRectWithSize(CGSizeMake(labelRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil).size.height)
+            let labelTextHeight: CGFloat = ceil(labelAttrStr.boundingRect(with: CGSize(width: labelRect.width, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil).size.height)
             
-            CGContextSaveGState(context)
-            CGContextClipToRect(context, labelRect);
-            labelAttrStr.drawInRect(CGRectMake(labelRect.minX, labelRect.minY + (labelRect.height - labelTextHeight) / 2, labelRect.width, labelTextHeight))
-            CGContextRestoreGState(context)
+            context!.saveGState()
+            context!.clip(to: labelRect);
+            labelAttrStr.draw(in: CGRect(x: labelRect.minX, y: labelRect.minY + (labelRect.height - labelTextHeight) / 2, width: labelRect.width, height: labelTextHeight))
+            context!.restoreGState()
         }
     }
     
@@ -138,7 +162,7 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
     // MARK: - Tidepool specific utility functions
     //
     
-    func bolusYAtPosition(rect: CGRect) -> CGFloat? {
+    func bolusYAtPosition(_ rect: CGRect) -> CGFloat? {
         var result: CGFloat?
         let rectLeft = rect.origin.x
         let rectRight = rectLeft + rect.width

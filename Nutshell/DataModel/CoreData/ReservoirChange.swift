@@ -11,9 +11,9 @@ import CoreData
 import SwiftyJSON
 
 class ReservoirChange: DeviceMetadata {
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> ReservoirChange? {
-        if let entityDescription = NSEntityDescription.entityForName("ReservoirChange", inManagedObjectContext: moc) {
-            let me = ReservoirChange(entity: entityDescription, insertIntoManagedObjectContext: nil)
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> ReservoirChange? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "ReservoirChange", in: moc) {
+            let me = ReservoirChange(entity: entityDescription, insertInto: nil)
             
             me.status = json["status"].string
             

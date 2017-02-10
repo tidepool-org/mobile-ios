@@ -14,7 +14,7 @@ public let NewBlockRangeLoadedNotification = "NewBlockRangeLoadedNotification"
 
 class DatabaseUtils {
     
-    class func databaseSave(moc: NSManagedObjectContext) -> Bool {
+    class func databaseSave(_ moc: NSManagedObjectContext) -> Bool {
         // Save the database
         do {
             try moc.save()
@@ -30,13 +30,13 @@ class DatabaseUtils {
     // MARK: - Methods to cache read-only data from service
 
     // A sorted cache of server blocks we have fetched during the current application lifetime, along with the date of fetch...
-    static var serverBlocks = [Int : NSDate]()
+    static var serverBlocks = [Int : Date]()
     // TODO: look at moving this to NutshellDataController...
     class func resetTidepoolEventLoader() {
-        DatabaseUtils.serverBlocks = [Int : NSDate]()
+        DatabaseUtils.serverBlocks = [Int : Date]()
     }
  
-    class func dateToBucketNumber(date: NSDate) -> Int {
+    class func dateToBucketNumber(_ date: Date) -> Int {
         let refSeconds = Int(date.timeIntervalSinceReferenceDate)
         let kBucketSeconds = 60*60*20 // 20 hour chunks
         let result = refSeconds/kBucketSeconds
@@ -44,14 +44,14 @@ class DatabaseUtils {
         return result
     }
 
-    class func bucketNumberToDate(bucket: Int) -> NSDate {
-        let date = NSDate(timeIntervalSinceReferenceDate: NSTimeInterval(bucket*60*60*20))
+    class func bucketNumberToDate(_ bucket: Int) -> Date {
+        let date = Date(timeIntervalSinceReferenceDate: TimeInterval(bucket*60*60*20))
         //NSLog("Bucket number: \(bucket), date: \(date)")
         return date
     }
 
-    class func checkLoadDataForDateRange(startDate: NSDate, endDate: NSDate, completion: ((Int) -> Void)?) {
-        let now = NSDate()
+    class func checkLoadDataForDateRange(_ startDate: Date, endDate: Date, completion: ((Int) -> Void)?) {
+        let now = Date()
         let startBucket = DatabaseUtils.dateToBucketNumber(startDate)
         let endBucket = DatabaseUtils.dateToBucketNumber(endDate)
         var itemsAdded = 0
@@ -59,7 +59,7 @@ class DatabaseUtils {
         for bucket in startBucket...endBucket {
             
             if let lastFetchDate = serverBlocks[bucket] {
-                if now.timeIntervalSinceDate(lastFetchDate) < 60 {
+                if now.timeIntervalSince(lastFetchDate) < 60 {
                     // don't check more often than every minute...
                     NSLog("checkLoadDataForDateRange: skip load of bucket \(bucket)")
                     continue
@@ -93,23 +93,23 @@ class DatabaseUtils {
         }
     }
     
-    class func updateEventsForTimeRange(startTime: NSDate, endTime: NSDate, objectTypes: [String] = ["smbg","bolus","cbg","wizard","basal"], moc: NSManagedObjectContext, eventsJSON: JSON) -> (Int, Int) {
+    class func updateEventsForTimeRange(_ startTime: Date, endTime: Date, objectTypes: [String] = ["smbg","bolus","cbg","wizard","basal"], moc: NSManagedObjectContext, eventsJSON: JSON) -> (Int, Int) {
         NSLog("updateEventsForTimeRange from \(startTime) to \(endTime) for types \(objectTypes)")
         // NSLog("Events from \(startTime) to \(endTime): \(eventsJSON)")
         var deleteEventCounter = 0
         // Delete all tidepool items in range before adding the new ones...
         do {
-            let request = NSFetchRequest(entityName: "CommonData")
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CommonData")
             // Return all objects in the requested range, exclusive of start time and inclusive of end time, to match server fetch
             // NOTE: This would include Meal and Workout items if they were part of this database!
-            request.predicate = NSPredicate(format: "(type IN %@) AND (time > %@) AND (time <= %@)", objectTypes, startTime, endTime)
+            request.predicate = NSPredicate(format: "(type IN %@) AND (time > %@) AND (time <= %@)", objectTypes, startTime as CVarArg, endTime as CVarArg)
             request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
-            let events = try moc.executeFetchRequest(request) as! [NSManagedObject]
+            let events = try moc.fetch(request) as! [NSManagedObject]
             for obj: NSManagedObject in events {
 //                if let tObj = obj as? CommonData {
 //                    NSLog("deleting event id: \(tObj.id) with time: \(tObj.time)")
 //                }
-                moc.deleteObject(obj)
+                moc.delete(obj)
                 deleteEventCounter += 1
             }
         } catch let error as NSError {
@@ -124,7 +124,7 @@ class DatabaseUtils {
                 // add objects
                 if let _=obj.id {
                     insertEventCounter += 1
-                    moc.insertObject(obj)
+                    moc.insert(obj)
                     //NSLog("inserting event id: \(obj.id) with time: \(obj.time)")
                 } else {
                     NSLog("updateEvents: no ID found for object: \(obj), not inserting!")
@@ -148,10 +148,10 @@ class DatabaseUtils {
         return (insertEventCounter, deleteEventCounter)
     }
     
-    class func updateEvents(moc: NSManagedObjectContext, eventsJSON: JSON) {
+    class func updateEvents(_ moc: NSManagedObjectContext, eventsJSON: JSON) {
         // We get back an array of JSON objects. Iterate through the array and insert the objects into the database, removing any existing objects we may have.
         
-        let request = NSFetchRequest(entityName: "CommonData")
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CommonData")
         var eventCounter = 0
         for (_, subJson) in eventsJSON {
             //NSLog("updateEvents next subJson: \(subJson)")
@@ -162,11 +162,11 @@ class DatabaseUtils {
                     request.predicate = NSPredicate(format: "id = %@", id)
                     
                     do {
-                        let foundObjects = try moc.executeFetchRequest(request) as! [NSManagedObject]
+                        let foundObjects = try moc.fetch(request) as! [NSManagedObject]
                         for foundObject in foundObjects {
-                            moc.deleteObject(foundObject)
+                            moc.delete(foundObject)
                         }
-                        moc.insertObject(obj)
+                        moc.insert(obj)
                     } catch let error as NSError {
                         NSLog("updateEvents: Failed to replace existing event with ID \(id) error: \(error)")
                     }
@@ -190,11 +190,11 @@ class DatabaseUtils {
     
     class func notifyOnDataLoad() {
         // This will come in on the main thread, unlike the NSManagedObjectContextDidSaveNotification
-        NSNotificationCenter.defaultCenter().postNotificationName(NewBlockRangeLoadedNotification, object:nil)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: NewBlockRangeLoadedNotification), object:nil)
     }
     
     // Note: This call has the side effect of fetching data from the service which may result in a future notification of database changes.
-    class func getTidepoolEvents(afterTime: NSDate, thruTime: NSDate, objectTypes: [String]? = nil, skipCheckLoad: Bool = false) throws -> [NSManagedObject] {
+    class func getTidepoolEvents(_ afterTime: Date, thruTime: Date, objectTypes: [String]? = nil, skipCheckLoad: Bool = false) throws -> [NSManagedObject] {
         let moc = NutDataController.controller().mocForTidepoolEvents()!
 
         // load on-demand: if data has not been loaded, a notification will come later!
@@ -202,29 +202,29 @@ class DatabaseUtils {
             DatabaseUtils.checkLoadDataForDateRange(afterTime, endDate: thruTime, completion: nil)
         }
 
-        let request = NSFetchRequest(entityName: "CommonData")
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CommonData")
         
         if let types = objectTypes {
             // Return only objects of the requested types in the requested range
-            request.predicate = NSPredicate(format: "(type IN %@) AND (time > %@) AND (time <= %@)", types, afterTime, thruTime)
+            request.predicate = NSPredicate(format: "(type IN %@) AND (time > %@) AND (time <= %@)", types, afterTime as CVarArg, thruTime as CVarArg)
         } else {
             // Return all objects in the requested range
-            request.predicate = NSPredicate(format: "(time > %@) AND (time <= %@)", afterTime, thruTime)
+            request.predicate = NSPredicate(format: "(time > %@) AND (time <= %@)", afterTime as CVarArg, thruTime as CVarArg)
         }
         
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
-        let events = try moc.executeFetchRequest(request) as! [NSManagedObject]
+        let events = try moc.fetch(request) as! [NSManagedObject]
         return events
     }
 
-    class func getNutEvent(id: String) throws -> [EventItem] {
+    class func getNutEvent(_ id: String) throws -> [EventItem] {
         let moc = NutDataController.controller().mocForNutEvents()!
-        let request = NSFetchRequest(entityName: "EventItem")
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "EventItem")
         request.predicate = NSPredicate(format: "id == %@", id)
-        return try moc.executeFetchRequest(request) as! [EventItem]
+        return try moc.fetch(request) as! [EventItem]
     }
     
-    class func getNutEventItemWithId(id: String) -> EventItem? {
+    class func getNutEventItemWithId(_ id: String) -> EventItem? {
         do {
             let nutEventArray = try DatabaseUtils.getNutEvent(id)
             if nutEventArray.count == 1 {
@@ -245,35 +245,35 @@ class DatabaseUtils {
         
         let moc = NutDataController.controller().mocForNutEvents()!
         let userId = NutDataController.controller().currentUserId!
-        let request = NSFetchRequest(entityName: "EventItem")
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "EventItem")
         // Return all nut events in the requested range for the current user!
         // TODO: remove nil option before shipping!
         request.predicate = NSPredicate(format: "(userid == %@) OR (userid = nil)", userId)
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
-        return try moc.executeFetchRequest(request) as! [EventItem]
+        return try moc.fetch(request) as! [EventItem]
     }
 
-    class func nutEventRequest(nutType: String, fromTime: NSDate, toTime: NSDate) -> (request: NSFetchRequest, moc: NSManagedObjectContext) {
+    class func nutEventRequest(_ nutType: String, fromTime: Date, toTime: Date) -> (request: NSFetchRequest<NSFetchRequestResult>, moc: NSManagedObjectContext) {
         let moc = NutDataController.controller().mocForNutEvents()!
         let userId = NutDataController.controller().currentUserId!
-        let request = NSFetchRequest(entityName: nutType)
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: nutType)
         // Return only objects in the requested range for the current user!
         // TODO: remove nil option before shipping!
-        request.predicate = NSPredicate(format: "((userid == %@) OR (userid = nil)) AND (time >= %@) AND (time <= %@)", userId, fromTime, toTime)
+        request.predicate = NSPredicate(format: "((userid == %@) OR (userid = nil)) AND (time >= %@) AND (time <= %@)", userId, fromTime as CVarArg, toTime as CVarArg)
         
         request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
         return (request, moc)
     }
  
-    class func getWorkoutEvents(fromTime: NSDate, toTime: NSDate) throws -> [Workout] {
+    class func getWorkoutEvents(_ fromTime: Date, toTime: Date) throws -> [Workout] {
         let (request, moc) = nutEventRequest("Workout", fromTime: fromTime, toTime: toTime)
-        return try moc.executeFetchRequest(request) as! [Workout]
+        return try moc.fetch(request) as! [Workout]
     }
     
 
-    class func getMealEvents(fromTime: NSDate, toTime: NSDate) throws -> [Meal] {
+    class func getMealEvents(_ fromTime: Date, toTime: Date) throws -> [Meal] {
         let (request, moc) = nutEventRequest("Meal", fromTime: fromTime, toTime: toTime)
-        return try moc.executeFetchRequest(request) as! [Meal]
+        return try moc.fetch(request) as! [Meal]
     }
 
     // TEST ONLY!
@@ -282,14 +282,14 @@ class DatabaseUtils {
         // TODO: Note this is currently only used for testing!
         let moc = NutDataController.controller().mocForNutEvents()!
         do {
-            let request = NSFetchRequest(entityName: "EventItem")
+            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "EventItem")
             let userId = NutDataController.controller().currentUserId!
             request.predicate = NSPredicate(format: "(userid == %@) OR (userid = nil)", userId)
-            let myList = try moc.executeFetchRequest(request)
-            for obj: AnyObject in myList {
+            let myList = try moc.fetch(request) as! [EventItem]
+            for obj: EventItem in myList {
                 if let objId = obj.id as? String {
                     if objId.hasPrefix("demo")  {
-                        moc.deleteObject(obj as! NSManagedObject)
+                        moc.delete(obj)
                     }
                 }
             }

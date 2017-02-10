@@ -11,9 +11,9 @@ import CoreData
 import SwiftyJSON
 
 class Alarm: DeviceMetadata {
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Alarm? {
-        if let entityDescription = NSEntityDescription.entityForName("Alarm", inManagedObjectContext: moc) {
-            let me = Alarm(entity: entityDescription, insertIntoManagedObjectContext: nil)
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> Alarm? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "Alarm", in: moc) {
+            let me = Alarm(entity: entityDescription, insertInto: nil)
             
             me.alarmType = json["alarmType"].string
             me.status = json["status"].string

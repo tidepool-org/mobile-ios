@@ -19,7 +19,7 @@ class TidepoolGraphDataLayer: GraphDataLayer {
 
     var layout: TidepoolGraphLayout
 
-    init(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate, layout: TidepoolGraphLayout) {
+    init(viewSize: CGSize, timeIntervalForView: TimeInterval, startTime: Date, layout: TidepoolGraphLayout) {
         self.layout = layout
         super.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime)
     }
@@ -37,16 +37,16 @@ class TidepoolGraphDataLayer: GraphDataLayer {
     }
 
     /// Optionally override instead of nominalPixelWidth() if a different start time is necessary
-    func loadStartTime() -> NSDate {
-        let timeExtensionForDataFetch = NSTimeInterval(nominalPixelWidth()/viewPixelsPerSec)
-        return startTime.dateByAddingTimeInterval(-timeExtensionForDataFetch)
+    func loadStartTime() -> Date {
+        let timeExtensionForDataFetch = TimeInterval(nominalPixelWidth()/viewPixelsPerSec)
+        return startTime.addingTimeInterval(-timeExtensionForDataFetch) as Date
     }
     
     /// Optionally override instead of nominalPixelWidth() if a different end time is necessary
-    func loadEndTime() -> NSDate {
-        let endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
-        let timeExtensionForDataFetch = NSTimeInterval(nominalPixelWidth()/viewPixelsPerSec)
-        return endTime.dateByAddingTimeInterval(timeExtensionForDataFetch)
+    func loadEndTime() -> Date {
+        let endTime = startTime.addingTimeInterval(timeIntervalForView)
+        let timeExtensionForDataFetch = TimeInterval(nominalPixelWidth()/viewPixelsPerSec)
+        return endTime.addingTimeInterval(timeExtensionForDataFetch)
     }
 
     // Override!
@@ -55,7 +55,7 @@ class TidepoolGraphDataLayer: GraphDataLayer {
     }
 
     // Override!
-    func loadEvent(event: CommonData, timeOffset: NSTimeInterval) {
+    func loadEvent(_ event: CommonData, timeOffset: TimeInterval) {
         
     }
     
@@ -78,7 +78,7 @@ class TidepoolGraphDataLayer: GraphDataLayer {
             for event in events {
                 if let event = event as? CommonData {
                     if let eventTime = event.time {
-                        let deltaTime = eventTime.timeIntervalSinceDate(startTime)
+                        let deltaTime = eventTime.timeIntervalSince(startTime)
                         loadEvent(event, timeOffset: deltaTime)
                     }
                 }

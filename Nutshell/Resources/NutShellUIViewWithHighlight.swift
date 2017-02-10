@@ -33,17 +33,17 @@ class NutShellUIViewWithHighlight: UIView {
         }
     }
     
-    private var normalBackColor: UIColor?
-    private var highliteBackColor: UIColor?
-    private func updateNormalBackColor(color: UIColor) {
+    fileprivate var normalBackColor: UIColor?
+    fileprivate var highliteBackColor: UIColor?
+    fileprivate func updateNormalBackColor(_ color: UIColor) {
         normalBackColor = color
         //self.backgroundColor = color
     }
-    private func updateHighliteBackColor(color: UIColor) {
+    fileprivate func updateHighliteBackColor(_ color: UIColor) {
         highliteBackColor = color
     }
     
-    func setHighlighted(highlighted: Bool) {
+    func setHighlighted(_ highlighted: Bool) {
         
         // Configure the view for the highlighted state
         if (highlighted) {

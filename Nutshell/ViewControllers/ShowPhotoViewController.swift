@@ -34,7 +34,7 @@ class ShowPhotoViewController: UIViewController {
         if !modalPresentation {
             // Hide modal header when used as a nav view
             for c in headerForModalView.constraints {
-                if c.firstAttribute == NSLayoutAttribute.Height {
+                if c.firstAttribute == NSLayoutAttribute.height {
                     c.constant = 0.0
                     break
                 }
@@ -42,7 +42,7 @@ class ShowPhotoViewController: UIViewController {
             // We use a custom back button, this tweaks the arrow positioning to match the iOS back arrow position.
             self.navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsetsMake(0.0, -8.0, -1.0, 0.0)
             if editAllowed {
-                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Trash, target: self, action: #selector(ShowPhotoViewController.deleteButtonHandler(_:)))
+                navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.trash, target: self, action: #selector(ShowPhotoViewController.deleteButtonHandler(_:)))
             }
         }
         
@@ -52,7 +52,7 @@ class ShowPhotoViewController: UIViewController {
         }
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         APIConnector.connector().trackMetric("Viewed a Photo (Photo Screen)")
     }
@@ -65,12 +65,12 @@ class ShowPhotoViewController: UIViewController {
         photoCollectView.configurePhotoCollection()
     }
     
-    private func removeCurrentPhoto() {
+    fileprivate func removeCurrentPhoto() {
         if let curPhotoIndex = photoCollectView.currentCellIndex() {
             let curImageIndex = curPhotoIndex.row
-            photoURLs.removeAtIndex(curImageIndex)
+            photoURLs.remove(at: curImageIndex)
             if photoURLs.count == 0 {
-                self.performSegueWithIdentifier(EventViewStoryboard.SegueIdentifiers.UnwindSegueFromShowPhoto, sender: self)
+                self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.UnwindSegueFromShowPhoto, sender: self)
             } else {
                 photoCollectView.photoURLs = photoURLs
                 photoCollectView.configurePhotoCollection()
@@ -83,7 +83,7 @@ class ShowPhotoViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         NSLog("Segue from Photo viewer!")
         let currentPhotoIndex = photoCollectView.currentCellIndex()
         if let currentPhotoIndex = currentPhotoIndex {
@@ -93,28 +93,28 @@ class ShowPhotoViewController: UIViewController {
         }
     }
     
-    @IBAction func backButtonHandler(sender: AnyObject) {
+    @IBAction func backButtonHandler(_ sender: AnyObject) {
         //photoImageView.hidden = true
-        self.performSegueWithIdentifier(EventViewStoryboard.SegueIdentifiers.UnwindSegueFromShowPhoto, sender: self)
+        self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.UnwindSegueFromShowPhoto, sender: self)
     }
 
-    @IBAction func deleteButtonHandler(sender: AnyObject) {
+    @IBAction func deleteButtonHandler(_ sender: AnyObject) {
         // removing items from url array sets up the EventAddOrEditVC to delete the photos when edits are saved...
         // TODO: is this dialog really necessary and if so, is wording ok? The photos are not really deleted until you return to the edit scene and tap save. 
         if photoURLs.isEmpty {
             return
         }
         APIConnector.connector().trackMetric("Clicked Trashcan to Discard a Photo (Edit Screen)")
-        let alert = UIAlertController(title: NSLocalizedString("deletePhotoAlertTitle", comment:"Are you sure?"), message: NSLocalizedString("deletePhotoAlertMessage", comment:"If you delete this photo, your photo will be lost."), preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+        let alert = UIAlertController(title: NSLocalizedString("deletePhotoAlertTitle", comment:"Are you sure?"), message: NSLocalizedString("deletePhotoAlertMessage", comment:"If you delete this photo, your photo will be lost."), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertCancel", comment:"Cancel"), style: .cancel, handler: { Void in
             APIConnector.connector().trackMetric("Clicked Cancel Photo Delete (Edit Screen)")
             return
         }))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertOkay", comment:"Delete"), style: .Default, handler: { Void in
+        alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertOkay", comment:"Delete"), style: .default, handler: { Void in
             APIConnector.connector().trackMetric("Clicked Discard to Confirm Photo Discard (Edit Screen)")
             self.removeCurrentPhoto()
         }))
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
        
     }
 

@@ -2,33 +2,33 @@ import CocoaLumberjack
 import CocoaLumberjack.DDDispatchQueueLogFormatter
 
 class LogFormatter: DDDispatchQueueLogFormatter {
-    let df: NSDateFormatter
+    let df: DateFormatter
     
     override init() {
-        df = NSDateFormatter()
-        df.formatterBehavior = .Behavior10_4
+        df = DateFormatter()
+        df.formatterBehavior = .behavior10_4
         df.dateFormat = "HH:mm:ss.SSS"
         
         super.init()
     }
     
-    override func formatLogMessage(logMessage: DDLogMessage!) -> String {
-        let dateAndTime = df.stringFromDate(logMessage.timestamp)
+    override func format(message logMessage: DDLogMessage!) -> String {
+        let dateAndTime = df.string(from: logMessage.timestamp)
         
         var logLevel: String
         var useLog = true
         var formattedLog = ""
         let logFlag:DDLogFlag  = logMessage.flag
         
-        if logFlag.contains(.Verbose) {
+        if logFlag.contains(.verbose) {
             logLevel = "V"
-        } else if logFlag.contains(.Debug) {
+        } else if logFlag.contains(.debug) {
             logLevel = "D"
-        } else if logFlag.contains(.Info) {
+        } else if logFlag.contains(.info) {
             logLevel = "I"
-        } else if logFlag.contains(.Warning) {
+        } else if logFlag.contains(.warning) {
             logLevel = "W"
-        } else if logFlag.contains(.Error) {
+        } else if logFlag.contains(.error) {
             logLevel = "E"
         } else {
             logLevel = ""

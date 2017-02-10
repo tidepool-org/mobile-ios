@@ -18,7 +18,7 @@ import UIKit
 class TidepoolGraphView: GraphContainerView {
  
     var eventItem: NutEventItem
-    private var tidepoolLayout: TidepoolGraphLayout!
+    fileprivate var tidepoolLayout: TidepoolGraphLayout!
 
     init(frame: CGRect, delegate: GraphContainerViewDelegate, eventItem: NutEventItem) {
         self.eventItem = eventItem

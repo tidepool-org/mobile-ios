@@ -24,8 +24,8 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     var eventItem: NutEventItem?
     var eventGroup: NutEvent?
     var newEventItem: EventItem?
-    private var editExistingEvent = false
-    private var isWorkout: Bool = false
+    fileprivate var editExistingEvent = false
+    fileprivate var isWorkout: Bool = false
     
     @IBOutlet weak var titleTextField: NutshellUITextField!
     @IBOutlet weak var titleHintLabel: NutshellUILabel!
@@ -63,10 +63,10 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     @IBOutlet weak var picture1Image: UIImageView!
     @IBOutlet weak var picture2Image: UIImageView!
     
-    private var eventTime = NSDate()
+    fileprivate var eventTime = Date()
     // Note: time zone offset is only used for display; new items are always created with the offset for the current calendar time zone, and time zones are not editable!
-    private var eventTimeOffsetSecs: Int = 0
-    private var pictureImageURLs: [String] = []
+    fileprivate var eventTimeOffsetSecs: Int = 0
+    fileprivate var pictureImageURLs: [String] = []
 
     @IBOutlet weak var bottomSectionContainer: UIView!
     //
@@ -78,23 +78,23 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         var saveButtonTitle = NSLocalizedString("saveButtonTitle", comment:"Save")
         if let eventItem = eventItem {
             editExistingEvent = true
-            eventTime = eventItem.time
+            eventTime = eventItem.time as Date
             eventTimeOffsetSecs = eventItem.tzOffsetSecs
 
             // hide location and photo controls for workouts
             if let workout = eventItem as? NutWorkout {
                 isWorkout = true
-                placeControlContainer.hidden = true
-                photoControlContainer.hidden = true
+                placeControlContainer.isHidden = true
+                photoControlContainer.isHidden = true
                 if workout.duration > 0 {
-                    workoutDurationContainer.hidden = false
-                    let dateComponentsFormatter = NSDateComponentsFormatter()
-                    dateComponentsFormatter.unitsStyle = NSDateComponentsFormatterUnitsStyle.Abbreviated
-                    durationLabel.text = dateComponentsFormatter.stringFromTimeInterval(workout.duration)
+                    workoutDurationContainer.isHidden = false
+                    let dateComponentsFormatter = DateComponentsFormatter()
+                    dateComponentsFormatter.unitsStyle = DateComponentsFormatter.UnitsStyle.abbreviated
+                    durationLabel.text = dateComponentsFormatter.string(from: workout.duration)
                 }
                 if let calories = workout.calories {
                     if Int(calories) > 0 {
-                        workoutCalorieContainer.hidden = false
+                        workoutCalorieContainer.isHidden = false
                         caloriesLabel.text = String(Int(calories)) + " Calories"
                     }
                 }
@@ -102,33 +102,33 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
 
             // hide modal header when used as a nav view
             for c in headerForModalView.constraints {
-                if c.firstAttribute == NSLayoutAttribute.Height {
+                if c.firstAttribute == NSLayoutAttribute.height {
                     c.constant = 0.0
                     break
                 }
             }
         }  else  {
-            eventTimeOffsetSecs = NSCalendar.currentCalendar().timeZone.secondsFromGMT
+            eventTimeOffsetSecs = NSCalendar.current.timeZone.secondsFromGMT()
             locationTextField.text = Styles.placeholderLocationString
             saveButtonTitle = NSLocalizedString("saveAndEatButtonTitle", comment:"Save and eat!")
         }
-        saveButton.setTitle(saveButtonTitle, forState: UIControlState.Normal)
+        saveButton.setTitle(saveButtonTitle, for: UIControlState())
         configureInfoSection()
         titleHintLabel.text = Styles.titleHintString
         notesHintLabel.text = Styles.noteHintString
         
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(EventAddOrEditViewController.textFieldDidChange), name: UITextFieldTextDidChangeNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventAddOrEditViewController.keyboardWillShow(_:)), name: UIKeyboardWillShowNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventAddOrEditViewController.keyboardWillHide(_:)), name: UIKeyboardWillHideNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(EventAddOrEditViewController.textFieldDidChange), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddOrEditViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddOrEditViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
 
     deinit {
-        let nc = NSNotificationCenter.defaultCenter()
+        let nc = NotificationCenter.default
         nc.removeObserver(self, name: nil, object: nil)
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         APIConnector.connector().trackMetric("Viewed Edit Screen (Edit Screen)")
     }
@@ -142,11 +142,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     // MARK: - Navigation
     //
 
-    @IBAction func done(segue: UIStoryboardSegue) {
+    @IBAction func done(_ segue: UIStoryboardSegue) {
         print("unwind segue to eventAddOrEdit done")
         // Deal with possible delete/edit of photo from viewer...
         if segue.identifier == EventViewStoryboard.SegueIdentifiers.UnwindSegueFromShowPhoto {
-            if let photoVC = segue.sourceViewController as? ShowPhotoViewController {
+            if let photoVC = segue.source as? ShowPhotoViewController {
 
                 // handle the case of a new photo replacing a new (not yet saved) photo: the older one should be immediately deleted since will be no reference to it left!
                 for url in pictureImageURLs {
@@ -168,7 +168,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     // MARK: - Configuration
     //
     
-    private func configureInfoSection() {
+    fileprivate func configureInfoSection() {
         var titleText = Styles.placeholderTitleString
         var notesText = Styles.placeholderNotesString
         
@@ -180,9 +180,9 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 notesText = eventItem.notes
             }
             
-            picture0Image.hidden = true
-            picture1Image.hidden = true
-            picture2Image.hidden = true
+            picture0Image.isHidden = true
+            picture1Image.isHidden = true
+            picture2Image.isHidden = true
            
             if let mealItem = eventItem as? NutMeal {
                 if !mealItem.location.isEmpty {
@@ -208,60 +208,60 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         updateSaveButtonState()
     }
     
-    private func configureTitleHint() {
-        let isBeingEdited = titleTextField.isFirstResponder()
+    fileprivate func configureTitleHint() {
+        let isBeingEdited = titleTextField.isFirstResponder
         if isBeingEdited {
-            titleHintLabel.hidden = false
+            titleHintLabel.isHidden = false
         } else {
             let titleIsSet = titleTextField.text != "" && titleTextField.text != Styles.placeholderTitleString
-            titleHintLabel.hidden = titleIsSet
+            titleHintLabel.isHidden = titleIsSet
         }
     }
 
-    private func configureNotesHint() {
-        let isBeingEdited = notesTextField.isFirstResponder()
+    fileprivate func configureNotesHint() {
+        let isBeingEdited = notesTextField.isFirstResponder
         if isBeingEdited {
-            notesHintLabel.hidden = false
+            notesHintLabel.isHidden = false
         } else {
             let notesIsSet = notesTextField.text != "" && notesTextField.text != Styles.placeholderNotesString
-            notesHintLabel.hidden = notesIsSet
+            notesHintLabel.isHidden = notesIsSet
         }
     }
 
-    private func configurePhotos() {
+    fileprivate func configurePhotos() {
         for item in 0...2 {
             let picture = itemToPicture(item)
             let url = itemToImageUrl(item)
             if url.isEmpty {
-                picture.hidden = true
+                picture.isHidden = true
             } else {
-                picture.hidden = false
+                picture.isHidden = false
                 NutUtils.loadImage(url, imageView: picture)
             }
         }
     }
     
-    private func updateSaveButtonState() {
-        if !datePickerView.hidden {
-            saveButton.hidden = true
+    fileprivate func updateSaveButtonState() {
+        if !datePickerView.isHidden {
+            saveButton.isHidden = true
             return
         }
         if editExistingEvent {
-            saveButton.hidden = !existingEventChanged()
+            saveButton.isHidden = !existingEventChanged()
         } else {
             if !newEventChanged() || titleTextField.text?.characters.count == 0 ||  titleTextField.text == Styles.placeholderTitleString {
-                saveButton.hidden = true
+                saveButton.isHidden = true
             } else {
-                saveButton.hidden = false
+                saveButton.isHidden = false
             }
         }
     }
 
     // When the keyboard is up, the save button moves up
-    private var viewAdjustAnimationTime: Float = 0.25
-    private func configureSaveViewPosition(bottomOffset: CGFloat) {
+    fileprivate var viewAdjustAnimationTime: Float = 0.25
+    fileprivate func configureSaveViewPosition(_ bottomOffset: CGFloat) {
         for c in sceneContainer.constraints {
-            if c.firstAttribute == NSLayoutAttribute.Bottom {
+            if c.firstAttribute == NSLayoutAttribute.bottom {
                 if let secondItem = c.secondItem {
                     if secondItem as! NSObject == saveButton {
                         c.constant = bottomOffset
@@ -270,52 +270,52 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 }
             }
         }
-        UIView.animateWithDuration(NSTimeInterval(viewAdjustAnimationTime)) {
+        UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
             self.saveButton.layoutIfNeeded()
-        }
+        }) 
     }
 
-    private func hideDateIfOpen() {
-        if !datePickerView.hidden {
+    fileprivate func hideDateIfOpen() {
+        if !datePickerView.isHidden {
             cancelDatePickButtonHandler(self)
         }
     }
     
     // Bold all but last suffixCnt characters of string (Note: assumes date format!
-    private func boldFirstPartOfDateString(dateStr: String, suffixCnt: Int) -> NSAttributedString {
+    fileprivate func boldFirstPartOfDateString(_ dateStr: String, suffixCnt: Int) -> NSAttributedString {
         let attrStr = NSMutableAttributedString(string: dateStr, attributes: [NSFontAttributeName: Styles.smallBoldFont, NSForegroundColorAttributeName: Styles.whiteColor])
          attrStr.addAttribute(NSFontAttributeName, value: Styles.smallRegularFont, range: NSRange(location: attrStr.length - suffixCnt, length: suffixCnt))
         return attrStr
     }
     
-    private func updateDateLabels() {
-        let df = NSDateFormatter()
+    fileprivate func updateDateLabels() {
+        let df = DateFormatter()
         // Note: Time zones created with this method never have daylight savings, and the offset is constant no matter the date
-        df.timeZone = NSTimeZone(forSecondsFromGMT:eventTimeOffsetSecs)
+        df.timeZone = TimeZone(secondsFromGMT:eventTimeOffsetSecs)
         df.dateFormat = "MMM d, yyyy"
-        date1Label.attributedText = boldFirstPartOfDateString(df.stringFromDate(eventTime), suffixCnt: 6)
+        date1Label.attributedText = boldFirstPartOfDateString(df.string(from: eventTime), suffixCnt: 6)
         df.dateFormat = "h:mm a"
-        date2Label.attributedText = boldFirstPartOfDateString(df.stringFromDate(eventTime), suffixCnt: 2)
+        date2Label.attributedText = boldFirstPartOfDateString(df.string(from: eventTime), suffixCnt: 2)
     }
 
-    private func configureDateView() {
+    fileprivate func configureDateView() {
         updateDateLabels()
         datePicker.date = eventTime
         // Note: Time zones created with this method never have daylight savings, and the offset is constant no matter the date
-        datePicker.timeZone = NSTimeZone(forSecondsFromGMT: eventTimeOffsetSecs)
-        datePickerView.hidden = true
+        datePicker.timeZone = TimeZone(secondsFromGMT: eventTimeOffsetSecs)
+        datePickerView.isHidden = true
     }
 
     // UIKeyboardWillShowNotification
-    func keyboardWillShow(notification: NSNotification) {
+    func keyboardWillShow(_ notification: Notification) {
         // adjust save button up when keyboard is up
-        let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+        let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! Float
         self.configureSaveViewPosition(keyboardFrame.height)
     }
     
     // UIKeyboardWillHideNotification
-    func keyboardWillHide(notification: NSNotification) {
+    func keyboardWillHide(_ notification: Notification) {
         // reposition save button view if needed
         self.configureSaveViewPosition(0.0)
     }
@@ -324,14 +324,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     // MARK: - Button and text field handlers
     //
     
-    @IBAction func dismissKeyboard(sender: AnyObject) {
+    @IBAction func dismissKeyboard(_ sender: AnyObject) {
         titleTextField.resignFirstResponder()
         notesTextField.resignFirstResponder()
         locationTextField.resignFirstResponder()
         hideDateIfOpen()
     }
     
-    @IBAction func titleTextLargeHitAreaButton(sender: AnyObject) {
+    @IBAction func titleTextLargeHitAreaButton(_ sender: AnyObject) {
         titleTextField.becomeFirstResponder()
     }
     
@@ -339,7 +339,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         updateSaveButtonState()
     }
     
-    @IBAction func titleEditingDidBegin(sender: AnyObject) {
+    @IBAction func titleEditingDidBegin(_ sender: AnyObject) {
         hideDateIfOpen()
         configureTitleHint()
         if titleTextField.text == Styles.placeholderTitleString {
@@ -352,7 +352,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
     
-    @IBAction func titleEditingDidEnd(sender: AnyObject) {
+    @IBAction func titleEditingDidEnd(_ sender: AnyObject) {
         updateSaveButtonState()
         configureTitleHint()
         if titleTextField.text == "" {
@@ -360,11 +360,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
 
-    @IBAction func notesTextLargeHitAreaButton(sender: AnyObject) {
+    @IBAction func notesTextLargeHitAreaButton(_ sender: AnyObject) {
         notesTextField.becomeFirstResponder()
     }
 
-    @IBAction func notesEditingDidBegin(sender: AnyObject) {
+    @IBAction func notesEditingDidBegin(_ sender: AnyObject) {
         hideDateIfOpen()
         configureNotesHint()
         if notesTextField.text == Styles.placeholderNotesString {
@@ -377,7 +377,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
     
-    @IBAction func notesEditingDidEnd(sender: AnyObject) {
+    @IBAction func notesEditingDidEnd(_ sender: AnyObject) {
         updateSaveButtonState()
         configureNotesHint()
         if notesTextField.text == "" {
@@ -385,11 +385,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
     
-    @IBAction func locationButtonHandler(sender: AnyObject) {
+    @IBAction func locationButtonHandler(_ sender: AnyObject) {
         locationTextField.becomeFirstResponder()
     }
     
-    @IBAction func locationEditingDidBegin(sender: AnyObject) {
+    @IBAction func locationEditingDidBegin(_ sender: AnyObject) {
         hideDateIfOpen()
         if locationTextField.text == Styles.placeholderLocationString {
             locationTextField.text = ""
@@ -401,7 +401,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
     
-    @IBAction func locationEditingDidEnd(sender: AnyObject) {
+    @IBAction func locationEditingDidEnd(_ sender: AnyObject) {
         updateSaveButtonState()
         locationTextField.resignFirstResponder()
         if locationTextField.text == "" {
@@ -409,11 +409,11 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
 
-    @IBAction func saveButtonHandler(sender: AnyObject) {
+    @IBAction func saveButtonHandler(_ sender: AnyObject) {
         
         if editExistingEvent {
             updateCurrentEvent()
-            self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
+            self.performSegue(withIdentifier: "unwindSegueToDone", sender: self)
             return
         } else {
             updateNewEvent()
@@ -421,7 +421,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         
     }
 
-    @IBAction func backButtonHandler(sender: AnyObject) {
+    @IBAction func backButtonHandler(_ sender: AnyObject) {
         // this is a cancel for the role of addEvent and editEvent
         // for viewEvent, we need to check whether the title has changed
         if editExistingEvent {
@@ -434,7 +434,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 }
                 alertOnCancelAndReturn(NSLocalizedString("discardEditsAlertTitle", comment:"Discard changes?"), alertMessage: alertString, okayButtonString: NSLocalizedString("discardAlertOkay", comment:"Discard"))
             } else {
-                self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
+                self.performSegue(withIdentifier: "unwindSegueToCancel", sender: self)
             }
         } else {
             // cancel of add
@@ -448,22 +448,22 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 }
                 alertOnCancelAndReturn(alertTitle, alertMessage: alertMessage, okayButtonString: NSLocalizedString("deleteAlertOkay", comment:"Delete"))
             } else {
-                self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
+                self.performSegue(withIdentifier: "unwindSegueToCancel", sender: self)
             }
         }
     }
     
-    @IBAction func deleteButtonHandler(sender: AnyObject) {
+    @IBAction func deleteButtonHandler(_ sender: AnyObject) {
         // this is a delete for the role of editEvent
         APIConnector.connector().trackMetric("Clicked Trashcan to Discard (Edit Screen)")
         alertOnDeleteAndReturn()
     }
     
-    private func pictureUrlEmptySlots() -> Int {
+    fileprivate func pictureUrlEmptySlots() -> Int {
         return 3 - pictureImageURLs.count
     }
 
-    private func itemToImageUrl(itemNum: Int) -> String {
+    fileprivate func itemToImageUrl(_ itemNum: Int) -> String {
         if itemNum >= pictureImageURLs.count {
             return ""
         } else {
@@ -471,7 +471,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
     
-    private func itemToPicture(itemNum: Int) -> UIImageView {
+    fileprivate func itemToPicture(_ itemNum: Int) -> UIImageView {
         switch itemNum {
         case 0:
             return picture0Image
@@ -485,7 +485,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
     
-    private func appendPictureUrl(url: String) {
+    fileprivate func appendPictureUrl(_ url: String) {
         if pictureImageURLs.count < 3 {
             pictureImageURLs.append(url)
             if !editExistingEvent {
@@ -499,14 +499,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
 
-    private func showPicture(itemNum: Int) -> Bool {
+    fileprivate func showPicture(_ itemNum: Int) -> Bool {
         let pictureUrl = itemToImageUrl(itemNum)
         if !pictureUrl.isEmpty {
             if editExistingEvent {
                 APIConnector.connector().trackMetric("Clicked Photos (Edit Screen)")
             }
             let storyboard = UIStoryboard(name: "EventView", bundle: nil)
-            let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
+            let photoVC = storyboard.instantiateViewController(withIdentifier: "ShowPhotoViewController") as! ShowPhotoViewController
             photoVC.photoURLs = pictureImageURLs
             photoVC.mealTitle = titleTextField.text
             photoVC.imageIndex = itemNum
@@ -515,7 +515,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 self.navigationController?.pushViewController(photoVC, animated: true)
             } else {
                 photoVC.modalPresentation = true
-                self.presentViewController(photoVC, animated: true, completion: nil)
+                self.present(photoVC, animated: true, completion: nil)
             }
             return true
         } else {
@@ -523,25 +523,25 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
     
-    @IBAction func picture0ButtonHandler(sender: AnyObject) {
+    @IBAction func picture0ButtonHandler(_ sender: AnyObject) {
         if !showPicture(0) {
             photoButtonHandler(sender)
         }
     }
     
-    @IBAction func picture1ButtonHandler(sender: AnyObject) {
+    @IBAction func picture1ButtonHandler(_ sender: AnyObject) {
         if !showPicture(1) {
             photoButtonHandler(sender)
         }
     }
 
-    @IBAction func picture2ButtonHandler(sender: AnyObject) {
+    @IBAction func picture2ButtonHandler(_ sender: AnyObject) {
         if !showPicture(2) {
             photoButtonHandler(sender)
         }
     }
 
-    @IBAction func photoButtonHandler(sender: AnyObject) {
+    @IBAction func photoButtonHandler(_ sender: AnyObject) {
         if pictureUrlEmptySlots() == 0 {
             simpleInfoAlert(NSLocalizedString("photoSlotsFullTitle", comment:"No empty photo slot"), alertMessage: NSLocalizedString("photoSlotsFullMessage", comment:"Three photos are supported. Please discard one before adding a new photo."))
         } else {
@@ -558,26 +558,26 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     }
 
     func showPhotoActionSheet() {
-        let photoActionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-        photoActionSheet.modalPresentationStyle = .Popover
+        let photoActionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        photoActionSheet.modalPresentationStyle = .popover
 
-        photoActionSheet.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+        photoActionSheet.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .cancel, handler: { Void in
             return
         }))
 
-        photoActionSheet.addAction(UIAlertAction(title: "Photo Library", style: .Default, handler: { Void in
+        photoActionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { Void in
             let pickerC = UIImagePickerController()
             pickerC.delegate = self
-            self.presentViewController(pickerC, animated: true, completion: nil)
+            self.present(pickerC, animated: true, completion: nil)
         }))
         
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
-            photoActionSheet.addAction(UIAlertAction(title: "Take Photo", style: .Default, handler: { Void in
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+            photoActionSheet.addAction(UIAlertAction(title: "Take Photo", style: .default, handler: { Void in
                 let pickerC = UIImagePickerController()
                 pickerC.delegate = self
-                pickerC.sourceType = UIImagePickerControllerSourceType.Camera
+                pickerC.sourceType = UIImagePickerControllerSourceType.camera
                 pickerC.mediaTypes = [kUTTypeImage as String]
-                self.presentViewController(pickerC, animated: true, completion: nil)
+                self.present(pickerC, animated: true, completion: nil)
             }))
         }
         
@@ -586,15 +586,15 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             popoverController.sourceRect = self.photoIconButton.bounds
         }
         
-        self.presentViewController(photoActionSheet, animated: true, completion: nil)
+        self.present(photoActionSheet, animated: true, completion: nil)
     }
 
     //
     // MARK: - UIImagePickerControllerDelegate
     //
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        self.dismiss(animated: true, completion: nil)
         print(info)
         
         if let photoImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
@@ -603,7 +603,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             if let filePath = NutUtils.filePathForPhoto(photoUrl) {
                 // NOTE: we save photo with high compression, typically 0.2 to 0.4 MB
                 if let photoData = UIImageJPEGRepresentation(photoImage, 0.1) {
-                    let savedOk = photoData.writeToFile(filePath, atomically: true)
+                    let savedOk = (try? photoData.write(to: URL(fileURLWithPath: filePath), options: [.atomic])) != nil
                     if !savedOk {
                         NSLog("Failed to save photo successfully!")
                     }
@@ -619,7 +619,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     // MARK: - Event updating
     //
 
-    private func newEventChanged() -> Bool {
+    fileprivate func newEventChanged() -> Bool {
         if let _ = eventGroup {
             // for "eat again" new events, we already have a title and location from the NutEvent, so consider this "changed"
             return true
@@ -639,7 +639,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         return false
     }
 
-    private func existingEventChanged() -> Bool {
+    fileprivate func existingEventChanged() -> Bool {
         if let eventItem = eventItem {
             if eventItem.title != titleTextField.text {
                 NSLog("title changed, enabling save")
@@ -649,7 +649,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 NSLog("notes changed, enabling save")
                 return true
             }
-            if eventItem.time != eventTime {
+            if eventItem.time as Date != eventTime {
                 NSLog("event time changed, enabling save")
                 return true
             }
@@ -675,7 +675,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         return false
     }
     
-    private func filteredLocationText() -> String {
+    fileprivate func filteredLocationText() -> String {
         var location = ""
         if let locationText = locationTextField.text {
             if locationText != Styles.placeholderLocationString {
@@ -685,7 +685,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         return location
     }
 
-    private func filteredNotesText() -> String {
+    fileprivate func filteredNotesText() -> String {
         var notes = ""
         if let notesText = notesTextField.text {
             if notesText != Styles.placeholderNotesString {
@@ -695,7 +695,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         return notes
     }
 
-    private func updateCurrentEvent() {
+    fileprivate func updateCurrentEvent() {
         
         if let mealItem = eventItem as? NutMeal {
             
@@ -750,35 +750,35 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     func testCrash() {
         // force crash to test crash reporting...
         if crashValue! == "crash" {
-            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+            self.performSegue(withIdentifier: "unwindSegueToHome", sender: self)
             return
         }
     }
     
-    private func updateNewEvent() {
-        if titleTextField.text!.localizedCaseInsensitiveCompare("test mode") == NSComparisonResult.OrderedSame  {
+    fileprivate func updateNewEvent() {
+        if titleTextField.text!.localizedCaseInsensitiveCompare("test mode") == ComparisonResult.orderedSame  {
             AppDelegate.testMode = !AppDelegate.testMode
-            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+            self.performSegue(withIdentifier: "unwindSegueToHome", sender: self)
             return
         }
 
         // This is a good place to splice in demo and test data. For now, entering "demo" as the title will result in us adding a set of demo events to the model, and "delete" will delete all food events.
-        if titleTextField.text!.localizedCaseInsensitiveCompare("demo") == NSComparisonResult.OrderedSame {
+        if titleTextField.text!.localizedCaseInsensitiveCompare("demo") == ComparisonResult.orderedSame {
             DatabaseUtils.deleteAllNutEvents()
             addDemoData()
-            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+            self.performSegue(withIdentifier: "unwindSegueToHome", sender: self)
             return
-        } else if titleTextField.text!.localizedCaseInsensitiveCompare("no demo") == NSComparisonResult.OrderedSame {
+        } else if titleTextField.text!.localizedCaseInsensitiveCompare("no demo") == ComparisonResult.orderedSame {
             DatabaseUtils.deleteAllNutEvents()
-            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+            self.performSegue(withIdentifier: "unwindSegueToHome", sender: self)
             return
-        } else if titleTextField.text!.localizedCaseInsensitiveCompare("kill token") == NSComparisonResult.OrderedSame {
+        } else if titleTextField.text!.localizedCaseInsensitiveCompare("kill token") == ComparisonResult.orderedSame {
             APIConnector.connector().sessionToken = "xxxx"
-            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+            self.performSegue(withIdentifier: "unwindSegueToHome", sender: self)
             return
         }
         
-        if titleTextField.text!.localizedCaseInsensitiveCompare("test crash") == NSComparisonResult.OrderedSame {
+        if titleTextField.text!.localizedCaseInsensitiveCompare("test crash") == ComparisonResult.orderedSame {
             self.testCrash()
         }
         
@@ -799,9 +799,9 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
 
-    private func updateItemAndGroupForNewEventItem() {
+    fileprivate func updateItemAndGroupForNewEventItem() {
         // Update eventGroup and eventItem based on new event created, for return values to calling VC
-        if let eventGroup = eventGroup, newEventItem = newEventItem {
+        if let eventGroup = eventGroup, let newEventItem = newEventItem {
             if newEventItem.nutEventIdString() == eventGroup.nutEventIdString() {
                 if let currentItem = eventItem {
                     // if we're editing an existing item...
@@ -820,7 +820,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         
     }
     
-    private func preExistingPhoto(url: String) -> Bool {
+    fileprivate func preExistingPhoto(_ url: String) -> Bool {
         var preExisting = false
         // if we are editing a current event, don't delete the photo if it already exists in the event
         if let eventItem = eventItem {
@@ -830,7 +830,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     }
     
     /// Delete new photos we may have created so we don't leave them orphaned in the local file system.
-    private func deleteNewPhotos() {
+    fileprivate func deleteNewPhotos() {
         for url in pictureImageURLs {
             if !preExistingPhoto(url) {
                 NutUtils.deleteLocalPhoto(url)
@@ -839,10 +839,10 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         pictureImageURLs = []
     }
     
-    private func deleteItemAndReturn() {
+    fileprivate func deleteItemAndReturn() {
         // first delete any new photos user may have added
         deleteNewPhotos()
-        if let eventItem = eventItem, eventGroup = eventGroup {
+        if let eventItem = eventItem, let eventGroup = eventGroup {
             if eventItem.deleteItem() {
                 // now remove it from the group
                 eventGroup.itemArray = eventGroup.itemArray.filter() {
@@ -854,16 +854,16 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 if eventGroup.itemArray.isEmpty {
                     self.eventGroup = nil
                     // segue back to home as there are no events remaining...
-                    self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+                    self.performSegue(withIdentifier: "unwindSegueToHome", sender: self)
                } else {
                     // segue back to home or group list viewer depending...
-                    self.performSegueWithIdentifier("unwindSegueToDoneItemDeleted", sender: self)
+                    self.performSegue(withIdentifier: "unwindSegueToDoneItemDeleted", sender: self)
                 }
             } else {
                 // TODO: handle delete error?
                 NSLog("Error: Failed to delete item!")
                 // segue back to home as this event probably was deleted out from under us...
-                self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+                self.performSegue(withIdentifier: "unwindSegueToHome", sender: self)
             }
         }
     }
@@ -872,36 +872,36 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     // MARK: - Alerts
     //
     
-    private func simpleInfoAlert(alertTitle: String, alertMessage: String) {
+    fileprivate func simpleInfoAlert(_ alertTitle: String, alertMessage: String) {
         // use dialog to confirm cancel with user!
-        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("notifyAlertOkay", comment:"OK"), style: .Cancel, handler: { Void in
+        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("notifyAlertOkay", comment:"OK"), style: .cancel, handler: { Void in
             return
         }))
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
    
-    private func alertOnCancelAndReturn(alertTitle: String, alertMessage: String, okayButtonString: String) {
+    fileprivate func alertOnCancelAndReturn(_ alertTitle: String, alertMessage: String, okayButtonString: String) {
         // use dialog to confirm cancel with user!
-        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .Alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+        let alert = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("discardAlertCancel", comment:"Cancel"), style: .cancel, handler: { Void in
             if self.editExistingEvent {
                 APIConnector.connector().trackMetric("Clicked Cancel Cancel to Stay on Edit (Edit Screen)")
             }
             return
         }))
-        alert.addAction(UIAlertAction(title: okayButtonString, style: .Default, handler: { Void in
+        alert.addAction(UIAlertAction(title: okayButtonString, style: .default, handler: { Void in
             if self.editExistingEvent {
                 APIConnector.connector().trackMetric("Clicked Discard Changes to Cancel (Edit Screen)")
             }
             self.deleteNewPhotos()
-            self.performSegueWithIdentifier("unwindSegueToCancel", sender: self)
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.performSegue(withIdentifier: "unwindSegueToCancel", sender: self)
+            self.dismiss(animated: true, completion: nil)
         }))
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
-    private func alertOnDeleteAndReturn() {
+    fileprivate func alertOnDeleteAndReturn() {
         if let nutItem = eventItem {
             // use dialog to confirm delete with user!
             var titleString = NSLocalizedString("deleteMealAlertTitle", comment:"Are you sure?")
@@ -911,16 +911,16 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
                 messageString = NSLocalizedString("deleteWorkoutAlertMessage", comment:"If you delete this workout, it will be gone forever.")
             }
             
-            let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertCancel", comment:"Cancel"), style: .Cancel, handler: { Void in
+            let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertCancel", comment:"Cancel"), style: .cancel, handler: { Void in
                 APIConnector.connector().trackMetric("Clicked Cancel Discard (Edit Screen)")
                 return
             }))
-            alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertOkay", comment:"Delete"), style: .Default, handler: { Void in
+            alert.addAction(UIAlertAction(title: NSLocalizedString("deleteAlertOkay", comment:"Delete"), style: .default, handler: { Void in
                 APIConnector.connector().trackMetric("Clicked Confirmed Delete (Edit Screen)")
                 self.deleteItemAndReturn()
             }))
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
         }
     }
 
@@ -928,7 +928,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     // MARK: - Misc private funcs
     //
     
-    private func showSuccessView() {
+    fileprivate func showSuccessView() {
         dismissKeyboard(self)
         let animations: [UIImage]? = [UIImage(named: "addAnimation-01")!,
             UIImage(named: "addAnimation-02")!,
@@ -940,16 +940,16 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         addSuccessImageView.animationDuration = 1.0
         addSuccessImageView.animationRepeatCount = 1
         addSuccessImageView.startAnimating()
-        addSuccessView.hidden = false
+        addSuccessView.isHidden = false
         
         NutUtils.delay(1.25) {
-            if let newEventItem = self.newEventItem, eventGroup = self.eventGroup {
+            if let newEventItem = self.newEventItem, let eventGroup = self.eventGroup {
                 if newEventItem.nutEventIdString() != eventGroup.nutEventIdString() {
-                    self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+                    self.performSegue(withIdentifier: "unwindSegueToHome", sender: self)
                     return
                 }
             }
-            self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
+            self.performSegue(withIdentifier: "unwindSegueToDone", sender: self)
         }
     }
     
@@ -957,12 +957,12 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     // MARK: - Date picking
     //
     
-    private var savedTime: NSDate?
-    @IBAction func dateButtonHandler(sender: AnyObject) {
+    fileprivate var savedTime: Date?
+    @IBAction func dateButtonHandler(_ sender: AnyObject) {
         // user tapped on date, bring up date picker
-        if datePickerView.hidden {
+        if datePickerView.isHidden {
             dismissKeyboard(self)
-            datePickerView.hidden = false
+            datePickerView.isHidden = false
             savedTime = eventTime
             updateSaveButtonState()
             if editExistingEvent {
@@ -975,14 +975,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         }
     }
     
-    @IBAction func cancelDatePickButtonHandler(sender: AnyObject) {
+    @IBAction func cancelDatePickButtonHandler(_ sender: AnyObject) {
         if let savedTime = savedTime {
             eventTime = savedTime
         }
         configureDateView()
     }
     
-    @IBAction func doneDatePickButtonHandler(sender: AnyObject) {
+    @IBAction func doneDatePickButtonHandler(_ sender: AnyObject) {
         eventTime = datePicker.date
         
         // Note: for new events, if the user creates a time in the past that crosses a daylight savings time zone boundary, we want to adjust the time zone offset from the local one, ASSUMING THE USER IS EDITING IN THE SAME TIME ZONE IN WHICH THEY HAD THE MEAL. 
@@ -991,14 +991,14 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
         // We truly only know the actual time zone of meals when they are created and their times are not edited (well, unless they are on a plane): allowing this edit, while practical, does put in some question the actual time zone of the event! What is key is the GMT time since that is what will be used to show the meal relatively to the blood glucose and insulin events.
         if !editExistingEvent {
             let dstAdjust = NutUtils.dayLightSavingsAdjust(datePicker.date)
-            eventTimeOffsetSecs = NSCalendar.currentCalendar().timeZone.secondsFromGMT + dstAdjust
+            eventTimeOffsetSecs = NSCalendar.current.timeZone.secondsFromGMT() + dstAdjust
         }
         
         configureDateView()
         updateSaveButtonState()
     }
     
-    @IBAction func datePickerValueChanged(sender: AnyObject) {
+    @IBAction func datePickerValueChanged(_ sender: AnyObject) {
         eventTime = datePicker.date
         updateDateLabels()
     }
@@ -1008,7 +1008,7 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
     
     // TODO: Move to NutshellTests!
     
-    private func addDemoData() {
+    fileprivate func addDemoData() {
         
         let demoMeals = [
             // brandon account
@@ -1038,24 +1038,24 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             ["This is a meal with a very long title that should wrap onto multiple lines in most devices", "And these are notes about this meal, which are also very long and should certainly wrap as well. It might be more usual to see long notes!", "2015-07-26T14:25:21.000Z", "This is a long place name, something like Taco Place at 238 Garrett St, San Francisco, California", ""],
         ]
         
-        func addMeal(me: Meal, event: [String]) {
+        func addMeal(_ me: Meal, event: [String]) {
             me.title = event[0]
             me.notes = event[1]
             if (event[2] == "") {
-                me.time = NSDate()
+                me.time = Date()
             } else {
                 me.time = NutUtils.dateFromJSON(event[2])
             }
             me.location = event[3]
             me.photo = event[4]
             me.type = "meal"
-            me.id = "demo" + NSUUID().UUIDString // required!
+            me.id = ("demo" + UUID().uuidString) as NSString? // required!
             me.userid = NutDataController.controller().currentUserId // required!
-            let now = NSDate()
+            let now = Date()
             me.createdTime = now
             me.modifiedTime = now
             // TODO: really should specify time zone offset in the data so we can test some time zone related issues
-            me.timezoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT/60
+            me.timezoneOffset = NSNumber(value: NSCalendar.current.timeZone.secondsFromGMT()/60)
         }
         
         let demoWorkouts = [
@@ -1067,45 +1067,45 @@ class EventAddOrEditViewController: BaseUIViewController, UINavigationController
             ["Soccer Practice", "", "2015-07-25T14:25:21.000Z", "4800"],
         ]
         
-        func addWorkout(we: Workout, event: [String]) {
+        func addWorkout(_ we: Workout, event: [String]) {
             we.title = event[0]
             we.notes = event[1]
             if (event[2] == "") {
-                we.time = NSDate().dateByAddingTimeInterval(-60*60)
-                we.duration = (-60*60)
+                we.time = Date().addingTimeInterval(-60*60)
+                we.duration = NSNumber(value: (-60*60))
             } else {
                 we.time = NutUtils.dateFromJSON(event[2])
-                we.duration = NSTimeInterval(event[3])
+                we.duration = TimeInterval(event[3]) as NSNumber?
             }
             we.type = "workout"
-            we.id = "demo" + NSUUID().UUIDString // required!
+            we.id = ("demo" + UUID().uuidString) as NSString // required!
             we.userid = NutDataController.controller().currentUserId // required!
-            let now = NSDate()
+            let now = Date()
             we.createdTime = now
             we.modifiedTime = now
-            we.timezoneOffset = NSCalendar.currentCalendar().timeZone.secondsFromGMT/60
+            we.timezoneOffset = NSNumber(value: NSCalendar.current.timeZone.secondsFromGMT()/60)
         }
         
         let moc = NutDataController.controller().mocForNutEvents()!
-        if let entityDescription = NSEntityDescription.entityForName("Meal", inManagedObjectContext: moc) {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "Meal", in: moc) {
             for event in demoMeals {
-                let me = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Meal
+                let me = NSManagedObject(entity: entityDescription, insertInto: nil) as! Meal
                 addMeal(me, event: event)
-                moc.insertObject(me)
+                moc.insert(me)
             }
         }
         
         if AppDelegate.healthKitUIEnabled {
-            if let entityDescription = NSEntityDescription.entityForName("Workout", inManagedObjectContext: moc) {
+            if let entityDescription = NSEntityDescription.entity(forEntityName: "Workout", in: moc) {
                 for event in demoWorkouts {
-                    let we = NSManagedObject(entity: entityDescription, insertIntoManagedObjectContext: nil) as! Workout
+                    let we = NSManagedObject(entity: entityDescription, insertInto: nil) as! Workout
                     addWorkout(we, event: event)
-                    moc.insertObject(we)
+                    moc.insert(we)
                 }
             }
         }
         
-        DatabaseUtils.databaseSave(moc)
+        _ = DatabaseUtils.databaseSave(moc)
     }
 }
 

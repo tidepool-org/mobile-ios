@@ -11,9 +11,9 @@ import CoreData
 import SwiftyJSON
 
 class Upload: CommonData {
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> Upload? {
-        if let entityDescription = NSEntityDescription.entityForName("Upload", inManagedObjectContext: moc) {
-            let me = Upload(entity: entityDescription, insertIntoManagedObjectContext: nil)
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> Upload? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "Upload", in: moc) {
+            let me = Upload(entity: entityDescription, insertInto: nil)
             
             me.timezone = json["timezone"].string
             me.version = json["version"].string

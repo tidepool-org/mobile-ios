@@ -32,7 +32,7 @@ class BaseUITableViewController: UITableViewController {
 
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationItem.title = self.title
     }
@@ -42,7 +42,7 @@ class BaseUITableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         self.navigationItem.title = ""
     }
 

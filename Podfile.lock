@@ -1,25 +1,27 @@
 PODS:
-  - Alamofire (3.1.5)
-  - CocoaLumberjack/Core (2.2.0)
-  - CocoaLumberjack/Default (2.2.0):
+  - Alamofire (4.3.0)
+  - CocoaLumberjack/Core (3.0.0)
+  - CocoaLumberjack/Default (3.0.0):
     - CocoaLumberjack/Core
-  - CocoaLumberjack/Extensions (2.2.0):
+  - CocoaLumberjack/Extensions (3.0.0):
     - CocoaLumberjack/Default
-  - CocoaLumberjack/Swift (2.2.0):
+  - CocoaLumberjack/Swift (3.0.0):
     - CocoaLumberjack/Extensions
-  - CryptoSwift (0.2.3)
-  - SwiftyJSON (2.3.2)
+  - CryptoSwift (0.6.7)
+  - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
-  - Alamofire (= 3.1.5)
-  - CocoaLumberjack/Swift (~> 2.2.0)
-  - CryptoSwift (~> 0.2.3)
-  - SwiftyJSON (= 2.3.2)
+  - Alamofire (= 4.3.0)
+  - CocoaLumberjack/Swift (~> 3.0.0)
+  - CryptoSwift (~> 0.6.7)
+  - SwiftyJSON (= 3.1.4)
 
 SPEC CHECKSUMS:
-  Alamofire: 5f730ba29fd113b7ddd71c1e65d0c630acf5d7b0
-  CocoaLumberjack: 17fe8581f84914d5d7e6360f7c70022b173c3ae0
-  CryptoSwift: b2bf37b8e7cc6d682ef3365cb966bc5ae5174aa5
-  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+  Alamofire: 856a113053a7bc9cbe5d6367a555d773fc5cfef7
+  CocoaLumberjack: c823149bccc5519a9447aeb433be7b1212a7d6a5
+  CryptoSwift: 685ae257941e5447474348a2b545583e1a16b573
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: ecbc82fddad4bff6de7fdcedc937c9ecba5ed21e
+
+COCOAPODS: 1.2.0

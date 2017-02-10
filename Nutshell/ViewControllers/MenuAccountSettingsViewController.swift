@@ -23,8 +23,8 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var healthStatusLine3: UILabel!
     
     @IBOutlet weak var privacyTextField: UITextView!
-    var hkTimeRefreshTimer: NSTimer?
-    private let kHKTimeRefreshInterval: NSTimeInterval = 30.0
+    var hkTimeRefreshTimer: Timer?
+    fileprivate let kHKTimeRefreshInterval: TimeInterval = 30.0
 
     //
     // MARK: - Base Methods
@@ -42,20 +42,20 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         //let attributes = [NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue]
  
         let str = "Privacy and Terms of Use"
-        let paragraphStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        paragraphStyle.alignment = .Center
+        let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+        paragraphStyle.alignment = .center
         let attributedString = NSMutableAttributedString(string:str, attributes:[NSFontAttributeName: Styles.mediumVerySmallSemiboldFont, NSForegroundColorAttributeName: Styles.blackColor, NSParagraphStyleAttributeName: paragraphStyle])
-        attributedString.addAttribute(NSLinkAttributeName, value: NSURL(string: "http://developer.tidepool.io/privacy-policy/")!, range: NSRange(location: 0, length: 7))
-        attributedString.addAttribute(NSLinkAttributeName, value: NSURL(string: "http://developer.tidepool.io/terms-of-use/")!, range: NSRange(location: attributedString.length - 12, length: 12))
+        attributedString.addAttribute(NSLinkAttributeName, value: URL(string: "http://developer.tidepool.io/privacy-policy/")!, range: NSRange(location: 0, length: 7))
+        attributedString.addAttribute(NSLinkAttributeName, value: URL(string: "http://developer.tidepool.io/terms-of-use/")!, range: NSRange(location: attributedString.length - 12, length: 12))
         privacyTextField.attributedText = attributedString
         privacyTextField.delegate = self
 
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: HealthKitDataUploader.Notifications.Updated, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitDataUploader.Notifications.Updated), object: nil)
     }
 
     deinit {
-        let nc = NSNotificationCenter.defaultCenter()
+        let nc = NotificationCenter.default
         nc.removeObserver(self, name: nil, object: nil)
         hkTimeRefreshTimer?.invalidate()
     }
@@ -77,7 +77,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     // MARK: - Navigation
     //
 
-    @IBAction func done(segue: UIStoryboardSegue) {
+    @IBAction func done(_ segue: UIStoryboardSegue) {
         print("unwind segue to menuaccount done!")
     }
 
@@ -85,17 +85,17 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     // MARK: - Button/switch handling
     //
     
-    @IBAction func supportButtonHandler(sender: AnyObject) {
+    @IBAction func supportButtonHandler(_ sender: AnyObject) {
         APIConnector.connector().trackMetric("Clicked Tidepool Support (Hamburger)")
         let email = "support@tidepool.org"
-        let url = NSURL(string: "mailto:\(email)")
-        UIApplication.sharedApplication().openURL(url!)
+        let url = URL(string: "mailto:\(email)")
+        UIApplication.shared.openURL(url!)
     }
     
     
-    @IBAction func logOutTapped(sender: AnyObject) {
+    @IBAction func logOutTapped(_ sender: AnyObject) {
         APIConnector.connector().trackMetric("Clicked Log Out (Hamburger)")
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.logout()
     }
     
@@ -103,9 +103,9 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     // MARK: - Healthkit Methods
     //
     
-    @IBAction func enableHealthData(sender: AnyObject) {
+    @IBAction func enableHealthData(_ sender: AnyObject) {
         if let enableSwitch = sender as? UISwitch {
-            if enableSwitch.on {
+            if enableSwitch.isOn {
                 enableHealthKitInterfaceForCurrentUser()
             } else {
                 NutDataController.controller().disableHealthKitInterface()
@@ -114,9 +114,9 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         }
     }
 
-    private func startHKTimeRefreshTimer() {
+    fileprivate func startHKTimeRefreshTimer() {
         if hkTimeRefreshTimer == nil {
-            hkTimeRefreshTimer = NSTimer.scheduledTimerWithTimeInterval(kHKTimeRefreshInterval, target: self, selector: #selector(MenuAccountSettingsViewController.nextHKTimeRefresh), userInfo: nil, repeats: true)
+            hkTimeRefreshTimer = Timer.scheduledTimer(timeInterval: kHKTimeRefreshInterval, target: self, selector: #selector(MenuAccountSettingsViewController.nextHKTimeRefresh), userInfo: nil, repeats: true)
         }
     }
 
@@ -130,16 +130,16 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         configureHKInterface()
     }
     
-    internal func handleUploaderNotification(notification: NSNotification) {
+    internal func handleUploaderNotification(_ notification: Notification) {
         DDLogInfo("handleUploaderNotification: \(notification.name)")
         configureHKInterface()
     }
 
-    private func configureHKInterface() {
+    fileprivate func configureHKInterface() {
         // Late binding here because profile fetch occurs after login complete!
         usernameLabel.text = NutDataController.controller().userFullName
         let hkCurrentEnable = appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
-        healthKitSwitch.on = hkCurrentEnable
+        healthKitSwitch.isOn = hkCurrentEnable
         if hkCurrentEnable {
             self.configureHealthStatusLines()
             // make sure timer is turned on to prevent a stale interface...
@@ -159,27 +159,27 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
                 hideHealthKitUI = true
             }
         }
-        healthKitSwitch.hidden = hideHealthKitUI
-        healthKitLabel.hidden = hideHealthKitUI
-        healthStatusContainerView.hidden = hideHealthKitUI || !hkCurrentEnable
+        healthKitSwitch.isHidden = hideHealthKitUI
+        healthKitLabel.isHidden = hideHealthKitUI
+        healthStatusContainerView.isHidden = hideHealthKitUI || !hkCurrentEnable
     }
     
-    private func enableHealthKitInterfaceForCurrentUser() {
+    fileprivate func enableHealthKitInterfaceForCurrentUser() {
         if appHealthKitConfiguration.healthKitInterfaceConfiguredForOtherUser() {
             // use dialog to confirm delete with user!
             let curHKUserName = appHealthKitConfiguration.healthKitUserTidepoolUsername() ?? "Unknown"
             //let curUserName = usernameLabel.text!
             let titleString = "Are you sure?"
             let messageString = "A different account (" + curHKUserName + ") is currently associated with Health Data on this device"
-            let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { Void in
-                self.healthKitSwitch.on = false
+            let alert = UIAlertController(title: titleString, message: messageString, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { Void in
+                self.healthKitSwitch.isOn = false
                 return
             }))
-            alert.addAction(UIAlertAction(title: "Change Account", style: .Default, handler: { Void in
+            alert.addAction(UIAlertAction(title: "Change Account", style: .default, handler: { Void in
                 NutDataController.controller().enableHealthKitInterface()
             }))
-            self.presentViewController(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil)
         } else {
             NutDataController.controller().enableHealthKitInterface()
         }
@@ -193,21 +193,21 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     let healthKitUploadStatusNoDataAvailableToUpload: String = "No data available to upload"
     let healthKitUploadStatusDexcomDataDelayed3Hours: String = "Dexcom data from Health is delayed 3 hours"
 
-    private func configureHealthStatusLines() {
+    fileprivate func configureHealthStatusLines() {
         let hkDataUploader = HealthKitDataUploader.sharedInstance
         var phase = hkDataUploader.uploadPhaseBloodGlucoseSamples
         
         // if we haven't actually uploaded a first historical sample, act like we're still doing most recent samples...
-        if phase == .HistoricalSamples && hkDataUploader.totalDaysHistoricalBloodGlucoseSamples == 0 {
-            phase = .MostRecentSamples
+        if phase == .historicalSamples && hkDataUploader.totalDaysHistoricalBloodGlucoseSamples == 0 {
+            phase = .mostRecentSamples
         }
 
         switch phase {
-        case .MostRecentSamples:
+        case .mostRecentSamples:
             healthStatusLine1.text = healthKitUploadStatusMostRecentSamples
             healthStatusLine2.text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
             healthStatusLine3.text = ""
-        case .HistoricalSamples:
+        case .historicalSamples:
             healthStatusLine1.text = healthKitUploadStatusUploadingCompleteHistory
             var healthKitUploadStatusDaysUploadedText = ""
             if hkDataUploader.totalDaysHistoricalBloodGlucoseSamples > 0 {
@@ -215,9 +215,9 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
             }
             healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
             healthStatusLine3.text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
-        case .CurrentSamples:
+        case .currentSamples:
             if hkDataUploader.totalUploadCountBloodGlucoseSamples > 0 {
-                let lastUploadTimeAgoInWords = hkDataUploader.lastUploadTimeBloodGlucoseSamples.timeAgoInWords(NSDate())
+                let lastUploadTimeAgoInWords = hkDataUploader.lastUploadTimeBloodGlucoseSamples.timeAgoInWords(Date())
                 healthStatusLine1.text = String(format: healthKitUploadStatusLastUploadTime, lastUploadTimeAgoInWords)
             } else {
                 healthStatusLine1.text = healthKitUploadStatusNoDataAvailableToUpload
@@ -232,8 +232,8 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     //
     
     // Intercept links in order to track metrics...
-    func textView(textView: UITextView, shouldInteractWithURL URL: NSURL, inRange characterRange: NSRange) -> Bool {
-        if URL.absoluteString.containsString("privacy-policy") {
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
+        if URL.absoluteString.contains("privacy-policy") {
             APIConnector.connector().trackMetric("Clicked privacy (Hamburger)")
         } else {
             APIConnector.connector().trackMetric("Clicked Terms of Use (Hamburger)")

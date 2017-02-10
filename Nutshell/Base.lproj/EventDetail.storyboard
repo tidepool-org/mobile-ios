@@ -1,22 +1,24 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="S8b-Gx-dOJ">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="S8b-Gx-dOJ">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <mutableArray key="OpenSans-Bold.ttf">
+        <array key="OpenSans-Bold.ttf">
             <string>OpenSans-Bold</string>
-            <string>OpenSans-Bold</string>
-        </mutableArray>
-        <mutableArray key="OpenSans-Regular.ttf">
+        </array>
+        <array key="OpenSans-Regular.ttf">
             <string>OpenSans</string>
-            <string>OpenSans</string>
-        </mutableArray>
-        <mutableArray key="OpenSans-Semibold.ttf">
+        </array>
+        <array key="OpenSans-Semibold.ttf">
             <string>OpenSans-Semibold</string>
-        </mutableArray>
+        </array>
     </customFonts>
     <scenes>
         <!--EventDetail-->
@@ -28,27 +30,27 @@
                         <viewControllerLayoutGuide type="bottom" id="hG6-oc-20X"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="YxP-hy-3au">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A21-yX-8hn" userLabel="SceneContainer">
+                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A21-yX-8hn" userLabel="SceneContainer">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CGM-yQ-ne9" userLabel="TopSection" customClass="EventPhotoCollectView" customModule="Nutshell" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CGM-yQ-ne9" userLabel="TopSection" customClass="EventPhotoCollectView" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="160"/>
                                         <subviews>
-                                            <view userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L5t-um-0Ba" userLabel="backgroundView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                            <view userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="L5t-um-0Ba" userLabel="backgroundView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="160"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z3U-KK-eno" userLabel="headerOverlayContainer">
+                                            <view userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z3U-KK-eno" userLabel="headerOverlayContainer">
                                                 <rect key="frame" x="16" y="0.0" width="288" height="160"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EYQ-h7-WaO" userLabel="photoDisplayButton">
+                                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EYQ-h7-WaO" userLabel="photoDisplayButton">
                                                 <rect key="frame" x="270" y="110" width="50" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="50" id="TkA-Jh-zmo"/>
@@ -58,16 +60,16 @@
                                                     <action selector="photoDisplayButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="Am2-hh-4HC"/>
                                                 </connections>
                                             </button>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="singlePhotoIcon" translatesAutoresizingMaskIntoConstraints="NO" id="4sc-ki-6ix" userLabel="photoDisplayImage">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="singlePhotoIcon" translatesAutoresizingMaskIntoConstraints="NO" id="4sc-ki-6ix" userLabel="photoDisplayImage">
                                                 <rect key="frame" x="299" y="139" width="16" height="16"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="16" id="5qu-V9-LDT"/>
                                                     <constraint firstAttribute="height" constant="16" id="DQl-as-leW"/>
                                                 </constraints>
                                             </imageView>
-                                            <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jqb-kE-6Hg" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                            <view alpha="0.5" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jqb-kE-6Hg" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="OVL-qP-Mum"/>
                                                 </constraints>
@@ -75,9 +77,9 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Jd-1i-UWb" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                            <view alpha="0.5" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Jd-1i-UWb" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="159" width="320" height="1"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="jEY-io-Yfh"/>
                                                 </constraints>
@@ -86,7 +88,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="L5t-um-0Ba" firstAttribute="top" secondItem="CGM-yQ-ne9" secondAttribute="top" id="4o5-Dl-4vU"/>
                                             <constraint firstAttribute="trailing" secondItem="L5t-um-0Ba" secondAttribute="trailing" id="6gY-Ky-5Gb"/>
@@ -112,13 +114,13 @@
                                             <action selector="photoOverlayTouchHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="3a4-2L-4hm"/>
                                         </connections>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Qx-V0-1Du" userLabel="EventDescriptionContainer" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Qx-V0-1Du" userLabel="EventDescriptionContainer" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="160" width="320" height="58"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yYZ-tt-QM6" userLabel="successView" customClass="UIControl">
+                                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yYZ-tt-QM6" userLabel="successView" customClass="UIControl">
                                                 <rect key="frame" x="0.0" y="0.0" width="160" height="58"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="12g-bz-WJr" userLabel="nutCrackedButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="center" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="12g-bz-WJr" userLabel="nutCrackedButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="20" y="0.0" width="40" height="58"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="40" id="gsa-PI-0xn"/>
@@ -132,10 +134,10 @@
                                                             <action selector="nutCrackedButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="mlG-03-kmc"/>
                                                         </connections>
                                                     </button>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nut cracked?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c32-24-Hp7" userLabel="nutCrackedLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Nut cracked?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c32-24-Hp7" userLabel="nutCrackedLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="68" y="0.0" width="92" height="58"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="12"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="detailViewButtonText"/>
@@ -163,10 +165,10 @@
                                                     <action selector="nutCrackedButtonHandler:" destination="S8b-Gx-dOJ" eventType="touchUpInside" id="nik-ZE-4F6"/>
                                                 </connections>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9LU-DB-mib" userLabel="eatAgainView">
+                                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9LU-DB-mib" userLabel="eatAgainView">
                                                 <rect key="frame" x="160" y="0.0" width="160" height="58"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XKQ-xY-799" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XKQ-xY-799" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="160" height="58"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="12"/>
                                                         <inset key="titleEdgeInsets" minX="25" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -179,7 +181,7 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="bottom" secondItem="XKQ-xY-799" secondAttribute="bottom" id="hZQ-4h-j4a"/>
                                                     <constraint firstItem="XKQ-xY-799" firstAttribute="top" secondItem="9LU-DB-mib" secondAttribute="top" id="jVb-Rl-ZLy"/>
@@ -188,7 +190,7 @@
                                                 </constraints>
                                             </view>
                                         </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="9LU-DB-mib" firstAttribute="top" secondItem="9Qx-V0-1Du" secondAttribute="top" id="CU0-m9-wia"/>
                                             <constraint firstAttribute="trailing" secondItem="9LU-DB-mib" secondAttribute="trailing" id="MzM-Oo-XUp"/>
@@ -204,17 +206,17 @@
                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="INU-ti-JXM" userLabel="GraphSection">
+                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="INU-ti-JXM" userLabel="GraphSection">
                                         <rect key="frame" x="0.0" y="218" width="320" height="286"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bkz-Fj-tdv" userLabel="graphLayerContainer">
+                                            <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bkz-Fj-tdv" userLabel="graphLayerContainer">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="286"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                             </view>
-                                            <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cmJ-dI-KmZ" userLabel="MissingData">
+                                            <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cmJ-dI-KmZ" userLabel="MissingData">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="286"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCd-7V-eEl" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TCd-7V-eEl" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="41" y="96" width="239" height="103"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There is no data in here!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="azx-xE-oT0" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
@@ -223,7 +225,7 @@
                                                                     <constraint firstAttribute="height" constant="37" id="O2U-ur-ofZ"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="17"/>
-                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="advisoryText"/>
@@ -235,7 +237,7 @@
                                                                     <constraint firstAttribute="height" constant="30" id="3Ik-yO-z4I"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
-                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="advisorySubtext"/>
@@ -247,14 +249,14 @@
                                                                     <constraint firstAttribute="height" constant="21" id="fXi-zT-0oL"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
-                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="advisorySubtext"/>
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                         </subviews>
-                                                        <color key="backgroundColor" red="0.94901960784313721" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <color key="backgroundColor" red="0.94901960784313721" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstItem="E2h-Ni-G2t" firstAttribute="top" secondItem="Y1z-zk-JS3" secondAttribute="bottom" id="AIh-lq-c7E"/>
                                                             <constraint firstItem="E2h-Ni-G2t" firstAttribute="leading" secondItem="TCd-7V-eEl" secondAttribute="leading" id="Fru-72-prk"/>
@@ -273,14 +275,14 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
                                                 </subviews>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstItem="TCd-7V-eEl" firstAttribute="centerX" secondItem="cmJ-dI-KmZ" secondAttribute="centerX" id="akE-ve-pno"/>
                                                     <constraint firstItem="TCd-7V-eEl" firstAttribute="centerY" secondItem="cmJ-dI-KmZ" secondAttribute="centerY" constant="4" id="eyH-Mc-zZF"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="bkz-Fj-tdv" firstAttribute="leading" secondItem="INU-ti-JXM" secondAttribute="leading" id="2t4-Tr-mhN"/>
                                             <constraint firstAttribute="trailing" secondItem="bkz-Fj-tdv" secondAttribute="trailing" id="FR3-6r-CvL"/>
@@ -293,7 +295,7 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="9Qx-V0-1Du" firstAttribute="leading" secondItem="A21-yX-8hn" secondAttribute="leading" id="Dan-gG-Lj1"/>
                                     <constraint firstAttribute="trailing" secondItem="INU-ti-JXM" secondAttribute="trailing" id="Gx6-wr-Qxk"/>
@@ -308,7 +310,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="hG6-oc-20X" firstAttribute="top" secondItem="A21-yX-8hn" secondAttribute="bottom" id="VSq-Nr-C6M"/>
                             <constraint firstItem="A21-yX-8hn" firstAttribute="leading" secondItem="YxP-hy-3au" secondAttribute="leading" id="hqL-To-wdr"/>
@@ -332,8 +334,6 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
-                    <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <outlet property="eatAgainView" destination="9LU-DB-mib" id="0CH-ad-H4T"/>
                         <outlet property="graphLayerContainer" destination="bkz-Fj-tdv" id="yWd-ac-OMr"/>

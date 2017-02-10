@@ -21,16 +21,16 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     
     var eventItem: NutEventItem?
     var eventGroup: NutEvent?
-    private var originalId: String?
-    private var switchedEvents: Bool = false
-    private var isWorkout: Bool = false
+    fileprivate var originalId: String?
+    fileprivate var switchedEvents: Bool = false
+    fileprivate var isWorkout: Bool = false
     
     @IBOutlet weak var graphSectionView: UIView!
     @IBOutlet weak var graphLayerContainer: UIView!
     @IBOutlet weak var missingDataAdvisoryView: UIView!
     @IBOutlet weak var missingDataAdvisoryTitle: NutshellUILabel!
     @IBOutlet weak var eatAgainView: UIView!
-    private var graphContainerView: TidepoolGraphView?
+    fileprivate var graphContainerView: TidepoolGraphView?
     
     @IBOutlet weak var headerOverlayContainer: UIControl!
     @IBOutlet weak var topSectionContainer: EventPhotoCollectView!
@@ -45,8 +45,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     
     @IBOutlet weak var photoDisplayImageView: UIImageView!
     
-    private var eventTime = NSDate()
-    private var placeholderLocationString = "Note location here!"
+    fileprivate var eventTime = Date()
+    fileprivate var placeholderLocationString = "Note location here!"
 
     //
     // MARK: - Base methods
@@ -60,21 +60,21 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         // We use a custom back button so we can redirect back when the event has changed. This tweaks the arrow positioning to match the iOS back arrow position
         self.navigationItem.leftBarButtonItem?.imageInsets = UIEdgeInsetsMake(0.0, -8.0, -1.0, 0.0)
         topSectionContainer.backgroundColor = Styles.darkPurpleColor
-        let notificationCenter = NSNotificationCenter.defaultCenter()
-        notificationCenter.addObserver(self, selector: #selector(EventDetailViewController.graphDataChanged(_:)), name: NewBlockRangeLoadedNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(EventDetailViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
         notificationCenter.addObserver(self, selector: #selector(EventDetailViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
         configureForReachability()
     }
  
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 
-    func reachabilityChanged(note: NSNotification) {
+    func reachabilityChanged(_ note: Notification) {
         configureForReachability()
     }
     
-    private func configureForReachability() {
+    fileprivate func configureForReachability() {
         let connected = APIConnector.connector().isConnectedToNetwork()
         missingDataAdvisoryTitle.text = connected ? "There is no data in here!" : "You are currently offline!"
     }
@@ -84,15 +84,15 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         // Dispose of any resources that can be recreated.
     }
     
-    private var viewIsForeground: Bool = false
-    override func viewWillAppear(animated: Bool) {
+    fileprivate var viewIsForeground: Bool = false
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         //NSLog("EventDetailVC: viewWillAppear")
         APIConnector.connector().trackMetric("Viewed Data Screen")
         
         if eventItem == nil {
             NSLog("Error: No Event at EventDetailVC viewWillAppear!")
-            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+            self.performSegue(withIdentifier: "unwindSegueToHome", sender: self)
             return
         }
 
@@ -101,7 +101,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         checkUpdateGraph()
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         viewIsForeground = false
     }
@@ -110,19 +110,19 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     // MARK: - Navigation
     //
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        super.prepareForSegue(segue, sender: sender)
+        super.prepare(for: segue, sender: sender)
         if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemEditSegue {
             // "Edit" case
-            let eventEditVC = segue.destinationViewController as! EventAddOrEditViewController
+            let eventEditVC = segue.destination as! EventAddOrEditViewController
             eventEditVC.eventItem = eventItem
             eventEditVC.eventGroup = eventGroup
             APIConnector.connector().trackMetric("Clicked Edit (Data Screen)")
         } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
             // "Eat again" case...
-            let eventAddVC = segue.destinationViewController as! EventAddOrEditViewController
+            let eventAddVC = segue.destination as! EventAddOrEditViewController
             // no existing item to pass along...
             eventAddVC.eventGroup = eventGroup
             APIConnector.connector().trackMetric("Clicked Eat Again (Data Screen)")
@@ -131,9 +131,9 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         }
     }
     
-    @IBAction func done(segue: UIStoryboardSegue) {
+    @IBAction func done(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventDetail done")
-        if let eventAddOrEditVC = segue.sourceViewController as? EventAddOrEditViewController {
+        if let eventAddOrEditVC = segue.source as? EventAddOrEditViewController {
             // update group and item!
             self.eventGroup = eventAddOrEditVC.eventGroup
             self.eventItem = eventAddOrEditVC.eventItem
@@ -146,7 +146,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
                 NSLog("EventDetailVC detected deleted event at done!")
                 // Note: will segue out at ViewWillDisplay...
             }
-        } else if let _ = segue.sourceViewController as? ShowPhotoViewController {
+        } else if let _ = segue.source as? ShowPhotoViewController {
             APIConnector.connector().trackMetric("Clicked Back to Data Screen (Photo Screen)")
 //            let newPhotoIndex = photoViewVC.imageIndex
 //            if newPhotoIndex > 0 {
@@ -164,7 +164,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         }
      }
 
-    private func shiftPhotoArrayLeft(mealItem: NutMeal) {
+    fileprivate func shiftPhotoArrayLeft(_ mealItem: NutMeal) {
         // shift photo urls - either 2 or 3...
         let photoUrls = mealItem.photoUrlArray()
         if photoUrls.count > 1 {
@@ -180,7 +180,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     }
     
     /// Works with graphDataChanged to ensure graph is up-to-date after notification of database changes whether this VC is in the foreground or background.
-    private func checkUpdateGraph() {
+    fileprivate func checkUpdateGraph() {
         if graphNeedsUpdate {
             graphNeedsUpdate = false
             if let graphContainerView = graphContainerView {
@@ -189,8 +189,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         }
     }
     
-    private var graphNeedsUpdate: Bool  = false
-    func graphDataChanged(note: NSNotification) {
+    fileprivate var graphNeedsUpdate: Bool  = false
+    func graphDataChanged(_ note: Notification) {
         graphNeedsUpdate = true
         if viewIsForeground {
             //NSLog("EventDetailView: graphDataChanged, reloading")
@@ -200,7 +200,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         }
     }
 
-    @IBAction func cancel(segue: UIStoryboardSegue) {
+    @IBAction func cancel(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventDetail cancel")
     }
 
@@ -208,58 +208,58 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     // MARK: - Button handlers
     //
 
-    @IBAction func backButtonHandler(sender: AnyObject) {
+    @IBAction func backButtonHandler(_ sender: AnyObject) {
         APIConnector.connector().trackMetric("Clicked Back (Data Screen)")
         if self.eventItem?.nutEventIdString() == originalId && !switchedEvents {
-            self.performSegueWithIdentifier("unwindSegueToDone", sender: self)
+            self.performSegue(withIdentifier: "unwindSegueToDone", sender: self)
         } else {
             // We have a new NutEvent, won't want to return to group event scene...
-            self.performSegueWithIdentifier("unwindSegueToHome", sender: self)
+            self.performSegue(withIdentifier: "unwindSegueToHome", sender: self)
         }
     }
     
-    private func configureNutCracked() {
+    fileprivate func configureNutCracked() {
         if let eventItem = eventItem {
             nutCrackedLabel.text = eventItem.nutCracked ? NSLocalizedString("successButtonTitle", comment:"Success!") : NSLocalizedString("nutCrackedButtonTitle", comment:"Success?")
-            nutCrackedButton.selected = eventItem.nutCracked
+            nutCrackedButton.isSelected = eventItem.nutCracked
         }
     }
     
-    @IBAction func nutCrackedButtonHandler(sender: AnyObject) {
-        nutCrackedButton.selected = !nutCrackedButton.selected
+    @IBAction func nutCrackedButtonHandler(_ sender: AnyObject) {
+        nutCrackedButton.isSelected = !nutCrackedButton.isSelected
 
         if let eventItem = eventItem {
-            if nutCrackedButton.selected {
+            if nutCrackedButton.isSelected {
                 APIConnector.connector().trackMetric("Clicked to Crack the Nut")
             } else {
                 APIConnector.connector().trackMetric("Clicked to Uncrack the Nut")
             }
-            eventItem.nutCracked = nutCrackedButton.selected
+            eventItem.nutCracked = nutCrackedButton.isSelected
             // Save changes to database
-            eventItem.saveChanges()
+            _ = eventItem.saveChanges()
             configureNutCracked()
         }
     }
     
-    func didSelectItemAtIndexPath(indexPath: NSIndexPath) {
+    func didSelectItemAtIndexPath(_ indexPath: IndexPath) {
         self.photoOverlayTouchHandler(self)
     }
     
-    @IBAction func photoOverlayTouchHandler(sender: AnyObject) {
+    @IBAction func photoOverlayTouchHandler(_ sender: AnyObject) {
         if let graphContainerView = graphContainerView {
             graphContainerView.centerGraphOnEvent(animated: true)
             APIConnector.connector().trackMetric("Clicked Header to Re-Center Data (Data Screen)")
         }
     }
     
-    @IBAction func photoDisplayButtonHandler(sender: AnyObject) {
+    @IBAction func photoDisplayButtonHandler(_ sender: AnyObject) {
         if let mealItem = eventItem as? NutMeal {
             let photoUrls = mealItem.photoUrlArray()
             if photoUrls.count > 0 {
                 let firstPhotoUrl = mealItem.firstPictureUrl()
                 if !firstPhotoUrl.isEmpty {
                     let storyboard = UIStoryboard(name: "EventView", bundle: nil)
-                    let photoVC = storyboard.instantiateViewControllerWithIdentifier("ShowPhotoViewController") as! ShowPhotoViewController
+                    let photoVC = storyboard.instantiateViewController(withIdentifier: "ShowPhotoViewController") as! ShowPhotoViewController
                     photoVC.editAllowed = false
                     photoVC.mealTitle = mealItem.title
                     photoVC.photoURLs = mealItem.photoUrlArray()
@@ -298,46 +298,46 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     // MARK: - Configuration
     //
     
-    private var curPhotoDisplayedIndex = 0
-    private func configurePhotoBackground() {
+    fileprivate var curPhotoDisplayedIndex = 0
+    fileprivate func configurePhotoBackground() {
         if let eventItem = eventItem {
             //NSLog("EventDetailVC: configurePhotoBackground")
-            photoDisplayImageView.hidden = true
+            photoDisplayImageView.isHidden = true
             let photoUrls = eventItem.photoUrlArray()
             topSectionContainer.setNeedsLayout()
             topSectionContainer.layoutIfNeeded()
             topSectionContainer.photoURLs = photoUrls
-            topSectionContainer.photoDisplayMode = .ScaleAspectFill
+            topSectionContainer.photoDisplayMode = .scaleAspectFill
             topSectionContainer.delegate = self // handle touches here!
             topSectionContainer.configurePhotoCollection()
             if photoUrls.count > 0 {
-                photoDisplayImageView.hidden = false
+                photoDisplayImageView.isHidden = false
                 photoDisplayImageView.image = photoUrls.count == 1 ? UIImage(named: "singlePhotoIcon") : UIImage(named: "multiPhotoIcon")
             }
         }
     }
     
-    private func configureDetailView() {
+    fileprivate func configureDetailView() {
         //NSLog("EventDetailVC: configureDetailView")
         if let eventItem = eventItem {
             configureNutCracked()
 
             if let _ = eventItem as? NutWorkout {
                 isWorkout = true
-                eatAgainView.hidden = true
+                eatAgainView.isHidden = true
             }
             
             titleLabel = addLabel(eventItem.title, labelStyle: "detailHeaderTitle", currentView: titleLabel)
             notesLabel = addLabel(eventItem.notes, labelStyle: "detailHeaderNotes", currentView: notesLabel)
-            notesLabel!.hidden = eventItem.notes.isEmpty
+            notesLabel!.isHidden = eventItem.notes.isEmpty
 
-            eventTime = eventItem.time
+            eventTime = eventItem.time as Date
             NutUtils.setFormatterTimezone(eventItem.tzOffsetSecs)
             let dateLabelText = NutUtils.standardUIDateString(eventTime)
             dateLabel = addLabel(dateLabelText, labelStyle: "detailHeaderDate", currentView: dateLabel)
 
             locationLabel = addLabel(eventItem.location, labelStyle: "detailHeaderLocation", currentView: locationLabel)
-            locationLabel!.hidden = eventItem.location.isEmpty
+            locationLabel!.isHidden = eventItem.location.isEmpty
             if locationIcon != nil {
                 locationIcon!.removeFromSuperview()
                 locationIcon = nil
@@ -350,14 +350,14 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         }
     }
 
-    private func addLabel(labelText: String, labelStyle: String, currentView: UILabel?) -> UILabel {
+    fileprivate func addLabel(_ labelText: String, labelStyle: String, currentView: UILabel?) -> UILabel {
         
-        let paragraphStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
-        paragraphStyle.alignment = .Center
-        paragraphStyle.lineBreakMode = .ByWordWrapping
+        let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+        paragraphStyle.alignment = .center
+        paragraphStyle.lineBreakMode = .byWordWrapping
         paragraphStyle.lineHeightMultiple = 0.9
         
-        let label = NutshellUILabel(frame: CGRectZero)
+        let label = NutshellUILabel(frame: CGRect.zero)
         label.usage = labelStyle
         label.numberOfLines = 0
         label.attributedText = NSMutableAttributedString(string: labelText, attributes: [NSFontAttributeName: label.font, NSForegroundColorAttributeName: label.textColor, NSParagraphStyleAttributeName:paragraphStyle])
@@ -372,29 +372,29 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     // MARK: - Layout Header
     //
 
-    private let kMinTopMargin: CGFloat = 5.0
-    private let kTargetTopMargin: CGFloat = 20.0
-    private let kMinBottomMargin: CGFloat = 5.0
-    private let kTargetBottomMargin: CGFloat = 20.0
-    private let kMinTitleSubtitleSeparation: CGFloat = 2.0
-    private let kTargetTitleSubtitleSeparation: CGFloat = 10.0
-    private let kMinSubtitleDateSeparation: CGFloat = 2.0
-    private let kTargetSubtitleDateSeparation: CGFloat = 10.0
-    private let kMinDateLocationSeparation: CGFloat = 2.0
-    private let kTargetDateLocationSeparation: CGFloat = 10.0
-    private let klocationIconOffset: CGFloat = 8.0
+    fileprivate let kMinTopMargin: CGFloat = 5.0
+    fileprivate let kTargetTopMargin: CGFloat = 20.0
+    fileprivate let kMinBottomMargin: CGFloat = 5.0
+    fileprivate let kTargetBottomMargin: CGFloat = 20.0
+    fileprivate let kMinTitleSubtitleSeparation: CGFloat = 2.0
+    fileprivate let kTargetTitleSubtitleSeparation: CGFloat = 10.0
+    fileprivate let kMinSubtitleDateSeparation: CGFloat = 2.0
+    fileprivate let kTargetSubtitleDateSeparation: CGFloat = 10.0
+    fileprivate let kMinDateLocationSeparation: CGFloat = 2.0
+    fileprivate let kTargetDateLocationSeparation: CGFloat = 10.0
+    fileprivate let klocationIconOffset: CGFloat = 8.0
     
-    private func sizeNeededForLabel(availWidth: CGFloat, availHeight: CGFloat, label: UILabel?) -> CGSize {
+    fileprivate func sizeNeededForLabel(_ availWidth: CGFloat, availHeight: CGFloat, label: UILabel?) -> CGSize {
         if let attribStr = label?.attributedText {
-            let sizeNeeded = attribStr.boundingRectWithSize(CGSize(width: availWidth, height: availHeight), options: NSStringDrawingOptions.UsesLineFragmentOrigin, context: nil)
+            let sizeNeeded = attribStr.boundingRect(with: CGSize(width: availWidth, height: availHeight), options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
             return CGSize(width: ceil(sizeNeeded.width), height: ceil(sizeNeeded.height))
         } else {
-            return CGSizeZero
+            return CGSize.zero
         }
     }
     
-    private func centerLabelInTopFrame(label: UILabel?, frame: CGRect) -> CGSize {
-        var calcFrame = CGRectZero
+    fileprivate func centerLabelInTopFrame(_ label: UILabel?, frame: CGRect) -> CGSize {
+        var calcFrame = CGRect.zero
         if let label = label {
             let sizeNeeded = sizeNeededForLabel(frame.size.width, availHeight: frame.size.height, label: label)
             calcFrame = frame
@@ -405,19 +405,19 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             label.frame = calcFrame
             return sizeNeeded
         } else {
-            return CGSizeZero
+            return CGSize.zero
         }
     }
     
-    private func growHeaderOverlayContainer(newMultiplier: CGFloat) -> CGRect {
+    fileprivate func growHeaderOverlayContainer(_ newMultiplier: CGFloat) -> CGRect {
         for c in topSectionContainer.constraints {
             // remove current constraint because multiplier can't be set
-            if c.firstAttribute == NSLayoutAttribute.Width {
+            if c.firstAttribute == NSLayoutAttribute.width {
                 topSectionContainer.removeConstraint(c)
                 break
             }
         }
-        let newC = NSLayoutConstraint(item: topSectionContainer, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: topSectionContainer, attribute: NSLayoutAttribute.Height, multiplier: newMultiplier, constant: 0.0)
+        let newC = NSLayoutConstraint(item: topSectionContainer, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: topSectionContainer, attribute: NSLayoutAttribute.height, multiplier: newMultiplier, constant: 0.0)
         topSectionContainer.addConstraint(newC)
         topSectionContainer.setNeedsLayout()
         topSectionContainer.layoutIfNeeded()
@@ -426,7 +426,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         return headerOverlayContainer.bounds
     }
     
-    private func shrinkLabelHeight(curAllocation: CGFloat, minAllocation: CGFloat, width: CGFloat, label: UILabel) -> CGFloat {
+    fileprivate func shrinkLabelHeight(_ curAllocation: CGFloat, minAllocation: CGFloat, width: CGFloat, label: UILabel) -> CGFloat {
         // trim label height allocation to minAllocation, returning reclaimed delta
         if curAllocation > minAllocation {
             let newAllocation = sizeNeededForLabel(width, availHeight: minAllocation, label: label).height
@@ -448,7 +448,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     Distribute the remaining space proportionally between the fields, with slightly more space at top and bottom margins.
 */
 
-    private func layoutHeaderView() {
+    fileprivate func layoutHeaderView() {
         
         //NSLog("EventDetailVC: layoutHeaderView")
         headerOverlayContainer.setNeedsLayout()
@@ -459,8 +459,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         let titleHeightNeeded = sizeNeededForLabel(containerframe.width, availHeight: containerframe.height, label: titleLabel).height
         let dateHeightNeeded = sizeNeededForLabel(containerframe.width, availHeight: containerframe.height, label: dateLabel).height
         // note subtitle and location are optional
-        let subtitleHeightNeeded = notesLabel!.hidden ? 0.0 : sizeNeededForLabel(containerframe.width, availHeight: containerframe.height, label: notesLabel).height
-        let locationHeightNeeded = locationLabel!.hidden ? 0.0 : sizeNeededForLabel(containerframe.width, availHeight: containerframe.height, label: locationLabel).height
+        let subtitleHeightNeeded = notesLabel!.isHidden ? 0.0 : sizeNeededForLabel(containerframe.width, availHeight: containerframe.height, label: notesLabel).height
+        let locationHeightNeeded = locationLabel!.isHidden ? 0.0 : sizeNeededForLabel(containerframe.width, availHeight: containerframe.height, label: locationLabel).height
         var totalHeightNeeded = titleHeightNeeded + subtitleHeightNeeded + dateHeightNeeded + locationHeightNeeded
         let minSpacing = kMinTopMargin + kMinBottomMargin + kMinTitleSubtitleSeparation + kMinSubtitleDateSeparation + kMinDateLocationSeparation
         let targetSpacing = kTargetTopMargin + kTargetBottomMargin + kTargetTitleSubtitleSeparation + kTargetSubtitleDateSeparation + kTargetDateLocationSeparation
@@ -485,7 +485,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         var locationHeightAllocated = locationHeightNeeded
         var locationIconWidth: CGFloat = 0.0
         if let locationIcon = locationIcon {
-            if !locationIcon.hidden {
+            if !locationIcon.isHidden {
                 locationIconWidth = locationIcon.bounds.width + 2*klocationIconOffset
             }
         }
@@ -544,11 +544,11 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         nextFrame.size.height = locationHeightAllocated
         nextFrame.origin.y += yAdvance
         
-        if !locationLabel!.hidden {
+        if !locationLabel!.isHidden {
             nextFrame.origin.x += locationIconWidth/2.0
             nextFrame.size.width -= locationIconWidth
-            centerLabelInTopFrame(locationLabel, frame: nextFrame)
-            if let locationIcon = locationIcon, locationLabel = locationLabel {
+            _ = centerLabelInTopFrame(locationLabel, frame: nextFrame)
+            if let locationIcon = locationIcon, let locationLabel = locationLabel {
                 // place icon to left of first line of location...
                 var iconFrame: CGRect = locationIcon.bounds
                 iconFrame.origin.x = ceil(locationLabel.frame.origin.x - iconFrame.width - klocationIconOffset)
@@ -563,7 +563,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     //
     
     /// Reloads the graph - this should be called after the header has been laid out and the graph section size has been figured. Pass in edgeOffset to place the nut event other than in the center.
-    private func configureGraphContainer(edgeOffset: CGFloat = 0.0) {
+    fileprivate func configureGraphContainer(_ edgeOffset: CGFloat = 0.0) {
         //NSLog("EventDetailVC: configureGraphContainer")
         if (graphContainerView != nil) {
             graphContainerView?.removeFromSuperview();
@@ -601,11 +601,11 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     
     func containerCellUpdated() {
         let graphHasData = graphContainerView!.dataFound()
-        if missingDataAdvisoryView.hidden && !graphHasData {
+        if missingDataAdvisoryView.isHidden && !graphHasData {
             // about to show missing data message...
             APIConnector.connector().trackMetric("Viewed 'No data' message")
         }
-        missingDataAdvisoryView.hidden = graphHasData
+        missingDataAdvisoryView.isHidden = graphHasData
     }
 
     func pinchZoomEnded() {
@@ -613,8 +613,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         APIConnector.connector().trackMetric("Pinched to Zoom (Data Screen)")
     }
     
-    private var currentCell: Int?
-    func willDisplayGraphCell(cell: Int) {
+    fileprivate var currentCell: Int?
+    func willDisplayGraphCell(_ cell: Int) {
         if let currentCell = currentCell {
             if cell > currentCell {
                 APIConnector.connector().trackMetric("Swiped to Pan Left (Data Screen)")
@@ -625,7 +625,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         currentCell = cell
     }
 
-    func dataPointTapped(dataPoint: GraphDataType, tapLocationInView: CGPoint) {
+    func dataPointTapped(_ dataPoint: GraphDataType, tapLocationInView: CGPoint) {
         var itemId: String?
         if let mealDataPoint = dataPoint as? MealGraphDataType {
             NSLog("tapped on meal!")
@@ -660,6 +660,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             }
         }
     }
+    
+    func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {}
 
 }
 

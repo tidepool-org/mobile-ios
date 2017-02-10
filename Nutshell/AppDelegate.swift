@@ -33,11 +33,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     static var healthKitUIEnabled = true
     // one shot, true until we go to foreground...
-    private var freshLaunch = true
+    fileprivate var freshLaunch = true
     // one shot, UI should put up dialog letting user know we are in test mode!
     static var testModeNotification = false
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         DDLogVerbose("trace")
 
@@ -47,9 +47,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Override point for customization after application launch.
         UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor
-        UINavigationBar.appearance().translucent = false
-        UINavigationBar.appearance().tintColor = UIColor.whiteColor()
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor(), NSFontAttributeName: Styles.navTitleBoldFont]
+        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().tintColor = UIColor.white
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: Styles.navTitleBoldFont]
         
         // Initialize database by referencing username. This must be done before using the APIConnector!
         let name = NutDataController.controller().currentUserName
@@ -58,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         // Set up the API connection
-        APIConnector.connector().configure()
+        _ = APIConnector.connector().configure()
         
         NSLog("did finish launching")
         return true
@@ -68,13 +68,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     static var testMode: Bool {
         set(newValue) {
-            NSUserDefaults.standardUserDefaults().setBool(newValue, forKey: kTestModeSettingKey)
-            NSUserDefaults.standardUserDefaults().synchronize()
+            UserDefaults.standard.set(newValue, forKey: kTestModeSettingKey)
+            UserDefaults.standard.synchronize()
             _testMode = nil
         }
         get {
             if _testMode == nil {
-                _testMode = NSUserDefaults.standardUserDefaults().boolForKey(kTestModeSettingKey)
+                _testMode = UserDefaults.standard.bool(forKey: kTestModeSettingKey)
             }
             return _testMode!
         }
@@ -103,19 +103,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    private var deviceIsLocked = false
-    func applicationProtectedDataDidBecomeAvailable(application: UIApplication) {
+    fileprivate var deviceIsLocked = false
+    func applicationProtectedDataDidBecomeAvailable(_ application: UIApplication) {
         DDLogVerbose("Device unlocked!")
         deviceIsLocked = false
     }
     
-    func applicationProtectedDataWillBecomeUnavailable(application: UIApplication) {
+    func applicationProtectedDataWillBecomeUnavailable(_ application: UIApplication) {
         DDLogVerbose("Device locked!")
         deviceIsLocked = true
     }
     
     // Support for background fetch
-    func application(application: UIApplication, performFetchWithCompletionHandler completionHandler: (UIBackgroundFetchResult) -> Void) {
+    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         NSLog("performFetchWithCompletionHandler")
         
         // if device is locked, bail now because we can't read HealthKit data
@@ -123,7 +123,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if AppDelegate.testMode {
                 self.localNotifyMessage("Nutshell skipping background fetch: device is locked!")
             }
-            completionHandler(.Failed)
+            completionHandler(.failed)
             return
         }
         
@@ -135,7 +135,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if AppDelegate.testMode {
                 self.localNotifyMessage("Nutshell was unable to download items from Tidepool: log in required!")
             }
-            completionHandler(.Failed)
+            completionHandler(.failed)
             return
         }
         
@@ -145,7 +145,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if AppDelegate.testMode {
                 self.localNotifyMessage("Nutshell was unable to download items from Tidepool: no network available!")
             }
-            completionHandler(.Failed)
+            completionHandler(.failed)
             return
         }
         // make sure HK interface is configured...
@@ -158,27 +158,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    private func localNotifyMessage(msg: String) {
+    fileprivate func localNotifyMessage(_ msg: String) {
         NSLog("localNotifyMessage: \(msg)")
         let debugMsg = UILocalNotification()
         debugMsg.alertBody = msg
-        UIApplication.sharedApplication().presentLocalNotificationNow(debugMsg)
+        UIApplication.shared.presentLocalNotificationNow(debugMsg)
     }
     
     
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         NSLog("Nutshell applicationWillResignActive")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
         NSLog("Nutshell applicationDidEnterBackground")
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         NSLog("Nutshell applicationWillEnterForeground")
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         if !freshLaunch {
@@ -212,9 +212,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    private var refreshTokenNextActive: Bool = false
+    fileprivate var refreshTokenNextActive: Bool = false
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         // When app is launched, either go to login, or if we have a valid token, go to main UI after optionally refreshing the token. 
         // Note: We attempt token refresh each time the app is launched; it might make more sense to do it periodically when app is brought to foreground, or just let the service control token timeout.
         NSLog("Nutshell applicationDidBecomeActive")
@@ -252,7 +252,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         NutDataController.controller().appWillTerminate()

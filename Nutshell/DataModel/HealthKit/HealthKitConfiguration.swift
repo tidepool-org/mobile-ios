@@ -18,8 +18,8 @@ class HealthKitConfiguration
 //        DDLogVerbose("trace")
 //    }
 
-    private var currentUserId: String?
-    private var isDSAUser: Bool?
+    fileprivate var currentUserId: String?
+    fileprivate var isDSAUser: Bool?
     
     func shouldShowHealthKitUI() -> Bool {
         if let isDSAUser = isDSAUser {
@@ -29,7 +29,7 @@ class HealthKitConfiguration
     }
     
     /// Call this whenever the current user changes, at login/logout, token refresh(?), and upon enabling or disabling the HealthKit interface.
-    func configureHealthKitInterface(userid: String?, isDSAUser: Bool?) {
+    func configureHealthKitInterface(_ userid: String?, isDSAUser: Bool?) {
         DDLogVerbose("trace")
         
         if !HealthKitManager.sharedInstance.isHealthDataAvailable {
@@ -80,15 +80,15 @@ class HealthKitConfiguration
     // MARK: - Methods needed for config UI
     //
     
-    private let kHealthKitInterfaceEnabledKey = "kHealthKitInterfaceEnabledKey"
-    private let kHealthKitInterfaceUserIdKey = "kUserIdForHealthKitInterfaceKey"
-    private let kHealthKitInterfaceUserNameKey = "kUserNameForHealthKitInterfaceKey"
+    fileprivate let kHealthKitInterfaceEnabledKey = "kHealthKitInterfaceEnabledKey"
+    fileprivate let kHealthKitInterfaceUserIdKey = "kUserIdForHealthKitInterfaceKey"
+    fileprivate let kHealthKitInterfaceUserNameKey = "kUserNameForHealthKitInterfaceKey"
     
     
     /// Enables HealthKit for current user
     ///
     /// Note: This sets the current tidepool user as the HealthKit user!
-    func enableHealthKitInterface(username: String?, userid: String?, isDSAUser: Bool?, needsGlucoseReads: Bool, needsGlucoseWrites: Bool, needsWorkoutReads: Bool) {
+    func enableHealthKitInterface(_ username: String?, userid: String?, isDSAUser: Bool?, needsGlucoseReads: Bool, needsGlucoseWrites: Bool, needsWorkoutReads: Bool) {
         DDLogVerbose("trace")
  
         currentUserId = userid
@@ -102,8 +102,8 @@ class HealthKitConfiguration
         func configureCurrentHealthKitUser() {
             DDLogVerbose("trace")
 
-            let defaults = NSUserDefaults.standardUserDefaults()
-            defaults.setBool(true, forKey:self.kHealthKitInterfaceEnabledKey)
+            let defaults = UserDefaults.standard
+            defaults.set(true, forKey:self.kHealthKitInterfaceEnabledKey)
             if !self.healthKitInterfaceEnabledForCurrentUser() {
                 if self.healthKitInterfaceConfiguredForOtherUser() {
                     // switching healthkit users! reset anchors!
@@ -113,12 +113,12 @@ class HealthKitConfiguration
                 // may be nil...
                 defaults.setValue(username, forKey: kHealthKitInterfaceUserNameKey)
             }
-            NSUserDefaults.standardUserDefaults().synchronize()
+            UserDefaults.standard.synchronize()
         }
         
         HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSampleReads: needsGlucoseReads, shouldAuthorizeBloodGlucoseSampleWrites: needsGlucoseWrites, shouldAuthorizeWorkoutSamples: needsWorkoutReads) {
             success, error -> Void in
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async(execute: {
                 if (error == nil) {
                     configureCurrentHealthKitUser()
                     self.configureHealthKitInterface(self.currentUserId, isDSAUser: self.isDSAUser)
@@ -135,8 +135,8 @@ class HealthKitConfiguration
     func disableHealthKitInterface() {
         DDLogVerbose("trace")
 
-        NSUserDefaults.standardUserDefaults().setBool(false, forKey:kHealthKitInterfaceEnabledKey)
-        NSUserDefaults.standardUserDefaults().synchronize()
+        UserDefaults.standard.set(false, forKey:kHealthKitInterfaceEnabledKey)
+        UserDefaults.standard.synchronize()
         configureHealthKitInterface(self.currentUserId, isDSAUser: self.isDSAUser)
     }
     
@@ -145,7 +145,7 @@ class HealthKitConfiguration
         if healthKitInterfaceEnabled() == false {
             return false
         }
-        if let curHealthKitUserId = healthKitUserTidepoolId(), curId = currentUserId {
+        if let curHealthKitUserId = healthKitUserTidepoolId(), let curId = currentUserId {
             if curId == curHealthKitUserId {
                 return true
             }
@@ -171,19 +171,19 @@ class HealthKitConfiguration
     /// Returns whether authorization for HealthKit has been requested, and the HealthKit interface is currently enabled, regardless of user it is enabled for.
     ///
     /// Note: separately, we may enable/disable the current interface to HealthKit.
-    private func healthKitInterfaceEnabled() -> Bool {
-        return NSUserDefaults.standardUserDefaults().boolForKey(kHealthKitInterfaceEnabledKey)
+    fileprivate func healthKitInterfaceEnabled() -> Bool {
+        return UserDefaults.standard.bool(forKey: kHealthKitInterfaceEnabledKey)
     }
     
     /// If HealthKit interface is enabled, returns associated Tidepool account id
     func healthKitUserTidepoolId() -> String? {
-        let result = NSUserDefaults.standardUserDefaults().stringForKey(kHealthKitInterfaceUserIdKey)
+        let result = UserDefaults.standard.string(forKey: kHealthKitInterfaceUserIdKey)
         return result
     }
     
     /// If HealthKit interface is enabled, returns associated Tidepool account id
     func healthKitUserTidepoolUsername() -> String? {
-        let result = NSUserDefaults.standardUserDefaults().stringForKey(kHealthKitInterfaceUserNameKey)
+        let result = UserDefaults.standard.string(forKey: kHealthKitInterfaceUserNameKey)
         return result
     }
 }

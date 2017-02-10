@@ -19,16 +19,16 @@ import UIKit
 class GraphDataType {
 
     let value: CGFloat
-    let timeOffset: NSTimeInterval
+    let timeOffset: TimeInterval
     //
     
-    init(value: CGFloat = 0.0, timeOffset: NSTimeInterval = 0.0) {
+    init(value: CGFloat = 0.0, timeOffset: TimeInterval = 0.0) {
         self.value = value
         self.timeOffset = timeOffset
     }
     
     func label() -> String {
-        return String(value)
+        return String(describing: value)
     }
     
     func typeString() -> String {

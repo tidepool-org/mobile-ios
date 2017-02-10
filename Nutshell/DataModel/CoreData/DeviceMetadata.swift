@@ -11,7 +11,7 @@ import CoreData
 import SwiftyJSON
 
 class DeviceMetadata: CommonData {
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> DeviceMetadata? {
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> DeviceMetadata? {
         // This class is really a container for various sub-types. We determine the sub-type much
         // like we determined the type, which is "deviceMeta" for this object.
         var newObject: DeviceMetadata? = nil

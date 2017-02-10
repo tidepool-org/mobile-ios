@@ -21,22 +21,22 @@ class App: UIApplication {
         // Set up Xcode and system logging
         DDASLLogger.sharedInstance().logFormatter = LogFormatter()
         DDTTYLogger.sharedInstance().logFormatter = LogFormatter()
-        DDLog.addLogger(DDASLLogger.sharedInstance())
-        DDLog.addLogger(DDTTYLogger.sharedInstance())
+        DDLog.add(DDASLLogger.sharedInstance())
+        DDLog.add(DDTTYLogger.sharedInstance())
         
         // Set up file logging
         fileLogger = DDFileLogger()
         fileLogger.logFormatter = LogFormatter()
-        fileLogger.rollingFrequency = 60 * 60 * 4; // 2 hour rolling
+        fileLogger.rollingFrequency = TimeInterval(60 * 60 * 4); // 2 hour rolling
         fileLogger.logFileManager.maximumNumberOfLogFiles = 12;
         // Add file logger
-        DDLog.addLogger(fileLogger);
+        DDLog.add(fileLogger);
         
         // Set up log level
-        defaultDebugLevel = DDLogLevel.Verbose
-        let loggingEnabledObject = NSUserDefaults.standardUserDefaults().objectForKey("LoggingEnabled")
-        if loggingEnabledObject != nil && !loggingEnabledObject!.boolValue {
-            defaultDebugLevel = DDLogLevel.Off
+        defaultDebugLevel = DDLogLevel.verbose
+        let loggingEnabledObject = UserDefaults.standard.object(forKey: "LoggingEnabled")
+        if loggingEnabledObject != nil && !(loggingEnabledObject! as AnyObject).boolValue {
+            defaultDebugLevel = DDLogLevel.off
         }
 
         DDLogVerbose("trace")
@@ -44,4 +44,7 @@ class App: UIApplication {
 }
 
 
-UIApplicationMain(Process.argc, Process.unsafeArgv, NSStringFromClass(App), NSStringFromClass(AppDelegate))
+UIApplicationMain(CommandLine.argc, UnsafeMutableRawPointer(CommandLine.unsafeArgv)
+    .bindMemory(
+        to: UnsafeMutablePointer<Int8>.self,
+        capacity: Int(CommandLine.argc)), NSStringFromClass(App.self), NSStringFromClass(AppDelegate.self))

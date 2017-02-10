@@ -18,17 +18,17 @@ import UIKit
 /// Provides an ordered array of GraphDataLayer objects.
 class TidepoolGraphLayout: GraphLayout {
     
-    var mainEventTime: NSDate
+    var mainEventTime: Date
     var dataDetected = false
 
-    init (viewSize: CGSize, mainEventTime: NSDate, tzOffsetSecs: Int) {
+    init (viewSize: CGSize, mainEventTime: Date, tzOffsetSecs: Int) {
 
         self.mainEventTime = mainEventTime
         let startPixelsPerHour = 80
         let numberOfTiles = 7
-        let cellTI = NSTimeInterval(viewSize.width * 3600.0/CGFloat(startPixelsPerHour))
-        let graphTI = cellTI * NSTimeInterval(numberOfTiles)
-        let startTime = mainEventTime.dateByAddingTimeInterval(-graphTI/2.0)
+        let cellTI = TimeInterval(viewSize.width * 3600.0/CGFloat(startPixelsPerHour))
+        let graphTI = cellTI * TimeInterval(numberOfTiles)
+        let startTime = mainEventTime.addingTimeInterval(-graphTI/2.0)
         super.init(viewSize: viewSize, startTime: startTime, timeIntervalPerTile: cellTI, numberOfTiles: numberOfTiles, tilesInView: 1, tzOffsetSecs: tzOffsetSecs)
     }
 
@@ -37,7 +37,7 @@ class TidepoolGraphLayout: GraphLayout {
     //
 
     // create and return an array of GraphDataLayer objects, w/o data, ordered in view layer from back to front (i.e., last item in array will be drawn last)
-    override func graphLayers(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate, tileIndex: Int) -> [GraphDataLayer] {
+    override func graphLayers(_ viewSize: CGSize, timeIntervalForView: TimeInterval, startTime: Date, tileIndex: Int) -> [GraphDataLayer] {
 
         let workoutLayer = WorkoutGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
         
@@ -114,17 +114,17 @@ class TidepoolGraphLayout: GraphLayout {
     // MARK: - Private constants
     //
     
-    private let kGraphWizardHeight: CGFloat = 27.0
+    fileprivate let kGraphWizardHeight: CGFloat = 27.0
     // After removing a constant height for the header and wizard values, the remaining graph vertical space is divided into four sections based on the following fractions (which should add to 1.0)
-    private let kGraphFractionForGlucose: CGFloat = 180.0/266.0
-    private let kGraphFractionForBolusAndBasal: CGFloat = 76.0/266.0
+    fileprivate let kGraphFractionForGlucose: CGFloat = 180.0/266.0
+    fileprivate let kGraphFractionForBolusAndBasal: CGFloat = 76.0/266.0
     // Each section has some base offset as well
-    private let kGraphGlucoseBaseOffset: CGFloat = 2.0
-    private let kGraphWizardBaseOffset: CGFloat = 2.0
-    private let kGraphBolusBaseOffset: CGFloat = 2.0
-    private let kGraphBasalBaseOffset: CGFloat = 2.0
-    private let kGraphWorkoutBaseOffset: CGFloat = 2.0
-    private let kGraphBottomEdge: CGFloat = 5.0
+    fileprivate let kGraphGlucoseBaseOffset: CGFloat = 2.0
+    fileprivate let kGraphWizardBaseOffset: CGFloat = 2.0
+    fileprivate let kGraphBolusBaseOffset: CGFloat = 2.0
+    fileprivate let kGraphBasalBaseOffset: CGFloat = 2.0
+    fileprivate let kGraphWorkoutBaseOffset: CGFloat = 2.0
+    fileprivate let kGraphBottomEdge: CGFloat = 5.0
     
     //
     // MARK: - Configuration
@@ -138,7 +138,7 @@ class TidepoolGraphLayout: GraphLayout {
         self.headerHeight = 32.0
         self.yAxisLineLeftMargin = 26.0
         self.yAxisLineRightMargin = 10.0
-        self.yAxisLineColor = UIColor.whiteColor()
+        self.yAxisLineColor = UIColor.white
         self.backgroundColor = Styles.veryLightGreyColor
         self.yAxisValuesWithLines = [80, 180]
         self.yAxisValuesWithLabels = [40, 80, 180, 300]

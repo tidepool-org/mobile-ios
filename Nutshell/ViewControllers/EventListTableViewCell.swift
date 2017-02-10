@@ -28,7 +28,7 @@ class EventListTableViewCell: BaseUITableViewCell {
     static var _highlightedPlaceIconImage: UIImage?
     class var highlightedPlaceIconImage: UIImage {
         if _highlightedPlaceIconImage == nil {
-            _highlightedPlaceIconImage = UIImage(named: "placeSmallIcon")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+            _highlightedPlaceIconImage = UIImage(named: "placeSmallIcon")!.withRenderingMode(UIImageRenderingMode.alwaysOriginal)
         }
         return _highlightedPlaceIconImage!
     }
@@ -36,7 +36,7 @@ class EventListTableViewCell: BaseUITableViewCell {
     static var _defaultPlaceIconImage: UIImage?
     class var defaultPlaceIconImage: UIImage {
         if _defaultPlaceIconImage == nil {
-            _defaultPlaceIconImage = UIImage(named: "placeSmallIcon")!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+            _defaultPlaceIconImage = UIImage(named: "placeSmallIcon")!.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
         }
         return _defaultPlaceIconImage!
     }
@@ -46,32 +46,32 @@ class EventListTableViewCell: BaseUITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
 
-    override func setHighlighted(highlighted: Bool, animated: Bool) {
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated:animated)
         
         // Configure the view for the highlighted state
-        titleLabel.highlighted = highlighted
-        locationLabel?.highlighted = highlighted
-        repeatCountLabel.highlighted = highlighted
-        nutCrackedStar.highlighted = highlighted
-        placeIconView?.highlighted = highlighted
+        titleLabel.isHighlighted = highlighted
+        locationLabel?.isHighlighted = highlighted
+        repeatCountLabel.isHighlighted = highlighted
+        nutCrackedStar.isHighlighted = highlighted
+        placeIconView?.isHighlighted = highlighted
     }
 
-    func configureCell(nutEvent: NutEvent) {
+    func configureCell(_ nutEvent: NutEvent) {
         titleLabel.text = nutEvent.title
         repeatCountLabel.text = "x " + String(nutEvent.itemArray.count)
         eventGroup = nutEvent
-        nutCrackedStar.hidden = true
+        nutCrackedStar.isHidden = true
         
         if !nutEvent.location.isEmpty {
             locationLabel.text = nutEvent.location
-            placeIconView.hidden = false
+            placeIconView.isHidden = false
             placeIconView.image = EventListTableViewCell.defaultPlaceIconImage
             placeIconView.highlightedImage = EventListTableViewCell.highlightedPlaceIconImage
             placeIconView.tintColor = Styles.altDarkGreyColor
@@ -79,7 +79,7 @@ class EventListTableViewCell: BaseUITableViewCell {
         
         for item in nutEvent.itemArray {
             if item.nutCracked {
-                nutCrackedStar.hidden = false
+                nutCrackedStar.isHidden = false
                 break
             }
         }

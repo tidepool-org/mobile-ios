@@ -19,7 +19,7 @@ class BasalGraphDataType: GraphDataType {
     
     var suppressed: CGFloat?
     
-    convenience init(value: CGFloat, timeOffset: NSTimeInterval, suppressed: CGFloat?) {
+    convenience init(value: CGFloat, timeOffset: TimeInterval, suppressed: CGFloat?) {
         self.init(value: value, timeOffset: timeOffset)
         self.suppressed = suppressed
     }
@@ -37,45 +37,45 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
     var pixelsPerValue: CGFloat = 0.0
  
     // config...
-    private let kBasalLightBlueRectColor = Styles.lightBlueColor
-    private let kBasalMinScaleValue: CGFloat = 1.0
-    private let kBasalDarkBlueRectColor = Styles.blueColor
-    private let kBasalMaxDuration: NSTimeInterval = 12*60*60 // Assume maximum basal of 12 hours!
+    fileprivate let kBasalLightBlueRectColor = Styles.lightBlueColor
+    fileprivate let kBasalMinScaleValue: CGFloat = 1.0
+    fileprivate let kBasalDarkBlueRectColor = Styles.blueColor
+    fileprivate let kBasalMaxDuration: TimeInterval = 12*60*60 // Assume maximum basal of 12 hours!
 
     // locals...
-    private var context: CGContext?
-    private var startValue: CGFloat = 0.0
-    private var startTimeOffset: NSTimeInterval = 0.0
-    private var startValueSuppressed: CGFloat?
-    private var suppressedLine: UIBezierPath?
+    fileprivate var context: CGContext?
+    fileprivate var startValue: CGFloat = 0.0
+    fileprivate var startTimeOffset: TimeInterval = 0.0
+    fileprivate var startValueSuppressed: CGFloat?
+    fileprivate var suppressedLine: UIBezierPath?
     
     //
     // MARK: - Loading data
     //
 
     // NOTE: the first BasalGraphDataLayer slice that has loadDataItems called loads the basal data for the entire graph time interval
-    override func loadStartTime() -> NSDate {
-        return layout.graphStartTime.dateByAddingTimeInterval(-kBasalMaxDuration)
+    override func loadStartTime() -> Date {
+        return layout.graphStartTime.addingTimeInterval(-kBasalMaxDuration) as Date
     }
     
-    override func loadEndTime() -> NSDate {
-        return layout.graphStartTime.dateByAddingTimeInterval(layout.graphTimeInterval)
+    override func loadEndTime() -> Date {
+        return layout.graphStartTime.addingTimeInterval(layout.graphTimeInterval)
     }
 
     override func typeString() -> String {
         return "basal"
     }
     
-    override func loadEvent(event: CommonData, timeOffset: NSTimeInterval) {
+    override func loadEvent(_ event: CommonData, timeOffset: TimeInterval) {
         if let event = event as? Basal {
             let eventTime = event.time!
-            let graphTimeOffset = eventTime.timeIntervalSinceDate(layout.graphStartTime)
+            let graphTimeOffset = eventTime.timeIntervalSince(layout.graphStartTime as Date)
             //NSLog("Adding Basal event: \(event)")
             var value = event.value
             if value == nil {
                 if let deliveryType = event.deliveryType {
                     if deliveryType == "suspend" {
-                        value = NSNumber(double: 0.0)
+                        value = NSNumber(value: 0.0 as Double)
                     }
                 }
             }
@@ -123,7 +123,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
         }
         
         dataArray = []
-        let dataLayerOffset = startTime.timeIntervalSinceDate(layout.graphStartTime)
+        let dataLayerOffset = startTime.timeIntervalSince(layout.graphStartTime as Date)
         let rangeStart = dataLayerOffset - kBasalMaxDuration
         let rangeEnd = dataLayerOffset + timeIntervalForView
         // copy over cached items in the range needed for this tile!
@@ -151,7 +151,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
         suppressedLine = nil
    }
     
-    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType) {
+    override func drawDataPointAtXOffset(_ xOffset: CGFloat, dataPoint: GraphDataType) {
         
         if let basalPoint = dataPoint as? BasalGraphDataType {
             // skip over values before starting time, but remember last value...
@@ -189,11 +189,11 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
         }
     }
     
-    private func drawSuppressedLine() {
+    fileprivate func drawSuppressedLine() {
         if let linePath = suppressedLine {
             kBasalDarkBlueRectColor.setStroke()
             linePath.lineWidth = 2.0
-            linePath.lineCapStyle = .Square // note this requires pattern change from 2, 2 to 2, 4!
+            linePath.lineCapStyle = .square // note this requires pattern change from 2, 2 to 2, 4!
             let pattern: [CGFloat] = [2.0, 4.0]
             linePath.setLineDash(pattern, count: 2, phase: 0.0)
             linePath.stroke()
@@ -201,7 +201,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
         }
     }
     
-    private func drawBasalRect(startTimeOffset: NSTimeInterval, endTimeOffset: NSTimeInterval, value: CGFloat, suppressed: CGFloat?, layout: TidepoolGraphLayout, finish: Bool) {
+    fileprivate func drawBasalRect(_ startTimeOffset: TimeInterval, endTimeOffset: TimeInterval, value: CGFloat, suppressed: CGFloat?, layout: TidepoolGraphLayout, finish: Bool) {
         let rectLeft = floor(CGFloat(startTimeOffset) * viewPixelsPerSec)
         let rectRight = ceil(CGFloat(endTimeOffset) * viewPixelsPerSec)
         let rectWidth = rectRight-rectLeft
@@ -218,19 +218,19 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
             if suppressedLine == nil {
                 // start a new line path
                 suppressedLine = UIBezierPath()
-                suppressedLine!.moveToPoint(suppressedStart)
+                suppressedLine!.move(to: suppressedStart)
                 //NSLog("suppressed move to \(suppressedStart)")
             } else {
                 // continue an existing suppressed line path by adding connecting line if it's at a different y
                 let currentEnd = suppressedLine!.currentPoint
                 if abs(currentEnd.y - suppressedStart.y) > 1.0 {
-                    suppressedLine!.addLineToPoint(suppressedStart)
+                    suppressedLine!.addLine(to: suppressedStart)
                     //NSLog("suppressed line to \(suppressedStart)")
                 }
                 suppressedStart.y = currentEnd.y
             }
             // add current line segment
-            suppressedLine!.addLineToPoint(suppressedEnd)
+            suppressedLine!.addLine(to: suppressedEnd)
             //NSLog("suppressed line to \(suppressedEnd)")
             if finish {
                 drawSuppressedLine()

@@ -19,9 +19,9 @@ class MealGraphDataType: GraphDataType {
     
     var isMainEvent: Bool = false
     var id: String?
-    var rectInGraph: CGRect = CGRectZero
+    var rectInGraph: CGRect = CGRect.zero
     
-    init(timeOffset: NSTimeInterval, isMain: Bool, event: Meal) {
+    init(timeOffset: TimeInterval, isMain: Bool, event: Meal) {
         self.isMainEvent = isMain
         // id needed if user taps on this item...
         if let eventId = event.id as? String {
@@ -43,7 +43,7 @@ class MealGraphDataLayer: GraphDataLayer {
 
     var layout: TidepoolGraphLayout
     
-    init(viewSize: CGSize, timeIntervalForView: NSTimeInterval, startTime: NSDate, layout: TidepoolGraphLayout) {
+    init(viewSize: CGSize, timeIntervalForView: TimeInterval, startTime: Date, layout: TidepoolGraphLayout) {
         self.layout = layout
         super.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime)
     }
@@ -60,15 +60,15 @@ class MealGraphDataLayer: GraphDataLayer {
 
     override func loadDataItems() {
         dataArray = []
-        let endTime = startTime.dateByAddingTimeInterval(timeIntervalForView)
-        let timeExtensionForDataFetch = NSTimeInterval(kMealTriangleTopWidth/viewPixelsPerSec)
-        let earlyStartTime = startTime.dateByAddingTimeInterval(-timeExtensionForDataFetch)
-        let lateEndTime = endTime.dateByAddingTimeInterval(timeExtensionForDataFetch)
+        let endTime = startTime.addingTimeInterval(timeIntervalForView)
+        let timeExtensionForDataFetch = TimeInterval(kMealTriangleTopWidth/viewPixelsPerSec)
+        let earlyStartTime = startTime.addingTimeInterval(-timeExtensionForDataFetch)
+        let lateEndTime = endTime.addingTimeInterval(timeExtensionForDataFetch)
         do {
             let events = try DatabaseUtils.getMealEvents(earlyStartTime, toTime: lateEndTime)
             for mealEvent in events {
                 if let eventTime = mealEvent.time {
-                    let deltaTime = eventTime.timeIntervalSinceDate(startTime)
+                    let deltaTime = eventTime.timeIntervalSince(startTime)
                     var isMainEvent = false
                     isMainEvent = mealEvent.time == layout.mainEventTime
                     dataArray.append(MealGraphDataType(timeOffset: deltaTime, isMain: isMainEvent, event: mealEvent))
@@ -84,7 +84,7 @@ class MealGraphDataLayer: GraphDataLayer {
     // MARK: - Drawing data points
     //
 
-    override func drawDataPointAtXOffset(xOffset: CGFloat, dataPoint: GraphDataType) {
+    override func drawDataPointAtXOffset(_ xOffset: CGFloat, dataPoint: GraphDataType) {
         
         var isMain = false
         if let mealDataType = dataPoint as? MealGraphDataType {
@@ -105,11 +105,11 @@ class MealGraphDataLayer: GraphDataLayer {
             let centerX = rect.origin.x + lineWidth/2.0
             let triangleSize: CGFloat = kMealTriangleTopWidth
             let triangleOrgX = centerX - triangleSize/2.0
-            trianglePath.moveToPoint(CGPointMake(triangleOrgX, 0.0))
-            trianglePath.addLineToPoint(CGPointMake(triangleOrgX + triangleSize, 0.0))
-            trianglePath.addLineToPoint(CGPointMake(triangleOrgX + triangleSize/2.0, 13.5))
-            trianglePath.addLineToPoint(CGPointMake(triangleOrgX, 0))
-            trianglePath.closePath()
+            trianglePath.move(to: CGPoint(x: triangleOrgX, y: 0.0))
+            trianglePath.addLine(to: CGPoint(x: triangleOrgX + triangleSize, y: 0.0))
+            trianglePath.addLine(to: CGPoint(x: triangleOrgX + triangleSize/2.0, y: 13.5))
+            trianglePath.addLine(to: CGPoint(x: triangleOrgX, y: 0))
+            trianglePath.close()
             trianglePath.miterLimit = 4;
             trianglePath.usesEvenOddFillRule = true;
             triangleColor.setFill()
@@ -124,7 +124,7 @@ class MealGraphDataLayer: GraphDataLayer {
     }
     
     // override to handle taps - return true if tap has been handled
-    override func tappedAtPoint(point: CGPoint) -> GraphDataType? {
+    override func tappedAtPoint(_ point: CGPoint) -> GraphDataType? {
         for dataPoint in dataArray {
             if let mealDataPoint = dataPoint as? MealGraphDataType {
                 if mealDataPoint.rectInGraph.contains(point) {

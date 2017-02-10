@@ -11,9 +11,9 @@ import CoreData
 import SwiftyJSON
 
 class BloodKetone: CommonData {
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> BloodKetone? {
-        if let entityDescription = NSEntityDescription.entityForName("BloodKetone", inManagedObjectContext: moc) {
-            let me = BloodKetone(entity: entityDescription, insertIntoManagedObjectContext: nil)
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> BloodKetone? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "BloodKetone", in: moc) {
+            let me = BloodKetone(entity: entityDescription, insertInto: nil)
             
             me.value = NutUtils.decimalFromJSON(json["value"].string)
             

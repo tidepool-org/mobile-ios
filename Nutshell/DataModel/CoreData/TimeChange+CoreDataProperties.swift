@@ -14,8 +14,8 @@ import CoreData
 
 extension TimeChange {
 
-    @NSManaged var changeFrom: NSDate?
-    @NSManaged var changeTo: NSDate?
+    @NSManaged var changeFrom: Date?
+    @NSManaged var changeTo: Date?
     @NSManaged var changeAgent: String?
     @NSManaged var changeTimezone: String?
     @NSManaged var changeReasons: String?

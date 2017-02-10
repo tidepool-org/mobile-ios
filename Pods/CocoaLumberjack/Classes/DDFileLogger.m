@@ -1,6 +1,6 @@
 // Software License Agreement (BSD License)
 //
-// Copyright (c) 2010-2015, Deusty, LLC
+// Copyright (c) 2010-2016, Deusty, LLC
 // All rights reserved.
 //
 // Redistribution and use of this software in source and binary forms,
@@ -907,7 +907,7 @@ unsigned long long const kDDDefaultLogFilesDiskQuota   = 20 * 1024 * 1024; // 20
             // If previous log was created when app wasn't running in background, but now it is - we archive it and create
             // a new one.
             //
-            // If user has owerwritten to NSFileProtectionNone there is no neeed to create a new one.
+            // If user has overwritten to NSFileProtectionNone there is no neeed to create a new one.
 
             if (!_doNotReuseLogFiles && doesAppRunInBackground()) {
                 NSString *key = mostRecentLogFileInfo.fileAttributes[NSFileProtectionKey];

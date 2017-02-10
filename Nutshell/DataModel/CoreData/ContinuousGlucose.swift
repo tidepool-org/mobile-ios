@@ -12,9 +12,9 @@ import SwiftyJSON
 
 class ContinuousGlucose: CommonData {
 
-    override class func fromJSON(json: JSON, moc: NSManagedObjectContext) -> ContinuousGlucose? {
-        if let entityDescription = NSEntityDescription.entityForName("ContinuousGlucose", inManagedObjectContext: moc) {
-            let me = ContinuousGlucose(entity: entityDescription, insertIntoManagedObjectContext: nil) 
+    override class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> ContinuousGlucose? {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "ContinuousGlucose", in: moc) {
+            let me = ContinuousGlucose(entity: entityDescription, insertInto: nil) 
             
             if let value = json["value"].number {
                 me.value = value

@@ -15,17 +15,17 @@
 
 import Foundation
 
-extension NSDate {
-    func differenceInDays(date: NSDate) -> Int {
-        let calendar: NSCalendar = NSCalendar.currentCalendar()
-        let components = calendar.components(.Day, fromDate: calendar.startOfDayForDate(self), toDate: calendar.startOfDayForDate(date), options: [])
-        return components.day
+extension Date {
+    func differenceInDays(_ date: Date) -> Int {
+        let calendar: Calendar = Calendar.current
+        let components = (calendar as NSCalendar).components(.day, from: calendar.startOfDay(for: self), to: calendar.startOfDay(for: date), options: [])
+        return components.day!
     }
     
-    func timeAgoInWords(date: NSDate) -> String {
+    func timeAgoInWords(_ date: Date) -> String {
         // TODO: Localize these strings
         
-        let timeAgoInSeconds = round(abs(date.timeIntervalSinceDate(self)))
+        let timeAgoInSeconds = round(abs(date.timeIntervalSince(self)))
         
         switch timeAgoInSeconds {
         case 0...59:
