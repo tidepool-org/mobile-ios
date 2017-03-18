@@ -6,6 +6,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -32,17 +33,33 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yu7-Gk-FTH" userLabel="eventListSceneContainer" customClass="UIControl">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9sr-8X-2eF" userLabel="dataVizView">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="0.0"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="95N-hk-m3T" userLabel="graphLayerContainer">
+                                                <rect key="frame" x="0.0" y="-301.5" width="375" height="301.5"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="95N-hk-m3T" secondAttribute="trailing" id="OuY-eK-LTq"/>
+                                            <constraint firstAttribute="height" id="XZF-yU-3qR"/>
+                                            <constraint firstAttribute="bottom" secondItem="95N-hk-m3T" secondAttribute="bottom" id="cK0-Jf-RKn"/>
+                                            <constraint firstItem="95N-hk-m3T" firstAttribute="leading" secondItem="9sr-8X-2eF" secondAttribute="leading" id="eV2-3b-N7b"/>
+                                        </constraints>
+                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OYl-Ze-wEA" userLabel="searchView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="0.0"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="separatorLine" translatesAutoresizingMaskIntoConstraints="NO" id="lnt-C7-SSb" userLabel="separatorImageView">
-                                                <rect key="frame" x="0.0" y="49" width="375" height="1"/>
+                                                <rect key="frame" x="0.0" y="-1" width="375" height="1"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="np9-kn-ahP"/>
                                                 </constraints>
                                             </imageView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h03-Pt-g4w" userLabel="searchButton">
-                                                <rect key="frame" x="14" y="15" width="22" height="21"/>
+                                                <rect key="frame" x="14" y="-10" width="22" height="21"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="21" id="GlZ-We-qKh"/>
                                                     <constraint firstAttribute="width" constant="21.5" id="waf-aa-luR"/>
@@ -50,7 +67,7 @@
                                                 <state key="normal" image="searchIcon"/>
                                             </button>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="V7b-Gr-XmB" userLabel="searchTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="50" y="0.0" width="317" height="50"/>
+                                                <rect key="frame" x="50" y="0.0" width="317" height="0.0"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                 <userDefinedRuntimeAttributes>
@@ -62,7 +79,7 @@
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QuJ-Pq-qUA" userLabel="searchPlaceholder" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="50" y="0.0" width="53.5" height="50"/>
+                                                <rect key="frame" x="50" y="0.0" width="53.5" height="0.0"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -82,7 +99,7 @@
                                             <constraint firstItem="V7b-Gr-XmB" firstAttribute="leading" secondItem="h03-Pt-g4w" secondAttribute="trailing" constant="14" id="KEs-tg-OCn"/>
                                             <constraint firstAttribute="trailing" secondItem="V7b-Gr-XmB" secondAttribute="trailing" constant="8" id="M7D-dt-U6W"/>
                                             <constraint firstAttribute="trailing" secondItem="lnt-C7-SSb" secondAttribute="trailing" id="MC8-HP-ul7"/>
-                                            <constraint firstAttribute="height" constant="50" id="RvB-Nw-1Li"/>
+                                            <constraint firstAttribute="height" id="RvB-Nw-1Li"/>
                                             <constraint firstItem="h03-Pt-g4w" firstAttribute="centerY" secondItem="OYl-Ze-wEA" secondAttribute="centerY" id="Yq7-lL-0uS"/>
                                             <constraint firstItem="QuJ-Pq-qUA" firstAttribute="centerY" secondItem="OYl-Ze-wEA" secondAttribute="centerY" id="c1q-51-ORx"/>
                                             <constraint firstItem="lnt-C7-SSb" firstAttribute="leading" secondItem="OYl-Ze-wEA" secondAttribute="leading" id="zo3-Si-1BL"/>
@@ -92,7 +109,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="102" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TkA-IK-Jxk" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="375" height="553"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                                         <color key="backgroundColor" red="0.94901960784313721" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="eventListCell" rowHeight="70" id="OeA-ji-N23" userLabel="eventListCell" customClass="EventListTableViewCell" customModule="Nutshell" customModuleProvider="target">
@@ -334,16 +351,24 @@
                                 <constraints>
                                     <constraint firstItem="p1Z-R3-s10" firstAttribute="leading" secondItem="Yu7-Gk-FTH" secondAttribute="leading" id="6Xt-Mo-r1i"/>
                                     <constraint firstAttribute="bottom" secondItem="p1Z-R3-s10" secondAttribute="bottom" id="88L-ov-nwA"/>
+                                    <constraint firstAttribute="trailing" secondItem="9sr-8X-2eF" secondAttribute="trailing" id="8dn-i8-KRL"/>
                                     <constraint firstAttribute="bottom" secondItem="TkA-IK-Jxk" secondAttribute="bottom" id="EL9-mz-a35"/>
+                                    <constraint firstItem="9sr-8X-2eF" firstAttribute="leading" secondItem="Yu7-Gk-FTH" secondAttribute="leading" id="FUF-wa-JBL"/>
                                     <constraint firstItem="p1Z-R3-s10" firstAttribute="top" secondItem="Yu7-Gk-FTH" secondAttribute="top" id="I0e-Zd-0ve"/>
                                     <constraint firstAttribute="trailing" secondItem="p1Z-R3-s10" secondAttribute="trailing" id="IBo-Xv-iRX"/>
                                     <constraint firstItem="OYl-Ze-wEA" firstAttribute="leading" secondItem="Yu7-Gk-FTH" secondAttribute="leading" id="Lbb-kv-b5Y"/>
-                                    <constraint firstItem="OYl-Ze-wEA" firstAttribute="top" secondItem="Yu7-Gk-FTH" secondAttribute="top" id="QtE-Dn-WFe"/>
-                                    <constraint firstItem="TkA-IK-Jxk" firstAttribute="top" secondItem="OYl-Ze-wEA" secondAttribute="bottom" id="Rj7-ST-2x1"/>
+                                    <constraint firstItem="95N-hk-m3T" firstAttribute="height" secondItem="Yu7-Gk-FTH" secondAttribute="height" multiplier="0.5" id="TfP-2O-UH9"/>
+                                    <constraint firstItem="TkA-IK-Jxk" firstAttribute="top" secondItem="9sr-8X-2eF" secondAttribute="bottom" id="Tse-Ml-Sf4"/>
+                                    <constraint firstItem="9sr-8X-2eF" firstAttribute="top" secondItem="Yu7-Gk-FTH" secondAttribute="top" id="oJQ-oL-ZRx"/>
                                     <constraint firstItem="TkA-IK-Jxk" firstAttribute="leading" secondItem="Yu7-Gk-FTH" secondAttribute="leading" id="wtP-um-zr7"/>
                                     <constraint firstAttribute="trailing" secondItem="TkA-IK-Jxk" secondAttribute="trailing" id="zaL-Qk-xXR"/>
                                     <constraint firstAttribute="trailing" secondItem="OYl-Ze-wEA" secondAttribute="trailing" id="zk3-Sh-x4a"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="subviews">
+                                        <exclude reference="OYl-Ze-wEA"/>
+                                    </mask>
+                                </variation>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -376,6 +401,9 @@
                     </navigationItem>
                     <connections>
                         <outlet property="coverView" destination="p1Z-R3-s10" id="x9s-ca-Xdd"/>
+                        <outlet property="dataVizView" destination="9sr-8X-2eF" id="qmQ-eH-sTu"/>
+                        <outlet property="eventListSceneContainer" destination="Yu7-Gk-FTH" id="8kb-NH-Nyl"/>
+                        <outlet property="graphLayerContainer" destination="95N-hk-m3T" id="LCi-lv-uvI"/>
                         <outlet property="menuButton" destination="k2Y-dm-3tk" id="Mdl-ih-WZN"/>
                         <outlet property="searchPlaceholderLabel" destination="QuJ-Pq-qUA" id="zbU-o8-EJ4"/>
                         <outlet property="searchTextField" destination="V7b-Gr-XmB" id="Dzu-RD-bs4"/>

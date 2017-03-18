@@ -16,8 +16,12 @@
 import UIKit
 import CoreData
 
-class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
+class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphContainerViewDelegate {
 
+    
+    @IBOutlet weak var eventListSceneContainer: UIControl!
+    @IBOutlet weak var dataVizView: UIView!
+    
     @IBOutlet weak var menuButton: UIBarButtonItem!
     @IBOutlet weak var searchTextField: NutshellUITextField!
     @IBOutlet weak var searchPlaceholderLabel: NutshellUILabel!
@@ -28,6 +32,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
     fileprivate var filteredNutEvents = [(String, NutEvent)]()
     fileprivate var filterString = ""
     
+    // support for displaying graph around current selection
+    fileprivate var selectedIndexPath: IndexPath? = nil
+    fileprivate var selectedEvent: NutEvent?
+    @IBOutlet weak var graphLayerContainer: UIView!
+    fileprivate var graphContainerView: TidepoolGraphView?
+    fileprivate var eventTime = Date()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,6 +55,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.databaseChanged(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: moc)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChange), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
+        configureForReachability()
 
         if let sideMenu = self.sideMenuController()?.sideMenu {
             sideMenu.delegate = self
@@ -112,6 +126,16 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
             sideMenu.allowRightSwipe = false
             sideMenu.allowPanGesture = false
         }
+    }
+
+    func reachabilityChanged(_ note: Notification) {
+        configureForReachability()
+    }
+
+    fileprivate func configureForReachability() {
+        let connected = APIConnector.connector().isConnectedToNetwork()
+        //missingDataAdvisoryTitle.text = connected ? "There is no data in here!" : "You are currently offline!"
+        NSLog("TODO: figure out connectivity story! Connected: \(connected)")
     }
 
     @IBAction func toggleSideMenu(_ sender: AnyObject) {
@@ -307,7 +331,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         }
     }
     
+    //
     // MARK: - Search
+    //
     
     @IBAction func dismissKeyboard(_ sender: AnyObject) {
         searchTextField.resignFirstResponder()
@@ -370,7 +396,172 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate {
         }
         tableView.reloadData()
     }
+    
+    //
+    // MARK: - Data vizualization view
+    //
+    
+    
+    fileprivate func selectEvent(_ event: NutEvent?) {
+        
+        // if we are deselecting, just close up data viz
+        if event == nil {
+            self.selectedEvent = nil
+            showHideDataVizView(show: false)
+            configureGraphContainer()
+            return
+        }
+        
+        // if we have been showing something, close it up
+        if let currentEvent = self.selectedEvent {
+            if currentEvent.nutEventIdString() != event!.nutEventIdString() {
+                //showHideDataVizView(show: false)
+                configureGraphContainer()
+            } else {
+                // same event, not sure why we'd be called...
+                return
+            }
+        }
+    
+        // start looking for data for this item...
+        self.selectedEvent = event
+        configureGraphContainer()
+    }
+    
+    /// Works with graphDataChanged to ensure graph is up-to-date after notification of database changes whether this VC is in the foreground or background.
+    fileprivate func checkUpdateGraph() {
+        if graphNeedsUpdate {
+            graphNeedsUpdate = false
+            if let graphContainerView = graphContainerView {
+                graphContainerView.loadGraphData()
+            }
+        }
+    }
+    
+    fileprivate var graphNeedsUpdate: Bool  = false
+    func graphDataChanged(_ note: Notification) {
+        graphNeedsUpdate = true
+        if viewIsForeground {
+            //NSLog("EventListVC: graphDataChanged, reloading")
+            checkUpdateGraph()
+        } else {
+            NSLog("EventListVC: graphDataChanged, in background")
+        }
+    }
+    
+    /// Reloads the graph - this should be called after the header has been laid out and the graph section size has been figured. Pass in edgeOffset to place the nut event other than in the center.
+    fileprivate func configureGraphContainer(_ edgeOffset: CGFloat = 0.0) {
+        //NSLog("EventListVC: configureGraphContainer")
+        if (graphContainerView != nil) {
+            graphContainerView?.removeFromSuperview();
+            graphContainerView = nil;
+        }
+        if self.selectedEvent == nil {
+            return
+        }
+        if let eventItem = self.selectedEvent?.itemArray[0] {
+            graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, eventItem: eventItem)
+            if let graphContainerView = graphContainerView {
+                graphContainerView.configureGraph(edgeOffset)
+                graphLayerContainer.addSubview(graphContainerView)
+                graphContainerView.loadGraphData()
+            }
+        }
+    }
+    
+    fileprivate var viewAdjustAnimationTime: Float = 0.25
+    fileprivate func showHideDataVizView(show: Bool) {
+        
+        for c in dataVizView.constraints {
+            if c.firstAttribute == NSLayoutAttribute.height {
+                c.constant = show ? graphLayerContainer.frame.size.height : 0.0
+                break
+            }
+        }
+        // graph view doesn't have a contraint, so we need to update its origin directly (could also manually add a constraint)
+        if let graphView = graphContainerView {
+            var rect = graphView.frame
+            rect.origin.y = 0.0
+            graphView.frame = rect
+        }
+        UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
+            self.graphContainerView?.layoutIfNeeded()
+            self.tableView?.layoutIfNeeded()
+            self.dataVizView.layoutIfNeeded()
+        }, completion: { (Bool) -> (Void) in
+            self.tableView.scrollToNearestSelectedRow(at: .top, animated: true)
+        })
+    }
+    
+    //
+    // MARK: - GraphContainerViewDelegate
+    //
+    
+    func containerCellUpdated() {
+        let graphHasData = graphContainerView!.dataFound()
+        NSLog("\(#function) - graphHasData: \(graphHasData)")
+        if !graphHasData {
+            showHideDataVizView(show: false)
+        } else {
+            showHideDataVizView(show: true)
+        }
+    }
+
+    func pinchZoomEnded() {
+        //adjustZoomButtons()
+        APIConnector.connector().trackMetric("Pinched to Zoom (Data Screen)")
+    }
+
+    fileprivate var currentCell: Int?
+    func willDisplayGraphCell(_ cell: Int) {
+        if let currentCell = currentCell {
+            if cell > currentCell {
+                APIConnector.connector().trackMetric("Swiped to Pan Left (Data Screen)")
+            } else if cell < currentCell {
+                APIConnector.connector().trackMetric("Swiped to Pan Right (Data Screen)")
+            }
+        }
+        currentCell = cell
+    }
+
+    func dataPointTapped(_ dataPoint: GraphDataType, tapLocationInView: CGPoint) {
+        var itemId: String?
+        if let mealDataPoint = dataPoint as? MealGraphDataType {
+            NSLog("tapped on meal!")
+            itemId = mealDataPoint.id
+        } else if let workoutDataPoint = dataPoint as? WorkoutGraphDataType {
+            NSLog("tapped on workout!")
+            itemId = workoutDataPoint.id
+        }
+        if let itemId = itemId {
+            //NSLog("EventDetailVC: dataPointTapped")
+            let nutEventItem = DatabaseUtils.getNutEventItemWithId(itemId)
+            if let nutEventItem = nutEventItem {
+                // if the user tapped on some other event, switch to viewing that one instead!
+                if nutEventItem.time != eventTime {
+                    // TODO: handle by selecting appropriate event in table?
+//                    switchedEvents = true
+//                    // conjure up a NutWorkout and NutEvent for this new item!
+//                    self.eventGroup = NutEvent(firstEvent: nutEventItem)
+//                    self.eventItem = self.eventGroup?.itemArray[0]
+                    // update view to show the new event, centered...
+                    // keep point that was tapped at the same offset in the view in the new graph by setting the graph center point to be at the same x offset in the view...
+                    configureGraphContainer(tapLocationInView.x)
+                    // then animate to center...
+                    if let graphContainerView = graphContainerView {
+                        graphContainerView.centerGraphOnEvent(animated: true)
+                    }
+                }
+            } else {
+                NSLog("Couldn't find nut event item with id \(itemId)")
+            }
+        }
+    }
+
+    func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {}
+
 }
+
 
 //
 // MARK: - Table view delegate
@@ -390,10 +581,27 @@ extension EventListViewController: UITableViewDelegate {
         
         let tuple = self.filteredNutEvents[indexPath.item]
         let nutEvent = tuple.1
-        let cell = tableView.cellForRow(at: indexPath)
+        let cell = tableView.cellForRow(at: indexPath) as! EventListTableViewCell
+        
         if nutEvent.itemArray.count == 1 {
-            self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue, sender: cell)
+            //self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue, sender: cell)
+            // Rather than invoking a detail view controller, show/hide the graph for the current selection
+            if selectedIndexPath != nil && selectedIndexPath! == indexPath {
+                // already selected and shown, toggle off
+                self.selectEvent(nil)
+                self.selectedIndexPath = nil
+                cell.setSelected(false, animated: true)
+            } else {
+                self.selectEvent(nutEvent)
+                cell.setSelected(true, animated: true)
+                self.selectedIndexPath = indexPath
+            }
+            
         } else if nutEvent.itemArray.count > 1 {
+            if selectedIndexPath != nil {
+                self.selectEvent(nil)
+                self.selectedIndexPath = nil
+            }
             self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventGroupSegue, sender: cell)
         }
     }
@@ -431,6 +639,11 @@ extension EventListViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! EventListTableViewCell
         if let nutEvent = nutEvent {
             cell.configureCell(nutEvent)
+            if let selectedEvent = self.selectedEvent {
+                if selectedEvent.nutEventIdString() == nutEvent.nutEventIdString() {
+                    cell.setSelected(true, animated: false)
+                }
+            }
         }
         return cell
     }

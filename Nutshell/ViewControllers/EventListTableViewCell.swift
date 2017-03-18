@@ -48,21 +48,38 @@ class EventListTableViewCell: BaseUITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        if selected {
+            NSLog("select \(eventGroup?.title)!")
+        } else {
+            NSLog("deselect \(eventGroup?.title)")
+        }
+        
         // Configure the view for the selected state
+        titleLabel.isHighlighted = selected
+        locationLabel?.isHighlighted = selected
+        repeatCountLabel.isHighlighted = selected
+        nutCrackedStar.isHighlighted = selected
+        placeIconView?.isHighlighted = selected
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        super.setHighlighted(highlighted, animated:animated)
+        let highLitOrSelected = self.isSelected ? true : highlighted
+        
+        super.setHighlighted(highLitOrSelected, animated:animated)
+        if highLitOrSelected {
+            NSLog("highlighted \(eventGroup?.title)!")
+        } else {
+            NSLog("de-highlight \(eventGroup?.title)")
+        }
         
         // Configure the view for the highlighted state
-        titleLabel.isHighlighted = highlighted
-        locationLabel?.isHighlighted = highlighted
-        repeatCountLabel.isHighlighted = highlighted
-        nutCrackedStar.isHighlighted = highlighted
-        placeIconView?.isHighlighted = highlighted
+        titleLabel.isHighlighted = highLitOrSelected
+        locationLabel?.isHighlighted = highLitOrSelected
+        repeatCountLabel.isHighlighted = highLitOrSelected
+        nutCrackedStar.isHighlighted = highLitOrSelected
+        placeIconView?.isHighlighted = highLitOrSelected
     }
-
+    
     func configureCell(_ nutEvent: NutEvent) {
         titleLabel.text = nutEvent.title
         repeatCountLabel.text = "x " + String(nutEvent.itemArray.count)
