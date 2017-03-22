@@ -20,6 +20,14 @@ import SwiftyJSON
 import CoreData
 import CocoaLumberjack
 
+protocol NoteIOWatcher {
+    // Notify caller that a cell has been updated...
+    func loadingNotes(_ loading: Bool)
+    func endRefresh()
+    func addNotes(_ notes: [BlipNote])
+    func postComplete(_ note: BlipNote)
+}
+
 /// APIConnector is a singleton object with the main responsibility of communicating to the Tidepool service:
 /// - Given a username and password, login.
 /// - Can refresh connection.
@@ -384,9 +392,7 @@ class APIConnector {
 
     // MARK: - Internal methods
     
-    /**
-     * Sends a request to the specified endpoint
-    */
+    // Sends a request to the specified endpoint
     fileprivate func sendRequest(_ requestType: HTTPMethod? = .get,
         endpoint: (String),
         parameters: [String: AnyObject]? = nil,
@@ -417,6 +423,247 @@ class APIConnector {
         }
         return nil
     }
+    
+    //
+    // MARK: - Note fetching and uploading
+    //
+    // TODO: Taken from BlipNotes, should really use AlamoFire, etc.
+    
+//    func findProfile(_ otherUser: User, notesVC: NotesViewController?) {
+//        
+//        let urlExtension = "/metadata/" + otherUser.userid + "/profile"
+//        
+//        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
+//        
+//        let preRequest = { () -> Void in
+//            // nothing to prepare
+//        }
+//        
+//        let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
+//            if let httpResponse = response as? HTTPURLResponse {
+//                if (httpResponse.statusCode == 200) {
+//                    DDLogInfo("Profile found: \(otherUser.userid)")
+//                    
+//                    let userDict: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
+//                    
+//                    otherUser.processUserDict(userDict)
+//                    
+//                    if (notesVC != nil) {
+//                        self.groupsFetched += 1
+//                        
+//                        // Insert logic here for DSAs only
+//                        if (otherUser.patient != nil && (otherUser.patient?.aboutMe != nil || otherUser.patient?.birthday != nil || otherUser.patient?.diagnosisDate != nil)) {
+//                            notesVC!.groups.insert(otherUser, at: 0)
+//                        }
+//                        
+//                        if (self.groupsFetched == self.groupsToFetchFor) {
+//                            // Send notification to NotesVC to notify that groups are ready
+//                            let notification = Notification(name: Notification.Name(rawValue: "groupsReady"), object: nil)
+//                            NotificationCenter.default.post(notification)
+//                        }
+//                    }
+//                    
+//                    
+//                } else {
+//                    DDLogError("Did not find profile - invalid status code \(httpResponse.statusCode)")
+//                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
+//                }
+//            } else {
+//                DDLogError("Did not find profile - response could not be parsed")
+//                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
+//            }
+//        }
+//        
+//        request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+//    }
+//    
+    
+    
+//    func getAllViewableUsers(_ notesVC: NotesViewController) {
+//        
+//        let urlExtension = "/access/groups/" + user!.userid
+//        
+//        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
+//        
+//        let preRequest = { () -> Void in
+//            // Nothing to do
+//        }
+//        
+//        let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
+//            if let httpResponse = response as? HTTPURLResponse {
+//                if (httpResponse.statusCode == 200) {
+//                    DDLogInfo("Found viewable users for user: \(self.user?.userid)")
+//                    let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
+//                    
+//                    var i = 0
+//                    for key in jsonResult.keyEnumerator() {
+//                        _ = User(userid: key as! String, apiConnector: self, notesVC: notesVC)
+//                        i += 1
+//                    }
+//                    self.groupsToFetchFor = i
+//                } else {
+//                    DDLogError("Did not find viewable users - invalid status code \(httpResponse.statusCode)")
+//                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
+//                }
+//            } else {
+//                DDLogError("Did not find viewable users - response could not be parsed")
+//                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
+//            }
+//        }
+//        
+//        request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+//    }
+
+    func getNotesForUserInDateRange(_ fetchWatcher: NoteIOWatcher, userid: String, start: Date, end: Date) {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        let urlExtension = "/message/notes/" + userid + "?starttime=" + dateFormatter.string(from: start) + "&endtime="  + dateFormatter.string(from: end)
+        
+        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
+        
+        let preRequest = { () -> Void in
+            fetchWatcher.loadingNotes(true)
+        }
+        
+        let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
+            
+            // End refreshing for refresh control
+            fetchWatcher.endRefresh()
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if (httpResponse.statusCode == 200) {
+                    DDLogInfo("Got notes for user (\(userid)) in given date range: \(dateFormatter.string(from: start)) to \(dateFormatter.string(from: end))")
+                    
+                    var notes: [BlipNote] = []
+                    
+                    let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
+                    
+                    let messages: NSArray = jsonResult.value(forKey: "messages") as! NSArray
+                    
+                    let dateFormatter = DateFormatter()
+                    
+                    for message in messages {
+                        let id = (message as AnyObject).value(forKey: "id") as! String
+                        let otheruserid = (message as AnyObject).value(forKey: "userid") as! String
+                        let groupid = (message as AnyObject).value(forKey: "groupid") as! String
+                        let timestamp = dateFormatter.dateFromISOString((message as AnyObject).value(forKey: "timestamp") as! String)
+                        var createdtime: Date
+                        if let created = (message as AnyObject).value(forKey: "createdtime") as? String {
+                            createdtime = dateFormatter.dateFromISOString(created)
+                        } else {
+                            createdtime = timestamp
+                        }
+                        let messagetext = (message as AnyObject).value(forKey: "messagetext") as! String
+                        
+                        let otheruser = BlipUser(userid: otheruserid)
+                        let userDict = (message as AnyObject).value(forKey: "user") as! NSDictionary
+                        otheruser.processUserDict(userDict)
+                        
+                        let note = BlipNote(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
+                        notes.append(note)
+                    }
+                    
+                    fetchWatcher.addNotes(notes)
+                } else if (httpResponse.statusCode == 404) {
+                    DDLogError("No notes retrieved, status code: \(httpResponse.statusCode), userid: \(userid)")
+                } else {
+                    DDLogError("No notes retrieved - invalid status code \(httpResponse.statusCode)")
+                    self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
+                }
+                
+                fetchWatcher.loadingNotes(false)
+                let notification = Notification(name: Notification.Name(rawValue: "doneFetching"), object: nil)
+                NotificationCenter.default.post(notification)
+            } else {
+                DDLogError("No notes retrieved - could not parse response")
+                self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
+            }
+        }
+        
+        blipRequest("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+    }
+    
+    func doPostWithNote(_ postWatcher: NoteIOWatcher, note: BlipNote) {
+        
+        let urlExtension = "/message/send/" + note.groupid
+        
+        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
+        
+        let jsonObject = note.dictionaryFromNote()
+        let body: Data?
+        do {
+            body = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
+        } catch {
+            body = nil
+        }
+        
+        let preRequest = { () -> Void in
+            // nothing to do in prerequest
+        }
+        
+        let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
+            if let httpResponse = response as? HTTPURLResponse {
+                
+                if (httpResponse.statusCode == 201) {
+                    DDLogInfo("Sent note for groupid: \(note.groupid)")
+                    
+                    let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
+                    
+                    note.id = jsonResult.value(forKey: "id") as! String
+                    postWatcher.postComplete(note)
+                    
+//                    notesVC.notes.insert(note, at: 0)
+//                    // filter the notes, sort the notes, reload notes table
+//                    notesVC.filterNotes()
+//                    notesVC.notesTable.reloadData()
+                    
+                } else {
+                    DDLogError("Did not send note for groupid \(note.groupid) - invalid status code \(httpResponse.statusCode)")
+                    self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
+                }
+            } else {
+                DDLogError("Did not send note for groupid \(note.groupid) - could not parse response")
+                self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
+            }
+        }
+        
+        blipRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
+    }
+
+    let unknownError: String = "Unknown Error Occurred"
+    let unknownErrorMessage: String = "An unknown error occurred. We are working hard to resolve this issue."
+    fileprivate var isShowingAlert = false
+    
+    func alertWithOkayButton(_ title: String, message: String) {
+        DDLogInfo("title: \(title), message: \(message)")
+        if defaultDebugLevel != DDLogLevel.off {
+            let callStackSymbols = Thread.callStackSymbols
+            DDLogInfo("callStackSymbols: \(callStackSymbols)")
+        }
+        
+        if (!isShowingAlert) {
+            isShowingAlert = true
+            
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { Void in
+                self.isShowingAlert = false
+            }))
+            if var topController = UIApplication.shared.keyWindow?.rootViewController {
+                while let presentedViewController = topController.presentedViewController {
+                    topController = presentedViewController
+                }
+                
+                topController.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+
+    
+    //
+    // MARK: - Blood glucose sample upload
+    //
     
     func doUpload(_ body: Data, completion: @escaping (_ error: NSError?, _ duplicateSampleCount: Int) -> (Void)) -> (Void) {
         DDLogVerbose("trace")
@@ -471,11 +718,11 @@ class APIConnector {
             completion(error, duplicateSampleCount)
         }
 
-        uploadRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, subdomainRootOverride: "uploads", completion: handleRequestCompletion as! (URLResponse?, Data?, NSError?) -> Void)
+        blipRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, subdomainRootOverride: "uploads", completion: handleRequestCompletion as! (URLResponse?, Data?, NSError?) -> Void)
     }
 
 
-    func uploadRequest(_ method: String, urlExtension: String, headerDict: [String: String], body: Data?, preRequest: () -> Void, subdomainRootOverride: String = "api", completion: @escaping (_ response: URLResponse?, _ data: Data?, _ error: NSError?) -> Void) {
+    func blipRequest(_ method: String, urlExtension: String, headerDict: [String: String], body: Data?, preRequest: () -> Void, subdomainRootOverride: String = "api", completion: @escaping (_ response: URLResponse?, _ data: Data?, _ error: NSError?) -> Void) {
         
         if (self.isConnectedToNetwork()) {
             preRequest()

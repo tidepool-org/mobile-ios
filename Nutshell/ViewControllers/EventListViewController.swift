@@ -15,8 +15,9 @@
 
 import UIKit
 import CoreData
+import CocoaLumberjack
 
-class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphContainerViewDelegate {
+class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphContainerViewDelegate, NoteIOWatcher {
 
     
     @IBOutlet weak var eventListSceneContainer: UIControl!
@@ -34,7 +35,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
     // support for displaying graph around current selection
     fileprivate var selectedIndexPath: IndexPath? = nil
-    fileprivate var selectedEvent: NutEvent?
+    fileprivate var selectedNote: BlipNote?
     @IBOutlet weak var graphLayerContainer: UIView!
     fileprivate var graphContainerView: TidepoolGraphView?
     fileprivate var eventTime = Date()
@@ -66,6 +67,62 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             let revealWidth = min(ceil((240.0/320.0) * self.view.bounds.width), 281.0)
             sideMenu.menuWidth = revealWidth
             sideMenu.bouncingEnabled = false
+        }
+        
+    }
+
+    // All notes
+    var notes: [BlipNote] = []
+    // Only filtered notes
+    var filteredNotes: [BlipNote] = []
+    
+    // Last date fetched to & beginning -- starts at current date
+    //let fetchPeriodInMonths: Int = -3
+    let fetchPeriodInMonths: Int = -24
+    var lastDateFetchTo: Date = Date()
+    var loadingNotes = false
+    
+    //
+    // MARK: - NoteIOWatcher Delegate
+    //
+    
+    func loadingNotes(_ loading: Bool) {
+        NSLog("NoteIOWatcher.loadingNotes: \(loading)")
+        loadingNotes = loading
+    }
+    
+    func endRefresh() {
+        NSLog("NoteIOWatcher.endRefresh")
+    }
+    
+    func addNotes(_ notes: [BlipNote]) {
+        NSLog("NoteIOWatcher.addNotes")
+        self.notes = self.notes + notes
+        // TODO: re-filter and update table...
+        self.filteredNotes = self.notes
+        self.tableView.reloadData()
+    }
+    
+    func postComplete(_ note: BlipNote) {
+        NSLog("NoteIOWatcher.postComplete")
+    }
+
+    func loadNotes() {
+        DDLogVerbose("trace")
+        
+        if (!loadingNotes) {
+            // Shift back three months for fetching
+            var dateShift = DateComponents()
+            dateShift.month = fetchPeriodInMonths
+            let calendar = Calendar.current
+            let startDate = (calendar as NSCalendar).date(byAdding: dateShift, to: lastDateFetchTo, options: [])!
+            
+            //for group in groups {
+            // TODO: change to group.userId, and fetch for all groups...
+                APIConnector.connector().getNotesForUserInDateRange(self, userid: NutDataController.controller().currentUserId!, start: startDate, end: lastDateFetchTo)
+            //}
+            
+            self.lastDateFetchTo = startDate
         }
     }
 
@@ -246,90 +303,93 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
     func getNutEvents() {
 
-        var nutEvents = [String: NutEvent]()
+        // TODO: Should notes be loaded here? Or should they be available elsewhere, and perhaps queried here?
+        loadNotes()
 
-        func addNewEvent(_ newEvent: EventItem) {
-            /// TODO: TEMP UPGRADE CODE, REMOVE BEFORE SHIPPING!
-            if newEvent.userid == nil {
-                newEvent.userid = NutDataController.controller().currentUserId
-                if let moc = newEvent.managedObjectContext {
-                    NSLog("NOTE: Updated nil userid to \(newEvent.userid)")
-                    moc.refresh(newEvent, mergeChanges: true)
-                    _ = DatabaseUtils.databaseSave(moc)
-                }
-            }
-            /// TODO: TEMP UPGRADE CODE, REMOVE BEFORE SHIPPING!
-
-            let newEventId = newEvent.nutEventIdString()
-            if let existingNutEvent = nutEvents[newEventId] {
-                _ = existingNutEvent.addEvent(newEvent)
-                //NSLog("appending new event: \(newEvent.notes)")
-                //existingNutEvent.printNutEvent()
-            } else {
-                nutEvents[newEventId] = NutEvent(firstEvent: newEvent)
-            }
-        }
-
-        sortedNutEvents = [(String, NutEvent)]()
-        filteredNutEvents = [(String, NutEvent)]()
-        filterString = ""
-        
-        // Get all Food and Activity events, chronologically; this will result in an unsorted dictionary of NutEvents.
-        do {
-            let nutEvents = try DatabaseUtils.getAllNutEvents()
-            for event in nutEvents {
-                //if let event = event as? Workout {
-                //  NSLog("Event type: \(event.type), id: \(event.id), time: \(event.time), created time: \(event.createdTime!.timeIntervalSinceDate(event.time!)), duration: \(event.duration), title: \(event.title), notes: \(event.notes), userid: \(event.userid), timezone offset:\(event.timezoneOffset)")
-                //}
-                addNewEvent(event)
-            }
-        } catch let error as NSError {
-            NSLog("Error: \(error)")
-        }
-        
-        sortedNutEvents = nutEvents.sorted() { $0.1.mostRecent.compare($1.1.mostRecent as Date) == ComparisonResult.orderedDescending }
-        updateFilteredAndReload()
-        // One time orphan check after application load
-        EventListViewController.checkAndDeleteOrphans(sortedNutEvents)
+//        var nutEvents = [String: NutEvent]()
+//
+//        func addNewEvent(_ newEvent: EventItem) {
+//            /// TODO: TEMP UPGRADE CODE, REMOVE BEFORE SHIPPING!
+//            if newEvent.userid == nil {
+//                newEvent.userid = NutDataController.controller().currentUserId
+//                if let moc = newEvent.managedObjectContext {
+//                    NSLog("NOTE: Updated nil userid to \(newEvent.userid)")
+//                    moc.refresh(newEvent, mergeChanges: true)
+//                    _ = DatabaseUtils.databaseSave(moc)
+//                }
+//            }
+//            /// TODO: TEMP UPGRADE CODE, REMOVE BEFORE SHIPPING!
+//
+//            let newEventId = newEvent.nutEventIdString()
+//            if let existingNutEvent = nutEvents[newEventId] {
+//                _ = existingNutEvent.addEvent(newEvent)
+//                //NSLog("appending new event: \(newEvent.notes)")
+//                //existingNutEvent.printNutEvent()
+//            } else {
+//                nutEvents[newEventId] = NutEvent(firstEvent: newEvent)
+//            }
+//        }
+//
+//        sortedNutEvents = [(String, NutEvent)]()
+//        filteredNutEvents = [(String, NutEvent)]()
+//        filterString = ""
+//        
+//        // Get all Food and Activity events, chronologically; this will result in an unsorted dictionary of NutEvents.
+//        do {
+//            let nutEvents = try DatabaseUtils.getAllNutEvents()
+//            for event in nutEvents {
+//                //if let event = event as? Workout {
+//                //  NSLog("Event type: \(event.type), id: \(event.id), time: \(event.time), created time: \(event.createdTime!.timeIntervalSinceDate(event.time!)), duration: \(event.duration), title: \(event.title), notes: \(event.notes), userid: \(event.userid), timezone offset:\(event.timezoneOffset)")
+//                //}
+//                addNewEvent(event)
+//            }
+//        } catch let error as NSError {
+//            NSLog("Error: \(error)")
+//        }
+//        
+//        sortedNutEvents = nutEvents.sorted() { $0.1.mostRecent.compare($1.1.mostRecent as Date) == ComparisonResult.orderedDescending }
+//        updateFilteredAndReload()
+//        // One time orphan check after application load
+//        EventListViewController.checkAndDeleteOrphans(sortedNutEvents)
     }
     
-    static var _checkedForOrphanPhotos = false
-    class func checkAndDeleteOrphans(_ allNutEvents: [(String, NutEvent)]) {
-        if _checkedForOrphanPhotos {
-            return
-        }
-        _checkedForOrphanPhotos = true
-        if let photoDirPath = NutUtils.photosDirectoryPath() {
-            var allLocalPhotos = [String: Bool]()
-            let fm = FileManager.default
-            do {
-                let dirContents = try fm.contentsOfDirectory(atPath: photoDirPath)
-                //NSLog("Photos dir: \(dirContents)")
-                if !dirContents.isEmpty {
-                    for file in dirContents {
-                        allLocalPhotos[file] = false
-                    }
-                    for (_, nutEvent) in allNutEvents {
-                        for event in nutEvent.itemArray {
-                            for url in event.photoUrlArray() {
-                                if url.hasPrefix("file_") {
-                                    //NSLog("\(NutUtils.photoInfo(url))")
-                                    allLocalPhotos[url] = true
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch let error as NSError {
-                NSLog("Error accessing photos at \(photoDirPath), error: \(error)")
-            }
-            let orphans = allLocalPhotos.filter() { $1 == false }
-            for (url, _) in orphans {
-                NSLog("Deleting orphaned photo: \(url)")
-                NutUtils.deleteLocalPhoto(url)
-            }
-        }
-    }
+//    static var _checkedForOrphanPhotos = false
+//    class func checkAndDeleteOrphans(_ allNutEvents: [(String, NutEvent)]) {
+//        if _checkedForOrphanPhotos {
+//            return
+//        }
+//        _checkedForOrphanPhotos = true
+//        if let photoDirPath = NutUtils.photosDirectoryPath() {
+//            var allLocalPhotos = [String: Bool]()
+//            let fm = FileManager.default
+//            do {
+//                let dirContents = try fm.contentsOfDirectory(atPath: photoDirPath)
+//                //NSLog("Photos dir: \(dirContents)")
+//                if !dirContents.isEmpty {
+//                    for file in dirContents {
+//                        allLocalPhotos[file] = false
+//                    }
+//                    for (_, nutEvent) in allNutEvents {
+//                        for event in nutEvent.itemArray {
+//                            for url in event.photoUrlArray() {
+//                                if url.hasPrefix("file_") {
+//                                    //NSLog("\(NutUtils.photoInfo(url))")
+//                                    allLocalPhotos[url] = true
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            } catch let error as NSError {
+//                NSLog("Error accessing photos at \(photoDirPath), error: \(error)")
+//            }
+//            let orphans = allLocalPhotos.filter() { $1 == false }
+//            for (url, _) in orphans {
+//                NSLog("Deleting orphaned photo: \(url)")
+//                NutUtils.deleteLocalPhoto(url)
+//            }
+//        }
+//    }
     
     //
     // MARK: - Search
@@ -402,29 +462,29 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     //
     
     
-    fileprivate func selectEvent(_ event: NutEvent?) {
+    fileprivate func selectNote(_ note: BlipNote?) {
         
         // if we are deselecting, just close up data viz
-        if event == nil {
-            self.selectedEvent = nil
+        if note == nil {
+            self.selectedNote = nil
             showHideDataVizView(show: false)
             configureGraphContainer()
             return
         }
         
         // if we have been showing something, close it up
-        if let currentEvent = self.selectedEvent {
-            if currentEvent.nutEventIdString() != event!.nutEventIdString() {
+        if let currentNote = self.selectedNote {
+            if currentNote.id != note!.id {
                 //showHideDataVizView(show: false)
                 configureGraphContainer()
             } else {
-                // same event, not sure why we'd be called...
+                // same note, not sure why we'd be called...
                 return
             }
         }
     
         // start looking for data for this item...
-        self.selectedEvent = event
+        self.selectedNote = note
         configureGraphContainer()
     }
     
@@ -456,11 +516,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             graphContainerView?.removeFromSuperview();
             graphContainerView = nil;
         }
-        if self.selectedEvent == nil {
-            return
-        }
-        if let eventItem = self.selectedEvent?.itemArray[0] {
-            graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, eventItem: eventItem)
+        if let note = self.selectedNote {
+            // TODO: using a faked up timezone offset for now...
+            graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: 0)
             if let graphContainerView = graphContainerView {
                 graphContainerView.configureGraph(edgeOffset)
                 graphLayerContainer.addSubview(graphContainerView)
@@ -579,30 +637,30 @@ extension EventListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let tuple = self.filteredNutEvents[indexPath.item]
-        let nutEvent = tuple.1
-        let cell = tableView.cellForRow(at: indexPath) as! EventListTableViewCell
+        let note = filteredNotes[indexPath.item]
+        let cell = tableView.cellForRow(at: indexPath) as! NoteListTableViewCell
+        let selectOrEdit = true
         
-        if nutEvent.itemArray.count == 1 {
+        if selectOrEdit {
             //self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue, sender: cell)
             // Rather than invoking a detail view controller, show/hide the graph for the current selection
             if selectedIndexPath != nil && selectedIndexPath! == indexPath {
                 // already selected and shown, toggle off
-                self.selectEvent(nil)
+                self.selectNote(nil)
                 self.selectedIndexPath = nil
                 cell.setSelected(false, animated: true)
             } else {
-                self.selectEvent(nutEvent)
+                self.selectNote(note)
                 cell.setSelected(true, animated: true)
                 self.selectedIndexPath = indexPath
             }
             
-        } else if nutEvent.itemArray.count > 1 {
-            if selectedIndexPath != nil {
-                self.selectEvent(nil)
-                self.selectedIndexPath = nil
-            }
-            self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventGroupSegue, sender: cell)
+        } else {
+//            if selectedIndexPath != nil {
+//                self.selectEvent(nil)
+//                self.selectedIndexPath = nil
+//            }
+//            self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventGroupSegue, sender: cell)
         }
     }
 
@@ -619,28 +677,23 @@ extension EventListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredNutEvents.count
+        return filteredNotes.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Note: two different list cells are used depending upon whether a location will be shown or not. 
-        var cellId = EventViewStoryboard.TableViewCellIdentifiers.eventListCellNoLoc
-        var nutEvent: NutEvent?
-        if (indexPath.item < filteredNutEvents.count) {
-            let tuple = self.filteredNutEvents[indexPath.item]
-            nutEvent = tuple.1
-            
-            if !nutEvent!.location.isEmpty {
-                cellId = EventViewStoryboard.TableViewCellIdentifiers.eventListCellWithLoc
-            }
+        let cellId = EventViewStoryboard.TableViewCellIdentifiers.noteListCell
+        var note: BlipNote?
+        if (indexPath.item < filteredNotes.count) {
+            note = filteredNotes[indexPath.item]
         }
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! EventListTableViewCell
-        if let nutEvent = nutEvent {
-            cell.configureCell(nutEvent)
-            if let selectedEvent = self.selectedEvent {
-                if selectedEvent.nutEventIdString() == nutEvent.nutEventIdString() {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCell
+        if let note = note {
+            cell.configureCell(note)
+            if let selectedNote = self.selectedNote {
+                if selectedNote.id == note.id {
                     cell.setSelected(true, animated: false)
                 }
             }

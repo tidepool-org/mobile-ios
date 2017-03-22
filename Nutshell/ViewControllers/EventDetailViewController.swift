@@ -569,7 +569,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             graphContainerView?.removeFromSuperview();
             graphContainerView = nil;
         }
-        graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.bounds, delegate: self, eventItem: eventItem!)
+        graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.bounds, delegate: self, mainEventTime: eventItem!.time, tzOffsetSecs: eventItem!.tzOffsetSecs)
         if let graphContainerView = graphContainerView {
             graphContainerView.configureGraph(edgeOffset)
             graphLayerContainer.addSubview(graphContainerView)

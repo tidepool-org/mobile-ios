@@ -36,7 +36,9 @@ class LogFormatter: DDDispatchQueueLogFormatter {
         }
         
         if (useLog) {
-            formattedLog = "\(dateAndTime) \(logLevel)/[\(logMessage.fileName):\(logMessage.line) \(logMessage.function)]: \(logMessage.message)"
+            if let filename = logMessage.fileName, let function = logMessage.function, let message = logMessage.message {
+                formattedLog = "\(dateAndTime) \(logLevel)/[\(filename):\(logMessage.line) \(function)]: \(message)"
+            }
         }
         
         return formattedLog

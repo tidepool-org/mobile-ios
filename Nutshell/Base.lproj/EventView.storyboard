@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="MlM-Oh-SBV">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <array key="OpenSans-Bold.ttf">
             <string>OpenSans-Bold</string>
+        </array>
+        <array key="OpenSans-Regular.ttf">
+            <string>OpenSans</string>
         </array>
         <array key="OpenSans-Semibold.ttf">
             <string>OpenSans-Semibold</string>
@@ -27,17 +31,17 @@
                         <viewControllerLayoutGuide type="bottom" id="Pl9-hd-HdO"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="vp9-lf-HJa" userLabel="view">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yu7-Gk-FTH" userLabel="eventListSceneContainer" customClass="UIControl">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9sr-8X-2eF" userLabel="dataVizView">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="0.0"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="0.0"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="95N-hk-m3T" userLabel="graphLayerContainer">
-                                                <rect key="frame" x="0.0" y="-301.5" width="375" height="301.5"/>
+                                                <rect key="frame" x="0.0" y="-252.5" width="320" height="252.5"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </view>
                                         </subviews>
@@ -109,21 +113,21 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="102" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TkA-IK-Jxk" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                         <color key="backgroundColor" red="0.94901960784313721" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="eventListCell" rowHeight="70" id="OeA-ji-N23" userLabel="eventListCell" customClass="EventListTableViewCell" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="28" width="375" height="70"/>
+                                                <rect key="frame" x="0.0" y="28" width="320" height="70"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OeA-ji-N23" id="QLe-TP-wyT">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NEV-rB-Eah" userLabel="backgroundView" customClass="NutShellUIViewWithHighlight" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="70"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="separatorLine" translatesAutoresizingMaskIntoConstraints="NO" id="wex-39-mUH" userLabel="separatorImageView">
-                                                                    <rect key="frame" x="0.0" y="69" width="375" height="1"/>
+                                                                    <rect key="frame" x="0.0" y="69" width="320" height="1"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="1" id="yYn-h4-yeb"/>
                                                                     </constraints>
@@ -156,7 +160,7 @@
                                                             </constraints>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Tacos" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OMf-9h-cyM" userLabel="titleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="46" y="22" width="45.5" height="26"/>
+                                                            <rect key="frame" x="46" y="22" width="46" height="26"/>
                                                             <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="17"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -165,7 +169,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="752" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" text="x 4" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fck-hu-xtp" userLabel="repeatCountLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="307" y="23.5" width="24" height="23.5"/>
+                                                            <rect key="frame" x="252" y="23" width="24" height="24"/>
                                                             <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -174,7 +178,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2fz-WO-pie" userLabel="disclosureButton">
-                                                            <rect key="frame" x="346" y="27" width="9" height="16"/>
+                                                            <rect key="frame" x="291" y="27" width="9" height="16"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="9" id="Cpl-Zq-ECO"/>
                                                                 <constraint firstAttribute="height" constant="16" id="YAS-uq-ZKR"/>
@@ -207,17 +211,17 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="eventListCellWithLoc" rowHeight="102" id="A0g-43-HJ0" customClass="EventListTableViewCell" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="98" width="375" height="102"/>
+                                                <rect key="frame" x="0.0" y="98" width="320" height="102"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="A0g-43-HJ0" id="124-Kc-60p">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="102"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="102"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oDf-oW-Jwv" userLabel="backgroundView" customClass="NutShellUIViewWithHighlight" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="102"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="102"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="separatorLine" translatesAutoresizingMaskIntoConstraints="NO" id="Qgm-tg-ffk" userLabel="separatorImageView">
-                                                                    <rect key="frame" x="0.0" y="101" width="375" height="1"/>
+                                                                    <rect key="frame" x="0.0" y="101" width="320" height="1"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="1" id="UH1-GD-Yhc"/>
                                                                     </constraints>
@@ -250,7 +254,7 @@
                                                             </constraints>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Tacos" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uRj-LK-WKc" userLabel="titleLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="46" y="18" width="45.5" height="23.5"/>
+                                                            <rect key="frame" x="46" y="18" width="46" height="24"/>
                                                             <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="17"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -259,7 +263,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeSmallIcon" highlightedImage="placeSmallIcon" translatesAutoresizingMaskIntoConstraints="NO" id="7HN-d9-JmR" userLabel="placeIcon">
-                                                            <rect key="frame" x="49" y="45.5" width="11" height="18"/>
+                                                            <rect key="frame" x="49" y="46" width="11" height="18"/>
                                                             <color key="tintColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="11" id="8pe-x0-3JJ"/>
@@ -267,7 +271,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" placeholderIntrinsicWidth="58" placeholderIntrinsicHeight="40" text="El Farolito" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l9C-3c-5Tl" userLabel="locationLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="68" y="45.5" width="58" height="36"/>
+                                                            <rect key="frame" x="68" y="46" width="58" height="36"/>
                                                             <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="12"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -276,7 +280,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="752" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" text="x 4" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZGH-j6-Io7" userLabel="repeatCountLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="307" y="18" width="24" height="23.5"/>
+                                                            <rect key="frame" x="252" y="18" width="24" height="24"/>
                                                             <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -285,7 +289,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KR4-2O-ERa" userLabel="disclosureButton">
-                                                            <rect key="frame" x="346" y="22" width="9" height="16"/>
+                                                            <rect key="frame" x="291" y="22" width="9" height="16"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="16" id="gN3-4r-JJQ"/>
                                                                 <constraint firstAttribute="width" constant="9" id="qJM-Bi-dTg"/>
@@ -330,6 +334,83 @@
                                                     <outlet property="titleLabel" destination="uRj-LK-WKc" id="B0f-nf-bLt"/>
                                                 </connections>
                                             </tableViewCell>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="noteListCell" rowHeight="80" id="HJY-h1-QQo" userLabel="noteListTableCell" customClass="NoteListTableViewCell" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="200" width="320" height="80"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HJY-h1-QQo" id="TRJ-LN-MsU">
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ksy-zK-Qfo" userLabel="backgroundView" customClass="NutShellUIViewWithHighlight" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+                                                            <subviews>
+                                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="separatorLine" translatesAutoresizingMaskIntoConstraints="NO" id="EDe-E9-jtD" userLabel="separatorImageView">
+                                                                    <rect key="frame" x="0.0" y="79" width="320" height="1"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="1" id="tSp-g4-V8o"/>
+                                                                    </constraints>
+                                                                </imageView>
+                                                            </subviews>
+                                                            <color key="backgroundColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <constraints>
+                                                                <constraint firstItem="EDe-E9-jtD" firstAttribute="leading" secondItem="Ksy-zK-Qfo" secondAttribute="leading" id="T1e-Hs-HVX"/>
+                                                                <constraint firstAttribute="bottom" secondItem="EDe-E9-jtD" secondAttribute="bottom" id="dz2-ax-sQ7"/>
+                                                                <constraint firstAttribute="trailing" secondItem="EDe-E9-jtD" secondAttribute="trailing" id="ggs-ya-PLu"/>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="normalBackground" value="lightBackground"/>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="highlightedBackground" value="brightBackground"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </view>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RgN-Oa-vbI" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="24" y="12" width="272" height="17"/>
+                                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
+                                                            <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="groupedEventCellDate"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Tacos" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ELX-Al-2OH" userLabel="noteLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="24" y="39" width="272" height="23.5"/>
+                                                            <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="17"/>
+                                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="eventListCellTitle"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
+                                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LMJ-Dc-4JH" userLabel="disclosureButton">
+                                                            <rect key="frame" x="291" y="32" width="9" height="16"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="9" id="2VS-lf-K45"/>
+                                                                <constraint firstAttribute="height" constant="16" id="nXi-i4-jv3"/>
+                                                            </constraints>
+                                                            <state key="normal" image="rightDisclosureArrow"/>
+                                                        </button>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="Ksy-zK-Qfo" firstAttribute="top" secondItem="TRJ-LN-MsU" secondAttribute="top" id="5KY-6y-OK3"/>
+                                                        <constraint firstAttribute="trailing" secondItem="Ksy-zK-Qfo" secondAttribute="trailing" id="6bx-2t-cZ3"/>
+                                                        <constraint firstItem="RgN-Oa-vbI" firstAttribute="top" secondItem="TRJ-LN-MsU" secondAttribute="top" constant="12" id="Agf-RG-LZr"/>
+                                                        <constraint firstItem="ELX-Al-2OH" firstAttribute="top" secondItem="RgN-Oa-vbI" secondAttribute="bottom" constant="10" id="OgR-nB-ZEN"/>
+                                                        <constraint firstAttribute="trailing" secondItem="RgN-Oa-vbI" secondAttribute="trailing" constant="24" id="OhU-s5-hwa"/>
+                                                        <constraint firstAttribute="bottomMargin" secondItem="ELX-Al-2OH" secondAttribute="bottom" constant="10" id="QVl-2N-gPI"/>
+                                                        <constraint firstAttribute="trailing" secondItem="ELX-Al-2OH" secondAttribute="trailing" constant="24" id="Rhu-c3-I2D"/>
+                                                        <constraint firstAttribute="bottom" secondItem="Ksy-zK-Qfo" secondAttribute="bottom" id="Uah-5G-tO9"/>
+                                                        <constraint firstAttribute="trailing" secondItem="LMJ-Dc-4JH" secondAttribute="trailing" constant="20" id="X4X-87-saM"/>
+                                                        <constraint firstItem="RgN-Oa-vbI" firstAttribute="leading" secondItem="TRJ-LN-MsU" secondAttribute="leading" constant="24" id="YdI-1P-tXQ"/>
+                                                        <constraint firstItem="ELX-Al-2OH" firstAttribute="leading" secondItem="RgN-Oa-vbI" secondAttribute="leading" id="a3F-22-Hou"/>
+                                                        <constraint firstItem="Ksy-zK-Qfo" firstAttribute="leading" secondItem="TRJ-LN-MsU" secondAttribute="leading" id="hfa-Ti-m3t"/>
+                                                        <constraint firstItem="LMJ-Dc-4JH" firstAttribute="centerY" secondItem="Ksy-zK-Qfo" secondAttribute="centerY" id="lKH-Bs-Vc9"/>
+                                                    </constraints>
+                                                </tableViewCellContentView>
+                                                <connections>
+                                                    <outlet property="cellBackgroundView" destination="Ksy-zK-Qfo" id="uDz-oM-Q1b"/>
+                                                    <outlet property="dateLabel" destination="RgN-Oa-vbI" id="6G5-df-lT9"/>
+                                                    <outlet property="noteLabel" destination="ELX-Al-2OH" id="J17-KN-YyB"/>
+                                                </connections>
+                                            </tableViewCell>
                                         </prototypes>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
@@ -340,7 +421,7 @@
                                         </connections>
                                     </tableView>
                                     <view hidden="YES" alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p1Z-R3-s10" userLabel="coverView" customClass="UIControl">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                         <color key="backgroundColor" red="0.15686274510000001" green="0.098039215690000001" blue="0.27450980390000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <action selector="toggleSideMenu:" destination="oVB-ry-Lwj" eventType="touchUpInside" id="Rs4-wM-qjR"/>
@@ -385,7 +466,7 @@
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </barButtonItem>
                         <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3hf-bE-obs" userLabel="dismissKeyboard">
-                            <rect key="frame" x="112.5" y="7" width="150" height="30"/>
+                            <rect key="frame" x="85" y="7" width="150" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="40"/>
                             <connections>

@@ -25,6 +25,7 @@ struct EventViewStoryboard {
         static let eventListCell = "eventListCell"
         static let eventListCellNoLoc = "eventListCell"
         static let eventListCellWithLoc = "eventListCellWithLoc"
+        static let noteListCell = "noteListCell"
     }
 
     // MARK: SegueHandlerType

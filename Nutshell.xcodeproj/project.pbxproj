@@ -168,6 +168,13 @@
 		486F5E6E1BA24C5C00BA2A57 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E6D1BA24C5C00BA2A57 /* EventDetailViewController.swift */; };
 		486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
 		487ED2511C3DA40A00EE36DF /* TidepoolGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */; };
+		48867CF51E80AEAE00C4E79D /* BlipNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CEF1E80A98C00C4E79D /* BlipNote.swift */; };
+		48867CF61E819F2000C4E79D /* BlipNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CEF1E80A98C00C4E79D /* BlipNote.swift */; };
+		48867CF71E81A4AD00C4E79D /* BlipUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CF11E80A98C00C4E79D /* BlipUser.swift */; };
+		48867CF81E81A4B200C4E79D /* BlipUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CF11E80A98C00C4E79D /* BlipUser.swift */; };
+		48867CF91E81A4BB00C4E79D /* BlipPatient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CF01E80A98C00C4E79D /* BlipPatient.swift */; };
+		48867CFA1E81A4BF00C4E79D /* BlipPatient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CF01E80A98C00C4E79D /* BlipPatient.swift */; };
+		48867CFC1E81E32500C4E79D /* NoteListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */; };
 		489299681CB4290D001F24D6 /* HealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489299671CB4290D001F24D6 /* HealthKitConfiguration.swift */; };
 		489299691CB42917001F24D6 /* HealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489299671CB4290D001F24D6 /* HealthKitConfiguration.swift */; };
 		4892996B1CB4297B001F24D6 /* NutshellHealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4892996A1CB4297B001F24D6 /* NutshellHealthKitConfiguration.swift */; };
@@ -352,6 +359,10 @@
 		486F5E751BA35CD800BA2A57 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		486F5E771BA3891600BA2A57 /* NutUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutUtils.swift; path = "Utilities and Extensions/NutUtils.swift"; sourceTree = "<group>"; };
 		487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolGraphData.swift; path = "GraphView/Tidepool Graph/TidepoolGraphData.swift"; sourceTree = "<group>"; };
+		48867CEF1E80A98C00C4E79D /* BlipNote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlipNote.swift; path = DataModel/BlipNote.swift; sourceTree = "<group>"; };
+		48867CF01E80A98C00C4E79D /* BlipPatient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlipPatient.swift; path = DataModel/BlipPatient.swift; sourceTree = "<group>"; };
+		48867CF11E80A98C00C4E79D /* BlipUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlipUser.swift; path = DataModel/BlipUser.swift; sourceTree = "<group>"; };
+		48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListTableViewCell.swift; path = ViewControllers/NoteListTableViewCell.swift; sourceTree = "<group>"; };
 		489299671CB4290D001F24D6 /* HealthKitConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitConfiguration.swift; path = DataModel/HealthKit/HealthKitConfiguration.swift; sourceTree = "<group>"; };
 		4892996A1CB4297B001F24D6 /* NutshellHealthKitConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutshellHealthKitConfiguration.swift; path = DataModel/NutshellHealthKitConfiguration.swift; sourceTree = "<group>"; };
 		4899436D1C442837004774BA /* Nutshell_v5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v5.xcdatamodel; sourceTree = "<group>"; };
@@ -538,6 +549,7 @@
 				484365CB1CA10F640046A2C5 /* EventAddEdit.storyboard */,
 				486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */,
 				48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */,
+				48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */,
 				486F5E5F1BA1EBE100BA2A57 /* EventListTableViewCell.swift */,
 				485922A31B9A639B0056E605 /* EventGroupTableViewController.swift */,
 				486F5E6B1BA24B7F00BA2A57 /* EventGroupTableViewCell.swift */,
@@ -675,6 +687,9 @@
 		486F5E221BA0DB7400BA2A57 /* DataModel */ = {
 			isa = PBXGroup;
 			children = (
+				48867CF11E80A98C00C4E79D /* BlipUser.swift */,
+				48867CEF1E80A98C00C4E79D /* BlipNote.swift */,
+				48867CF01E80A98C00C4E79D /* BlipPatient.swift */,
 				482ECC841C94BBA5002A015D /* HealthKit */,
 				0334C9E51BA8DDFC00013096 /* CoreData */,
 				486F5E291BA0DC6700BA2A57 /* NutEvent.swift */,
@@ -1024,6 +1039,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				48867CF91E81A4BB00C4E79D /* BlipPatient.swift in Sources */,
 				0334CA4C1BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift in Sources */,
 				0334CA1F1BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */,
 				0334CA371BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift in Sources */,
@@ -1092,6 +1108,7 @@
 				0334CA191BA8DDFC00013096 /* Alarm+CoreDataProperties.swift in Sources */,
 				0334CA461BA8DDFC00013096 /* Food.swift in Sources */,
 				48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */,
+				48867CF71E81A4AD00C4E79D /* BlipUser.swift in Sources */,
 				4837CC6B1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift in Sources */,
 				486F5E2B1BA0DC6700BA2A57 /* NutEvent.swift in Sources */,
 				0334CA161BA8DDFC00013096 /* Activity.swift in Sources */,
@@ -1108,6 +1125,7 @@
 				48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */,
 				48C491681C3B47A000F34630 /* BasalGraphData.swift in Sources */,
 				0334CA311BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,
+				48867CF51E80AEAE00C4E79D /* BlipNote.swift in Sources */,
 				48C4916C1C3B771200F34630 /* WizardGraphData.swift in Sources */,
 				0334CA281BA8DDFC00013096 /* BloodKetone.swift in Sources */,
 				486F5E111BA08DE900BA2A57 /* LoginViewController.swift in Sources */,
@@ -1134,6 +1152,7 @@
 				48DA11101CE3CBD600B99C35 /* main.swift in Sources */,
 				48C4916A1C3B59B400F34630 /* BoluslGraphData.swift in Sources */,
 				4854202B1BC44D290020CFE1 /* EventItem.swift in Sources */,
+				48867CFC1E81E32500C4E79D /* NoteListTableViewCell.swift in Sources */,
 				482ECC861C94BC47002A015D /* LogFormatter.swift in Sources */,
 				48C4916E1C3B816700F34630 /* WorkoutGraphData.swift in Sources */,
 				48C491531C38750900F34630 /* TidepoolGraphView.swift in Sources */,
@@ -1168,6 +1187,7 @@
 				0334CA861BA8DDFC00013096 /* UrineKetone.swift in Sources */,
 				0334CA591BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,
 				48EC32321BA7BDDE00A75103 /* NutUtils.swift in Sources */,
+				48867CFA1E81A4BF00C4E79D /* BlipPatient.swift in Sources */,
 				485420261BC44D290020CFE1 /* Meal+CoreDataProperties.swift in Sources */,
 				0334CA381BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift in Sources */,
 				48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */,
@@ -1198,9 +1218,11 @@
 				48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */,
 				0334CA3E1BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift in Sources */,
 				0334CA771BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift in Sources */,
+				48867CF61E819F2000C4E79D /* BlipNote.swift in Sources */,
 				0334CA6B1BA8DDFC00013096 /* Settings+CoreDataProperties.swift in Sources */,
 				0334CA501BA8DDFC00013096 /* GrabBag.swift in Sources */,
 				0334CA531BA8DDFC00013096 /* Note+CoreDataProperties.swift in Sources */,
+				48867CF81E81A4B200C4E79D /* BlipUser.swift in Sources */,
 				0334CA2C1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */,
 				0334CA8F1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift in Sources */,
 				0334CA891BA8DDFC00013096 /* User+CoreDataProperties.swift in Sources */,
