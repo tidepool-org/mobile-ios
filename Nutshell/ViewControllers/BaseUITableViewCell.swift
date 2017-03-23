@@ -41,4 +41,10 @@ class BaseUITableViewCell: UITableViewCell {
         }
     }
 
+    func setCellHighlight(_ highlighted: Bool) {
+        if cellBackgroundView != nil {
+            cellBackgroundView.setHighlighted(highlighted)
+        }
+    }
+
 }

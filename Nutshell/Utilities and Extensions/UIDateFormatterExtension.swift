@@ -36,7 +36,34 @@ let iso8601dateNoTimeZone: String = "yyyy-MM-dd'T'HH:mm:ss"
 let regularDateFormat: String = "yyyy-MM-dd"
 
 public extension DateFormatter {
-    
+
+    func attributedStringFromDate(_ date: Date) -> NSMutableAttributedString {
+        let uniformDateFormat: String = "EEEE M/d/yy h:mma"
+        // Date format being used.
+        self.dateFormat = uniformDateFormat
+        var dateString = self.string(from: date)
+        
+        // Replace uppercase PM and AM with lowercase versions
+        dateString = dateString.replacingOccurrences(of: "PM", with: "pm", options: NSString.CompareOptions.literal, range: nil)
+        dateString = dateString.replacingOccurrences(of: "AM", with: "am", options: NSString.CompareOptions.literal, range: nil)
+        
+        // Count backwards until the first space (will bold)
+        var count = 0
+        for char in Array(dateString.characters.reversed()) {
+            if (char == " ") {
+                break
+            } else {
+                count += 1
+            }
+        }
+        
+        // Bold the last (count) characters (the time)
+        let attrStr = NSMutableAttributedString(string: dateString, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: smallRegularFont])
+        attrStr.addAttribute(NSFontAttributeName, value: smallBoldFont, range: NSRange(location: attrStr.length - count, length: count))
+        
+        return attrStr
+    }
+
     func dateFromISOString(_ string: String) -> Date {
         self.locale = Locale(identifier: "en_US_POSIX")
         self.timeZone = TimeZone.autoupdatingCurrent

@@ -21,45 +21,44 @@ class NoteListTableViewCell: BaseUITableViewCell {
 
     @IBOutlet weak var noteLabel: NutshellUILabel!
     @IBOutlet weak var dateLabel: NutshellUILabel!
-
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
+        let highLitOrSelected = self.isHighlighted ? true : selected
+        NSLog("setSelected \(selected) for \(note?.messagetext)!")
+        NSLog("highLitOrSelected: \(highLitOrSelected)")
+
         super.setSelected(selected, animated: animated)
-        if selected {
-            NSLog("select \(note?.messagetext)!")
-        } else {
-            NSLog("deselect \(note?.messagetext)")
-        }
         
         // Configure the view for the selected state
-        noteLabel.isHighlighted = selected
-        dateLabel.isHighlighted = selected
-        
+        noteLabel.isHighlighted = highLitOrSelected
+        dateLabel.isHighlighted = highLitOrSelected
+        super.setCellHighlight(highLitOrSelected)
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         let highLitOrSelected = self.isSelected ? true : highlighted
-        
-        super.setHighlighted(highLitOrSelected, animated:animated)
-        if highLitOrSelected {
-            NSLog("highlighted \(note?.messagetext)!")
-        } else {
-            NSLog("de-highlight \(note?.messagetext)")
-        }
+        NSLog("setHighlighted \(highlighted) for \(note?.messagetext)!")
+        NSLog("highLitOrSelected: \(highLitOrSelected)")
+
+        super.setHighlighted(highlighted, animated:animated)
         
         // Configure the view for the highlighted state
         noteLabel.isHighlighted = highLitOrSelected
         dateLabel.isHighlighted = highLitOrSelected
+        super.setCellHighlight(highLitOrSelected)
     }
     
     func configureCell(_ note: BlipNote) {
         noteLabel.text = note.messagetext
         dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
         self.note = note
-        
+        noteLabel.isHighlighted = false
+        dateLabel.isHighlighted = false
+        super.setCellHighlight(false)
     }
 }

@@ -9,6 +9,7 @@ def available_pods
   pod 'SwiftyJSON', '3.1.4'
   pod 'CocoaLumberjack/Swift', '~> 3.0.0'
   pod 'CryptoSwift', '~> 0.6.7'
+  pod 'twitter-text', '~> 1.13.4'
  end
 
 target 'Nutshell' do

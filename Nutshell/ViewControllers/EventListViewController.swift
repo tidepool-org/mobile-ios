@@ -23,6 +23,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     @IBOutlet weak var eventListSceneContainer: UIControl!
     @IBOutlet weak var dataVizView: UIView!
     
+    @IBOutlet weak var editBarButtonItem: UIBarButtonItem!
     @IBOutlet weak var menuButton: UIBarButtonItem!
     @IBOutlet weak var searchTextField: NutshellUITextField!
     @IBOutlet weak var searchPlaceholderLabel: NutshellUILabel!
@@ -50,6 +51,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+
+        editBarButtonItem.isEnabled = false
 
         // Add a notification for when the database changes
         let moc = NutDataController.controller().mocForNutEvents()
@@ -142,9 +145,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             sideMenu.allowPanGesture = true
        }
         
-        if sortedNutEvents.isEmpty || eventListNeedsUpdate {
+        if notes.isEmpty || eventListNeedsUpdate {
             eventListNeedsUpdate = false
-            getNutEvents()
+            loadNotes()
         }
         
         checkNotifyUserOfTestMode()
@@ -253,20 +256,14 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepare(for: segue, sender: sender)
-        if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventGroupSegue {
-            let cell = sender as! EventListTableViewCell
-            let eventGroupVC = segue.destination as! EventGroupTableViewController
-            eventGroupVC.eventGroup = cell.eventGroup!
-            APIConnector.connector().trackMetric("Clicked a Meal (Home screen)")
-        } else if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue {
-            let cell = sender as! EventListTableViewCell
-            let eventDetailVC = segue.destination as! EventDetailViewController
-            let group = cell.eventGroup!
-            eventDetailVC.eventGroup = group
-            eventDetailVC.eventItem = group.itemArray[0]
-            APIConnector.connector().trackMetric("Clicked a Meal (Home screen)")
-        } else if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.HomeToAddEventSegue {
-            APIConnector.connector().trackMetric("Click Add (Home screen)")
+        if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemEditSegue {
+            let eventEditVC = segue.destination as! EventEditViewController
+            eventEditVC.note = self.selectedNote
+            eventEditVC.groupFullName = "GROUP FULL NAME"
+            APIConnector.connector().trackMetric("Clicked edit a note (Home screen)")
+        } else if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
+            let _ = segue.destination as! EventAddViewController
+            APIConnector.connector().trackMetric("Clicked add a note (Home screen)")
         } else {
             NSLog("Unprepped segue from eventList \(segue.identifier)")
         }
@@ -295,105 +292,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     func databaseChanged(_ note: Notification) {
         NSLog("EventList: Database Change Notification")
         if viewIsForeground {
-            getNutEvents()
+            loadNotes()
         } else {
             eventListNeedsUpdate = true
         }
     }
-    
-    func getNutEvents() {
-
-        // TODO: Should notes be loaded here? Or should they be available elsewhere, and perhaps queried here?
-        loadNotes()
-
-//        var nutEvents = [String: NutEvent]()
-//
-//        func addNewEvent(_ newEvent: EventItem) {
-//            /// TODO: TEMP UPGRADE CODE, REMOVE BEFORE SHIPPING!
-//            if newEvent.userid == nil {
-//                newEvent.userid = NutDataController.controller().currentUserId
-//                if let moc = newEvent.managedObjectContext {
-//                    NSLog("NOTE: Updated nil userid to \(newEvent.userid)")
-//                    moc.refresh(newEvent, mergeChanges: true)
-//                    _ = DatabaseUtils.databaseSave(moc)
-//                }
-//            }
-//            /// TODO: TEMP UPGRADE CODE, REMOVE BEFORE SHIPPING!
-//
-//            let newEventId = newEvent.nutEventIdString()
-//            if let existingNutEvent = nutEvents[newEventId] {
-//                _ = existingNutEvent.addEvent(newEvent)
-//                //NSLog("appending new event: \(newEvent.notes)")
-//                //existingNutEvent.printNutEvent()
-//            } else {
-//                nutEvents[newEventId] = NutEvent(firstEvent: newEvent)
-//            }
-//        }
-//
-//        sortedNutEvents = [(String, NutEvent)]()
-//        filteredNutEvents = [(String, NutEvent)]()
-//        filterString = ""
-//        
-//        // Get all Food and Activity events, chronologically; this will result in an unsorted dictionary of NutEvents.
-//        do {
-//            let nutEvents = try DatabaseUtils.getAllNutEvents()
-//            for event in nutEvents {
-//                //if let event = event as? Workout {
-//                //  NSLog("Event type: \(event.type), id: \(event.id), time: \(event.time), created time: \(event.createdTime!.timeIntervalSinceDate(event.time!)), duration: \(event.duration), title: \(event.title), notes: \(event.notes), userid: \(event.userid), timezone offset:\(event.timezoneOffset)")
-//                //}
-//                addNewEvent(event)
-//            }
-//        } catch let error as NSError {
-//            NSLog("Error: \(error)")
-//        }
-//        
-//        sortedNutEvents = nutEvents.sorted() { $0.1.mostRecent.compare($1.1.mostRecent as Date) == ComparisonResult.orderedDescending }
-//        updateFilteredAndReload()
-//        // One time orphan check after application load
-//        EventListViewController.checkAndDeleteOrphans(sortedNutEvents)
-    }
-    
-//    static var _checkedForOrphanPhotos = false
-//    class func checkAndDeleteOrphans(_ allNutEvents: [(String, NutEvent)]) {
-//        if _checkedForOrphanPhotos {
-//            return
-//        }
-//        _checkedForOrphanPhotos = true
-//        if let photoDirPath = NutUtils.photosDirectoryPath() {
-//            var allLocalPhotos = [String: Bool]()
-//            let fm = FileManager.default
-//            do {
-//                let dirContents = try fm.contentsOfDirectory(atPath: photoDirPath)
-//                //NSLog("Photos dir: \(dirContents)")
-//                if !dirContents.isEmpty {
-//                    for file in dirContents {
-//                        allLocalPhotos[file] = false
-//                    }
-//                    for (_, nutEvent) in allNutEvents {
-//                        for event in nutEvent.itemArray {
-//                            for url in event.photoUrlArray() {
-//                                if url.hasPrefix("file_") {
-//                                    //NSLog("\(NutUtils.photoInfo(url))")
-//                                    allLocalPhotos[url] = true
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            } catch let error as NSError {
-//                NSLog("Error accessing photos at \(photoDirPath), error: \(error)")
-//            }
-//            let orphans = allLocalPhotos.filter() { $1 == false }
-//            for (url, _) in orphans {
-//                NSLog("Deleting orphaned photo: \(url)")
-//                NutUtils.deleteLocalPhoto(url)
-//            }
-//        }
-//    }
-    
-    //
-    // MARK: - Search
-    //
     
     @IBAction func dismissKeyboard(_ sender: AnyObject) {
         searchTextField.resignFirstResponder()
@@ -467,6 +370,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         // if we are deselecting, just close up data viz
         if note == nil {
             self.selectedNote = nil
+            editBarButtonItem.isEnabled = false
             showHideDataVizView(show: false)
             configureGraphContainer()
             return
@@ -485,6 +389,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
         // start looking for data for this item...
         self.selectedNote = note
+        editBarButtonItem.isEnabled = true
         configureGraphContainer()
     }
     
@@ -660,7 +565,7 @@ extension EventListViewController: UITableViewDelegate {
 //                self.selectEvent(nil)
 //                self.selectedIndexPath = nil
 //            }
-//            self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventGroupSegue, sender: cell)
+//            self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemEditSegue, sender: cell)
         }
     }
 
@@ -700,7 +605,7 @@ extension EventListViewController: UITableViewDataSource {
         }
         return cell
     }
-
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
