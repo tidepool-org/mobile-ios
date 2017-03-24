@@ -79,6 +79,7 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
         
         // Set background color to light grey color
         self.sceneContainerView.backgroundColor = lightGreyColor
+        
         // Add observers for notificationCenter to handle keyboard events
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(EventEditViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)

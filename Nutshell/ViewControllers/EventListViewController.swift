@@ -323,7 +323,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     // MARK: - Navigation
     //
     
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if NutDataController.sharedInstance.currentBlipUser == nil {
+            return false
+        }
+        return true
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
@@ -334,7 +340,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             eventEditVC.groupFullName = "GROUP FULL NAME"
             APIConnector.connector().trackMetric("Clicked edit a note (Home screen)")
         } else if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
-            let _ = segue.destination as! EventAddViewController
+            let eventAddVC = segue.destination as! EventAddViewController
+            // TODO: support for groups! For now, just support current user...
+            if let currentUser = NutDataController.sharedInstance.currentBlipUser {
+                eventAddVC.user = currentUser
+                eventAddVC.group = currentUser
+                eventAddVC.groups = [currentUser]
+            }
             APIConnector.connector().trackMetric("Clicked add a note (Home screen)")
         } else {
             NSLog("Unprepped segue from eventList \(segue.identifier)")
@@ -351,6 +363,12 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 // TODO: also handle unsuccessful updates?
             } else {
                 NSLog("No note to delete!")
+            }
+        } else if let eventAddVC = segue.source as? EventAddViewController {
+            if let newNote = eventAddVC.newNote {
+                APIConnector.connector().doPostWithNote(self, note: newNote)
+                // will be called back on successful post!
+                // TODO: also handle unsuccessful posts?
             }
         } else {
             NSLog("Unknown segue source!")

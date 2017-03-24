@@ -31,7 +31,9 @@ import CocoaLumberjack
 /// The Tidepool data store is only allocated at login, and is deleted at logout. It is named so it won't be backed up to iCloud if the user has application backup to cloud configured.
 class NutDataController: NSObject
 {
-
+    /// Supports a singleton controller for the application.
+    static let sharedInstance = NutDataController()
+    
     // MARK: - Constants
     
     fileprivate let kLocalObjectsStoreFilename = "SingleViewCoreData.sqlite"
@@ -39,9 +41,6 @@ class NutDataController: NSObject
     fileprivate let kTidepoolObjectsStoreFilename = "TidepoolObjects.sqlite.nosync"
     fileprivate let kTestFilePrefix = "Test-"
     
-    /// Supports a singleton controller for the application.
-    static let sharedInstance = NutDataController()
-
     /// Coordinator/store for current userId, token, etc. Should always be available.
     func mocForCurrentUser() -> NSManagedObjectContext {
         return self.mocForLocalObjects!
@@ -95,6 +94,19 @@ class NutDataController: NSObject
         }
     }
     
+    /// Return current user as a BlipUser object
+    var currentBlipUser: BlipUser? {
+        get {
+            if _currentBlipUser == nil {
+                if let user = self.currentUser {
+                    _currentBlipUser = BlipUser(user: user)
+                }
+            }
+            return _currentBlipUser
+        }
+    }
+    fileprivate var _currentBlipUser: BlipUser?
+    
     /// Call this at login/logout, token refresh(?), and upon enabling or disabling the HealthKit interface.
     func configureHealthKitInterface() {
         appHealthKitConfiguration.configureHealthKitInterface(currentUserId, isDSAUser: isDSAUser)
@@ -116,6 +128,7 @@ class NutDataController: NSObject
         self.deleteAnyTidepoolData()
         self.currentUser = nil
         _currentUserId = nil
+        _currentBlipUser = nil
         configureHealthKitInterface()
     }
 
@@ -123,6 +136,7 @@ class NutDataController: NSObject
         if let user = self.currentUser {
             user.processProfileJSON(json)
             _ = DatabaseUtils.databaseSave(user.managedObjectContext!)
+            _currentBlipUser = nil  // update currentBlipUser too...
         }
     }
     

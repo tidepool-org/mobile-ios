@@ -32,7 +32,15 @@ class BlipUser {
     init(userid: String) {
         self.userid = userid
     }
-    
+ 
+    init(user: User) {
+        self.userid = user.userid!
+        if user.accountIsDSA != nil {
+            self.patient = BlipPatient()
+        }
+        self.fullName = user.fullName
+    }
+
     /// Indicates whether the current user logged in is associated with a Data Storage Account
     var isDSAUser: Bool {
         return patient != nil

@@ -302,7 +302,7 @@ let rightArrow: UIImage = UIImage(named: "right")!
 /*
  Image for bar button item, closing a view controller (Add/EditNoteVC)
  */
-let closeX: UIImage = UIImage(named: "closex")!
+let closeX: UIImage = UIImage(named: "xIconSmall")!
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

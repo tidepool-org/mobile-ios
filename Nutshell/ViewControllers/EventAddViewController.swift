@@ -18,15 +18,11 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 
-class EventAddViewController: BaseUIViewController, UINavigationControllerDelegate {
+class EventAddViewController: BaseUIViewController {
 
-/*  TODO: adapt for Nutshell along the lines of EventEditViewController:
-     
-     - Need to have groups, user, etc figured out (how to access)
-     - Start moving ui into storyboard
-     - Adding new note...
-     
-     
+    @IBOutlet weak var navBar: UINavigationBar!
+    @IBOutlet weak var sceneContainerView: NutshellUIView!
+    
     // DropDownMenu
     var dropDownMenu: UITableView!
     // Helpers for dropDownMenu and Animations
@@ -48,7 +44,7 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
     var datePickerShown: Bool = false
     var isAnimating: Bool = false
     let datePicker: UIDatePicker = UIDatePicker()
-    let previousDate: Date
+    private var previousDate: Date!
     
     // Separator between date/time and hashtags
     let separatorOne: UIView = UIView()
@@ -62,33 +58,19 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
     // UI Elements
     let messageBox: UITextView = UITextView()
     let postButton: UIButton = UIButton()
-    let cameraButton: UIButton = UIButton()
-    let locationButton: UIButton = UIButton()
-    
-    // API Connector
-    let apiConnector: APIConnector
     
     // Data
-    var note: BlipNote? = nil
-    var group: User? = nil
-    var groups: [User] = []
-    var user: User? = nil
+    // Group, groups, and user must be set by launching controller in prepareForSegue!
+    var group: BlipUser!
+    var groups: [BlipUser] = []
+    var user: BlipUser!
+    // Returns newNote if successful
+    var newNote: BlipNote? = nil
+
+    private var note: BlipNote!
     
     // Keyboard frame for positioning UI Elements, initially zero
     var keyboardFrame: CGRect = CGRect.zero
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // Set status bar to light color for dark navigationBar
-        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        messageBox.becomeFirstResponder()
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,52 +80,59 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
         note.user = user
         note.groupid = group.userid
         note.messagetext = ""
-        self.group = group
-        self.groups = groups
-        self.user = user
         
         self.previousDate = datePicker.date
 
         // Set background color to light grey color
-        self.view.backgroundColor = lightGreyColor
+        self.sceneContainerView.backgroundColor = lightGreyColor
         
-        // If device is running < iOS 8.0, make navigationBar NOT translucent
-        if (UIDevice.current.systemVersion as NSString).floatValue < 8.0 {
-            self.navigationController?.navigationBar.isTranslucent = false
+        // Add observers for notificationCenter to handle keyboard events
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(EventAddViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddViewController.keyboardDidShow(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+        // Add an observer to notificationCenter to handle hashtagPress events from HashtagsView
+        notificationCenter.addObserver(self, selector: #selector(EventAddViewController.hashtagPressed(_:)), name: NSNotification.Name(rawValue: "hashtagPressed"), object: nil)
+     }
+
+     deinit {
+        NotificationCenter.default.removeObserver(self)
+     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Set status bar to light color for dark navigationBar
+        //UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        messageBox.becomeFirstResponder()
+    }
+    
+
+    // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
+    private var subviewedInitialized = false
+    override func viewDidLayoutSubviews() {
+        let frame = self.sceneContainerView.frame
+        NSLog("viewDidLayoutSubviews: \(frame)")
+        
+        if (subviewedInitialized) {
+            return
         }
-        
+        subviewedInitialized = true
+
         // Thicken navBar border
         let border = CALayer()
         border.borderColor = white20PercentAlpha.cgColor
         border.borderWidth = 1
-        let navBarLayer = self.navigationController!.navigationBar.layer
+        let navBarLayer = self.navBar.layer
         border.frame = CGRect(x: 0, y: navBarLayer.bounds.height, width: navBarLayer.bounds.width, height: 1)
         navBarLayer.addSublayer(border)
-        
-        // Configure 'x' to close VC
-        closeButton.image = closeX
-        closeButton.style = .plain
-        closeButton.target = self
-        closeButton.action = #selector(AddNoteViewController.closeVC(_:))
-        // navigationBar begins with leftBarButtonItem to close VC
-        self.navigationItem.setLeftBarButton(closeButton, animated: true)
-        
-        if (groups.count > 1) {
-            // Configure title to initial group (may be changed later with dropDown)
-            configureTitleView(group.fullName!)
-            
-            // Configure rightDropDownMenuButton to trigger dropDownMenu toggle
-            let rightDropDownMenuButton: UIBarButtonItem = UIBarButtonItem(image: downArrow, style: .plain, target: self, action: #selector(AddNoteViewController.dropDownMenuPressed))
-            self.navigationItem.setRightBarButton(rightDropDownMenuButton, animated: true)
-        } else {
-            let titleView = UILabel()
-            titleView.text = group.fullName!
-            titleView.font = mediumRegularFont
-            titleView.textColor = navBarTitleColor
-            titleView.sizeToFit()
-            titleView.frame.size.height = self.navigationController!.navigationBar.frame.size.height
-            self.navigationItem.titleView = titleView
-        }
+                
+        configureTitleView(group.fullName ?? "")
         
         // configure date label
         let dateFormatter = DateFormatter()
@@ -157,69 +146,68 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
         changeDateLabel.font = smallRegularFont
         changeDateLabel.textColor = tealColor
         changeDateLabel.sizeToFit()
-        changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + changeDateLabel.frame.width)
+        changeDateLabel.frame.origin.x = self.sceneContainerView.frame.width - (labelInset + changeDateLabel.frame.width)
         changeDateLabel.frame.origin.y = timedateLabel.frame.midY - changeDateLabel.frame.height / 2
         
         // Create a whole view to add the date label and change label to
         //      --> user can click anywhere in view to trigger change date animation
         let changeDateH = labelInset + timedateLabel.frame.height + labelInset
-        let changeDateView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: changeDateH))
+        let changeDateView = UIView(frame: CGRect(x: 0, y: 0, width: self.sceneContainerView.frame.width, height: changeDateH))
         changeDateView.backgroundColor = UIColor.clear
         // tapGesture in view triggers animation
-        let tap = UITapGestureRecognizer(target: self, action: #selector(AddNoteViewController.changeDatePressed(_:)))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(EventAddViewController.changeDatePressed(_:)))
         changeDateView.addGestureRecognizer(tap)
         // add labels to view
         changeDateView.addSubview(timedateLabel)
         changeDateView.addSubview(changeDateLabel)
         
-        self.view.addSubview(changeDateView)
+        self.sceneContainerView.addSubview(changeDateView)
         
         // configure date picker
         datePicker.datePickerMode = .dateAndTime
         datePicker.frame.origin.x = 0
         datePicker.frame.origin.y = timedateLabel.frame.maxY + labelInset / 2
         datePicker.isHidden = true
-        datePicker.addTarget(self, action: #selector(AddNoteViewController.datePickerAction(_:)), for: .valueChanged)
+        datePicker.addTarget(self, action: #selector(EventAddViewController.datePickerAction(_:)), for: .valueChanged)
         
-        self.view.addSubview(datePicker)
+        self.sceneContainerView.addSubview(datePicker)
         
         // configure first separator between date and hashtags
         separatorOne.backgroundColor = darkestGreyColor
-        separatorOne.frame.size = CGSize(width: self.view.frame.size.width, height: 1)
+        separatorOne.frame.size = CGSize(width: self.sceneContainerView.frame.size.width, height: 1)
         separatorOne.frame.origin.x = 0
         separatorOne.frame.origin.y = timedateLabel.frame.maxY + labelInset
         
-        self.view.addSubview(separatorOne)
+        self.sceneContainerView.addSubview(separatorOne)
         
         // configure hashtags view --> begins with expanded height
-        hashtagsScrollView.frame.size = CGSize(width: self.view.frame.width, height: expandedHashtagsViewH)
+        hashtagsScrollView.frame.size = CGSize(width: self.sceneContainerView.frame.width, height: expandedHashtagsViewH)
         hashtagsScrollView.frame.origin.x = 0
         hashtagsScrollView.frame.origin.y = separatorOne.frame.maxY
         hashtagsScrollView.configureHashtagsScrollView()
         
-        view.addSubview(hashtagsScrollView)
+        self.sceneContainerView.addSubview(hashtagsScrollView)
         
         // configure second separator between hashtags and messageBox
         separatorTwo.backgroundColor = darkestGreyColor
-        separatorTwo.frame.size = CGSize(width: self.view.frame.size.width, height: 1)
+        separatorTwo.frame.size = CGSize(width: self.sceneContainerView.frame.size.width, height: 1)
         separatorTwo.frame.origin.x = 0
         separatorTwo.frame.origin.y = hashtagsScrollView.frame.maxY
         
-        self.view.addSubview(separatorTwo)
+        self.sceneContainerView.addSubview(separatorTwo)
         
         // configure post button
         postButton.setAttributedTitle(NSAttributedString(string:postButtonText,
                                                          attributes:[NSForegroundColorAttributeName: postButtonTextColor, NSFontAttributeName: mediumRegularFont]), for: UIControlState())
         postButton.backgroundColor = tealColor
         postButton.alpha = 0.5
-        postButton.addTarget(self, action: #selector(AddNoteViewController.postNote(_:)), for: .touchUpInside)
+        postButton.addTarget(self, action: #selector(EventAddViewController.postNote(_:)), for: .touchUpInside)
         postButton.frame.size = CGSize(width: postButtonW, height: postButtonH)
-        postButton.frame.origin.x = self.view.frame.size.width - (labelInset + postButton.frame.width)
-        let navBarH = self.navigationController!.navigationBar.frame.size.height
+        postButton.frame.origin.x = self.sceneContainerView.frame.size.width - (labelInset + postButton.frame.width)
         let statusBarH = UIApplication.shared.statusBarFrame.size.height
-        postButton.frame.origin.y = self.view.frame.size.height - (labelInset + postButton.frame.height + navBarH + statusBarH)
+        postButton.frame.origin.y = self.sceneContainerView.frame.size.height - (labelInset + postButton.frame.height + statusBarH)
         
-        self.view.addSubview(postButton)
+        self.sceneContainerView.addSubview(postButton)
         
         // configure message box
         //      initializes with default placeholder text
@@ -227,7 +215,7 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
         messageBox.font = mediumRegularFont
         messageBox.text = defaultMessage
         messageBox.textColor = messageTextColor
-        let messageBoxW = self.view.frame.width - 2 * labelInset
+        let messageBoxW = self.sceneContainerView.frame.width - 2 * labelInset
         let messageBoxH = (postButton.frame.minY - separatorTwo.frame.maxY) - 2 * labelInset
         messageBox.frame.size = CGSize(width: messageBoxW, height: messageBoxH)
         messageBox.frame.origin.x = labelInset
@@ -241,97 +229,54 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
         messageBox.returnKeyType = UIReturnKeyType.default
         messageBox.isSecureTextEntry = false
         
-        self.view.addSubview(messageBox)
-        
-        // configure camera button
-        cameraButton.setImage(cameraImage, for: UIControlState())
-        cameraButton.addTarget(self, action: #selector(AddNoteViewController.cameraPressed(_:)), for: .touchUpInside)
-        cameraButton.frame.size = cameraImage.size
-        let cameraX = 2 * labelInset
-        let cameraY = postButton.frame.midY - cameraButton.frame.height / 2
-        cameraButton.frame.origin = CGPoint(x: cameraX, y: cameraY)
-        
-        // camera button not added to view. feature not yet supported.
-        //        self.view.addSubview(cameraButton)
-        
-        // configure location button
-        locationButton.setImage(locationImage, for: UIControlState())
-        locationButton.addTarget(self, action: #selector(AddNoteViewController.locationPressed(_:)), for: .touchUpInside)
-        locationButton.frame.size = locationImage.size
-        let locationX = cameraButton.frame.maxX + 2 * labelInset
-        let locationY = postButton.frame.midY - locationButton.frame.height / 2
-        locationButton.frame.origin = CGPoint(x: locationX, y: locationY)
-        
-        // location button not added to view. feature not yet supported.
-        //        self.view.addSubview(locationButton)
+        self.sceneContainerView.addSubview(messageBox)
         
         // Configure overlay for dropDownMenu, so user cannot touch not while dropDownMenu is exposed
-        overlayHeight = self.view.frame.height
-        opaqueOverlay = UIView(frame: CGRect(x: 0, y: -overlayHeight, width: self.view.frame.width, height: overlayHeight))
+        overlayHeight = self.sceneContainerView.frame.height
+        opaqueOverlay = UIView(frame: CGRect(x: 0, y: -overlayHeight, width: self.sceneContainerView.frame.width, height: overlayHeight))
         opaqueOverlay.backgroundColor = blackishLowAlpha
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(AddNoteViewController.dropDownMenuPressed))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(EventAddViewController.dropDownButtonPressed))
         tapGesture.numberOfTapsRequired = 1
         opaqueOverlay.addGestureRecognizer(tapGesture)
-        self.view.addSubview(opaqueOverlay)
+        self.sceneContainerView.addSubview(opaqueOverlay)
         
         // Configure dropDownMenu, width same as view width
         //          No need to fetch groups --> VC is initialized with user's groups
-        let proposedDropDownH = CGFloat(groups.count)*userCellHeight + CGFloat(groups.count - 1)*userCellThinSeparator
-        self.dropDownHeight = min(proposedDropDownH, self.view.frame.height - (navBarH + statusBarH))
-        let dropDownWidth = self.view.frame.width
-        self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
-        dropDownMenu.backgroundColor = darkGreenColor
-        dropDownMenu.rowHeight = userCellHeight
-        dropDownMenu.separatorInset.left = userCellInset
-        dropDownMenu.register(UserDropDownCell.self, forCellReuseIdentifier: NSStringFromClass(UserDropDownCell.self))
-        dropDownMenu.dataSource = self
-        dropDownMenu.delegate = self
-        dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.none
-        
-        // Drop down menu is only scrollable if the content fits
-        dropDownMenu.isScrollEnabled = proposedDropDownH > self.dropDownMenu.frame.height
-        
-        // Shadowing
-        dropDownMenu.layer.masksToBounds = true
-        dropDownMenu.layer.shadowColor = blackishColor.cgColor
-        dropDownMenu.layer.shadowOffset = CGSize(width: 0, height: shadowHeight)
-        dropDownMenu.layer.shadowOpacity = 0.75
-        dropDownMenu.layer.shadowRadius = shadowHeight
-        
-        self.view.addSubview(dropDownMenu)
-        
-        // Add observers for notificationCenter to handle keyboard events
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(AddNoteViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AddNoteViewController.keyboardDidShow(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(AddNoteViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
-        // Add an observer to notificationCenter to handle hashtagPress events from HashtagsView
-        notificationCenter.addObserver(self, selector: #selector(AddNoteViewController.hashtagPressed(_:)), name: NSNotification.Name(rawValue: "hashtagPressed"), object: nil)
+//        let proposedDropDownH = CGFloat(groups.count)*userCellHeight + CGFloat(groups.count - 1)*userCellThinSeparator
+//        self.dropDownHeight = min(proposedDropDownH, self.sceneContainerView.frame.height - (navBarH + statusBarH))
+//        let dropDownWidth = self.sceneContainerView.frame.width
+//        self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
+//        dropDownMenu.backgroundColor = darkGreenColor
+//        dropDownMenu.rowHeight = userCellHeight
+//        dropDownMenu.separatorInset.left = userCellInset
+//        dropDownMenu.register(UserDropDownCell.self, forCellReuseIdentifier: NSStringFromClass(UserDropDownCell.self))
+//        dropDownMenu.dataSource = self
+//        dropDownMenu.delegate = self
+//        dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.none
+//        
+//        // Drop down menu is only scrollable if the content fits
+//        dropDownMenu.isScrollEnabled = proposedDropDownH > self.dropDownMenu.frame.height
+//        
+//        // Shadowing
+//        dropDownMenu.layer.masksToBounds = true
+//        dropDownMenu.layer.shadowColor = blackishColor.cgColor
+//        dropDownMenu.layer.shadowOffset = CGSize(width: 0, height: shadowHeight)
+//        dropDownMenu.layer.shadowOpacity = 0.75
+//        dropDownMenu.layer.shadowRadius = shadowHeight
+//        
+//        self.sceneContainerView.addSubview(dropDownMenu)
     }
-
-     deinit {
-     NotificationCenter.default.removeObserver(self)
-     }
-     
+    
+        
     // Configure title of navigationBar to given string
     func configureTitleView(_ text: String) {
-        // UILabel used
-        let titleView = UILabel()
-        titleView.text = text
-        titleView.font = mediumRegularFont
-        titleView.textColor = navBarTitleColor
-        titleView.sizeToFit()
-        titleView.frame.size.height = self.navigationController!.navigationBar.frame.size.height
-        self.navigationItem.titleView = titleView
-        
-        // tapGesture triggers dropDownMenu to toggle
-        let recognizer = UITapGestureRecognizer(target: self, action: #selector(AddNoteViewController.dropDownMenuPressed))
-        titleView.isUserInteractionEnabled = true
-        titleView.addGestureRecognizer(recognizer)
+        if let navItem = self.navBar.topItem {
+            navItem.title = group.fullName ?? ""
+        }
     }
     
     // close the VC on button press from leftBarButtonItem
-    func closeVC(_ sender: UIBarButtonItem!) {
+    @IBAction func cancelButtonPressed(_ sender: Any) {
         APIConnector.connector().trackMetric("Clicked Close Add or Edit Note")
         
         if (!messageBox.text.isEmpty && messageBox.text != defaultMessage) {
@@ -350,7 +295,8 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
                 
                 self.view.endEditing(true)
                 self.closeDatePicker(false)
-                self.dismiss(animated: true, completion: nil)
+                // close the VC
+                self.performSegue(withIdentifier: "unwindToDone", sender: self)
             }))
             self.present(alert, animated: true, completion: nil)
         } else {
@@ -360,7 +306,8 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
             
             self.view.endEditing(true)
             self.closeDatePicker(false)
-            self.dismiss(animated: true, completion: nil)
+            // close the VC
+            self.performSegue(withIdentifier: "unwindToDone", sender: self)
         }
     }
     
@@ -404,7 +351,7 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
                 // change the changeDateLabel back to 'change'
                 self.changeDateLabel.text = changeDateText
                 self.changeDateLabel.sizeToFit()
-                self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
+                self.changeDateLabel.frame.origin.x = self.sceneContainerView.frame.width - (labelInset + self.changeDateLabel.frame.width)
                 if (hashtagsAfter) {
                     self.toggleHashtags()
                 }
@@ -440,7 +387,7 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
                     // change the changeDateLabel to prompt done/close action
                     self.changeDateLabel.text = doneDateText
                     self.changeDateLabel.sizeToFit()
-                    self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
+                    self.changeDateLabel.frame.origin.x = self.sceneContainerView.frame.width - (labelInset + self.changeDateLabel.frame.width)
                 }
             })
         }
@@ -466,14 +413,12 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 // position affected UI elements
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                let separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
+                let separatorToBottom: CGFloat = self.sceneContainerView.frame.height - self.separatorTwo.frame.maxY
                 if (separatorToBottom > 300) {
                     // Small Device
                     
                     // Move up controls
-                    self.postButton.frame.origin.y = self.view.frame.height - (self.keyboardFrame.height + labelInset + self.postButton.frame.height)
-                    self.cameraButton.frame.origin.y = self.postButton.frame.midY - self.cameraButton.frame.height / 2
-                    self.locationButton.frame.origin.y = self.postButton.frame.midY - self.locationButton.frame.height / 2
+                    self.postButton.frame.origin.y = self.sceneContainerView.frame.height - (self.keyboardFrame.height + labelInset + self.postButton.frame.height)
                     // Resize messageBox
                     let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
                     self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
@@ -482,7 +427,7 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
                     // Larger device
                     
                     // Do not move up controls, just resize messageBox
-                    let messageBoxH = self.view.frame.height - (self.separatorTwo.frame.maxY + self.keyboardFrame.height + 2 * labelInset)
+                    let messageBoxH = self.sceneContainerView.frame.height - (self.separatorTwo.frame.maxY + self.keyboardFrame.height + 2 * labelInset)
                     self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
                     self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
                 }
@@ -490,13 +435,13 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
             }, completion: { (completed: Bool) -> Void in
                 self.isAnimating = false
                 if (completed) {
-                    let separatorToBottom: CGFloat = self.view.frame.height - self.separatorTwo.frame.maxY
+                    let separatorToBottom: CGFloat = self.sceneContainerView.frame.height - self.separatorTwo.frame.maxY
                     if (separatorToBottom < 300) {
                         // For small view, change the button to be 'done'
                         self.changeDateLabel.text = doneDateText
                         self.changeDateLabel.font = smallBoldFont
                         self.changeDateLabel.sizeToFit()
-                        self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
+                        self.changeDateLabel.frame.origin.x = self.sceneContainerView.frame.width - (labelInset + self.changeDateLabel.frame.width)
                     }
                     
                     // hashtags now collapsed
@@ -517,9 +462,7 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 // position affected UI elements
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                self.postButton.frame.origin.y = self.view.frame.height - (labelInset + self.postButton.frame.height)
-                self.cameraButton.frame.origin.y = self.postButton.frame.midY - self.cameraButton.frame.height / 2
-                self.locationButton.frame.origin.y = self.postButton.frame.midY - self.locationButton.frame.height / 2
+                self.postButton.frame.origin.y = self.sceneContainerView.frame.height - (labelInset + self.postButton.frame.height)
                 let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
                 self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
                 self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
@@ -532,7 +475,7 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
                         self.changeDateLabel.text = changeDateText
                         self.changeDateLabel.font = smallRegularFont
                         self.changeDateLabel.sizeToFit()
-                        self.changeDateLabel.frame.origin.x = self.view.frame.width - (labelInset + self.changeDateLabel.frame.width)
+                        self.changeDateLabel.frame.origin.x = self.sceneContainerView.frame.width - (labelInset + self.changeDateLabel.frame.width)
                     }
                     
                     // hashtagsView no longer collapsed
@@ -561,16 +504,6 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
         let dateFormatter = DateFormatter()
         timedateLabel.attributedText = dateFormatter.attributedStringFromDate(datePicker.date)
         timedateLabel.sizeToFit()
-    }
-    
-    // Camera functionality currently not developed.
-    func cameraPressed(_ sender: UIButton!) {
-        // Nothing occurs
-    }
-    
-    // Location functionality currently not developed.
-    func locationPressed(_ sender: UIButton!) {
-        // Nothing occurs
     }
     
     // postNote action from postNoteButton
@@ -617,15 +550,9 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
             self.view.endEditing(true)
             self.closeDatePicker(false)
             
-            let notification = Notification(name: Notification.Name(rawValue: "doneAdding"), object: nil)
-            NotificationCenter.default.post(notification)
-            
-            // Send notification to NotesVC to handle new note that was just created
-            let notificationTwo = Notification(name: Notification.Name(rawValue: "addNote"), object: nil)
-            NotificationCenter.default.post(notificationTwo)
-            
-            // close the VC
-            self.dismiss(animated: true, completion: nil)
+            // close the VC, passing along new note...
+            self.newNote = note
+            self.performSegue(withIdentifier: "unwindToDone", sender: self)
         }
     }
     
@@ -661,8 +588,8 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
         if let touch = touches.first {
             
             // determine if the touch (first touch) is in the hashtagsView
-            let touchLocation = touch.location(in: self.view)
-            let viewFrame = self.view.convert(hashtagsScrollView.frame, from: hashtagsScrollView.superview)
+            let touchLocation = touch.location(in: self.sceneContainerView)
+            let viewFrame = self.sceneContainerView.convert(hashtagsScrollView.frame, from: hashtagsScrollView.superview)
             
             if !viewFrame.contains(touchLocation) {
                 // if outside hashtagsView, endEditing, close keyboard, animate, etc.
@@ -699,23 +626,31 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
         self.openHashtagsCompletely()
     }
     
-    // Toggle the dropDownMenu
-    func dropDownMenuPressed() {
+    @IBAction func dropDownButtonPressed(_ sender: Any) {
+        
+        // ignore dropdown if group count is 1 for now... should disable?
+        if (groups.count <= 1) {
+            return
+        }
+        
         // End editing
         view.endEditing(true)
         // toggle the dropDownMenu open or closed
         if (isDropDownDisplayed) {
             // Configure title with the current group name
-            configureTitleView(group.fullName!)
+            let title = group.fullName ?? ""
+            configureTitleView(title)
             // Put the closeButton back as the leftBarButtonItem
-            self.navigationItem.leftBarButtonItem = closeButton
+            // TODO: show/hide left nav item...
+            //self.navigationItem.leftBarButtonItem = closeButton
             // Finally, close the dropDownMenu
             self.hideDropDownMenu()
         } else {
             // Change the title to prompt group selection
             configureTitleView(noteForTitle)
             // Remove the leftBarButtonItem
-            self.navigationItem.leftBarButtonItem = nil
+            // TODO: show/hide left nav item...
+            //self.navigationItem.leftBarButtonItem = nil
             // Finally, show the dropDownMenu
             self.showDropDownMenu()
         }
@@ -771,6 +706,49 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
     override var shouldAutorotate : Bool {
         return false
     }
-*/
 }
+
+extension EventAddViewController: UITextViewDelegate {
+    
+    // textViewDidBeginEditing, clear the messageBox if default message
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        APIConnector.connector().trackMetric("Clicked On Message Box")
+        
+        if (textView.text == defaultMessage) {
+            textView.text = nil
+        }
+    }
+    
+    // textViewDidEndEditing, if empty set back to default message
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = defaultMessage
+            textView.font = mediumRegularFont
+            textView.textColor = messageTextColor
+        }
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        if (textView.text != defaultMessage) {
+            // take the cursor position
+            let range = textView.selectedTextRange
+            
+            // use hashtagBolder extension to bold the hashtags
+            let hashtagBolder = HashtagBolder()
+            let attributedText = hashtagBolder.boldHashtags(textView.text as NSString)
+            
+            // set textView (messageBox) text to new attributed text
+            textView.attributedText = attributedText
+            
+            // put the cursor back in the same position
+            textView.selectedTextRange = range
+        }
+        if (textView.text != defaultMessage && !textView.text.isEmpty) {
+            postButton.alpha = 1.0
+        } else {
+            postButton.alpha = 0.5
+        }
+    }
+}
+
 
