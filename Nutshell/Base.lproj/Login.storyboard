@@ -1,7 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="4G7-DP-gat">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="4G7-DP-gat">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -21,21 +24,24 @@
                         <viewControllerLayoutGuide type="bottom" id="cJz-jh-nmi"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="lik-Jb-UNr" userLabel="LoginScene" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zV2-Yb-tzp" userLabel="LoginViewContainer">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iHd-Hc-UkR" userLabel="LoginContainerView" customClass="UIControl">
+                                        <rect key="frame" x="0.0" y="201.5" width="375" height="264"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="login_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="kJo-Zi-pFB" userLabel="LogoView">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loginLogo" translatesAutoresizingMaskIntoConstraints="NO" id="kJo-Zi-pFB" userLabel="LogoView">
+                                                <rect key="frame" x="77.5" y="0.0" width="220.5" height="24"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="115" id="Ttd-7m-IJS"/>
-                                                    <constraint firstAttribute="width" constant="109" id="l7b-vO-g9Q"/>
+                                                    <constraint firstAttribute="height" constant="24" id="Ttd-7m-IJS"/>
+                                                    <constraint firstAttribute="width" constant="220.5" id="l7b-vO-g9Q"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Wrong email or password!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bJV-Wt-zLG" userLabel="errorFeedbackLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                <frame key="frameInset" minX="58" minY="154" width="259" height="17"/>
+                                                <rect key="frame" x="58" y="154" width="259" height="17"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -44,8 +50,10 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ucb-jq-HNI" userLabel="InputContainerView">
+                                                <rect key="frame" x="47" y="84" width="282" height="180"/>
                                                 <subviews>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yzu-4v-Bis" userLabel="passwordTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="10" y="65" width="262" height="40"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
                                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="go" secureTextEntry="YES"/>
@@ -57,6 +65,7 @@
                                                         </connections>
                                                     </textField>
                                                     <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="forgot my password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kFz-1S-09L" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="10" y="120" width="159" height="24"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="23" id="WAr-Me-tLW"/>
                                                         </constraints>
@@ -73,6 +82,7 @@
                                                         </variation>
                                                     </label>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Email" adjustsFontSizeToFit="NO" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="6dr-nu-GmC" userLabel="emailTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="10" y="0.0" width="262" height="40"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="40" id="9M7-hN-ci0"/>
@@ -121,9 +131,10 @@
                                                 </variation>
                                             </view>
                                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pok-KF-0aG" userLabel="offlineMessageView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="47" y="84" width="282" height="180"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="You are not currently connected to a network!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nYu-JU-kh6" userLabel="offlineMessage" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <frame key="frameInset" minX="25" minY="63" width="233" height="55"/>
+                                                        <rect key="frame" x="25" y="63" width="233" height="55"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -174,8 +185,10 @@
                                         </connections>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x8Q-os-z1s" userLabel="ActivityContainer">
+                                        <rect key="frame" x="0.0" y="465.5" width="375" height="148.5"/>
                                         <subviews>
                                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="75w-tb-LSw">
+                                                <rect key="frame" x="169" y="56" width="37" height="37"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="37" id="XNE-ik-8GV"/>
                                                     <constraint firstAttribute="width" constant="37" id="cqz-tT-OCn"/>
@@ -189,8 +202,10 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PQA-rp-TeB" userLabel="ButtonContainerView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                        <rect key="frame" x="-1" y="614" width="377" height="54"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="REp-R0-dOl" userLabel="SignUpButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="1" y="1" width="187" height="52"/>
                                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="20"/>
                                                 <state key="normal" title="sign up"/>
                                                 <userDefinedRuntimeAttributes>
@@ -198,6 +213,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zPr-G0-r47" userLabel="LogInButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="189" y="1" width="187" height="52"/>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="20"/>
                                                 <state key="normal" title="log in"/>
@@ -296,7 +312,7 @@
                             <constraint firstAttribute="trailing" secondItem="zV2-Yb-tzp" secondAttribute="trailing" id="vKK-Ec-3pS"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
+                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
                         </userDefinedRuntimeAttributes>
                         <variation key="default">
                             <mask key="constraints">
@@ -325,6 +341,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="login_logo.png" width="109" height="115"/>
+        <image name="loginLogo" width="441" height="48"/>
     </resources>
 </document>

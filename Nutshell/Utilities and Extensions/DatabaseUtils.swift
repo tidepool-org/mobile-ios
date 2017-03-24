@@ -74,7 +74,7 @@ class DatabaseUtils {
                 let endTime = DatabaseUtils.bucketNumberToDate(bucket+1)
                 APIConnector.connector().getReadOnlyUserData(startTime, endDate:endTime, completion: { (result) -> (Void) in
                     if result.isSuccess {
-                        let (adds, deletes) = DatabaseUtils.updateEventsForTimeRange(startTime, endTime: endTime, moc: NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: result.value!)
+                        let (adds, deletes) = DatabaseUtils.updateEventsForTimeRange(startTime, endTime: endTime, moc: NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!)
                         itemsAdded += adds
                         itemsDeleted += deletes
                     } else {
@@ -195,7 +195,7 @@ class DatabaseUtils {
     
     // Note: This call has the side effect of fetching data from the service which may result in a future notification of database changes.
     class func getTidepoolEvents(_ afterTime: Date, thruTime: Date, objectTypes: [String]? = nil, skipCheckLoad: Bool = false) throws -> [NSManagedObject] {
-        let moc = NutDataController.controller().mocForTidepoolEvents()!
+        let moc = NutDataController.sharedInstance.mocForTidepoolEvents()!
 
         // load on-demand: if data has not been loaded, a notification will come later!
         if !skipCheckLoad {
@@ -218,7 +218,7 @@ class DatabaseUtils {
     }
 
     class func getNutEvent(_ id: String) throws -> [EventItem] {
-        let moc = NutDataController.controller().mocForNutEvents()!
+        let moc = NutDataController.sharedInstance.mocForNutEvents()!
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "EventItem")
         request.predicate = NSPredicate(format: "id == %@", id)
         return try moc.fetch(request) as! [EventItem]
@@ -243,8 +243,8 @@ class DatabaseUtils {
     // TODO: This will need to be reworked to sync data from the service when the service supports meal and workout events.
     class func getAllNutEvents() throws -> [EventItem] {
         
-        let moc = NutDataController.controller().mocForNutEvents()!
-        let userId = NutDataController.controller().currentUserId!
+        let moc = NutDataController.sharedInstance.mocForNutEvents()!
+        let userId = NutDataController.sharedInstance.currentUserId!
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "EventItem")
         // Return all nut events in the requested range for the current user!
         // TODO: remove nil option before shipping!
@@ -254,8 +254,8 @@ class DatabaseUtils {
     }
 
     class func nutEventRequest(_ nutType: String, fromTime: Date, toTime: Date) -> (request: NSFetchRequest<NSFetchRequestResult>, moc: NSManagedObjectContext) {
-        let moc = NutDataController.controller().mocForNutEvents()!
-        let userId = NutDataController.controller().currentUserId!
+        let moc = NutDataController.sharedInstance.mocForNutEvents()!
+        let userId = NutDataController.sharedInstance.currentUserId!
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: nutType)
         // Return only objects in the requested range for the current user!
         // TODO: remove nil option before shipping!
@@ -280,10 +280,10 @@ class DatabaseUtils {
     // TODO: Move to NutshellTests!
     class func deleteAllNutEvents() {
         // TODO: Note this is currently only used for testing!
-        let moc = NutDataController.controller().mocForNutEvents()!
+        let moc = NutDataController.sharedInstance.mocForNutEvents()!
         do {
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: "EventItem")
-            let userId = NutDataController.controller().currentUserId!
+            let userId = NutDataController.sharedInstance.currentUserId!
             request.predicate = NSPredicate(format: "(userid == %@) OR (userid = nil)", userId)
             let myList = try moc.fetch(request) as! [EventItem]
             for obj: EventItem in myList {

@@ -69,7 +69,7 @@ class NutEventItem {
             copyChanges()
             if let moc = eventItem.managedObjectContext {
                 eventItem.modifiedTime = Date()
-                eventItem.userid = NutDataController.controller().currentUserId // Should already be set but can't hurt
+                eventItem.userid = NutDataController.sharedInstance.currentUserId // Should already be set but can't hurt
                 moc.refresh(eventItem, mergeChanges: true)
                 return DatabaseUtils.databaseSave(moc)
             }

@@ -40,11 +40,14 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     @IBOutlet weak var graphLayerContainer: UIView!
     fileprivate var graphContainerView: TidepoolGraphView?
     fileprivate var eventTime = Date()
+    
+    // refresh control...
+    var refreshControl:UIRefreshControl = UIRefreshControl()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "All events"
+        self.title = NutDataController.sharedInstance.currentUserName
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -55,7 +58,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         editBarButtonItem.isEnabled = false
 
         // Add a notification for when the database changes
-        let moc = NutDataController.controller().mocForNutEvents()
+        let moc = NutDataController.sharedInstance.mocForNutEvents()
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.databaseChanged(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: moc)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChange), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
@@ -67,66 +70,23 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             sideMenu.delegate = self
             menuButton.target = self
             menuButton.action = #selector(EventListViewController.toggleSideMenu(_:))
-            let revealWidth = min(ceil((240.0/320.0) * self.view.bounds.width), 281.0)
+            let revealWidth = min(ceil((280.0/320.0) * self.view.bounds.width), 280.0)
             sideMenu.menuWidth = revealWidth
             sideMenu.bouncingEnabled = false
         }
         
     }
-
-    // All notes
-    var notes: [BlipNote] = []
-    // Only filtered notes
-    var filteredNotes: [BlipNote] = []
-    
-    // Last date fetched to & beginning -- starts at current date
-    //let fetchPeriodInMonths: Int = -3
-    let fetchPeriodInMonths: Int = -24
-    var lastDateFetchTo: Date = Date()
-    var loadingNotes = false
-    
-    //
-    // MARK: - NoteIOWatcher Delegate
-    //
-    
-    func loadingNotes(_ loading: Bool) {
-        NSLog("NoteIOWatcher.loadingNotes: \(loading)")
-        loadingNotes = loading
-    }
-    
-    func endRefresh() {
-        NSLog("NoteIOWatcher.endRefresh")
-    }
-    
-    func addNotes(_ notes: [BlipNote]) {
-        NSLog("NoteIOWatcher.addNotes")
-        self.notes = self.notes + notes
-        // TODO: re-filter and update table...
-        self.filteredNotes = self.notes
-        self.tableView.reloadData()
-    }
-    
-    func postComplete(_ note: BlipNote) {
-        NSLog("NoteIOWatcher.postComplete")
-    }
-
-    func loadNotes() {
-        DDLogVerbose("trace")
-        
-        if (!loadingNotes) {
-            // Shift back three months for fetching
-            var dateShift = DateComponents()
-            dateShift.month = fetchPeriodInMonths
-            let calendar = Calendar.current
-            let startDate = (calendar as NSCalendar).date(byAdding: dateShift, to: lastDateFetchTo, options: [])!
-            
-            //for group in groups {
-            // TODO: change to group.userId, and fetch for all groups...
-                APIConnector.connector().getNotesForUserInDateRange(self, userid: NutDataController.controller().currentUserId!, start: startDate, end: lastDateFetchTo)
-            //}
-            
-            self.lastDateFetchTo = startDate
+   
+    // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
+    private var subviewedInitialized = false
+    override func viewDidLayoutSubviews() {
+        if (subviewedInitialized) {
+            return
         }
+        subviewedInitialized = true
+        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSFontAttributeName: smallRegularFont, NSForegroundColorAttributeName: blackishColor])
+        self.refreshControl.addTarget(self, action: #selector(EventListViewController.refresh), for: UIControlEvents.valueChanged)
+        self.tableView.addSubview(refreshControl)
     }
 
     override func didReceiveMemoryWarning() {
@@ -248,6 +208,118 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     }
 
     //
+    // MARK: - Notes methods
+    //
+    
+    // All notes
+    var notes: [BlipNote] = []
+    // Only filtered notes
+    var filteredNotes: [BlipNote] = []
+    
+    // Last date fetched to & beginning -- starts at current date
+    //let fetchPeriodInMonths: Int = -3
+    let fetchPeriodInMonths: Int = -24
+    var lastDateFetchTo: Date = Date()
+    var loadingNotes = false
+    
+    //
+    // MARK: - NoteIOWatcher Delegate
+    //
+    
+    func loadingNotes(_ loading: Bool) {
+        NSLog("NoteIOWatcher.loadingNotes: \(loading)")
+        loadingNotes = loading
+    }
+    
+    func endRefresh() {
+        NSLog("NoteIOWatcher.endRefresh")
+        refreshControl.endRefreshing()
+    }
+    
+    func addNotes(_ notes: [BlipNote]) {
+        NSLog("NoteIOWatcher.addNotes")
+        self.notes = self.notes + notes
+        // TODO: re-filter and update table...
+        self.filteredNotes = self.notes
+        self.tableView.reloadData()
+    }
+    
+    func postComplete(_ note: BlipNote) {
+        NSLog("NoteIOWatcher.postComplete")
+        
+        self.notes.insert(note, at: 0)
+        // filter the notes, sort the notes, reload notes table
+        // TODO: re-filter...
+        self.filteredNotes = self.notes
+        self.tableView.reloadData()
+    }
+    
+    func deleteComplete(_ deletedNote: BlipNote) {
+        NSLog("NoteIOWatcher.deleteComplete")
+        if self.selectedNote != nil {
+            if selectedNote!.id == deletedNote.id, let selectedIP = selectedIndexPath {
+                // deselect cell before deletion...
+                self.tableView.deselectRow(at: selectedIP, animated: true)
+                self.selectNote(nil)
+            }
+        }
+        var i = 0
+        for note in self.notes {
+            
+            if (note.id == deletedNote.id) {
+                self.notes.remove(at: i)
+                break
+            }
+            i += 1
+        }
+        
+        // filter the notes, sort the notes, reload notes table
+        // TODO: re-filter and update table...
+        self.filteredNotes = self.notes
+        self.tableView.reloadData()
+    }
+    
+    func updateComplete(_ originalNote: BlipNote, editedNote: BlipNote) {
+        NSLog("NoteIOWatcher.updateComplete")
+        
+        originalNote.messagetext = editedNote.messagetext
+        originalNote.timestamp = editedNote.timestamp
+        self.filteredNotes = self.notes
+        self.tableView.reloadData()
+    }
+    
+    
+    func loadNotes() {
+        DDLogVerbose("trace")
+        
+        if (!loadingNotes) {
+            // Shift back three months for fetching
+            var dateShift = DateComponents()
+            dateShift.month = fetchPeriodInMonths
+            let calendar = Calendar.current
+            let startDate = (calendar as NSCalendar).date(byAdding: dateShift, to: lastDateFetchTo, options: [])!
+            
+            //for group in groups {
+            // TODO: change to group.userId, and fetch for all groups...
+            APIConnector.connector().getNotesForUserInDateRange(self, userid: NutDataController.sharedInstance.currentUserId!, start: startDate, end: lastDateFetchTo)
+            //}
+            
+            self.lastDateFetchTo = startDate
+        }
+    }
+    
+    func refresh() {
+        DDLogVerbose("trace)")
+        
+        if (!loadingNotes) {
+            notes = []
+            filteredNotes = []
+            lastDateFetchTo = Date()
+            loadNotes()
+        }
+    }
+    
+    //
     // MARK: - Navigation
     //
     
@@ -272,6 +344,17 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     // Back button from group or detail viewer.
     @IBAction func done(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventList done!")
+        if let eventEditVC = segue.source as? EventEditViewController {
+            if let originalNote = eventEditVC.note, let editedNote = eventEditVC.editedNote {
+                APIConnector.connector().updateNote(self, editedNote: editedNote, originalNote: originalNote)
+                // will be called back on successful update!
+                // TODO: also handle unsuccessful updates?
+            } else {
+                NSLog("No note to delete!")
+            }
+        } else {
+            NSLog("Unknown segue source!")
+        }
     }
 
     // Multiple VC's on the navigation stack return all the way back to this initial VC via this segue, when nut events go away due to deletion, for test purposes, etc.
@@ -282,6 +365,17 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     // The add/edit VC will return here when a meal event is deleted, and detail vc was transitioned to directly from this vc (i.e., the Nut event contained a single meal event which was deleted).
     @IBAction func doneItemDeleted(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventList doneItemDeleted")
+        if let eventEditVC = segue.source as? EventEditViewController {
+            if let noteToDelete = eventEditVC.note {
+                APIConnector.connector().deleteNote(self, noteToDelete: noteToDelete)
+                // will be called back on successful delete!
+                // TODO: also handle unsuccessful deletes?
+            } else {
+                NSLog("No note to delete!")
+            }
+        } else {
+            NSLog("Unknown segue source!")
+        }
     }
 
     @IBAction func cancel(_ segue: UIStoryboardSegue) {
@@ -292,7 +386,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     func databaseChanged(_ note: Notification) {
         NSLog("EventList: Database Change Notification")
         if viewIsForeground {
-            loadNotes()
+            // TODO: this crashed on logout, we're still foreground, and moc is being saved...
+            // TODO: will be needed if notes go into a database but unused right now...
+            //loadNotes()
         } else {
             eventListNeedsUpdate = true
         }
@@ -547,8 +643,7 @@ extension EventListViewController: UITableViewDelegate {
         let selectOrEdit = true
         
         if selectOrEdit {
-            //self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue, sender: cell)
-            // Rather than invoking a detail view controller, show/hide the graph for the current selection
+            // Select cell, and, rather than invoking a detail view controller, show/hide the graph for the current selection
             if selectedIndexPath != nil && selectedIndexPath! == indexPath {
                 // already selected and shown, toggle off
                 self.selectNote(nil)
@@ -559,13 +654,6 @@ extension EventListViewController: UITableViewDelegate {
                 cell.setSelected(true, animated: true)
                 self.selectedIndexPath = indexPath
             }
-            
-        } else {
-//            if selectedIndexPath != nil {
-//                self.selectEvent(nil)
-//                self.selectedIndexPath = nil
-//            }
-//            self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemEditSegue, sender: cell)
         }
     }
 

@@ -18,7 +18,7 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 
-class EventEditViewController: UIViewController, UITextViewDelegate {
+class EventEditViewController: BaseUIViewController, UITextViewDelegate {
     
     // UI Elements
     // From storyboard
@@ -49,14 +49,12 @@ class EventEditViewController: UIViewController, UITextViewDelegate {
     // More UI Elements
     let messageBox: UITextView = UITextView()
     let postButton: UIButton = UIButton()
-    let cameraButton: UIButton = UIButton()
-    let locationButton: UIButton = UIButton()
     
     // Original note, edited note, and the full name for the group
-    // TODO: Set by launching controller in prepareForSegue!
+    // Note and groupFullName must be set by launching controller in prepareForSegue!
     var note: BlipNote!
-    var groupFullName: String!
-    private var editedNote: BlipNote!
+    var groupFullName: String = ""
+    var editedNote: BlipNote!
     private var previousDate: Date!
     
     // Keyboard frame for positioning UI Elements
@@ -90,6 +88,10 @@ class EventEditViewController: UIViewController, UITextViewDelegate {
         notificationCenter.addObserver(self, selector: #selector(EventEditViewController.hashtagPressed(_:)), name: NSNotification.Name(rawValue: "hashtagPressed"), object: nil)
     }
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -206,7 +208,7 @@ class EventEditViewController: UIViewController, UITextViewDelegate {
         messageBox.autocapitalizationType = UITextAutocapitalizationType.sentences
         messageBox.autocorrectionType = UITextAutocorrectionType.yes
         messageBox.spellCheckingType = UITextSpellCheckingType.yes
-        messageBox.keyboardAppearance = UIKeyboardAppearance.dark
+        messageBox.keyboardAppearance = UIKeyboardAppearance.light
         messageBox.keyboardType = UIKeyboardType.default
         messageBox.returnKeyType = UIReturnKeyType.default
         messageBox.isSecureTextEntry = false
@@ -219,22 +221,18 @@ class EventEditViewController: UIViewController, UITextViewDelegate {
         NSLog("\(#function)")
     }
     
-    @IBAction func backButtonHandler(_ sender: Any) {
-        NSLog("\(#function)")
-    }
-
     @IBAction func cancelButtonHandler(_ sender: Any) {
         NSLog("\(#function)")
-        
-        self.performSegue(withIdentifier: "unwindToCancel", sender: self)
+        self.closeVC()
     }
 
     @IBAction func deleteButtonHandler(_ sender: Any) {
         NSLog("\(#function)")
+        self.deleteNote()
     }
     
     // close the VC on button press from leftBarButtonItem
-    func closeVC(_ sender: UIBarButtonItem!) {
+    func closeVC() {
         APIConnector.connector().trackMetric("Clicked Close Add or Edit Note")
         
         if (note.messagetext != messageBox.text || note.timestamp as Date != datePicker.date) {
@@ -245,12 +243,9 @@ class EventEditViewController: UIViewController, UITextViewDelegate {
             alert.addAction(UIAlertAction(title: editAlertDiscard, style: .cancel, handler: { Void in
                 DDLogVerbose("Discard edits from note")
                 
-                let notification = Notification(name: Notification.Name(rawValue: "doneEditing"), object: nil)
-                NotificationCenter.default.post(notification)
-                
                 self.view.endEditing(true)
                 self.closeDatePicker(false)
-                self.dismiss(animated: true, completion: nil)
+                self.performSegue(withIdentifier: "unwindToCancel", sender: self)
             }))
             alert.addAction(UIAlertAction(title: editAlertSave, style: .default, handler: { Void in
                 DDLogVerbose("Save edited note")
@@ -260,17 +255,13 @@ class EventEditViewController: UIViewController, UITextViewDelegate {
             self.present(alert, animated: true, completion: nil)
             
         } else {
-            // Note has not been edited, dismiss the VC
-            let notification = Notification(name: Notification.Name(rawValue: "doneEditing"), object: nil)
-            NotificationCenter.default.post(notification)
-            
             self.view.endEditing(true)
             self.closeDatePicker(false)
-            self.dismiss(animated: true, completion: nil)
+            self.performSegue(withIdentifier: "unwindToCancel", sender: self)
         }
     }
     
-    func deleteNote(_ sender: UIBarButtonItem!) {
+    func deleteNote() {
         APIConnector.connector().trackMetric("Clicked Delete Note")
         
         let alert = UIAlertController(title: trashAlertTitle, message: trashAlertMessage, preferredStyle: .alert)
@@ -285,15 +276,9 @@ class EventEditViewController: UIViewController, UITextViewDelegate {
             DDLogVerbose("Trash note")
             
             // Done editing note
-            let notification = Notification(name: Notification.Name(rawValue: "doneEditing"), object: nil)
-            NotificationCenter.default.post(notification)
-            
-            let notificationTwo = Notification(name: Notification.Name(rawValue: "deleteNote"), object: nil)
-            NotificationCenter.default.post(notificationTwo)
-            
             self.view.endEditing(true)
             self.closeDatePicker(false)
-            self.dismiss(animated: true, completion: nil)
+            self.performSegue(withIdentifier: "unwindToDelete", sender: self)
             
         }))
         self.present(alert, animated: true, completion: nil)
@@ -407,8 +392,6 @@ class EventEditViewController: UIViewController, UITextViewDelegate {
                     
                     // Move up controls
                     self.postButton.frame.origin.y = self.sceneContainerView.frame.height - (self.keyboardFrame.height + labelInset + self.postButton.frame.height)
-                    self.cameraButton.frame.origin.y = self.postButton.frame.midY - self.cameraButton.frame.height / 2
-                    self.locationButton.frame.origin.y = self.postButton.frame.midY - self.locationButton.frame.height / 2
                     // Resize messageBox
                     let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
                     self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
@@ -452,8 +435,6 @@ class EventEditViewController: UIViewController, UITextViewDelegate {
                 // position affected UI elements
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
                 self.postButton.frame.origin.y = self.sceneContainerView.frame.height - (labelInset + self.postButton.frame.height)
-                self.cameraButton.frame.origin.y = self.postButton.frame.midY - self.cameraButton.frame.height / 2
-                self.locationButton.frame.origin.y = self.postButton.frame.midY - self.locationButton.frame.height / 2
                 let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
                 self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
                 self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
@@ -495,16 +476,6 @@ class EventEditViewController: UIViewController, UITextViewDelegate {
         timedateLabel.attributedText = dateFormatter.attributedStringFromDate(datePicker.date)
         timedateLabel.sizeToFit()
         textViewDidChange(messageBox)
-    }
-    
-    // Camera functionality currently not developed.
-    func cameraPressed(_ sender: UIButton!) {
-        // Do nothing
-    }
-    
-    // Location functionality currently not developed.
-    func locationPressed(_ sender: UIButton!) {
-        // Do nothing
     }
     
     // saveNote action from saveNoteButton
@@ -550,15 +521,8 @@ class EventEditViewController: UIViewController, UITextViewDelegate {
             self.view.endEditing(true)
             self.closeDatePicker(false)
             
-            let notification = Notification(name: Notification.Name(rawValue: "doneEditing"), object: nil)
-            NotificationCenter.default.post(notification)
-            
-            // Send notification to NotesVC to handle edited note
-            let notificationTwo = Notification(name: Notification.Name(rawValue: "saveNote"), object: nil)
-            NotificationCenter.default.post(notificationTwo)
-            
             // close the VC
-            self.dismiss(animated: true, completion: nil)
+            self.performSegue(withIdentifier: "unwindToDone", sender: self)
         }
     }
     

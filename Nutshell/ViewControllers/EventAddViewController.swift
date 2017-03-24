@@ -308,7 +308,11 @@ class EventAddViewController: BaseUIViewController, UINavigationControllerDelega
         // Add an observer to notificationCenter to handle hashtagPress events from HashtagsView
         notificationCenter.addObserver(self, selector: #selector(AddNoteViewController.hashtagPressed(_:)), name: NSNotification.Name(rawValue: "hashtagPressed"), object: nil)
     }
-    
+
+     deinit {
+     NotificationCenter.default.removeObserver(self)
+     }
+     
     // Configure title of navigationBar to given string
     func configureTitleView(_ text: String) {
         // UILabel used

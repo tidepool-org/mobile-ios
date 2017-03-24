@@ -38,7 +38,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         } else{
             versionString.text = "V" + UIApplication.appVersion() + " on " + curService
         }
-        loginAccount.text = NutDataController.controller().currentUserName
+        loginAccount.text = NutDataController.sharedInstance.currentUserName
         //let attributes = [NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue]
  
         let str = "Privacy and Terms of Use"
@@ -68,7 +68,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     func menuWillOpen() {
         // Late binding here because profile fetch occurs after login complete!
         // Treat this like viewWillAppear...
-        usernameLabel.text = NutDataController.controller().userFullName
+        usernameLabel.text = NutDataController.sharedInstance.userFullName
         
         configureHKInterface()
     }
@@ -108,7 +108,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
             if enableSwitch.isOn {
                 enableHealthKitInterfaceForCurrentUser()
             } else {
-                NutDataController.controller().disableHealthKitInterface()
+                NutDataController.sharedInstance.disableHealthKitInterface()
             }
             configureHKInterface()
         }
@@ -137,7 +137,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
     fileprivate func configureHKInterface() {
         // Late binding here because profile fetch occurs after login complete!
-        usernameLabel.text = NutDataController.controller().userFullName
+        usernameLabel.text = NutDataController.sharedInstance.userFullName
         let hkCurrentEnable = appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
         healthKitSwitch.isOn = hkCurrentEnable
         if hkCurrentEnable {
@@ -154,7 +154,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
             hideHealthKitUI = true
         }
         // The isDSAUser variable only becomes valid after user profile fetch, so if it is not set, assume true. Otherwise use it as main control of whether we show the HealthKit UI.
-        if let isDSAUser = NutDataController.controller().isDSAUser {
+        if let isDSAUser = NutDataController.sharedInstance.isDSAUser {
             if !isDSAUser {
                 hideHealthKitUI = true
             }
@@ -177,11 +177,11 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
                 return
             }))
             alert.addAction(UIAlertAction(title: "Change Account", style: .default, handler: { Void in
-                NutDataController.controller().enableHealthKitInterface()
+                NutDataController.sharedInstance.enableHealthKitInterface()
             }))
             self.present(alert, animated: true, completion: nil)
         } else {
-            NutDataController.controller().enableHealthKitInterface()
+            NutDataController.sharedInstance.enableHealthKitInterface()
         }
     }
     

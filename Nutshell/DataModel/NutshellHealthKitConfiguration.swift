@@ -65,7 +65,7 @@ class NutshellHealthKitConfiguration: HealthKitConfiguration
     }
     
     fileprivate func processWorkoutEvents(_ workouts: [HKSample]) {
-        let moc = NutDataController.controller().mocForNutEvents()!
+        let moc = NutDataController.sharedInstance.mocForNutEvents()!
         if let entityDescription = NSEntityDescription.entity(forEntityName: "Workout", in: moc) {
             for event in workouts {
                 if let workout = event as? HKWorkout {
@@ -104,7 +104,7 @@ class NutshellHealthKitConfiguration: HealthKitConfiguration
                     we.time = workout.startDate
                     we.type = "workout"
                     we.id = event.uuid.uuidString as NSString?
-                    we.userid = NutDataController.controller().currentUserId
+                    we.userid = NutDataController.sharedInstance.currentUserId
                     let now = Date()
                     we.createdTime = now
                     we.modifiedTime = now
@@ -143,7 +143,7 @@ class NutshellHealthKitConfiguration: HealthKitConfiguration
     }
     
     fileprivate func processDeleteWorkoutEvents(_ workouts: [HKDeletedObject]) {
-        let moc = NutDataController.controller().mocForNutEvents()!
+        let moc = NutDataController.sharedInstance.mocForNutEvents()!
         for workout in workouts {
             NSLog("Processing deleted workout sample with UUID: \(workout.uuid)");
             let id = workout.uuid.uuidString

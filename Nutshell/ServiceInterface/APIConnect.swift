@@ -26,6 +26,8 @@ protocol NoteIOWatcher {
     func endRefresh()
     func addNotes(_ notes: [BlipNote])
     func postComplete(_ note: BlipNote)
+    func deleteComplete(_ note: BlipNote)
+    func updateComplete(_ originalNote: BlipNote, editedNote: BlipNote)
 }
 
 /// APIConnector is a singleton object with the main responsibility of communicating to the Tidepool service:
@@ -190,21 +192,21 @@ class APIConnector {
                 
                 // Create the User object
                 // TODO: Should this call be made in NutshellDataController?
-                let moc = NutDataController.controller().mocForCurrentUser()
+                let moc = NutDataController.sharedInstance.mocForCurrentUser()
                 if let user = User.fromJSON(json, moc: moc) {
-                    NutDataController.controller().loginUser(user)
+                    NutDataController.sharedInstance.loginUser(user)
                     APIConnector.connector().trackMetric("Logged In")
                     completion(Result.success(user))
                 } else {
                     APIConnector.connector().trackMetric("Log In Failed")
-                    NutDataController.controller().logoutUser()
+                    NutDataController.sharedInstance.logoutUser()
                     completion(Result.failure(NSError(domain: self.kNutshellErrorDomain,
                         code: -1,
                         userInfo: ["description":"Could not create user from JSON", "result":response.result.value!])))
                 }
             } else {
                 APIConnector.connector().trackMetric("Log In Failed")
-                NutDataController.controller().logoutUser()
+                NutDataController.sharedInstance.logoutUser()
                 completion(Result.failure(response.result.error!))
             }
         }
@@ -213,7 +215,7 @@ class APIConnector {
     func fetchProfile(_ completion: @escaping (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user profile
         // format is like: https://api.tidepool.org/metadata/f934a287c4/profile
-        let endpoint = "metadata/" + NutDataController.controller().currentUserId! + "/profile"
+        let endpoint = "metadata/" + NutDataController.sharedInstance.currentUserId! + "/profile"
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         sendRequest(.get, endpoint: endpoint).responseJSON { response in
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -275,7 +277,7 @@ class APIConnector {
         APIConnector.connector().trackMetric("Logged Out", flushBuffer: true)
         self.lastNetworkError = nil
         self.sessionToken = nil
-        NutDataController.controller().logoutUser()
+        NutDataController.sharedInstance.logoutUser()
         completion()
     }
     
@@ -283,7 +285,7 @@ class APIConnector {
         
         let endpoint = "/auth/login"
         
-        if self.sessionToken == nil || NutDataController.controller().currentUserId == nil {
+        if self.sessionToken == nil || NutDataController.sharedInstance.currentUserId == nil {
             // We don't have a session token to refresh.
             completion(false)
             return
@@ -313,7 +315,7 @@ class APIConnector {
      */
     func getUserData(_ completion: @escaping (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user data
-        let endpoint = "data/" + NutDataController.controller().currentUserId!;
+        let endpoint = "data/" + NutDataController.sharedInstance.currentUserId!;
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         sendRequest(.get, endpoint: endpoint).responseJSON { response in
@@ -332,7 +334,7 @@ class APIConnector {
         // Set our endpoint for the user data
         // TODO: centralize define of read-only events!
         // request format is like: https://api.tidepool.org/data/f934a287c4?endDate=2015-11-17T08%3A00%3A00%2E000Z&startDate=2015-11-16T12%3A00%3A00%2E000Z&type=smbg%2Cbolus%2Ccbg%2Cwizard%2Cbasal
-        let endpoint = "data/" + NutDataController.controller().currentUserId!
+        let endpoint = "data/" + NutDataController.sharedInstance.currentUserId!
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         // TODO: If there is no data returned, I get a failure case with status code 200, and error FAILURE: Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.} ] Maybe an Alamofire issue?
         var parameters: Dictionary = ["type": objectTypes]
@@ -516,6 +518,10 @@ class APIConnector {
 
     func getNotesForUserInDateRange(_ fetchWatcher: NoteIOWatcher, userid: String, start: Date, end: Date) {
         
+        if sessionToken == nil {
+            return
+        }
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         let urlExtension = "/message/notes/" + userid + "?starttime=" + dateFormatter.string(from: start) + "&endtime="  + dateFormatter.string(from: end)
@@ -613,11 +619,6 @@ class APIConnector {
                     note.id = jsonResult.value(forKey: "id") as! String
                     postWatcher.postComplete(note)
                     
-//                    notesVC.notes.insert(note, at: 0)
-//                    // filter the notes, sort the notes, reload notes table
-//                    notesVC.filterNotes()
-//                    notesVC.notesTable.reloadData()
-                    
                 } else {
                     DDLogError("Did not send note for groupid \(note.groupid) - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
@@ -631,6 +632,70 @@ class APIConnector {
         blipRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
     }
 
+    func updateNote(_ updateWatcher: NoteIOWatcher, editedNote: BlipNote, originalNote: BlipNote) {
+        
+        let urlExtension = "/message/edit/" + originalNote.id
+        
+        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
+        
+        let jsonObject = editedNote.updatesFromNote()
+        let body: Data?
+        do {
+            body = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
+        } catch  {
+            body = nil
+        }
+        
+        let preRequest = { () -> Void in
+            // nothing to do in the preRequest
+        }
+        
+        let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
+            if let httpResponse = response as? HTTPURLResponse {
+                if (httpResponse.statusCode == 200) {
+                    DDLogInfo("Edited note with id \(originalNote.id)")
+                    updateWatcher.updateComplete(originalNote, editedNote: editedNote)
+                } else {
+                    DDLogError("Did not edit note with id \(originalNote.id) - invalid status code \(httpResponse.statusCode)")
+                    self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
+                }
+            } else {
+                DDLogError("Did not edit note with id \(originalNote.id) - could not parse response")
+                self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
+            }
+        }
+        
+        blipRequest("PUT", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
+    }
+    
+    func deleteNote(_ deleteWatcher: NoteIOWatcher, noteToDelete: BlipNote) {
+        let urlExtension = "/message/remove/" + noteToDelete.id
+        
+        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
+        
+        let preRequest = { () -> Void in
+            // nothing to do in the preRequest
+        }
+        
+        let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
+            if let httpResponse = response as? HTTPURLResponse {
+                if (httpResponse.statusCode == 202) {
+                    DDLogInfo("Deleted note with id \(noteToDelete.id)")
+                    deleteWatcher.deleteComplete(noteToDelete)
+                } else {
+                    DDLogError("Did not delete note with id \(noteToDelete.id) - invalid status code \(httpResponse.statusCode)")
+                    self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
+                }
+            } else {
+                DDLogError("Did not delete note with id \(noteToDelete.id) - could not parse response")
+                self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
+            }
+        }
+        
+        blipRequest("DELETE", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+    }
+
+    
     let unknownError: String = "Unknown Error Occurred"
     let unknownErrorMessage: String = "An unknown error occurred. We are working hard to resolve this issue."
     fileprivate var isShowingAlert = false
@@ -683,7 +748,7 @@ class APIConnector {
             return
         }
         
-        guard let currentUserId = NutDataController.controller().currentUserId else {
+        guard let currentUserId = NutDataController.sharedInstance.currentUserId else {
             error = NSError(domain: "APIConnect-doUpload", code: -2, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, no user is logged in"])
             return
         }

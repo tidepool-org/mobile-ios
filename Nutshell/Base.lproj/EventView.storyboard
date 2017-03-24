@@ -122,7 +122,7 @@
                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="102" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TkA-IK-Jxk" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="102" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TkA-IK-Jxk" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                         <color key="backgroundColor" red="0.94901960784313721" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
@@ -155,8 +155,8 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RgN-Oa-vbI" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="24" y="12" width="264" height="17"/>
-                                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
+                                                            <rect key="frame" x="24" y="12" width="264" height="20"/>
+                                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <userDefinedRuntimeAttributes>
@@ -164,8 +164,8 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="Tacos" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ELX-Al-2OH" userLabel="noteLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="24" y="39" width="272" height="23.5"/>
-                                                            <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="17"/>
+                                                            <rect key="frame" x="24" y="42" width="272" height="20.5"/>
+                                                            <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
                                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <userDefinedRuntimeAttributes>
@@ -242,19 +242,10 @@
                             <constraint firstItem="Yu7-Gk-FTH" firstAttribute="top" secondItem="2ih-Oi-tIS" secondAttribute="bottom" id="w0t-01-pYQ"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="h4z-iC-Yiv">
-                        <nil key="title"/>
+                    <navigationItem key="navigationItem" title="Note List" id="h4z-iC-Yiv">
                         <barButtonItem key="leftBarButtonItem" image="menu-button" id="k2Y-dm-3tk">
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </barButtonItem>
-                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="3hf-bE-obs" userLabel="dismissKeyboard">
-                            <rect key="frame" x="76" y="7" width="150" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="40"/>
-                            <connections>
-                                <action selector="dismissKeyboard:" destination="oVB-ry-Lwj" eventType="touchUpInside" id="3fq-tn-APz"/>
-                            </connections>
-                        </button>
                         <rightBarButtonItems>
                             <barButtonItem image="add-button" id="AjV-8Q-vYz">
                                 <color key="tintColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -345,24 +336,37 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zHg-a9-AA4" userLabel="HeaderView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="64" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mc4-RZ-bcx" userLabel="dismissKeyboard">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                                        <connections>
-                                            <action selector="dismissKeyboardHandler:" destination="gES-61-bql" eventType="touchUpInside" id="1ub-Sh-jNm"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n6i-hk-BPQ" userLabel="cancelButton">
-                                        <rect key="frame" x="16" y="10" width="24" height="24"/>
-                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" image="xIcon"/>
-                                        <connections>
-                                            <action selector="cancelButtonHandler:" destination="gES-61-bql" eventType="touchUpInside" id="eUW-Gj-Spz"/>
-                                        </connections>
-                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f8F-0R-qEc" userLabel="navBarView">
+                                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
+                                        <subviews>
+                                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GVC-Qm-z8K">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <items>
+                                                    <navigationItem title="Edit Note" id="LUA-oj-Gkv">
+                                                        <barButtonItem key="leftBarButtonItem" image="xIconSmall" id="EDS-ML-XB2" userLabel="cancelButton">
+                                                            <connections>
+                                                                <action selector="cancelButtonHandler:" destination="Wac-B3-d2O" id="MeL-24-Zj6"/>
+                                                            </connections>
+                                                        </barButtonItem>
+                                                        <barButtonItem key="rightBarButtonItem" title="delete" id="har-Na-d6U" userLabel="deleteButton">
+                                                            <connections>
+                                                                <action selector="deleteButtonHandler:" destination="Wac-B3-d2O" id="sGh-xR-7Zr"/>
+                                                            </connections>
+                                                        </barButtonItem>
+                                                    </navigationItem>
+                                                </items>
+                                            </navigationBar>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="3fI-Xg-8Zb"/>
+                                        </constraints>
+                                    </view>
                                     <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9LX-Cx-Cu3" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="43" width="320" height="1"/>
+                                        <rect key="frame" x="0.0" y="63" width="320" height="1"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="P8h-xd-T3E"/>
@@ -373,32 +377,29 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="5cH-xL-TQl"/>
+                                    <constraint firstAttribute="height" constant="64" id="5cH-xL-TQl"/>
+                                    <constraint firstAttribute="trailing" secondItem="f8F-0R-qEc" secondAttribute="trailing" id="7JO-aH-jlI"/>
                                     <constraint firstItem="9LX-Cx-Cu3" firstAttribute="leading" secondItem="zHg-a9-AA4" secondAttribute="leading" id="Ezl-cM-mqB"/>
+                                    <constraint firstItem="f8F-0R-qEc" firstAttribute="leading" secondItem="zHg-a9-AA4" secondAttribute="leading" id="I0a-n7-FbW"/>
+                                    <constraint firstAttribute="bottom" secondItem="f8F-0R-qEc" secondAttribute="bottom" id="Ptc-57-bEh"/>
                                     <constraint firstAttribute="trailing" secondItem="9LX-Cx-Cu3" secondAttribute="trailing" id="Vfy-ja-u6M"/>
-                                    <constraint firstItem="n6i-hk-BPQ" firstAttribute="centerY" secondItem="zHg-a9-AA4" secondAttribute="centerY" id="VxS-pK-mRY"/>
-                                    <constraint firstItem="mc4-RZ-bcx" firstAttribute="leading" secondItem="zHg-a9-AA4" secondAttribute="leading" id="Xs8-7C-hua"/>
-                                    <constraint firstItem="n6i-hk-BPQ" firstAttribute="leading" secondItem="zHg-a9-AA4" secondAttribute="leading" constant="16" id="aTU-XV-1Ca"/>
                                     <constraint firstAttribute="bottom" secondItem="9LX-Cx-Cu3" secondAttribute="bottom" id="kod-xc-nMU"/>
-                                    <constraint firstItem="mc4-RZ-bcx" firstAttribute="top" secondItem="zHg-a9-AA4" secondAttribute="top" id="pnj-9g-gU1"/>
-                                    <constraint firstAttribute="bottom" secondItem="mc4-RZ-bcx" secondAttribute="bottom" id="tss-BF-7DU"/>
-                                    <constraint firstAttribute="trailing" secondItem="mc4-RZ-bcx" secondAttribute="trailing" id="xR8-49-eiQ"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1yp-qA-0w5" userLabel="SceneContainer" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="108" width="320" height="460"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.199973762" green="0.2000150383" blue="0.19997116919999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="gSt-hf-pBX" firstAttribute="top" secondItem="1yp-qA-0w5" secondAttribute="bottom" id="EGz-lY-Nw7"/>
                             <constraint firstItem="1yp-qA-0w5" firstAttribute="top" secondItem="b2U-5y-ERU" secondAttribute="bottom" id="N5u-Nc-UHI"/>
@@ -408,7 +409,7 @@
                             <constraint firstAttribute="trailing" secondItem="zHg-a9-AA4" secondAttribute="trailing" id="bMS-Ed-eMJ"/>
                             <constraint firstItem="1yp-qA-0w5" firstAttribute="top" secondItem="zHg-a9-AA4" secondAttribute="bottom" id="eoZ-HP-1qg"/>
                             <constraint firstItem="1yp-qA-0w5" firstAttribute="leading" secondItem="FgG-UI-FMA" secondAttribute="leading" id="gqT-ZW-BDl"/>
-                            <constraint firstItem="zHg-a9-AA4" firstAttribute="top" secondItem="b2U-5y-ERU" secondAttribute="bottom" id="jAB-ih-1io"/>
+                            <constraint firstItem="zHg-a9-AA4" firstAttribute="top" secondItem="b2U-5y-ERU" secondAttribute="bottom" constant="-20" id="jAB-ih-1io"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -417,33 +418,12 @@
                             </mask>
                         </variation>
                     </view>
-                    <navigationItem key="navigationItem" id="0Ya-M2-zhn">
-                        <nil key="title"/>
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="IWn-lb-de6">
-                            <connections>
-                                <action selector="backButtonHandler:" destination="gES-61-bql" id="Xw2-zn-ptG"/>
-                                <segue destination="fFW-91-Y5n" kind="unwind" identifier="unwindToCancel" unwindAction="cancel:" id="lIe-xZ-lr9"/>
-                            </connections>
-                        </barButtonItem>
-                        <button key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="lgP-nD-DDC" userLabel="dismissKeyboard">
-                            <rect key="frame" x="85" y="7" width="150" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <connections>
-                                <action selector="dismissKeyboardHandler:" destination="gES-61-bql" eventType="touchUpInside" id="Zcu-9l-4Yz"/>
-                            </connections>
-                        </button>
-                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="5Ke-Eh-f9N">
-                            <connections>
-                                <action selector="deleteButtonHandler:" destination="gES-61-bql" id="d0C-Qj-gTy"/>
-                                <segue destination="fFW-91-Y5n" kind="unwind" unwindAction="doneItemDeleted:" id="Nbf-fQ-EPw"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
-                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="sceneContainerView" destination="1yp-qA-0w5" id="mo8-Yr-yod"/>
+                        <segue destination="fFW-91-Y5n" kind="unwind" identifier="unwindToCancel" unwindAction="cancel:" id="BfT-eu-pd4"/>
+                        <segue destination="fFW-91-Y5n" kind="unwind" identifier="unwindToDone" unwindAction="done:" id="aYa-BJ-58s"/>
+                        <segue destination="fFW-91-Y5n" kind="unwind" identifier="unwindToDelete" unwindAction="doneItemDeleted:" id="anh-5s-6Ww"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wac-B3-d2O" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -457,6 +437,6 @@
         <image name="menu-button" width="22" height="15"/>
         <image name="searchIcon" width="21" height="21"/>
         <image name="separatorLine" width="100" height="2"/>
-        <image name="xIcon" width="24" height="24"/>
+        <image name="xIconSmall" width="15" height="15"/>
     </resources>
 </document>

@@ -69,7 +69,7 @@ class NutUtils {
     
     class func photosDirectoryPath() -> String? {
         let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        var photoDirPath: String? = path + "/photos/" + NutDataController.controller().currentUserId! + "/"
+        var photoDirPath: String? = path + "/photos/" + NutDataController.sharedInstance.currentUserId! + "/"
         
         let fm = FileManager.default
         var dirExists = false

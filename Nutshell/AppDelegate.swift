@@ -49,10 +49,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor
         UINavigationBar.appearance().isTranslucent = false
         UINavigationBar.appearance().tintColor = UIColor.white
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: Styles.navTitleBoldFont]
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: Styles.navTitleFont]
         
         // Initialize database by referencing username. This must be done before using the APIConnector!
-        let name = NutDataController.controller().currentUserName
+        let name = NutDataController.sharedInstance.currentUserName
         if !name.isEmpty {
             NSLog("Initializing NutshellDataController, found and set user \(name)")
         }
@@ -151,7 +151,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // make sure HK interface is configured...
         // TODO: this can kick off a lot of activity! Review...
         // Note: configureHealthKitInterface is somewhat background-aware...
-        NutDataController.controller().configureHealthKitInterface()
+        NutDataController.sharedInstance.configureHealthKitInterface()
         // then call it...
         HealthKitDataPusher.sharedInstance.backgroundFetch { (fetchResult) -> Void in
             completionHandler(fetchResult)
@@ -240,7 +240,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSLog("AppDelegate: attempting to refresh token...")
             api.refreshToken() { succeeded -> (Void) in
                 if succeeded {
-                    NutDataController.controller().configureHealthKitInterface()
+                    NutDataController.sharedInstance.configureHealthKitInterface()
                     self.setupUIForLoginSuccess()
                 } else {
                     NSLog("Refresh token failed, need to log in normally")
@@ -255,7 +255,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        NutDataController.controller().appWillTerminate()
+        NutDataController.sharedInstance.appWillTerminate()
         NSLog("Nutshell applicationWillTerminate")
     }
 

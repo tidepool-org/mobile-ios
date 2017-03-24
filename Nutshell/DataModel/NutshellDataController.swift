@@ -39,15 +39,8 @@ class NutDataController: NSObject
     fileprivate let kTidepoolObjectsStoreFilename = "TidepoolObjects.sqlite.nosync"
     fileprivate let kTestFilePrefix = "Test-"
     
-
-    static var _controller: NutDataController?
     /// Supports a singleton controller for the application.
-    class func controller() -> NutDataController {
-        if _controller == nil {
-            _controller = NutDataController()
-        }
-        return _controller!
-    }
+    static let sharedInstance = NutDataController()
 
     /// Coordinator/store for current userId, token, etc. Should always be available.
     func mocForCurrentUser() -> NSManagedObjectContext {

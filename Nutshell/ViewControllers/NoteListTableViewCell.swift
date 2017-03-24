@@ -54,7 +54,10 @@ class NoteListTableViewCell: BaseUITableViewCell {
     }
     
     func configureCell(_ note: BlipNote) {
-        noteLabel.text = note.messagetext
+        let hashtagBolder = HashtagBolder()
+        let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString)
+        noteLabel.attributedText = attributedText
+
         dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
         self.note = note
         noteLabel.isHighlighted = false

@@ -44,7 +44,7 @@ class HashtagsView: UIView {
     func handleHashtagCoreData(_ text: String) {
         
         // Get the mangagedContext
-        let managedContext = NutDataController.controller().mocForNutEvents()!
+        let managedContext = NutDataController.sharedInstance.mocForNutEvents()!
         
         // Open a new fetch request for a Hashtag
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"Hashtag")
@@ -113,7 +113,7 @@ class HashtagsView: UIView {
     func fetchHashtags() {
         
         // Get the managedContext
-        let managedContext = NutDataController.controller().mocForNutEvents()!
+        let managedContext = NutDataController.sharedInstance.mocForNutEvents()!
         
         // Open a new fetch request
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"Hashtag")
@@ -146,7 +146,7 @@ class HashtagsView: UIView {
         let defaults = ["#exercise", "#meal", "#sitechange", "#sensorchange", "#juicebox", "#devicesetting"]
         
         // Get the managedContext
-        let managedContext = NutDataController.controller().mocForNutEvents()!
+        let managedContext = NutDataController.sharedInstance.mocForNutEvents()!
         
         // For each default hashtag...
         for text in defaults {

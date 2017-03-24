@@ -138,7 +138,7 @@ open class Styles: NSObject {
         static let mediumSmallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 14.0)!
         static let mediumBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 16.0)!
         static let mediumLargeBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 17.5)!
-        static let navTitleBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 20.0)!
+        static let navTitleFont: UIFont = UIFont(name: "OpenSans", size: 17.5)!
         
         static let smallLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 12.0)!
         static let mediumLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 17.0)!
@@ -167,7 +167,7 @@ open class Styles: NSObject {
     open class var mediumSmallBoldFont: UIFont { return FontCache.mediumSmallBoldFont }
     open class var mediumBoldFont: UIFont { return FontCache.mediumBoldFont }
     open class var mediumLargeBoldFont: UIFont { return FontCache.mediumLargeBoldFont }
-    open class var navTitleBoldFont: UIFont { return FontCache.navTitleBoldFont }
+    open class var navTitleFont: UIFont { return FontCache.navTitleFont }
 
     open class var smallLightFont: UIFont { return FontCache.smallLightFont }
     open class var mediumLightFont: UIFont { return FontCache.mediumLightFont }
@@ -189,7 +189,7 @@ open class Styles: NSObject {
         static let darkPurpleColor: UIColor = UIColor(hex: 0x281946)
         static let brightBlueColor: UIColor = UIColor(hex: 0x627cff) 
         static let lightGreyColor: UIColor = UIColor(hex: 0xeaeff0) 
-        static let veryLightGreyColor: UIColor = UIColor(hex: 0xf2f3f5) 
+        static let veryLightGreyColor: UIColor = UIColor(hex: 0xF7F7F8)
         static let redErrorColor: UIColor = UIColor(hex: 0xff354e)
         static let pinkColor: UIColor = UIColor(hex: 0xf58fc7, opacity: 0.75)
         static let purpleColor: UIColor = UIColor(hex: 0xb29ac9)

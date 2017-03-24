@@ -461,7 +461,7 @@ let defaultMessage: String = "What's going on?"
 /*
  Change date button text
  */
-let changeDateText: String = "change"
+let changeDateText: String = "edit"
 let doneDateText: String = "done"
 
 /*

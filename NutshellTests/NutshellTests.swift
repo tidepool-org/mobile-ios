@@ -30,7 +30,7 @@ class NutshellTests: XCTestCase {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
         // Initialize database by referencing username. This must be done before using the APIConnector!
-        let _ = NutDataController.controller().currentUserName
+        let _ = NutDataController.sharedInstance.currentUserName
         _ = APIConnector.connector().configure()
         APIConnector.connector().switchToServer(server)
     }
@@ -89,7 +89,7 @@ class NutshellTests: XCTestCase {
                 NSLog("Profile fetch result: \(result)")
                 if (result.isSuccess) {
                     if let json = result.value {
-                        NutDataController.controller().processProfileFetch(json)
+                        NutDataController.sharedInstance.processProfileFetch(json)
                     }
                     expectation.fulfill()
                 } else {
@@ -121,7 +121,7 @@ class NutshellTests: XCTestCase {
                 if (result.isSuccess) {
                     if let json = result.value {
                         if result.isSuccess {
-                            DatabaseUtils.updateEvents(NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: json)
+                            DatabaseUtils.updateEvents(NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json)
                         } else {
                             NSLog("No user data events!")
                         }
@@ -155,7 +155,7 @@ class NutshellTests: XCTestCase {
                 if (result.isSuccess) {
                     if let json = result.value {
                         if result.isSuccess {
-                            _ = DatabaseUtils.updateEventsForTimeRange(startDate, endTime: endDate, moc:NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: json)
+                            _ = DatabaseUtils.updateEventsForTimeRange(startDate, endTime: endDate, moc:NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json)
                         } else {
                             NSLog("No user data events!")
                         }

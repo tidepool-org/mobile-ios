@@ -191,7 +191,7 @@ class HealthKitDataPusher: NSObject {
         // first load up data from Tidepool service for this timeframe
         APIConnector.connector().getReadOnlyUserData(startTime, endDate: currentTime, objectTypes: "smbg", completion: { (result) -> (Void) in
                 if result.isSuccess {
-                    let (adds, deletes) = DatabaseUtils.updateEventsForTimeRange(startTime, endTime: currentTime, objectTypes: ["smbg"], moc: NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: result.value!)
+                    let (adds, deletes) = DatabaseUtils.updateEventsForTimeRange(startTime, endTime: currentTime, objectTypes: ["smbg"], moc: NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!)
                     DDLogVerbose("Adds: \(adds), deletes: \(deletes) in range \(startTime) to \(currentTime)")
                 } else {
                     DDLogVerbose("No events in range \(startTime) to \(currentTime)")
