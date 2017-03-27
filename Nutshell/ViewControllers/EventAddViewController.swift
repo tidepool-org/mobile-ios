@@ -18,20 +18,10 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 
-class EventAddViewController: BaseUIViewController {
+class EventAddViewController: BaseUIViewController, UITextViewDelegate {
 
     @IBOutlet weak var navBar: UINavigationBar!
     @IBOutlet weak var sceneContainerView: NutshellUIView!
-    
-    // DropDownMenu
-    var dropDownMenu: UITableView!
-    // Helpers for dropDownMenu and Animations
-    var isDropDownDisplayed: Bool = false
-    var isDropDownAnimating: Bool = false
-    var dropDownHeight: CGFloat = 0
-    // Overlay to go with dropDownMenu
-    var opaqueOverlay: UIView!
-    var overlayHeight: CGFloat = 0
     
     // Global so it can be removed and added back at will
     let closeButton: UIBarButtonItem = UIBarButtonItem()
@@ -230,41 +220,6 @@ class EventAddViewController: BaseUIViewController {
         messageBox.isSecureTextEntry = false
         
         self.sceneContainerView.addSubview(messageBox)
-        
-        // Configure overlay for dropDownMenu, so user cannot touch not while dropDownMenu is exposed
-        overlayHeight = self.sceneContainerView.frame.height
-        opaqueOverlay = UIView(frame: CGRect(x: 0, y: -overlayHeight, width: self.sceneContainerView.frame.width, height: overlayHeight))
-        opaqueOverlay.backgroundColor = blackishLowAlpha
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(EventAddViewController.dropDownButtonPressed))
-        tapGesture.numberOfTapsRequired = 1
-        opaqueOverlay.addGestureRecognizer(tapGesture)
-        self.sceneContainerView.addSubview(opaqueOverlay)
-        
-        // Configure dropDownMenu, width same as view width
-        //          No need to fetch groups --> VC is initialized with user's groups
-//        let proposedDropDownH = CGFloat(groups.count)*userCellHeight + CGFloat(groups.count - 1)*userCellThinSeparator
-//        self.dropDownHeight = min(proposedDropDownH, self.sceneContainerView.frame.height - (navBarH + statusBarH))
-//        let dropDownWidth = self.sceneContainerView.frame.width
-//        self.dropDownMenu = UITableView(frame: CGRect(x: CGFloat(0), y: -dropDownHeight, width: dropDownWidth, height: dropDownHeight))
-//        dropDownMenu.backgroundColor = darkGreenColor
-//        dropDownMenu.rowHeight = userCellHeight
-//        dropDownMenu.separatorInset.left = userCellInset
-//        dropDownMenu.register(UserDropDownCell.self, forCellReuseIdentifier: NSStringFromClass(UserDropDownCell.self))
-//        dropDownMenu.dataSource = self
-//        dropDownMenu.delegate = self
-//        dropDownMenu.separatorStyle = UITableViewCellSeparatorStyle.none
-//        
-//        // Drop down menu is only scrollable if the content fits
-//        dropDownMenu.isScrollEnabled = proposedDropDownH > self.dropDownMenu.frame.height
-//        
-//        // Shadowing
-//        dropDownMenu.layer.masksToBounds = true
-//        dropDownMenu.layer.shadowColor = blackishColor.cgColor
-//        dropDownMenu.layer.shadowOffset = CGSize(width: 0, height: shadowHeight)
-//        dropDownMenu.layer.shadowOpacity = 0.75
-//        dropDownMenu.layer.shadowRadius = shadowHeight
-//        
-//        self.sceneContainerView.addSubview(dropDownMenu)
     }
     
         
@@ -626,81 +581,6 @@ class EventAddViewController: BaseUIViewController {
         self.openHashtagsCompletely()
     }
     
-    @IBAction func dropDownButtonPressed(_ sender: Any) {
-        
-        // ignore dropdown if group count is 1 for now... should disable?
-        if (groups.count <= 1) {
-            return
-        }
-        
-        // End editing
-        view.endEditing(true)
-        // toggle the dropDownMenu open or closed
-        if (isDropDownDisplayed) {
-            // Configure title with the current group name
-            let title = group.fullName ?? ""
-            configureTitleView(title)
-            // Put the closeButton back as the leftBarButtonItem
-            // TODO: show/hide left nav item...
-            //self.navigationItem.leftBarButtonItem = closeButton
-            // Finally, close the dropDownMenu
-            self.hideDropDownMenu()
-        } else {
-            // Change the title to prompt group selection
-            configureTitleView(noteForTitle)
-            // Remove the leftBarButtonItem
-            // TODO: show/hide left nav item...
-            //self.navigationItem.leftBarButtonItem = nil
-            // Finally, show the dropDownMenu
-            self.showDropDownMenu()
-        }
-    }
-    
-    // Animate the dropDownMenu and opaqueOverlay back up
-    func hideDropDownMenu() {
-        // Set the destination frames
-        var frame: CGRect = self.dropDownMenu.frame
-        frame.origin.y = -dropDownHeight
-        var obstructionFrame: CGRect = self.opaqueOverlay.frame
-        obstructionFrame.origin.y = -overlayHeight
-        self.animateDropDownToFrame(frame, obstructionFrame: obstructionFrame) {
-            // In completion, dropDownMenu no longer displayed --> reload the dropDownMenu
-            self.isDropDownDisplayed = false
-            self.dropDownMenu.layer.masksToBounds = true
-            self.dropDownMenu.reloadData()
-        }
-    }
-    
-    // Animate the dropDownMenu and opaqueOverlay down
-    func showDropDownMenu() {
-        // Set destination frames
-        var frame: CGRect = self.dropDownMenu.frame
-        frame.origin.y = 0.0
-        var obstructionFrame: CGRect = self.opaqueOverlay.frame
-        obstructionFrame.origin.y = 0.0
-        self.animateDropDownToFrame(frame, obstructionFrame: obstructionFrame) {
-            // In completion, dropDownMenu now displayed
-            self.isDropDownDisplayed = true
-            self.dropDownMenu.layer.masksToBounds = false
-        }
-    }
-    
-    // Animations for dropDownMenu and opaqueOverlay
-    func animateDropDownToFrame(_ frame: CGRect, obstructionFrame: CGRect, completion:@escaping () -> Void) {
-        if (!isDropDownAnimating) {
-            isDropDownAnimating = true
-            UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, options: [], animations: { () -> Void in
-                // Animate to new frames
-                self.dropDownMenu.frame = frame
-                self.opaqueOverlay.frame = obstructionFrame
-            }, completion: { (completed: Bool) -> Void in
-                self.isDropDownAnimating = false
-                if (completed) {
-                    completion()
-                }
-            })
-        }
-    }
     
     // Lock in portrait orientation
     override var shouldAutorotate : Bool {
@@ -708,8 +588,10 @@ class EventAddViewController: BaseUIViewController {
     }
 }
 
-extension EventAddViewController: UITextViewDelegate {
-    
+//
+//  MARK: - UITextViewDelegate
+//
+
     // textViewDidBeginEditing, clear the messageBox if default message
     func textViewDidBeginEditing(_ textView: UITextView) {
         APIConnector.connector().trackMetric("Clicked On Message Box")

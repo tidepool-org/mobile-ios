@@ -214,6 +214,7 @@
 		48DA110D1CE3C77200B99C35 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DA110C1CE3C77100B99C35 /* NSDateExtension.swift */; };
 		48DA110E1CE3C78500B99C35 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DA110C1CE3C77100B99C35 /* NSDateExtension.swift */; };
 		48DA11101CE3CBD600B99C35 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DA110F1CE3CBD600B99C35 /* main.swift */; };
+		48DB6CFF1E8965DB00C5F221 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DB6CFE1E8965DB00C5F221 /* EventDetailViewController.swift */; };
 		48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
 		48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
 		48DF9B9B1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
@@ -392,6 +393,7 @@
 		48D62CFF1CA457FE00E063A4 /* Nutshell_v6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v6.xcdatamodel; sourceTree = "<group>"; };
 		48DA110C1CE3C77100B99C35 /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDateExtension.swift; path = "Utilities and Extensions/NSDateExtension.swift"; sourceTree = "<group>"; };
 		48DA110F1CE3CBD600B99C35 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		48DB6CFE1E8965DB00C5F221 /* EventDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventDetailViewController.swift; path = ViewControllers/EventDetailViewController.swift; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
 		48E4A4451BF015CE001A7B35 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = ServiceInterface/Reachability.swift; sourceTree = "<group>"; };
 		48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphUIView.swift; path = GraphView/GraphUIView.swift; sourceTree = "<group>"; };
@@ -543,6 +545,7 @@
 				486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */,
 				48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */,
 				48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */,
+				48DB6CFE1E8965DB00C5F221 /* EventDetailViewController.swift */,
 				48EDC2C51BD6B403003049D9 /* EventAddViewController.swift */,
 				488E44DB1E83198D00A17AD7 /* EventEditViewController.swift */,
 				48103E981C1DE7BC0055C27A /* EventViewNavController.swift */,
@@ -1152,6 +1155,7 @@
 				48867CFC1E81E32500C4E79D /* NoteListTableViewCell.swift in Sources */,
 				482ECC861C94BC47002A015D /* LogFormatter.swift in Sources */,
 				48C4916E1C3B816700F34630 /* WorkoutGraphData.swift in Sources */,
+				48DB6CFF1E8965DB00C5F221 /* EventDetailViewController.swift in Sources */,
 				48C491531C38750900F34630 /* TidepoolGraphView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
