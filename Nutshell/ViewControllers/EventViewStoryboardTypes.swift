@@ -22,13 +22,15 @@ struct EventViewStoryboard {
     
     struct TableViewCellIdentifiers {
         static let noteListCell = "noteListCell"
+        static let noteDetailCell = "noteDetailCell"
     }
 
     // MARK: SegueHandlerType
     
     struct SegueIdentifiers {
         static let EventItemAddSegue = "segueToEventAdd"
-        static let EventItemEditSegue = "segueToEventEdit"
+        static let EventItemEditSegue = "segueToEditView"
+        static let EventItemDetailSegue = "segueToEventDetail"
     }
 }
 

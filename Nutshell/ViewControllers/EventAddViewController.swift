@@ -104,15 +104,15 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
     
 
     // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
-    private var subviewedInitialized = false
+    private var subviewsInitialized = false
     override func viewDidLayoutSubviews() {
         let frame = self.sceneContainerView.frame
         NSLog("viewDidLayoutSubviews: \(frame)")
         
-        if (subviewedInitialized) {
+        if (subviewsInitialized) {
             return
         }
-        subviewedInitialized = true
+        subviewsInitialized = true
 
         // Thicken navBar border
         let border = CALayer()
@@ -245,9 +245,6 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
             alert.addAction(UIAlertAction(title: addAlertOkay, style: .default, handler: { Void in
                 DDLogVerbose("Do not add note and close view controller")
                 
-                let notification = Notification(name: Notification.Name(rawValue: "doneAdding"), object: nil)
-                NotificationCenter.default.post(notification)
-                
                 self.view.endEditing(true)
                 self.closeDatePicker(false)
                 // close the VC
@@ -256,9 +253,6 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
             self.present(alert, animated: true, completion: nil)
         } else {
             // Note has not been edited, dismiss the VC
-            let notification = Notification(name: Notification.Name(rawValue: "doneAdding"), object: nil)
-            NotificationCenter.default.post(notification)
-            
             self.view.endEditing(true)
             self.closeDatePicker(false)
             // close the VC
@@ -586,11 +580,10 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
     override var shouldAutorotate : Bool {
         return false
     }
-}
 
-//
-//  MARK: - UITextViewDelegate
-//
+    //
+    //  MARK: - UITextViewDelegate
+    //
 
     // textViewDidBeginEditing, clear the messageBox if default message
     func textViewDidBeginEditing(_ textView: UITextView) {
@@ -626,9 +619,9 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
             textView.selectedTextRange = range
         }
         if (textView.text != defaultMessage && !textView.text.isEmpty) {
-            postButton.alpha = 1.0
+            self.postButton.alpha = 1.0
         } else {
-            postButton.alpha = 0.5
+            self.postButton.alpha = 0.5
         }
     }
 }

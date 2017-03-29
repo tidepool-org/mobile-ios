@@ -29,7 +29,7 @@ class BaseUITableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
         if cellBackgroundView != nil {
-            cellBackgroundView.setHighlighted(selected)
+            cellBackgroundView.selected = selected
         }
     }
 
@@ -37,14 +37,9 @@ class BaseUITableViewCell: UITableViewCell {
         super.setHighlighted(highlighted, animated:animated)
         
         if cellBackgroundView != nil {
-            cellBackgroundView.setHighlighted(highlighted)
+            cellBackgroundView.highlighted = highlighted
         }
     }
 
-    func setCellHighlight(_ highlighted: Bool) {
-        if cellBackgroundView != nil {
-            cellBackgroundView.setHighlighted(highlighted)
-        }
-    }
 
 }

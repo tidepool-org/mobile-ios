@@ -17,13 +17,12 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 
-class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphContainerViewDelegate, NoteIOWatcher {
+class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphContainerViewDelegate, NoteIOWatcher, UIScrollViewDelegate {
 
     
     @IBOutlet weak var eventListSceneContainer: UIControl!
     @IBOutlet weak var dataVizView: UIView!
     
-    @IBOutlet weak var editBarButtonItem: UIBarButtonItem!
     @IBOutlet weak var menuButton: UIBarButtonItem!
     @IBOutlet weak var searchTextField: NutshellUITextField!
     @IBOutlet weak var searchPlaceholderLabel: NutshellUILabel!
@@ -55,7 +54,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
 
-        editBarButtonItem.isEnabled = false
 
         // Add a notification for when the database changes
         let moc = NutDataController.sharedInstance.mocForNutEvents()
@@ -70,7 +68,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             sideMenu.delegate = self
             menuButton.target = self
             menuButton.action = #selector(EventListViewController.toggleSideMenu(_:))
-            let revealWidth = min(ceil((280.0/320.0) * self.view.bounds.width), 280.0)
+            let revealWidth = min(ceil((255.0/320.0) * self.view.bounds.width), 280.0)
             sideMenu.menuWidth = revealWidth
             sideMenu.bouncingEnabled = false
         }
@@ -78,15 +76,27 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     }
    
     // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
-    private var subviewedInitialized = false
+    private var subviewsInitialized = false
     override func viewDidLayoutSubviews() {
-        if (subviewedInitialized) {
+        if (subviewsInitialized) {
             return
         }
-        subviewedInitialized = true
+        subviewsInitialized = true
+        
+        eventListSceneContainer.setNeedsLayout()
+        eventListSceneContainer.layoutIfNeeded()
+
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSFontAttributeName: smallRegularFont, NSForegroundColorAttributeName: blackishColor])
         self.refreshControl.addTarget(self, action: #selector(EventListViewController.refresh), for: UIControlEvents.valueChanged)
         self.tableView.addSubview(refreshControl)
+        
+        // add a footer view to the table that is the size of the table minus the smallest row height, so last table row can be scrolled to the top of the table
+        var footerFrame = self.tableView.frame
+        footerFrame.size.height -= 70.0
+        footerFrame.origin.y = 0.0
+        let footerView = UIView(frame: footerFrame)
+        footerView.backgroundColor = UIColor.white
+        self.tableView.tableFooterView = footerView
     }
 
     override func didReceiveMemoryWarning() {
@@ -98,7 +108,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewIsForeground = true
-        configureSearchUI()
+        //configureSearchUI()
         if let sideMenu = self.sideMenuController()?.sideMenu {
             sideMenu.allowLeftSwipe = true
             sideMenu.allowRightSwipe = true
@@ -138,7 +148,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        searchTextField.resignFirstResponder()
+        //searchTextField.resignFirstResponder()
         viewIsForeground = false
         if let sideMenu = self.sideMenuController()?.sideMenu {
             //NSLog("swipe disabled")
@@ -242,6 +252,14 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         // TODO: re-filter and update table...
         self.filteredNotes = self.notes
         self.tableView.reloadData()
+        
+        if filteredNotes.count > 0 && selectedIndexPath == nil {
+            let topIndexPath = IndexPath(row: 0, section: 0)
+            self.selectedIndexPath = topIndexPath
+            selectNote(filteredNotes[topIndexPath.item])
+            self.tableView.selectRow(at: topIndexPath, animated: true, scrollPosition: .top)
+            self.tableView.scrollToNearestSelectedRow(at: .top, animated: true)
+        }
     }
     
     func postComplete(_ note: BlipNote) {
@@ -282,10 +300,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     func updateComplete(_ originalNote: BlipNote, editedNote: BlipNote) {
         NSLog("NoteIOWatcher.updateComplete")
         
-        originalNote.messagetext = editedNote.messagetext
-        originalNote.timestamp = editedNote.timestamp
-        self.filteredNotes = self.notes
-        self.tableView.reloadData()
     }
     
     
@@ -334,11 +348,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepare(for: segue, sender: sender)
-        if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemEditSegue {
-            let eventEditVC = segue.destination as! EventEditViewController
-            eventEditVC.note = self.selectedNote
-            eventEditVC.groupFullName = "GROUP FULL NAME"
-            APIConnector.connector().trackMetric("Clicked edit a note (Home screen)")
+        if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue {
+            let eventDetailVC = segue.destination as! EventDetailViewController
+            eventDetailVC.note = self.selectedNote
+            APIConnector.connector().trackMetric("Clicked view a note (Home screen)")
         } else if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
             let eventAddVC = segue.destination as! EventAddViewController
             // TODO: support for groups! For now, just support current user...
@@ -370,8 +383,15 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 // will be called back on successful post!
                 // TODO: also handle unsuccessful posts?
             }
+        }  else if let eventDetailVC = segue.source as? EventDetailViewController {
+            if eventDetailVC.noteEdited {
+                // TODO: has note been updated?
+                self.filteredNotes = self.notes
+                self.tableView.reloadData()
+            }
         } else {
             NSLog("Unknown segue source!")
+
         }
     }
 
@@ -413,7 +433,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     }
     
     @IBAction func dismissKeyboard(_ sender: AnyObject) {
-        searchTextField.resignFirstResponder()
+        //searchTextField.resignFirstResponder()
     }
     
     func textFieldDidChange() {
@@ -431,13 +451,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
     fileprivate func searchMode() -> Bool {
         var searchMode = false
-        if searchTextField.isFirstResponder {
-            searchMode = true
-        } else if let searchText = searchTextField.text {
-            if !searchText.isEmpty {
-                searchMode = true
-            }
-        }
+//        if searchTextField.isFirstResponder {
+//            searchMode = true
+//        } else if let searchText = searchTextField.text {
+//            if !searchText.isEmpty {
+//                searchMode = true
+//            }
+//        }
         return searchMode
     }
     
@@ -484,8 +504,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         // if we are deselecting, just close up data viz
         if note == nil {
             self.selectedNote = nil
-            editBarButtonItem.isEnabled = false
-            showHideDataVizView(show: false)
+            //showHideDataVizView(show: false)
             configureGraphContainer()
             return
         }
@@ -503,7 +522,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
         // start looking for data for this item...
         self.selectedNote = note
-        editBarButtonItem.isEnabled = true
         configureGraphContainer()
     }
     
@@ -546,30 +564,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         }
     }
     
-    fileprivate var viewAdjustAnimationTime: Float = 0.25
-    fileprivate func showHideDataVizView(show: Bool) {
-        
-        for c in dataVizView.constraints {
-            if c.firstAttribute == NSLayoutAttribute.height {
-                c.constant = show ? graphLayerContainer.frame.size.height : 0.0
-                break
-            }
-        }
-        // graph view doesn't have a contraint, so we need to update its origin directly (could also manually add a constraint)
-        if let graphView = graphContainerView {
-            var rect = graphView.frame
-            rect.origin.y = 0.0
-            graphView.frame = rect
-        }
-        UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
-            self.graphContainerView?.layoutIfNeeded()
-            self.tableView?.layoutIfNeeded()
-            self.dataVizView.layoutIfNeeded()
-        }, completion: { (Bool) -> (Void) in
-            self.tableView.scrollToNearestSelectedRow(at: .top, animated: true)
-        })
-    }
-    
     //
     // MARK: - GraphContainerViewDelegate
     //
@@ -578,9 +572,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         let graphHasData = graphContainerView!.dataFound()
         NSLog("\(#function) - graphHasData: \(graphHasData)")
         if !graphHasData {
-            showHideDataVizView(show: false)
+            //showHideDataVizView(show: false)
         } else {
-            showHideDataVizView(show: true)
+            //showHideDataVizView(show: true)
         }
     }
 
@@ -637,6 +631,29 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
 
     func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {}
 
+    //
+    // Mark: - ScrollViewDelegate
+    //
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let x = targetContentOffset.pointee.x
+        let y = targetContentOffset.pointee.y
+        NSLog("scrollViewWillEndDragging: x is \(x), y is \(y)")
+        
+        let topRowPoint = CGPoint(x: 0.0, y: y + 35.0)
+        if let topIndexPath = tableView.indexPathForRow(at: topRowPoint) {
+            NSLog("top indexpath: \(topIndexPath)")
+            if let curSel = self.selectedIndexPath {
+                // just bow out if we already are there...
+                if curSel.row == topIndexPath.row {
+                    return
+                }
+            }
+            self.selectedIndexPath = topIndexPath
+            selectNote(filteredNotes[topIndexPath.item])
+            self.tableView.selectRow(at: topIndexPath, animated: true, scrollPosition: .top)
+        }
+    }
 }
 
 
@@ -653,28 +670,13 @@ extension EventListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt heightForRowAtIndexPath: IndexPath) -> CGFloat {
         return UITableViewAutomaticDimension;
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let note = filteredNotes[indexPath.item]
-        let cell = tableView.cellForRow(at: indexPath) as! NoteListTableViewCell
-        let selectOrEdit = true
-        
-        if selectOrEdit {
-            // Select cell, and, rather than invoking a detail view controller, show/hide the graph for the current selection
-            if selectedIndexPath != nil && selectedIndexPath! == indexPath {
-                // already selected and shown, toggle off
-                self.selectNote(nil)
-                self.selectedIndexPath = nil
-                cell.setSelected(false, animated: true)
-            } else {
-                self.selectNote(note)
-                cell.setSelected(true, animated: true)
-                self.selectedIndexPath = indexPath
-            }
-        }
+        self.selectedNote = note
+        self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue, sender: self)
     }
-
 }
 
 //

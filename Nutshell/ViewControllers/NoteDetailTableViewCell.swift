@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2015, Tidepool Project
+* Copyright (c) 2017, Tidepool Project
 *
 * This program is free software; you can redistribute it and/or modify it under
 * the terms of the associated License, which is identical to the BSD 2-Clause
@@ -15,12 +15,13 @@
 
 import UIKit
 
-class NoteListTableViewCell: BaseUITableViewCell {
+class NoteDetailTableViewCell: BaseUITableViewCell {
 
     var note: BlipNote?
 
     @IBOutlet weak var noteLabel: NutshellUILabel!
     @IBOutlet weak var dateLabel: NutshellUILabel!
+    @IBOutlet weak var userLabel: NutshellUILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -28,32 +29,23 @@ class NoteListTableViewCell: BaseUITableViewCell {
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
-        NSLog("setSelected \(selected) for \(note?.messagetext)!")
-
-        noteLabel.usage = selected ? "cellNoteTextSelected" : "cellNoteText"
         super.setSelected(selected, animated: animated)
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        NSLog("setHighlighted \(highlighted) for \(note?.messagetext)!")
         super.setHighlighted(highlighted, animated:animated)
-        
-        // Configure the view for the highlighted state
-        noteLabel.isHighlighted = highlighted
-        dateLabel.isHighlighted = highlighted
     }
     
     func configureCell(_ note: BlipNote) {
 //        let hashtagBolder = HashtagBolder()
 //        let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString)
 //        noteLabel.attributedText = attributedText
-        
-        noteLabel.usage = "cellNoteText"
-        noteLabel.text = note.messagetext
 
+        noteLabel.text = note.messagetext
+        
         dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
+        
+        self.userLabel.text = note.user?.fullName ?? ""
         self.note = note
-        noteLabel.isHighlighted = false
-        dateLabel.isHighlighted = false
     }
 }

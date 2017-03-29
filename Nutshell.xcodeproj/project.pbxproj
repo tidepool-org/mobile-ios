@@ -194,6 +194,8 @@
 		48B127AD1BC444FE00061483 /* ThreeTacosDemoPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */; };
 		48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
+		48B7C7E91E8988160069B6DF /* NoteDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B7C7E81E8988160069B6DF /* NoteDetailTableViewCell.swift */; };
+		48B7C7EB1E899BC10069B6DF /* NoteListTableViewCellWithComments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B7C7EA1E899BC10069B6DF /* NoteListTableViewCellWithComments.swift */; };
 		48BA05B01E53911500212486 /* GraphCursorLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BA05AF1E53911500212486 /* GraphCursorLayer.swift */; };
 		48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */; };
 		48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */; };
@@ -373,6 +375,8 @@
 		48B127A41BC444FE00061483 /* applejuicedemopic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = applejuicedemopic.png; path = Images/applejuicedemopic.png; sourceTree = "<group>"; };
 		48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ThreeTacosDemoPic.png; path = Images/ThreeTacosDemoPic.png; sourceTree = "<group>"; };
 		48B127B01BC4466E00061483 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseUtils.swift; path = "Utilities and Extensions/DatabaseUtils.swift"; sourceTree = "<group>"; };
+		48B7C7E81E8988160069B6DF /* NoteDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteDetailTableViewCell.swift; path = ViewControllers/NoteDetailTableViewCell.swift; sourceTree = "<group>"; };
+		48B7C7EA1E899BC10069B6DF /* NoteListTableViewCellWithComments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListTableViewCellWithComments.swift; path = ViewControllers/NoteListTableViewCellWithComments.swift; sourceTree = "<group>"; };
 		48BA05AF1E53911500212486 /* GraphCursorLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCursorLayer.swift; path = GraphView/GraphCursorLayer.swift; sourceTree = "<group>"; };
 		48BA1EA41C18865100C1B71C /* Data Model.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Data Model.txt"; path = "Manual Test Cases/Data Model.txt"; sourceTree = "<group>"; };
 		48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
@@ -545,7 +549,9 @@
 				486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */,
 				48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */,
 				48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */,
+				48B7C7EA1E899BC10069B6DF /* NoteListTableViewCellWithComments.swift */,
 				48DB6CFE1E8965DB00C5F221 /* EventDetailViewController.swift */,
+				48B7C7E81E8988160069B6DF /* NoteDetailTableViewCell.swift */,
 				48EDC2C51BD6B403003049D9 /* EventAddViewController.swift */,
 				488E44DB1E83198D00A17AD7 /* EventEditViewController.swift */,
 				48103E981C1DE7BC0055C27A /* EventViewNavController.swift */,
@@ -813,6 +819,7 @@
 				4859FCB11B9A4DE4000C1269 /* Sources */,
 				4859FCB21B9A4DE4000C1269 /* Frameworks */,
 				4859FCB31B9A4DE4000C1269 /* Resources */,
+				48FE49E41E8AD871005B103C /* ShellScript */,
 				DA97F439745BB4E48E8FCA3A /* [CP] Embed Pods Frameworks */,
 				606FCE6FE4B3B08459023F47 /* [CP] Copy Pods Resources */,
 			);
@@ -941,6 +948,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		48FE49E41E8AD871005B103C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "COMMITS=$(git rev-list HEAD | wc -l)\nCOMMITS=$(($COMMITS))\ndefaults write \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH%.*}\" \"CFBundleVersion\" \"${COMMITS}\"";
+		};
 		606FCE6FE4B3B08459023F47 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1053,6 +1073,7 @@
 				485420211BC44D290020CFE1 /* Workout+CoreDataProperties.swift in Sources */,
 				484365C91C9DB3960046A2C5 /* HealthKitDataPusher.swift in Sources */,
 				0334CA671BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
+				48B7C7EB1E899BC10069B6DF /* NoteListTableViewCellWithComments.swift in Sources */,
 				488E44DC1E83198D00A17AD7 /* EventEditViewController.swift in Sources */,
 				0334CA791BA8DDFC00013096 /* TimeChange.swift in Sources */,
 				4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */,
@@ -1098,6 +1119,7 @@
 				0334CA581BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,
 				0334CA4F1BA8DDFC00013096 /* GrabBag.swift in Sources */,
 				48C491661C3B2DEE00F34630 /* SmbgGraphData.swift in Sources */,
+				48B7C7E91E8988160069B6DF /* NoteDetailTableViewCell.swift in Sources */,
 				482ECC831C94BB9D002A015D /* HealthKitManager.swift in Sources */,
 				48B127941BC4445500061483 /* NutEventItem.swift in Sources */,
 				0334CA521BA8DDFC00013096 /* Note+CoreDataProperties.swift in Sources */,

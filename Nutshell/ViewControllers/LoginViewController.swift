@@ -60,6 +60,9 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     @IBOutlet weak var errorFeedbackLabel: NutshellUILabel!
     @IBOutlet weak var forgotPasswordLabel: NutshellUILabel!
     
+    @IBOutlet weak var versionLabel: UILabel!
+    
+    @IBOutlet weak var signUpButton: UIButton!
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -72,19 +75,19 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let curService = APIConnector.connector().currentService!
+        if curService == "Production" {
+            versionLabel.text = "v" + UIApplication.appVersion()
+        } else{
+            versionLabel.text = "v" + UIApplication.appVersion() + " on " + curService
+        }
 
+        self.signUpButton.setTitleColor(Styles.lightDarkGreyColor, for: .highlighted)
+        
         let notificationCenter = NotificationCenter.default
 
         notificationCenter.addObserver(self, selector: #selector(LoginViewController.textFieldDidChange), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
         updateButtonStates()
-        
-        // forgot password text needs an underline...
-        if let forgotText = forgotPasswordLabel.text {
-            let forgotStr = NSAttributedString(string: forgotText, attributes:[NSFontAttributeName: forgotPasswordLabel.font, NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue])
-            forgotPasswordLabel.attributedText = forgotStr
-        }
-        // TODO: hide for now until implemented!
-        forgotPasswordLabel.isHidden = true
         
         notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -168,7 +171,15 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
                 self.processLoginResult(result)
         }
     }
+
+    @IBAction func signUpButtonTapped(_ sender: Any) {
+        NSLog("TODO: sign up!")
+    }
     
+    @IBAction func forgotPasswordTapped(_ sender: Any) {
+        NSLog("TODO: forgot password!")
+    }
+
     fileprivate func processLoginResult(_ result: Alamofire.Result<User>) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         self.loginIndicator.stopAnimating()
