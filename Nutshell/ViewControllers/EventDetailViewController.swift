@@ -18,68 +18,346 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 
-class EventDetailViewController: BaseUIViewController {
+class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegate, NoteIOWatcher {
 
-    @IBOutlet weak var navBar: UINavigationBar!
-    @IBOutlet weak var sceneContainerView: NutshellUIView!
     
+    @IBOutlet weak var sceneContainerView: UIControl!
+    @IBOutlet weak var dataVizView: UIView!
     
+    @IBOutlet weak var editBarButtonItem: UIBarButtonItem!
+    @IBOutlet weak var tableView: NutshellUITableView!
+
+    // support for displaying graph around current note
+    @IBOutlet weak var graphLayerContainer: UIView!
+    fileprivate var graphContainerView: TidepoolGraphView?
+
     // Data
     // Note must be set by launching controller in prepareForSegue!
     var note: BlipNote!
+    var noteEdited: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // data
-     }
+        editBarButtonItem.isEnabled = true
+
+        NotificationCenter.default.addObserver(self, selector: #selector(EventDetailViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
+        configureForReachability()
+    }
 
      deinit {
         NotificationCenter.default.removeObserver(self)
      }
 
+    fileprivate var viewIsForeground: Bool = false
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // Set status bar to light color for dark navigationBar
-        //UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+        viewIsForeground = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
-    
+
+    override func viewWillDisappear(_ animated: Bool) {
+        viewIsForeground = false
+    }
 
     // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
-    private var subviewedInitialized = false
+    private var subviewsInitialized = false
     override func viewDidLayoutSubviews() {
         let frame = self.sceneContainerView.frame
         NSLog("viewDidLayoutSubviews: \(frame)")
         
-        if (subviewedInitialized) {
+        if (subviewsInitialized) {
             return
         }
-        subviewedInitialized = true
-
-
+        subviewsInitialized = true
+        selectNote()
     }
     
-        
-    // Configure title of navigationBar to given string
-    func configureTitleView(_ text: String) {
-        if let navItem = self.navBar.topItem {
-            navItem.title = note.user?.fullName ?? ""
+    func reachabilityChanged(_ note: Notification) {
+        configureForReachability()
+    }
+    
+    fileprivate func configureForReachability() {
+        let connected = APIConnector.connector().isConnectedToNetwork()
+        //missingDataAdvisoryTitle.text = connected ? "There is no data in here!" : "You are currently offline!"
+        NSLog("TODO: figure out connectivity story! Connected: \(connected)")
+    }
+
+    //
+    // MARK: - NoteIOWatcher Delegate
+    //
+    
+    func loadingNotes(_ loading: Bool) {
+        NSLog("EventDetailVC! NoteIOWatcher.loadingNotes: \(loading)")
+    }
+    
+    func endRefresh() {
+        NSLog("EventDetailVC! NoteIOWatcher.endRefresh")
+    }
+    
+    func addNotes(_ notes: [BlipNote]) {
+        NSLog("EventDetailVC! NoteIOWatcher.addNotes")
+    }
+    
+    func postComplete(_ note: BlipNote) {
+        NSLog("EventDetailVC! NoteIOWatcher.postComplete")
+    }
+    
+    func deleteComplete(_ deletedNote: BlipNote) {
+        NSLog("EventDetailVC NoteIOWatcher.deleteComplete")
+        // TODO: if deleted, need to continue to segue back to list view...
+        // OR will that happen automatically?
+    }
+    
+    func updateComplete(_ originalNote: BlipNote, editedNote: BlipNote) {
+        NSLog("EventDetailVC NoteIOWatcher.updateComplete")
+        // TODO: when we segue back, list needs updating!
+        originalNote.messagetext = editedNote.messagetext
+        originalNote.timestamp = editedNote.timestamp
+        self.noteEdited = true
+        self.tableView.reloadData()
+    }
+
+    //
+    // MARK: - Navigation
+    //
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if NutDataController.sharedInstance.currentBlipUser == nil {
+            return false
+        }
+        return true
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        super.prepare(for: segue, sender: sender)
+        if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemEditSegue {
+            let eventEditVC = segue.destination as! EventEditViewController
+            eventEditVC.note = self.note
+            APIConnector.connector().trackMetric("Clicked edit a note (Detail screen)")
+        }else {
+            NSLog("Unprepped segue from eventView \(segue.identifier)")
+        }
+    }
+    
+    // Back button from group or detail viewer.
+    @IBAction func done(_ segue: UIStoryboardSegue) {
+        NSLog("unwind segue to eventList done!")
+        if let eventEditVC = segue.source as? EventEditViewController {
+            if let originalNote = self.note, let editedNote = eventEditVC.editedNote {
+                APIConnector.connector().updateNote(self, editedNote: editedNote, originalNote: originalNote)
+                // will be called back on successful update!
+                // TODO: also handle unsuccessful updates?
+            } else {
+                NSLog("No note to delete!")
+            }
+        } else if let eventAddVC = segue.source as? EventAddViewController {
+            if let newNote = eventAddVC.newNote {
+                APIConnector.connector().doPostWithNote(self, note: newNote)
+                // will be called back on successful post!
+                // TODO: also handle unsuccessful posts?
+            }
+        } else {
+            NSLog("Unknown segue source!")
         }
     }
     
     // close the VC on button press from leftBarButtonItem
     @IBAction func backButtonPressed(_ sender: Any) {
         APIConnector.connector().trackMetric("Clicked Back View Note")
-        self.performSegue(withIdentifier: "unwindToDone", sender: self)
+        self.performSegue(withIdentifier: "unwindSegueToDone", sender: self)
         
     }
     
+    @IBAction func editButtonPressed(_ sender: Any) {
+        self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemEditSegue, sender: self)
+        
+    }
 
+    //
+    // MARK: - Data vizualization view
+    //
+    
+    
+    fileprivate func selectNote() {
+        
+        if self.note != nil {
+            showHideDataVizView(show: true)
+            configureGraphContainer()
+        }
+    }
+    
+    /// Works with graphDataChanged to ensure graph is up-to-date after notification of database changes whether this VC is in the foreground or background.
+    fileprivate func checkUpdateGraph() {
+        if graphNeedsUpdate {
+            graphNeedsUpdate = false
+            if let graphContainerView = graphContainerView {
+                graphContainerView.loadGraphData()
+            }
+        }
+    }
+    
+    fileprivate var graphNeedsUpdate: Bool  = false
+    func graphDataChanged(_ note: Notification) {
+        graphNeedsUpdate = true
+        if viewIsForeground {
+            //NSLog("EventListVC: graphDataChanged, reloading")
+            checkUpdateGraph()
+        } else {
+            NSLog("EventListVC: graphDataChanged, in background")
+        }
+    }
+    
+    /// Reloads the graph - this should be called after the header has been laid out and the graph section size has been figured. Pass in edgeOffset to place the nut event other than in the center.
+    fileprivate func configureGraphContainer(_ edgeOffset: CGFloat = 0.0) {
+        //NSLog("EventListVC: configureGraphContainer")
+        if (graphContainerView != nil) {
+            graphContainerView?.removeFromSuperview();
+            graphContainerView = nil;
+        }
+        if let note = self.note {
+            // TODO: using a faked up timezone offset for now...
+            graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: 0)
+            if let graphContainerView = graphContainerView {
+                graphContainerView.configureGraph(edgeOffset)
+                graphLayerContainer.addSubview(graphContainerView)
+                graphContainerView.loadGraphData()
+            }
+        }
+    }
+    
+    fileprivate func showHideDataVizView(show: Bool) {
+        
+    }
+    
+    //
+    // MARK: - GraphContainerViewDelegate
+    //
+    
+    func containerCellUpdated() {
+        let graphHasData = graphContainerView!.dataFound()
+        NSLog("\(#function) - graphHasData: \(graphHasData)")
+        if !graphHasData {
+            showHideDataVizView(show: false)
+        } else {
+            showHideDataVizView(show: true)
+        }
+    }
+    
+    func pinchZoomEnded() {
+        //adjustZoomButtons()
+        APIConnector.connector().trackMetric("Pinched to Zoom (Data Screen)")
+    }
+    
+    fileprivate var currentCell: Int?
+    func willDisplayGraphCell(_ cell: Int) {
+        if let currentCell = currentCell {
+            if cell > currentCell {
+                APIConnector.connector().trackMetric("Swiped to Pan Left (Data Screen)")
+            } else if cell < currentCell {
+                APIConnector.connector().trackMetric("Swiped to Pan Right (Data Screen)")
+            }
+        }
+        currentCell = cell
+    }
+    
+    func dataPointTapped(_ dataPoint: GraphDataType, tapLocationInView: CGPoint) {
+        var itemId: String?
+        if let mealDataPoint = dataPoint as? MealGraphDataType {
+            NSLog("tapped on meal!")
+            itemId = mealDataPoint.id
+        } else if let workoutDataPoint = dataPoint as? WorkoutGraphDataType {
+            NSLog("tapped on workout!")
+            itemId = workoutDataPoint.id
+        }
+        if let itemId = itemId {
+            //NSLog("EventDetailVC: dataPointTapped")
+            let nutEventItem = DatabaseUtils.getNutEventItemWithId(itemId)
+            if let nutEventItem = nutEventItem {
+                // if the user tapped on some other event, switch to viewing that one instead!
+                if nutEventItem.time != note.timestamp {
+                    // TODO: handle by selecting appropriate event in table?
+                    //                    switchedEvents = true
+                    //                    // conjure up a NutWorkout and NutEvent for this new item!
+                    //                    self.eventGroup = NutEvent(firstEvent: nutEventItem)
+                    //                    self.eventItem = self.eventGroup?.itemArray[0]
+                    // update view to show the new event, centered...
+                    // keep point that was tapped at the same offset in the view in the new graph by setting the graph center point to be at the same x offset in the view...
+                    configureGraphContainer(tapLocationInView.x)
+                    // then animate to center...
+                    if let graphContainerView = graphContainerView {
+                        graphContainerView.centerGraphOnEvent(animated: true)
+                    }
+                }
+            } else {
+                NSLog("Couldn't find nut event item with id \(itemId)")
+            }
+        }
+    }
+    
+    func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {}
+    
+}
+
+
+//
+// MARK: - Table view delegate
+//
+
+extension EventDetailViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt estimatedHeightForRowAtIndexPath: IndexPath) -> CGFloat {
+        return 102.0;
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt heightForRowAtIndexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension;
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
+    
+}
+
+//
+// MARK: - Table view data source
+//
+
+extension EventDetailViewController: UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // TODO: add support for comment items!
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        // Note: two different list cells are used depending upon whether a location will be shown or not.
+        let cellId = EventViewStoryboard.TableViewCellIdentifiers.noteDetailCell
+        var note: BlipNote?
+        if (indexPath.item == 0) {
+            note = self.note
+        }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteDetailTableViewCell
+        if let note = note {
+            cell.configureCell(note)
+        }
+        return cell
+    }
+    
+    
 }
 
 

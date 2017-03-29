@@ -51,9 +51,8 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
     let postButton: UIButton = UIButton()
     
     // Original note, edited note, and the full name for the group
-    // Note and groupFullName must be set by launching controller in prepareForSegue!
+    // Note must be set by launching controller in prepareForSegue!
     var note: BlipNote!
-    var groupFullName: String = ""
     var editedNote: BlipNote!
     private var previousDate: Date!
     
@@ -72,10 +71,6 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
         
         // Initialize keyboard frame of size Zero
         keyboardFrame = CGRect.zero
-        
-        // Configure title with group / team name
-        // Title does not need tapGesture actions --> group is fixed
-        self.title = groupFullName
         
         // Set background color to light grey color
         self.sceneContainerView.backgroundColor = lightGreyColor
@@ -105,15 +100,15 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
     }
     
     // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
-    private var subviewedInitialized = false
+    private var subviewsInitialized = false
     override func viewDidLayoutSubviews() {
         let frame = self.sceneContainerView.frame
         NSLog("viewDidLayoutSubviews: \(frame)")
 
-        if (subviewedInitialized) {
+        if (subviewsInitialized) {
             return
         }
-        subviewedInitialized = true
+        subviewsInitialized = true
         
         self.hashtagsScrollView = HashtagsScrollView()
         

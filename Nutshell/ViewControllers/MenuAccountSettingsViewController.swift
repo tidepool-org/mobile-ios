@@ -39,16 +39,21 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
             versionString.text = "V" + UIApplication.appVersion() + " on " + curService
         }
         loginAccount.text = NutDataController.sharedInstance.currentUserName
+        
+        //healthKitSwitch.tintColor = whiteColor
+        //healthKitSwitch.thumbTintColor = whiteColor
+        healthKitSwitch.onTintColor = Styles.brightBlueColor
+
         //let attributes = [NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue]
  
-        let str = "Privacy and Terms of Use"
-        let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-        paragraphStyle.alignment = .center
-        let attributedString = NSMutableAttributedString(string:str, attributes:[NSFontAttributeName: Styles.mediumVerySmallSemiboldFont, NSForegroundColorAttributeName: Styles.blackColor, NSParagraphStyleAttributeName: paragraphStyle])
-        attributedString.addAttribute(NSLinkAttributeName, value: URL(string: "http://developer.tidepool.io/privacy-policy/")!, range: NSRange(location: 0, length: 7))
-        attributedString.addAttribute(NSLinkAttributeName, value: URL(string: "http://developer.tidepool.io/terms-of-use/")!, range: NSRange(location: attributedString.length - 12, length: 12))
-        privacyTextField.attributedText = attributedString
-        privacyTextField.delegate = self
+//        let str = "Privacy and Terms of Use"
+//        let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+//        paragraphStyle.alignment = .center
+//        let attributedString = NSMutableAttributedString(string:str, attributes:[NSFontAttributeName: Styles.mediumVerySmallSemiboldFont, NSForegroundColorAttributeName: Styles.blackColor, NSParagraphStyleAttributeName: paragraphStyle])
+//        attributedString.addAttribute(NSLinkAttributeName, value: URL(string: "http://developer.tidepool.io/privacy-policy/")!, range: NSRange(location: 0, length: 7))
+//        attributedString.addAttribute(NSLinkAttributeName, value: URL(string: "http://developer.tidepool.io/terms-of-use/")!, range: NSRange(location: attributedString.length - 12, length: 12))
+//        privacyTextField.attributedText = attributedString
+//        privacyTextField.delegate = self
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitDataUploader.Notifications.Updated), object: nil)
@@ -87,11 +92,15 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func supportButtonHandler(_ sender: AnyObject) {
         APIConnector.connector().trackMetric("Clicked Tidepool Support (Hamburger)")
-        let email = "support@tidepool.org"
-        let url = URL(string: "mailto:\(email)")
+        let url = URL(string: "support.tidepool.org")
         UIApplication.shared.openURL(url!)
     }
     
+    @IBAction func privacyButtonTapped(_ sender: Any) {
+        APIConnector.connector().trackMetric("Clicked Privacy and Terms (Hamburger)")
+        let url = URL(string: "tidepool.org/legal/")
+        UIApplication.shared.openURL(url!)
+    }
     
     @IBAction func logOutTapped(_ sender: AnyObject) {
         APIConnector.connector().trackMetric("Clicked Log Out (Hamburger)")
@@ -227,18 +236,5 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    //
-    // MARK: - UITextView delegate
-    //
-    
-    // Intercept links in order to track metrics...
-    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-        if URL.absoluteString.contains("privacy-policy") {
-            APIConnector.connector().trackMetric("Clicked privacy (Hamburger)")
-        } else {
-            APIConnector.connector().trackMetric("Clicked Terms of Use (Hamburger)")
-        }
-        return true
-    }
     
 }

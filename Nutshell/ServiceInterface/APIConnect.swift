@@ -540,11 +540,11 @@ class APIConnector {
             if let httpResponse = response as? HTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
                     DDLogInfo("Got notes for user (\(userid)) in given date range: \(dateFormatter.string(from: start)) to \(dateFormatter.string(from: end))")
-                    
                     var notes: [BlipNote] = []
                     
                     let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
                     
+                    NSLog("notes: \(jsonResult)")
                     let messages: NSArray = jsonResult.value(forKey: "messages") as! NSArray
                     
                     let dateFormatter = DateFormatter()

@@ -47,6 +47,7 @@ open class Styles: NSObject {
         "darkBackgroundButton": darkPurpleColor,
         // add/edit event scenes
         "addEditViewSaveButton": brightBlueColor,
+        "loginButton": brightBlueColor,
     ]
 
     // This table is used for mapping usage to font and font color for UI elements including fonts (UITextField, UILabel, UIButton). An entry may appear here as well as in the basic color mapping table above to set both font attributes as well as background coloring.
@@ -54,13 +55,15 @@ open class Styles: NSObject {
         // general usage
         "brightBackgroundButton": (largeRegularFont, whiteColor),
         "darkBackgroundButton": (largeRegularFont, whiteColor),
+        "loginButton": (smallSemiboldFont, whiteColor),
         // login & signup scenes
-        "userDataEntry": (mediumRegularFont, darkPurpleColor),
+        "userDataEntry": (smallRegularFont, blackColor),
         "dataEntryErrorFeedback": (smallSemiboldFont, redErrorColor),
-        "brightLinkText": (mediumRegularFont, brightBlueColor),
+        "brightLinkText": (smallRegularFont, blackColor),
         "networkDisconnectText" : (largeRegularFont, whiteColor),
         // event list table scene
-        "eventListCellTitle": (mediumSemiboldFont, altDarkGreyColor),
+        "cellNoteText": (mediumSmallRegularFont, altDarkGreyColor),
+        "cellNoteTextSelected": (mediumSmallSemiboldFont, altDarkGreyColor),
         "eventListCellLocation": (smallSemiboldFont, altDarkGreyColor),
         "eventListCellRepeatCount": (mediumSemiboldFont, altDarkGreyColor),
         "searchPlaceholder": (mediumLightFont, blackColor),
@@ -90,14 +93,14 @@ open class Styles: NSObject {
         "addEditViewLocation": (smallRegularFont, whiteColor),
         "addEditViewSaveButton": (mediumBoldFont, whiteColor),
         // account configuration scene
-        "sidebarSettingUserName": (mediumLargeBoldFont, blackColor),
-        "sidebarSettingItem": (mediumRegularFont, darkGreyColor),
-        "sidebarSettingItemSmall": (mediumSmallRegularFont, darkGreyColor),
+        "sidebarSettingUserName": (mediumSmallSemiboldFont, brightBlueColor),
+        "sidebarSettingItem": (mediumSmallRegularFont, brightBlueColor),
+        "sidebarSettingItemSmall": (verySmallRegularFont, altDarkGreyColor),
         "sidebarLogoutButton": (mediumSemiboldFont, darkGreyColor),
-        "sidebarOtherLinks": (mediumVerySmallSemiboldFont, darkGreyColor),
-        "sidebarSettingHKEnable": (mediumLargeBoldFont, darkGreyColor),
-        "sidebarSettingHKMainStatus": (mediumSmallSemiboldFont, darkGreyColor),
-        "sidebarSettingHKMinorStatus": (mediumSmallRegularFont, darkGreyColor),
+        "sidebarOtherLinks": (mediumSmallRegularFont, mediumLightGreyColor),
+        "sidebarSettingHKEnable": (mediumSmallRegularFont, darkPurpleColor),
+        "sidebarSettingHKMainStatus": (verySmallSemiboldFont, mediumLightGreyColor),
+        "sidebarSettingHKMinorStatus": (verySmallRegularFont, mediumLightGreyColor),
     ]
 
     class func backgroundImageofSize(_ size: CGSize, style: String) -> UIImage? {
@@ -196,7 +199,7 @@ open class Styles: NSObject {
         static let darkGreyColor: UIColor = UIColor(hex: 0x4a4a4a)
         static let lightDarkGreyColor: UIColor = UIColor(hex: 0x5c5c5c) 
         static let altDarkGreyColor: UIColor = UIColor(hex: 0x4d4e4c) 
-        static let mediumLightGreyColor: UIColor = UIColor(hex: 0xd0d3d4)
+        static let mediumLightGreyColor: UIColor = UIColor(hex: 0x7e7e7e)
         static let mediumGreyColor: UIColor = UIColor(hex: 0xb8b8b8) 
         static let whiteColor: UIColor = UIColor(hex: 0xffffff) 
         static let dimmedWhiteColor: UIColor = UIColor(hex: 0xffffff, opacity: 0.30)
@@ -212,7 +215,8 @@ open class Styles: NSObject {
         static let lineColor: UIColor = UIColor(hex: 0x281946) 
         static let goldStarColor: UIColor = UIColor(hex: 0xf8ad04) 
         static let greyStarColor: UIColor = UIColor(hex: 0xd0d3d4) 
-        static let dimmedDarkGreyColor: UIColor = UIColor(hex: 0x979797, opacity: 0.5)
+        static let dimmedDarkGreyColor: UIColor = UIColor(hex: 0xcbcbcb
+            , opacity: 0.5)
     }
 
     open class var darkPurpleColor: UIColor { return ColorCache.darkPurpleColor }
@@ -244,24 +248,12 @@ open class Styles: NSObject {
     // MARK: - Graph Colors
     //
     
-    // background, left side/right side
-    // public class var lightGreyColor: UIColor { return lightGreyColor }
-    // public class var veryLightGreyColor: UIColor { return veryLightGreyColor }
-    
-    // axis text
-    // public class var darkGreyColor: UIColor { return darkGreyColor }
     
     // insulin bar
     open class var lightBlueColor: UIColor { return ColorCache.lightBlueColor }
     open class var blueColor: UIColor { return ColorCache.blueColor }
     // Open Sans Semibold 10:   custom graph insulin amount text
     open class var mediumBlueColor: UIColor { return ColorCache.mediumBlueColor }
-    
-    
-    // blood glucose data
-    // public class var peachColor: UIColor { return peachColor }
-    // public class var purpleColor: UIColor { return purpleColor }
-    // public class var greenColor: UIColor { return greenColor }
     
     // event carb amount circle and vertical line
     open class var goldColor: UIColor { return ColorCache.goldColor }

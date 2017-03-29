@@ -15,12 +15,9 @@
 
 import UIKit
 
-class NoteListTableViewCell: BaseUITableViewCell {
+class NoteListTableViewCellWithComments: NoteListTableViewCell {
 
-    var note: BlipNote?
-
-    @IBOutlet weak var noteLabel: NutshellUILabel!
-    @IBOutlet weak var dateLabel: NutshellUILabel!
+    @IBOutlet weak var commentsLabel: NutshellUILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -28,32 +25,18 @@ class NoteListTableViewCell: BaseUITableViewCell {
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
-        NSLog("setSelected \(selected) for \(note?.messagetext)!")
-
-        noteLabel.usage = selected ? "cellNoteTextSelected" : "cellNoteText"
         super.setSelected(selected, animated: animated)
+        
+        // Configure the view for the selected state
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        NSLog("setHighlighted \(highlighted) for \(note?.messagetext)!")
         super.setHighlighted(highlighted, animated:animated)
-        
-        // Configure the view for the highlighted state
-        noteLabel.isHighlighted = highlighted
-        dateLabel.isHighlighted = highlighted
     }
     
-    func configureCell(_ note: BlipNote) {
-//        let hashtagBolder = HashtagBolder()
-//        let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString)
-//        noteLabel.attributedText = attributedText
-        
-        noteLabel.usage = "cellNoteText"
-        noteLabel.text = note.messagetext
-
-        dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
-        self.note = note
-        noteLabel.isHighlighted = false
-        dateLabel.isHighlighted = false
+    override func configureCell(_ note: BlipNote) {
+        super.configureCell(note)
+        // TODO!
+        commentsLabel.text = "3 comments..."
     }
 }
