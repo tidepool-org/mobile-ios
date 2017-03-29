@@ -119,6 +119,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         originalNote.messagetext = editedNote.messagetext
         originalNote.timestamp = editedNote.timestamp
         self.noteEdited = true
+        self.tableView.reloadData()
     }
 
     //

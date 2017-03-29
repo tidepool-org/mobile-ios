@@ -475,7 +475,7 @@ let addAlertOkay: String = "OK"
 /*
  Post/Save button text
  */
-let postButtonText: String = "Post"
+let postButtonText: String = "Save"
 let postButtonSave: String = "Save"
 
 /*

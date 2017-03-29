@@ -134,7 +134,7 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
         // configure change date label
         changeDateLabel.text = changeDateText
         changeDateLabel.font = smallRegularFont
-        changeDateLabel.textColor = tealColor
+        changeDateLabel.textColor = Styles.brightBlueColor
         changeDateLabel.sizeToFit()
         changeDateLabel.frame.origin.x = self.sceneContainerView.frame.width - (labelInset + changeDateLabel.frame.width)
         changeDateLabel.frame.origin.y = timedateLabel.frame.midY - changeDateLabel.frame.height / 2
@@ -189,7 +189,7 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
         // configure post button
         postButton.setAttributedTitle(NSAttributedString(string:postButtonText,
                                                          attributes:[NSForegroundColorAttributeName: postButtonTextColor, NSFontAttributeName: mediumRegularFont]), for: UIControlState())
-        postButton.backgroundColor = tealColor
+        postButton.backgroundColor = Styles.brightBlueColor
         postButton.alpha = 0.5
         postButton.addTarget(self, action: #selector(EventAddViewController.postNote(_:)), for: .touchUpInside)
         postButton.frame.size = CGSize(width: postButtonW, height: postButtonH)

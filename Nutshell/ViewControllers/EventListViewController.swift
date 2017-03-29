@@ -231,7 +231,40 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     let fetchPeriodInMonths: Int = -24
     var lastDateFetchTo: Date = Date()
     var loadingNotes = false
+
+    func selectAndScrollToTopNote() {
+        if filteredNotes.count > 0 {
+            let topIndexPath = IndexPath(row: 0, section: 0)
+            selectAndScrollToNoteAtIndexPath(topIndexPath)
+        } else {
+            selectedIndexPath = nil
+            selectNote(nil)
+        }
+    }
     
+    func selectAndScrollToNoteAtIndexPath(_ path: IndexPath) {
+        self.selectedIndexPath = path
+        selectNote(filteredNotes[path.item])
+        self.tableView.selectRow(at: path, animated: true, scrollPosition: .top)
+        self.tableView.scrollToNearestSelectedRow(at: .top, animated: true)
+    }
+    
+    func selectAndScrollToNote(_ note: BlipNote) {
+        if let pathForNote = indexPathForNoteId(note.id) {
+            self.selectAndScrollToNoteAtIndexPath(pathForNote)
+        }
+    }
+    
+    func indexPathForNoteId(_ noteId: String) -> IndexPath? {
+        for i in 0...filteredNotes.count {
+            if filteredNotes[i].id == noteId {
+                let path = IndexPath(row: i, section: 0)
+                return path
+            }
+        }
+        return nil
+    }
+
     //
     // MARK: - NoteIOWatcher Delegate
     //
@@ -252,13 +285,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         // TODO: re-filter and update table...
         self.filteredNotes = self.notes
         self.tableView.reloadData()
-        
-        if filteredNotes.count > 0 && selectedIndexPath == nil {
-            let topIndexPath = IndexPath(row: 0, section: 0)
-            self.selectedIndexPath = topIndexPath
-            selectNote(filteredNotes[topIndexPath.item])
-            self.tableView.selectRow(at: topIndexPath, animated: true, scrollPosition: .top)
-            self.tableView.scrollToNearestSelectedRow(at: .top, animated: true)
+        if selectedIndexPath == nil {
+            self.selectAndScrollToTopNote()
         }
     }
     
@@ -270,31 +298,43 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         // TODO: re-filter...
         self.filteredNotes = self.notes
         self.tableView.reloadData()
+        self.selectAndScrollToNote(note)
     }
     
     func deleteComplete(_ deletedNote: BlipNote) {
         NSLog("NoteIOWatcher.deleteComplete")
+        var nextIndexPath: IndexPath? = nil
         if self.selectedNote != nil {
-            if selectedNote!.id == deletedNote.id, let selectedIP = selectedIndexPath {
+            if selectedNote!.id == deletedNote.id {
                 // deselect cell before deletion...
-                self.tableView.deselectRow(at: selectedIP, animated: true)
                 self.selectNote(nil)
+                if let selectedIP = selectedIndexPath {
+                    self.tableView.deselectRow(at: selectedIP, animated: true)
+                    if selectedIP.row > 0 {
+                        nextIndexPath = IndexPath(row: selectedIP.row-1, section: 0)
+                    }
+                    self.selectedIndexPath = nil
+                }
             }
         }
-        var i = 0
-        for note in self.notes {
-            
-            if (note.id == deletedNote.id) {
-                self.notes.remove(at: i)
-                break
-            }
-            i += 1
+        
+        if let deletedNotePath = self.indexPathForNoteId(deletedNote.id) {
+            self.notes.remove(at: deletedNotePath.row)
         }
         
         // filter the notes, sort the notes, reload notes table
         // TODO: re-filter and update table...
         self.filteredNotes = self.notes
         self.tableView.reloadData()
+        
+        // make sure we have a note selected. If we deleted the selected one, select the previous one.
+        if self.selectedIndexPath != nil {
+            self.selectAndScrollToNoteAtIndexPath(self.selectedIndexPath!)
+        } else if nextIndexPath != nil {
+            self.selectAndScrollToNoteAtIndexPath(nextIndexPath!)
+        } else {
+            self.selectAndScrollToTopNote()
+        }
     }
     
     func updateComplete(_ originalNote: BlipNote, editedNote: BlipNote) {
@@ -384,17 +424,20 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 // TODO: also handle unsuccessful posts?
             }
         }  else if let eventDetailVC = segue.source as? EventDetailViewController {
-            if eventDetailVC.noteEdited {
-                // TODO: has note been updated?
-                self.filteredNotes = self.notes
-                self.tableView.reloadData()
+            if eventDetailVC.noteEdited {                // TODO: has note been updated?
+                self.reloadAndReselect(eventDetailVC.note)
             }
         } else {
             NSLog("Unknown segue source!")
-
         }
     }
 
+    private func reloadAndReselect(_ note: BlipNote) {
+        self.filteredNotes = self.notes
+        self.tableView.reloadData()
+        self.selectAndScrollToNote(note)
+    }
+    
     // Multiple VC's on the navigation stack return all the way back to this initial VC via this segue, when nut events go away due to deletion, for test purposes, etc.
     @IBAction func home(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventList home!")
@@ -450,7 +493,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     }
     
     fileprivate func searchMode() -> Bool {
-        var searchMode = false
+        let searchMode = false
 //        if searchTextField.isFirstResponder {
 //            searchMode = true
 //        } else if let searchText = searchTextField.text {
@@ -492,6 +535,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             configureSearchUI()
         }
         tableView.reloadData()
+        self.selectAndScrollToTopNote()
     }
     
     //
@@ -654,6 +698,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             self.tableView.selectRow(at: topIndexPath, animated: true, scrollPosition: .top)
         }
     }
+    
+    
 }
 
 
