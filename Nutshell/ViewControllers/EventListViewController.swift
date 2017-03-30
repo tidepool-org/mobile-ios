@@ -43,6 +43,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     // refresh control...
     var refreshControl:UIRefreshControl = UIRefreshControl()
 
+    // Program timers
+    var graphUpdateTimer: Timer?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -144,6 +147,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+        graphUpdateTimer?.invalidate()
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -192,23 +197,29 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     }
     
     func sideMenuWillOpen() {
-        //NSLog("EventList sideMenuWillOpen")
+        NSLog("EventList sideMenuWillOpen")
         configureForMenuOpen(true)
     }
     
     func sideMenuWillClose() {
-        //NSLog("EventList sideMenuWillClose")
+        NSLog("EventList sideMenuWillClose")
         configureForMenuOpen(false)
     }
     
     func sideMenuShouldOpenSideMenu() -> Bool {
-        //NSLog("EventList sideMenuShouldOpenSideMenu")
+        NSLog("EventList sideMenuShouldOpenSideMenu")
         return true
     }
     
     func sideMenuDidClose() {
-        //NSLog("EventList sideMenuDidClose")
+        NSLog("EventList sideMenuDidClose")
         configureForMenuOpen(false)
+        if let sideMenuController = self.sideMenuController()?.sideMenu?.menuViewController as? MenuAccountSettingsViewController {
+            if sideMenuController.didSelectSwitchProfile {
+                sideMenuController.didSelectSwitchProfile = false
+                performSegue(withIdentifier: "segueToSwitchProfile", sender: self)
+            }
+        }
     }
     
     func sideMenuDidOpen() {
@@ -221,10 +232,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     // MARK: - Notes methods
     //
     
-    // All notes
+    // All notes, kept sorted chronologically
     var notes: [BlipNote] = []
-    // Only filtered notes
-    var filteredNotes: [BlipNote] = []
     
     // Last date fetched to & beginning -- starts at current date
     //let fetchPeriodInMonths: Int = -3
@@ -232,8 +241,16 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     var lastDateFetchTo: Date = Date()
     var loadingNotes = false
 
+    // Sort notes chronologically
+    func sortNotesAndReload() {
+        notes.sort(by: {$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
+        tableView.reloadData()
+        // TODO: use this global for now until we move notes into database! Used by graph code to show notes.
+        NutDataController.sharedInstance.currentNotes = notes
+    }
+
     func selectAndScrollToTopNote() {
-        if filteredNotes.count > 0 {
+        if notes.count > 0 {
             let topIndexPath = IndexPath(row: 0, section: 0)
             selectAndScrollToNoteAtIndexPath(topIndexPath)
         } else {
@@ -244,7 +261,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
     func selectAndScrollToNoteAtIndexPath(_ path: IndexPath) {
         self.selectedIndexPath = path
-        selectNote(filteredNotes[path.item])
+        selectNote(notes[path.item])
         self.tableView.selectRow(at: path, animated: true, scrollPosition: .top)
         self.tableView.scrollToNearestSelectedRow(at: .top, animated: true)
     }
@@ -254,10 +271,17 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             self.selectAndScrollToNoteAtIndexPath(pathForNote)
         }
     }
-    
+
+    func snapSelectedRowToTop() {
+        if let note = selectedNote {
+            let path = indexPathForNoteId(note.id)
+            self.tableView.selectRow(at: path, animated: true, scrollPosition: .top)
+        }
+    }
+
     func indexPathForNoteId(_ noteId: String) -> IndexPath? {
-        for i in 0...filteredNotes.count {
-            if filteredNotes[i].id == noteId {
+        for i in 0...notes.count {
+            if notes[i].id == noteId {
                 let path = IndexPath(row: i, section: 0)
                 return path
             }
@@ -282,9 +306,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     func addNotes(_ notes: [BlipNote]) {
         NSLog("NoteIOWatcher.addNotes")
         self.notes = self.notes + notes
-        // TODO: re-filter and update table...
-        self.filteredNotes = self.notes
-        self.tableView.reloadData()
+        sortNotesAndReload()
         if selectedIndexPath == nil {
             self.selectAndScrollToTopNote()
         }
@@ -294,10 +316,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         NSLog("NoteIOWatcher.postComplete")
         
         self.notes.insert(note, at: 0)
-        // filter the notes, sort the notes, reload notes table
-        // TODO: re-filter...
-        self.filteredNotes = self.notes
-        self.tableView.reloadData()
+        // sort the notes, reload notes table
+        sortNotesAndReload()
         self.selectAndScrollToNote(note)
     }
     
@@ -322,10 +342,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             self.notes.remove(at: deletedNotePath.row)
         }
         
-        // filter the notes, sort the notes, reload notes table
-        // TODO: re-filter and update table...
-        self.filteredNotes = self.notes
-        self.tableView.reloadData()
+        sortNotesAndReload()
         
         // make sure we have a note selected. If we deleted the selected one, select the previous one.
         if self.selectedIndexPath != nil {
@@ -367,7 +384,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         
         if (!loadingNotes) {
             notes = []
-            filteredNotes = []
+            notes = []
             lastDateFetchTo = Date()
             loadNotes()
         }
@@ -433,14 +450,22 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     }
 
     private func reloadAndReselect(_ note: BlipNote) {
-        self.filteredNotes = self.notes
-        self.tableView.reloadData()
+        sortNotesAndReload()
         self.selectAndScrollToNote(note)
     }
     
     // Multiple VC's on the navigation stack return all the way back to this initial VC via this segue, when nut events go away due to deletion, for test purposes, etc.
     @IBAction func home(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventList home!")
+        if let switchProfileVC = segue.source as? SwitchProfileTableViewController {
+            if let newUser = switchProfileVC.newUser {
+                NSLog("TODO: switch to user \(newUser.fullName)")
+            } else {
+                NSLog("No note to delete!")
+            }
+        } else {
+            NSLog("Unknown segue source!")
+        }
     }
 
     // The add/edit VC will return here when a meal event is deleted, and detail vc was transitioned to directly from this vc (i.e., the Nut event contained a single meal event which was deleted).
@@ -542,29 +567,65 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     // MARK: - Data vizualization view
     //
     
+    private let kGraphUpdateDelay: TimeInterval = 1.0
+    private func startGraphUpdateTimer() {
+        if graphUpdateTimer == nil {
+            graphUpdateTimer = Timer.scheduledTimer(timeInterval: kGraphUpdateDelay, target: self, selector: #selector(EventListViewController.graphUpdateTimerFired), userInfo: nil, repeats: false)
+        }
+    }
     
-    fileprivate func selectNote(_ note: BlipNote?) {
-        
+    private func stopGraphUpdateTimer() {
+        NSLog("\(#function)")
+        graphUpdateTimer?.invalidate()
+        graphUpdateTimer = nil
+    }
+    
+    func graphUpdateTimerFired() {
+        NSLog("\(#function)")
+        snapSelectedRowToTop()
+        configureGraphContainer()
+    }
+
+    private func clearGraphAndUpdateDelayed() {
+        NSLog("\(#function)")
+        stopGraphUpdateTimer()
+        if (graphContainerView != nil) {
+            NSLog("Removing current graph view...")
+            graphContainerView?.removeFromSuperview();
+            graphContainerView = nil;
+        }
+        startGraphUpdateTimer()
+    }
+    
+    private func selectNote(_ note: BlipNote?) {
+        NSLog("\(#function)")
+
         // if we are deselecting, just close up data viz
         if note == nil {
+            NSLog("Deselecting note...")
             self.selectedNote = nil
             //showHideDataVizView(show: false)
             configureGraphContainer()
             return
         }
         
-        // if we have been showing something, close it up
+        // if we have been showing something, close it up and update delayed
         if let currentNote = self.selectedNote {
+            NSLog("Selecting a different note...")
             if currentNote.id != note!.id {
                 //showHideDataVizView(show: false)
-                configureGraphContainer()
+                self.selectedNote = note
+                clearGraphAndUpdateDelayed()
+                return
+                //configureGraphContainer()
             } else {
                 // same note, not sure why we'd be called...
                 return
             }
         }
     
-        // start looking for data for this item...
+        NSLog("Selecting a new note...")
+        // no selected note, start looking for data for this item...
         self.selectedNote = note
         configureGraphContainer()
     }
@@ -590,16 +651,21 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         }
     }
     
+    
     /// Reloads the graph - this should be called after the header has been laid out and the graph section size has been figured. Pass in edgeOffset to place the nut event other than in the center.
     fileprivate func configureGraphContainer(_ edgeOffset: CGFloat = 0.0) {
-        //NSLog("EventListVC: configureGraphContainer")
+        NSLog("EventListVC: configureGraphContainer")
         if (graphContainerView != nil) {
+            NSLog("Removing current graph view...")
             graphContainerView?.removeFromSuperview();
             graphContainerView = nil;
         }
         if let note = self.selectedNote {
-            // TODO: using a faked up timezone offset for now...
-            graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: 0)
+            NSLog("Configuring graph for note id: \(note.id)")
+
+            // TODO: assume all notes created in current timezone?
+            let tzOffset = NSCalendar.current.timeZone.secondsFromGMT()
+            graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: tzOffset)
             if let graphContainerView = graphContainerView {
                 graphContainerView.configureGraph(edgeOffset)
                 graphLayerContainer.addSubview(graphContainerView)
@@ -694,12 +760,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 }
             }
             self.selectedIndexPath = topIndexPath
-            selectNote(filteredNotes[topIndexPath.item])
+            selectNote(notes[topIndexPath.item])
             self.tableView.selectRow(at: topIndexPath, animated: true, scrollPosition: .top)
         }
     }
-    
-    
 }
 
 
@@ -719,7 +783,7 @@ extension EventListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let note = filteredNotes[indexPath.item]
+        let note = notes[indexPath.item]
         self.selectedNote = note
         self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue, sender: self)
     }
@@ -736,7 +800,7 @@ extension EventListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredNotes.count
+        return notes.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -744,8 +808,8 @@ extension EventListViewController: UITableViewDataSource {
         // Note: two different list cells are used depending upon whether a location will be shown or not. 
         let cellId = EventViewStoryboard.TableViewCellIdentifiers.noteListCell
         var note: BlipNote?
-        if (indexPath.item < filteredNotes.count) {
-            note = filteredNotes[indexPath.item]
+        if (indexPath.item < notes.count) {
+            note = notes[indexPath.item]
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCell

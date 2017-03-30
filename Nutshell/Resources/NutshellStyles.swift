@@ -64,6 +64,7 @@ open class Styles: NSObject {
         // event list table scene
         "cellNoteText": (mediumSmallRegularFont, altDarkGreyColor),
         "cellNoteTextSelected": (mediumSmallSemiboldFont, altDarkGreyColor),
+        "profileCellNameText": (mediumSmallRegularFont, darkPurpleColor),
         "eventListCellLocation": (smallSemiboldFont, altDarkGreyColor),
         "eventListCellRepeatCount": (mediumSemiboldFont, altDarkGreyColor),
         "searchPlaceholder": (mediumLightFont, blackColor),

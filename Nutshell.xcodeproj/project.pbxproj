@@ -102,6 +102,8 @@
 		4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
 		4820ED6A1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
 		4820ED6B1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
+		482BB3601E8C942E008CD02A /* NutshellUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482BB35F1E8C942E008CD02A /* NutshellUISwitch.swift */; };
+		482BB3621E8D5FCA008CD02A /* NoteGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482BB3611E8D5FCA008CD02A /* NoteGraphData.swift */; };
 		482ECC821C94BB9D002A015D /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */; };
 		482ECC831C94BB9D002A015D /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */; };
 		482ECC861C94BC47002A015D /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC851C94BC47002A015D /* LogFormatter.swift */; };
@@ -161,6 +163,8 @@
 		486F5E3A1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */; };
 		486F5E3B1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */; };
 		486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
+		4872118D1E8D818300BAD5CE /* SwitchProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4872118C1E8D818300BAD5CE /* SwitchProfileTableViewController.swift */; };
+		4872118F1E8DC33200BAD5CE /* ProfileListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */; };
 		487ED2511C3DA40A00EE36DF /* TidepoolGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */; };
 		48867CF51E80AEAE00C4E79D /* BlipNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CEF1E80A98C00C4E79D /* BlipNote.swift */; };
 		48867CF61E819F2000C4E79D /* BlipNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CEF1E80A98C00C4E79D /* BlipNote.swift */; };
@@ -301,6 +305,8 @@
 		48103E9C1C1E05660055C27A /* Nutshell-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Nutshell-Bridging-Header.h"; sourceTree = "<group>"; };
 		4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/Pods-Nutshell/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		4820ED691C21E8E3008C754A /* GraphDataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataTypes.swift; path = GraphView/GraphDataTypes.swift; sourceTree = "<group>"; };
+		482BB35F1E8C942E008CD02A /* NutshellUISwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutshellUISwitch.swift; path = Resources/NutshellUISwitch.swift; sourceTree = "<group>"; };
+		482BB3611E8D5FCA008CD02A /* NoteGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteGraphData.swift; path = "GraphView/Tidepool Graph/NoteGraphData.swift"; sourceTree = "<group>"; };
 		482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataUploader.swift; path = DataModel/HealthKit/HealthKitDataUploader.swift; sourceTree = "<group>"; };
 		482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = DataModel/HealthKit/HealthKitManager.swift; sourceTree = "<group>"; };
 		482ECC851C94BC47002A015D /* LogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogFormatter.swift; sourceTree = "<group>"; };
@@ -352,6 +358,8 @@
 		486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIDateFormatterExtension.swift; path = "Utilities and Extensions/UIDateFormatterExtension.swift"; sourceTree = "<group>"; };
 		486F5E751BA35CD800BA2A57 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		486F5E771BA3891600BA2A57 /* NutUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutUtils.swift; path = "Utilities and Extensions/NutUtils.swift"; sourceTree = "<group>"; };
+		4872118C1E8D818300BAD5CE /* SwitchProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwitchProfileTableViewController.swift; path = ViewControllers/SwitchProfileTableViewController.swift; sourceTree = "<group>"; };
+		4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileListTableViewCell.swift; path = ViewControllers/ProfileListTableViewCell.swift; sourceTree = "<group>"; };
 		487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolGraphData.swift; path = "GraphView/Tidepool Graph/TidepoolGraphData.swift"; sourceTree = "<group>"; };
 		48867CEF1E80A98C00C4E79D /* BlipNote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlipNote.swift; path = DataModel/BlipNote.swift; sourceTree = "<group>"; };
 		48867CF01E80A98C00C4E79D /* BlipPatient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlipPatient.swift; path = DataModel/BlipPatient.swift; sourceTree = "<group>"; };
@@ -555,6 +563,8 @@
 				48EDC2C51BD6B403003049D9 /* EventAddViewController.swift */,
 				488E44DB1E83198D00A17AD7 /* EventEditViewController.swift */,
 				48103E981C1DE7BC0055C27A /* EventViewNavController.swift */,
+				4872118C1E8D818300BAD5CE /* SwitchProfileTableViewController.swift */,
+				4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */,
 			);
 			name = EventViewControllers;
 			sourceTree = "<group>";
@@ -643,6 +653,7 @@
 				4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */,
 				4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */,
 				4837CC681BA7394E00BA2CDE /* NutshellUIButton.swift */,
+				482BB35F1E8C942E008CD02A /* NutshellUISwitch.swift */,
 				4859FCC71B9A4DE4000C1269 /* Info.plist */,
 				4859FCC21B9A4DE4000C1269 /* Assets.xcassets */,
 				485922A51B9C982D0056E605 /* Images */,
@@ -761,6 +772,7 @@
 		48C491621C3B2D2200F34630 /* Tidepool Graph Data */ = {
 			isa = PBXGroup;
 			children = (
+				482BB3611E8D5FCA008CD02A /* NoteGraphData.swift */,
 				487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */,
 				48C4916D1C3B816700F34630 /* WorkoutGraphData.swift */,
 				48C491631C3B2DEE00F34630 /* MealGraphData.swift */,
@@ -1093,6 +1105,7 @@
 				48B127971BC4447100061483 /* NutWorkout.swift in Sources */,
 				486F5E3A1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
 				0334CA2E1BA8DDFC00013096 /* Calibration.swift in Sources */,
+				4872118D1E8D818300BAD5CE /* SwitchProfileTableViewController.swift in Sources */,
 				488E44E31E831CC100A17AD7 /* HashtagsView.swift in Sources */,
 				485420271BC44D290020CFE1 /* Meal.swift in Sources */,
 				486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */,
@@ -1106,6 +1119,7 @@
 				0334CA3A1BA8DDFC00013096 /* ContinuousGlucose.swift in Sources */,
 				4837CC691BA7394E00BA2CDE /* NutshellUIButton.swift in Sources */,
 				48ED0D341BADAF8B009D0D6F /* GraphUIView.swift in Sources */,
+				482BB3621E8D5FCA008CD02A /* NoteGraphData.swift in Sources */,
 				0334CA761BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift in Sources */,
 				489F3C501BB0AE1D00C95FDC /* NutMeal.swift in Sources */,
 				488E44E21E831CC100A17AD7 /* HashtagsScrollView.swift in Sources */,
@@ -1134,10 +1148,12 @@
 				0334CA161BA8DDFC00013096 /* Activity.swift in Sources */,
 				483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */,
 				4892996B1CB4297B001F24D6 /* NutshellHealthKitConfiguration.swift in Sources */,
+				4872118F1E8DC33200BAD5CE /* ProfileListTableViewCell.swift in Sources */,
 				0334CA1C1BA8DDFC00013096 /* Alarm.swift in Sources */,
 				48BA05B01E53911500212486 /* GraphCursorLayer.swift in Sources */,
 				0334CA911BA8DDFC00013096 /* Wizard.swift in Sources */,
 				48C491551C38798E00F34630 /* GraphLayout.swift in Sources */,
+				482BB3601E8C942E008CD02A /* NutshellUISwitch.swift in Sources */,
 				489299681CB4290D001F24D6 /* HealthKitConfiguration.swift in Sources */,
 				0334CA2B1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */,
 				48C491571C38804700F34630 /* GraphingUtils.swift in Sources */,
@@ -1424,7 +1440,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"  \"-D\" \"DEBUG\"";
-				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.nutshell;
+				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1449,7 +1465,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"  \"-D\" \"RELEASE\"";
-				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.nutshell;
+				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

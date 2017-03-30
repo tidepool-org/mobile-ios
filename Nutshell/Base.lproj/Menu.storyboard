@@ -108,9 +108,14 @@
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKEnable"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
-                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="9g5-rw-efz">
-                                                        <rect key="frame" x="160.5" y="3" width="51" height="31"/>
+                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="9g5-rw-efz" customClass="ScaledSwitch" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="160" y="3" width="51" height="31"/>
                                                         <color key="tintColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="scale">
+                                                                <real key="value" value="0.75"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="enableHealthData:" destination="jOa-f6-dl3" eventType="valueChanged" id="fFy-Am-V5h"/>
                                                         </connections>
@@ -191,6 +196,9 @@
                                                         <subviews>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ukP-ee-UU0" userLabel="userSelectLargeHitArea">
                                                                 <rect key="frame" x="0.0" y="0.0" width="40" height="42"/>
+                                                                <connections>
+                                                                    <action selector="switchProfileTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="0IJ-bu-wDQ"/>
+                                                                </connections>
                                                             </button>
                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0B8-jq-TlF" userLabel="userSelectButton">
                                                                 <rect key="frame" x="13" y="12" width="11" height="17"/>
@@ -199,6 +207,9 @@
                                                                     <constraint firstAttribute="width" constant="11" id="HH3-hk-G9Z"/>
                                                                 </constraints>
                                                                 <state key="normal" image="rightDisclosureArrow"/>
+                                                                <connections>
+                                                                    <action selector="switchProfileTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="gaS-H5-Ly9"/>
+                                                                </connections>
                                                             </button>
                                                         </subviews>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -405,7 +416,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.97254901960784312" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="9OQ-uM-nfY" firstAttribute="top" secondItem="Yfg-jr-ctW" secondAttribute="bottom" constant="44" id="AGR-7F-OzU"/>
                             <constraint firstItem="9OQ-uM-nfY" firstAttribute="leading" secondItem="Msq-rR-Cxe" secondAttribute="leading" id="Ivg-Mt-Qa5"/>
@@ -431,11 +442,13 @@
                         <outlet property="sidebarView" destination="9OQ-uM-nfY" id="Ix6-bv-TsQ"/>
                         <outlet property="usernameLabel" destination="8eU-B6-eOM" id="iCh-s4-6Aa"/>
                         <outlet property="versionString" destination="FRD-xW-MeJ" id="XGz-45-lWe"/>
+                        <segue destination="Abk-OY-d5S" kind="unwind" identifier="unwindFromMenu" unwindAction="done:" id="pm8-wF-UwI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XvS-Cr-aVr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Abk-OY-d5S" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="440.5" y="235.5"/>
+            <point key="canvasLocation" x="439.6875" y="234.50704225352112"/>
         </scene>
     </scenes>
     <resources>

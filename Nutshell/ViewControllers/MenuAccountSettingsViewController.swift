@@ -11,6 +11,8 @@ import CocoaLumberjack
 
 class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
+    var didSelectSwitchProfile = false
+    
     @IBOutlet weak var loginAccount: UILabel!
     @IBOutlet weak var versionString: NutshellUILabel!
     @IBOutlet weak var usernameLabel: NutshellUILabel!
@@ -34,26 +36,15 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         let curService = APIConnector.connector().currentService!
         if curService == "Production" {
-            versionString.text = "V" + UIApplication.appVersion()
+            versionString.text = "v" + UIApplication.appVersion()
         } else{
-            versionString.text = "V" + UIApplication.appVersion() + " on " + curService
+            versionString.text = "v" + UIApplication.appVersion() + " on " + curService
         }
         loginAccount.text = NutDataController.sharedInstance.currentUserName
         
-        //healthKitSwitch.tintColor = whiteColor
-        //healthKitSwitch.thumbTintColor = whiteColor
+        //healthKitSwitch.tintColor = Styles.brightBlueColor
+        //healthKitSwitch.thumbTintColor = Styles.whiteColor
         healthKitSwitch.onTintColor = Styles.brightBlueColor
-
-        //let attributes = [NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue]
- 
-//        let str = "Privacy and Terms of Use"
-//        let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-//        paragraphStyle.alignment = .center
-//        let attributedString = NSMutableAttributedString(string:str, attributes:[NSFontAttributeName: Styles.mediumVerySmallSemiboldFont, NSForegroundColorAttributeName: Styles.blackColor, NSParagraphStyleAttributeName: paragraphStyle])
-//        attributedString.addAttribute(NSLinkAttributeName, value: URL(string: "http://developer.tidepool.io/privacy-policy/")!, range: NSRange(location: 0, length: 7))
-//        attributedString.addAttribute(NSLinkAttributeName, value: URL(string: "http://developer.tidepool.io/terms-of-use/")!, range: NSRange(location: attributedString.length - 12, length: 12))
-//        privacyTextField.attributedText = attributedString
-//        privacyTextField.delegate = self
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitDataUploader.Notifications.Updated), object: nil)
@@ -89,6 +80,11 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     //
     // MARK: - Button/switch handling
     //
+    
+    @IBAction func switchProfileTapped(_ sender: AnyObject) {
+        didSelectSwitchProfile = true
+        self.hideSideMenuView()
+    }
     
     @IBAction func supportButtonHandler(_ sender: AnyObject) {
         APIConnector.connector().trackMetric("Clicked Tidepool Support (Hamburger)")

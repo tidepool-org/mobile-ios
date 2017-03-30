@@ -540,11 +540,11 @@ class APIConnector {
             if let httpResponse = response as? HTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
                     DDLogInfo("Got notes for user (\(userid)) in given date range: \(dateFormatter.string(from: start)) to \(dateFormatter.string(from: end))")
-                    
                     var notes: [BlipNote] = []
                     
                     let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
                     
+                    NSLog("notes: \(jsonResult)")
                     let messages: NSArray = jsonResult.value(forKey: "messages") as! NSArray
                     
                     let dateFormatter = DateFormatter()
@@ -589,6 +589,83 @@ class APIConnector {
         
         blipRequest("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
     }
+
+    func getMessageThreadForNote(_ fetchWatcher: NoteIOWatcher, messageId: String) {
+        
+        if sessionToken == nil {
+            return
+        }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        let urlExtension = "/message/thread/" + messageId
+        
+        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
+        
+        let preRequest = { () -> Void in
+            fetchWatcher.loadingNotes(true)
+        }
+        
+        let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
+            
+            // End refreshing for refresh control
+            fetchWatcher.endRefresh()
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if (httpResponse.statusCode == 200) {
+                    DDLogInfo("Got thread for note \(messageId)")
+                    var notes: [BlipNote] = []
+                    
+                    let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
+                    
+                    NSLog("notes: \(jsonResult)")
+                    let messages: NSArray = jsonResult.value(forKey: "messages") as! NSArray
+                    NSLog("\(messages)")
+                    let dateFormatter = DateFormatter()
+                    
+                    for message in messages {
+                        let id = (message as AnyObject).value(forKey: "id") as! String
+                        let parentmessage = (message as AnyObject).value(forKey: "parentmessage") as? String
+                        let otheruserid = (message as AnyObject).value(forKey: "userid") as! String
+                        let groupid = (message as AnyObject).value(forKey: "groupid") as! String
+                        let timestamp = dateFormatter.dateFromISOString((message as AnyObject).value(forKey: "timestamp") as! String)
+                        var createdtime: Date
+                        if let created = (message as AnyObject).value(forKey: "createdtime") as? String {
+                            createdtime = dateFormatter.dateFromISOString(created)
+                        } else {
+                            createdtime = timestamp
+                        }
+                        let messagetext = (message as AnyObject).value(forKey: "messagetext") as! String
+                        
+                        let otheruser = BlipUser(userid: otheruserid)
+                        let userDict = (message as AnyObject).value(forKey: "user") as! NSDictionary
+                        otheruser.processUserDict(userDict)
+                        
+                        let note = BlipNote(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
+                        note.parentmessage = parentmessage
+                        notes.append(note)
+                    }
+                    
+                    fetchWatcher.addNotes(notes)
+                } else if (httpResponse.statusCode == 404) {
+                    DDLogError("No notes retrieved, status code: \(httpResponse.statusCode), messageId: \(messageId)")
+                } else {
+                    DDLogError("No notes retrieved - invalid status code \(httpResponse.statusCode)")
+                    self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
+                }
+                
+                fetchWatcher.loadingNotes(false)
+                let notification = Notification(name: Notification.Name(rawValue: "doneFetching"), object: nil)
+                NotificationCenter.default.post(notification)
+            } else {
+                DDLogError("No notes retrieved - could not parse response")
+                self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
+            }
+        }
+        
+        blipRequest("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+    }
+    
     
     func doPostWithNote(_ postWatcher: NoteIOWatcher, note: BlipNote) {
         

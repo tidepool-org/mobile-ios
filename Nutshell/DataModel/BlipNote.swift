@@ -18,6 +18,7 @@ import Foundation
 class BlipNote {
     
     var id: String
+    var parentmessage: String?
     var userid: String
     var groupid: String
     var timestamp: Date

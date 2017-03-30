@@ -54,6 +54,9 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewIsForeground = true
+        
+        APIConnector.connector().getMessageThreadForNote(self, messageId: note.id)
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -74,6 +77,9 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             return
         }
         subviewsInitialized = true
+        sceneContainerView.setNeedsLayout()
+        sceneContainerView.layoutIfNeeded()
+        
         selectNote()
     }
     
@@ -88,6 +94,14 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     }
 
     //
+    // MARK: - Comments methods
+    //
+    
+    // All comments
+    var comments: [BlipNote] = []
+
+    
+    //
     // MARK: - NoteIOWatcher Delegate
     //
     
@@ -100,7 +114,17 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     }
     
     func addNotes(_ notes: [BlipNote]) {
+        for comment in notes {
+            if comment.id != self.note.id {
+                self.comments.append(comment)
+            }
+        }
         NSLog("EventDetailVC! NoteIOWatcher.addNotes")
+        if self.comments.count > 0 {
+            NSLog("added \(self.comments.count) comments!")
+            self.comments.sort(by: {$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
+            self.tableView.reloadData()
+        }
     }
     
     func postComplete(_ note: BlipNote) {
@@ -222,8 +246,9 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             graphContainerView = nil;
         }
         if let note = self.note {
-            // TODO: using a faked up timezone offset for now...
-            graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: 0)
+            // TODO: assume all notes created in current timezone?
+            let tzOffset = NSCalendar.current.timeZone.secondsFromGMT()
+            graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: tzOffset)
             if let graphContainerView = graphContainerView {
                 graphContainerView.configureGraph(edgeOffset)
                 graphLayerContainer.addSubview(graphContainerView)
@@ -337,8 +362,7 @@ extension EventDetailViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // TODO: add support for comment items!
-        return 1
+        return 1 + self.comments.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -346,8 +370,10 @@ extension EventDetailViewController: UITableViewDataSource {
         // Note: two different list cells are used depending upon whether a location will be shown or not.
         let cellId = EventViewStoryboard.TableViewCellIdentifiers.noteDetailCell
         var note: BlipNote?
-        if (indexPath.item == 0) {
+        if (indexPath.row == 0) {
             note = self.note
+        } else {
+            note = self.comments[indexPath.row-1]
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteDetailTableViewCell

@@ -41,8 +41,10 @@ class TidepoolGraphLayout: GraphLayout {
 
         let workoutLayer = WorkoutGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
         
-        let mealLayer = MealGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
+//        let mealLayer = MealGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
         
+        let noteLayer = NoteGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
+
         let cbgLayer = CbgGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
         
         let smbgLayer = SmbgGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
@@ -57,7 +59,7 @@ class TidepoolGraphLayout: GraphLayout {
         bolusLayer.wizardLayer = wizardLayer
 
         // Note: ordering is important! E.g., wizard layer draws after bolus layer so it can place circles above related bolus rectangles.
-        return [workoutLayer, mealLayer, cbgLayer, smbgLayer, basalLayer, bolusLayer, wizardLayer]
+        return [workoutLayer, noteLayer, cbgLayer, smbgLayer, basalLayer, bolusLayer, wizardLayer]
     }
 
     // Bolus and basal values are scaled according to max value found, so the records are queried for the complete graph time range and stored here where the tiles can share them.
@@ -109,6 +111,8 @@ class TidepoolGraphLayout: GraphLayout {
     var yPixelsWorkout: CGFloat = 0.0
     var yTopOfMeal: CGFloat = 0.0
     var yBottomOfMeal: CGFloat = 0.0
+    var yTopOfNote: CGFloat = 0.0
+    var yBottomOfNote: CGFloat = 0.0
 
     //
     // MARK: - Private constants
@@ -161,8 +165,10 @@ class TidepoolGraphLayout: GraphLayout {
         // Put the workout data at the top, over the X-axis
         yTopOfWorkout = 2.0
         yTopOfMeal = 2.0
+        yTopOfNote = 2.0
         yBottomOfWorkout = graphViewHeight - kGraphBottomEdge
         yBottomOfMeal = yBottomOfWorkout
+        yBottomOfNote = yBottomOfWorkout
         // Meal line goes from top to bottom as well
         yPixelsWorkout = headerHeight - 4.0
         

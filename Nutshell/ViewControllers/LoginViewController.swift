@@ -83,6 +83,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         }
 
         self.signUpButton.setTitleColor(Styles.lightDarkGreyColor, for: .highlighted)
+        self.loginIndicator.color = UIColor.black
         
         let notificationCenter = NotificationCenter.default
 

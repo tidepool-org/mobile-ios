@@ -6,7 +6,6 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -27,11 +26,11 @@
                         <viewControllerLayoutGuide type="bottom" id="Pl9-hd-HdO"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="vp9-lf-HJa" userLabel="view">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yu7-Gk-FTH" userLabel="eventListSceneContainer" customClass="UIControl">
-                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9sr-8X-2eF" userLabel="dataVizView">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="275"/>
@@ -274,6 +273,7 @@
                         <outlet property="menuButton" destination="k2Y-dm-3tk" id="Mdl-ih-WZN"/>
                         <outlet property="tableView" destination="TkA-IK-Jxk" id="qBO-FW-Unw"/>
                         <segue destination="jDw-Oo-Xxj" kind="show" identifier="segueToEventDetail" id="RZP-kk-4AG"/>
+                        <segue destination="2sW-sN-gyd" kind="show" identifier="segueToSwitchProfile" id="Fhj-f1-jcN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6ca-ao-v5B" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -379,7 +379,8 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MlM-Oh-SBV" customClass="EventViewNavController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <value key="contentSizeForViewInPopover" type="size" width="320" height="568"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="xoN-ni-B6S">
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" translucent="NO" prompted="NO"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="xoN-ni-B6S">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
@@ -402,6 +403,62 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AGZ-vH-Yur" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="580" y="-184"/>
+        </scene>
+        <!--Switch Profile-->
+        <scene sceneID="EqB-nH-VQ9">
+            <objects>
+                <tableViewController title="Switch Profile" id="2sW-sN-gyd" customClass="SwitchProfileTableViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="ygL-w3-c0U">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="profileTableCell" id="vDp-ta-v7W" userLabel="profileTableCell" customClass="ProfileListTableViewCell" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vDp-ta-v7W" id="qXI-U4-jGq">
+                                    <rect key="frame" x="0.0" y="0.0" width="281" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Tacos" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JsW-AH-t2A" userLabel="nameLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                            <rect key="frame" x="24" y="12" width="39" height="20.5"/>
+                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
+                                            <color key="textColor" red="0.15686274509803921" green="0.098039215686274508" blue="0.27450980392156865" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="profileCellNameText"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="JsW-AH-t2A" firstAttribute="centerY" secondItem="qXI-U4-jGq" secondAttribute="centerY" id="YIB-oj-GOI"/>
+                                        <constraint firstItem="JsW-AH-t2A" firstAttribute="leading" secondItem="qXI-U4-jGq" secondAttribute="leading" constant="24" id="oeF-Zx-SZg"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="nameLabel" destination="JsW-AH-t2A" id="SSu-W0-Wpd"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="2sW-sN-gyd" id="zPD-WC-80W"/>
+                            <outlet property="delegate" destination="2sW-sN-gyd" id="FKd-7a-nvZ"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Switch Profile" id="pYG-ug-p68" userLabel="switchProfileNavBar">
+                        <barButtonItem key="leftBarButtonItem" image="backArrow" id="grC-Kb-ddU" userLabel="menuBarButtonItem">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <segue destination="60L-Jp-qNO" kind="unwind" identifier="segueBackFromSwitchProfile" unwindAction="home:" id="efy-UL-t2V"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VnV-xe-ObY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="60L-Jp-qNO" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1313" y="108"/>
         </scene>
         <!--EventEdit-->
         <scene sceneID="RKL-Yb-Yjp">
@@ -520,17 +577,17 @@
                         <viewControllerLayoutGuide type="bottom" id="dv8-m0-JNF"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="t4x-VM-m8d" userLabel="view">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tV7-5h-ivR" userLabel="sceneContainerView" customClass="UIControl">
-                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S2q-3Z-sOG" userLabel="dataVizView">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="275"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="geb-dR-DzH" userLabel="graphLayerContainer">
-                                                <rect key="frame" x="0.0" y="22" width="320" height="252"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="274"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </view>
                                             <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xpk-kf-LTi" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
@@ -540,7 +597,7 @@
                                                     <constraint firstAttribute="height" constant="1" id="f1D-Fd-1st"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="whiteBackground"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                         </subviews>
@@ -549,6 +606,7 @@
                                             <constraint firstItem="Xpk-kf-LTi" firstAttribute="top" secondItem="geb-dR-DzH" secondAttribute="bottom" id="8ap-Gf-GL8"/>
                                             <constraint firstAttribute="height" constant="275" id="Lyh-Hx-rIC"/>
                                             <constraint firstAttribute="trailing" secondItem="Xpk-kf-LTi" secondAttribute="trailing" id="SDb-eT-09C"/>
+                                            <constraint firstItem="geb-dR-DzH" firstAttribute="top" secondItem="S2q-3Z-sOG" secondAttribute="top" id="ScO-RC-TcQ"/>
                                             <constraint firstAttribute="bottom" secondItem="Xpk-kf-LTi" secondAttribute="bottom" id="bbA-y4-khT"/>
                                             <constraint firstItem="geb-dR-DzH" firstAttribute="leading" secondItem="S2q-3Z-sOG" secondAttribute="leading" id="bko-IQ-rXN"/>
                                             <constraint firstItem="Xpk-kf-LTi" firstAttribute="leading" secondItem="S2q-3Z-sOG" secondAttribute="leading" id="wFP-AA-k3k"/>
@@ -583,7 +641,7 @@
                                                                 <constraint firstItem="jcZ-U6-pJr" firstAttribute="leading" secondItem="wFE-ZX-kPc" secondAttribute="leading" id="gR3-e2-Dh3"/>
                                                             </constraints>
                                                             <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="string" keyPath="normalBackground" value="lightBackground"/>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="normalBackground" value="whiteBackground"/>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="highlightedBackground" value="brightBackground"/>
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
@@ -653,7 +711,6 @@
                                 <constraints>
                                     <constraint firstItem="iHb-Z2-3F1" firstAttribute="top" secondItem="S2q-3Z-sOG" secondAttribute="bottom" id="6ex-oR-rjb"/>
                                     <constraint firstAttribute="bottom" secondItem="iHb-Z2-3F1" secondAttribute="bottom" id="QtM-w6-ypc"/>
-                                    <constraint firstItem="geb-dR-DzH" firstAttribute="height" secondItem="tV7-5h-ivR" secondAttribute="height" multiplier="0.5" id="RWP-e2-fbi"/>
                                     <constraint firstItem="iHb-Z2-3F1" firstAttribute="leading" secondItem="tV7-5h-ivR" secondAttribute="leading" id="adc-nU-zpG"/>
                                     <constraint firstAttribute="trailing" secondItem="iHb-Z2-3F1" secondAttribute="trailing" id="fmr-M3-wAN"/>
                                     <constraint firstItem="S2q-3Z-sOG" firstAttribute="leading" secondItem="tV7-5h-ivR" secondAttribute="leading" id="gQI-QS-AI9"/>
