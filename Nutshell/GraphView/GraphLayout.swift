@@ -106,9 +106,10 @@ class GraphLayout {
     }
 
     //
-    // Header and background configuration
+    // Header, footer, and background configuration
     //
     var headerHeight: CGFloat = 32.0
+    var footerHeight: CGFloat = 0.0
     var backgroundColor: UIColor = UIColor.gray
 
     //

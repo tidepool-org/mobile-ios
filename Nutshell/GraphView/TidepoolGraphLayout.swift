@@ -59,7 +59,7 @@ class TidepoolGraphLayout: GraphLayout {
         bolusLayer.wizardLayer = wizardLayer
 
         // Note: ordering is important! E.g., wizard layer draws after bolus layer so it can place circles above related bolus rectangles.
-        return [workoutLayer, noteLayer, cbgLayer, smbgLayer, basalLayer, bolusLayer, wizardLayer]
+        return [workoutLayer, cbgLayer, noteLayer, smbgLayer, basalLayer, bolusLayer, wizardLayer]
     }
 
     // Bolus and basal values are scaled according to max value found, so the records are queried for the complete graph time range and stored here where the tiles can share them.
@@ -105,7 +105,7 @@ class TidepoolGraphLayout: GraphLayout {
     var yTopOfBasal: CGFloat = 0.0
     var yBottomOfBasal: CGFloat = 0.0
     var yPixelsBasal: CGFloat = 0.0
-    // Workout durations go in the header sections
+    // Workout durations go in the header sections. Notes are in footer.
     var yTopOfWorkout: CGFloat = 0.0
     var yBottomOfWorkout: CGFloat = 0.0
     var yPixelsWorkout: CGFloat = 0.0
@@ -128,7 +128,7 @@ class TidepoolGraphLayout: GraphLayout {
     fileprivate let kGraphBolusBaseOffset: CGFloat = 2.0
     fileprivate let kGraphBasalBaseOffset: CGFloat = 2.0
     fileprivate let kGraphWorkoutBaseOffset: CGFloat = 2.0
-    fileprivate let kGraphBottomEdge: CGFloat = 5.0
+    fileprivate let kGraphBottomEdge: CGFloat = 2.0
     
     //
     // MARK: - Configuration
@@ -140,6 +140,7 @@ class TidepoolGraphLayout: GraphLayout {
         super.configureGraph()
 
         self.headerHeight = 32.0
+        self.footerHeight = 20.0
         self.yAxisLineLeftMargin = 26.0
         self.yAxisLineRightMargin = 10.0
         self.yAxisLineColor = UIColor(hex: 0xe2e4e7)
@@ -147,12 +148,14 @@ class TidepoolGraphLayout: GraphLayout {
         self.yAxisValuesWithLines = [80, 180]
         self.yAxisValuesWithLabels = [40, 80, 180, 300]
     
-        self.axesLabelTextColor = UIColor(hex: 0x58595B)
-        self.axesLabelTextFont = Styles.smallRegularFont
+        self.axesLabelTextColor = Styles.alt2DarkGreyColor
+        self.axesLabelTextFont = Styles.verySmallRegularFont
+        self.axesLeftLabelTextColor = Styles.alt2DarkGreyColor
+        self.axesRightLabelTextColor = Styles.alt2DarkGreyColor
         
-        self.hourMarkerStrokeColor = UIColor(hex: 0xe2e4e7)
-        self.xLabelRegularFont = Styles.smallRegularFont
-        self.xLabelLightFont = Styles.smallLightFont
+        self.hourMarkerStrokeColor = UIColor(hex: 0xdce1f2)
+        self.xLabelRegularFont = Styles.verySmallRegularFont
+        self.xLabelLightFont = Styles.verySmallLightFont
         
         let graphViewHeight = ceil(graphViewSize.height) // often this is fractional
         
@@ -160,12 +163,12 @@ class TidepoolGraphLayout: GraphLayout {
         let wizardHeight = graphViewHeight < 320.0 ? 0.0 : kGraphWizardHeight
 
         // The pie to divide is what's left over after removing constant height areas
-        let graphHeight = graphViewHeight - headerHeight - wizardHeight - kGraphBottomEdge
+        let graphHeight = graphViewHeight - headerHeight - wizardHeight - kGraphBottomEdge - footerHeight
         
         // Put the workout data at the top, over the X-axis
         yTopOfWorkout = 2.0
-        yTopOfMeal = 2.0
-        yTopOfNote = 2.0
+        yTopOfMeal = 0.0
+        yTopOfNote = 0.0
         yBottomOfWorkout = graphViewHeight - kGraphBottomEdge
         yBottomOfMeal = yBottomOfWorkout
         yBottomOfNote = yBottomOfWorkout
@@ -183,7 +186,7 @@ class TidepoolGraphLayout: GraphLayout {
         
         // At the bottom are the bolus and basal readings
         self.yTopOfBolus = self.yBottomOfWizard + kGraphWizardBaseOffset
-        self.yBottomOfBolus = graphViewHeight - kGraphBottomEdge
+        self.yBottomOfBolus = graphViewHeight - footerHeight - kGraphBottomEdge
         self.yPixelsBolus = self.yBottomOfBolus - self.yTopOfBolus
         
         // Basal values sit just below the bolus readings

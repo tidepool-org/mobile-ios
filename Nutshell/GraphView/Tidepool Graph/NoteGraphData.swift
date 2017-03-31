@@ -86,10 +86,10 @@ class NoteGraphDataLayer: GraphDataLayer {
             // eventLine Drawing
             let lineColor = isMain ? kNoteLineColor : kOtherNoteColor
             let triangleColor = isMain ? kNoteTriangleColor : kOtherNoteColor
-            let lineHeight: CGFloat = isMain ? layout.yBottomOfMeal - layout.yTopOfMeal : layout.headerHeight
+            let lineHeight: CGFloat = isMain ? layout.yBottomOfNote - layout.yTopOfNote : layout.headerHeight
             let lineWidth: CGFloat = isMain ? 2.0 : 1.0
             
-            let rect = CGRect(x: xOffset, y: layout.yTopOfMeal, width: lineWidth, height: lineHeight)
+            let rect = CGRect(x: xOffset, y: layout.yTopOfNote, width: lineWidth, height: lineHeight)
             let eventLinePath = UIBezierPath(rect: rect)
             lineColor.setFill()
             eventLinePath.fill()
@@ -98,17 +98,29 @@ class NoteGraphDataLayer: GraphDataLayer {
             let centerX = rect.origin.x + lineWidth/2.0
             let triangleSize: CGFloat = kNoteTriangleTopWidth
             let triangleOrgX = centerX - triangleSize/2.0
-            trianglePath.move(to: CGPoint(x: triangleOrgX, y: 0.0))
-            trianglePath.addLine(to: CGPoint(x: triangleOrgX + triangleSize, y: 0.0))
-            trianglePath.addLine(to: CGPoint(x: triangleOrgX + triangleSize/2.0, y: 13.5))
-            trianglePath.addLine(to: CGPoint(x: triangleOrgX, y: 0))
+            let triangleHeight: CGFloat = sqrt(triangleSize*triangleSize - triangleSize/2)
+            
+            if isMain {
+                // draw main at bottom of graph
+                trianglePath.move(to: CGPoint(x: triangleOrgX, y: layout.yBottomOfNote))
+                trianglePath.addLine(to: CGPoint(x: triangleOrgX + triangleSize, y: layout.yBottomOfNote))
+                trianglePath.addLine(to: CGPoint(x: triangleOrgX + triangleSize/2.0, y: layout.yBottomOfNote-triangleHeight))
+                trianglePath.addLine(to: CGPoint(x: triangleOrgX, y: layout.yBottomOfNote))
+            } else {
+                // draw others at top of graph
+                trianglePath.move(to: CGPoint(x: triangleOrgX, y: layout.yTopOfNote))
+                trianglePath.addLine(to: CGPoint(x: triangleOrgX + triangleSize, y: layout.yTopOfNote))
+                trianglePath.addLine(to: CGPoint(x: triangleOrgX + triangleSize/2.0, y: triangleHeight))
+                trianglePath.addLine(to: CGPoint(x: triangleOrgX, y: layout.yTopOfNote))
+            }
+            
             trianglePath.close()
             trianglePath.miterLimit = 4;
             trianglePath.usesEvenOddFillRule = true;
             triangleColor.setFill()
             trianglePath.fill()
             
-            if !isMain {
+            if isMain {
                 let noteHitAreaWidth: CGFloat = max(triangleSize, 30.0)
                 let noteRect = CGRect(x: centerX - noteHitAreaWidth/2.0, y: 0.0, width: noteHitAreaWidth, height: lineHeight)
                 noteDataType.rectInGraph = noteRect

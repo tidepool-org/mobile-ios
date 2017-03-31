@@ -80,7 +80,6 @@ open class Styles: NSObject {
         "detailHeaderNotes": (mediumRegularFont, whiteColor),
         "detailHeaderDate": (smallRegularFont, whiteColor),
         "detailHeaderLocation": (smallBoldFont, whiteColor),
-        "detailViewButtonText": (mediumSmallBoldFont, whiteColor),
         "advisoryText": (mediumSemiboldFont, darkGreyColor),
         "advisorySubtext": (mediumRegularFont, lightDarkGreyColor),
         "greenLink": (mediumRegularFont, lightGreenColor),
@@ -139,12 +138,12 @@ open class Styles: NSObject {
         static let veryLargeSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 25.5)!
         
         static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.0)!
-        static let mediumSmallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 14.0)!
+        static let mediumSmallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 15.0)!
         static let mediumBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 16.0)!
         static let mediumLargeBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 17.5)!
         static let navTitleFont: UIFont = UIFont(name: "OpenSans", size: 17.5)!
         
-        static let smallLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 12.0)!
+        static let verySmallLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 12.0)!
         static let mediumLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 17.0)!
         
         // Fonts for special graph view
@@ -173,7 +172,7 @@ open class Styles: NSObject {
     open class var mediumLargeBoldFont: UIFont { return FontCache.mediumLargeBoldFont }
     open class var navTitleFont: UIFont { return FontCache.navTitleFont }
 
-    open class var smallLightFont: UIFont { return FontCache.smallLightFont }
+    open class var verySmallLightFont: UIFont { return FontCache.verySmallLightFont }
     open class var mediumLightFont: UIFont { return FontCache.mediumLightFont }
 
     // Fonts for special graph view
@@ -200,11 +199,13 @@ open class Styles: NSObject {
         static let darkGreyColor: UIColor = UIColor(hex: 0x4a4a4a)
         static let lightDarkGreyColor: UIColor = UIColor(hex: 0x5c5c5c) 
         static let altDarkGreyColor: UIColor = UIColor(hex: 0x4d4e4c) 
+        static let alt2DarkGreyColor: UIColor = UIColor(hex: 0x58595b)
         static let mediumLightGreyColor: UIColor = UIColor(hex: 0x7e7e7e)
         static let mediumGreyColor: UIColor = UIColor(hex: 0xb8b8b8) 
         static let whiteColor: UIColor = UIColor(hex: 0xffffff) 
         static let dimmedWhiteColor: UIColor = UIColor(hex: 0xffffff, opacity: 0.30)
         static let blackColor: UIColor = UIColor(hex: 0x000000)
+        static let blackishColor: UIColor = UIColor(hex: 0x3c3c3c)
         static let peachColor: UIColor = UIColor(hex: 0xf88d79)
         static let peachDeleteColor: UIColor = UIColor(hex: 0xf66f56)
         static let greenColor: UIColor = UIColor(hex: 0x98ca63)
@@ -234,11 +235,13 @@ open class Styles: NSObject {
     open class var darkGreyColor: UIColor { return ColorCache.darkGreyColor }
     open class var lightDarkGreyColor: UIColor { return ColorCache.lightDarkGreyColor }
     open class var altDarkGreyColor: UIColor { return ColorCache.altDarkGreyColor }
+    open class var alt2DarkGreyColor: UIColor { return ColorCache.alt2DarkGreyColor }
     open class var mediumLightGreyColor: UIColor { return ColorCache.mediumLightGreyColor }
     open class var mediumGreyColor: UIColor { return ColorCache.mediumGreyColor }
     open class var whiteColor: UIColor { return ColorCache.whiteColor }
     open class var dimmedWhiteColor: UIColor { return ColorCache.dimmedWhiteColor }
     open class var blackColor: UIColor { return ColorCache.blackColor }
+    open class var blackishColor: UIColor { return ColorCache.blackishColor }
     open class var peachColor: UIColor { return ColorCache.peachColor }
     open class var peachDeleteColor: UIColor { return ColorCache.peachDeleteColor }
     open class var purpleColor: UIColor { return ColorCache.purpleColor }

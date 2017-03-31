@@ -19,7 +19,7 @@ class NoteDetailTableViewCell: BaseUITableViewCell {
 
     var note: BlipNote?
 
-    @IBOutlet weak var noteLabel: NutshellUILabel!
+    @IBOutlet weak var noteLabel: UILabel!
     @IBOutlet weak var dateLabel: NutshellUILabel!
     @IBOutlet weak var userLabel: NutshellUILabel!
     
@@ -37,15 +37,17 @@ class NoteDetailTableViewCell: BaseUITableViewCell {
     }
     
     func configureCell(_ note: BlipNote) {
-//        let hashtagBolder = HashtagBolder()
-//        let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString)
-//        noteLabel.attributedText = attributedText
-
-        noteLabel.text = note.messagetext
-        
-        dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
-        
-        self.userLabel.text = note.user?.fullName ?? ""
         self.note = note
+        self.updateNoteFontStyling()
+        dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
+        self.userLabel.text = note.user?.fullName ?? ""
+    }
+
+    private func updateNoteFontStyling() {
+        if let note = note {
+            let hashtagBolder = HashtagBolder()
+            let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString, selected: false, highlighted: self.isHighlighted)
+            noteLabel.attributedText = attributedText
+        }
     }
 }

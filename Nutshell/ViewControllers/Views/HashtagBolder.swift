@@ -21,14 +21,18 @@ class HashtagBolder {
     
     // A function to identify, then bold, the hashtags in some text
     // returns an attributed string
-    func boldHashtags(_ text: NSString) -> NSMutableAttributedString {
+    func boldHashtags(_ text: NSString, selected: Bool = false, highlighted: Bool = false) -> NSMutableAttributedString {
+        let regularFont = selected ? Styles.mediumSmallSemiboldFont : Styles.mediumSmallRegularFont
+        let boldFont = Styles.mediumSmallBoldFont
+        let color = highlighted ? Styles.whiteColor : Styles.blackishColor
+        
         let attributedText = NSMutableAttributedString(string: text as String)
 
-        attributedText.addAttributes([NSFontAttributeName: mediumRegularFont, NSForegroundColorAttributeName: blackishColor], range: NSRange(location: 0, length: attributedText.length))
+        attributedText.addAttributes([NSFontAttributeName: regularFont, NSForegroundColorAttributeName: color], range: NSRange(location: 0, length: attributedText.length))
         
         let hashTags = TwitterText.hashtags(inText: text as String, checkingURLOverlap: false)
         for hashtag in hashTags! {
-            attributedText.addAttributes([NSFontAttributeName: mediumBoldFont], range: (hashtag as AnyObject).range)
+            attributedText.addAttributes([NSFontAttributeName: boldFont], range: (hashtag as AnyObject).range)
         }
 
         return attributedText
