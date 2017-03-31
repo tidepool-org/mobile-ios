@@ -31,12 +31,11 @@
 	<key>NSHealthShareUsageDescription</key>
 	<string>Nutshell reads exercise and Dexcom glucose data from HealthKit so you can view that data in Tidepool apps and other apps that connect to your Tidepool account.</string>
 	<key>NSHealthUpdateUsageDescription</key>
-	<string>Nutshell writes glucose data to HealthKit so you can view data you've uploaded to Tidepool using other apps on your iPhone.</string>
+	<string>Nutshell writes glucose data to HealthKit so you can view data you‘ve uploaded to Tidepool using other apps on your iPhone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Nutshell copies photos from your Photos application when you want to associate an existing photo with a meal.</string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>LaBelleAurore.ttf</string>
 		<string>OpenSans-Bold.ttf</string>
 		<string>OpenSans-Regular.ttf</string>
 		<string>OpenSans-Semibold.ttf</string>
@@ -55,7 +54,6 @@
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
-		<string>healthkit</string>
 	</array>
 	<key>UIRequiresFullScreen</key>
 	<true/>

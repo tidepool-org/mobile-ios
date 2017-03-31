@@ -149,7 +149,6 @@
 		486894F51E831F89008B0732 /* UrchinConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486894F41E831F89008B0732 /* UrchinConstants.swift */; };
 		486894F61E83288C008B0732 /* EventAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EDC2C51BD6B403003049D9 /* EventAddViewController.swift */; };
 		486EAA7A1C305E38003B4497 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 486EAA791C305E38003B4497 /* HealthKit.framework */; };
-		486F5DF21B9F874A00BA2A57 /* LaBelleAurore.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DEE1B9F874A00BA2A57 /* LaBelleAurore.ttf */; };
 		486F5DF51B9F874A00BA2A57 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DEF1B9F874A00BA2A57 /* OpenSans-Bold.ttf */; };
 		486F5DF81B9F874A00BA2A57 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DF01B9F874A00BA2A57 /* OpenSans-Regular.ttf */; };
 		486F5DFB1B9F874A00BA2A57 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DF11B9F874A00BA2A57 /* OpenSans-Semibold.ttf */; };
@@ -346,7 +345,6 @@
 		486894F41E831F89008B0732 /* UrchinConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UrchinConstants.swift; path = Resources/UrchinConstants.swift; sourceTree = "<group>"; };
 		486EAA791C305E38003B4497 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		486EAA7B1C305E39003B4497 /* Nutshell.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Nutshell.entitlements; sourceTree = "<group>"; };
-		486F5DEE1B9F874A00BA2A57 /* LaBelleAurore.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = LaBelleAurore.ttf; path = Resources/LaBelleAurore.ttf; sourceTree = "<group>"; };
 		486F5DEF1B9F874A00BA2A57 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Bold.ttf"; path = "Resources/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		486F5DF01B9F874A00BA2A57 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Regular.ttf"; path = "Resources/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
 		486F5DF11B9F874A00BA2A57 /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Semibold.ttf"; path = "Resources/OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
@@ -677,7 +675,6 @@
 		486F5DFF1B9F87AC00BA2A57 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				486F5DEE1B9F874A00BA2A57 /* LaBelleAurore.ttf */,
 				486F5DEF1B9F874A00BA2A57 /* OpenSans-Bold.ttf */,
 				48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */,
 				486F5DF01B9F874A00BA2A57 /* OpenSans-Regular.ttf */,
@@ -920,7 +917,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				486F5DF21B9F874A00BA2A57 /* LaBelleAurore.ttf in Resources */,
 				48ED0D401BAF22CC009D0D6F /* addAnimation-05.png in Resources */,
 				485922A81B9C98420056E605 /* splash_logo@2x.png in Resources */,
 				4859229B1B9A61510056E605 /* Login.storyboard in Resources */,
