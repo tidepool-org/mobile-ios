@@ -39,6 +39,7 @@ open class Styles: NSObject {
         "darkBackground": darkPurpleColor,
         "lightBackground": veryLightGreyColor,
         "whiteBackground": whiteColor,
+        "graphSeparator": darkPurpleColor,
         // login & signup
         "brightBackgroundButton": brightBlueColor,
         "userDataEntry": whiteColor,

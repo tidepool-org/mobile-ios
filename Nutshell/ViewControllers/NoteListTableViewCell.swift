@@ -56,7 +56,7 @@ class NoteListTableViewCell: BaseUITableViewCell {
     private func updateNoteFontStyling() {
         if let note = note {
             let hashtagBolder = HashtagBolder()
-            let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString, selected: self.isSelected, highlighted: self.isHighlighted)
+            let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString, highlighted: self.isHighlighted)
             noteLabel.attributedText = attributedText
         }
     }

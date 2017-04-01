@@ -15,6 +15,7 @@
 
 import Foundation
 import CocoaLumberjack
+import SwiftyJSON
 
 // TODO: unclear we need this - perhaps just use our User class, backed by core data model...
 class BlipUser {
@@ -22,12 +23,6 @@ class BlipUser {
     var fullName: String?
     let userid: String
     var patient: BlipPatient?
-    
-//    init(userid: String, apiConnector: APIConnector, notesVC: NotesViewController?) {
-//        self.userid = userid
-//        
-//        apiConnector.findProfile(self, notesVC: notesVC)
-//    }
     
     init(userid: String) {
         self.userid = userid
@@ -44,6 +39,15 @@ class BlipUser {
     /// Indicates whether the current user logged in is associated with a Data Storage Account
     var isDSAUser: Bool {
         return patient != nil
+    }
+
+    func processProfileJSON(_ json: JSON) {
+        NSLog("profile json: \(json)")
+        fullName = json["fullName"].string
+        let patient = json["patient"]
+        if patient != JSON.null {
+            self.patient = BlipPatient() // use empty patient for now
+        }
     }
 
     func processUserDict(_ userDict: NSDictionary) {

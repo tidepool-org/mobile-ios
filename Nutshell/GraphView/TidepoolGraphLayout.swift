@@ -59,7 +59,7 @@ class TidepoolGraphLayout: GraphLayout {
         bolusLayer.wizardLayer = wizardLayer
 
         // Note: ordering is important! E.g., wizard layer draws after bolus layer so it can place circles above related bolus rectangles.
-        return [workoutLayer, cbgLayer, noteLayer, smbgLayer, basalLayer, bolusLayer, wizardLayer]
+        return [workoutLayer, basalLayer, cbgLayer, noteLayer, smbgLayer, bolusLayer, wizardLayer]
     }
 
     // Bolus and basal values are scaled according to max value found, so the records are queried for the complete graph time range and stored here where the tiles can share them.

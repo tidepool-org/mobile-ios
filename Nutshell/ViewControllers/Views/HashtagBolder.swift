@@ -21,8 +21,8 @@ class HashtagBolder {
     
     // A function to identify, then bold, the hashtags in some text
     // returns an attributed string
-    func boldHashtags(_ text: NSString, selected: Bool = false, highlighted: Bool = false) -> NSMutableAttributedString {
-        let regularFont = selected ? Styles.mediumSmallSemiboldFont : Styles.mediumSmallRegularFont
+    func boldHashtags(_ text: NSString, highlighted: Bool = false) -> NSMutableAttributedString {
+        let regularFont = Styles.mediumSmallRegularFont
         let boldFont = Styles.mediumSmallBoldFont
         let color = highlighted ? Styles.whiteColor : Styles.blackishColor
         

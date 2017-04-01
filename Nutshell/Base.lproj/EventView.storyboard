@@ -46,7 +46,7 @@
                                                     <constraint firstAttribute="height" constant="1" id="jra-DH-UJM"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="graphSeparator"/>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                         </subviews>
@@ -594,7 +594,7 @@
                                                     <constraint firstAttribute="height" constant="1" id="f1D-Fd-1st"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="graphSeparator"/>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
                                         </subviews>

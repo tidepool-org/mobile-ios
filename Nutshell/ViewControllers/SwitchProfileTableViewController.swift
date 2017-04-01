@@ -7,23 +7,59 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
+import CocoaLumberjack
 
-class SwitchProfileTableViewController: BaseUITableViewController {
+class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPIWatcher {
 
     var newUser: BlipUser?
+    private var tableUsers: [BlipUser] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        // For now, fetch profile users each time
+        if let mainUser = NutDataController.sharedInstance.currentBlipUser {
+            tableUsers = [mainUser]
+        }
         
         self.tableView.reloadData()
+        APIConnector.connector().getAllViewableUsers(self)
+        // will be called back below at viewableUsers
     }
 
+    //
+    // MARK: - UsersFetchAPIWatcher delegate
+    //
+    
+    private var profileUsers: [BlipUser] = []
+    private var groupUserIds: [String] = []
+    func viewableUsers(_ userIds: [String]) {
+        self.groupUserIds = userIds
+        for userId in userIds {
+            APIConnector.connector().fetchProfile(userId) { (result:Alamofire.Result<JSON>) -> (Void) in
+                NSLog("Profile fetch result: \(result)")
+                if (result.isSuccess) {
+                    if let json = result.value {
+                        let user = BlipUser(userid: userId)
+                        user.processProfileJSON(json)
+                        self.profileUsers.append(user)
+                        // add any other users...
+                        if user.userid != NutDataController.sharedInstance.currentUserId! {
+                            self.tableUsers.append(user)
+                        }
+                        if self.profileUsers.count == self.groupUserIds.count {
+                            self.tableView.reloadData()
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -32,23 +68,28 @@ class SwitchProfileTableViewController: BaseUITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 1
+        return tableUsers.count
     }
 
     // basicProfileCell
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "profileTableCell", for: indexPath) as! ProfileListTableViewCell
         // TODO: support for other users in profile...
-
-        // Configure the main cell...
-        cell.nameLabel?.text = "(You) " + NutDataController.sharedInstance.currentUserName
-        cell.setSelected(true, animated: false)
+        if indexPath.row < tableUsers.count {
+            let user = tableUsers[indexPath.row]
+            if indexPath.row == 0 {
+                // Configure the cell...
+                cell.nameLabel?.text = "(You) " + (user.fullName ?? "")
+                cell.setSelected(true, animated: false)
+            } else {
+                cell.nameLabel?.text = user.fullName ?? ""
+                cell.setSelected(false, animated: false)
+            }
+        }
         return cell
     }
 

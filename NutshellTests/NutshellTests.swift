@@ -85,7 +85,7 @@ class NutshellTests: XCTestCase {
         self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
             print("Login for profile result: \(result)")
 
-             APIConnector.connector().fetchProfile() { (result:Alamofire.Result<JSON>) -> (Void) in
+             APIConnector.connector().fetchProfile(NutDataController.sharedInstance.currentUserId!) { (result:Alamofire.Result<JSON>) -> (Void) in
                 NSLog("Profile fetch result: \(result)")
                 if (result.isSuccess) {
                     if let json = result.value {

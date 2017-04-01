@@ -187,15 +187,15 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         if (result.isSuccess) {
             if let user=result.value {
                 NSLog("Login success: \(user)")
-                APIConnector.connector().fetchProfile() { (result:Alamofire.Result<JSON>) -> (Void) in
+                APIConnector.connector().fetchProfile(NutDataController.sharedInstance.currentUserId!) { (result:Alamofire.Result<JSON>) -> (Void) in
                         NSLog("Profile fetch result: \(result)")
                     if (result.isSuccess) {
                         if let json = result.value {
                             NutDataController.sharedInstance.processProfileFetch(json)
                         }
+                        appDelegate.setupUIForLoginSuccess()
                     }
                 }
-                appDelegate.setupUIForLoginSuccess()
             } else {
                 // This should not happen- we should not succeed without a user!
                 NSLog("Fatal error: No user returned!")

@@ -17,7 +17,7 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 
-class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphContainerViewDelegate, NoteIOWatcher, UIScrollViewDelegate {
+class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphContainerViewDelegate, NoteAPIWatcher, UIScrollViewDelegate {
 
     
     @IBOutlet weak var eventListSceneContainer: UIControl!
@@ -91,6 +91,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
 
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSFontAttributeName: smallRegularFont, NSForegroundColorAttributeName: blackishColor])
         self.refreshControl.addTarget(self, action: #selector(EventListViewController.refresh), for: UIControlEvents.valueChanged)
+        self.refreshControl.setNeedsLayout()
         self.tableView.addSubview(refreshControl)
         
         // add a footer view to the table that is the size of the table minus the smallest row height, so last table row can be scrolled to the top of the table
@@ -290,21 +291,21 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     }
 
     //
-    // MARK: - NoteIOWatcher Delegate
+    // MARK: - NoteAPIWatcher Delegate
     //
     
     func loadingNotes(_ loading: Bool) {
-        NSLog("NoteIOWatcher.loadingNotes: \(loading)")
+        NSLog("NoteAPIWatcher.loadingNotes: \(loading)")
         loadingNotes = loading
     }
     
     func endRefresh() {
-        NSLog("NoteIOWatcher.endRefresh")
+        NSLog("NoteAPIWatcher.endRefresh")
         refreshControl.endRefreshing()
     }
     
     func addNotes(_ notes: [BlipNote]) {
-        NSLog("NoteIOWatcher.addNotes")
+        NSLog("NoteAPIWatcher.addNotes")
         self.notes = self.notes + notes
         sortNotesAndReload()
         if selectedIndexPath == nil {
@@ -313,7 +314,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     }
     
     func postComplete(_ note: BlipNote) {
-        NSLog("NoteIOWatcher.postComplete")
+        NSLog("NoteAPIWatcher.postComplete")
         
         self.notes.insert(note, at: 0)
         // sort the notes, reload notes table
@@ -322,7 +323,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     }
     
     func deleteComplete(_ deletedNote: BlipNote) {
-        NSLog("NoteIOWatcher.deleteComplete")
+        NSLog("NoteAPIWatcher.deleteComplete")
         var nextIndexPath: IndexPath? = nil
         if self.selectedNote != nil {
             if selectedNote!.id == deletedNote.id {
@@ -355,7 +356,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     }
     
     func updateComplete(_ originalNote: BlipNote, editedNote: BlipNote) {
-        NSLog("NoteIOWatcher.updateComplete")
+        NSLog("NoteAPIWatcher.updateComplete")
         
     }
     
@@ -425,7 +426,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
     // Back button from group or detail viewer.
     @IBAction func done(_ segue: UIStoryboardSegue) {
-        NSLog("unwind segue to eventList done!")
+        NSLog("unwind segue to eventListVC done!")
         if let eventEditVC = segue.source as? EventEditViewController {
             if let originalNote = eventEditVC.note, let editedNote = eventEditVC.editedNote {
                 APIConnector.connector().updateNote(self, editedNote: editedNote, originalNote: originalNote)
@@ -441,7 +442,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 // TODO: also handle unsuccessful posts?
             }
         }  else if let eventDetailVC = segue.source as? EventDetailViewController {
-            if eventDetailVC.noteEdited {                // TODO: has note been updated?
+            if eventDetailVC.noteEdited {
                 self.reloadAndReselect(eventDetailVC.note)
             }
         } else {
@@ -597,7 +598,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         startGraphUpdateTimer()
     }
     
-    private func selectNote(_ note: BlipNote?) {
+    fileprivate func selectNote(_ note: BlipNote?) {
         NSLog("\(#function)")
 
         // if we are deselecting, just close up data viz
@@ -619,7 +620,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 return
                 //configureGraphContainer()
             } else {
-                // same note, not sure why we'd be called...
+                // same note, update graph if needed...
+                configureGraphContainer()
                 return
             }
         }
@@ -784,7 +786,12 @@ extension EventListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let note = notes[indexPath.item]
-        self.selectedNote = note
+        if selectedNote != nil && selectedNote!.id != note.id {
+            // set so we come back to this one
+            self.selectedIndexPath = indexPath
+            selectNote(note)
+        }
+
         self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue, sender: self)
     }
 }

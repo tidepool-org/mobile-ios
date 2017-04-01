@@ -18,7 +18,7 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 
-class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegate, NoteIOWatcher {
+class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegate, NoteAPIWatcher {
 
     
     @IBOutlet weak var sceneContainerView: UIControl!
@@ -102,15 +102,15 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
 
     
     //
-    // MARK: - NoteIOWatcher Delegate
+    // MARK: - NoteAPIWatcher Delegate
     //
     
     func loadingNotes(_ loading: Bool) {
-        NSLog("EventDetailVC! NoteIOWatcher.loadingNotes: \(loading)")
+        NSLog("EventDetailVC! NoteAPIWatcher.loadingNotes: \(loading)")
     }
     
     func endRefresh() {
-        NSLog("EventDetailVC! NoteIOWatcher.endRefresh")
+        NSLog("EventDetailVC! NoteAPIWatcher.endRefresh")
     }
     
     func addNotes(_ notes: [BlipNote]) {
@@ -119,7 +119,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
                 self.comments.append(comment)
             }
         }
-        NSLog("EventDetailVC! NoteIOWatcher.addNotes")
+        NSLog("EventDetailVC! NoteAPIWatcher.addNotes")
         if self.comments.count > 0 {
             NSLog("added \(self.comments.count) comments!")
             self.comments.sort(by: {$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
@@ -128,22 +128,24 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     }
     
     func postComplete(_ note: BlipNote) {
-        NSLog("EventDetailVC! NoteIOWatcher.postComplete")
+        NSLog("EventDetailVC! NoteAPIWatcher.postComplete")
     }
     
     func deleteComplete(_ deletedNote: BlipNote) {
-        NSLog("EventDetailVC NoteIOWatcher.deleteComplete")
-        // TODO: if deleted, need to continue to segue back to list view...
-        // OR will that happen automatically?
+        NSLog("EventDetailVC NoteAPIWatcher.deleteComplete")
+        // If deleted, segue back to list view will  happen from eventEditVC segue
     }
     
     func updateComplete(_ originalNote: BlipNote, editedNote: BlipNote) {
-        NSLog("EventDetailVC NoteIOWatcher.updateComplete")
-        // TODO: when we segue back, list needs updating!
+        NSLog("EventDetailVC NoteAPIWatcher.updateComplete")
         originalNote.messagetext = editedNote.messagetext
+        let timeChanged = originalNote.timestamp != editedNote.timestamp
         originalNote.timestamp = editedNote.timestamp
         self.noteEdited = true
         self.tableView.reloadData()
+        if timeChanged {
+            self.configureGraphContainer()
+        }
     }
 
     //
@@ -165,14 +167,14 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             let eventEditVC = segue.destination as! EventEditViewController
             eventEditVC.note = self.note
             APIConnector.connector().trackMetric("Clicked edit a note (Detail screen)")
-        }else {
+        } else {
             NSLog("Unprepped segue from eventView \(segue.identifier)")
         }
     }
     
     // Back button from group or detail viewer.
     @IBAction func done(_ segue: UIStoryboardSegue) {
-        NSLog("unwind segue to eventList done!")
+        NSLog("unwind segue to eventDetailVC done!")
         if let eventEditVC = segue.source as? EventEditViewController {
             if let originalNote = self.note, let editedNote = eventEditVC.editedNote {
                 APIConnector.connector().updateNote(self, editedNote: editedNote, originalNote: originalNote)
@@ -217,6 +219,19 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         }
     }
     
+    fileprivate func updateGraph() {
+        if let graphContainerView = graphContainerView {
+            graphContainerView.loadGraphData()
+        }
+        graphNeedsUpdate = false
+    }
+
+    fileprivate func recenterGraph() {
+        if let graphContainerView = graphContainerView {
+            graphContainerView.centerGraphOnEvent(animated: true)
+         }
+    }
+
     /// Works with graphDataChanged to ensure graph is up-to-date after notification of database changes whether this VC is in the foreground or background.
     fileprivate func checkUpdateGraph() {
         if graphNeedsUpdate {
@@ -346,7 +361,7 @@ extension EventDetailViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        recenterGraph()
     }
     
 }

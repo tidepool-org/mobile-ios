@@ -20,7 +20,7 @@ import SwiftyJSON
 import CoreData
 import CocoaLumberjack
 
-protocol NoteIOWatcher {
+protocol NoteAPIWatcher {
     // Notify caller that a cell has been updated...
     func loadingNotes(_ loading: Bool)
     func endRefresh()
@@ -28,6 +28,10 @@ protocol NoteIOWatcher {
     func postComplete(_ note: BlipNote)
     func deleteComplete(_ note: BlipNote)
     func updateComplete(_ originalNote: BlipNote, editedNote: BlipNote)
+}
+
+protocol UsersFetchAPIWatcher {
+    func viewableUsers(_ userIds: [String])
 }
 
 /// APIConnector is a singleton object with the main responsibility of communicating to the Tidepool service:
@@ -212,10 +216,10 @@ class APIConnector {
         }
     }
  
-    func fetchProfile(_ completion: @escaping (Result<JSON>) -> (Void)) {
+    func fetchProfile(_ userId: String, _ completion: @escaping (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user profile
         // format is like: https://api.tidepool.org/metadata/f934a287c4/profile
-        let endpoint = "metadata/" + NutDataController.sharedInstance.currentUserId! + "/profile"
+        let endpoint = "metadata/" + userId + "/profile"
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         sendRequest(.get, endpoint: endpoint).responseJSON { response in
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -228,7 +232,25 @@ class APIConnector {
             }
         }
     }
-    
+
+// TODO: figure out how to process the JSON coming back into an array of keys
+//    func getAllViewableUsers(_ completion: @escaping (Result<JSON>) -> (Void)) {
+//        // Set our endpoint for the user profile
+//        // format is like: https://api.tidepool.org/access/groups/f934a287c4
+//        let endpoint = "access/groups/" + NutDataController.sharedInstance.currentUserId!
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//        sendRequest(.get, endpoint: endpoint).responseJSON { response in
+//            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//            if ( response.result.isSuccess ) {
+//                let json = JSON(response.result.value!)
+//                completion(Result.success(json))
+//            } else {
+//                // Failure
+//                completion(Result.failure(response.result.error!))
+//            }
+//        }
+//    }
+
     // When offline just stash metrics in metricsCache array
     fileprivate var metricsCache: [String] = []
     // Used so we only have one metric send in progress at a time, to help balance service load a bit...
@@ -431,92 +453,41 @@ class APIConnector {
     //
     // TODO: Taken from BlipNotes, should really use AlamoFire, etc.
     
-//    func findProfile(_ otherUser: User, notesVC: NotesViewController?) {
-//        
-//        let urlExtension = "/metadata/" + otherUser.userid + "/profile"
-//        
-//        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
-//        
-//        let preRequest = { () -> Void in
-//            // nothing to prepare
-//        }
-//        
-//        let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
-//            if let httpResponse = response as? HTTPURLResponse {
-//                if (httpResponse.statusCode == 200) {
-//                    DDLogInfo("Profile found: \(otherUser.userid)")
-//                    
-//                    let userDict: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
-//                    
-//                    otherUser.processUserDict(userDict)
-//                    
-//                    if (notesVC != nil) {
-//                        self.groupsFetched += 1
-//                        
-//                        // Insert logic here for DSAs only
-//                        if (otherUser.patient != nil && (otherUser.patient?.aboutMe != nil || otherUser.patient?.birthday != nil || otherUser.patient?.diagnosisDate != nil)) {
-//                            notesVC!.groups.insert(otherUser, at: 0)
-//                        }
-//                        
-//                        if (self.groupsFetched == self.groupsToFetchFor) {
-//                            // Send notification to NotesVC to notify that groups are ready
-//                            let notification = Notification(name: Notification.Name(rawValue: "groupsReady"), object: nil)
-//                            NotificationCenter.default.post(notification)
-//                        }
-//                    }
-//                    
-//                    
-//                } else {
-//                    DDLogError("Did not find profile - invalid status code \(httpResponse.statusCode)")
-//                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
-//                }
-//            } else {
-//                DDLogError("Did not find profile - response could not be parsed")
-//                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
-//            }
-//        }
-//        
-//        request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
-//    }
-//    
     
-    
-//    func getAllViewableUsers(_ notesVC: NotesViewController) {
-//        
-//        let urlExtension = "/access/groups/" + user!.userid
-//        
-//        let headerDict = ["x-tidepool-session-token":"\(x_tidepool_session_token)"]
-//        
-//        let preRequest = { () -> Void in
-//            // Nothing to do
-//        }
-//        
-//        let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
-//            if let httpResponse = response as? HTTPURLResponse {
-//                if (httpResponse.statusCode == 200) {
-//                    DDLogInfo("Found viewable users for user: \(self.user?.userid)")
-//                    let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
-//                    
-//                    var i = 0
-//                    for key in jsonResult.keyEnumerator() {
-//                        _ = User(userid: key as! String, apiConnector: self, notesVC: notesVC)
-//                        i += 1
-//                    }
-//                    self.groupsToFetchFor = i
-//                } else {
-//                    DDLogError("Did not find viewable users - invalid status code \(httpResponse.statusCode)")
-//                    self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
-//                }
-//            } else {
-//                DDLogError("Did not find viewable users - response could not be parsed")
-//                self.alertWithOkayButton(unknownError, message: unknownErrorMessage)
-//            }
-//        }
-//        
-//        request("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
-//    }
+    func getAllViewableUsers(_ fetchWatcher: UsersFetchAPIWatcher) {
+        
+        let urlExtension = "/access/groups/" + NutDataController.sharedInstance.currentUserId!
+        
+        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
+        
+        let preRequest = { () -> Void in
+            // Nothing to do
+        }
+        
+        let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
+            if let httpResponse = response as? HTTPURLResponse {
+                if (httpResponse.statusCode == 200) {
+                    DDLogInfo("Found viewable users")
+                    let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
+                    var users: [String] = []
+                    for key in jsonResult.keyEnumerator() {
+                        users.append(key as! String)
+                    }
+                    fetchWatcher.viewableUsers(users)
+                } else {
+                    DDLogError("Did not find viewable users - invalid status code \(httpResponse.statusCode)")
+                    self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
+                }
+            } else {
+                DDLogError("Did not find viewable users - response could not be parsed")
+                self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
+            }
+        }
+        
+        blipRequest("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+    }
 
-    func getNotesForUserInDateRange(_ fetchWatcher: NoteIOWatcher, userid: String, start: Date, end: Date) {
+    func getNotesForUserInDateRange(_ fetchWatcher: NoteAPIWatcher, userid: String, start: Date, end: Date) {
         
         if sessionToken == nil {
             return
@@ -582,6 +553,7 @@ class APIConnector {
                 let notification = Notification(name: Notification.Name(rawValue: "doneFetching"), object: nil)
                 NotificationCenter.default.post(notification)
             } else {
+                // TODO: have seen this... need to dump response and debug!
                 DDLogError("No notes retrieved - could not parse response")
                 self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
             }
@@ -590,7 +562,7 @@ class APIConnector {
         blipRequest("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
     }
 
-    func getMessageThreadForNote(_ fetchWatcher: NoteIOWatcher, messageId: String) {
+    func getMessageThreadForNote(_ fetchWatcher: NoteAPIWatcher, messageId: String) {
         
         if sessionToken == nil {
             return
@@ -667,7 +639,7 @@ class APIConnector {
     }
     
     
-    func doPostWithNote(_ postWatcher: NoteIOWatcher, note: BlipNote) {
+    func doPostWithNote(_ postWatcher: NoteAPIWatcher, note: BlipNote) {
         
         let urlExtension = "/message/send/" + note.groupid
         
@@ -709,7 +681,7 @@ class APIConnector {
         blipRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
     }
 
-    func updateNote(_ updateWatcher: NoteIOWatcher, editedNote: BlipNote, originalNote: BlipNote) {
+    func updateNote(_ updateWatcher: NoteAPIWatcher, editedNote: BlipNote, originalNote: BlipNote) {
         
         let urlExtension = "/message/edit/" + originalNote.id
         
@@ -745,7 +717,7 @@ class APIConnector {
         blipRequest("PUT", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
     }
     
-    func deleteNote(_ deleteWatcher: NoteIOWatcher, noteToDelete: BlipNote) {
+    func deleteNote(_ deleteWatcher: NoteAPIWatcher, noteToDelete: BlipNote) {
         let urlExtension = "/message/remove/" + noteToDelete.id
         
         let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
