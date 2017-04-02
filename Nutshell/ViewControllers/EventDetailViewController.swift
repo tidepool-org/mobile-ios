@@ -39,8 +39,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // data
-        editBarButtonItem.isEnabled = true
+        // only notes by current logged in user are editable (perhaps just hide edit button?)
+        editBarButtonItem.isEnabled = note.userid == note.groupid
 
         NotificationCenter.default.addObserver(self, selector: #selector(EventDetailViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
         configureForReachability()
@@ -122,7 +122,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         NSLog("EventDetailVC! NoteAPIWatcher.addNotes")
         if self.comments.count > 0 {
             NSLog("added \(self.comments.count) comments!")
-            self.comments.sort(by: {$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
+            self.comments.sort(by: {$0.timestamp.timeIntervalSinceNow < $1.timestamp.timeIntervalSinceNow})
             self.tableView.reloadData()
         }
     }

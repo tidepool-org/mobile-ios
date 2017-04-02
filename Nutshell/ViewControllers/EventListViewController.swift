@@ -36,6 +36,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     // support for displaying graph around current selection
     fileprivate var selectedIndexPath: IndexPath? = nil
     fileprivate var selectedNote: BlipNote?
+    fileprivate var selectedProfileUser: BlipUser? = nil
     @IBOutlet weak var graphLayerContainer: UIView!
     fileprivate var graphContainerView: TidepoolGraphView?
     fileprivate var eventTime = Date()
@@ -49,7 +50,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = NutDataController.sharedInstance.currentUserName
+        if selectedProfileUser == nil {
+            selectedProfileUser = NutDataController.sharedInstance.currentBlipUser
+        }
+        
+        self.title = selectedProfileUser?.fullName ?? ""
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -93,6 +98,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         self.refreshControl.addTarget(self, action: #selector(EventListViewController.refresh), for: UIControlEvents.valueChanged)
         self.refreshControl.setNeedsLayout()
         self.tableView.addSubview(refreshControl)
+        self.tableView.rowHeight = UITableViewAutomaticDimension
         
         // add a footer view to the table that is the size of the table minus the smallest row height, so last table row can be scrolled to the top of the table
         var footerFrame = self.tableView.frame
@@ -216,9 +222,15 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         NSLog("EventList sideMenuDidClose")
         configureForMenuOpen(false)
         if let sideMenuController = self.sideMenuController()?.sideMenu?.menuViewController as? MenuAccountSettingsViewController {
-            if sideMenuController.didSelectSwitchProfile {
-                sideMenuController.didSelectSwitchProfile = false
+            if sideMenuController.userSelectedSwitchProfile {
+                sideMenuController.userSelectedSwitchProfile = false
                 performSegue(withIdentifier: "segueToSwitchProfile", sender: self)
+            } else if sideMenuController.userSelectedLogout {
+                APIConnector.connector().trackMetric("Clicked Log Out (Hamburger)")
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.logout()
+            } else if let url = sideMenuController.userSelectedExternalLink {
+                UIApplication.shared.openURL(url)
             }
         }
     }
@@ -242,6 +254,15 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     var lastDateFetchTo: Date = Date()
     var loadingNotes = false
 
+    func switchProfile(_ newUser: BlipUser) {
+        selectedProfileUser = newUser
+        self.title = newUser.fullName ?? ""
+        selectedNote = nil
+        selectedIndexPath = nil
+        configureGraphContainer()
+        refresh()
+    }
+    
     // Sort notes chronologically
     func sortNotesAndReload() {
         notes.sort(by: {$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
@@ -365,18 +386,17 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         DDLogVerbose("trace")
         
         if (!loadingNotes) {
-            // Shift back three months for fetching
+            // TODO: leave at fetch of 2 years of notes, or put back n month incremental fetch, but do it in background
             var dateShift = DateComponents()
             dateShift.month = fetchPeriodInMonths
             let calendar = Calendar.current
             let startDate = (calendar as NSCalendar).date(byAdding: dateShift, to: lastDateFetchTo, options: [])!
             
-            //for group in groups {
-            // TODO: change to group.userId, and fetch for all groups...
-            APIConnector.connector().getNotesForUserInDateRange(self, userid: NutDataController.sharedInstance.currentUserId!, start: startDate, end: lastDateFetchTo)
-            //}
-            
-            self.lastDateFetchTo = startDate
+            if let user = selectedProfileUser {
+                APIConnector.connector().getNotesForUserInDateRange(self, userid: user.userid, start: startDate, end: lastDateFetchTo)
+                
+                self.lastDateFetchTo = startDate
+            }
         }
     }
     
@@ -396,7 +416,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     //
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if NutDataController.sharedInstance.currentBlipUser == nil {
+        if NutDataController.sharedInstance.currentBlipUser == nil || self.selectedProfileUser == nil {
             return false
         }
         return true
@@ -406,19 +426,20 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepare(for: segue, sender: sender)
-        if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue {
+        if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue {
             let eventDetailVC = segue.destination as! EventDetailViewController
             eventDetailVC.note = self.selectedNote
             APIConnector.connector().trackMetric("Clicked view a note (Home screen)")
-        } else if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
+        } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
             let eventAddVC = segue.destination as! EventAddViewController
-            // TODO: support for groups! For now, just support current user...
-            if let currentUser = NutDataController.sharedInstance.currentBlipUser {
-                eventAddVC.user = currentUser
-                eventAddVC.group = currentUser
-                eventAddVC.groups = [currentUser]
-            }
+            // Pass along group (logged in user) and selected profile user...
+            eventAddVC.user = self.selectedProfileUser!
+            eventAddVC.group = NutDataController.sharedInstance.currentBlipUser!
             APIConnector.connector().trackMetric("Clicked add a note (Home screen)")
+        } else if segue.identifier == "segueToSwitchProfile" {
+            let switchProfileVC = segue.destination as! SwitchProfileTableViewController
+            switchProfileVC.currentUser = selectedProfileUser
+            APIConnector.connector().trackMetric("Clicked switch profile (Home screen)")
         } else {
             NSLog("Unprepped segue from eventList \(segue.identifier)")
         }
@@ -461,8 +482,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         if let switchProfileVC = segue.source as? SwitchProfileTableViewController {
             if let newUser = switchProfileVC.newUser {
                 NSLog("TODO: switch to user \(newUser.fullName)")
+                if newUser.userid != selectedProfileUser?.userid {
+                    switchProfile(newUser)
+                }
             } else {
-                NSLog("No note to delete!")
+                NSLog("User did not change!")
             }
         } else {
             NSLog("Unknown segue source!")
@@ -776,7 +800,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
 extension EventListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt estimatedHeightForRowAtIndexPath: IndexPath) -> CGFloat {
-        return 102.0;
+        return 70.0;
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt heightForRowAtIndexPath: IndexPath) -> CGFloat {
@@ -827,6 +851,7 @@ extension EventListViewController: UITableViewDataSource {
                     cell.setSelected(true, animated: false)
                 }
             }
+            cell.layoutIfNeeded()
         }
         return cell
     }

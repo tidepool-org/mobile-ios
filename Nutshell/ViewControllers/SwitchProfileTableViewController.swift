@@ -13,6 +13,7 @@ import CocoaLumberjack
 
 class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPIWatcher {
 
+    var currentUser: BlipUser!
     var newUser: BlipUser?
     private var tableUsers: [BlipUser] = []
     
@@ -84,10 +85,13 @@ class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPI
             if indexPath.row == 0 {
                 // Configure the cell...
                 cell.nameLabel?.text = "(You) " + (user.fullName ?? "")
-                cell.setSelected(true, animated: false)
             } else {
                 cell.nameLabel?.text = user.fullName ?? ""
-                cell.setSelected(false, animated: false)
+            }
+            if user.userid == currentUser.userid {
+                cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryType = .none
             }
         }
         return cell
@@ -95,8 +99,7 @@ class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPI
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        // TODO: add support for other profile users!
-        self.newUser = NutDataController.sharedInstance.currentBlipUser
+        self.newUser = tableUsers[indexPath.row] 
         self.performSegue(withIdentifier: "segueBackFromSwitchProfile", sender: self)
     }
 

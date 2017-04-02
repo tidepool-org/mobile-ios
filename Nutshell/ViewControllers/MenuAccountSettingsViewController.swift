@@ -6,12 +6,16 @@
 //  Copyright © 2015 Tidepool. All rights reserved.
 //
 
+// TODO: replace this 3rd party menu mechanism with a simple menu view, and a constrain animation to slide it in and out...
+
 import UIKit
 import CocoaLumberjack
 
 class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
-    var didSelectSwitchProfile = false
+    var userSelectedSwitchProfile = false
+    var userSelectedLogout = false
+    var userSelectedExternalLink: URL? = nil
     
     @IBOutlet weak var loginAccount: UILabel!
     @IBOutlet weak var versionString: NutshellUILabel!
@@ -61,11 +65,18 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         // Dispose of any resources that can be recreated.
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        NSLog("MenuVC viewWillAppear")
+        super.viewWillAppear(animated)
+    }
+    
     func menuWillOpen() {
-        // Late binding here because profile fetch occurs after login complete!
         // Treat this like viewWillAppear...
+        userSelectedSwitchProfile = false
+        userSelectedLogout = false
+        userSelectedExternalLink = nil
+
         usernameLabel.text = NutDataController.sharedInstance.userFullName
-        
         configureHKInterface()
     }
     
@@ -82,26 +93,25 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     //
     
     @IBAction func switchProfileTapped(_ sender: AnyObject) {
-        didSelectSwitchProfile = true
+        userSelectedSwitchProfile = true
         self.hideSideMenuView()
     }
     
     @IBAction func supportButtonHandler(_ sender: AnyObject) {
         APIConnector.connector().trackMetric("Clicked Tidepool Support (Hamburger)")
-        let url = URL(string: "support.tidepool.org")
-        UIApplication.shared.openURL(url!)
+        userSelectedExternalLink = URL(string: "http://support.tidepool.org")
+        self.hideSideMenuView()
     }
     
     @IBAction func privacyButtonTapped(_ sender: Any) {
         APIConnector.connector().trackMetric("Clicked Privacy and Terms (Hamburger)")
-        let url = URL(string: "tidepool.org/legal/")
-        UIApplication.shared.openURL(url!)
+        userSelectedExternalLink = URL(string: "http://tidepool.org/legal/")
+        self.hideSideMenuView()
     }
     
     @IBAction func logOutTapped(_ sender: AnyObject) {
-        APIConnector.connector().trackMetric("Clicked Log Out (Hamburger)")
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.logout()
+        userSelectedLogout = true
+        self.hideSideMenuView()
     }
     
     //
@@ -131,7 +141,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     }
 
     func nextHKTimeRefresh() {
-        DDLogInfo("nextHKTimeRefresh")
+        //DDLogInfo("nextHKTimeRefresh")
         configureHKInterface()
     }
     

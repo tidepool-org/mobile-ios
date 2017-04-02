@@ -50,9 +50,8 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
     let postButton: UIButton = UIButton()
     
     // Data
-    // Group, groups, and user must be set by launching controller in prepareForSegue!
+    // Group and user must be set by launching controller in prepareForSegue!
     var group: BlipUser!
-    var groups: [BlipUser] = []
     var user: BlipUser!
     // Returns newNote if successful
     var newNote: BlipNote? = nil
