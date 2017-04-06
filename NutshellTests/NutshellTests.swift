@@ -89,7 +89,7 @@ class NutshellTests: XCTestCase {
                 NSLog("Profile fetch result: \(result)")
                 if (result.isSuccess) {
                     if let json = result.value {
-                        NutDataController.sharedInstance.processProfileFetch(json)
+                        NutDataController.sharedInstance.processLoginProfileFetch(json)
                     }
                     expectation.fulfill()
                 } else {

@@ -97,22 +97,43 @@ class NutDataController: NSObject
         }
     }
     
-    /// Return current user as a BlipUser object
-    var currentBlipUser: BlipUser? {
+    /// Return current logged in user as a BlipUser object. Alternately, just reference currentUserName, currentUserId, etc.
+    var currentLoggedInUser: BlipUser? {
         get {
-            if _currentBlipUser == nil {
+            if _currentLoggedInUser == nil {
                 if let user = self.currentUser {
-                    _currentBlipUser = BlipUser(user: user)
+                    _currentLoggedInUser = BlipUser(user: user)
                 }
             }
-            return _currentBlipUser
+            return _currentLoggedInUser
         }
     }
-    fileprivate var _currentBlipUser: BlipUser?
+    fileprivate var _currentLoggedInUser: BlipUser?
     
+    /// This determines the set of tidepool data and the notes we are viewing. Defaults to the current logged in user. Cannot set to nil! Setting will delete any cached tidepool data, and reconfigure the healthkit interface!
+    var currentViewedUser: BlipUser? {
+        get {
+            if _currentViewedUser == nil {
+                if let user = self.currentLoggedInUser {
+                    NSLog("Current viewable user is \(_currentViewedUser?.fullName)")
+                    _currentViewedUser = user
+                }
+            }
+            return _currentViewedUser
+        }
+        set(newUser) {
+            _currentViewedUser = newUser
+            NSLog("Current viewable user changed to \(_currentViewedUser!.fullName)")
+            self.deleteAnyTidepoolData()
+            configureHealthKitInterface()
+        }
+    }
+    fileprivate var _currentViewedUser: BlipUser?
+
+
     /// Call this at login/logout, token refresh(?), and upon enabling or disabling the HealthKit interface.
     func configureHealthKitInterface() {
-        appHealthKitConfiguration.configureHealthKitInterface(currentUserId, isDSAUser: isDSAUser)
+        appHealthKitConfiguration.configureHealthKitInterface(currentViewedUser!.userid, isDSAUser: isDSAUser)
     }
     
     /// Call this after logging into a service account to set up the current user and configure the data model for the user.
@@ -123,6 +144,8 @@ class NutDataController: NSObject
         self.deleteAnyTidepoolData()
         self.currentUser = newUser
         _currentUserId = newUser.userid
+        _currentLoggedInUser = nil
+        _currentViewedUser = nil
         configureHealthKitInterface()
     }
 
@@ -131,15 +154,17 @@ class NutDataController: NSObject
         self.deleteAnyTidepoolData()
         self.currentUser = nil
         _currentUserId = nil
-        _currentBlipUser = nil
+        _currentLoggedInUser = nil
+        _currentViewedUser = nil
         configureHealthKitInterface()
     }
 
-    func processProfileFetch(_ json: JSON) {
+    func processLoginProfileFetch(_ json: JSON) {
         if let user = self.currentUser {
             user.processProfileJSON(json)
             _ = DatabaseUtils.databaseSave(user.managedObjectContext!)
-            _currentBlipUser = nil  // update currentBlipUser too...
+            _currentLoggedInUser = nil  // update currentLoggedInUser too...
+            _currentViewedUser = nil  // and current viewable user as well
         }
     }
     
@@ -159,7 +184,7 @@ class NutDataController: NSObject
     var isDSAUser: Bool? {
         get {
             var result: Bool?
-            if let isDSA = currentUser?.accountIsDSA {
+            if let isDSA = currentViewedUser?.isDSAUser {
                 result = Bool(isDSA)
             }
             return result
@@ -170,7 +195,7 @@ class NutDataController: NSObject
     // MARK: - HealthKit user info
     //
 
-    /// Enables HealthKit for current user
+    /// Enables HealthKit for current viewable user
     ///
     /// Note: This sets the current tidepool user as the HealthKit user!
     func enableHealthKitInterface() {
@@ -213,6 +238,8 @@ class NutDataController: NSObject
             if newUser != _currentUser {
                 self.updateUser(_currentUser, newUser: newUser)
                 _currentUser = newUser
+                _currentLoggedInUser = nil
+                _currentViewedUser = nil
                 if newUser != nil {
                     _currentUserId = newUser!.userid
                     NSLog("Set currentUser, name: \(newUser!.username), id: \(newUser!.userid)")

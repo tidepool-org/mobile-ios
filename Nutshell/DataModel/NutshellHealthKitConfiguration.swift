@@ -24,13 +24,13 @@ class NutshellHealthKitConfiguration: HealthKitConfiguration
     override func turnOnInterface() {
         super.turnOnInterface()
         monitorForWorkoutData(true)
-        HealthKitDataPusher.sharedInstance.enablePushToHealthKit(true)
+        //HealthKitDataPusher.sharedInstance.enablePushToHealthKit(true)
     }
 
     override func turnOffInterface() {
         super.turnOffInterface()
         monitorForWorkoutData(false)
-        HealthKitDataPusher.sharedInstance.enablePushToHealthKit(false)
+        //HealthKitDataPusher.sharedInstance.enablePushToHealthKit(false)
     }
 
     //

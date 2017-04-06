@@ -153,7 +153,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     //
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if NutDataController.sharedInstance.currentBlipUser == nil {
+        if NutDataController.sharedInstance.currentLoggedInUser == nil {
             return false
         }
         return true

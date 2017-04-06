@@ -337,7 +337,8 @@ class APIConnector {
      */
     func getUserData(_ completion: @escaping (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user data
-        let endpoint = "data/" + NutDataController.sharedInstance.currentUserId!;
+        let userId = NutDataController.sharedInstance.currentViewedUser!.userid
+        let endpoint = "data/" + userId
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         sendRequest(.get, endpoint: endpoint).responseJSON { response in
@@ -352,11 +353,12 @@ class APIConnector {
         }
     }
     
-    func getReadOnlyUserData(_ startDate: Date? = nil, endDate: Date? = nil,  objectTypes: String = "smbg,bolus,cbg,wizard,basal", completion: @escaping (Result<JSON>) -> (Void)) {
+    func getReadOnlyUserData(_ startDate: Date? = nil, endDate: Date? = nil, objectTypes: String = "smbg,bolus,cbg,wizard,basal", completion: @escaping (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user data
         // TODO: centralize define of read-only events!
         // request format is like: https://api.tidepool.org/data/f934a287c4?endDate=2015-11-17T08%3A00%3A00%2E000Z&startDate=2015-11-16T12%3A00%3A00%2E000Z&type=smbg%2Cbolus%2Ccbg%2Cwizard%2Cbasal
-        let endpoint = "data/" + NutDataController.sharedInstance.currentUserId!
+        let userId = NutDataController.sharedInstance.currentViewedUser!.userid
+        let endpoint = "data/" + userId
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         // TODO: If there is no data returned, I get a failure case with status code 200, and error FAILURE: Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.} ] Maybe an Alamofire issue?
         var parameters: Dictionary = ["type": objectTypes]

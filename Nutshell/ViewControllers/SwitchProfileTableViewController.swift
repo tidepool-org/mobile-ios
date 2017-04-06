@@ -13,15 +13,14 @@ import CocoaLumberjack
 
 class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPIWatcher {
 
-    var currentUser: BlipUser!
-    var newUser: BlipUser?
+    var newViewedUser: BlipUser?
     private var tableUsers: [BlipUser] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // For now, fetch profile users each time
-        if let mainUser = NutDataController.sharedInstance.currentBlipUser {
+        if let mainUser = NutDataController.sharedInstance.currentLoggedInUser {
             tableUsers = [mainUser]
         }
         
@@ -34,10 +33,8 @@ class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPI
     // MARK: - UsersFetchAPIWatcher delegate
     //
     
-    private var profileUsers: [BlipUser] = []
-    private var groupUserIds: [String] = []
     func viewableUsers(_ userIds: [String]) {
-        self.groupUserIds = userIds
+        var profileUsers: [BlipUser] = []
         for userId in userIds {
             APIConnector.connector().fetchProfile(userId) { (result:Alamofire.Result<JSON>) -> (Void) in
                 NSLog("Profile fetch result: \(result)")
@@ -45,12 +42,12 @@ class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPI
                     if let json = result.value {
                         let user = BlipUser(userid: userId)
                         user.processProfileJSON(json)
-                        self.profileUsers.append(user)
+                        profileUsers.append(user)
                         // add any other users...
                         if user.userid != NutDataController.sharedInstance.currentUserId! {
                             self.tableUsers.append(user)
                         }
-                        if self.profileUsers.count == self.groupUserIds.count {
+                        if profileUsers.count == userIds.count {
                             self.tableView.reloadData()
                         }
                     }
@@ -88,7 +85,7 @@ class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPI
             } else {
                 cell.nameLabel?.text = user.fullName ?? ""
             }
-            if user.userid == currentUser.userid {
+            if user.userid == NutDataController.sharedInstance.currentViewedUser!.userid {
                 cell.accessoryType = .checkmark
             } else {
                 cell.accessoryType = .none
@@ -99,7 +96,7 @@ class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPI
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        self.newUser = tableUsers[indexPath.row] 
+        self.newViewedUser = tableUsers[indexPath.row] 
         self.performSegue(withIdentifier: "segueBackFromSwitchProfile", sender: self)
     }
 

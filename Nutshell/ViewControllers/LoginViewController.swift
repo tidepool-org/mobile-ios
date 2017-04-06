@@ -191,7 +191,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
                         NSLog("Profile fetch result: \(result)")
                     if (result.isSuccess) {
                         if let json = result.value {
-                            NutDataController.sharedInstance.processProfileFetch(json)
+                            NutDataController.sharedInstance.processLoginProfileFetch(json)
                         }
                         appDelegate.setupUIForLoginSuccess()
                     }

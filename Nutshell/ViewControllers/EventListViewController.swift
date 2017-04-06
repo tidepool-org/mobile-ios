@@ -36,7 +36,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     // support for displaying graph around current selection
     fileprivate var selectedIndexPath: IndexPath? = nil
     fileprivate var selectedNote: BlipNote?
-    fileprivate var selectedProfileUser: BlipUser? = nil
     @IBOutlet weak var graphLayerContainer: UIView!
     fileprivate var graphContainerView: TidepoolGraphView?
     fileprivate var eventTime = Date()
@@ -46,15 +45,14 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
 
     // Program timers
     var graphUpdateTimer: Timer?
+    
+    // misc
+    let dataController = NutDataController.sharedInstance
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if selectedProfileUser == nil {
-            selectedProfileUser = NutDataController.sharedInstance.currentBlipUser
-        }
-        
-        self.title = selectedProfileUser?.fullName ?? ""
+        self.title = dataController.currentViewedUser?.fullName ?? ""
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -64,7 +62,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
 
 
         // Add a notification for when the database changes
-        let moc = NutDataController.sharedInstance.mocForNutEvents()
+        let moc = dataController.mocForNutEvents()
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.databaseChanged(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: moc)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChange), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
@@ -255,7 +253,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     var loadingNotes = false
 
     func switchProfile(_ newUser: BlipUser) {
-        selectedProfileUser = newUser
+        // change the world!
+        dataController.currentViewedUser = newUser
         self.title = newUser.fullName ?? ""
         selectedNote = nil
         selectedIndexPath = nil
@@ -268,7 +267,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         notes.sort(by: {$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
         tableView.reloadData()
         // TODO: use this global for now until we move notes into database! Used by graph code to show notes.
-        NutDataController.sharedInstance.currentNotes = notes
+        dataController.currentNotes = notes
     }
 
     func selectAndScrollToTopNote() {
@@ -392,7 +391,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             let calendar = Calendar.current
             let startDate = (calendar as NSCalendar).date(byAdding: dateShift, to: lastDateFetchTo, options: [])!
             
-            if let user = selectedProfileUser {
+            if let user = dataController.currentViewedUser {
                 APIConnector.connector().getNotesForUserInDateRange(self, userid: user.userid, start: startDate, end: lastDateFetchTo)
                 
                 self.lastDateFetchTo = startDate
@@ -416,7 +415,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     //
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if NutDataController.sharedInstance.currentBlipUser == nil || self.selectedProfileUser == nil {
+        if dataController.currentLoggedInUser == nil {
             return false
         }
         return true
@@ -433,12 +432,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
             let eventAddVC = segue.destination as! EventAddViewController
             // Pass along group (logged in user) and selected profile user...
-            eventAddVC.user = self.selectedProfileUser!
-            eventAddVC.group = NutDataController.sharedInstance.currentBlipUser!
+            eventAddVC.user = dataController.currentViewedUser!
+            eventAddVC.group = dataController.currentLoggedInUser!
             APIConnector.connector().trackMetric("Clicked add a note (Home screen)")
         } else if segue.identifier == "segueToSwitchProfile" {
-            let switchProfileVC = segue.destination as! SwitchProfileTableViewController
-            switchProfileVC.currentUser = selectedProfileUser
+            let _ = segue.destination as! SwitchProfileTableViewController
             APIConnector.connector().trackMetric("Clicked switch profile (Home screen)")
         } else {
             NSLog("Unprepped segue from eventList \(segue.identifier)")
@@ -480,10 +478,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     @IBAction func home(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventList home!")
         if let switchProfileVC = segue.source as? SwitchProfileTableViewController {
-            if let newUser = switchProfileVC.newUser {
-                NSLog("TODO: switch to user \(newUser.fullName)")
-                if newUser.userid != selectedProfileUser?.userid {
-                    switchProfile(newUser)
+            if let newViewedUser = switchProfileVC.newViewedUser {
+                NSLog("TODO: switch to user \(newViewedUser.fullName)")
+                if newViewedUser.userid != dataController.currentViewedUser?.userid {
+                    switchProfile(newViewedUser)
                 }
             } else {
                 NSLog("User did not change!")
