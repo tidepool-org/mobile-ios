@@ -712,7 +712,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         if let currentNote = self.selectedNote {
             NSLog("Selecting a different note...")
             if currentNote.id != note!.id {
-                //showHideDataVizView(show: false)
                 self.selectedNote = note
                 clearGraphAndUpdateDelayed()
                 return

@@ -17,6 +17,7 @@
 import UIKit
 import CoreData
 import CocoaLumberjack
+import FLAnimatedImage
 
 class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegate, NoteAPIWatcher {
 
@@ -29,6 +30,9 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
 
     // support for displaying graph around current note
     @IBOutlet weak var graphLayerContainer: UIView!
+    @IBOutlet weak var loadingAnimationView: UIView!
+    @IBOutlet weak var animatedLoadingImage: FLAnimatedImageView!
+    @IBOutlet weak var noDataViewContainer: UIView!
     fileprivate var graphContainerView: TidepoolGraphView?
 
     // Data
@@ -82,6 +86,15 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         sceneContainerView.setNeedsLayout()
         sceneContainerView.layoutIfNeeded()
         
+        if let path = Bundle.main.path(forResource: "jump-jump-jump-jump", ofType: "gif") {
+            do {
+                let animatedImage = try FLAnimatedImage(animatedGIFData: Data(contentsOf: URL(fileURLWithPath: path)))
+                animatedLoadingImage.animatedImage = animatedImage
+            } catch {
+                DDLogError("Unable to load animated gifs!")
+            }
+        }
+
         selectNote()
     }
     
@@ -212,11 +225,68 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     // MARK: - Data vizualization view
     //
     
+    // TODO: share this code with EventListViewController!
+    enum DataVizDisplayState: Int {
+        case initial
+        case loadingNoSelect
+        case loadingSelected
+        case dataGraph
+        case noDataDisplay
+    }
+    private var dataVizState: DataVizDisplayState = .initial
+    
+    private func updateDataVizForState(_ newState: DataVizDisplayState) {
+        if newState == dataVizState {
+            NSLog("\(#function) already in state \(newState)")
+            return
+        }
+        NSLog("\(#function) setting new state: \(newState)")
+        dataVizState = newState
+        var hideLoadingGif = true
+        var hideNoDataView = true
+        if newState == .initial {
+            if (graphContainerView != nil) {
+                NSLog("Removing current graph view...")
+                graphContainerView?.removeFromSuperview();
+                graphContainerView = nil;
+            }
+        } else if newState == .loadingNoSelect {
+            // no item selected, show loading gif, hiding any current data and graph gridlines
+            graphContainerView?.displayGraphData(false)
+            graphContainerView?.displayGridLines(false)
+            hideLoadingGif = false
+        } else if newState == .loadingSelected {
+            // item selected, show loading gif, hide gridlines, but allow data to load.
+            graphContainerView?.displayGraphData(true)
+            graphContainerView?.displayGridLines(false)
+            hideLoadingGif = false
+        } else if newState == .dataGraph {
+            // item selected and data found, ensure gridlines are on and data displayed (should already be)
+            graphContainerView?.displayGridLines(true)
+        } else if newState == .noDataDisplay {
+            // item selected, but no data found; hide gridlines and show the no data found overlay
+            graphContainerView?.displayGridLines(false)
+            hideNoDataView = false
+        }
+        if loadingAnimationView.isHidden != hideLoadingGif {
+            loadingAnimationView.isHidden = hideLoadingGif
+            if hideLoadingGif {
+                NSLog("\(#function) hide loading gif!")
+                animatedLoadingImage.stopAnimating()
+            } else {
+                NSLog("\(#function) start showing loading gif!")
+                animatedLoadingImage.startAnimating()
+            }
+        }
+        if noDataViewContainer.isHidden != hideNoDataView {
+            noDataViewContainer.isHidden = hideNoDataView
+            NSLog("\(#function) noDataViewContainer.isHidden = \(hideNoDataView)")
+        }
+    }
     
     fileprivate func selectNote() {
         
         if self.note != nil {
-            showHideDataVizView(show: true)
             configureGraphContainer()
         }
     }
@@ -267,15 +337,14 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             let tzOffset = NSCalendar.current.timeZone.secondsFromGMT()
             graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: tzOffset)
             if let graphContainerView = graphContainerView {
+                updateDataVizForState(.loadingSelected)
                 graphContainerView.configureGraph(edgeOffset)
-                graphLayerContainer.addSubview(graphContainerView)
+                // delay to display notes until we get notified of data available...
+                //graphContainerView.configureNotesToDisplay([])
+                graphLayerContainer.insertSubview(graphContainerView, at: 0)
                 graphContainerView.loadGraphData()
             }
         }
-    }
-    
-    fileprivate func showHideDataVizView(show: Bool) {
-        
     }
     
     //
@@ -285,10 +354,14 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     func containerCellUpdated() {
         let graphHasData = graphContainerView!.dataFound()
         NSLog("\(#function) - graphHasData: \(graphHasData)")
-        if !graphHasData {
-            showHideDataVizView(show: false)
-        } else {
-            showHideDataVizView(show: true)
+        if let graphContainerView = graphContainerView {
+            if graphHasData {
+                // delay to display notes until we get notified of data available...
+                _ = graphContainerView.configureNotesToDisplay([note])
+                updateDataVizForState(.dataGraph)
+            } else {
+                updateDataVizForState(.noDataDisplay)
+            }
         }
     }
     
@@ -345,6 +418,9 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     
     func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {}
     
+    @IBAction func howToUploadButtonHandler(_ sender: Any) {
+        NSLog("TODO!")
+    }
 }
 
 
