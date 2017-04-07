@@ -30,19 +30,16 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     @IBOutlet weak var tableView: NutshellUITableView!
     @IBOutlet weak var coverView: UIControl!
     
-    fileprivate var sortedNutEvents = [(String, NutEvent)]()
-    fileprivate var filteredNutEvents = [(String, NutEvent)]()
-    fileprivate var filterString = ""
+    // data viz layout
+    @IBOutlet weak var graphLayerContainer: UIView!
+    @IBOutlet weak var loadingAnimationView: UIView!
+    @IBOutlet weak var animatedLoadingImage: FLAnimatedImageView!
+    @IBOutlet weak var noDataViewContainer: UIView!
     
     // support for displaying graph around current selection
     fileprivate var selectedIndexPath: IndexPath? = nil
     fileprivate var selectedNote: BlipNote?
-    @IBOutlet weak var graphLayerContainer: UIView!
-    @IBOutlet weak var loadingAnimationView: UIView!
-    @IBOutlet weak var animatedLoadingImage: FLAnimatedImageView!
-    
     fileprivate var graphContainerView: TidepoolGraphView?
-    
     fileprivate var eventTime = Date()
     
     // refresh control...
@@ -53,7 +50,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
     // misc
     let dataController = NutDataController.sharedInstance
-
+    fileprivate var sortedNutEvents = [(String, NutEvent)]()
+    fileprivate var filteredNutEvents = [(String, NutEvent)]()
+    fileprivate var filterString = ""
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -280,8 +280,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     func sortNotesAndReload() {
         notes.sort(by: {$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
         tableView.reloadData()
-        // TODO: use this global for now until we move notes into database! Used by graph code to show notes.
-        dataController.currentNotes = notes
     }
 
     func selectAndScrollToTopNote() {
@@ -537,6 +535,14 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         }
     }
     
+    @IBAction func howToUploadButtonHandler(_ sender: Any) {
+        NSLog("TODO!")
+    }
+
+    //
+    // MARK: - Search 
+    //
+    
     @IBAction func dismissKeyboard(_ sender: AnyObject) {
         //searchTextField.resignFirstResponder()
     }
@@ -604,6 +610,64 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     // MARK: - Data vizualization view
     //
     
+    enum DataVizDisplayState: Int {
+        case initial
+        case loadingNoSelect
+        case loadingSelected
+        case dataGraph
+        case noDataDisplay
+    }
+    private var dataVizState: DataVizDisplayState = .initial
+
+    private func updateDataVizForState(_ newState: DataVizDisplayState) {
+        if newState == dataVizState {
+            NSLog("\(#function) already in state \(newState)")
+            return
+        }
+        NSLog("\(#function) setting new state: \(newState)")
+        dataVizState = newState
+        var hideLoadingGif = true
+        var hideNoDataView = true
+        if newState == .initial {
+            if (graphContainerView != nil) {
+                NSLog("Removing current graph view...")
+                graphContainerView?.removeFromSuperview();
+                graphContainerView = nil;
+            }
+        } else if newState == .loadingNoSelect {
+            // no item selected, show loading gif, hiding any current data and graph gridlines
+            graphContainerView?.displayGraphData(false)
+            graphContainerView?.displayGridLines(false)
+            hideLoadingGif = false
+        } else if newState == .loadingSelected {
+            // item selected, show loading gif, hide gridlines, but allow data to load.
+            graphContainerView?.displayGraphData(true)
+            graphContainerView?.displayGridLines(false)
+            hideLoadingGif = false
+        } else if newState == .dataGraph {
+            // item selected and data found, ensure gridlines are on and data displayed (should already be)
+            graphContainerView?.displayGridLines(true)
+        } else if newState == .noDataDisplay {
+            // item selected, but no data found; hide gridlines and show the no data found overlay
+            graphContainerView?.displayGridLines(false)
+            hideNoDataView = false
+        }
+        if loadingAnimationView.isHidden != hideLoadingGif {
+            loadingAnimationView.isHidden = hideLoadingGif
+            if hideLoadingGif {
+                NSLog("\(#function) hide loading gif!")
+                animatedLoadingImage.stopAnimating()
+            } else {
+                NSLog("\(#function) start showing loading gif!")
+                animatedLoadingImage.startAnimating()
+            }
+        }
+        if noDataViewContainer.isHidden != hideNoDataView {
+            noDataViewContainer.isHidden = hideNoDataView
+            NSLog("\(#function) noDataViewContainer.isHidden = \(hideNoDataView)")
+        }
+    }
+    
     private let kGraphUpdateDelay: TimeInterval = 1.0
     private func startGraphUpdateTimer() {
         if graphUpdateTimer == nil {
@@ -626,28 +690,20 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     private func clearGraphAndUpdateDelayed() {
         NSLog("\(#function)")
         stopGraphUpdateTimer()
-//        if (graphContainerView != nil) {
-//            //NSLog("Removing current graph view...")
-//            //graphContainerView?.removeFromSuperview();
-//            //graphContainerView = nil;
-//        }
-        graphContainerView?.clearGraphData()
-        // while loading, and in between selections, put up loading view...
-        NSLog("showing activity indicator!")
-        loadingAnimationView.isHidden = false
-        animatedLoadingImage.startAnimating()
 
+        // while loading, and in between selections, put up loading view...
+        updateDataVizForState(.loadingNoSelect)
         startGraphUpdateTimer()
     }
     
     fileprivate func selectNote(_ note: BlipNote?) {
         NSLog("\(#function)")
 
-        // if we are deselecting, just close up data viz
+        // if we are deselecting, change data viz to loading, no selection...
         if note == nil {
             NSLog("Deselecting note...")
             self.selectedNote = nil
-            //showHideDataVizView(show: false)
+            updateDataVizForState(.initial)
             configureGraphContainer()
             return
         }
@@ -660,8 +716,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 self.selectedNote = note
                 clearGraphAndUpdateDelayed()
                 return
-                //configureGraphContainer()
-            } else {
+             } else {
                 // same note, update graph if needed...
                 configureGraphContainer()
                 return
@@ -676,6 +731,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
     /// Works with graphDataChanged to ensure graph is up-to-date after notification of database changes whether this VC is in the foreground or background.
     fileprivate func checkUpdateGraph() {
+        NSLog("\(#function)")
         if graphNeedsUpdate {
             graphNeedsUpdate = false
             if let graphContainerView = graphContainerView {
@@ -688,7 +744,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     func graphDataChanged(_ note: Notification) {
         graphNeedsUpdate = true
         if viewIsForeground {
-            //NSLog("EventListVC: graphDataChanged, reloading")
+            NSLog("EventListVC: graphDataChanged, reloading")
             checkUpdateGraph()
         } else {
             NSLog("EventListVC: graphDataChanged, in background")
@@ -699,25 +755,24 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     /// Reloads the graph - this should be called after the header has been laid out and the graph section size has been figured. Pass in edgeOffset to place the nut event other than in the center.
     fileprivate func configureGraphContainer(_ edgeOffset: CGFloat = 0.0) {
         NSLog("EventListVC: configureGraphContainer")
-        if (graphContainerView != nil) {
-            NSLog("Removing current graph view...")
-            graphContainerView?.removeFromSuperview();
-            graphContainerView = nil;
-        }
-
-        // while loading, and in between selections, put up loading view...
-        NSLog("showing activity indicator!")
-        loadingAnimationView.isHidden = false
-        animatedLoadingImage.startAnimating()
-
         if let note = self.selectedNote {
             NSLog("Configuring graph for note id: \(note.id)")
+
+            if (graphContainerView != nil) {
+                NSLog("Removing current graph view...")
+                graphContainerView?.removeFromSuperview();
+                graphContainerView = nil;
+            }
 
             // TODO: assume all notes created in current timezone?
             let tzOffset = NSCalendar.current.timeZone.secondsFromGMT()
             graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: tzOffset)
             if let graphContainerView = graphContainerView {
+                // while loading, and in between selections, put up loading view...
+                updateDataVizForState(.loadingSelected)
                 graphContainerView.configureGraph(edgeOffset)
+                // delay to display notes until we get notified of data available...
+                //graphContainerView.configureNotesToDisplay([])
                 graphLayerContainer.insertSubview(graphContainerView, at: 0)
                 graphContainerView.loadGraphData()
             }
@@ -728,21 +783,25 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     // MARK: - GraphContainerViewDelegate
     //
     
+    // we get this
     func containerCellUpdated() {
-        let graphHasData = graphContainerView!.dataFound()
-        NSLog("\(#function) - graphHasData: \(graphHasData)")
-
-        // stop the loading view unless we just cleared the graph...
-        if  !graphContainerView!.graphCleared() {
-            NSLog("hiding activity indicator!")
-            loadingAnimationView.isHidden = true
-            animatedLoadingImage.stopAnimating()            
-        }
-
-        if !graphHasData {
-            //showHideDataVizView(show: false)
-        } else {
-            //showHideDataVizView(show: true)
+        if let graphContainerView = graphContainerView {
+            let graphHasData = graphContainerView.dataFound()
+            NSLog("\(#function) - graphHasData: \(graphHasData)")
+            if dataVizState == .loadingNoSelect {
+                NSLog("\(#function) ignoring call in state .loadingNoSelect")
+                return
+            }
+            if graphHasData {
+                // delay to display notes until we get notified of data available...
+                if let selectedNote = selectedNote {
+                    _ = graphContainerView.configureNotesToDisplay([selectedNote])
+                }
+                updateDataVizForState(.dataGraph)
+            } else {
+                // Show the no-data view
+                updateDataVizForState(.noDataDisplay)
+            }
         }
     }
 

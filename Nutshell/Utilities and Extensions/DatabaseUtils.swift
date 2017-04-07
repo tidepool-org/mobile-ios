@@ -50,12 +50,10 @@ class DatabaseUtils {
         return date
     }
 
-    class func checkLoadDataForDateRange(_ startDate: Date, endDate: Date, completion: ((Int) -> Void)?) {
+    class func checkLoadDataForDateRange(_ startDate: Date, endDate: Date) {
         let now = Date()
         let startBucket = DatabaseUtils.dateToBucketNumber(startDate)
         let endBucket = DatabaseUtils.dateToBucketNumber(endDate)
-        var itemsAdded = 0
-        var itemsDeleted = 0
         for bucket in startBucket...endBucket {
             
             if let lastFetchDate = serverBlocks[bucket] {
@@ -74,16 +72,7 @@ class DatabaseUtils {
                 let endTime = DatabaseUtils.bucketNumberToDate(bucket+1)
                 APIConnector.connector().getReadOnlyUserData(startTime, endDate:endTime, completion: { (result) -> (Void) in
                     if result.isSuccess {
-                        let (adds, deletes) = DatabaseUtils.updateEventsForTimeRange(startTime, endTime: endTime, moc: NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!)
-                        itemsAdded += adds
-                        itemsDeleted += deletes
-                        // Call optional completion routine with estimate of items added (net of adds less deletes)
-                        if itemsAdded != 0 || itemsDeleted != 0 {
-                            NSLog("final items added: \(itemsAdded), deleted: \(itemsDeleted), net: \(itemsAdded-itemsDeleted)")
-                        }
-                        if let completion = completion {
-                            completion(itemsAdded-itemsDeleted)
-                        }
+                        DatabaseUtils.updateEventsForTimeRange(startTime, endTime: endTime, moc: NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!, completion: nil)
                     } else {
                         NSLog("Failed to fetch events in range \(startTime) to \(endTime)")
                     }
@@ -94,59 +83,76 @@ class DatabaseUtils {
         }
     }
     
-    class func updateEventsForTimeRange(_ startTime: Date, endTime: Date, objectTypes: [String] = ["smbg","bolus","cbg","wizard","basal"], moc: NSManagedObjectContext, eventsJSON: JSON) -> (Int, Int) {
-        NSLog("updateEventsForTimeRange from \(startTime) to \(endTime) for types \(objectTypes)")
+    class func updateEventsForTimeRange(_ startTime: Date, endTime: Date, objectTypes: [String] = ["smbg","bolus","cbg","wizard","basal"], moc: NSManagedObjectContext, eventsJSON: JSON, completion: ((Bool) -> Void)?) {
+        NSLog("\(#function) from \(startTime) to \(endTime) for types \(objectTypes)")
         //NSLog("Events from \(startTime) to \(endTime): \(eventsJSON)")
-        var deleteEventCounter = 0
-        // Delete all tidepool items in range before adding the new ones...
-        do {
-            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CommonData")
-            // Return all objects in the requested range, exclusive of start time and inclusive of end time, to match server fetch
-            // NOTE: This would include Meal and Workout items if they were part of this database!
-            request.predicate = NSPredicate(format: "(type IN %@) AND (time > %@) AND (time <= %@)", objectTypes, startTime as CVarArg, endTime as CVarArg)
-            request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
-            let events = try moc.fetch(request) as! [NSManagedObject]
-            for obj: NSManagedObject in events {
-//                if let tObj = obj as? CommonData {
-//                    NSLog("deleting event id: \(tObj.id) with time: \(tObj.time)")
-//                }
-                moc.delete(obj)
-                deleteEventCounter += 1
+        DispatchQueue.global(qos: .background).async {
+    
+            var deleteEventCounter = 0
+            let bgMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+            bgMOC.persistentStoreCoordinator = moc.persistentStoreCoordinator
+            
+            // Delete all tidepool items in range before adding the new ones...
+            do {
+                let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CommonData")
+                // Return all objects in the requested range, exclusive of start time and inclusive of end time, to match server fetch
+                // NOTE: This would include Meal and Workout items if they were part of this database!
+                request.predicate = NSPredicate(format: "(type IN %@) AND (time > %@) AND (time <= %@)", objectTypes, startTime as CVarArg, endTime as CVarArg)
+                request.sortDescriptors = [NSSortDescriptor(key: "time", ascending: true)]
+                let events = try bgMOC.fetch(request) as! [NSManagedObject]
+                for obj: NSManagedObject in events {
+                    //                if let tObj = obj as? CommonData {
+                    //                    NSLog("deleting event id: \(tObj.id) with time: \(tObj.time)")
+                    //                }
+                    bgMOC.delete(obj)
+                    deleteEventCounter += 1
+                }
+            } catch let error as NSError {
+                NSLog("Error in \(#function) deleting objects: \(error)")
             }
-        } catch let error as NSError {
-            NSLog("Error in updateEventsForTimeRange deleting objects: \(error)")
-        }
-        //NSLog("updateEventsForTimeRange deleted \(deleteEventCounter) items")
-
-        var insertEventCounter = 0
-        for (_, subJson) in eventsJSON {
-            //NSLog("updateEvents next subJson: \(subJson)")
-            if let obj = CommonData.fromJSON(subJson, moc: moc) {
-                // add objects
-                if let _=obj.id {
-                    insertEventCounter += 1
-                    moc.insert(obj)
-                    //NSLog("inserting event id: \(obj.id) with time: \(obj.time)")
-                } else {
-                    NSLog("updateEvents: no ID found for object: \(obj), not inserting!")
+            //NSLog("\(#function) deleted \(deleteEventCounter) items")
+            
+            var insertEventCounter = 0
+            for (_, subJson) in eventsJSON {
+                //NSLog("updateEvents next subJson: \(subJson)")
+                if let obj = CommonData.fromJSON(subJson, moc: bgMOC) {
+                    // add objects
+                    if let _=obj.id {
+                        insertEventCounter += 1
+                        bgMOC.insert(obj)
+                        //NSLog("inserting event id: \(obj.id) with time: \(obj.time)")
+                    } else {
+                        NSLog("updateEvents: no ID found for object: \(obj), not inserting!")
+                    }
                 }
             }
+            //NSLog("\(#function) updated \(insertEventCounter) items")
+            if deleteEventCounter != 0 && insertEventCounter != deleteEventCounter {
+                NSLog("NOTE: deletes were non-zero and did not match inserts!!!")
+            }
+            // Save the database
+            do {
+                try bgMOC.save()
+                //NSLog("\(#function) \(startTime) to \(endTime): Database saved!")
+                notifyOnDataLoad()
+                if let completion = completion {
+                    DispatchQueue.main.async {
+                        completion(true)
+                    }
+                }
+            } catch let error as NSError {
+                NSLog("Failed to save MOC: \(error)")
+                if let completion = completion {
+                    DispatchQueue.main.async {
+                        completion(false)
+                    }
+                }
+            }
+            
+            if insertEventCounter != 0 || deleteEventCounter != 0 {
+                NSLog("final items added: \(insertEventCounter), deleted: \(deleteEventCounter), net: \(insertEventCounter-deleteEventCounter)")
+            }
         }
-        //NSLog("updateEventsForTimeRange updated \(insertEventCounter) items")
-        if deleteEventCounter != 0 && insertEventCounter != deleteEventCounter {
-            NSLog("NOTE: deletes were non-zero and did not match inserts!!!")
-        }
-        // Save the database
-        do {
-            try moc.save()
-            //NSLog("updateEventsForTimeRange \(startTime) to \(endTime): Database saved!")
-            notifyOnDataLoad()
-        } catch let error as NSError {
-            NSLog("Failed to save MOC: \(error)")
-        }
-        
-        // return net events added...
-        return (insertEventCounter, deleteEventCounter)
     }
     
     class func updateEvents(_ moc: NSManagedObjectContext, eventsJSON: JSON) {
@@ -191,7 +197,9 @@ class DatabaseUtils {
     
     class func notifyOnDataLoad() {
         // This will come in on the main thread, unlike the NSManagedObjectContextDidSaveNotification
-        NotificationCenter.default.post(name: Notification.Name(rawValue: NewBlockRangeLoadedNotification), object:nil)
+        DispatchQueue.main.async {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: NewBlockRangeLoadedNotification), object:nil)
+        }
     }
     
     // Note: This call has the side effect of fetching data from the service which may result in a future notification of database changes.
@@ -200,7 +208,7 @@ class DatabaseUtils {
 
         // load on-demand: if data has not been loaded, a notification will come later!
         if !skipCheckLoad {
-            DatabaseUtils.checkLoadDataForDateRange(afterTime, endDate: thruTime, completion: nil)
+            DatabaseUtils.checkLoadDataForDateRange(afterTime, endDate: thruTime)
         }
 
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CommonData")

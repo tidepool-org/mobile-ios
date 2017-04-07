@@ -155,12 +155,14 @@ class NutshellTests: XCTestCase {
                 if (result.isSuccess) {
                     if let json = result.value {
                         if result.isSuccess {
-                            _ = DatabaseUtils.updateEventsForTimeRange(startDate, endTime: endDate, moc:NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json)
+                            _ = DatabaseUtils.updateEventsForTimeRange(startDate, endTime: endDate, moc:NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json) {
+                                (success) -> (Void) in
+                                expectation.fulfill()
+                            }
                         } else {
-                            NSLog("No user data events!")
+                            XCTFail("updateEventsForTimeRange failed!")
                         }
                     }
-                    expectation.fulfill()
                 } else {
                     var errorCode = ""
                     if let error = result.error {

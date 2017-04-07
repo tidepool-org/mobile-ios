@@ -191,20 +191,19 @@ class HealthKitDataPusher: NSObject {
         // first load up data from Tidepool service for this timeframe
         APIConnector.connector().getReadOnlyUserData(startTime, endDate: currentTime, objectTypes: "smbg", completion: { (result) -> (Void) in
                 if result.isSuccess {
-                    let (adds, deletes) = DatabaseUtils.updateEventsForTimeRange(startTime, endTime: currentTime, objectTypes: ["smbg"], moc: NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!)
-                    DDLogVerbose("Adds: \(adds), deletes: \(deletes) in range \(startTime) to \(currentTime)")
-                } else {
-                    DDLogVerbose("No events in range \(startTime) to \(currentTime)")
+                    DatabaseUtils.updateEventsForTimeRange(startTime, endTime: currentTime, objectTypes: ["smbg"], moc: NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!) { (success) -> (Void) in
+                        
+                        DDLogVerbose("Completed updateEventsForTimeRange, success = \(success) for \(startTime) to \(currentTime)")
+                        
+                        // Note: even if no net new items were loaded, they may have already been in the Tidepool item database, so we still want to do the HealthKit sync...
+                        if generationForThisSync == self.currentSyncGeneration {
+                            self.fetchLatestCachedData(generationForThisSync, fromTime: startTime, thruTime: currentTime, completion: completion)
+                        } else {
+                            DDLogVerbose("assuming current sync was aborted!")
+                            self.finishSync(generationForThisSync, itemsSynced: 0, completion: completion)
+                        }
+                    }
                 }
-                
-                // Note: even if no net new items were loaded, they may have already been in the Tidepool item database, so we still want to do the HealthKit sync...
-                if generationForThisSync == self.currentSyncGeneration {
-                    self.fetchLatestCachedData(generationForThisSync, fromTime: startTime, thruTime: currentTime, completion: completion)
-                } else {
-                    DDLogVerbose("assuming current sync was aborted!")
-                    self.finishSync(generationForThisSync, itemsSynced: 0, completion: completion)
-                }
-
             })
         // The background fetch continues next, in fetchLatestCachedData
     }

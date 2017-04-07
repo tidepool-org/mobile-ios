@@ -35,16 +35,31 @@ class TidepoolGraphView: GraphContainerView {
         tidepoolLayout.invalidateCaches()
         super.loadGraphData()
     }
-    
-    override func clearGraphData() {
-        // reconfigure to load just background, y-axis labels, and x-axis header
-        tidepoolLayout.clearGraph = true
-        // let super do the work based on new layout config
-        super.clearGraphData()
+   
+    // Note: when data is not displayed, it will also not be loaded. Display true is the default, so this is generally only called when data layer suppression is desired (typically to show other overlays)
+    func displayGraphData(_ display: Bool) {
+        if display != tidepoolLayout.showDataLayers {
+            tidepoolLayout.showDataLayers = display
+            loadGraphData()
+        } else {
+            NSLog("\(#function) display: already in state \(display)")
+        }
     }
     
-    func graphCleared() -> Bool {
-        return tidepoolLayout.clearGraph
+    // This can be called to randomly show/hide gridlines
+    func displayGridLines(_ display: Bool) {
+        if display != tidepoolLayout.displayGridLines {
+            tidepoolLayout.displayGridLines = display
+            configureBackground()
+        } else {
+            NSLog("\(#function) display: already in state \(display)")
+        }
+    }
+    
+    func configureNotesToDisplay(_ notes: [BlipNote]) -> [BlipNote] {
+        let result = tidepoolLayout.notesToDisplay
+        tidepoolLayout.notesToDisplay = notes
+        return result   // pass back former value...
     }
     
     func dataFound() -> Bool {

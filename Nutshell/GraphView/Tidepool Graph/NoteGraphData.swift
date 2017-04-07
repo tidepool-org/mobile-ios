@@ -58,19 +58,16 @@ class NoteGraphDataLayer: GraphDataLayer {
         let timeExtensionForDataFetch = TimeInterval(kNoteTriangleTopWidth/viewPixelsPerSec)
         let earlyStartTime = startTime.addingTimeInterval(-timeExtensionForDataFetch)
         let endTimeInterval = timeIntervalForView + timeExtensionForDataFetch + TimeInterval(kNoteTriangleTopWidth/viewPixelsPerSec)
-        if let notes = NutDataController.sharedInstance.currentNotes {
-            for noteEvent in notes {
-                let eventTime = noteEvent.timestamp
-                let timeSinceEarlyStart = eventTime.timeIntervalSince(earlyStartTime)
-                if timeSinceEarlyStart <= endTimeInterval {
-                    let deltaTime = eventTime.timeIntervalSince(startTime)
-                    var isMainEvent = false
-                    isMainEvent = noteEvent.timestamp == layout.mainEventTime
-                    dataArray.append(NoteGraphDataType(timeOffset: deltaTime, isMain: isMainEvent, event: noteEvent))
-                }
+        for noteEvent in layout.notesToDisplay {
+            let eventTime = noteEvent.timestamp
+            let timeSinceEarlyStart = eventTime.timeIntervalSince(earlyStartTime)
+            if timeSinceEarlyStart <= endTimeInterval {
+                let deltaTime = eventTime.timeIntervalSince(startTime)
+                var isMainEvent = false
+                isMainEvent = noteEvent.timestamp == layout.mainEventTime
+                dataArray.append(NoteGraphDataType(timeOffset: deltaTime, isMain: isMainEvent, event: noteEvent))
             }
         }
-        
     }
  
     //

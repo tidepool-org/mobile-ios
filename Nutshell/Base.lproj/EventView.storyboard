@@ -7,6 +7,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -40,7 +41,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rOT-95-kGQ" userLabel="loadingAnimationView">
+                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rOT-95-kGQ" userLabel="loadingAnimationView">
                                                 <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                 <subviews>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4iG-58-JPe" userLabel="animatedImageView" customClass="FLAnimatedImageView">
@@ -57,10 +58,75 @@
                                                     <constraint firstItem="4iG-58-JPe" firstAttribute="centerX" secondItem="rOT-95-kGQ" secondAttribute="centerX" id="kUB-T0-ATW"/>
                                                 </constraints>
                                             </view>
+                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mf1-qM-eOo" userLabel="noDataView">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
+                                                <subviews>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="smallCloud" translatesAutoresizingMaskIntoConstraints="NO" id="qsg-Pz-CPx" userLabel="smallCloudLeftImage">
+                                                        <rect key="frame" x="-30" y="49" width="62" height="37"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="62" id="RaO-l9-6vB"/>
+                                                            <constraint firstAttribute="height" constant="37" id="XRG-K7-gS4"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cloud" translatesAutoresizingMaskIntoConstraints="NO" id="KT4-x3-8Ht" userLabel="cloudCenterImage">
+                                                        <rect key="frame" x="94.5" y="51" width="131" height="78"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="78" id="WxB-0Y-wTg"/>
+                                                            <constraint firstAttribute="width" constant="131" id="vlI-5v-TlI"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There is no data in here" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VO8-6Z-8xg">
+                                                        <rect key="frame" x="125.5" y="76.5" width="70" height="27.5"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="70" id="7LD-aK-JZF"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="smallCloud" translatesAutoresizingMaskIntoConstraints="NO" id="RHp-Mt-Gjb" userLabel="smallCloudRightmage">
+                                                        <rect key="frame" x="288" y="94" width="62" height="37"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="37" id="8qI-XD-Oa8"/>
+                                                            <constraint firstAttribute="width" constant="62" id="Ot1-sE-imD"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="shA-V9-KcA" userLabel="howToUploadButton">
+                                                        <rect key="frame" x="120.5" y="139" width="79" height="23"/>
+                                                        <color key="backgroundColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="23" id="C1z-rM-XTH"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
+                                                        <state key="normal" title="  How to upload  ">
+                                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="howToUploadButtonHandler:" destination="oVB-ry-Lwj" eventType="touchUpInside" id="RCx-q3-wmO"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="KT4-x3-8Ht" firstAttribute="centerX" secondItem="Mf1-qM-eOo" secondAttribute="centerX" id="36I-I6-s7A"/>
+                                                    <constraint firstItem="VO8-6Z-8xg" firstAttribute="centerY" secondItem="KT4-x3-8Ht" secondAttribute="centerY" id="D49-Fb-qaL"/>
+                                                    <constraint firstItem="shA-V9-KcA" firstAttribute="top" secondItem="KT4-x3-8Ht" secondAttribute="bottom" constant="10" id="EjH-C8-YBk"/>
+                                                    <constraint firstItem="shA-V9-KcA" firstAttribute="centerX" secondItem="Mf1-qM-eOo" secondAttribute="centerX" id="G3J-fJ-iXm"/>
+                                                    <constraint firstItem="KT4-x3-8Ht" firstAttribute="centerY" secondItem="Mf1-qM-eOo" secondAttribute="centerY" id="J96-bU-3bU"/>
+                                                    <constraint firstItem="qsg-Pz-CPx" firstAttribute="centerY" secondItem="Mf1-qM-eOo" secondAttribute="centerY" multiplier="0.75" id="QxN-5p-qhd"/>
+                                                    <constraint firstItem="VO8-6Z-8xg" firstAttribute="centerX" secondItem="KT4-x3-8Ht" secondAttribute="centerX" id="fIC-W0-QvR"/>
+                                                    <constraint firstAttribute="trailing" secondItem="RHp-Mt-Gjb" secondAttribute="trailing" constant="-30" id="jmr-uQ-78h"/>
+                                                    <constraint firstItem="RHp-Mt-Gjb" firstAttribute="centerY" secondItem="Mf1-qM-eOo" secondAttribute="centerY" multiplier="1.25" id="s10-3t-zCB"/>
+                                                    <constraint firstItem="qsg-Pz-CPx" firstAttribute="leading" secondItem="Mf1-qM-eOo" secondAttribute="leading" constant="-30" id="vVi-6N-Qux"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
+                                            <constraint firstItem="Mf1-qM-eOo" firstAttribute="leading" secondItem="9sr-8X-2eF" secondAttribute="leading" id="0DI-7D-oCt"/>
                                             <constraint firstItem="95N-hk-m3T" firstAttribute="top" secondItem="9sr-8X-2eF" secondAttribute="top" id="3E6-vL-ADv"/>
+                                            <constraint firstItem="Mf1-qM-eOo" firstAttribute="top" secondItem="9sr-8X-2eF" secondAttribute="top" id="5FE-xO-3rz"/>
+                                            <constraint firstAttribute="trailing" secondItem="Mf1-qM-eOo" secondAttribute="trailing" id="JQp-qQ-Ycz"/>
                                             <constraint firstAttribute="width" secondItem="9sr-8X-2eF" secondAttribute="height" multiplier="16:9" id="LLC-PA-Ekl"/>
                                             <constraint firstAttribute="trailing" secondItem="rOT-95-kGQ" secondAttribute="trailing" id="Msk-BN-knj"/>
                                             <constraint firstAttribute="trailing" secondItem="95N-hk-m3T" secondAttribute="trailing" id="OuY-eK-LTq"/>
@@ -70,6 +136,7 @@
                                             <constraint firstAttribute="bottom" secondItem="rOT-95-kGQ" secondAttribute="bottom" id="dWg-qY-nTl"/>
                                             <constraint firstItem="rOT-95-kGQ" firstAttribute="top" secondItem="9sr-8X-2eF" secondAttribute="top" id="eQz-Zl-eik"/>
                                             <constraint firstItem="95N-hk-m3T" firstAttribute="leading" secondItem="9sr-8X-2eF" secondAttribute="leading" id="eV2-3b-N7b"/>
+                                            <constraint firstAttribute="bottom" secondItem="Mf1-qM-eOo" secondAttribute="bottom" id="sJc-x1-N6D"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="constraints">
@@ -285,6 +352,7 @@
                         <outlet property="graphLayerContainer" destination="95N-hk-m3T" id="LCi-lv-uvI"/>
                         <outlet property="loadingAnimationView" destination="rOT-95-kGQ" id="cdc-cC-DiH"/>
                         <outlet property="menuButton" destination="k2Y-dm-3tk" id="Mdl-ih-WZN"/>
+                        <outlet property="noDataViewContainer" destination="Mf1-qM-eOo" id="azw-1k-NwS"/>
                         <outlet property="tableView" destination="TkA-IK-Jxk" id="qBO-FW-Unw"/>
                         <segue destination="jDw-Oo-Xxj" kind="show" identifier="segueToEventDetail" id="RZP-kk-4AG"/>
                         <segue destination="2sW-sN-gyd" kind="show" identifier="segueToSwitchProfile" id="Fhj-f1-jcN"/>
@@ -796,9 +864,11 @@
     <resources>
         <image name="add-button" width="23" height="23"/>
         <image name="backArrow" width="10" height="20"/>
+        <image name="cloud" width="130" height="78"/>
         <image name="menu-button" width="22" height="15"/>
         <image name="profileBlack" width="24" height="23"/>
         <image name="separatorLine" width="100" height="2"/>
+        <image name="smallCloud" width="62" height="37"/>
         <image name="xIconSmall" width="15" height="15"/>
     </resources>
 </document>

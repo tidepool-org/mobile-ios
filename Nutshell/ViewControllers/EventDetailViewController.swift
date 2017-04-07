@@ -42,7 +42,9 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         // only notes by current logged in user are editable (perhaps just hide edit button?)
         editBarButtonItem.isEnabled = note.userid == note.groupid
 
-        NotificationCenter.default.addObserver(self, selector: #selector(EventDetailViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(EventDetailViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventDetailViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
         configureForReachability()
     }
 

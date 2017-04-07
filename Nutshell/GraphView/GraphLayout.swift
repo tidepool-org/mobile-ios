@@ -33,6 +33,7 @@ class GraphLayout {
     ///
     var graphCellsInCollection: Int
     var graphCellFocusInCollection: Int
+    var showDataLayers = true // allow suppression of data layers to just show axes and background...
 
     /// Use this init to create a graph that starts at a point in time.
     init(viewSize: CGSize, startTime: Date, timeIntervalPerTile: TimeInterval, numberOfTiles: Int, tilesInView: CGFloat, tzOffsetSecs: Int) {

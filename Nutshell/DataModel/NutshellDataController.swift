@@ -77,10 +77,7 @@ class NutDataController: NSObject
             return _currentUserId
         }
     }
-    
-    /// Temp shared global for all notes for current profile (until we move this into local database.
-    var currentNotes: [BlipNote]?
-    
+        
     /// Used mainly for display, this is the login name for the currently logged in user, or nil.
     ///
     /// Read only - returns nil string if no user set.

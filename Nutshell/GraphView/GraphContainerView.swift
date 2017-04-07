@@ -55,22 +55,6 @@ class GraphContainerView: UIView {
         }
     }
     
-    // work-in-progress; should really be named refreshLayout, to call after layout changes...
-    func clearGraphData() {
-        layout.configureGraph()
-        // first put in the fixed background
-        if let fixedBackgroundImageView = fixedBackgroundImageView {
-            fixedBackgroundImageView.removeFromSuperview()
-        }
-        // Get time-invariant background view generation
-        let graphUtils = layout.graphUtilsForGraphView()
-        fixedBackgroundImageView = UIImageView(image: graphUtils.imageOfFixedGraphBackground())
-        self.addSubview(fixedBackgroundImageView!)
-        // reconfigure background to eliminate x-axis lines
-        self.configureGraph()
-        loadGraphData()
-    }
-    
     func zoomInOut(_ zoomIn: Bool) {
         var size = self.cellSize
         
@@ -223,22 +207,25 @@ class GraphContainerView: UIView {
         return graphUtils.imageOfFixedGraphBackground()
     }
     
-
+    func configureBackground() {
+        // first put in the fixed background
+        if let fixedBackgroundImageView = fixedBackgroundImageView {
+            fixedBackgroundImageView.removeFromSuperview()
+        }
+        
+        // Get time-invariant background view generation
+        let graphUtils = layout.graphUtilsForGraphView()
+        fixedBackgroundImageView = UIImageView(image: graphUtils.imageOfFixedGraphBackground())
+        
+        self.insertSubview(fixedBackgroundImageView!, at: 0)
+    }
+    
     fileprivate let collectCellReuseID = "graphViewCell"
     func configureGraph(_ edgeOffset: CGFloat = 0.0) {
         if graphCollectionView == nil {
             layout.configureGraph()
-
-            // first put in the fixed background
-            if let fixedBackgroundImageView = fixedBackgroundImageView {
-                fixedBackgroundImageView.removeFromSuperview()
-            }
             
-            // Get time-invariant background view generation
-            let graphUtils = layout.graphUtilsForGraphView()
-            fixedBackgroundImageView = UIImageView(image: graphUtils.imageOfFixedGraphBackground())
-            
-            self.addSubview(fixedBackgroundImageView!)
+            configureBackground()
             
             let collectLayout = UICollectionViewFlowLayout()
             self.cellSize = layout.cellViewSize

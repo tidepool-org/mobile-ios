@@ -20,7 +20,9 @@ class TidepoolGraphLayout: GraphLayout {
     
     var mainEventTime: Date
     var dataDetected = false
-    var clearGraph = false
+    var displayGridLines = true
+    /// Notes to display.
+    var notesToDisplay: [BlipNote] = []
 
     init (viewSize: CGSize, mainEventTime: Date, tzOffsetSecs: Int) {
 
@@ -41,10 +43,6 @@ class TidepoolGraphLayout: GraphLayout {
     // create and return an array of GraphDataLayer objects, w/o data, ordered in view layer from back to front (i.e., last item in array will be drawn last)
     override func graphLayers(_ viewSize: CGSize, timeIntervalForView: TimeInterval, startTime: Date, tileIndex: Int) -> [GraphDataLayer] {
 
-        if clearGraph {
-            return []
-        }
-        
         let workoutLayer = WorkoutGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
         
 //        let mealLayer = MealGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
@@ -151,7 +149,7 @@ class TidepoolGraphLayout: GraphLayout {
         self.yAxisLineRightMargin = 10.0
         self.yAxisLineColor = UIColor(hex: 0xe2e4e7)
         self.backgroundColor = Styles.whiteColor
-        self.yAxisValuesWithLines = clearGraph ? [] : [80, 180]
+        self.yAxisValuesWithLines = displayGridLines ? [80, 180] : []
         self.yAxisValuesWithLabels = [40, 80, 180, 300]
     
         self.axesLabelTextColor = Styles.alt2DarkGreyColor

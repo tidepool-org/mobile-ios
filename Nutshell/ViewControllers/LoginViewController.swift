@@ -19,30 +19,6 @@ import SwiftyJSON
 import CocoaLumberjack
 import MessageUI
 import HealthKit
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
-
 
 /// Presents the UI to capture email and password for login and calls APIConnector to login. Show errors to the user. Backdoor UI for development setting of the service.
 class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDelegate {
@@ -58,7 +34,6 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var loginIndicator: UIActivityIndicatorView!
     @IBOutlet weak var errorFeedbackLabel: NutshellUILabel!
-    @IBOutlet weak var forgotPasswordLabel: NutshellUILabel!
     
     @IBOutlet weak var versionLabel: UILabel!
     
@@ -458,7 +433,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: nil, limit: HKObjectQueryNoLimit, sortDescriptors: nil) {
             (query, samples, error) -> Void in
             
-            if error == nil && samples?.count > 0 {
+            if error == nil && samples != nil && samples!.count > 0 {
                 // Write header row
                 let rows = NSMutableString()
                 rows.append("sequence,sourceBundleId,UUID,date,value,units\n")
