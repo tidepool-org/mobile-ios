@@ -263,7 +263,7 @@ open class GraphingUtils {
             sizeNeeded = CGSize(width: ceil(sizeNeeded.width), height: ceil(sizeNeeded.height))
             
             let originX = leftAlignLabel ? topCenter.x + 4.0 : topCenter.x - sizeNeeded.width/2.0
-            let labelRect = CGRect(x: originX, y: 6.0, width: sizeNeeded.width, height: sizeNeeded.height)
+            let labelRect = CGRect(x: originX, y: topCenter.y, width: sizeNeeded.width, height: sizeNeeded.height)
             // skip label draw if we would overwrite previous label
             if (!lastLabelDrawn.intersects(labelRect)) {
                 labelAttrStr.draw(in: labelRect)
@@ -332,9 +332,9 @@ open class GraphingUtils {
                 
                 // draw hour label
                 if midnight {
-                    drawHourLabel(timeStr, topCenter: CGPoint(x: viewXOffset, y: 6.0), lightenLastLetter: false, leftAlignLabel: true)
+                    drawHourLabel(timeStr, topCenter: CGPoint(x: viewXOffset, y: 0.0), lightenLastLetter: false, leftAlignLabel: true)
                 } else {
-                    drawHourLabel(timeStr, topCenter: CGPoint(x: viewXOffset, y: 6.0), lightenLastLetter: true)
+                    drawHourLabel(timeStr, topCenter: CGPoint(x: viewXOffset, y: 0.0), lightenLastLetter: true)
                 }
                 
                 curDate = curDate.addingTimeInterval(tickTiming)

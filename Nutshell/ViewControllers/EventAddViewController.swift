@@ -88,20 +88,12 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
         NotificationCenter.default.removeObserver(self)
      }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // Set status bar to light color for dark navigationBar
-        //UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         messageBox.becomeFirstResponder()
     }
     
-
     // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
     private var subviewsInitialized = false
     override func viewDidLayoutSubviews() {
@@ -121,7 +113,7 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
         border.frame = CGRect(x: 0, y: navBarLayer.bounds.height, width: navBarLayer.bounds.width, height: 1)
         navBarLayer.addSublayer(border)
                 
-        configureTitleView(group.fullName ?? "")
+        configureTitleView()
         
         // configure date label
         let dateFormatter = DateFormatter()
@@ -223,9 +215,9 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
     
         
     // Configure title of navigationBar to given string
-    func configureTitleView(_ text: String) {
+    func configureTitleView() {
         if let navItem = self.navBar.topItem {
-            navItem.title = group.fullName ?? ""
+            navItem.title = user.fullName ?? ""
         }
     }
     

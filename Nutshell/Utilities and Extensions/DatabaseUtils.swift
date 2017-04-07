@@ -77,6 +77,13 @@ class DatabaseUtils {
                         let (adds, deletes) = DatabaseUtils.updateEventsForTimeRange(startTime, endTime: endTime, moc: NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!)
                         itemsAdded += adds
                         itemsDeleted += deletes
+                        // Call optional completion routine with estimate of items added (net of adds less deletes)
+                        if itemsAdded != 0 || itemsDeleted != 0 {
+                            NSLog("final items added: \(itemsAdded), deleted: \(itemsDeleted), net: \(itemsAdded-itemsDeleted)")
+                        }
+                        if let completion = completion {
+                            completion(itemsAdded-itemsDeleted)
+                        }
                     } else {
                         NSLog("Failed to fetch events in range \(startTime) to \(endTime)")
                     }
@@ -84,12 +91,6 @@ class DatabaseUtils {
             } else {
                 NSLog("skipping: serviceAvailable is false")
             }
-            
-        }
-        // Call optional completion routine with estimate of items added (net of adds less deletes)
-        NSLog("items added: \(itemsAdded), deleted: \(itemsDeleted), net: \(itemsAdded-itemsDeleted)")
-        if let completion = completion {
-            completion(itemsAdded-itemsDeleted)
         }
     }
     

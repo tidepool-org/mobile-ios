@@ -133,7 +133,7 @@ class NutDataController: NSObject
 
     /// Call this at login/logout, token refresh(?), and upon enabling or disabling the HealthKit interface.
     func configureHealthKitInterface() {
-        appHealthKitConfiguration.configureHealthKitInterface(currentViewedUser!.userid, isDSAUser: isDSAUser)
+        appHealthKitConfiguration.configureHealthKitInterface(currentUserId, isDSAUser: isDSAUser)
     }
     
     /// Call this after logging into a service account to set up the current user and configure the data model for the user.
@@ -184,7 +184,7 @@ class NutDataController: NSObject
     var isDSAUser: Bool? {
         get {
             var result: Bool?
-            if let isDSA = currentViewedUser?.isDSAUser {
+            if let isDSA = currentLoggedInUser?.isDSAUser {
                 result = Bool(isDSA)
             }
             return result

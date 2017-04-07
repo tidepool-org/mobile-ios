@@ -36,6 +36,17 @@ class TidepoolGraphView: GraphContainerView {
         super.loadGraphData()
     }
     
+    override func clearGraphData() {
+        // reconfigure to load just background, y-axis labels, and x-axis header
+        tidepoolLayout.clearGraph = true
+        // let super do the work based on new layout config
+        super.clearGraphData()
+    }
+    
+    func graphCleared() -> Bool {
+        return tidepoolLayout.clearGraph
+    }
+    
     func dataFound() -> Bool {
         return tidepoolLayout.dataDetected
     }

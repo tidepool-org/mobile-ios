@@ -20,12 +20,14 @@ class TidepoolGraphLayout: GraphLayout {
     
     var mainEventTime: Date
     var dataDetected = false
+    var clearGraph = false
 
     init (viewSize: CGSize, mainEventTime: Date, tzOffsetSecs: Int) {
 
         self.mainEventTime = mainEventTime
         let startPixelsPerHour = 80
-        let numberOfTiles = 7
+        // TODO: figure number of tiles based on view size, in order to get 24 hours. 3 tiles gets about 28 hours on a portrait iPad (768/80 = 9.6 hours x 3 = 28.8 hours), where screen size is one tile wide - see tilesInView below.
+        let numberOfTiles = 3
         let cellTI = TimeInterval(viewSize.width * 3600.0/CGFloat(startPixelsPerHour))
         let graphTI = cellTI * TimeInterval(numberOfTiles)
         let startTime = mainEventTime.addingTimeInterval(-graphTI/2.0)
@@ -39,6 +41,10 @@ class TidepoolGraphLayout: GraphLayout {
     // create and return an array of GraphDataLayer objects, w/o data, ordered in view layer from back to front (i.e., last item in array will be drawn last)
     override func graphLayers(_ viewSize: CGSize, timeIntervalForView: TimeInterval, startTime: Date, tileIndex: Int) -> [GraphDataLayer] {
 
+        if clearGraph {
+            return []
+        }
+        
         let workoutLayer = WorkoutGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
         
 //        let mealLayer = MealGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
@@ -139,13 +145,13 @@ class TidepoolGraphLayout: GraphLayout {
         
         super.configureGraph()
 
-        self.headerHeight = 32.0
+        self.headerHeight = 24.0
         self.footerHeight = 20.0
         self.yAxisLineLeftMargin = 26.0
         self.yAxisLineRightMargin = 10.0
         self.yAxisLineColor = UIColor(hex: 0xe2e4e7)
         self.backgroundColor = Styles.whiteColor
-        self.yAxisValuesWithLines = [80, 180]
+        self.yAxisValuesWithLines = clearGraph ? [] : [80, 180]
         self.yAxisValuesWithLabels = [40, 80, 180, 300]
     
         self.axesLabelTextColor = Styles.alt2DarkGreyColor

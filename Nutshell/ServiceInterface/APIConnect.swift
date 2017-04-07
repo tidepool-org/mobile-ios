@@ -360,6 +360,7 @@ class APIConnector {
         let userId = NutDataController.sharedInstance.currentViewedUser!.userid
         let endpoint = "data/" + userId
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        NSLog("getReadOnlyUserData request start")
         // TODO: If there is no data returned, I get a failure case with status code 200, and error FAILURE: Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.} ] Maybe an Alamofire issue?
         var parameters: Dictionary = ["type": objectTypes]
         if let startDate = startDate {
@@ -372,6 +373,7 @@ class APIConnector {
         }
         sendRequest(.get, endpoint: endpoint, parameters: parameters as [String : AnyObject]?).responseJSON { response in
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            NSLog("getReadOnlyUserData request complete")
             if (response.result.isSuccess) {
                 let json = JSON(response.result.value!)
                 var validResult = true

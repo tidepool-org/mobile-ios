@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="MlM-Oh-SBV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="MlM-Oh-SBV">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -33,37 +34,51 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9sr-8X-2eF" userLabel="dataVizView">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="275"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="95N-hk-m3T" userLabel="graphLayerContainer">
-                                                <rect key="frame" x="0.0" y="0.0" width="320" height="274"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </view>
-                                            <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5qD-K5-Nrh" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="274" width="320" height="1"/>
-                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rOT-95-kGQ" userLabel="loadingAnimationView">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
+                                                <subviews>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4iG-58-JPe" userLabel="animatedImageView" customClass="FLAnimatedImageView">
+                                                        <rect key="frame" x="37.5" y="13.5" width="245" height="153"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="4iG-58-JPe" secondAttribute="height" multiplier="1.6:1" id="r7L-Gj-aQU"/>
+                                                            <constraint firstAttribute="width" constant="245" id="rEI-1k-AQe"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="1" id="jra-DH-UJM"/>
+                                                    <constraint firstItem="4iG-58-JPe" firstAttribute="centerY" secondItem="rOT-95-kGQ" secondAttribute="centerY" id="bNy-3l-uWy"/>
+                                                    <constraint firstItem="4iG-58-JPe" firstAttribute="centerX" secondItem="rOT-95-kGQ" secondAttribute="centerX" id="kUB-T0-ATW"/>
                                                 </constraints>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="graphSeparator"/>
-                                                </userDefinedRuntimeAttributes>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="95N-hk-m3T" firstAttribute="top" secondItem="9sr-8X-2eF" secondAttribute="top" id="3E6-vL-ADv"/>
-                                            <constraint firstItem="5qD-K5-Nrh" firstAttribute="top" secondItem="95N-hk-m3T" secondAttribute="bottom" id="4ZL-oR-2Te"/>
-                                            <constraint firstAttribute="bottom" secondItem="5qD-K5-Nrh" secondAttribute="bottom" id="DAs-CB-W7h"/>
-                                            <constraint firstItem="5qD-K5-Nrh" firstAttribute="leading" secondItem="9sr-8X-2eF" secondAttribute="leading" id="OCW-Ya-T9t"/>
+                                            <constraint firstAttribute="width" secondItem="9sr-8X-2eF" secondAttribute="height" multiplier="16:9" id="LLC-PA-Ekl"/>
+                                            <constraint firstAttribute="trailing" secondItem="rOT-95-kGQ" secondAttribute="trailing" id="Msk-BN-knj"/>
                                             <constraint firstAttribute="trailing" secondItem="95N-hk-m3T" secondAttribute="trailing" id="OuY-eK-LTq"/>
+                                            <constraint firstItem="rOT-95-kGQ" firstAttribute="leading" secondItem="9sr-8X-2eF" secondAttribute="leading" id="QbZ-Aa-N2u"/>
                                             <constraint firstAttribute="height" constant="275" id="XZF-yU-3qR"/>
+                                            <constraint firstAttribute="bottom" secondItem="95N-hk-m3T" secondAttribute="bottom" id="dPi-Zg-3AI"/>
+                                            <constraint firstAttribute="bottom" secondItem="rOT-95-kGQ" secondAttribute="bottom" id="dWg-qY-nTl"/>
+                                            <constraint firstItem="rOT-95-kGQ" firstAttribute="top" secondItem="9sr-8X-2eF" secondAttribute="top" id="eQz-Zl-eik"/>
                                             <constraint firstItem="95N-hk-m3T" firstAttribute="leading" secondItem="9sr-8X-2eF" secondAttribute="leading" id="eV2-3b-N7b"/>
-                                            <constraint firstAttribute="trailing" secondItem="5qD-K5-Nrh" secondAttribute="trailing" id="u04-75-OZh"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="XZF-yU-3qR"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="102" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TkA-IK-Jxk" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="275" width="320" height="229"/>
+                                        <rect key="frame" x="0.0" y="180" width="320" height="324"/>
                                         <color key="backgroundColor" red="0.94901960784313721" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="noteListCell" rowHeight="70" id="v6j-vL-aQN" userLabel="noteListTableCell" customClass="NoteListTableViewCell" customModule="Nutshell" customModuleProvider="target">
@@ -263,10 +278,12 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="animatedLoadingImage" destination="4iG-58-JPe" id="cdA-i1-c28"/>
                         <outlet property="coverView" destination="p1Z-R3-s10" id="x9s-ca-Xdd"/>
                         <outlet property="dataVizView" destination="9sr-8X-2eF" id="qmQ-eH-sTu"/>
                         <outlet property="eventListSceneContainer" destination="Yu7-Gk-FTH" id="8kb-NH-Nyl"/>
                         <outlet property="graphLayerContainer" destination="95N-hk-m3T" id="LCi-lv-uvI"/>
+                        <outlet property="loadingAnimationView" destination="rOT-95-kGQ" id="cdc-cC-DiH"/>
                         <outlet property="menuButton" destination="k2Y-dm-3tk" id="Mdl-ih-WZN"/>
                         <outlet property="tableView" destination="TkA-IK-Jxk" id="qBO-FW-Unw"/>
                         <segue destination="jDw-Oo-Xxj" kind="show" identifier="segueToEventDetail" id="RZP-kk-4AG"/>
@@ -410,15 +427,48 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="profileTableCell" id="vDp-ta-v7W" userLabel="profileTableCell" customClass="ProfileListTableViewCell" customModule="Nutshell" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="profileTableCell" id="DO6-Co-7wf" userLabel="profileTableCell" customClass="ProfileListTableViewCell" customModule="Nutshell" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="DO6-Co-7wf" id="Xya-Pz-I11">
+                                    <rect key="frame" x="0.0" y="0.0" width="281" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Tacos" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UxJ-xf-wqd" userLabel="nameLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                            <rect key="frame" x="24" y="11.5" width="39" height="20.5"/>
+                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
+                                            <color key="textColor" red="0.15686274510000001" green="0.098039215690000001" blue="0.27450980390000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="profileCellNameText"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="UxJ-xf-wqd" firstAttribute="leading" secondItem="Xya-Pz-I11" secondAttribute="leading" constant="24" id="50H-y9-Xyd"/>
+                                        <constraint firstItem="UxJ-xf-wqd" firstAttribute="centerY" secondItem="Xya-Pz-I11" secondAttribute="centerY" id="wK6-jx-v4J"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="nameLabel" destination="UxJ-xf-wqd" id="uNX-oa-30b"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="profileTableCellLoggedInUser" id="vDp-ta-v7W" userLabel="mainUserProfileTableCell" customClass="ProfileListLoggedInUserTableViewCell" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="72" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vDp-ta-v7W" id="qXI-U4-jGq">
                                     <rect key="frame" x="0.0" y="0.0" width="281" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profileBlack" translatesAutoresizingMaskIntoConstraints="NO" id="eTt-SN-RW3">
+                                            <rect key="frame" x="20" y="9" width="24" height="24"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="24" id="2EY-k8-lrP"/>
+                                                <constraint firstAttribute="width" constant="24" id="ltP-O9-dxi"/>
+                                            </constraints>
+                                        </imageView>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Tacos" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JsW-AH-t2A" userLabel="nameLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                            <rect key="frame" x="24" y="12" width="39" height="20.5"/>
+                                            <rect key="frame" x="54" y="11.5" width="39" height="20.5"/>
                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
                                             <color key="textColor" red="0.15686274509803921" green="0.098039215686274508" blue="0.27450980392156865" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -428,8 +478,10 @@
                                         </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="eTt-SN-RW3" firstAttribute="trailing" secondItem="JsW-AH-t2A" secondAttribute="leading" constant="-10" id="Cqa-fS-RYf"/>
                                         <constraint firstItem="JsW-AH-t2A" firstAttribute="centerY" secondItem="qXI-U4-jGq" secondAttribute="centerY" id="YIB-oj-GOI"/>
-                                        <constraint firstItem="JsW-AH-t2A" firstAttribute="leading" secondItem="qXI-U4-jGq" secondAttribute="leading" constant="24" id="oeF-Zx-SZg"/>
+                                        <constraint firstItem="eTt-SN-RW3" firstAttribute="centerY" secondItem="qXI-U4-jGq" secondAttribute="centerY" id="moo-dB-lGW"/>
+                                        <constraint firstItem="eTt-SN-RW3" firstAttribute="leading" secondItem="qXI-U4-jGq" secondAttribute="leadingMargin" constant="12" id="pVE-6f-eiP"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
@@ -581,37 +633,30 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S2q-3Z-sOG" userLabel="dataVizView">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="275"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="geb-dR-DzH" userLabel="graphLayerContainer">
-                                                <rect key="frame" x="0.0" y="0.0" width="320" height="274"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="240"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            </view>
-                                            <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xpk-kf-LTi" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="274" width="320" height="1"/>
-                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="1" id="f1D-Fd-1st"/>
-                                                </constraints>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="graphSeparator"/>
-                                                </userDefinedRuntimeAttributes>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="Xpk-kf-LTi" firstAttribute="top" secondItem="geb-dR-DzH" secondAttribute="bottom" id="8ap-Gf-GL8"/>
                                             <constraint firstAttribute="height" constant="275" id="Lyh-Hx-rIC"/>
-                                            <constraint firstAttribute="trailing" secondItem="Xpk-kf-LTi" secondAttribute="trailing" id="SDb-eT-09C"/>
+                                            <constraint firstAttribute="width" secondItem="S2q-3Z-sOG" secondAttribute="height" multiplier="4:3" id="MAO-aG-aS5"/>
                                             <constraint firstItem="geb-dR-DzH" firstAttribute="top" secondItem="S2q-3Z-sOG" secondAttribute="top" id="ScO-RC-TcQ"/>
-                                            <constraint firstAttribute="bottom" secondItem="Xpk-kf-LTi" secondAttribute="bottom" id="bbA-y4-khT"/>
                                             <constraint firstItem="geb-dR-DzH" firstAttribute="leading" secondItem="S2q-3Z-sOG" secondAttribute="leading" id="bko-IQ-rXN"/>
-                                            <constraint firstItem="Xpk-kf-LTi" firstAttribute="leading" secondItem="S2q-3Z-sOG" secondAttribute="leading" id="wFP-AA-k3k"/>
+                                            <constraint firstAttribute="bottom" secondItem="geb-dR-DzH" secondAttribute="bottom" id="wbH-0v-ZwN"/>
                                             <constraint firstAttribute="trailing" secondItem="geb-dR-DzH" secondAttribute="trailing" id="zSx-3c-pXf"/>
                                         </constraints>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="Lyh-Hx-rIC"/>
+                                            </mask>
+                                        </variation>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="102" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="iHb-Z2-3F1" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="275" width="320" height="229"/>
+                                        <rect key="frame" x="0.0" y="240" width="320" height="264"/>
                                         <color key="backgroundColor" red="0.94901960780000005" green="0.95294117649999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="noteDetailCell" rowHeight="100" id="rTz-Ev-xXM" userLabel="noteDetailTableCell" customClass="NoteDetailTableViewCell" customModule="Nutshell" customModuleProvider="target">
@@ -752,6 +797,7 @@
         <image name="add-button" width="23" height="23"/>
         <image name="backArrow" width="10" height="20"/>
         <image name="menu-button" width="22" height="15"/>
+        <image name="profileBlack" width="24" height="23"/>
         <image name="separatorLine" width="100" height="2"/>
         <image name="xIconSmall" width="15" height="15"/>
     </resources>

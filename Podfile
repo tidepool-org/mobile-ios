@@ -10,6 +10,7 @@ def available_pods
   pod 'CocoaLumberjack/Swift', '~> 3.0.0'
   pod 'CryptoSwift', '~> 0.6.7'
   pod 'twitter-text', '~> 1.13.4'
+  pod 'FLAnimatedImage', '~> 1.0'
  end
 
 target 'Nutshell' do

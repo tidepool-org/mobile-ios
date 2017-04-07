@@ -227,6 +227,9 @@
 		48E4A4471BF015CE001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4451BF015CE001A7B35 /* Reachability.swift */; };
 		48EC32301BA7BDD700A75103 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
 		48EC32321BA7BDDE00A75103 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
+		48ECF6CA1E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ECF6C91E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift */; };
+		48ECF6CC1E96FDD3007EE5D3 /* celebration-animated-dots.gif in Resources */ = {isa = PBXBuildFile; fileRef = 48ECF6CB1E96FDD3007EE5D3 /* celebration-animated-dots.gif */; };
+		48ECF6CE1E96FE18007EE5D3 /* jump-jump-jump-jump.gif in Resources */ = {isa = PBXBuildFile; fileRef = 48ECF6CD1E96FE18007EE5D3 /* jump-jump-jump-jump.gif */; };
 		48ED0D341BADAF8B009D0D6F /* GraphUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */; };
 		48ED0D3C1BAF22CC009D0D6F /* addAnimation-01.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D361BAF22CC009D0D6F /* addAnimation-01.png */; };
 		48ED0D3D1BAF22CC009D0D6F /* addAnimation-02.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D371BAF22CC009D0D6F /* addAnimation-02.png */; };
@@ -406,6 +409,9 @@
 		48DB6CFE1E8965DB00C5F221 /* EventDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventDetailViewController.swift; path = ViewControllers/EventDetailViewController.swift; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
 		48E4A4451BF015CE001A7B35 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = ServiceInterface/Reachability.swift; sourceTree = "<group>"; };
+		48ECF6C91E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConnectToHealthCelebrationViewController.swift; path = ViewControllers/ConnectToHealthCelebrationViewController.swift; sourceTree = "<group>"; };
+		48ECF6CB1E96FDD3007EE5D3 /* celebration-animated-dots.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = "celebration-animated-dots.gif"; path = "Images/celebration-animated-dots.gif"; sourceTree = "<group>"; };
+		48ECF6CD1E96FE18007EE5D3 /* jump-jump-jump-jump.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = "jump-jump-jump-jump.gif"; path = "Images/jump-jump-jump-jump.gif"; sourceTree = "<group>"; };
 		48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphUIView.swift; path = GraphView/GraphUIView.swift; sourceTree = "<group>"; };
 		48ED0D361BAF22CC009D0D6F /* addAnimation-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-01.png"; path = "Images/addAnimation/addAnimation-01.png"; sourceTree = "<group>"; };
 		48ED0D371BAF22CC009D0D6F /* addAnimation-02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-02.png"; path = "Images/addAnimation/addAnimation-02.png"; sourceTree = "<group>"; };
@@ -551,7 +557,6 @@
 			isa = PBXGroup;
 			children = (
 				4859FCBC1B9A4DE4000C1269 /* EventView.storyboard */,
-				484365D71CA1118A0046A2C5 /* Menu.storyboard */,
 				486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */,
 				48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */,
 				48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */,
@@ -570,6 +575,8 @@
 		485922A51B9C982D0056E605 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				48ECF6CD1E96FE18007EE5D3 /* jump-jump-jump-jump.gif */,
+				48ECF6CB1E96FDD3007EE5D3 /* celebration-animated-dots.gif */,
 				48ED0D351BAF221C009D0D6F /* AddAnimation */,
 				48B127A41BC444FE00061483 /* applejuicedemopic.png */,
 				48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */,
@@ -582,6 +589,8 @@
 		485922BB1B9CA0890056E605 /* MenuViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				48ECF6C91E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift */,
+				484365D71CA1118A0046A2C5 /* Menu.storyboard */,
 				4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */,
 			);
 			name = MenuViewControllers;
@@ -754,10 +763,10 @@
 		48C4915B1C39DBF600F34630 /* Graphing Package */ = {
 			isa = PBXGroup;
 			children = (
+				4837C1651C11F9FC00D29B64 /* GraphContainerView.swift */,
+				48C491541C38798E00F34630 /* GraphLayout.swift */,
 				48BA05AF1E53911500212486 /* GraphCursorLayer.swift */,
 				48A839021C596A1D00FAFE1B /* GraphCollectionCell.swift */,
-				48C491541C38798E00F34630 /* GraphLayout.swift */,
-				4837C1651C11F9FC00D29B64 /* GraphContainerView.swift */,
 				48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */,
 				48C491501C38738A00F34630 /* GraphDataLayer.swift */,
 				4820ED691C21E8E3008C754A /* GraphDataTypes.swift */,
@@ -933,8 +942,10 @@
 				48ED0D3D1BAF22CC009D0D6F /* addAnimation-02.png in Resources */,
 				4859FCC31B9A4DE4000C1269 /* Assets.xcassets in Resources */,
 				48ED0D3F1BAF22CC009D0D6F /* addAnimation-04.png in Resources */,
+				48ECF6CE1E96FE18007EE5D3 /* jump-jump-jump-jump.gif in Resources */,
 				4859FCBE1B9A4DE4000C1269 /* EventView.storyboard in Resources */,
 				48EDC2C91BD99141003049D9 /* OpenSans-Light.ttf in Resources */,
+				48ECF6CC1E96FDD3007EE5D3 /* celebration-animated-dots.gif in Resources */,
 				48B127A81BC444FE00061483 /* applejuicedemopic.png in Resources */,
 				48D056921BDFDD16009D1591 /* Localizable.strings in Resources */,
 			);
@@ -1143,6 +1154,7 @@
 				486F5E2B1BA0DC6700BA2A57 /* NutEvent.swift in Sources */,
 				0334CA161BA8DDFC00013096 /* Activity.swift in Sources */,
 				483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */,
+				48ECF6CA1E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift in Sources */,
 				4892996B1CB4297B001F24D6 /* NutshellHealthKitConfiguration.swift in Sources */,
 				4872118F1E8DC33200BAD5CE /* ProfileListTableViewCell.swift in Sources */,
 				0334CA1C1BA8DDFC00013096 /* Alarm.swift in Sources */,

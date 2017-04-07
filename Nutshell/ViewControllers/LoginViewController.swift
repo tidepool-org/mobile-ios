@@ -174,7 +174,10 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     }
 
     @IBAction func signUpButtonTapped(_ sender: Any) {
-        NSLog("TODO: sign up!")
+        NSLog("signUpButtonTapped!")
+        if let url = URL(string: "http://tidepool.org/signup") {
+            UIApplication.shared.openURL(url)
+        }
     }
     
     @IBAction func forgotPasswordTapped(_ sender: Any) {

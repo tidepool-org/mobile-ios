@@ -144,7 +144,7 @@ open class Styles: NSObject {
         static let mediumLargeBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 17.5)!
         static let navTitleFont: UIFont = UIFont(name: "OpenSans", size: 17.5)!
         
-        static let verySmallLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 12.0)!
+        static let verySmallLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 10.0)!
         static let mediumLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 17.0)!
         
         // Fonts for special graph view

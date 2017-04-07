@@ -16,6 +16,7 @@
 import UIKit
 import CoreData
 import CocoaLumberjack
+import FLAnimatedImage
 
 class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphContainerViewDelegate, NoteAPIWatcher, UIScrollViewDelegate {
 
@@ -37,7 +38,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     fileprivate var selectedIndexPath: IndexPath? = nil
     fileprivate var selectedNote: BlipNote?
     @IBOutlet weak var graphLayerContainer: UIView!
+    @IBOutlet weak var loadingAnimationView: UIView!
+    @IBOutlet weak var animatedLoadingImage: FLAnimatedImageView!
+    
     fileprivate var graphContainerView: TidepoolGraphView?
+    
     fileprivate var eventTime = Date()
     
     // refresh control...
@@ -91,6 +96,15 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         
         eventListSceneContainer.setNeedsLayout()
         eventListSceneContainer.layoutIfNeeded()
+
+        if let path = Bundle.main.path(forResource: "jump-jump-jump-jump", ofType: "gif") {
+            do {
+                let animatedImage = try FLAnimatedImage(animatedGIFData: Data(contentsOf: URL(fileURLWithPath: path)))
+                animatedLoadingImage.animatedImage = animatedImage
+            } catch {
+                DDLogError("Unable to load animated gifs!")
+            }
+        }
 
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSFontAttributeName: smallRegularFont, NSForegroundColorAttributeName: blackishColor])
         self.refreshControl.addTarget(self, action: #selector(EventListViewController.refresh), for: UIControlEvents.valueChanged)
@@ -612,11 +626,17 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     private func clearGraphAndUpdateDelayed() {
         NSLog("\(#function)")
         stopGraphUpdateTimer()
-        if (graphContainerView != nil) {
-            NSLog("Removing current graph view...")
-            graphContainerView?.removeFromSuperview();
-            graphContainerView = nil;
-        }
+//        if (graphContainerView != nil) {
+//            //NSLog("Removing current graph view...")
+//            //graphContainerView?.removeFromSuperview();
+//            //graphContainerView = nil;
+//        }
+        graphContainerView?.clearGraphData()
+        // while loading, and in between selections, put up loading view...
+        NSLog("showing activity indicator!")
+        loadingAnimationView.isHidden = false
+        animatedLoadingImage.startAnimating()
+
         startGraphUpdateTimer()
     }
     
@@ -684,6 +704,12 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             graphContainerView?.removeFromSuperview();
             graphContainerView = nil;
         }
+
+        // while loading, and in between selections, put up loading view...
+        NSLog("showing activity indicator!")
+        loadingAnimationView.isHidden = false
+        animatedLoadingImage.startAnimating()
+
         if let note = self.selectedNote {
             NSLog("Configuring graph for note id: \(note.id)")
 
@@ -692,7 +718,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: tzOffset)
             if let graphContainerView = graphContainerView {
                 graphContainerView.configureGraph(edgeOffset)
-                graphLayerContainer.addSubview(graphContainerView)
+                graphLayerContainer.insertSubview(graphContainerView, at: 0)
                 graphContainerView.loadGraphData()
             }
         }
@@ -705,6 +731,14 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     func containerCellUpdated() {
         let graphHasData = graphContainerView!.dataFound()
         NSLog("\(#function) - graphHasData: \(graphHasData)")
+
+        // stop the loading view unless we just cleared the graph...
+        if  !graphContainerView!.graphCleared() {
+            NSLog("hiding activity indicator!")
+            loadingAnimationView.isHidden = true
+            animatedLoadingImage.stopAnimating()            
+        }
+
         if !graphHasData {
             //showHideDataVizView(show: false)
         } else {

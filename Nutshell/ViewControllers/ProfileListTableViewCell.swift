@@ -45,3 +45,7 @@ class ProfileListTableViewCell: UITableViewCell {
         nameLabel.isHighlighted = false
     }
 }
+
+class ProfileListLoggedInUserTableViewCell: ProfileListTableViewCell {
+    
+}

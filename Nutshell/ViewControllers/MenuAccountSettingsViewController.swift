@@ -168,7 +168,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         if !AppDelegate.healthKitUIEnabled {
             hideHealthKitUI = true
         }
-        // The isDSAUser variable only becomes valid after user profile fetch, so if it is not set, assume true. Otherwise use it as main control of whether we show the HealthKit UI.
+        // isDSAUser is used as main control of whether we show the HealthKit UI.
         if let isDSAUser = NutDataController.sharedInstance.isDSAUser {
             if !isDSAUser {
                 hideHealthKitUI = true

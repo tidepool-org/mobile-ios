@@ -142,6 +142,7 @@ class HealthKitDataUploader {
     
     var uploadHandler: ((_ postBody: Data, _ completion: @escaping (_ error: NSError?, _ duplicateSampleCount: Int) -> (Void)) -> (Void)) = {(postBody, completion) in }
 
+    // Unused...
     func authorizeAndStartUploading(currentUserId: String)
     {
         DDLogVerbose("trace")
