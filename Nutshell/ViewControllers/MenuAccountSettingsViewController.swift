@@ -78,6 +78,11 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
         usernameLabel.text = NutDataController.sharedInstance.userFullName
         configureHKInterface()
+
+        // configure custom buttons
+        sidebarView.setNeedsLayout()
+        sidebarView.layoutIfNeeded()
+        sidebarView.checkAdjustSubviewSizing()
     }
     
     //

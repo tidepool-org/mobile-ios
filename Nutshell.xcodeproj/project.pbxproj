@@ -95,6 +95,8 @@
 		0334CAA91BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */; };
 		0334CAAB1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
 		0334CAAC1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
+		4806E33A1E995A350024A497 /* TPMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4806E3391E995A350024A497 /* TPMenuButton.swift */; };
+		4806E33C1E99621D0024A497 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4806E33B1E99621D0024A497 /* UIViewExtension.swift */; };
 		48103E961C1DE4CC0055C27A /* ENSideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E941C1DE4CC0055C27A /* ENSideMenu.swift */; };
 		48103E971C1DE4CC0055C27A /* ENSideMenuNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E951C1DE4CC0055C27A /* ENSideMenuNavigationController.swift */; };
 		48103E991C1DE7BC0055C27A /* EventViewNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E981C1DE7BC0055C27A /* EventViewNavController.swift */; };
@@ -301,6 +303,8 @@
 		0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bolus+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		0334CAA71BA8E22E00013096 /* Bolus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bolus.swift; sourceTree = "<group>"; };
 		063572F169F60C9A48179678 /* Pods-Nutshell.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.release.xcconfig"; sourceTree = "<group>"; };
+		4806E3391E995A350024A497 /* TPMenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TPMenuButton.swift; path = ViewControllers/TPMenuButton.swift; sourceTree = "<group>"; };
+		4806E33B1E99621D0024A497 /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIViewExtension.swift; path = "Utilities and Extensions/UIViewExtension.swift"; sourceTree = "<group>"; };
 		48103E941C1DE4CC0055C27A /* ENSideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ENSideMenu.swift; path = "Third Party/ENSideMenu/ENSideMenu.swift"; sourceTree = "<group>"; };
 		48103E951C1DE4CC0055C27A /* ENSideMenuNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ENSideMenuNavigationController.swift; path = "Third Party/ENSideMenu/ENSideMenuNavigationController.swift"; sourceTree = "<group>"; };
 		48103E981C1DE7BC0055C27A /* EventViewNavController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventViewNavController.swift; path = ViewControllers/EventViewNavController.swift; sourceTree = "<group>"; };
@@ -592,6 +596,7 @@
 				48ECF6C91E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift */,
 				484365D71CA1118A0046A2C5 /* Menu.storyboard */,
 				4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */,
+				4806E3391E995A350024A497 /* TPMenuButton.swift */,
 			);
 			name = MenuViewControllers;
 			sourceTree = "<group>";
@@ -726,6 +731,7 @@
 				48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */,
 				486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */,
 				486F5E771BA3891600BA2A57 /* NutUtils.swift */,
+				4806E33B1E99621D0024A497 /* UIViewExtension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -1121,6 +1127,7 @@
 				48103E961C1DE4CC0055C27A /* ENSideMenu.swift in Sources */,
 				0334CA5E1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift in Sources */,
 				0334CA821BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift in Sources */,
+				4806E33A1E995A350024A497 /* TPMenuButton.swift in Sources */,
 				483E3C361B9F4A6300DA49E7 /* BaseUIViewController.swift in Sources */,
 				0334CA7C1BA8DDFC00013096 /* Upload+CoreDataProperties.swift in Sources */,
 				0334CA3A1BA8DDFC00013096 /* ContinuousGlucose.swift in Sources */,
@@ -1178,6 +1185,7 @@
 				0334CA131BA8DDFC00013096 /* Activity+CoreDataProperties.swift in Sources */,
 				489FDE541E833D47000C4AC5 /* Hashtag.swift in Sources */,
 				0334CA3D1BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift in Sources */,
+				4806E33C1E99621D0024A497 /* UIViewExtension.swift in Sources */,
 				486F5E241BA0DC1000BA2A57 /* APIConnect.swift in Sources */,
 				48103E971C1DE4CC0055C27A /* ENSideMenuNavigationController.swift in Sources */,
 				485420291BC44D290020CFE1 /* EventItem+CoreDataProperties.swift in Sources */,

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -48,7 +48,7 @@
                                                         </constraints>
                                                     </imageView>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Name Here" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8eU-B6-eOM" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="50" y="17" width="123" height="20.5"/>
+                                                        <rect key="frame" x="50" y="17.5" width="119.5" height="20.5"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
                                                         <color key="textColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -100,7 +100,7 @@
                                                 <rect key="frame" x="0.0" y="54" width="255" height="80"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect to Health" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2n-bT-OD5" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="8" width="136" height="20.5"/>
+                                                        <rect key="frame" x="16" y="8" width="126.5" height="20.5"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
                                                         <color key="textColor" red="0.15686274509803921" green="0.098039215686274508" blue="0.27450980392156865" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -109,7 +109,7 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="9g5-rw-efz" customClass="ScaledSwitch" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="160" y="3" width="51" height="31"/>
+                                                        <rect key="frame" x="156.875" y="6.875" width="38.916666666666657" height="23.25"/>
                                                         <color key="tintColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="scale">
@@ -121,9 +121,9 @@
                                                         </connections>
                                                     </switch>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6Yq-ge-9W3" userLabel="healthStatusContainerView">
-                                                        <rect key="frame" x="16" y="36.5" width="223" height="41.5"/>
+                                                        <rect key="frame" x="16" y="36.5" width="223" height="42.5"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Uploading complete history of Dexcom data" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gp0-ie-YG8" userLabel="healthStatusLine1" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Uploading complete history of Dexcom data" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gp0-ie-YG8" userLabel="healthStatusLine1" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="223" height="14"/>
                                                                 <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="10"/>
                                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -141,8 +141,8 @@
                                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMinorStatus"/>
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FYI upload pauses when phone is locked" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IYw-eg-MRt" userLabel="healthStatusLine3" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="28" width="223" height="13.5"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="FYI upload pauses when phone is locked" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IYw-eg-MRt" userLabel="healthStatusLine3" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="28" width="223" height="14.5"/>
                                                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                                 <color key="textColor" red="0.49411764705882355" green="0.49411764705882355" blue="0.49411764705882355" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -153,7 +153,7 @@
                                                         </subviews>
                                                     </stackView>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Rq-xO-II6" userLabel="line separator" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="78" width="255" height="1"/>
+                                                        <rect key="frame" x="0.0" y="79" width="255" height="1"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="zLG-cE-aHd"/>
@@ -170,7 +170,7 @@
                                                     <constraint firstItem="M2n-bT-OD5" firstAttribute="centerY" secondItem="9g5-rw-efz" secondAttribute="centerY" id="3jW-ih-RHr"/>
                                                     <constraint firstItem="6Yq-ge-9W3" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" constant="16" id="NTx-xk-Ryg"/>
                                                     <constraint firstItem="9g5-rw-efz" firstAttribute="leading" secondItem="M2n-bT-OD5" secondAttribute="trailing" constant="8" id="RTX-7V-4uf"/>
-                                                    <constraint firstAttribute="bottom" secondItem="9Rq-xO-II6" secondAttribute="bottom" constant="1" id="Tsr-o6-FOR"/>
+                                                    <constraint firstAttribute="bottom" secondItem="9Rq-xO-II6" secondAttribute="bottom" id="Tsr-o6-FOR"/>
                                                     <constraint firstItem="6Yq-ge-9W3" firstAttribute="top" secondItem="M2n-bT-OD5" secondAttribute="bottom" constant="8" id="UOc-mh-89v"/>
                                                     <constraint firstAttribute="trailing" secondItem="6Yq-ge-9W3" secondAttribute="trailing" constant="16" id="XeX-Pe-74o"/>
                                                     <constraint firstAttribute="trailing" secondItem="9Rq-xO-II6" secondAttribute="trailing" id="hlo-TS-E5p"/>
@@ -182,49 +182,41 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WpE-yY-uh1" userLabel="switchProfileSection">
                                                 <rect key="frame" x="0.0" y="134" width="255" height="42"/>
                                                 <subviews>
-                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Switch Profile" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LzF-GC-WKl" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="10" width="94.5" height="20.5"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GeI-ZX-uYF" userLabel="switchProfileButton" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="255" height="41"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
-                                                        <color key="textColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        <nil key="highlightedColor"/>
+                                                        <state key="normal">
+                                                            <color key="titleColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        </state>
+                                                        <state key="highlighted" backgroundImage="menuButtonBackground"/>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingItem"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonStyling" value="blueTextMenuButton"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonTitle" value="Switch Profile"/>
                                                         </userDefinedRuntimeAttributes>
-                                                    </label>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oNz-63-LPT" userLabel="rightButtonView">
+                                                        <connections>
+                                                            <action selector="switchProfileTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="HtY-UP-xln"/>
+                                                        </connections>
+                                                    </button>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oNz-63-LPT" userLabel="rightDisclosureView">
                                                         <rect key="frame" x="215" y="0.0" width="40" height="42"/>
                                                         <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ukP-ee-UU0" userLabel="userSelectLargeHitArea">
-                                                                <rect key="frame" x="0.0" y="0.0" width="40" height="42"/>
-                                                                <connections>
-                                                                    <action selector="switchProfileTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="0IJ-bu-wDQ"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0B8-jq-TlF" userLabel="userSelectButton">
-                                                                <rect key="frame" x="13" y="12" width="11" height="17"/>
+                                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rightDisclosureArrow" highlightedImage="rightDisclosureArrow" translatesAutoresizingMaskIntoConstraints="NO" id="hIF-jS-azo">
+                                                                <rect key="frame" x="13" y="12.5" width="11" height="17"/>
                                                                 <constraints>
-                                                                    <constraint firstAttribute="height" constant="17" id="5po-hM-GjA"/>
-                                                                    <constraint firstAttribute="width" constant="11" id="HH3-hk-G9Z"/>
+                                                                    <constraint firstAttribute="height" constant="17" id="5Z4-vW-AxO"/>
+                                                                    <constraint firstAttribute="width" constant="11" id="hGo-iD-wfH"/>
                                                                 </constraints>
-                                                                <state key="normal" image="rightDisclosureArrow"/>
-                                                                <connections>
-                                                                    <action selector="switchProfileTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="gaS-H5-Ly9"/>
-                                                                </connections>
-                                                            </button>
+                                                            </imageView>
                                                         </subviews>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="bottom" secondItem="ukP-ee-UU0" secondAttribute="bottom" id="4st-rx-FYv"/>
-                                                            <constraint firstAttribute="trailing" secondItem="0B8-jq-TlF" secondAttribute="trailing" constant="16" id="9uN-jg-Xkh"/>
-                                                            <constraint firstItem="0B8-jq-TlF" firstAttribute="centerY" secondItem="oNz-63-LPT" secondAttribute="centerY" id="Qtw-hB-mHI"/>
                                                             <constraint firstAttribute="width" constant="40" id="dQs-3C-5xt"/>
-                                                            <constraint firstAttribute="trailing" secondItem="ukP-ee-UU0" secondAttribute="trailing" id="pcj-3d-qIa"/>
-                                                            <constraint firstItem="ukP-ee-UU0" firstAttribute="leading" secondItem="oNz-63-LPT" secondAttribute="leading" id="yes-Sc-A0i"/>
-                                                            <constraint firstItem="ukP-ee-UU0" firstAttribute="top" secondItem="oNz-63-LPT" secondAttribute="top" id="zus-sb-IzQ"/>
+                                                            <constraint firstAttribute="trailing" secondItem="hIF-jS-azo" secondAttribute="trailing" constant="16" id="lcZ-Ci-4gJ"/>
+                                                            <constraint firstItem="hIF-jS-azo" firstAttribute="centerY" secondItem="oNz-63-LPT" secondAttribute="centerY" id="zCt-NF-wcE"/>
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c4a-ZP-hud" userLabel="line separator" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="40" width="255" height="1"/>
+                                                        <rect key="frame" x="0.0" y="41" width="255" height="1"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="OuX-oQ-ear"/>
@@ -238,33 +230,35 @@
                                                 <constraints>
                                                     <constraint firstItem="oNz-63-LPT" firstAttribute="top" secondItem="WpE-yY-uh1" secondAttribute="top" id="Cfl-by-0H9"/>
                                                     <constraint firstItem="c4a-ZP-hud" firstAttribute="leading" secondItem="WpE-yY-uh1" secondAttribute="leading" id="H92-oh-EYl"/>
-                                                    <constraint firstAttribute="bottom" secondItem="c4a-ZP-hud" secondAttribute="bottom" constant="1" id="Jnx-dp-Duw"/>
-                                                    <constraint firstItem="LzF-GC-WKl" firstAttribute="centerY" secondItem="WpE-yY-uh1" secondAttribute="centerY" id="OXP-T2-EKC"/>
+                                                    <constraint firstAttribute="bottom" secondItem="c4a-ZP-hud" secondAttribute="bottom" id="Jnx-dp-Duw"/>
                                                     <constraint firstAttribute="trailing" secondItem="c4a-ZP-hud" secondAttribute="trailing" id="Tw3-Ku-h8f"/>
+                                                    <constraint firstItem="c4a-ZP-hud" firstAttribute="top" secondItem="GeI-ZX-uYF" secondAttribute="bottom" id="UCT-eB-0hN"/>
                                                     <constraint firstAttribute="bottom" secondItem="oNz-63-LPT" secondAttribute="bottom" id="VI8-oL-bf7"/>
                                                     <constraint firstAttribute="height" constant="42" id="Wio-XF-9n3"/>
+                                                    <constraint firstItem="GeI-ZX-uYF" firstAttribute="leading" secondItem="WpE-yY-uh1" secondAttribute="leading" id="e7i-Wg-ffx"/>
                                                     <constraint firstAttribute="trailing" secondItem="oNz-63-LPT" secondAttribute="trailing" id="eRA-Lp-KYn"/>
-                                                    <constraint firstItem="LzF-GC-WKl" firstAttribute="leading" secondItem="WpE-yY-uh1" secondAttribute="leading" constant="16" id="h0a-8n-Tzs"/>
+                                                    <constraint firstAttribute="trailing" secondItem="GeI-ZX-uYF" secondAttribute="trailing" id="hdA-Ml-scf"/>
+                                                    <constraint firstItem="GeI-ZX-uYF" firstAttribute="top" secondItem="WpE-yY-uh1" secondAttribute="top" id="iiu-xV-8Ki"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xpv-Zp-SJ9" userLabel="supportSection">
                                                 <rect key="frame" x="0.0" y="176" width="255" height="42"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kci-7b-geJ" userLabel="supportButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="4.5" width="122" height="33"/>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
-                                                        <state key="normal" title="Tidepool Support">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kci-7b-geJ" userLabel="supportButton" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="255" height="41"/>
+                                                        <state key="normal">
                                                             <color key="titleColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                                         </state>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarOtherLinks"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonStyling" value="greyTextMenuButton"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonTitle" value="Tidepool Support"/>
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="supportButtonHandler:" destination="jOa-f6-dl3" eventType="touchUpInside" id="327-b0-GWQ"/>
                                                         </connections>
                                                     </button>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="96K-N3-aoH" userLabel="line separator" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="40" width="255" height="1"/>
+                                                        <rect key="frame" x="0.0" y="41" width="255" height="1"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="54C-3E-Sh0"/>
@@ -277,9 +271,11 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstAttribute="trailing" secondItem="96K-N3-aoH" secondAttribute="trailing" id="G85-gJ-2yf"/>
-                                                    <constraint firstItem="Kci-7b-geJ" firstAttribute="leading" secondItem="Xpv-Zp-SJ9" secondAttribute="leading" constant="16" id="L0q-c6-lgm"/>
-                                                    <constraint firstAttribute="bottom" secondItem="96K-N3-aoH" secondAttribute="bottom" constant="1" id="iHd-Rz-rEe"/>
-                                                    <constraint firstItem="Kci-7b-geJ" firstAttribute="centerY" secondItem="Xpv-Zp-SJ9" secondAttribute="centerY" id="qeR-Du-3Ut"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Kci-7b-geJ" secondAttribute="trailing" id="GBJ-Rb-TJG"/>
+                                                    <constraint firstItem="Kci-7b-geJ" firstAttribute="leading" secondItem="Xpv-Zp-SJ9" secondAttribute="leading" id="HLo-X5-7BB"/>
+                                                    <constraint firstItem="96K-N3-aoH" firstAttribute="top" secondItem="Kci-7b-geJ" secondAttribute="bottom" id="SJm-eI-hAI"/>
+                                                    <constraint firstAttribute="bottom" secondItem="96K-N3-aoH" secondAttribute="bottom" id="iHd-Rz-rEe"/>
+                                                    <constraint firstItem="Kci-7b-geJ" firstAttribute="top" secondItem="Xpv-Zp-SJ9" secondAttribute="top" id="pzx-8t-zSh"/>
                                                     <constraint firstAttribute="height" constant="42" id="rJd-pK-LWl"/>
                                                     <constraint firstItem="96K-N3-aoH" firstAttribute="leading" secondItem="Xpv-Zp-SJ9" secondAttribute="leading" id="spB-RD-yXt"/>
                                                 </constraints>
@@ -287,21 +283,21 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w3P-pi-kIM" userLabel="privacySection">
                                                 <rect key="frame" x="0.0" y="218" width="255" height="42"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kNg-yc-pvp" userLabel="privacyButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="4" width="220" height="33"/>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
-                                                        <state key="normal" title="Privacy Policy and Terms of Use">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kNg-yc-pvp" userLabel="privacyButton" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="255" height="41"/>
+                                                        <state key="normal">
                                                             <color key="titleColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         </state>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarOtherLinks"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonTitle" value="Privacy Policy and Terms of Use"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonStyling" value="greyTextMenuButton"/>
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="privacyButtonTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="uMA-Vl-qY6"/>
                                                         </connections>
                                                     </button>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FYI-4X-1Ue" userLabel="line separator" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="40" width="255" height="1"/>
+                                                        <rect key="frame" x="0.0" y="41" width="255" height="1"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="vpO-l8-O3c"/>
@@ -313,10 +309,12 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="FYI-4X-1Ue" secondAttribute="bottom" constant="1" id="9lS-8a-Teu"/>
-                                                    <constraint firstItem="kNg-yc-pvp" firstAttribute="leading" secondItem="w3P-pi-kIM" secondAttribute="leading" constant="16" id="R8M-Ta-mnu"/>
+                                                    <constraint firstAttribute="bottom" secondItem="FYI-4X-1Ue" secondAttribute="bottom" id="9lS-8a-Teu"/>
+                                                    <constraint firstAttribute="trailing" secondItem="kNg-yc-pvp" secondAttribute="trailing" id="ChV-HN-2aJ"/>
+                                                    <constraint firstItem="kNg-yc-pvp" firstAttribute="leading" secondItem="w3P-pi-kIM" secondAttribute="leading" id="NBA-KJ-Woh"/>
                                                     <constraint firstItem="FYI-4X-1Ue" firstAttribute="leading" secondItem="w3P-pi-kIM" secondAttribute="leading" id="UJp-FM-pMx"/>
-                                                    <constraint firstItem="kNg-yc-pvp" firstAttribute="centerY" secondItem="w3P-pi-kIM" secondAttribute="centerY" id="aAM-MY-NOS"/>
+                                                    <constraint firstItem="kNg-yc-pvp" firstAttribute="top" secondItem="w3P-pi-kIM" secondAttribute="top" id="a8x-p9-geJ"/>
+                                                    <constraint firstItem="FYI-4X-1Ue" firstAttribute="top" secondItem="kNg-yc-pvp" secondAttribute="bottom" id="hGc-fO-N5I"/>
                                                     <constraint firstAttribute="height" constant="42" id="r7j-Ah-EOg"/>
                                                     <constraint firstAttribute="trailing" secondItem="FYI-4X-1Ue" secondAttribute="trailing" id="vpp-cd-Fd4"/>
                                                 </constraints>
@@ -324,21 +322,8 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AkY-6Y-8Cr" userLabel="logoutSection">
                                                 <rect key="frame" x="0.0" y="260" width="255" height="42"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M98-PL-e0L" userLabel="logOutButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="4.5" width="53" height="33"/>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
-                                                        <state key="normal" title="Log out">
-                                                            <color key="titleColor" red="0.49411764705882355" green="0.49411764705882355" blue="0.49411764705882355" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        </state>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarOtherLinks"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                        <connections>
-                                                            <action selector="logOutTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="Pyd-hq-8ve"/>
-                                                        </connections>
-                                                    </button>
-                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="john@doe.com" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9sA-Dh-xzl" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="85" y="16.5" width="72.5" height="14"/>
+                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="john@doe.com" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9sA-Dh-xzl" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="162.5" y="14" width="72.5" height="14"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="10"/>
                                                         <color key="textColor" red="0.49411764705882355" green="0.49411764705882355" blue="0.49411764705882355" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -346,8 +331,21 @@
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMainStatus"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M98-PL-e0L" userLabel="logOutButton" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="0.0" width="255" height="41"/>
+                                                        <state key="normal">
+                                                            <color key="titleColor" red="0.49411764705882355" green="0.49411764705882355" blue="0.49411764705882355" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        </state>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonTitle" value="Log out"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonStyling" value="greyTextMenuButton"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="logOutTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="Pyd-hq-8ve"/>
+                                                        </connections>
+                                                    </button>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Me0-Pg-1UA" userLabel="line separator" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="40" width="255" height="1"/>
+                                                        <rect key="frame" x="0.0" y="41" width="255" height="1"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="deB-yK-NXp"/>
@@ -359,14 +357,17 @@
                                                 </subviews>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
+                                                    <constraint firstItem="9sA-Dh-xzl" firstAttribute="centerY" secondItem="AkY-6Y-8Cr" secondAttribute="centerY" id="3K3-xp-hr9"/>
                                                     <constraint firstAttribute="trailing" secondItem="Me0-Pg-1UA" secondAttribute="trailing" id="4wz-tr-Ize"/>
-                                                    <constraint firstItem="9sA-Dh-xzl" firstAttribute="baseline" secondItem="M98-PL-e0L" secondAttribute="baseline" id="5JL-d6-j0r"/>
+                                                    <constraint firstItem="M98-PL-e0L" firstAttribute="top" secondItem="AkY-6Y-8Cr" secondAttribute="top" id="Guo-sY-2DX"/>
                                                     <constraint firstAttribute="height" constant="42" id="J7L-Up-glz"/>
+                                                    <constraint firstAttribute="trailing" secondItem="M98-PL-e0L" secondAttribute="trailing" id="J7o-De-uIi"/>
+                                                    <constraint firstItem="9sA-Dh-xzl" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="AkY-6Y-8Cr" secondAttribute="leading" constant="80" id="Zxr-dL-BZ8"/>
+                                                    <constraint firstItem="Me0-Pg-1UA" firstAttribute="top" secondItem="M98-PL-e0L" secondAttribute="bottom" id="ahT-f3-qMa"/>
+                                                    <constraint firstAttribute="trailing" secondItem="9sA-Dh-xzl" secondAttribute="trailing" constant="20" id="gYz-IT-Hbn"/>
                                                     <constraint firstItem="Me0-Pg-1UA" firstAttribute="leading" secondItem="AkY-6Y-8Cr" secondAttribute="leading" id="nkU-FS-LvS"/>
-                                                    <constraint firstItem="M98-PL-e0L" firstAttribute="centerY" secondItem="AkY-6Y-8Cr" secondAttribute="centerY" id="r7k-Dn-kb6"/>
-                                                    <constraint firstItem="9sA-Dh-xzl" firstAttribute="leading" secondItem="M98-PL-e0L" secondAttribute="trailing" constant="16" id="v8c-ii-CTk"/>
-                                                    <constraint firstItem="M98-PL-e0L" firstAttribute="leading" secondItem="AkY-6Y-8Cr" secondAttribute="leading" constant="16" id="xz8-3j-5MS"/>
-                                                    <constraint firstAttribute="bottom" secondItem="Me0-Pg-1UA" secondAttribute="bottom" constant="1" id="ycF-XA-KN8"/>
+                                                    <constraint firstItem="M98-PL-e0L" firstAttribute="leading" secondItem="AkY-6Y-8Cr" secondAttribute="leading" id="xz8-3j-5MS"/>
+                                                    <constraint firstAttribute="bottom" secondItem="Me0-Pg-1UA" secondAttribute="bottom" id="ycF-XA-KN8"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -379,7 +380,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="255" height="42"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.3 on Production" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FRD-xW-MeJ" userLabel="versionString" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="86" y="14.5" width="83" height="14"/>
+                                                        <rect key="frame" x="86" y="14" width="83" height="14"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                         <color key="textColor" red="0.30196078431372547" green="0.30588235294117649" blue="0.29803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -452,6 +453,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="menuButtonBackground" width="253" height="42"/>
         <image name="profileIcon" width="24" height="23"/>
         <image name="rightDisclosureArrow" width="10" height="17"/>
     </resources>

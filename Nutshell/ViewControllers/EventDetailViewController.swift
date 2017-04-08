@@ -85,6 +85,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         subviewsInitialized = true
         sceneContainerView.setNeedsLayout()
         sceneContainerView.layoutIfNeeded()
+        sceneContainerView.checkAdjustSubviewSizing()
         
         if let path = Bundle.main.path(forResource: "jump-jump-jump-jump", ofType: "gif") {
             do {
