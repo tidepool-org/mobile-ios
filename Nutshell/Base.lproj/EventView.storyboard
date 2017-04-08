@@ -811,7 +811,7 @@
                                         </variation>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="102" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="iHb-Z2-3F1" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="240" width="320" height="264"/>
+                                        <rect key="frame" x="0.0" y="240" width="320" height="220"/>
                                         <color key="backgroundColor" red="0.94901960780000005" green="0.95294117649999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="noteDetailCell" rowHeight="100" id="rTz-Ev-xXM" userLabel="noteDetailTableCell" customClass="NoteDetailTableViewCell" customModule="Nutshell" customModuleProvider="target">
@@ -825,7 +825,7 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="separatorLine" translatesAutoresizingMaskIntoConstraints="NO" id="jcZ-U6-pJr" userLabel="separatorImageView">
-                                                                    <rect key="frame" x="0.0" y="99" width="320" height="1"/>
+                                                                    <rect key="frame" x="20.5" y="99" width="299.5" height="1"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="1" id="AwH-eJ-FjL"/>
                                                                     </constraints>
@@ -834,8 +834,8 @@
                                                             <color key="backgroundColor" red="0.66666666669999997" green="0.66666666669999997" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="trailing" secondItem="jcZ-U6-pJr" secondAttribute="trailing" id="4NR-pp-jD6"/>
+                                                                <constraint firstItem="jcZ-U6-pJr" firstAttribute="width" secondItem="wFE-ZX-kPc" secondAttribute="width" multiplier="599/640" id="Oxj-py-rYR"/>
                                                                 <constraint firstAttribute="bottom" secondItem="jcZ-U6-pJr" secondAttribute="bottom" id="SqW-lj-2NT"/>
-                                                                <constraint firstItem="jcZ-U6-pJr" firstAttribute="leading" secondItem="wFE-ZX-kPc" secondAttribute="leading" id="gR3-e2-Dh3"/>
                                                             </constraints>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="normalBackground" value="whiteBackground"/>
@@ -888,6 +888,7 @@
                                                     <outlet property="cellBackgroundView" destination="wFE-ZX-kPc" id="X7X-wF-RL0"/>
                                                     <outlet property="dateLabel" destination="8e0-7A-QQE" id="GcS-Zc-0YR"/>
                                                     <outlet property="noteLabel" destination="HjV-xU-9KZ" id="gpZ-Pe-pQx"/>
+                                                    <outlet property="separatorImageView" destination="jcZ-U6-pJr" id="88x-YV-pYO"/>
                                                     <outlet property="userLabel" destination="Kza-1J-KIE" id="RDl-55-eI7"/>
                                                 </connections>
                                             </tableViewCell>
@@ -900,16 +901,42 @@
                                             <outlet property="delegate" destination="jDw-Oo-Xxj" id="mhD-rx-2mA"/>
                                         </connections>
                                     </tableView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ky6-na-nca" userLabel="addCommentContainer">
+                                        <rect key="frame" x="0.0" y="460" width="320" height="44"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R1i-cf-zC3">
+                                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15.5"/>
+                                                <state key="normal" title="Add comment">
+                                                    <color key="titleColor" red="0.49411764705882355" green="0.49411764705882355" blue="0.49411764705882355" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="addCommentButtonHandler:" destination="jDw-Oo-Xxj" eventType="touchUpInside" id="QMO-37-PKt"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="R1i-cf-zC3" firstAttribute="leading" secondItem="Ky6-na-nca" secondAttribute="leading" id="Snr-dx-fsI"/>
+                                            <constraint firstItem="R1i-cf-zC3" firstAttribute="top" secondItem="Ky6-na-nca" secondAttribute="top" id="Wdg-vD-YEz"/>
+                                            <constraint firstAttribute="height" constant="44" id="hEY-Xk-tbB"/>
+                                            <constraint firstAttribute="bottom" secondItem="R1i-cf-zC3" secondAttribute="bottom" id="qsK-6h-SzO"/>
+                                            <constraint firstAttribute="trailing" secondItem="R1i-cf-zC3" secondAttribute="trailing" id="wwJ-ad-JNK"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="Ky6-na-nca" secondAttribute="bottom" id="5y1-bL-cH3"/>
                                     <constraint firstItem="iHb-Z2-3F1" firstAttribute="top" secondItem="S2q-3Z-sOG" secondAttribute="bottom" id="6ex-oR-rjb"/>
-                                    <constraint firstAttribute="bottom" secondItem="iHb-Z2-3F1" secondAttribute="bottom" id="QtM-w6-ypc"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ky6-na-nca" secondAttribute="trailing" id="9Lb-xP-C57"/>
                                     <constraint firstItem="iHb-Z2-3F1" firstAttribute="leading" secondItem="tV7-5h-ivR" secondAttribute="leading" id="adc-nU-zpG"/>
                                     <constraint firstAttribute="trailing" secondItem="iHb-Z2-3F1" secondAttribute="trailing" id="fmr-M3-wAN"/>
                                     <constraint firstItem="S2q-3Z-sOG" firstAttribute="leading" secondItem="tV7-5h-ivR" secondAttribute="leading" id="gQI-QS-AI9"/>
+                                    <constraint firstItem="Ky6-na-nca" firstAttribute="top" secondItem="iHb-Z2-3F1" secondAttribute="bottom" id="ibQ-gb-nWC"/>
                                     <constraint firstAttribute="trailing" secondItem="S2q-3Z-sOG" secondAttribute="trailing" id="jma-fr-7Aa"/>
                                     <constraint firstItem="S2q-3Z-sOG" firstAttribute="top" secondItem="tV7-5h-ivR" secondAttribute="top" id="k8E-7f-kUq"/>
+                                    <constraint firstItem="Ky6-na-nca" firstAttribute="leading" secondItem="tV7-5h-ivR" secondAttribute="leading" id="mJj-je-tGo"/>
                                 </constraints>
                             </view>
                         </subviews>

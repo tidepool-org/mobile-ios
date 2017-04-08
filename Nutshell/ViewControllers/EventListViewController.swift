@@ -750,6 +750,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         }
     }
     
+    fileprivate func recenterGraph() {
+        graphContainerView?.centerGraphOnEvent(animated: true)
+    }
     
     /// Reloads the graph - this should be called after the header has been laid out and the graph section size has been figured. Pass in edgeOffset to place the nut event other than in the center.
     fileprivate func configureGraphContainer(_ edgeOffset: CGFloat = 0.0) {
@@ -771,7 +774,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 updateDataVizForState(.loadingSelected)
                 graphContainerView.configureGraph(edgeOffset)
                 // delay to display notes until we get notified of data available...
-                //graphContainerView.configureNotesToDisplay([])
+                graphContainerView.configureNotesToDisplay([note])
                 graphLayerContainer.insertSubview(graphContainerView, at: 0)
                 graphContainerView.loadGraphData()
             }
@@ -792,10 +795,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 return
             }
             if graphHasData {
-                // delay to display notes until we get notified of data available...
-                if let selectedNote = selectedNote {
-                    _ = graphContainerView.configureNotesToDisplay([selectedNote])
-                }
                 updateDataVizForState(.dataGraph)
             } else {
                 // Show the no-data view
@@ -855,7 +854,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         }
     }
 
-    func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {}
+    func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {
+        recenterGraph()
+    }
 
     //
     // Mark: - ScrollViewDelegate

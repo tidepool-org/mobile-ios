@@ -291,13 +291,6 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         }
     }
     
-    fileprivate func updateGraph() {
-        if let graphContainerView = graphContainerView {
-            graphContainerView.loadGraphData()
-        }
-        graphNeedsUpdate = false
-    }
-
     fileprivate func recenterGraph() {
         if let graphContainerView = graphContainerView {
             graphContainerView.centerGraphOnEvent(animated: true)
@@ -339,8 +332,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             if let graphContainerView = graphContainerView {
                 updateDataVizForState(.loadingSelected)
                 graphContainerView.configureGraph(edgeOffset)
-                // delay to display notes until we get notified of data available...
-                //graphContainerView.configureNotesToDisplay([])
+                graphContainerView.configureNotesToDisplay([note])
                 graphLayerContainer.insertSubview(graphContainerView, at: 0)
                 graphContainerView.loadGraphData()
             }
@@ -352,12 +344,10 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     //
     
     func containerCellUpdated() {
-        let graphHasData = graphContainerView!.dataFound()
-        NSLog("\(#function) - graphHasData: \(graphHasData)")
         if let graphContainerView = graphContainerView {
+            let graphHasData = graphContainerView.dataFound()
+            NSLog("\(#function) - graphHasData: \(graphHasData)")
             if graphHasData {
-                // delay to display notes until we get notified of data available...
-                _ = graphContainerView.configureNotesToDisplay([note])
                 updateDataVizForState(.dataGraph)
             } else {
                 updateDataVizForState(.noDataDisplay)
@@ -416,11 +406,18 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         }
     }
     
-    func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {}
+    func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {
+        recenterGraph()
+    }
     
     @IBAction func howToUploadButtonHandler(_ sender: Any) {
         NSLog("TODO!")
     }
+    
+    @IBAction func addCommentButtonHandler(_ sender: Any) {
+        NSLog("TODO!")
+    }
+    
 }
 
 
@@ -472,6 +469,9 @@ extension EventDetailViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteDetailTableViewCell
         if let note = note {
             cell.configureCell(note)
+            let lastRow = tableView.numberOfRows(inSection: 0) - 1
+            let isLastRow = indexPath.row == lastRow
+            cell.separatorImageView.isHidden = isLastRow
         }
         return cell
     }

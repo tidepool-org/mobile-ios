@@ -22,7 +22,8 @@ class NoteDetailTableViewCell: BaseUITableViewCell {
     @IBOutlet weak var noteLabel: UILabel!
     @IBOutlet weak var dateLabel: NutshellUILabel!
     @IBOutlet weak var userLabel: NutshellUILabel!
-    
+    @IBOutlet weak var separatorImageView: UIImageView!
+   
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

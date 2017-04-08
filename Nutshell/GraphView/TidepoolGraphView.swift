@@ -56,10 +56,8 @@ class TidepoolGraphView: GraphContainerView {
         }
     }
     
-    func configureNotesToDisplay(_ notes: [BlipNote]) -> [BlipNote] {
-        let result = tidepoolLayout.notesToDisplay
+    func configureNotesToDisplay(_ notes: [BlipNote]) {
         tidepoolLayout.notesToDisplay = notes
-        return result   // pass back former value...
     }
     
     func dataFound() -> Bool {
