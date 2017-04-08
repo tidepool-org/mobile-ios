@@ -68,7 +68,7 @@ class WorkoutGraphDataLayer: GraphDataLayer {
         let earlyStartTime = startTime.addingTimeInterval(-maxWorkoutDuration)
         let lateEndTime = endTime.addingTimeInterval(timeExtensionForDataFetch)
         do {
-            let events = try DatabaseUtils.getWorkoutEvents(earlyStartTime, toTime: lateEndTime)
+            let events = try DatabaseUtils.sharedInstance.getWorkoutEvents(earlyStartTime, toTime: lateEndTime)
             for workoutEvent in events {
                 if let eventTime = workoutEvent.time {
                     let deltaTime = eventTime.timeIntervalSince(startTime)

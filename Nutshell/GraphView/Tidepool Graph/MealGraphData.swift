@@ -65,7 +65,7 @@ class MealGraphDataLayer: GraphDataLayer {
         let earlyStartTime = startTime.addingTimeInterval(-timeExtensionForDataFetch)
         let lateEndTime = endTime.addingTimeInterval(timeExtensionForDataFetch)
         do {
-            let events = try DatabaseUtils.getMealEvents(earlyStartTime, toTime: lateEndTime)
+            let events = try DatabaseUtils.sharedInstance.getMealEvents(earlyStartTime, toTime: lateEndTime)
             for mealEvent in events {
                 if let eventTime = mealEvent.time {
                     let deltaTime = eventTime.timeIntervalSince(startTime)

@@ -191,7 +191,7 @@ class HealthKitDataPusher: NSObject {
         // first load up data from Tidepool service for this timeframe
         APIConnector.connector().getReadOnlyUserData(startTime, endDate: currentTime, objectTypes: "smbg", completion: { (result) -> (Void) in
                 if result.isSuccess {
-                    DatabaseUtils.updateEventsForTimeRange(startTime, endTime: currentTime, objectTypes: ["smbg"], moc: NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!) { (success) -> (Void) in
+                    DatabaseUtils.sharedInstance.updateEventsForTimeRange(startTime, endTime: currentTime, objectTypes: ["smbg"], moc: NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!) { (success) -> (Void) in
                         
                         DDLogVerbose("Completed updateEventsForTimeRange, success = \(success) for \(startTime) to \(currentTime)")
                         
@@ -221,7 +221,7 @@ class HealthKitDataPusher: NSObject {
     fileprivate func fetchLatestCachedData(_ syncGen: Int, fromTime: Date, thruTime: Date, completion: @escaping (Int) -> Void) {
         DDLogVerbose("")
         do {
-            let events = try DatabaseUtils.getTidepoolEvents(fromTime, thruTime: thruTime, objectTypes: ["smbg"], skipCheckLoad: true)
+            let events = try DatabaseUtils.sharedInstance.getTidepoolEvents(fromTime, thruTime: thruTime, objectTypes: ["smbg"], skipCheckLoad: true)
             for event in events {
                 if let event = event as? CommonData {
                     if let _ = event.time {

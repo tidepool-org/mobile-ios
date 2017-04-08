@@ -74,7 +74,7 @@ class TidepoolGraphDataLayer: GraphDataLayer {
         // TODO: adjust for time zone offset of meal here?
         
         do {
-            let events = try DatabaseUtils.getTidepoolEvents(earlyStartTime, thruTime: lateEndTime, objectTypes: [typeString()])
+            let events = try DatabaseUtils.sharedInstance.getTidepoolEvents(earlyStartTime, thruTime: lateEndTime, objectTypes: [typeString()])
             for event in events {
                 if let event = event as? CommonData {
                     if let eventTime = event.time {

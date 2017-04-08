@@ -434,7 +434,7 @@ class NutDataController: NSObject
             // First nil out locals so a new psc and moc will be created on demand
             _pscForTidepoolObjects = nil
             _mocForTidepoolObjects = nil
-            DatabaseUtils.resetTidepoolEventLoader() // reset cache as well!
+            DatabaseUtils.sharedInstance.resetTidepoolEventLoader() // reset cache as well!
             let fm = FileManager.default
             do {
                 try fm.removeItem(at: url)

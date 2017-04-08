@@ -785,7 +785,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     // MARK: - GraphContainerViewDelegate
     //
     
-    // we get this
     func containerCellUpdated() {
         if let graphContainerView = graphContainerView {
             let graphHasData = graphContainerView.dataFound()
@@ -797,8 +796,12 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             if graphHasData {
                 updateDataVizForState(.dataGraph)
             } else {
-                // Show the no-data view
-                updateDataVizForState(.noDataDisplay)
+                // Show the no-data view if not still loading...
+                if !DatabaseUtils.sharedInstance.isLoadingTidepoolEvents() {
+                    updateDataVizForState(.noDataDisplay)
+                } else {
+                    NSLog("\(#function): Keep displaying loading screen as load is still in progress")
+                }
             }
         }
     }
@@ -831,7 +834,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         }
         if let itemId = itemId {
             //NSLog("EventDetailVC: dataPointTapped")
-            let nutEventItem = DatabaseUtils.getNutEventItemWithId(itemId)
+            let nutEventItem = DatabaseUtils.sharedInstance.getNutEventItemWithId(itemId)
             if let nutEventItem = nutEventItem {
                 // if the user tapped on some other event, switch to viewing that one instead!
                 if nutEventItem.time != eventTime {

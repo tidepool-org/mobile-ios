@@ -121,7 +121,7 @@ class NutshellTests: XCTestCase {
                 if (result.isSuccess) {
                     if let json = result.value {
                         if result.isSuccess {
-                            DatabaseUtils.updateEvents(NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json)
+                            DatabaseUtils.sharedInstance.updateEvents(NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json)
                         } else {
                             NSLog("No user data events!")
                         }
@@ -155,7 +155,7 @@ class NutshellTests: XCTestCase {
                 if (result.isSuccess) {
                     if let json = result.value {
                         if result.isSuccess {
-                            _ = DatabaseUtils.updateEventsForTimeRange(startDate, endTime: endDate, moc:NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json) {
+                            _ = DatabaseUtils.sharedInstance.updateEventsForTimeRange(startDate, endTime: endDate, moc:NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json) {
                                 (success) -> (Void) in
                                 expectation.fulfill()
                             }

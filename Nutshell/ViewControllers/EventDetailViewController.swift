@@ -350,7 +350,12 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             if graphHasData {
                 updateDataVizForState(.dataGraph)
             } else {
-                updateDataVizForState(.noDataDisplay)
+                // Show the no-data view if not still loading...
+                if !DatabaseUtils.sharedInstance.isLoadingTidepoolEvents() {
+                    updateDataVizForState(.noDataDisplay)
+                } else {
+                    NSLog("\(#function): Keep displaying loading screen as load is still in progress")
+                }
             }
         }
     }
@@ -383,7 +388,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         }
         if let itemId = itemId {
             //NSLog("EventDetailVC: dataPointTapped")
-            let nutEventItem = DatabaseUtils.getNutEventItemWithId(itemId)
+            let nutEventItem = DatabaseUtils.sharedInstance.getNutEventItemWithId(itemId)
             if let nutEventItem = nutEventItem {
                 // if the user tapped on some other event, switch to viewing that one instead!
                 if nutEventItem.time != note.timestamp {

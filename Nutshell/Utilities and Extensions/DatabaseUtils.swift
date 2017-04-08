@@ -13,7 +13,10 @@ import SwiftyJSON
 public let NewBlockRangeLoadedNotification = "NewBlockRangeLoadedNotification"
 
 class DatabaseUtils {
-    
+
+    /// Supports a singleton controller for the application.
+    static let sharedInstance = DatabaseUtils()
+
     class func databaseSave(_ moc: NSManagedObjectContext) -> Bool {
         // Save the database
         do {
@@ -30,13 +33,14 @@ class DatabaseUtils {
     // MARK: - Methods to cache read-only data from service
 
     // A sorted cache of server blocks we have fetched during the current application lifetime, along with the date of fetch...
-    static var serverBlocks = [Int : Date]()
+    private var serverBlocks = [Int : Date]()
+
     // TODO: look at moving this to NutshellDataController...
-    class func resetTidepoolEventLoader() {
-        DatabaseUtils.serverBlocks = [Int : Date]()
+    func resetTidepoolEventLoader() {
+        serverBlocks = [Int : Date]()
     }
- 
-    class func dateToBucketNumber(_ date: Date) -> Int {
+    
+    private func dateToBucketNumber(_ date: Date) -> Int {
         let refSeconds = Int(date.timeIntervalSinceReferenceDate)
         let kBucketSeconds = 60*60*20 // 20 hour chunks
         let result = refSeconds/kBucketSeconds
@@ -44,37 +48,42 @@ class DatabaseUtils {
         return result
     }
 
-    class func bucketNumberToDate(_ bucket: Int) -> Date {
+    private func bucketNumberToDate(_ bucket: Int) -> Date {
         let date = Date(timeIntervalSinceReferenceDate: TimeInterval(bucket*60*60*20))
         //NSLog("Bucket number: \(bucket), date: \(date)")
         return date
     }
 
-    class func checkLoadDataForDateRange(_ startDate: Date, endDate: Date) {
+    private func checkLoadDataForDateRange(_ startDate: Date, endDate: Date) {
         let now = Date()
-        let startBucket = DatabaseUtils.dateToBucketNumber(startDate)
-        let endBucket = DatabaseUtils.dateToBucketNumber(endDate)
+        let startBucket = dateToBucketNumber(startDate)
+        let endBucket = dateToBucketNumber(endDate)
         for bucket in startBucket...endBucket {
             
             if let lastFetchDate = serverBlocks[bucket] {
                 if now.timeIntervalSince(lastFetchDate) < 60 {
                     // don't check more often than every minute...
-                    NSLog("checkLoadDataForDateRange: skip load of bucket \(bucket)")
+                    NSLog("\(#function): skip load of bucket \(bucket)")
                     continue
                 }
             }
-            NSLog("checkLoadDataForDateRange: fetch server data for bucket \(bucket)")
+            NSLog("\(#function): fetch server data for bucket \(bucket)")
             // kick off a fetch if we are online...
             if APIConnector.connector().serviceAvailable() {
                 // TODO: if fetch fails, should we wait less time before retrying? 
                 serverBlocks[bucket] = now
-                let startTime = DatabaseUtils.bucketNumberToDate(bucket)
-                let endTime = DatabaseUtils.bucketNumberToDate(bucket+1)
+                let startTime = bucketNumberToDate(bucket)
+                let endTime = bucketNumberToDate(bucket+1)
+                startTidepoolLoad()
                 APIConnector.connector().getReadOnlyUserData(startTime, endDate:endTime, completion: { (result) -> (Void) in
                     if result.isSuccess {
-                        DatabaseUtils.updateEventsForTimeRange(startTime, endTime: endTime, moc: NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!, completion: nil)
+                        self.updateEventsForTimeRange(startTime, endTime: endTime, moc: NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!) {
+                            success -> Void in
+                            self.endTidepoolLoad()
+                        }
                     } else {
                         NSLog("Failed to fetch events in range \(startTime) to \(endTime)")
+                        self.endTidepoolLoad()
                     }
                 })
             } else {
@@ -83,7 +92,7 @@ class DatabaseUtils {
         }
     }
     
-    class func updateEventsForTimeRange(_ startTime: Date, endTime: Date, objectTypes: [String] = ["smbg","bolus","cbg","wizard","basal"], moc: NSManagedObjectContext, eventsJSON: JSON, completion: ((Bool) -> Void)?) {
+    func updateEventsForTimeRange(_ startTime: Date, endTime: Date, objectTypes: [String] = ["smbg","bolus","cbg","wizard","basal"], moc: NSManagedObjectContext, eventsJSON: JSON, completion: @escaping ((Bool) -> Void)) {
         NSLog("\(#function) from \(startTime) to \(endTime) for types \(objectTypes)")
         //NSLog("Events from \(startTime) to \(endTime): \(eventsJSON)")
         DispatchQueue.global(qos: .background).async {
@@ -130,22 +139,20 @@ class DatabaseUtils {
             if deleteEventCounter != 0 && insertEventCounter != deleteEventCounter {
                 NSLog("NOTE: deletes were non-zero and did not match inserts!!!")
             }
+            
             // Save the database
             do {
                 try bgMOC.save()
                 //NSLog("\(#function) \(startTime) to \(endTime): Database saved!")
-                notifyOnDataLoad()
-                if let completion = completion {
-                    DispatchQueue.main.async {
-                        completion(true)
-                    }
+                DispatchQueue.main.async {
+                    // NOTE: completion will decrement the loading count (in non-test case), then notification will be sent. Client will get the notification, and check whether loading is still in progess or not... 
+                    completion(true)
+                    self.notifyOnDataLoad()
                 }
             } catch let error as NSError {
                 NSLog("Failed to save MOC: \(error)")
-                if let completion = completion {
-                    DispatchQueue.main.async {
-                        completion(false)
-                    }
+                DispatchQueue.main.async {
+                    completion(false)
                 }
             }
             
@@ -155,7 +162,7 @@ class DatabaseUtils {
         }
     }
     
-    class func updateEvents(_ moc: NSManagedObjectContext, eventsJSON: JSON) {
+    func updateEvents(_ moc: NSManagedObjectContext, eventsJSON: JSON) {
         // We get back an array of JSON objects. Iterate through the array and insert the objects into the database, removing any existing objects we may have.
         
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CommonData")
@@ -187,28 +194,50 @@ class DatabaseUtils {
         do {
             try moc.save()
             NSLog("updateEvents: Database saved!")
-            //dispatch_async(dispatch_get_main_queue()) {
             notifyOnDataLoad()
-            //}
         } catch let error as NSError {
             NSLog("Failed to save MOC: \(error)")
         }
     }
     
-    class func notifyOnDataLoad() {
+    private func notifyOnDataLoad() {
         // This will come in on the main thread, unlike the NSManagedObjectContextDidSaveNotification
         DispatchQueue.main.async {
             NotificationCenter.default.post(name: Notification.Name(rawValue: NewBlockRangeLoadedNotification), object:nil)
         }
     }
     
-    // Note: This call has the side effect of fetching data from the service which may result in a future notification of database changes.
-    class func getTidepoolEvents(_ afterTime: Date, thruTime: Date, objectTypes: [String]? = nil, skipCheckLoad: Bool = false) throws -> [NSManagedObject] {
+    private var loadingCount: Int = 0
+    
+    private func startTidepoolLoad() {
+        if loadingCount == 0 {
+            NSLog("loading Tidepool Events started")
+        }
+        loadingCount += 1
+    }
+    
+    private func endTidepoolLoad() {
+        loadingCount -= 1
+        if loadingCount <= 0 {
+            if loadingCount < 0 {
+                loadingCount = 0
+                NSLog("ERROR: loading count negative!")
+            }
+            NSLog("loading Tidepool Events complete")
+        }
+    }
+    
+    func isLoadingTidepoolEvents() -> Bool {
+        return loadingCount > 0
+    }
+    
+    // Note: This call has the side effect of fetching data from the service which may result in a future notification of database changes; if this class is in the process of fetching tidepool events, isLoadingTidepoolEvents will be true.
+    func getTidepoolEvents(_ afterTime: Date, thruTime: Date, objectTypes: [String]? = nil, skipCheckLoad: Bool = false) throws -> [NSManagedObject] {
         let moc = NutDataController.sharedInstance.mocForTidepoolEvents()!
 
         // load on-demand: if data has not been loaded, a notification will come later!
         if !skipCheckLoad {
-            DatabaseUtils.checkLoadDataForDateRange(afterTime, endDate: thruTime)
+            checkLoadDataForDateRange(afterTime, endDate: thruTime)
         }
 
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CommonData")
@@ -226,16 +255,16 @@ class DatabaseUtils {
         return events
     }
 
-    class func getNutEvent(_ id: String) throws -> [EventItem] {
+    func getNutEvent(_ id: String) throws -> [EventItem] {
         let moc = NutDataController.sharedInstance.mocForNutEvents()!
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "EventItem")
         request.predicate = NSPredicate(format: "id == %@", id)
         return try moc.fetch(request) as! [EventItem]
     }
     
-    class func getNutEventItemWithId(_ id: String) -> EventItem? {
+    func getNutEventItemWithId(_ id: String) -> EventItem? {
         do {
-            let nutEventArray = try DatabaseUtils.getNutEvent(id)
+            let nutEventArray = try getNutEvent(id)
             if nutEventArray.count == 1 {
                 return nutEventArray[0]
             } else {
@@ -250,7 +279,7 @@ class DatabaseUtils {
 
     // Note: This call has the side effect of fetching data from the service which may result in a future notification of database changes.
     // TODO: This will need to be reworked to sync data from the service when the service supports meal and workout events.
-    class func getAllNutEvents() throws -> [EventItem] {
+    func getAllNutEvents() throws -> [EventItem] {
         
         let moc = NutDataController.sharedInstance.mocForNutEvents()!
         let userId = NutDataController.sharedInstance.currentUserId!
@@ -262,7 +291,7 @@ class DatabaseUtils {
         return try moc.fetch(request) as! [EventItem]
     }
 
-    class func nutEventRequest(_ nutType: String, fromTime: Date, toTime: Date) -> (request: NSFetchRequest<NSFetchRequestResult>, moc: NSManagedObjectContext) {
+    private func nutEventRequest(_ nutType: String, fromTime: Date, toTime: Date) -> (request: NSFetchRequest<NSFetchRequestResult>, moc: NSManagedObjectContext) {
         let moc = NutDataController.sharedInstance.mocForNutEvents()!
         let userId = NutDataController.sharedInstance.currentUserId!
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: nutType)
@@ -274,20 +303,20 @@ class DatabaseUtils {
         return (request, moc)
     }
  
-    class func getWorkoutEvents(_ fromTime: Date, toTime: Date) throws -> [Workout] {
+    func getWorkoutEvents(_ fromTime: Date, toTime: Date) throws -> [Workout] {
         let (request, moc) = nutEventRequest("Workout", fromTime: fromTime, toTime: toTime)
         return try moc.fetch(request) as! [Workout]
     }
     
 
-    class func getMealEvents(_ fromTime: Date, toTime: Date) throws -> [Meal] {
+    func getMealEvents(_ fromTime: Date, toTime: Date) throws -> [Meal] {
         let (request, moc) = nutEventRequest("Meal", fromTime: fromTime, toTime: toTime)
         return try moc.fetch(request) as! [Meal]
     }
 
     // TEST ONLY!
     // TODO: Move to NutshellTests!
-    class func deleteAllNutEvents() {
+    func deleteAllNutEvents() {
         // TODO: Note this is currently only used for testing!
         let moc = NutDataController.sharedInstance.mocForNutEvents()!
         do {
