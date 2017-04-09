@@ -71,7 +71,7 @@ class HashtagsView: UIView {
                         try managedContext.save()
                     } catch let error as NSError {
                         errorTwo = error
-                        DDLogError("Couldn't increase number of usages for hashtag \(text): \(errorTwo), \(errorTwo?.userInfo)")
+                        DDLogError("Couldn't increase number of usages for hashtag \(text): \(String(describing: errorTwo)), \(String(describing: errorTwo?.userInfo))")
                     }
                     
                     break
@@ -101,7 +101,7 @@ class HashtagsView: UIView {
                     try managedContext.save()
                 } catch let error as NSError {
                     errorTwo = error
-                    DDLogError("Could not save new hashtag \(text): \(errorTwo), \(errorTwo?.userInfo)")
+                    DDLogError("Could not save new hashtag \(text): \(String(describing: errorTwo)), \(String(describing: errorTwo?.userInfo))")
                 }
             }
         } catch let error as NSError {
@@ -170,7 +170,7 @@ class HashtagsView: UIView {
                 try managedContext.save()
             } catch let error1 as NSError {
                 error = error1
-                DDLogError("Could not save default hashtag \(text): \(error), \(error?.userInfo)")
+                DDLogError("Could not save default hashtag \(text): \(String(describing: error)), \(String(describing: error?.userInfo))")
             }
             
             // Append the hashtag to the list of hashtags

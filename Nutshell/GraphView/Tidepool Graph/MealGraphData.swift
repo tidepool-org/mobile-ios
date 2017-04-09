@@ -24,8 +24,8 @@ class MealGraphDataType: GraphDataType {
     init(timeOffset: TimeInterval, isMain: Bool, event: Meal) {
         self.isMainEvent = isMain
         // id needed if user taps on this item...
-        if let eventId = event.id as? String {
-            self.id = eventId
+        if let eventId = event.id {
+            self.id = eventId as String
         } else {
             // historically may be nil...
             self.id = nil

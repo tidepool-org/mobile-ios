@@ -182,7 +182,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
             NSLog("login failed! Error: " + result.error.debugDescription)
             var errorText = NSLocalizedString("loginErrUserOrPassword", comment: "Wrong email or password!")
             if let error = result.error {
-                NSLog("NSError: \(error)")
+                NSLog("Error: \(error)")
                 if (error as NSError).code == -1009 {
                     errorText = NSLocalizedString("loginErrOffline", comment: "The Internet connection appears to be offline!")
                 }
@@ -355,7 +355,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
 
     func handleCountBloodGlucoseSamples() {
         HealthKitManager.sharedInstance.countBloodGlucoseSamples {
-            (error: NSError?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) in
+            (error: Error?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) in
             
             var alert: UIAlertController?
             let title = "HealthKit Blood Glucose Sample Count"
@@ -363,7 +363,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
             if error == nil {
                 message = "There are \(totalSamplesCount) blood glucose samples and \(totalDexcomSamplesCount) Dexcom samples in HealthKit"
             } else if HealthKitManager.sharedInstance.authorizationRequestedForBloodGlucoseSamples() {
-                message = "Error counting samples: \(error)"
+                message = "Error counting samples: \(String(describing: error))"
             } else {
                 message = "Unable to count sample. Maybe you haven't connected to Health yet. Please login and connect to Health and try again."
             }
@@ -379,14 +379,14 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     func handleFindDateRangeBloodGlucoseSamples() {
         let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
         HealthKitManager.sharedInstance.findSampleDateRange(sampleType: sampleType) {
-            (error: NSError?, startDate: Date?, endDate: Date?) in
+            (error: Error?, startDate: Date?, endDate: Date?) in
             
             var alert: UIAlertController?
             let title = "Date range for blood glucose samples"
             var message = ""
             if error == nil && startDate != nil && endDate != nil {
                 let days = startDate!.differenceInDays(endDate!) + 1
-                message = "Start date: \(startDate), end date: \(endDate). Total days: \(days)"
+                message = "Start date: \(startDate!), end date: \(endDate!). Total days: \(days)"
             } else {
                 message = "Unable to find date range for blood glucose samples, maybe you haven't connected to Health yet, please login and connect to Health and try again. Or maybe there are no samples in HealthKit."
             }

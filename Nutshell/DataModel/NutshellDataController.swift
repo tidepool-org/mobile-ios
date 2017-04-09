@@ -112,7 +112,7 @@ class NutDataController: NSObject
         get {
             if _currentViewedUser == nil {
                 if let user = self.currentLoggedInUser {
-                    NSLog("Current viewable user is \(_currentViewedUser?.fullName)")
+                    NSLog("Current viewable user is \(String(describing: _currentViewedUser?.fullName))")
                     _currentViewedUser = user
                 }
             }
@@ -120,7 +120,7 @@ class NutDataController: NSObject
         }
         set(newUser) {
             _currentViewedUser = newUser
-            NSLog("Current viewable user changed to \(_currentViewedUser!.fullName)")
+            NSLog("Current viewable user changed to \(String(describing: _currentViewedUser!.fullName))")
             self.deleteAnyTidepoolData()
             configureHealthKitInterface()
         }
@@ -239,7 +239,7 @@ class NutDataController: NSObject
                 _currentViewedUser = nil
                 if newUser != nil {
                     _currentUserId = newUser!.userid
-                    NSLog("Set currentUser, name: \(newUser!.username), id: \(newUser!.userid)")
+                    NSLog("Set currentUser, name: \(String(describing: newUser!.username)), id: \(String(describing: newUser!.userid))")
                 } else {
                     NSLog("Cleared currentUser!")
                     _currentUserId = nil
@@ -407,7 +407,7 @@ class NutDataController: NSObject
                     }
                 }
             } catch let error as NSError {
-                print("Failed to remove existing user: \(currentUser.userid) error: \(error)")
+                NSLog("Failed to remove existing user: \(currentUser.userid!)) error: \(error)")
             }
         }
         

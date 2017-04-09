@@ -31,7 +31,7 @@ class User: NSManagedObject {
         fullName = json["fullName"].string
         if fullName != nil {
             self.managedObjectContext?.refresh(self, mergeChanges: true)
-            NSLog("Added full name from profile: \(fullName)")
+            NSLog("Added full name from profile: \(fullName!))")
         }
         let patient = json["patient"]
         let isDSA = patient != JSON.null

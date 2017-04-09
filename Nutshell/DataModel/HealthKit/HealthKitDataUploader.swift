@@ -156,7 +156,7 @@ class HealthKitDataUploader {
                     DDLogInfo("Authorization did not have an error (though we don't know whether permission was given), start uploading if possible")
                     self.startUploading(currentUserId: currentUserId)
                 } else {
-                    DDLogError("Error authorizing health data, success: \(success), \(error))")
+                    DDLogError("Error authorizing health data, success: \(success), \(String(describing: error)))")
                 }
         }
     }
@@ -329,11 +329,12 @@ class HealthKitDataUploader {
 
                     self.uploadSamplesForBatch(samples: samples, completion: completion)
                 } else {
-                    DDLogError("stop reading samples - error starting batch upload of samples: \(error)")
+                    DDLogError("stop reading samples - error starting batch upload of samples: \(String(describing: error))")
                     self.stopReadingSamples(completion: completion, error: error)
                 }
             }
-        } catch let error as NSError! {
+        } catch {
+            let error = NSError(domain: "HealthKitManager", code: -1, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
             DDLogError("stop reading samples - error creating post body for start of batch upload: \(error)")
             self.stopReadingSamples(completion: completion, error: error)
         }
@@ -439,11 +440,12 @@ class HealthKitDataUploader {
                         self.readMore(completion: completion)
                     }
                 } else {
-                    DDLogError("stop reading samples - error uploading samples: \(error)")
+                    DDLogError("stop reading samples - error uploading samples: \(String(describing: error))")
                     self.stopReadingSamples(completion: completion, error: error)
                 }
             }
-        } catch let error as NSError! {
+        } catch {
+            let error = NSError(domain: "HealthKitManager", code: -1, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
             DDLogError("stop reading samples - error creating post body for start of batch upload: \(error)")
             self.stopReadingSamples(completion: completion, error: error)
         }
@@ -533,7 +535,7 @@ class HealthKitDataUploader {
                 if error == nil {
                     self.readMore(completion: completion)
                 } else {
-                    DDLogInfo("stop reading most recent samples due to error: \(error)")
+                    DDLogInfo("stop reading most recent samples due to error: \(String(describing: error))")
                     self.stopReadingMostRecentSamples()
                 }
             } else if self.isReadingSamplesFromAnchor {
@@ -542,7 +544,7 @@ class HealthKitDataUploader {
                     self.stopReadingSamplesFromAnchor(completion: completion, error: nil)
                     self.transitionToPhase(.currentSamples)
                 } else {
-                    DDLogInfo("stop reading samples from anchor due to error: \(error)")
+                    DDLogInfo("stop reading samples from anchor due to error: \(String(describing: error))")
                     self.stopReadingSamplesFromAnchor(completion: completion, error: nil)
                 }
             }

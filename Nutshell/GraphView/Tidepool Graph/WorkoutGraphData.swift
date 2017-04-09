@@ -26,8 +26,8 @@ class WorkoutGraphDataType: GraphDataType {
         self.isMainEvent = isMain
         self.duration = duration
         // id needed if user taps on this item...
-        if let eventId = event.id as? String {
-            self.id = eventId
+        if let eventId = event.id {
+            self.id = eventId as String
         } else {
             // historically may be nil...
             self.id = nil

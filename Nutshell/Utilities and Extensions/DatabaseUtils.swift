@@ -314,31 +314,4 @@ class DatabaseUtils {
         return try moc.fetch(request) as! [Meal]
     }
 
-    // TEST ONLY!
-    // TODO: Move to NutshellTests!
-    func deleteAllNutEvents() {
-        // TODO: Note this is currently only used for testing!
-        let moc = NutDataController.sharedInstance.mocForNutEvents()!
-        do {
-            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "EventItem")
-            let userId = NutDataController.sharedInstance.currentUserId!
-            request.predicate = NSPredicate(format: "(userid == %@) OR (userid = nil)", userId)
-            let myList = try moc.fetch(request) as! [EventItem]
-            for obj: EventItem in myList {
-                if let objId = obj.id as? String {
-                    if objId.hasPrefix("demo")  {
-                        moc.delete(obj)
-                    }
-                }
-            }
-        } catch let error as NSError {
-            NSLog("Failed to delete nut event items: \(error)")
-        }
-        
-        do {
-            try moc.save()
-        } catch let error as NSError {
-            NSLog("deleteAllNutEvents: Failed to save MOC: \(error)")
-        }
-    }
 }

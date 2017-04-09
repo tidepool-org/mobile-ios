@@ -451,7 +451,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             let _ = segue.destination as! SwitchProfileTableViewController
             APIConnector.connector().trackMetric("Clicked switch profile (Home screen)")
         } else {
-            NSLog("Unprepped segue from eventList \(segue.identifier)")
+            NSLog("Unprepped segue from eventList \(String(describing: segue.identifier))")
         }
     }
     
@@ -491,7 +491,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         NSLog("unwind segue to eventList home!")
         if let switchProfileVC = segue.source as? SwitchProfileTableViewController {
             if let newViewedUser = switchProfileVC.newViewedUser {
-                NSLog("TODO: switch to user \(newViewedUser.fullName)")
+                NSLog("TODO: switch to user \(String(describing: newViewedUser.fullName))")
                 if newViewedUser.userid != dataController.currentViewedUser?.userid {
                     switchProfile(newViewedUser)
                 }

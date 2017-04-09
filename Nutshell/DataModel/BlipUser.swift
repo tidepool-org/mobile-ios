@@ -64,13 +64,13 @@ class BlipUser {
                let birthday = dateFormatter.date(from: birthdayString) {
                 patient.birthday = birthday
             } else {
-                DDLogInfo("Patient birthday not present or invalid: \(patientDict["birthday"] as? String)")
+                DDLogInfo("Patient birthday not present or invalid: \(String(describing: patientDict["birthday"]))")
             }
             if let diagnosisDateString = patientDict["diagnosisDate"] as? String,
                let diagnosisDate = dateFormatter.date(from: diagnosisDateString) {
                 patient.diagnosisDate = diagnosisDate
             } else {
-                DDLogInfo("Patient diagnosisDate not present or invalid: \(patientDict["diagnosisDate"] as? String)")
+                DDLogInfo("Patient diagnosisDate not present or invalid: \(String(describing: patientDict["diagnosisDate"]))")
             }
             if let aboutMe = patientDict["aboutMe"] as? String {
                 patient.aboutMe = aboutMe

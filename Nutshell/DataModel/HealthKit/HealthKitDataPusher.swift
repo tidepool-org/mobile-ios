@@ -372,7 +372,7 @@ class HealthKitDataPusher: NSObject {
             return
         }
         
-        if let itemId = event.id as? String, let time = event.time, let type = event.type as? String {
+        if let itemId = event.id, let time = event.time, let type = event.type {
             let bgType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)
             let bgQuantity = HKQuantity(unit: HKUnit(from: "mg/dL"), doubleValue: bgValue!)
             let deviceId = event.deviceId ?? ""

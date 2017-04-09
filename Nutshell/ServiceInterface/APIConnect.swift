@@ -142,7 +142,7 @@ class APIConnector {
     func configure() -> APIConnector {
         HealthKitDataUploader.sharedInstance.uploadHandler = self.doUpload
         self.baseUrl = URL(string: kServers[currentService!]!)!
-        NSLog("Using service: \(self.baseUrl)")
+        NSLog("Using service: \(String(describing: self.baseUrl))")
         self.sessionToken = UserDefaults.standard.string(forKey: kSessionTokenDefaultKey)
         if let reachability = reachability {
             reachability.stopNotifier()
@@ -790,7 +790,7 @@ class APIConnector {
         
         defer {
             if error != nil {
-                DDLogError("Upload failed: \(error), \(error?.userInfo)")
+                DDLogError("Upload failed: \(String(describing: error)), \(String(describing: error?.userInfo))")
                 
                 completion(error, 0)
             }
@@ -830,13 +830,13 @@ class APIConnector {
             }
             
             if error != nil {
-                DDLogError("Upload failed: \(error), \(error?.userInfo)")
+                DDLogError("Upload failed: \(String(describing: error)), \(String(describing: error?.userInfo))")
             }
             
             completion(error, duplicateSampleCount)
         }
 
-        blipRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, subdomainRootOverride: "uploads", completion: handleRequestCompletion as! (URLResponse?, Data?, NSError?) -> Void)
+        blipRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, subdomainRootOverride: "uploads", completion: handleRequestCompletion as (URLResponse?, Data?, NSError?) -> Void)
     }
 
 
@@ -860,7 +860,7 @@ class APIConnector {
             let task = URLSession.shared.dataTask(with: request as URLRequest) {
                 (data, response, error) -> Void in
                 DispatchQueue.main.async(execute: {
-                    completion(response, data, (error as? NSError))
+                    completion(response, data, (error as NSError?))
                 })
                 return
             }

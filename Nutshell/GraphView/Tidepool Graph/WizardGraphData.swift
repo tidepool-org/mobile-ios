@@ -14,30 +14,6 @@
 */
 
 import UIKit
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
-
 
 
 class WizardGraphDataType: GraphDataType {
@@ -170,7 +146,8 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
             let bolusLeftX = bolusRect.origin.x
             let bolusRightX = bolusLeftX + bolusRect.width
             if bolusRightX > rectLeft && bolusLeftX < rectRight {
-                if bolusRect.height > result {
+                let previousHigh = result ?? 0.0
+                if bolusRect.height > previousHigh {
                     // return the bolusRect that is largest and intersects the x position of the target rect
                     result = bolusRect.height
                 }

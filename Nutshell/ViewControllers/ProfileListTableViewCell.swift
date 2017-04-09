@@ -27,13 +27,13 @@ class ProfileListTableViewCell: UITableViewCell {
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
-        NSLog("setSelected \(selected) for \(note?.messagetext)!")
+        NSLog("setSelected \(selected) for \(String(describing: note?.messagetext))!")
 
         super.setSelected(selected, animated: animated)
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        NSLog("setHighlighted \(highlighted) for \(note?.messagetext)!")
+        NSLog("setHighlighted \(highlighted) for \(String(describing: note?.messagetext))!")
         super.setHighlighted(highlighted, animated:animated)
         
         // Configure the view for the highlighted state

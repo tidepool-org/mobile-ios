@@ -184,7 +184,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
             eventEditVC.note = self.note
             APIConnector.connector().trackMetric("Clicked edit a note (Detail screen)")
         } else {
-            NSLog("Unprepped segue from eventView \(segue.identifier)")
+            NSLog("Unprepped segue from eventView \(String(describing: segue.identifier))")
         }
     }
     
