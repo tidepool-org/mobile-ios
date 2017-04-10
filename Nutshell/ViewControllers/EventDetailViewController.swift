@@ -210,6 +210,11 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         }
     }
     
+    @IBAction func cancel(_ segue: UIStoryboardSegue) {
+        // Cancel edit...
+        NSLog("unwind segue to eventDetail cancel")
+    }
+    
     // close the VC on button press from leftBarButtonItem
     @IBAction func backButtonPressed(_ sender: Any) {
         APIConnector.connector().trackMetric("Clicked Back View Note")
