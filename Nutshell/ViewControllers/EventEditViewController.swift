@@ -527,26 +527,26 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
         
         APIConnector.connector().trackMetric("Clicked Hashtag")
         
-        // unwrap the hashtag from userInfo
-        let userInfo:Dictionary<String,String?> = notification.userInfo as! Dictionary<String,String?>
-        let hashtag = userInfo["hashtag"]!
-        
-        // append hashtag to messageBox.text
-        if (messageBox.text == defaultMessage || messageBox.text.isEmpty) {
-            // currently default message
-            messageBox.text = hashtag
-        } else {
-            // not default message, check if there's already a space
-            if (self.messageBox.text.hasSuffix(" ")) {
-                // already a space, append hashtag
-                messageBox.text = messageBox.text + hashtag!
-            } else {
-                // no space yet, throw a space in before hashtag
-                messageBox.text = messageBox.text + " " + hashtag!
+        if let info = notification.userInfo {
+            if let hashtag = info["hashtag"] as? String {
+                // append hashtag to messageBox.text
+                if (messageBox.text == defaultMessage || messageBox.text.isEmpty) {
+                    // currently default message
+                    messageBox.text = hashtag
+                } else {
+                    // not default message, check if there's already a space
+                    if (self.messageBox.text.hasSuffix(" ")) {
+                        // already a space, append hashtag
+                        messageBox.text = messageBox.text + hashtag
+                    } else {
+                        // no space yet, throw a space in before hashtag
+                        messageBox.text = messageBox.text + " " + hashtag
+                    }
+                }
+                // call textViewDidChange to format hashtags with bolding
+                textViewDidChange(messageBox)
             }
         }
-        // call textViewDidChange to format hashtags with bolding
-        textViewDidChange(messageBox)
     }
     
     // Handle touches in the view

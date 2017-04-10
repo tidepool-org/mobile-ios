@@ -945,7 +945,6 @@ extension EventListViewController: UITableViewDataSource {
                     cell.setSelected(true, animated: false)
                 }
             }
-            cell.layoutIfNeeded()
         }
         return cell
     }

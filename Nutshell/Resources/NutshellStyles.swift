@@ -39,7 +39,6 @@ open class Styles: NSObject {
         "darkBackground": darkPurpleColor,
         "lightBackground": veryLightGreyColor,
         "whiteBackground": whiteColor,
-        "graphSeparator": darkPurpleColor,
         // login & signup
         "brightBackgroundButton": brightBlueColor,
         "userDataEntry": whiteColor,
@@ -47,7 +46,6 @@ open class Styles: NSObject {
         "rowSeparator": dimmedDarkGreyColor,
         "darkBackgroundButton": darkPurpleColor,
         // add/edit event scenes
-        "addEditViewSaveButton": brightBlueColor,
         "loginButton": brightBlueColor,
     ]
 
@@ -63,39 +61,15 @@ open class Styles: NSObject {
         "brightLinkText": (smallRegularFont, blackColor),
         "networkDisconnectText" : (largeRegularFont, whiteColor),
         // event list table scene
-        "cellNoteText": (mediumSmallRegularFont, altDarkGreyColor),
-        "cellNoteTextSelected": (mediumSmallSemiboldFont, altDarkGreyColor),
         "profileCellNameText": (mediumSmallRegularFont, darkPurpleColor),
-        "eventListCellLocation": (smallSemiboldFont, altDarkGreyColor),
-        "eventListCellRepeatCount": (mediumSemiboldFont, altDarkGreyColor),
         "searchPlaceholder": (mediumLightFont, blackColor),
-        "searchText": (largeRegularFont, blackColor),
         // grouped event list table scene
-        "groupedEventHeaderTitle": (mediumSemiboldFont, whiteColor),
-        "groupedEventHeaderLocation": (smallSemiboldFont, whiteColor),
-        "groupedEventHeaderButton": (mediumVerySmallSemiboldFont, whiteColor),
-        "groupedEventCellTitle": (mediumSmallSemiboldFont, darkGreyColor),
         "groupedEventCellDate": (smallRegularFont, altDarkGreyColor),
         // event detail view scene
-        "detailHeaderTitle": (mediumLargeBoldFont, whiteColor),
-        "detailHeaderNotes": (mediumRegularFont, whiteColor),
-        "detailHeaderDate": (smallRegularFont, whiteColor),
-        "detailHeaderLocation": (smallBoldFont, whiteColor),
-        "advisoryText": (mediumSemiboldFont, darkGreyColor),
-        "advisorySubtext": (mediumRegularFont, lightDarkGreyColor),
-        "greenLink": (mediumRegularFont, lightGreenColor),
         // event detail graph area
-        "currentGraphDate" : (smallRegularFont, lightDarkGreyColor),
         // add/edit event scenes
-        "addEditViewTitle": (mediumLargeBoldFont, whiteColor),
-        "addEditViewNotes": (mediumRegularFont, whiteColor),
-        "addEditViewHint": (smallRegularFont, whiteColor),
-        "addEditViewDate": (smallRegularFont, whiteColor),
-        "addEditViewLocation": (smallRegularFont, whiteColor),
-        "addEditViewSaveButton": (mediumBoldFont, whiteColor),
         // account configuration scene
         "sidebarSettingUserName": (mediumSmallSemiboldFont, brightBlueColor),
-        "sidebarSettingItem": (mediumSmallRegularFont, brightBlueColor),
         "sidebarSettingItemSmall": (verySmallRegularFont, altDarkGreyColor),
         "sidebarLogoutButton": (mediumSemiboldFont, darkGreyColor),
         "sidebarOtherLinks": (mediumSmallRegularFont, mediumLightGreyColor),
@@ -191,35 +165,29 @@ open class Styles: NSObject {
     
     fileprivate struct ColorCache {
         static let darkPurpleColor: UIColor = UIColor(hex: 0x281946)
-        static let brightBlueColor: UIColor = UIColor(hex: 0x627cff) 
-        static let lightGreyColor: UIColor = UIColor(hex: 0xeaeff0) 
+        static let lightGreyColor: UIColor = UIColor(hex: 0xeaeff0)
         static let veryLightGreyColor: UIColor = UIColor(hex: 0xF7F7F8)
         static let redErrorColor: UIColor = UIColor(hex: 0xff354e)
         static let pinkColor: UIColor = UIColor(hex: 0xf58fc7, opacity: 0.75)
         static let purpleColor: UIColor = UIColor(hex: 0xb29ac9)
         static let darkGreyColor: UIColor = UIColor(hex: 0x4a4a4a)
-        static let lightDarkGreyColor: UIColor = UIColor(hex: 0x5c5c5c) 
+        static let lightDarkGreyColor: UIColor = UIColor(hex: 0x5c5c5c)//
         static let altDarkGreyColor: UIColor = UIColor(hex: 0x4d4e4c) 
-        static let alt2DarkGreyColor: UIColor = UIColor(hex: 0x58595b)
+        static let alt2DarkGreyColor: UIColor = UIColor(hex: 0x58595b)//
+        static let dimmedDarkGreyColor: UIColor = UIColor(hex: 0xcbcbcb
+            , opacity: 0.5)
         static let mediumLightGreyColor: UIColor = UIColor(hex: 0x7e7e7e)
-        static let mediumGreyColor: UIColor = UIColor(hex: 0xb8b8b8) 
-        static let whiteColor: UIColor = UIColor(hex: 0xffffff) 
+        static let whiteColor: UIColor = UIColor(hex: 0xffffff)
         static let dimmedWhiteColor: UIColor = UIColor(hex: 0xffffff, opacity: 0.30)
         static let blackColor: UIColor = UIColor(hex: 0x000000)
         static let blackishColor: UIColor = UIColor(hex: 0x3c3c3c)
         static let peachColor: UIColor = UIColor(hex: 0xf88d79)
-        static let peachDeleteColor: UIColor = UIColor(hex: 0xf66f56)
         static let greenColor: UIColor = UIColor(hex: 0x98ca63)
-        static let lightGreenColor: UIColor = UIColor(hex: 0x4cd964) 
-        static let lightBlueColor: UIColor = UIColor(hex: 0xc5e5f1) 
+        static let lightBlueColor: UIColor = UIColor(hex: 0xc5e5f1)
         static let blueColor: UIColor = UIColor(hex: 0x7aceef) 
         static let mediumBlueColor: UIColor = UIColor(hex: 0x6db7d4) 
-        static let goldColor: UIColor = UIColor(hex: 0xffd382) 
-        static let lineColor: UIColor = UIColor(hex: 0x281946) 
-        static let goldStarColor: UIColor = UIColor(hex: 0xf8ad04) 
-        static let greyStarColor: UIColor = UIColor(hex: 0xd0d3d4) 
-        static let dimmedDarkGreyColor: UIColor = UIColor(hex: 0xcbcbcb
-            , opacity: 0.5)
+        static let brightBlueColor: UIColor = UIColor(hex: 0x627cff)
+        static let goldColor: UIColor = UIColor(hex: 0xffd382)
     }
 
     open class var darkPurpleColor: UIColor { return ColorCache.darkPurpleColor }
@@ -238,16 +206,13 @@ open class Styles: NSObject {
     open class var altDarkGreyColor: UIColor { return ColorCache.altDarkGreyColor }
     open class var alt2DarkGreyColor: UIColor { return ColorCache.alt2DarkGreyColor }
     open class var mediumLightGreyColor: UIColor { return ColorCache.mediumLightGreyColor }
-    open class var mediumGreyColor: UIColor { return ColorCache.mediumGreyColor }
     open class var whiteColor: UIColor { return ColorCache.whiteColor }
     open class var dimmedWhiteColor: UIColor { return ColorCache.dimmedWhiteColor }
     open class var blackColor: UIColor { return ColorCache.blackColor }
     open class var blackishColor: UIColor { return ColorCache.blackishColor }
     open class var peachColor: UIColor { return ColorCache.peachColor }
-    open class var peachDeleteColor: UIColor { return ColorCache.peachDeleteColor }
     open class var purpleColor: UIColor { return ColorCache.purpleColor }
     open class var greenColor: UIColor { return ColorCache.greenColor }
-    open class var lightGreenColor: UIColor { return ColorCache.lightGreenColor }
 
     //
     // MARK: - Graph Colors
@@ -260,18 +225,13 @@ open class Styles: NSObject {
     // Open Sans Semibold 10:   custom graph insulin amount text
     open class var mediumBlueColor: UIColor { return ColorCache.mediumBlueColor }
     
-    // event carb amount circle and vertical line
+    // event carb amount circle
     open class var goldColor: UIColor { return ColorCache.goldColor }
-    open class var lineColor: UIColor { return ColorCache.lineColor }
     
     //
     // MARK: - Misc Colors
     //
     
-    // Icon:    favorite star colors
-    open class var goldStarColor: UIColor { return ColorCache.goldStarColor }
-    open class var greyStarColor: UIColor { return ColorCache.greyStarColor }
-
     // View:    table row line separator
     open class var dimmedDarkGreyColor: UIColor { return ColorCache.dimmedDarkGreyColor }
 
