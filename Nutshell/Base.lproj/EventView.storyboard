@@ -76,11 +76,11 @@
                                                         </constraints>
                                                     </imageView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There is no data in here" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VO8-6Z-8xg">
-                                                        <rect key="frame" x="125.5" y="76.5" width="70" height="27.5"/>
+                                                        <rect key="frame" x="125.5" y="78" width="70" height="33"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="70" id="7LD-aK-JZF"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -92,12 +92,12 @@
                                                         </constraints>
                                                     </imageView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="shA-V9-KcA" userLabel="howToUploadButton">
-                                                        <rect key="frame" x="120.5" y="139" width="79" height="23"/>
+                                                        <rect key="frame" x="112.5" y="139" width="95" height="23"/>
                                                         <color key="backgroundColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="23" id="C1z-rM-XTH"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <state key="normal" title="  How to upload  ">
                                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         </state>
@@ -109,7 +109,7 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
                                                     <constraint firstItem="KT4-x3-8Ht" firstAttribute="centerX" secondItem="Mf1-qM-eOo" secondAttribute="centerX" id="36I-I6-s7A"/>
-                                                    <constraint firstItem="VO8-6Z-8xg" firstAttribute="centerY" secondItem="KT4-x3-8Ht" secondAttribute="centerY" id="D49-Fb-qaL"/>
+                                                    <constraint firstItem="VO8-6Z-8xg" firstAttribute="centerY" secondItem="KT4-x3-8Ht" secondAttribute="centerY" multiplier="1.05" id="D49-Fb-qaL"/>
                                                     <constraint firstItem="shA-V9-KcA" firstAttribute="top" secondItem="KT4-x3-8Ht" secondAttribute="bottom" constant="10" id="EjH-C8-YBk"/>
                                                     <constraint firstItem="shA-V9-KcA" firstAttribute="centerX" secondItem="Mf1-qM-eOo" secondAttribute="centerX" id="G3J-fJ-iXm"/>
                                                     <constraint firstItem="KT4-x3-8Ht" firstAttribute="centerY" secondItem="Mf1-qM-eOo" secondAttribute="centerY" id="J96-bU-3bU"/>
@@ -745,11 +745,11 @@
                                                         </constraints>
                                                     </imageView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There is no data in here" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x2w-6b-bUJ">
-                                                        <rect key="frame" x="125.5" y="106.5" width="70" height="27.5"/>
+                                                        <rect key="frame" x="125.5" y="109.5" width="70" height="33"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="70" id="qm0-7o-Bx8"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -761,12 +761,12 @@
                                                         </constraints>
                                                     </imageView>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mL4-jg-su7" userLabel="howToUploadButton">
-                                                        <rect key="frame" x="120.5" y="169" width="79" height="23"/>
+                                                        <rect key="frame" x="112.5" y="169" width="95" height="23"/>
                                                         <color key="backgroundColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="23" id="p3S-Hs-8Za"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <state key="normal" title="  How to upload  ">
                                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         </state>
@@ -782,7 +782,7 @@
                                                     <constraint firstItem="QRT-Un-FuK" firstAttribute="centerY" secondItem="U4O-qR-7nu" secondAttribute="centerY" multiplier="1.25" id="RdR-B3-AGG"/>
                                                     <constraint firstItem="x2w-6b-bUJ" firstAttribute="centerX" secondItem="PaM-rt-baH" secondAttribute="centerX" id="UfR-nV-lq4"/>
                                                     <constraint firstItem="xhN-hT-RfU" firstAttribute="leading" secondItem="U4O-qR-7nu" secondAttribute="leading" constant="-30" id="Z75-k2-yWI"/>
-                                                    <constraint firstItem="x2w-6b-bUJ" firstAttribute="centerY" secondItem="PaM-rt-baH" secondAttribute="centerY" id="aDF-Df-6h7"/>
+                                                    <constraint firstItem="x2w-6b-bUJ" firstAttribute="centerY" secondItem="PaM-rt-baH" secondAttribute="centerY" multiplier="1.05" id="aDF-Df-6h7"/>
                                                     <constraint firstItem="mL4-jg-su7" firstAttribute="top" secondItem="PaM-rt-baH" secondAttribute="bottom" constant="10" id="cez-Vh-PGb"/>
                                                     <constraint firstItem="xhN-hT-RfU" firstAttribute="centerY" secondItem="U4O-qR-7nu" secondAttribute="centerY" multiplier="0.75" id="dG8-c8-gdw"/>
                                                     <constraint firstItem="mL4-jg-su7" firstAttribute="centerX" secondItem="U4O-qR-7nu" secondAttribute="centerX" id="qGN-Zn-ihc"/>

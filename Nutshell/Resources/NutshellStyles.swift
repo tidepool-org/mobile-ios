@@ -54,11 +54,11 @@ open class Styles: NSObject {
         // general usage
         "brightBackgroundButton": (largeRegularFont, whiteColor),
         "darkBackgroundButton": (largeRegularFont, whiteColor),
-        "loginButton": (smallSemiboldFont, whiteColor),
+        "loginButton": (mediumSemiboldFont, whiteColor),
         // login & signup scenes
-        "userDataEntry": (smallRegularFont, blackColor),
+        "userDataEntry": (mediumRegularFont, blackColor),
         "dataEntryErrorFeedback": (smallSemiboldFont, redErrorColor),
-        "brightLinkText": (smallRegularFont, blackColor),
+        "brightLinkText": (mediumRegularFont, blackColor),
         "networkDisconnectText" : (largeRegularFont, whiteColor),
         // event list table scene
         "profileCellNameText": (mediumSmallRegularFont, darkPurpleColor),
@@ -118,7 +118,7 @@ open class Styles: NSObject {
         static let mediumLargeBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 17.5)!
         static let navTitleFont: UIFont = UIFont(name: "OpenSans", size: 17.5)!
         
-        static let verySmallLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 10.0)!
+        static let smallLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 12.0)!
         static let mediumLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 17.0)!
         
         // Fonts for special graph view
@@ -147,7 +147,7 @@ open class Styles: NSObject {
     open class var mediumLargeBoldFont: UIFont { return FontCache.mediumLargeBoldFont }
     open class var navTitleFont: UIFont { return FontCache.navTitleFont }
 
-    open class var verySmallLightFont: UIFont { return FontCache.verySmallLightFont }
+    open class var smallLightFont: UIFont { return FontCache.smallLightFont }
     open class var mediumLightFont: UIFont { return FontCache.mediumLightFont }
 
     // Fonts for special graph view

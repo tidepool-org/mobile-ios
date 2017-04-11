@@ -272,6 +272,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         self.title = newUser.fullName ?? ""
         selectedNote = nil
         selectedIndexPath = nil
+        notes = []
+        tableView.reloadData()
         configureGraphContainer()
         refresh()
     }
@@ -294,9 +296,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
     func selectAndScrollToNoteAtIndexPath(_ path: IndexPath) {
         self.selectedIndexPath = path
-        selectNote(notes[path.item])
-        self.tableView.selectRow(at: path, animated: true, scrollPosition: .top)
-        self.tableView.scrollToNearestSelectedRow(at: .top, animated: true)
+        if let note = noteForIndexPath(path) {
+            selectNote(note)
+            self.tableView.selectRow(at: path, animated: true, scrollPosition: .top)
+            self.tableView.scrollToNearestSelectedRow(at: .top, animated: true)
+        }
     }
     
     func selectAndScrollToNote(_ note: BlipNote) {
@@ -322,6 +326,15 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         return nil
     }
 
+    func noteForIndexPath(_ indexPath: IndexPath) -> BlipNote? {
+        let noteIndex = indexPath.item
+        if noteIndex < self.notes.count {
+            return notes[noteIndex]
+        } else {
+            NSLog("\(#function): index \(noteIndex) out of range of note count \(self.notes.count)!!!")
+            return nil
+        }
+    }
     //
     // MARK: - NoteAPIWatcher Delegate
     //
@@ -415,7 +428,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         DDLogVerbose("trace)")
         
         if (!loadingNotes) {
-            notes = []
             notes = []
             lastDateFetchTo = Date()
             loadNotes()
@@ -757,14 +769,14 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     /// Reloads the graph - this should be called after the header has been laid out and the graph section size has been figured. Pass in edgeOffset to place the nut event other than in the center.
     fileprivate func configureGraphContainer(_ edgeOffset: CGFloat = 0.0) {
         NSLog("EventListVC: configureGraphContainer")
+        if (graphContainerView != nil) {
+            NSLog("Removing current graph view...")
+            graphContainerView?.removeFromSuperview();
+            graphContainerView = nil;
+        }
+        
         if let note = self.selectedNote {
             NSLog("Configuring graph for note id: \(note.id)")
-
-            if (graphContainerView != nil) {
-                NSLog("Removing current graph view...")
-                graphContainerView?.removeFromSuperview();
-                graphContainerView = nil;
-            }
 
             // TODO: assume all notes created in current timezone?
             let tzOffset = NSCalendar.current.timeZone.secondsFromGMT()
@@ -880,8 +892,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 }
             }
             self.selectedIndexPath = topIndexPath
-            selectNote(notes[topIndexPath.item])
-            self.tableView.selectRow(at: topIndexPath, animated: true, scrollPosition: .top)
+            // Note: during a profile switch, table may momentarily be in a state with zero notes...
+            if let note = noteForIndexPath(topIndexPath) {
+                selectNote(note)
+                self.tableView.selectRow(at: topIndexPath, animated: true, scrollPosition: .top)
+            }
         }
     }
 }
@@ -903,14 +918,14 @@ extension EventListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let note = notes[indexPath.item]
-        if selectedNote != nil && selectedNote!.id != note.id {
-            // set so we come back to this one
-            self.selectedIndexPath = indexPath
-            selectNote(note)
+        if let note = noteForIndexPath(indexPath) {
+            if selectedNote != nil && selectedNote!.id != note.id {
+                // set so we come back to this one
+                self.selectedIndexPath = indexPath
+                selectNote(note)
+            }
+            self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue, sender: self)
         }
-
-        self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue, sender: self)
     }
 }
 

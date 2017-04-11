@@ -153,13 +153,13 @@ class TidepoolGraphLayout: GraphLayout {
         self.yAxisValuesWithLabels = [40, 80, 180, 300]
     
         self.axesLabelTextColor = Styles.alt2DarkGreyColor
-        self.axesLabelTextFont = Styles.verySmallRegularFont
+        self.axesLabelTextFont = Styles.smallRegularFont
         self.axesLeftLabelTextColor = Styles.alt2DarkGreyColor
         self.axesRightLabelTextColor = Styles.alt2DarkGreyColor
         
         self.hourMarkerStrokeColor = UIColor(hex: 0xdce1f2)
-        self.xLabelRegularFont = Styles.verySmallRegularFont
-        self.xLabelLightFont = Styles.verySmallLightFont
+        self.xLabelRegularFont = Styles.smallRegularFont
+        self.xLabelLightFont = Styles.smallLightFont
         
         let graphViewHeight = ceil(graphViewSize.height) // often this is fractional
         
