@@ -147,6 +147,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         appDelegate?.checkConnection()
         APIConnector.connector().trackMetric("Viewed Home Screen (Home Screen)")
+        
+        // one-time check to show celebrate UI
+        celebrateCheck()
     }
     
     // each first time launch of app, let user know we are still in test mode!
@@ -239,8 +242,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 performSegue(withIdentifier: "segueToSwitchProfile", sender: self)
             } else if sideMenuController.userSelectedLogout {
                 APIConnector.connector().trackMetric("Clicked Log Out (Hamburger)")
-                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                appDelegate.logout()
+                APIConnector.connector().logout() {
+                    self.performSegue(withIdentifier: "segueToLogin", sender: self)
+                }
             } else if let url = sideMenuController.userSelectedExternalLink {
                 UIApplication.shared.openURL(url)
             }
@@ -253,6 +257,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         APIConnector.connector().trackMetric("Viewed Hamburger Menu (Hamburger)")
     }
 
+    
     //
     // MARK: - Notes methods
     //
@@ -462,6 +467,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         } else if segue.identifier == "segueToSwitchProfile" {
             let _ = segue.destination as! SwitchProfileTableViewController
             APIConnector.connector().trackMetric("Clicked switch profile (Home screen)")
+        }  else if segue.identifier == "segueToCelebrationView" {
+            let _ = segue.destination as! ConnectToHealthCelebrationViewController
+            APIConnector.connector().trackMetric("Showing connect to health celebration (Home screen)")
         } else {
             NSLog("Unprepped segue from eventList \(String(describing: segue.identifier))")
         }
@@ -547,6 +555,24 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         }
     }
     
+    // Note: to test celebrate, change the following to true, and it will come up once on each app launch...
+    static var oneShotTestCelebrate = false
+    private func celebrateCheck() {
+        // Show connect to health celebration
+        if (EventListViewController.oneShotTestCelebrate || (AppDelegate.shouldShowHealthKitUI() && !UserDefaults.standard.bool(forKey: "ConnectToHealthCelebrationHasBeenShown"))) {
+            EventListViewController.oneShotTestCelebrate = false
+            self.performSegue(withIdentifier: "segueToCelebrationView", sender: self)
+        }
+    }
+    
+    @IBAction func unwindFromCelebrate(_ sender: UIStoryboardSegue) {
+        NSLog("EventList: \(#function)")
+        // Celebration finished!
+        UserDefaults.standard.set(true, forKey: "ConnectToHealthCelebrationHasBeenShown")
+        UserDefaults.standard.synchronize()
+    }
+    
+
     @IBAction func howToUploadButtonHandler(_ sender: Any) {
         NSLog("TODO!")
     }
@@ -928,6 +954,7 @@ extension EventListViewController: UITableViewDelegate {
         }
     }
 }
+
 
 //
 // MARK: - Table view data source

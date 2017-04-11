@@ -31,7 +31,6 @@ let appHealthKitConfiguration = NutshellHealthKitConfiguration()
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    static var healthKitUIEnabled = true
     // one shot, true until we go to foreground...
     fileprivate var freshLaunch = true
     // one shot, UI should put up dialog letting user know we are in test mode!
@@ -41,10 +40,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         DDLogVerbose("trace")
 
-        // Default HealthKit UI enable UI to on unless iPad
-        // TODO: remove, for v0.8.6.0 release only!
-        AppDelegate.healthKitUIEnabled = HKHealthStore.isHealthDataAvailable()
-        
         // Override point for customization after application launch.
         UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor
         UINavigationBar.appearance().isTranslucent = false
@@ -64,6 +59,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
         
         // Note: for non-background launches, this will continue in applicationDidBecomeActive...
+    }
+    
+    class func shouldShowHealthKitUI() -> Bool {
+        var showHealthKitUI = true
+        // Note: Right now this is hard-wired true
+        if !HKHealthStore.isHealthDataAvailable() {
+            showHealthKitUI = false
+        }
+        // isDSAUser is used as main control of whether we show the HealthKit UI.
+        if let isDSAUser = NutDataController.sharedInstance.isDSAUser {
+            if !isDSAUser {
+                showHealthKitUI = false
+            }
+        }
+        return showHealthKitUI
     }
     
     static var testMode: Bool {

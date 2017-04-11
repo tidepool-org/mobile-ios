@@ -333,11 +333,20 @@
                         <outlet property="passwordTextField" destination="yzu-4v-Bis" id="CbM-8W-WV7"/>
                         <outlet property="signUpButton" destination="XD9-cK-wuz" id="7E1-C1-xrr"/>
                         <outlet property="versionLabel" destination="5xp-AB-RVE" id="sHh-HI-Z0A"/>
+                        <segue destination="45X-5z-ubT" kind="presentation" identifier="showEventListSegue" modalTransitionStyle="flipHorizontal" id="X2X-nW-Gsk"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H67-J5-4Gu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="595" y="466"/>
+        </scene>
+        <!--EventView-->
+        <scene sceneID="cPW-YY-PLh">
+            <objects>
+                <viewControllerPlaceholder storyboardName="EventView" id="45X-5z-ubT" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xux-V6-swt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="594" y="915"/>
         </scene>
     </scenes>
     <resources>

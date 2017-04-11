@@ -159,8 +159,8 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         NSLog("TODO: forgot password!")
     }
 
+    
     fileprivate func processLoginResult(_ result: Alamofire.Result<User>) {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         self.loginIndicator.stopAnimating()
         if (result.isSuccess) {
             if let user=result.value {
@@ -171,7 +171,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
                         if let json = result.value {
                             NutDataController.sharedInstance.processLoginProfileFetch(json)
                         }
-                        appDelegate.setupUIForLoginSuccess()
+                        self.performSegue(withIdentifier: "showEventListSegue", sender: self)
                     }
                 }
             } else {

@@ -572,6 +572,7 @@
 				48103E981C1DE7BC0055C27A /* EventViewNavController.swift */,
 				4872118C1E8D818300BAD5CE /* SwitchProfileTableViewController.swift */,
 				4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */,
+				48ECF6C91E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift */,
 			);
 			name = EventViewControllers;
 			sourceTree = "<group>";
@@ -593,7 +594,6 @@
 		485922BB1B9CA0890056E605 /* MenuViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				48ECF6C91E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift */,
 				484365D71CA1118A0046A2C5 /* Menu.storyboard */,
 				4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */,
 				4806E3391E995A350024A497 /* TPMenuButton.swift */,

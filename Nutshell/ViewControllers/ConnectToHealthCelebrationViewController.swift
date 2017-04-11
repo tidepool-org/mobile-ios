@@ -40,12 +40,9 @@ class ConnectToHealthCelebrationViewController: UIViewController {
                 
             }
         }
-
-
     }
     
     @IBAction func dismissButtonTapped(_ sender: AnyObject) {
-        let notification = Notification(name: Notification.Name(rawValue: Notifications.DismissButtonTapped), object: self)
-        NotificationCenter.default.post(notification)
+        self.performSegue(withIdentifier: "unwindSegueToLogin", sender: self)
     }
 }

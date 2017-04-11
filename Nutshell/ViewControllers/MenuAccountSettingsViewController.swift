@@ -168,17 +168,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
             stopHKTimeRefreshTimer()
         }
         
-        var hideHealthKitUI = false
-        // Note: Right now this is hard-wired true
-        if !AppDelegate.healthKitUIEnabled {
-            hideHealthKitUI = true
-        }
-        // isDSAUser is used as main control of whether we show the HealthKit UI.
-        if let isDSAUser = NutDataController.sharedInstance.isDSAUser {
-            if !isDSAUser {
-                hideHealthKitUI = true
-            }
-        }
+        let hideHealthKitUI = !AppDelegate.shouldShowHealthKitUI()
         healthKitSwitch.isHidden = hideHealthKitUI
         healthKitLabel.isHidden = hideHealthKitUI
         healthStatusContainerView.isHidden = hideHealthKitUI || !hkCurrentEnable
