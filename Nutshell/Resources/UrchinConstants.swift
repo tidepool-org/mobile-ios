@@ -495,12 +495,6 @@ let trashAlertCancel: String = "Cancel"
 let trashAlertOkay: String = "OK"
 
 /*
- Post button sizing
- */
-let postButtonW: CGFloat = 112
-let postButtonH: CGFloat = 41
-
-/*
  Animation times
  fade time should be shorter than animation time
  */

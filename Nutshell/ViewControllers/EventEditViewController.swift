@@ -48,6 +48,9 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
     
     // More UI Elements
     let messageBox: UITextView = UITextView()
+    
+    let postButtonW: CGFloat = 112
+    let postButtonH: CGFloat = 41
     let postButton: UIButton = UIButton()
     
     // Original note, edited note, and the full name for the group

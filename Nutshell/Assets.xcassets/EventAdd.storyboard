@@ -99,7 +99,6 @@
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
-                        <outlet property="navBar" destination="t3s-nA-bg7" id="Gox-1I-G5g"/>
                         <outlet property="saveButton" destination="l8u-ZM-ASl" id="sZx-X2-UE6"/>
                         <outlet property="sceneContainerView" destination="eQn-GO-3ak" id="qE0-8s-30A"/>
                         <segue destination="Ydi-yO-Q5f" kind="unwind" identifier="unwindToDone" unwindAction="done:" id="cfI-4d-TG8"/>

@@ -20,7 +20,6 @@ import CocoaLumberjack
 
 class EventAddViewController: BaseUIViewController, UITextViewDelegate {
 
-    @IBOutlet weak var navBar: UINavigationBar!
     @IBOutlet weak var sceneContainerView: NutshellUIView!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
@@ -48,6 +47,14 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
     
     // UI Elements
     let messageBox: UITextView = UITextView()
+    
+    /*
+     Post button sizing: 
+     TODO: removed for now by making this zero height and changing some configuration...
+     */
+    let postButtonW: CGFloat = 112
+    let postButtonH: CGFloat = 0
+
     let postButton: UIButton = UIButton()
     
     // Data
@@ -106,14 +113,6 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
         }
         subviewsInitialized = true
 
-        // Thicken navBar border
-        let border = CALayer()
-        border.borderColor = white20PercentAlpha.cgColor
-        border.borderWidth = 1
-        let navBarLayer = self.navBar.layer
-        border.frame = CGRect(x: 0, y: navBarLayer.bounds.height, width: navBarLayer.bounds.width, height: 1)
-        navBarLayer.addSublayer(border)
-                
         configureTitleView()
         
         // configure date label
@@ -179,11 +178,14 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
         self.sceneContainerView.addSubview(separatorTwo)
         
         // configure post button
-        postButton.setAttributedTitle(NSAttributedString(string:postButtonText,
-                                                         attributes:[NSForegroundColorAttributeName: postButtonTextColor, NSFontAttributeName: mediumRegularFont]), for: UIControlState())
-        postButton.backgroundColor = Styles.brightBlueColor
-        postButton.alpha = 0.5
-        postButton.addTarget(self, action: #selector(EventAddViewController.postNote(_:)), for: .touchUpInside)
+        // TODO: with post/save button now in navigation bar, hide for now, and make zero height - eventually remove when all this goes to storyboard
+        postButton.isHidden = true
+
+        //        postButton.setAttributedTitle(NSAttributedString(string:postButtonText,
+        //                                                         attributes:[NSForegroundColorAttributeName: postButtonTextColor, NSFontAttributeName: mediumRegularFont]), for: UIControlState())
+        //        postButton.backgroundColor = Styles.brightBlueColor
+        //        postButton.alpha = 0.5
+        //        postButton.addTarget(self, action: #selector(EventAddViewController.postNote(_:)), for: .touchUpInside)
         postButton.frame.size = CGSize(width: postButtonW, height: postButtonH)
         postButton.frame.origin.x = self.sceneContainerView.frame.size.width - (labelInset + postButton.frame.width)
         let statusBarH = UIApplication.shared.statusBarFrame.size.height
@@ -217,10 +219,8 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
         
     // Configure title of navigationBar to given string
     func configureTitleView() {
-        if let navItem = self.navBar.topItem {
-            //navItem.title = user.fullName ?? ""
-            navItem.title = "New Note"
-        }
+        // TODO: Change to name?
+        self.navigationItem.title = "New Note"
     }
     
     // close the VC on button press from leftBarButtonItem

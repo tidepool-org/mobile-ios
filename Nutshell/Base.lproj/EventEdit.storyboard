@@ -37,6 +37,7 @@
                                                             </connections>
                                                         </barButtonItem>
                                                         <barButtonItem key="rightBarButtonItem" title="Delete" id="har-Na-d6U" userLabel="deleteButton">
+                                                            <color key="tintColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <connections>
                                                                 <action selector="deleteButtonHandler:" destination="Wac-B3-d2O" id="sGh-xR-7Zr"/>
                                                             </connections>
