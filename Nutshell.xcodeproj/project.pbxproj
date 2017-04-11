@@ -104,6 +104,10 @@
 		4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
 		4820ED6A1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
 		4820ED6B1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
+		48276A181E9D582D004CADB1 /* Celebration.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A161E9D582D004CADB1 /* Celebration.storyboard */; };
+		48276A1B1E9D589F004CADB1 /* SwitchProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A191E9D589F004CADB1 /* SwitchProfile.storyboard */; };
+		48276A1E1E9D5900004CADB1 /* EventEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A1C1E9D5900004CADB1 /* EventEdit.storyboard */; };
+		48276A201E9D5941004CADB1 /* EventAdd.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A1F1E9D5941004CADB1 /* EventAdd.storyboard */; };
 		482BB3601E8C942E008CD02A /* NutshellUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482BB35F1E8C942E008CD02A /* NutshellUISwitch.swift */; };
 		482BB3621E8D5FCA008CD02A /* NoteGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482BB3611E8D5FCA008CD02A /* NoteGraphData.swift */; };
 		482ECC821C94BB9D002A015D /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */; };
@@ -311,6 +315,10 @@
 		48103E9C1C1E05660055C27A /* Nutshell-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Nutshell-Bridging-Header.h"; sourceTree = "<group>"; };
 		4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/Pods-Nutshell/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		4820ED691C21E8E3008C754A /* GraphDataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataTypes.swift; path = GraphView/GraphDataTypes.swift; sourceTree = "<group>"; };
+		48276A171E9D582D004CADB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Celebration.storyboard; sourceTree = "<group>"; };
+		48276A1A1E9D589F004CADB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SwitchProfile.storyboard; sourceTree = "<group>"; };
+		48276A1D1E9D5900004CADB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EventEdit.storyboard; sourceTree = "<group>"; };
+		48276A1F1E9D5941004CADB1 /* EventAdd.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = EventAdd.storyboard; path = Assets.xcassets/EventAdd.storyboard; sourceTree = "<group>"; };
 		482BB35F1E8C942E008CD02A /* NutshellUISwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutshellUISwitch.swift; path = Resources/NutshellUISwitch.swift; sourceTree = "<group>"; };
 		482BB3611E8D5FCA008CD02A /* NoteGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteGraphData.swift; path = "GraphView/Tidepool Graph/NoteGraphData.swift"; sourceTree = "<group>"; };
 		482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataUploader.swift; path = DataModel/HealthKit/HealthKitDataUploader.swift; sourceTree = "<group>"; };
@@ -527,6 +535,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		48276A151E9D57CF004CADB1 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				4859FCC41B9A4DE4000C1269 /* LaunchScreen.storyboard */,
+				485922991B9A61510056E605 /* Login.storyboard */,
+				484365D71CA1118A0046A2C5 /* Menu.storyboard */,
+				4859FCBC1B9A4DE4000C1269 /* EventView.storyboard */,
+				48276A1F1E9D5941004CADB1 /* EventAdd.storyboard */,
+				48276A1C1E9D5900004CADB1 /* EventEdit.storyboard */,
+				48276A191E9D589F004CADB1 /* SwitchProfile.storyboard */,
+				48276A161E9D582D004CADB1 /* Celebration.storyboard */,
+			);
+			name = Storyboards;
+			sourceTree = "<group>";
+		};
 		482ECC841C94BBA5002A015D /* HealthKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -541,7 +564,6 @@
 		483E3C331B9F4A3000DA49E7 /* LoginViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				485922991B9A61510056E605 /* Login.storyboard */,
 				486F5E101BA08DE900BA2A57 /* LoginViewController.swift */,
 			);
 			name = LoginViewControllers;
@@ -560,7 +582,6 @@
 		485922A01B9A62AB0056E605 /* EventViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				4859FCBC1B9A4DE4000C1269 /* EventView.storyboard */,
 				486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */,
 				48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */,
 				48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */,
@@ -594,7 +615,6 @@
 		485922BB1B9CA0890056E605 /* MenuViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				484365D71CA1118A0046A2C5 /* Menu.storyboard */,
 				4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */,
 				4806E3391E995A350024A497 /* TPMenuButton.swift */,
 			);
@@ -630,10 +650,10 @@
 				48AEB7C71C1CE33F00B2A214 /* Third Party */,
 				4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */,
 				48DA110F1CE3CBD600B99C35 /* main.swift */,
-				4859FCC41B9A4DE4000C1269 /* LaunchScreen.storyboard */,
 				4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */,
 				486F5E1C1BA0D85900BA2A57 /* Service */,
 				486F5E221BA0DB7400BA2A57 /* DataModel */,
+				48276A151E9D57CF004CADB1 /* Storyboards */,
 				486F5DFE1B9F876300BA2A57 /* View Controllers */,
 				486F5E381BA0E51F00BA2A57 /* Extensions */,
 				48EC32341BA7C5F400A75103 /* Graph View */,
@@ -938,10 +958,13 @@
 				484365D91CA1118A0046A2C5 /* Menu.storyboard in Resources */,
 				486F5DFB1B9F874A00BA2A57 /* OpenSans-Semibold.ttf in Resources */,
 				486F5E151BA0908900BA2A57 /* login_logo@2x.png in Resources */,
+				48276A1E1E9D5900004CADB1 /* EventEdit.storyboard in Resources */,
 				4859FCC61B9A4DE4000C1269 /* LaunchScreen.storyboard in Resources */,
 				486F5DF51B9F874A00BA2A57 /* OpenSans-Bold.ttf in Resources */,
 				486F5DF81B9F874A00BA2A57 /* OpenSans-Regular.ttf in Resources */,
 				48ED0D3C1BAF22CC009D0D6F /* addAnimation-01.png in Resources */,
+				48276A201E9D5941004CADB1 /* EventAdd.storyboard in Resources */,
+				48276A181E9D582D004CADB1 /* Celebration.storyboard in Resources */,
 				48ED0D3E1BAF22CC009D0D6F /* addAnimation-03.png in Resources */,
 				48B127AC1BC444FE00061483 /* ThreeTacosDemoPic.png in Resources */,
 				48ED0D411BAF22CC009D0D6F /* addAnimation-06.png in Resources */,
@@ -949,6 +972,7 @@
 				4859FCC31B9A4DE4000C1269 /* Assets.xcassets in Resources */,
 				48ED0D3F1BAF22CC009D0D6F /* addAnimation-04.png in Resources */,
 				48ECF6CE1E96FE18007EE5D3 /* jump-jump-jump-jump.gif in Resources */,
+				48276A1B1E9D589F004CADB1 /* SwitchProfile.storyboard in Resources */,
 				4859FCBE1B9A4DE4000C1269 /* EventView.storyboard in Resources */,
 				48EDC2C91BD99141003049D9 /* OpenSans-Light.ttf in Resources */,
 				48ECF6CC1E96FDD3007EE5D3 /* celebration-animated-dots.gif in Resources */,
@@ -1309,6 +1333,30 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		48276A161E9D582D004CADB1 /* Celebration.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				48276A171E9D582D004CADB1 /* Base */,
+			);
+			name = Celebration.storyboard;
+			sourceTree = "<group>";
+		};
+		48276A191E9D589F004CADB1 /* SwitchProfile.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				48276A1A1E9D589F004CADB1 /* Base */,
+			);
+			name = SwitchProfile.storyboard;
+			sourceTree = "<group>";
+		};
+		48276A1C1E9D5900004CADB1 /* EventEdit.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				48276A1D1E9D5900004CADB1 /* Base */,
+			);
+			name = EventEdit.storyboard;
+			sourceTree = "<group>";
+		};
 		484365D71CA1118A0046A2C5 /* Menu.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

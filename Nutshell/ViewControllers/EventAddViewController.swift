@@ -22,6 +22,7 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
 
     @IBOutlet weak var navBar: UINavigationBar!
     @IBOutlet weak var sceneContainerView: NutshellUIView!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
     
     // Global so it can be removed and added back at will
     let closeButton: UIBarButtonItem = UIBarButtonItem()
@@ -217,7 +218,8 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
     // Configure title of navigationBar to given string
     func configureTitleView() {
         if let navItem = self.navBar.topItem {
-            navItem.title = user.fullName ?? ""
+            //navItem.title = user.fullName ?? ""
+            navItem.title = "New Note"
         }
     }
     
@@ -446,8 +448,16 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
         timedateLabel.sizeToFit()
     }
     
+    @IBAction func saveButtonHandler(_ sender: Any) {
+        doPostNote()
+    }
+    
     // postNote action from postNoteButton
     func postNote(_ sender: UIButton!) {
+        doPostNote()
+    }
+    
+    func doPostNote() {
         if (messageBox.text != defaultMessage && !messageBox.text.isEmpty) {
             APIConnector.connector().trackMetric("Clicked Post Note")
             
@@ -611,8 +621,10 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
         }
         if (textView.text != defaultMessage && !textView.text.isEmpty) {
             self.postButton.alpha = 1.0
+            self.saveButton.isEnabled = true
         } else {
             self.postButton.alpha = 0.5
+            self.saveButton.isEnabled = false
         }
     }
 }

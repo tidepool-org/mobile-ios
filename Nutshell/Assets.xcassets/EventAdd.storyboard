@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="stl-aU-t9r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--EventAdd-->
+        <scene sceneID="83B-9n-l36">
+            <objects>
+                <viewController title="EventAdd" id="stl-aU-t9r" customClass="EventAddViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Riq-je-Tgm"/>
+                        <viewControllerLayoutGuide type="bottom" id="x3z-Pr-jvd"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2sq-Ub-Cjz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KM1-gb-8Ee" userLabel="HeaderView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JNp-Oh-n0k" userLabel="navBarView">
+                                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                                        <subviews>
+                                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t3s-nA-bg7">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                                <items>
+                                                    <navigationItem title="New Note" id="KY8-jf-nzQ">
+                                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="vih-8x-uIO" userLabel="cancelButton">
+                                                            <color key="tintColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <connections>
+                                                                <action selector="cancelButtonPressed:" destination="stl-aU-t9r" id="ul0-39-Qgr"/>
+                                                            </connections>
+                                                        </barButtonItem>
+                                                        <barButtonItem key="rightBarButtonItem" enabled="NO" systemItem="save" id="l8u-ZM-ASl" userLabel="editBarButtonItem">
+                                                            <color key="tintColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <connections>
+                                                                <action selector="saveButtonHandler:" destination="stl-aU-t9r" id="kvv-i4-9dr"/>
+                                                            </connections>
+                                                        </barButtonItem>
+                                                    </navigationItem>
+                                                </items>
+                                            </navigationBar>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="F8o-v2-uTz"/>
+                                        </constraints>
+                                    </view>
+                                    <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nq9-od-T22" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="63" width="375" height="1"/>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="DOp-Ry-hef"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="1" id="GCz-6U-86e"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="whiteBackground"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="Nq9-od-T22" firstAttribute="leading" secondItem="KM1-gb-8Ee" secondAttribute="leading" id="98a-TN-xav"/>
+                                    <constraint firstAttribute="trailing" secondItem="JNp-Oh-n0k" secondAttribute="trailing" id="ChH-If-aoQ"/>
+                                    <constraint firstAttribute="bottom" secondItem="JNp-Oh-n0k" secondAttribute="bottom" id="MdV-Qk-vdx"/>
+                                    <constraint firstAttribute="bottom" secondItem="Nq9-od-T22" secondAttribute="bottom" id="Si4-99-Njy"/>
+                                    <constraint firstAttribute="trailing" secondItem="Nq9-od-T22" secondAttribute="trailing" id="cFz-jA-MHc"/>
+                                    <constraint firstItem="JNp-Oh-n0k" firstAttribute="leading" secondItem="KM1-gb-8Ee" secondAttribute="leading" id="nVA-ZX-lQu"/>
+                                    <constraint firstAttribute="height" constant="64" id="x7F-QD-ik7"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eQn-GO-3ak" userLabel="SceneContainer" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackground"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="KM1-gb-8Ee" secondAttribute="trailing" id="2er-kw-GSz"/>
+                            <constraint firstAttribute="trailing" secondItem="eQn-GO-3ak" secondAttribute="trailing" id="4i3-yg-Cpg"/>
+                            <constraint firstItem="eQn-GO-3ak" firstAttribute="top" secondItem="KM1-gb-8Ee" secondAttribute="bottom" id="9cJ-aP-jcv"/>
+                            <constraint firstItem="x3z-Pr-jvd" firstAttribute="top" secondItem="eQn-GO-3ak" secondAttribute="bottom" id="PXv-na-mGF"/>
+                            <constraint firstItem="eQn-GO-3ak" firstAttribute="leading" secondItem="2sq-Ub-Cjz" secondAttribute="leading" id="Wg0-d2-IjY"/>
+                            <constraint firstItem="KM1-gb-8Ee" firstAttribute="top" secondItem="Riq-je-Tgm" secondAttribute="bottom" constant="-20" id="eAM-0C-DjV"/>
+                            <constraint firstItem="KM1-gb-8Ee" firstAttribute="leading" secondItem="2sq-Ub-Cjz" secondAttribute="leading" id="eyE-2N-EUp"/>
+                        </constraints>
+                    </view>
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
+                    <connections>
+                        <outlet property="navBar" destination="t3s-nA-bg7" id="Gox-1I-G5g"/>
+                        <outlet property="saveButton" destination="l8u-ZM-ASl" id="sZx-X2-UE6"/>
+                        <outlet property="sceneContainerView" destination="eQn-GO-3ak" id="qE0-8s-30A"/>
+                        <segue destination="Ydi-yO-Q5f" kind="unwind" identifier="unwindToDone" unwindAction="done:" id="cfI-4d-TG8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cUh-Ja-S5J" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="Ydi-yO-Q5f" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="2234" y="-1366"/>
+        </scene>
+    </scenes>
+</document>
