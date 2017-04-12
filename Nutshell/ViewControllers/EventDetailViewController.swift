@@ -36,6 +36,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     fileprivate var graphContainerView: TidepoolGraphView?
 
     // Data
+    let dataController = NutDataController.sharedInstance
     // Note must be set by launching controller in prepareForSegue!
     var note: BlipNote!
     var noteEdited: Bool = false
@@ -45,12 +46,14 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         super.viewDidLoad()
         
         // only notes by current logged in user are editable (perhaps just hide edit button?)
-        editBarButtonItem.isEnabled = note.userid == NutDataController.sharedInstance.currentUserId
+        editBarButtonItem.isEnabled = note.userid == dataController.currentUserId
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(EventDetailViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
         notificationCenter.addObserver(self, selector: #selector(EventDetailViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
         configureForReachability()
+        // kick off a fetch query...
+        fetchComments()
     }
 
      deinit {
@@ -62,8 +65,6 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         super.viewWillAppear(animated)
         viewIsForeground = true
         
-        APIConnector.connector().getMessageThreadForNote(self, messageId: note.id)
-
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -117,6 +118,10 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     // All comments
     var comments: [BlipNote] = []
 
+    func fetchComments() {
+        DDLogVerbose("Fetching comments for note \(note.id)")
+        APIConnector.connector().getMessageThreadForNote(self, messageId: note.id)
+    }
     
     //
     // MARK: - NoteAPIWatcher Delegate
@@ -131,6 +136,8 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     }
     
     func addNotes(_ notes: [BlipNote]) {
+        comments = []
+        
         for comment in notes {
             if comment.id != self.note.id {
                 self.comments.append(comment)
@@ -140,12 +147,14 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         if self.comments.count > 0 {
             NSLog("added \(self.comments.count) comments!")
             self.comments.sort(by: {$0.timestamp.timeIntervalSinceNow < $1.timestamp.timeIntervalSinceNow})
-            self.tableView.reloadData()
         }
+        self.tableView.reloadData()
     }
     
     func postComplete(_ note: BlipNote) {
         NSLog("EventDetailVC! NoteAPIWatcher.postComplete")
+        // do a refetch to update comments...
+        fetchComments()
     }
     
     func deleteComplete(_ deletedNote: BlipNote) {
@@ -170,7 +179,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     //
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if NutDataController.sharedInstance.currentLoggedInUser == nil {
+        if dataController.currentLoggedInUser == nil {
             return false
         }
         return true
@@ -180,10 +189,17 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepare(for: segue, sender: sender)
-        if (segue.identifier) == EventViewStoryboard.SegueIdentifiers.EventItemEditSegue {
+        if (segue.identifier) == "segueToEditView" {
             let eventEditVC = segue.destination as! EventEditViewController
             eventEditVC.note = self.note
             APIConnector.connector().trackMetric("Clicked edit a note (Detail screen)")
+        } else if segue.identifier == "segueToEventReply" {
+            let eventAddVC = segue.destination as! EventAddViewController
+            // Pass along group (logged in user), selected profile user, adn current note we are replying on...
+            eventAddVC.user = dataController.currentLoggedInUser!
+            eventAddVC.group = dataController.currentViewedUser!
+            eventAddVC.parentNote = note
+            APIConnector.connector().trackMetric("Clicked add a note (Home screen)")
         } else {
             NSLog("Unprepped segue from eventView \(String(describing: segue.identifier))")
         }
@@ -201,6 +217,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
                 NSLog("No note to delete!")
             }
         } else if let eventAddVC = segue.source as? EventAddViewController {
+            // user did an "add comment" - if there is a comment, then post it...
             if let newNote = eventAddVC.newNote {
                 APIConnector.connector().doPostWithNote(self, note: newNote)
                 // will be called back on successful post!
@@ -224,7 +241,7 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     }
     
     @IBAction func editButtonPressed(_ sender: Any) {
-        self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemEditSegue, sender: self)
+        self.performSegue(withIdentifier: "segueToEditView", sender: self)
         
     }
 
@@ -470,7 +487,7 @@ extension EventDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // Note: two different list cells are used depending upon whether a location will be shown or not.
-        let cellId = EventViewStoryboard.TableViewCellIdentifiers.noteDetailCell
+        let cellId = "noteDetailCell"
         var note: BlipNote?
         if (indexPath.row == 0) {
             note = self.note

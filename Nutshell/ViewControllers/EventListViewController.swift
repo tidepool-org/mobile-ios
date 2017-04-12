@@ -444,12 +444,12 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepare(for: segue, sender: sender)
-        if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue {
+        if segue.identifier == "segueToEventDetail" {
             let eventDetailVC = segue.destination as! EventDetailViewController
             eventDetailVC.note = self.selectedNote
             eventDetailVC.group = dataController.currentViewedUser!
             APIConnector.connector().trackMetric("Clicked view a note (Home screen)")
-        } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
+        } else if segue.identifier == "segueToEventAdd" {
             let eventAddVC = segue.destination as! EventAddViewController
             // Pass along group (logged in user) and selected profile user...
             eventAddVC.user = dataController.currentLoggedInUser!
@@ -480,7 +480,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         } else if let eventAddVC = segue.source as? EventAddViewController {
             if let newNote = eventAddVC.newNote {
                 APIConnector.connector().doPostWithNote(self, note: newNote)
-                // will be called back on successful post!
+                // will be called back at postComplete on successful post!
                 // TODO: also handle unsuccessful posts?
             } else {
                 // add was cancelled... need to ensure graph is correctly configured.
@@ -948,7 +948,7 @@ extension EventListViewController: UITableViewDelegate {
                 self.selectedIndexPath = indexPath
                 selectNote(note)
             }
-            self.performSegue(withIdentifier: EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue, sender: self)
+            self.performSegue(withIdentifier: "segueToEventDetail", sender: self)
         }
     }
 }
@@ -982,7 +982,7 @@ extension EventListViewController: UITableViewDataSource {
             // If note was created by current viewed user, don't configure a title
             if note.userid == note.groupid {
                 // If note was created by someone else, put in "xxx to yyy" title
-                let cellId = EventViewStoryboard.TableViewCellIdentifiers.noteListCell
+                let cellId = "noteListCell"
                 let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCell
                 cell.configureCell(note)
                 
@@ -993,7 +993,7 @@ extension EventListViewController: UITableViewDataSource {
                 }
                 return cell
             } else {
-                let cellId = EventViewStoryboard.TableViewCellIdentifiers.noteDetailCell
+                let cellId = "noteDetailCell"
                 let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteDetailTableViewCell
                 cell.configureCell(note, group: group)
                 

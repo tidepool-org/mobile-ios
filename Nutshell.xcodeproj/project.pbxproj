@@ -151,7 +151,6 @@
 		4859FCC61B9A4DE4000C1269 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4859FCC41B9A4DE4000C1269 /* LaunchScreen.storyboard */; };
 		4859FCD11B9A4DE5000C1269 /* NutshellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCD01B9A4DE5000C1269 /* NutshellTests.swift */; };
 		486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */; };
-		486283B41BA48B1500547BE3 /* EventViewStoryboardTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */; };
 		486894F51E831F89008B0732 /* UrchinConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486894F41E831F89008B0732 /* UrchinConstants.swift */; };
 		486894F61E83288C008B0732 /* EventAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EDC2C51BD6B403003049D9 /* EventAddViewController.swift */; };
 		486EAA7A1C305E38003B4497 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 486EAA791C305E38003B4497 /* HealthKit.framework */; };
@@ -356,7 +355,6 @@
 		4859FCCC1B9A4DE5000C1269 /* NutshellTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NutshellTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4859FCD01B9A4DE5000C1269 /* NutshellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutshellTests.swift; sourceTree = "<group>"; };
 		4859FCD21B9A4DE5000C1269 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventViewStoryboardTypes.swift; path = ViewControllers/EventViewStoryboardTypes.swift; sourceTree = "<group>"; };
 		486894F41E831F89008B0732 /* UrchinConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UrchinConstants.swift; path = Resources/UrchinConstants.swift; sourceTree = "<group>"; };
 		486EAA791C305E38003B4497 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		486EAA7B1C305E39003B4497 /* Nutshell.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Nutshell.entitlements; sourceTree = "<group>"; };
@@ -582,15 +580,13 @@
 		485922A01B9A62AB0056E605 /* EventViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				486283B31BA48B1500547BE3 /* EventViewStoryboardTypes.swift */,
 				48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */,
+				48DB6CFE1E8965DB00C5F221 /* EventDetailViewController.swift */,
 				48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */,
 				48B7C7EA1E899BC10069B6DF /* NoteListTableViewCellWithComments.swift */,
-				48DB6CFE1E8965DB00C5F221 /* EventDetailViewController.swift */,
 				48B7C7E81E8988160069B6DF /* NoteDetailTableViewCell.swift */,
 				48EDC2C51BD6B403003049D9 /* EventAddViewController.swift */,
 				488E44DB1E83198D00A17AD7 /* EventEditViewController.swift */,
-				48103E981C1DE7BC0055C27A /* EventViewNavController.swift */,
 				4872118C1E8D818300BAD5CE /* SwitchProfileTableViewController.swift */,
 				4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */,
 				48ECF6C91E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift */,
@@ -615,6 +611,7 @@
 		485922BB1B9CA0890056E605 /* MenuViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				48103E981C1DE7BC0055C27A /* EventViewNavController.swift */,
 				4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */,
 				4806E3391E995A350024A497 /* TPMenuButton.swift */,
 			);
@@ -1132,7 +1129,6 @@
 				486894F61E83288C008B0732 /* EventAddViewController.swift in Sources */,
 				0334CA551BA8DDFC00013096 /* Note.swift in Sources */,
 				4820ED6A1C21E8E3008C754A /* GraphDataTypes.swift in Sources */,
-				486283B41BA48B1500547BE3 /* EventViewStoryboardTypes.swift in Sources */,
 				0334CA6D1BA8DDFC00013096 /* Settings.swift in Sources */,
 				0334CA341BA8DDFC00013096 /* CommonData.swift in Sources */,
 				486F5E091B9FB1C600BA2A57 /* NutshellStyles.swift in Sources */,

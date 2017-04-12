@@ -687,10 +687,16 @@ class APIConnector {
         blipRequest("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
     }
     
-    
     func doPostWithNote(_ postWatcher: NoteAPIWatcher, note: BlipNote) {
         
-        let urlExtension = "/message/send/" + note.groupid
+        var urlExtension = ""
+        if let parentMessage = note.parentmessage {
+            // this is a reply
+            urlExtension = "/message/reply/" + parentMessage
+        } else {
+            // this is a note, i.e., start of a thread
+            urlExtension = "/message/send/" + note.groupid
+        }
         
         let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
         

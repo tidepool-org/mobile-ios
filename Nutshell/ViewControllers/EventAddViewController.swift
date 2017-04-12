@@ -22,6 +22,7 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
 
     @IBOutlet weak var sceneContainerView: NutshellUIView!
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var navItem: UINavigationItem!
     
     // Global so it can be removed and added back at will
     let closeButton: UIBarButtonItem = UIBarButtonItem()
@@ -61,6 +62,8 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
     // Group and user must be set by launching controller in prepareForSegue!
     var group: BlipUser!
     var user: BlipUser!
+    // Parent note if this is a comment (message reply)
+    var parentNote: BlipNote?
     // Returns newNote if successful
     var newNote: BlipNote? = nil
 
@@ -77,6 +80,8 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
         note.user = user
         note.groupid = group.userid
         note.messagetext = ""
+        // the following is non-nil if this is a message reply
+        note.parentmessage = parentNote?.id
         
         self.previousDate = datePicker.date
 
@@ -220,7 +225,7 @@ class EventAddViewController: BaseUIViewController, UITextViewDelegate {
     // Configure title of navigationBar to given string
     func configureTitleView() {
         // TODO: Change to name?
-        self.navigationItem.title = "New Note"
+        self.navItem.title = parentNote == nil ? "New Note" : "New Comment"
     }
     
     // close the VC on button press from leftBarButtonItem
