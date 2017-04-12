@@ -273,7 +273,20 @@ class NutDataController: NSObject
     fileprivate var pscForLocalObjects: NSPersistentStoreCoordinator? {
         get {
             if _pscForLocalObjects == nil {
-                _pscForLocalObjects = createPSC(kLocalObjectsStoreFilename)
+                do {
+                    try _pscForLocalObjects = createPSC(kLocalObjectsStoreFilename)
+                } catch {
+                    // May have a corrupted database, delete it here so user doesn't have to delete the app in order to recover. Worst case for local data is forcing the user to have to login again.
+                    do {
+                        DDLogError("CRASHED OPENING LOCAL OBJECTS DB: DELETING AND RETRYING")
+                        deleteLocalObjectData()
+                        try _pscForLocalObjects = createPSC(kLocalObjectsStoreFilename)
+                    } catch {
+                        DDLogError("CRASHED SECOND TIME OPENING LOCAL OBJECTS DB!")
+                        // give up after second time...
+                        _pscForLocalObjects = nil
+                    }
+                }
             }
             return _pscForLocalObjects
         }
@@ -283,7 +296,20 @@ class NutDataController: NSObject
     fileprivate var pscForTidepoolObjects: NSPersistentStoreCoordinator? {
         get {
             if _pscForTidepoolObjects == nil {
-                _pscForTidepoolObjects = createPSC(kTidepoolObjectsStoreFilename)
+                do {
+                    try _pscForTidepoolObjects = createPSC(kTidepoolObjectsStoreFilename)
+                } catch {
+                    // May have a corrupted database, delete it here so user doesn't have to delete the app in order to recover. Worst case is cached tidepool data will need to be refetched!
+                    do {
+                        DDLogError("CRASHED OPENING TIDEPOOL OBJECTS DB: DELETING AND RETRYING")
+                        deleteAnyTidepoolData()
+                        try _pscForTidepoolObjects = createPSC(kTidepoolObjectsStoreFilename)
+                    } catch {
+                        // give up after second time...
+                        DDLogError("CRASHED SECOND TIME OPENING TIDEPOOL OBJECTS DB!")
+                       _pscForTidepoolObjects = nil
+                    }
+                }
             }
             return _pscForTidepoolObjects
         }
@@ -298,11 +324,10 @@ class NutDataController: NSObject
         }
     }
     
-    fileprivate func createPSC(_ storeBaseFileName: String) -> NSPersistentStoreCoordinator {
+    fileprivate func createPSC(_ storeBaseFileName: String) throws -> NSPersistentStoreCoordinator  {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         var url = applicationDocumentsDirectory
         url = url.appendingPathComponent(filenameAdjustedForTest(storeBaseFileName))
-        let failureReason = "There was an error creating or loading the application's saved data."
         let pscOptions = [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true]
         do {
             NSLog("Store url is \(url)")
@@ -310,16 +335,7 @@ class NutDataController: NSObject
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: pscOptions)
         } catch {
             // Report any error we got.
-            var dict = [String: AnyObject]()
-            dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data" as AnyObject?
-            dict[NSLocalizedFailureReasonErrorKey] = failureReason as AnyObject?
-            
-            dict[NSUnderlyingErrorKey] = error as NSError
-            let wrappedError = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
-            // TODO: Replace this with code to handle the error appropriately -> probably delete the store and retry?
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            NSLog("Unresolved error \(wrappedError), \(wrappedError.userInfo)")
-            abort()
+            throw(error)
         }
         return coordinator
     }
@@ -424,17 +440,31 @@ class NutDataController: NSObject
     }
 
     /// Resets the tidepool object database by deleting the underlying file!
+    fileprivate func deleteLocalObjectData() {
+        // Delete the underlying file
+        // First nil out locals so a new psc and moc will be created on demand
+        _pscForLocalObjects = nil
+        _mocForLocalObjects = nil
+        deleteDatabase(kLocalObjectsStoreFilename)
+    }
+
+    /// Resets the tidepool object database by deleting the underlying file!
     fileprivate func deleteAnyTidepoolData() {
         // Delete the underlying file
+        // First nil out locals so a new psc and moc will be created on demand
+        _pscForTidepoolObjects = nil
+        _mocForTidepoolObjects = nil
+        DatabaseUtils.sharedInstance.resetTidepoolEventLoader() // reset cache as well!
+        deleteDatabase(kTidepoolObjectsStoreFilename)
+    }
+    
+    fileprivate func deleteDatabase(_ docsDirDBName: String) {
+        // Delete the underlying file
         var url = self.applicationDocumentsDirectory
-        url = url.appendingPathComponent(filenameAdjustedForTest(kTidepoolObjectsStoreFilename))
+        url = url.appendingPathComponent(filenameAdjustedForTest(docsDirDBName))
         var error: NSError?
         let fileExists = (url as NSURL).checkResourceIsReachableAndReturnError(&error)
         if (fileExists) {
-            // First nil out locals so a new psc and moc will be created on demand
-            _pscForTidepoolObjects = nil
-            _mocForTidepoolObjects = nil
-            DatabaseUtils.sharedInstance.resetTidepoolEventLoader() // reset cache as well!
             let fm = FileManager.default
             do {
                 try fm.removeItem(at: url)
@@ -444,7 +474,6 @@ class NutDataController: NSObject
             }
         }
     }
-    
 
 
 }
