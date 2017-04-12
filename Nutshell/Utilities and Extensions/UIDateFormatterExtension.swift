@@ -64,7 +64,7 @@ public extension DateFormatter {
         return attrStr
     }
 
-    func dateFromISOString(_ string: String) -> Date {
+    func dateFromISOString(_ string: String) -> Date? {
         self.locale = Locale(identifier: "en_US_POSIX")
         self.timeZone = TimeZone.autoupdatingCurrent
         self.dateFormat = iso8601dateOne
@@ -72,7 +72,7 @@ public extension DateFormatter {
             return date
         } else {
             self.dateFormat = iso8601dateTwo
-            return self.date(from: string)!
+            return self.date(from: string)
         }
     }
     

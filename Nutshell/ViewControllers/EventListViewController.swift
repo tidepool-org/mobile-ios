@@ -252,7 +252,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     }
     
     func sideMenuDidOpen() {
-        //NSLog("EventList sideMenuDidOpen")
+        NSLog("EventList sideMenuDidOpen")
         configureForMenuOpen(true)
         APIConnector.connector().trackMetric("Viewed Hamburger Menu (Hamburger)")
     }
@@ -265,10 +265,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     // All notes, kept sorted chronologically
     var notes: [BlipNote] = []
     
-    // Last date fetched to & beginning -- starts at current date
-    //let fetchPeriodInMonths: Int = -3
-    let fetchPeriodInMonths: Int = -24
-    var lastDateFetchTo: Date = Date()
+    // Fetch all notes for now...
     var loadingNotes = false
 
     func switchProfile(_ newUser: BlipUser) {
@@ -356,7 +353,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
     func addNotes(_ notes: [BlipNote]) {
         NSLog("NoteAPIWatcher.addNotes")
-        self.notes = self.notes + notes
+        self.notes = notes
         sortNotesAndReload()
         if selectedIndexPath == nil {
             self.selectAndScrollToTopNote()
@@ -410,22 +407,16 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         
     }
     
-    
     func loadNotes() {
         DDLogVerbose("trace")
         
         if (!loadingNotes) {
-            // TODO: leave at fetch of 2 years of notes, or put back n month incremental fetch, but do it in background
-            var dateShift = DateComponents()
-            dateShift.month = fetchPeriodInMonths
-            let calendar = Calendar.current
-            let startDate = (calendar as NSCalendar).date(byAdding: dateShift, to: lastDateFetchTo, options: [])!
-            
+            // TODO: implement incremental fetch and update if this takes too long!
             if let user = dataController.currentViewedUser {
-                APIConnector.connector().getNotesForUserInDateRange(self, userid: user.userid, start: startDate, end: lastDateFetchTo)
-                
-                self.lastDateFetchTo = startDate
+                APIConnector.connector().getNotesForUserInDateRange(self, userid: user.userid, start: nil, end: nil)
             }
+        } else {
+           DDLogVerbose("already loading notes...")
         }
     }
     
@@ -434,7 +425,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         
         if (!loadingNotes) {
             notes = []
-            lastDateFetchTo = Date()
             loadNotes()
         }
     }
@@ -457,12 +447,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemDetailSegue {
             let eventDetailVC = segue.destination as! EventDetailViewController
             eventDetailVC.note = self.selectedNote
+            eventDetailVC.group = dataController.currentViewedUser!
             APIConnector.connector().trackMetric("Clicked view a note (Home screen)")
         } else if segue.identifier == EventViewStoryboard.SegueIdentifiers.EventItemAddSegue {
             let eventAddVC = segue.destination as! EventAddViewController
             // Pass along group (logged in user) and selected profile user...
-            eventAddVC.user = dataController.currentViewedUser!
-            eventAddVC.group = dataController.currentLoggedInUser!
+            eventAddVC.user = dataController.currentLoggedInUser!
+            eventAddVC.group = dataController.currentViewedUser!
             APIConnector.connector().trackMetric("Clicked add a note (Home screen)")
         } else if segue.identifier == "segueToSwitchProfile" {
             let _ = segue.destination as! SwitchProfileTableViewController
@@ -491,6 +482,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 APIConnector.connector().doPostWithNote(self, note: newNote)
                 // will be called back on successful post!
                 // TODO: also handle unsuccessful posts?
+            } else {
+                // add was cancelled... need to ensure graph is correctly configured.
+                syncDataVizView()
             }
         }  else if let eventDetailVC = segue.source as? EventDetailViewController {
             if eventDetailVC.noteEdited {
@@ -706,7 +700,28 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         }
     }
     
-    private let kGraphUpdateDelay: TimeInterval = 1.0
+    func syncDataVizView() {
+        if let graphContainerView = graphContainerView {
+            let graphHasData = graphContainerView.dataFound()
+            NSLog("\(#function) - graphHasData: \(graphHasData)")
+            if dataVizState == .loadingNoSelect {
+                NSLog("\(#function) ignoring call in state .loadingNoSelect")
+                return
+            }
+            if graphHasData {
+                updateDataVizForState(.dataGraph)
+            } else {
+                // Show the no-data view if not still loading...
+                if !DatabaseUtils.sharedInstance.isLoadingTidepoolEvents() {
+                    updateDataVizForState(.noDataDisplay)
+                } else {
+                    NSLog("\(#function): Keep displaying loading screen as load is still in progress")
+                }
+            }
+        }
+    }
+
+    private let kGraphUpdateDelay: TimeInterval = 0.5
     private func startGraphUpdateTimer() {
         if graphUpdateTimer == nil {
             graphUpdateTimer = Timer.scheduledTimer(timeInterval: kGraphUpdateDelay, target: self, selector: #selector(EventListViewController.graphUpdateTimerFired), userInfo: nil, repeats: false)
@@ -824,24 +839,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     //
     
     func containerCellUpdated() {
-        if let graphContainerView = graphContainerView {
-            let graphHasData = graphContainerView.dataFound()
-            NSLog("\(#function) - graphHasData: \(graphHasData)")
-            if dataVizState == .loadingNoSelect {
-                NSLog("\(#function) ignoring call in state .loadingNoSelect")
-                return
-            }
-            if graphHasData {
-                updateDataVizForState(.dataGraph)
-            } else {
-                // Show the no-data view if not still loading...
-                if !DatabaseUtils.sharedInstance.isLoadingTidepoolEvents() {
-                    updateDataVizForState(.noDataDisplay)
-                } else {
-                    NSLog("\(#function): Keep displaying loading screen as load is still in progress")
-                }
-            }
-        }
+        syncDataVizView()
     }
 
     func pinchZoomEnded() {
@@ -972,23 +970,44 @@ extension EventListViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        // Note: two different list cells are used depending upon whether a location will be shown or not. 
-        let cellId = EventViewStoryboard.TableViewCellIdentifiers.noteListCell
+        // Note: two different list cells are used depending upon whether a user from: to title is needed...
         var note: BlipNote?
+        let group = dataController.currentViewedUser!
+        
         if (indexPath.item < notes.count) {
             note = notes[indexPath.item]
         }
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCell
         if let note = note {
-            cell.configureCell(note)
-            if let selectedNote = self.selectedNote {
-                if selectedNote.id == note.id {
-                    cell.setSelected(true, animated: false)
+            // If note was created by current viewed user, don't configure a title
+            if note.userid == note.groupid {
+                // If note was created by someone else, put in "xxx to yyy" title
+                let cellId = EventViewStoryboard.TableViewCellIdentifiers.noteListCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCell
+                cell.configureCell(note)
+                
+                if let selectedNote = self.selectedNote {
+                    if selectedNote.id == note.id {
+                        cell.setSelected(true, animated: false)
+                    }
                 }
+                return cell
+            } else {
+                let cellId = EventViewStoryboard.TableViewCellIdentifiers.noteDetailCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteDetailTableViewCell
+                cell.configureCell(note, group: group)
+                
+                if let selectedNote = self.selectedNote {
+                    if selectedNote.id == note.id {
+                        cell.setSelected(true, animated: false)
+                    }
+                }
+                return cell
             }
+        } else {
+            DDLogError("No note at cellForRowAt row \(indexPath.row)")
+            return UITableViewCell()
         }
-        return cell
     }
     
     /*

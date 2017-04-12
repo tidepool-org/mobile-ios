@@ -491,7 +491,7 @@ class APIConnector {
         blipRequest("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
     }
 
-    func getNotesForUserInDateRange(_ fetchWatcher: NoteAPIWatcher, userid: String, start: Date, end: Date) {
+    func getNotesForUserInDateRange(_ fetchWatcher: NoteAPIWatcher, userid: String, start: Date?, end: Date?) {
         
         if sessionToken == nil {
             return
@@ -499,8 +499,18 @@ class APIConnector {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        let urlExtension = "/message/notes/" + userid + "?starttime=" + dateFormatter.string(from: start) + "&endtime="  + dateFormatter.string(from: end)
+
+        var startString = ""
+        if let start = start {
+            startString = "?starttime=" + dateFormatter.string(from: start)
+        }
         
+        var endString = ""
+        if let end = end {
+            endString = "&endtime="  + dateFormatter.string(from: end)
+        }
+        
+        let urlExtension = "/message/notes/" + userid + startString + endString
         let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
         
         let preRequest = { () -> Void in
@@ -514,7 +524,7 @@ class APIConnector {
             
             if let httpResponse = response as? HTTPURLResponse {
                 if (httpResponse.statusCode == 200) {
-                    DDLogInfo("Got notes for user (\(userid)) in given date range: \(dateFormatter.string(from: start)) to \(dateFormatter.string(from: end))")
+                    DDLogInfo("Got notes for user (\(userid)) in given date range: \(startString) to \(endString)")
                     var notes: [BlipNote] = []
                     
                     let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
@@ -528,21 +538,39 @@ class APIConnector {
                         let id = (message as AnyObject).value(forKey: "id") as! String
                         let otheruserid = (message as AnyObject).value(forKey: "userid") as! String
                         let groupid = (message as AnyObject).value(forKey: "groupid") as! String
-                        let timestamp = dateFormatter.dateFromISOString((message as AnyObject).value(forKey: "timestamp") as! String)
-                        var createdtime: Date
-                        if let created = (message as AnyObject).value(forKey: "createdtime") as? String {
-                            createdtime = dateFormatter.dateFromISOString(created)
+                        
+                        
+                        var timestamp: Date?
+                        let timestampString = (message as AnyObject).value(forKey: "timestamp") as? String
+                        if let timestampString = timestampString {
+                            timestamp = dateFormatter.dateFromISOString(timestampString)
+                        }
+                        
+                        var createdtime: Date?
+                        let createdtimeString = (message as AnyObject).value(forKey: "createdtime") as? String
+                        if let createdtimeString = createdtimeString {
+                            createdtime = dateFormatter.dateFromISOString(createdtimeString)
                         } else {
                             createdtime = timestamp
                         }
-                        let messagetext = (message as AnyObject).value(forKey: "messagetext") as! String
-                        
-                        let otheruser = BlipUser(userid: otheruserid)
-                        let userDict = (message as AnyObject).value(forKey: "user") as! NSDictionary
-                        otheruser.processUserDict(userDict)
-                        
-                        let note = BlipNote(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
-                        notes.append(note)
+
+                        if let timestamp = timestamp, let createdtime = createdtime {
+                            let messagetext = (message as AnyObject).value(forKey: "messagetext") as! String
+                            
+                            let otheruser = BlipUser(userid: otheruserid)
+                            let userDict = (message as AnyObject).value(forKey: "user") as! NSDictionary
+                            otheruser.processUserDict(userDict)
+                            
+                            let note = BlipNote(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
+                            notes.append(note)
+                        } else {
+                            if timestamp == nil {
+                                DDLogError("Ignoring fetched note with invalid format timestamp string: \(String(describing: timestampString))")
+                            }
+                            if createdtime == nil {
+                                DDLogError("Ignoring fetched note with invalid create time string: \(String(describing: createdtimeString))")
+                            }
+                        }
                     }
                     
                     fetchWatcher.addNotes(notes)
@@ -604,22 +632,39 @@ class APIConnector {
                         let parentmessage = (message as AnyObject).value(forKey: "parentmessage") as? String
                         let otheruserid = (message as AnyObject).value(forKey: "userid") as! String
                         let groupid = (message as AnyObject).value(forKey: "groupid") as! String
-                        let timestamp = dateFormatter.dateFromISOString((message as AnyObject).value(forKey: "timestamp") as! String)
-                        var createdtime: Date
-                        if let created = (message as AnyObject).value(forKey: "createdtime") as? String {
-                            createdtime = dateFormatter.dateFromISOString(created)
+                        
+                        var timestamp: Date?
+                        let timestampString = (message as AnyObject).value(forKey: "timestamp") as? String
+                        if let timestampString = timestampString {
+                            timestamp = dateFormatter.dateFromISOString(timestampString)
+                        }
+
+                        var createdtime: Date?
+                        let createdtimeString = (message as AnyObject).value(forKey: "createdtime") as? String
+                        if let createdtimeString = createdtimeString {
+                            createdtime = dateFormatter.dateFromISOString(createdtimeString)
                         } else {
                             createdtime = timestamp
                         }
-                        let messagetext = (message as AnyObject).value(forKey: "messagetext") as! String
                         
-                        let otheruser = BlipUser(userid: otheruserid)
-                        let userDict = (message as AnyObject).value(forKey: "user") as! NSDictionary
-                        otheruser.processUserDict(userDict)
-                        
-                        let note = BlipNote(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
-                        note.parentmessage = parentmessage
-                        notes.append(note)
+                        if let timestamp = timestamp, let createdtime = createdtime {
+                            let messagetext = (message as AnyObject).value(forKey: "messagetext") as! String
+                            
+                            let otheruser = BlipUser(userid: otheruserid)
+                            let userDict = (message as AnyObject).value(forKey: "user") as! NSDictionary
+                            otheruser.processUserDict(userDict)
+                            
+                            let note = BlipNote(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
+                            note.parentmessage = parentmessage
+                            notes.append(note)
+                        } else {
+                            if timestamp == nil {
+                                DDLogError("Ignoring fetched comment with invalid format timestamp string: \(String(describing: timestampString))")
+                            }
+                            if createdtime == nil {
+                                DDLogError("Ignoring fetched comment with invalid create time string: \(String(describing: createdtimeString))")
+                            }
+                        }
                     }
                     
                     fetchWatcher.addNotes(notes)

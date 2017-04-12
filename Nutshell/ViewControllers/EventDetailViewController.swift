@@ -39,12 +39,13 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     // Note must be set by launching controller in prepareForSegue!
     var note: BlipNote!
     var noteEdited: Bool = false
+    var group: BlipUser!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // only notes by current logged in user are editable (perhaps just hide edit button?)
-        editBarButtonItem.isEnabled = note.userid == note.groupid
+        editBarButtonItem.isEnabled = note.userid == NutDataController.sharedInstance.currentUserId
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(EventDetailViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
@@ -479,7 +480,7 @@ extension EventDetailViewController: UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteDetailTableViewCell
         if let note = note {
-            cell.configureCell(note)
+            cell.configureCell(note, group: group)
             let lastRow = tableView.numberOfRows(inSection: 0) - 1
             let isLastRow = indexPath.row == lastRow
             cell.separatorImageView.isHidden = isLastRow

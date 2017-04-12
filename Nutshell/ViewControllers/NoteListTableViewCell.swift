@@ -44,11 +44,11 @@ class NoteListTableViewCell: BaseUITableViewCell {
     }
     
     func configureCell(_ note: BlipNote) {
-        dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
         self.note = note
+        self.updateNoteFontStyling()
+        dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
         noteLabel.isHighlighted = false
         dateLabel.isHighlighted = false
-        self.updateNoteFontStyling()
     }
     
     private func updateNoteFontStyling() {
@@ -56,7 +56,6 @@ class NoteListTableViewCell: BaseUITableViewCell {
             let hashtagBolder = HashtagBolder()
             let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString, highlighted: self.isHighlighted)
             noteLabel.attributedText = attributedText
-            noteLabel.sizeToFit()
         }
     }
 }

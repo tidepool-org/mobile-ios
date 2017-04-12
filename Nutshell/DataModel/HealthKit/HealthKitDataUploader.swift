@@ -695,7 +695,7 @@ class HealthKitDataUploader {
             self.totalUploadCountBloodGlucoseSamplesWithoutDuplicates += (sampleCount - duplicateSampleCount)
             self.totalUploadCountHistoricalBloodGlucoseSamples += sampleCount
             self.totalUploadCountHistoricalBloodGlucoseSamplesWithoutDuplicates += (sampleCount - duplicateSampleCount)
-            self.lastUploadTimeBloodGlucoseSamples = DateFormatter().dateFromISOString(self.currentBatchUploadDict["time"] as! String)
+            self.lastUploadTimeBloodGlucoseSamples = DateFormatter().dateFromISOString(self.currentBatchUploadDict["time"] as! String)!
             if self.lastUploadSampleTimeBloodGlucoseSamples.compare(lastUploadSampleTimeBloodGlucoseSamples) == .orderedAscending {
                 self.lastUploadSampleTimeBloodGlucoseSamples = lastUploadSampleTimeBloodGlucoseSamples
             }
@@ -710,7 +710,7 @@ class HealthKitDataUploader {
             self.totalUploadCountBloodGlucoseSamplesWithoutDuplicates += (sampleCount - duplicateSampleCount)
             self.totalUploadCountCurrentBloodGlucoseSamples += sampleCount
             self.totalUploadCountCurrentBloodGlucoseSamplesWithoutDuplicates += (sampleCount - duplicateSampleCount)
-            self.lastUploadTimeBloodGlucoseSamples = DateFormatter().dateFromISOString(self.currentBatchUploadDict["time"] as! String)
+            self.lastUploadTimeBloodGlucoseSamples = DateFormatter().dateFromISOString(self.currentBatchUploadDict["time"] as! String)!
             if self.lastUploadSampleTimeBloodGlucoseSamples.compare(lastUploadSampleTimeBloodGlucoseSamples) == .orderedAscending {
                 self.lastUploadSampleTimeBloodGlucoseSamples = lastUploadSampleTimeBloodGlucoseSamples
             }

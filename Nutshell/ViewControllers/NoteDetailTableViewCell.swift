@@ -31,17 +31,39 @@ class NoteDetailTableViewCell: BaseUITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+        self.updateNoteFontStyling()
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated:animated)
+
+        // Configure the view for the highlighted state
+        updateNoteFontStyling()
+        dateLabel.isHighlighted = highlighted
+        userLabel.isHighlighted = highlighted
     }
     
-    func configureCell(_ note: BlipNote) {
+    func configureCell(_ note: BlipNote, group: BlipUser) {
         self.note = note
         self.updateNoteFontStyling()
+        noteLabel.isHighlighted = false
+        dateLabel.isHighlighted = false
+        userLabel.isHighlighted = false
+        
         dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
-        self.userLabel.text = note.user?.fullName ?? ""
+        if note.userid == note.groupid {
+            self.userLabel.text = note.user?.fullName ?? ""
+        } else {
+            // note from someone else to current viewed user
+            var toFromUsers = ""
+            if let fromUser = note.user?.fullName {
+                toFromUsers = fromUser
+            }
+            if let toUser = group.fullName {
+                toFromUsers += " to " + toUser
+            }
+            self.userLabel.text = toFromUsers
+        }
     }
 
     private func updateNoteFontStyling() {
