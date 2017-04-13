@@ -17,42 +17,49 @@ import UIKit
         case blueTextMenuButton
         case greyTextMenuButton
         case greyAddCommentButton
+        case loginButton
     }
     
     private let buttonTypeStringToEnum: [String: ButtonTypeEnum] = [
         "blueTextMenuButton": .blueTextMenuButton,
         "greyTextMenuButton": .greyTextMenuButton,
         "greyAddCommentButton": .greyAddCommentButton,
+        "loginButton": .loginButton,
         ]
 
     private let buttonTypeToTextNormalColor: [ButtonTypeEnum: UIColor] = [
         .blueTextMenuButton: Styles.brightBlueColor,
         .greyTextMenuButton: Styles.mediumLightGreyColor,
         .greyAddCommentButton: Styles.mediumLightGreyColor,
+        .loginButton: Styles.whiteColor,
     ]
     
     private let buttonTypeToTextHighlightColor: [ButtonTypeEnum: UIColor] = [
         .blueTextMenuButton: Styles.whiteColor,
         .greyTextMenuButton: Styles.whiteColor,
         .greyAddCommentButton: Styles.whiteColor,
+        .loginButton: Styles.brightBlueColor,
     ]
 
     private let buttonTypeToBackgroundNormalColor: [ButtonTypeEnum: UIColor] = [
         .blueTextMenuButton: UIColor.clear,
         .greyTextMenuButton: UIColor.clear,
         .greyAddCommentButton: UIColor.clear,
+        .loginButton: Styles.brightBlueColor,
     ]
     
     private let buttonTypeToBackgroundHighlightColor: [ButtonTypeEnum: UIColor] = [
         .blueTextMenuButton: Styles.brightBlueColor,
         .greyTextMenuButton: Styles.brightBlueColor,
         .greyAddCommentButton: Styles.brightBlueColor,
+        .loginButton: Styles.whiteColor,
     ]
 
     private let buttonTypeToTextAlignment: [ButtonTypeEnum: NSTextAlignment] = [
         .blueTextMenuButton: .left,
         .greyTextMenuButton: .left,
         .greyAddCommentButton: .center,
+        .loginButton: .center,
         ]
 
     @IBInspectable var buttonStyling: String = "" {
@@ -112,9 +119,10 @@ import UIKit
 
     private let titleIndent: CGFloat = 18.0
     private func drawRectShape(_ size: CGSize, textColor: UIColor, backColor: UIColor, textAlign: NSTextAlignment) {
+        let textIndent: CGFloat = textAlign == .center ? 0.0 : titleIndent
         let context = UIGraphicsGetCurrentContext()!
         let rectangleRect = CGRect(x:0, y:0, width:size.width, height:size.height)
-        let rectangleInset = CGRect(x:titleIndent, y:0, width:size.width-titleIndent, height:size.height)
+        let rectangleInset = CGRect(x:textIndent, y:0, width:size.width-textIndent, height:size.height)
         let rectanglePath = UIBezierPath(rect: rectangleRect)
         backColor.setFill()
         rectanglePath.fill()

@@ -170,7 +170,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     deinit {
         NotificationCenter.default.removeObserver(self)
         graphUpdateTimer?.invalidate()
-
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -242,9 +241,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 performSegue(withIdentifier: "segueToSwitchProfile", sender: self)
             } else if sideMenuController.userSelectedLogout {
                 APIConnector.connector().trackMetric("Clicked Log Out (Hamburger)")
-                APIConnector.connector().logout() {
-                    self.performSegue(withIdentifier: "segueToLogin", sender: self)
-                }
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.logout()
+                viewIsForeground = false
             } else if let url = sideMenuController.userSelectedExternalLink {
                 UIApplication.shared.openURL(url)
             }
@@ -580,7 +579,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     }
     
     func textFieldDidChange() {
-        updateFilteredAndReload()
+        if viewIsForeground {
+            updateFilteredAndReload()
+        }
     }
 
     @IBAction func searchEditingDidEnd(_ sender: AnyObject) {

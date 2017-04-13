@@ -122,19 +122,19 @@
                                                         </connections>
                                                     </textField>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NjG-Wi-o84" userLabel="forgotPasswordButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="10" y="80" width="140" height="36"/>
+                                                        <rect key="frame" x="10" y="81.5" width="124" height="33"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <state key="normal" title="Forgot password?">
                                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                                         </state>
                                                         <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightLinkText"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="forgotPasswordText"/>
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="forgotPasswordTapped:" destination="4G7-DP-gat" eventType="touchUpInside" id="W2P-qe-evN"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hWu-5X-znl" userLabel="loginButton">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hWu-5X-znl" userLabel="loginButton" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="189.5" y="83.5" width="83" height="29"/>
                                                         <color key="backgroundColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
@@ -142,7 +142,10 @@
                                                             <constraint firstAttribute="width" constant="83" id="iks-M1-LrD"/>
                                                         </constraints>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
-                                                        <state key="normal" title="Log in"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonStyling" value="loginButton"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonTitle" value="Log in"/>
+                                                        </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="login_button_tapped:" destination="4G7-DP-gat" eventType="touchUpInside" id="AHX-FJ-g2C"/>
                                                         </connections>
@@ -185,7 +188,7 @@
                                                 <rect key="frame" x="46.5" y="58" width="282.5" height="120"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are not currently connected to a network!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nYu-JU-kh6" userLabel="offlineMessage" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="25" y="33.5" width="232.5" height="54.5"/>
+                                                        <rect key="frame" x="25" y="33" width="232.5" height="54.5"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>

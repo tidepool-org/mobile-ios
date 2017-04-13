@@ -117,6 +117,22 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         // Dispose of any resources that can be recreated.
     }
 
+    // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
+    private var subviewsInitialized = false
+    override func viewDidLayoutSubviews() {
+        let frame = self.logInScene.frame
+        NSLog("viewDidLayoutSubviews: \(frame)")
+        
+        if (subviewsInitialized) {
+            return
+        }
+        subviewsInitialized = true
+        logInScene.setNeedsLayout()
+        logInScene.layoutIfNeeded()
+        // For the login button ;-)
+        logInScene.checkAdjustSubviewSizing()
+    }
+    
     //
     // MARK: - Button and text field handlers
     //
@@ -171,7 +187,9 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
                         if let json = result.value {
                             NutDataController.sharedInstance.processLoginProfileFetch(json)
                         }
-                        self.performSegue(withIdentifier: "showEventListSegue", sender: self)
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        appDelegate.setupUIForLoginSuccess()
+                        //self.performSegue(withIdentifier: "showEventListSegue", sender: self)
                     }
                 }
             } else {

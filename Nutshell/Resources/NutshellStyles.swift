@@ -58,7 +58,7 @@ open class Styles: NSObject {
         // login & signup scenes
         "userDataEntry": (mediumRegularFont, blackColor),
         "dataEntryErrorFeedback": (smallSemiboldFont, redErrorColor),
-        "brightLinkText": (mediumRegularFont, blackColor),
+        "forgotPasswordText": (mediumSmallRegularFont, blackColor),
         "networkDisconnectText" : (largeRegularFont, whiteColor),
         // event list table scene
         "profileCellNameText": (mediumSmallRegularFont, darkPurpleColor),
