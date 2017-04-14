@@ -196,7 +196,8 @@ class NutDataController: NSObject
     ///
     /// Note: This sets the current tidepool user as the HealthKit user!
     func enableHealthKitInterface() {
-        appHealthKitConfiguration.enableHealthKitInterface(currentUserName, userid: currentUserId, isDSAUser: isDSAUser, needsGlucoseReads: true, needsGlucoseWrites: true, needsWorkoutReads: true)
+        // TODO: turn of workout data load for now...
+        appHealthKitConfiguration.enableHealthKitInterface(currentUserName, userid: currentUserId, isDSAUser: isDSAUser, needsGlucoseReads: true, needsGlucoseWrites: false, needsWorkoutReads: false)
     }
     
     /// Disables HealthKit for current user

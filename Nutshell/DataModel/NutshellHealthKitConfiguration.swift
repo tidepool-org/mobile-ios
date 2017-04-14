@@ -23,13 +23,15 @@ class NutshellHealthKitConfiguration: HealthKitConfiguration
     // Override to load workout events and sync smbg events from Tidepool service in addition to pushing up Dexcom blood glucose monitoring events
     override func turnOnInterface() {
         super.turnOnInterface()
-        monitorForWorkoutData(true)
+        // TODO: turn off workout data for now...
+        //monitorForWorkoutData(true)
         //HealthKitDataPusher.sharedInstance.enablePushToHealthKit(true)
     }
 
     override func turnOffInterface() {
         super.turnOffInterface()
-        monitorForWorkoutData(false)
+        // TODO: turn off workout data for now...
+        //monitorForWorkoutData(false)
         //HealthKitDataPusher.sharedInstance.enablePushToHealthKit(false)
     }
 

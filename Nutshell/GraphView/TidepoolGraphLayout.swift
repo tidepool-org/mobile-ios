@@ -43,7 +43,7 @@ class TidepoolGraphLayout: GraphLayout {
     // create and return an array of GraphDataLayer objects, w/o data, ordered in view layer from back to front (i.e., last item in array will be drawn last)
     override func graphLayers(_ viewSize: CGSize, timeIntervalForView: TimeInterval, startTime: Date, tileIndex: Int) -> [GraphDataLayer] {
 
-        let workoutLayer = WorkoutGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
+//        let workoutLayer = WorkoutGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
         
 //        let mealLayer = MealGraphDataLayer.init(viewSize: viewSize, timeIntervalForView: timeIntervalForView, startTime: startTime, layout: self)
         
@@ -63,7 +63,7 @@ class TidepoolGraphLayout: GraphLayout {
         bolusLayer.wizardLayer = wizardLayer
 
         // Note: ordering is important! E.g., wizard layer draws after bolus layer so it can place circles above related bolus rectangles.
-        return [workoutLayer, basalLayer, cbgLayer, noteLayer, smbgLayer, bolusLayer, wizardLayer]
+        return [basalLayer, cbgLayer, noteLayer, smbgLayer, bolusLayer, wizardLayer]
     }
 
     // Bolus and basal values are scaled according to max value found, so the records are queried for the complete graph time range and stored here where the tiles can share them.
