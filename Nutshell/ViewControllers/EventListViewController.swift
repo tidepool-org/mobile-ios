@@ -16,13 +16,11 @@
 import UIKit
 import CoreData
 import CocoaLumberjack
-import FLAnimatedImage
 
 class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPIWatcher {
 
     
     @IBOutlet weak var eventListSceneContainer: UIControl!
-//    @IBOutlet weak var dataVizView: UIView!
     
     @IBOutlet weak var menuButton: UIBarButtonItem!
     @IBOutlet weak var searchTextField: NutshellUITextField!
@@ -30,24 +28,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     @IBOutlet weak var tableView: NutshellUITableView!
     @IBOutlet weak var coverView: UIControl!
     
-    // data viz layout
-//    @IBOutlet weak var graphLayerContainer: UIView!
-//    @IBOutlet weak var loadingAnimationView: UIView!
-//    @IBOutlet weak var animatedLoadingImage: FLAnimatedImageView!
-//    @IBOutlet weak var noDataViewContainer: UIView!
-    
-    // support for displaying graph around current selection
-    fileprivate var selectedIndexPath: IndexPath? = nil
-    fileprivate var selectedNote: BlipNote?
-//    fileprivate var graphContainerView: TidepoolGraphView?
-    fileprivate var eventTime = Date()
-    
     // refresh control...
     var refreshControl:UIRefreshControl = UIRefreshControl()
 
-    // Program timers
-//    var graphUpdateTimer: Timer?
-    
     // misc
     let dataController = NutDataController.sharedInstance
     fileprivate var sortedNutEvents = [(String, NutEvent)]()
@@ -169,7 +152,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     
     deinit {
         NotificationCenter.default.removeObserver(self)
-//        graphUpdateTimer?.invalidate()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -271,11 +253,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // change the world!
         dataController.currentViewedUser = newUser
         self.title = newUser.fullName ?? ""
-        selectedNote = nil
-        selectedIndexPath = nil
         notes = []
         tableView.reloadData()
-        configureGraphContainer()
         refresh()
     }
     
@@ -283,38 +262,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func sortNotesAndReload() {
         notes.sort(by: {$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
         tableView.reloadData()
-    }
-
-    func selectAndScrollToTopNote() {
-        if notes.count > 0 {
-            let topIndexPath = IndexPath(row: 0, section: 0)
-            selectAndScrollToNoteAtIndexPath(topIndexPath)
-        } else {
-            selectedIndexPath = nil
-            selectNote(nil)
-        }
-    }
-    
-    func selectAndScrollToNoteAtIndexPath(_ path: IndexPath) {
-        self.selectedIndexPath = path
-        if let note = noteForIndexPath(path) {
-            selectNote(note)
-            self.tableView.selectRow(at: path, animated: true, scrollPosition: .top)
-            self.tableView.scrollToNearestSelectedRow(at: .top, animated: true)
-        }
-    }
-    
-    func selectAndScrollToNote(_ note: BlipNote) {
-        if let pathForNote = indexPathForNoteId(note.id) {
-            self.selectAndScrollToNoteAtIndexPath(pathForNote)
-        }
-    }
-
-    func snapSelectedRowToTop() {
-        if let note = selectedNote {
-            let path = indexPathForNoteId(note.id)
-            self.tableView.selectRow(at: path, animated: true, scrollPosition: .top)
-        }
     }
 
     func indexPathForNoteId(_ noteId: String) -> IndexPath? {
@@ -354,9 +301,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         NSLog("NoteAPIWatcher.addNotes")
         self.notes = notes
         sortNotesAndReload()
-        if selectedIndexPath == nil {
-            self.selectAndScrollToTopNote()
-        }
     }
     
     func postComplete(_ note: BlipNote) {
@@ -365,45 +309,34 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         self.notes.insert(note, at: 0)
         // sort the notes, reload notes table
         sortNotesAndReload()
-        self.selectAndScrollToNote(note)
     }
     
     func deleteComplete(_ deletedNote: BlipNote) {
         NSLog("NoteAPIWatcher.deleteComplete")
-        var nextIndexPath: IndexPath? = nil
-        if self.selectedNote != nil {
-            if selectedNote!.id == deletedNote.id {
-                // deselect cell before deletion...
-                self.selectNote(nil)
-                if let selectedIP = selectedIndexPath {
-                    self.tableView.deselectRow(at: selectedIP, animated: true)
-                    if selectedIP.row > 0 {
-                        nextIndexPath = IndexPath(row: selectedIP.row-1, section: 0)
-                    }
-                    self.selectedIndexPath = nil
-                }
-            }
-        }
-        
         if let deletedNotePath = self.indexPathForNoteId(deletedNote.id) {
             self.notes.remove(at: deletedNotePath.row)
+            sortNotesAndReload()
         }
-        
-        sortNotesAndReload()
-        
-        // make sure we have a note selected. If we deleted the selected one, select the previous one.
-        if self.selectedIndexPath != nil {
-            self.selectAndScrollToNoteAtIndexPath(self.selectedIndexPath!)
-        } else if nextIndexPath != nil {
-            self.selectAndScrollToNoteAtIndexPath(nextIndexPath!)
-        } else {
-            self.selectAndScrollToTopNote()
-        }
+        noteToEdit = nil
+        indexPathOfNoteToEdit = nil
     }
     
     func updateComplete(_ originalNote: BlipNote, editedNote: BlipNote) {
         NSLog("NoteAPIWatcher.updateComplete")
-        
+        NSLog("Updating note \(originalNote.id) with text \(editedNote.messagetext)")
+        originalNote.messagetext = editedNote.messagetext
+        let timeChanged = originalNote.timestamp != editedNote.timestamp
+        originalNote.timestamp = editedNote.timestamp
+        if indexPathOfNoteToEdit != nil {
+            if timeChanged {
+                // sort order may have changed...
+                sortNotesAndReload()
+            } else {
+                self.tableView.reloadRows(at: [indexPathOfNoteToEdit!], with: .middle)
+                indexPathOfNoteToEdit = nil
+            }
+        }
+        noteToEdit = nil
     }
     
     func loadNotes() {
@@ -443,11 +376,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepare(for: segue, sender: sender)
-        if segue.identifier == "segueToEventDetail" {
-            let eventDetailVC = segue.destination as! EventDetailViewController
-            eventDetailVC.note = self.selectedNote
-            eventDetailVC.group = dataController.currentViewedUser!
-            APIConnector.connector().trackMetric("Clicked view a note (Home screen)")
+        if (segue.identifier) == "segueToEditView" {
+            let eventEditVC = segue.destination as! EventEditViewController
+            eventEditVC.note = self.noteToEdit
+            APIConnector.connector().trackMetric("Clicked edit a note (Home screen)")
         } else if segue.identifier == "segueToEventAdd" {
             let eventAddVC = segue.destination as! EventAddViewController
             // Pass along group (logged in user) and selected profile user...
@@ -471,6 +403,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         if let eventEditVC = segue.source as? EventEditViewController {
             if let originalNote = eventEditVC.note, let editedNote = eventEditVC.editedNote {
                 APIConnector.connector().updateNote(self, editedNote: editedNote, originalNote: originalNote)
+                // indexPathOfNoteToEdit
                 // will be called back on successful update!
                 // TODO: also handle unsuccessful updates?
             } else {
@@ -483,22 +416,12 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                 // TODO: also handle unsuccessful posts?
             } else {
                 // add was cancelled... need to ensure graph is correctly configured.
-//                syncDataVizView()
-            }
-        }  else if let eventDetailVC = segue.source as? EventDetailViewController {
-            if eventDetailVC.noteEdited {
-                self.reloadAndReselect(eventDetailVC.note)
             }
         } else {
             NSLog("Unknown segue source!")
         }
     }
 
-    private func reloadAndReselect(_ note: BlipNote) {
-        sortNotesAndReload()
-        self.selectAndScrollToNote(note)
-    }
-    
     // Multiple VC's on the navigation stack return all the way back to this initial VC via this segue, when nut events go away due to deletion, for test purposes, etc.
     @IBAction func home(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventList home!")
@@ -636,150 +559,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             configureSearchUI()
         }
         tableView.reloadData()
-        self.selectAndScrollToTopNote()
-    }
-    
-    //
-    // MARK: - Data vizualization view
-    //
-    
-//    enum DataVizDisplayState: Int {
-//        case initial
-//        case loadingNoSelect
-//        case loadingSelected
-//        case dataGraph
-//        case noDataDisplay
-//    }
-//    private var dataVizState: DataVizDisplayState = .initial
-//
-//    private func updateDataVizForState(_ newState: DataVizDisplayState) {
-//        if newState == dataVizState {
-//            NSLog("\(#function) already in state \(newState)")
-//            return
-//        }
-//        NSLog("\(#function) setting new state: \(newState)")
-//        dataVizState = newState
-//        var hideLoadingGif = true
-//        var hideNoDataView = true
-//        if newState == .initial {
-//            if (graphContainerView != nil) {
-//                NSLog("Removing current graph view...")
-//                graphContainerView?.removeFromSuperview();
-//                graphContainerView = nil;
-//            }
-//        } else if newState == .loadingNoSelect {
-//            // no item selected, show loading gif, hiding any current data and graph gridlines
-//            graphContainerView?.displayGraphData(false)
-//            graphContainerView?.displayGridLines(false)
-//            hideLoadingGif = false
-//        } else if newState == .loadingSelected {
-//            // item selected, show loading gif, hide gridlines, but allow data to load.
-//            graphContainerView?.displayGraphData(true)
-//            graphContainerView?.displayGridLines(false)
-//            hideLoadingGif = false
-//        } else if newState == .dataGraph {
-//            // item selected and data found, ensure gridlines are on and data displayed (should already be)
-//            graphContainerView?.displayGridLines(true)
-//        } else if newState == .noDataDisplay {
-//            // item selected, but no data found; hide gridlines and show the no data found overlay
-//            graphContainerView?.displayGridLines(false)
-//            hideNoDataView = false
-//        }
-//        if loadingAnimationView.isHidden != hideLoadingGif {
-//            loadingAnimationView.isHidden = hideLoadingGif
-//            if hideLoadingGif {
-//                NSLog("\(#function) hide loading gif!")
-//                animatedLoadingImage.stopAnimating()
-//            } else {
-//                NSLog("\(#function) start showing loading gif!")
-//                animatedLoadingImage.startAnimating()
-//            }
-//        }
-//        if noDataViewContainer.isHidden != hideNoDataView {
-//            noDataViewContainer.isHidden = hideNoDataView
-//            NSLog("\(#function) noDataViewContainer.isHidden = \(hideNoDataView)")
-//        }
-//    }
-//    
-//    func syncDataVizView() {
-//        if let graphContainerView = graphContainerView {
-//            let graphHasData = graphContainerView.dataFound()
-//            NSLog("\(#function) - graphHasData: \(graphHasData)")
-//            if dataVizState == .loadingNoSelect {
-//                NSLog("\(#function) ignoring call in state .loadingNoSelect")
-//                return
-//            }
-//            if graphHasData {
-//                updateDataVizForState(.dataGraph)
-//            } else {
-//                // Show the no-data view if not still loading...
-//                if !DatabaseUtils.sharedInstance.isLoadingTidepoolEvents() {
-//                    updateDataVizForState(.noDataDisplay)
-//                } else {
-//                    NSLog("\(#function): Keep displaying loading screen as load is still in progress")
-//                }
-//            }
-//        }
-//    }
-//
-//    private let kGraphUpdateDelay: TimeInterval = 0.5
-//    private func startGraphUpdateTimer() {
-//        if graphUpdateTimer == nil {
-//            graphUpdateTimer = Timer.scheduledTimer(timeInterval: kGraphUpdateDelay, target: self, selector: #selector(EventListViewController.graphUpdateTimerFired), userInfo: nil, repeats: false)
-//        }
-//    }
-//    
-//    private func stopGraphUpdateTimer() {
-//        NSLog("\(#function)")
-//        graphUpdateTimer?.invalidate()
-//        graphUpdateTimer = nil
-//    }
-//    
-//    func graphUpdateTimerFired() {
-//        NSLog("\(#function)")
-//        snapSelectedRowToTop()
-//        configureGraphContainer()
-//    }
-//
-//    private func clearGraphAndUpdateDelayed() {
-//        NSLog("\(#function)")
-//        stopGraphUpdateTimer()
-//
-//        // while loading, and in between selections, put up loading view...
-//        updateDataVizForState(.loadingNoSelect)
-//        startGraphUpdateTimer()
-//    }
-    
-    fileprivate func selectNote(_ note: BlipNote?) {
-        NSLog("\(#function)")
-
-        // if we are deselecting, change data viz to loading, no selection...
-        if note == nil {
-            NSLog("Deselecting note...")
-            self.selectedNote = nil
-//            updateDataVizForState(.initial)
-            configureGraphContainer()
-            return
-        }
-        
-        // if we have been showing something, close it up and update delayed
-        if let currentNote = self.selectedNote {
-            NSLog("Selecting a different note...")
-            if currentNote.id != note!.id {
-                self.selectedNote = note
-//                clearGraphAndUpdateDelayed()
-                return
-             } else {
-                // same note, update graph if needed...
-                configureGraphContainer()
-                return
-            }
-        }
-    
-        NSLog("Selecting a new note...")
-        // no selected note, start looking for data for this item...
-        self.selectedNote = note
-        configureGraphContainer()
     }
     
     /// Works with graphDataChanged to ensure graph is up-to-date after notification of database changes whether this VC is in the foreground or background.
@@ -809,41 +588,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 //        graphContainerView?.centerGraphOnEvent(animated: true)
     }
     
-    /// Reloads the graph - this should be called after the header has been laid out and the graph section size has been figured. Pass in edgeOffset to place the nut event other than in the center.
-    fileprivate func configureGraphContainer(_ edgeOffset: CGFloat = 0.0) {
-        NSLog("EventListVC: configureGraphContainer")
-//        if (graphContainerView != nil) {
-//            NSLog("Removing current graph view...")
-//            graphContainerView?.removeFromSuperview();
-//            graphContainerView = nil;
-//        }
-//        
-//        if let note = self.selectedNote {
-//            NSLog("Configuring graph for note id: \(note.id)")
-//
-//            // TODO: assume all notes created in current timezone?
-//            let tzOffset = NSCalendar.current.timeZone.secondsFromGMT()
-//            graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: tzOffset)
-//            if let graphContainerView = graphContainerView {
-//                // while loading, and in between selections, put up loading view...
-//                updateDataVizForState(.loadingSelected)
-//                graphContainerView.configureGraph(edgeOffset)
-//                // delay to display notes until we get notified of data available...
-//                graphContainerView.configureNotesToDisplay([note])
-//                graphLayerContainer.insertSubview(graphContainerView, at: 0)
-//                graphContainerView.loadGraphData()
-//            }
-//        }
-    }
     
     //
     // MARK: - GraphContainerViewDelegate
     //
     
-//    func containerCellUpdated() {
-//        syncDataVizView()
-//    }
-//
 //    func pinchZoomEnded() {
 //        //adjustZoomButtons()
 //        APIConnector.connector().trackMetric("Pinched to Zoom (Data Screen)")
@@ -899,6 +648,17 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 //        recenterGraph()
 //    }
 
+    private var noteToEdit: BlipNote?
+    private var indexPathOfNoteToEdit: IndexPath?
+    func editPressed(_ sender: UIButton!) {
+        NSLog("cell with tag \(sender.tag) was pressed!")
+        let index = sender.tag
+        if (index < notes.count) {
+            indexPathOfNoteToEdit = IndexPath(row: index, section: 0)
+            noteToEdit = notes[index]
+            self.performSegue(withIdentifier: "segueToEditView", sender: self)
+        }
+    }
 }
 
 
@@ -909,7 +669,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 extension EventListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt estimatedHeightForRowAtIndexPath: IndexPath) -> CGFloat {
-        return 70.0;
+        return 90.0;
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt heightForRowAtIndexPath: IndexPath) -> CGFloat {
@@ -965,30 +725,31 @@ extension EventListViewController: UITableViewDataSource {
             note = notes[indexPath.item]
         }
         
+        func configureEdit(_ cell: NoteListTableViewCell, note: BlipNote) {
+            if note.userid == dataController.currentUserId {
+                // editButton tag to be indexPath.row so can be used in editPressed notification handling
+                cell.editButton.isHidden = false
+                cell.editButton.tag = indexPath.row
+                cell.editButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)                
+            } else {
+                cell.editButton.isHidden = true
+            }
+        }
+        
         if let note = note {
-            // If note was created by current viewed user, don't configure a title
+            // If note was created by current viewed user, don't configure a title, but note is editable
             if note.userid == note.groupid {
-                // If note was created by someone else, put in "xxx to yyy" title
                 let cellId = "noteListCell"
                 let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCell
                 cell.configureCell(note)
-                
-                if let selectedNote = self.selectedNote {
-                    if selectedNote.id == note.id {
-                        cell.setSelected(true, animated: false)
-                    }
-                }
+                configureEdit(cell, note: note)
                 return cell
             } else {
-                let cellId = "noteDetailCell"
-                let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteDetailTableViewCell
+                // If note was created by someone else, put in "xxx to yyy" title and hide edit button
+                let cellId = "noteListCellWithUser"
+                let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCellWithUser
                 cell.configureCell(note, group: group)
-                
-                if let selectedNote = self.selectedNote {
-                    if selectedNote.id == note.id {
-                        cell.setSelected(true, animated: false)
-                    }
-                }
+                configureEdit(cell, note: note)
                 return cell
             }
         } else {

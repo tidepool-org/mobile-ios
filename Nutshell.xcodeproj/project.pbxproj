@@ -228,6 +228,7 @@
 		48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
 		48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
 		48DF9B9B1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
+		48E16DC81EA16C9000EC8D48 /* NoteListTableViewCellWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E16DC71EA16C9000EC8D48 /* NoteListTableViewCellWithUser.swift */; };
 		48E4A4461BF015CE001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4451BF015CE001A7B35 /* Reachability.swift */; };
 		48E4A4471BF015CE001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4451BF015CE001A7B35 /* Reachability.swift */; };
 		48EC32301BA7BDD700A75103 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
@@ -418,6 +419,7 @@
 		48DA110F1CE3CBD600B99C35 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		48DB6CFE1E8965DB00C5F221 /* EventDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventDetailViewController.swift; path = ViewControllers/EventDetailViewController.swift; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
+		48E16DC71EA16C9000EC8D48 /* NoteListTableViewCellWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListTableViewCellWithUser.swift; path = ViewControllers/NoteListTableViewCellWithUser.swift; sourceTree = "<group>"; };
 		48E4A4451BF015CE001A7B35 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = ServiceInterface/Reachability.swift; sourceTree = "<group>"; };
 		48ECF6C91E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConnectToHealthCelebrationViewController.swift; path = ViewControllers/ConnectToHealthCelebrationViewController.swift; sourceTree = "<group>"; };
 		48ECF6CB1E96FDD3007EE5D3 /* celebration-animated-dots.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = "celebration-animated-dots.gif"; path = "Images/celebration-animated-dots.gif"; sourceTree = "<group>"; };
@@ -583,6 +585,7 @@
 				48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */,
 				48DB6CFE1E8965DB00C5F221 /* EventDetailViewController.swift */,
 				48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */,
+				48E16DC71EA16C9000EC8D48 /* NoteListTableViewCellWithUser.swift */,
 				48B7C7EA1E899BC10069B6DF /* NoteListTableViewCellWithComments.swift */,
 				48B7C7E81E8988160069B6DF /* NoteDetailTableViewCell.swift */,
 				48EDC2C51BD6B403003049D9 /* EventAddViewController.swift */,
@@ -1198,6 +1201,7 @@
 				0334CA311BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,
 				48867CF51E80AEAE00C4E79D /* BlipNote.swift in Sources */,
 				48C4916C1C3B771200F34630 /* WizardGraphData.swift in Sources */,
+				48E16DC81EA16C9000EC8D48 /* NoteListTableViewCellWithUser.swift in Sources */,
 				0334CA281BA8DDFC00013096 /* BloodKetone.swift in Sources */,
 				486F5E111BA08DE900BA2A57 /* LoginViewController.swift in Sources */,
 				486894F51E831F89008B0732 /* UrchinConstants.swift in Sources */,

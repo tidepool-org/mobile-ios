@@ -14,6 +14,8 @@
 */
 
 import UIKit
+import FLAnimatedImage
+import CocoaLumberjack
 
 class NoteListTableViewCell: BaseUITableViewCell, GraphContainerViewDelegate {
 
@@ -23,11 +25,13 @@ class NoteListTableViewCell: BaseUITableViewCell, GraphContainerViewDelegate {
     
     @IBOutlet weak var dataVizView: UIView!
     @IBOutlet weak var loadingAnimationView: UIView!
-    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var imageContainer: UIView!
     
     @IBOutlet weak var noDataView: UIView!
     @IBOutlet weak var noteLabel: UILabel!
     @IBOutlet weak var dateLabel: NutshellUILabel!
+    
+    @IBOutlet weak var editButton: NutshellSimpleUIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -90,7 +94,7 @@ class NoteListTableViewCell: BaseUITableViewCell, GraphContainerViewDelegate {
         graphContainerView?.removeFromSuperview();
         graphContainerView = nil;
         }
-        hideLoadAnimation(true)
+        showLoadAnimation(false)
         noDataView.isHidden = true
     }
 
@@ -143,21 +147,37 @@ class NoteListTableViewCell: BaseUITableViewCell, GraphContainerViewDelegate {
                 hideNoDataView = false
             }
             
-            hideLoadAnimation(hideLoadingView)
+            showLoadAnimation(!hideLoadingView)
             noDataView.isHidden = hideNoDataView
         }
     }
 
-    func hideLoadAnimation(_ hide: Bool) {
-        if loadingAnimationView.isHidden != hide {
-            loadingAnimationView.isHidden = hide
-            if hide {
-                loadingIndicator.stopAnimating()
-                
+    private var animatedLoadingImage: FLAnimatedImageView?
+    func showLoadAnimation(_ show: Bool) {
+        if loadingAnimationView.isHidden != !show {
+            if show {
+                NSLog("show loading animation")
+                if animatedLoadingImage == nil {
+                    animatedLoadingImage = FLAnimatedImageView(frame: imageContainer.bounds)
+                    imageContainer.insertSubview(animatedLoadingImage!, at: 0)
+                    if let path = Bundle.main.path(forResource: "jump-jump-jump-jump", ofType: "gif") {
+                        do {
+                            let animatedImage = try FLAnimatedImage(animatedGIFData: Data(contentsOf: URL(fileURLWithPath: path)))
+                            animatedLoadingImage?.animatedImage = animatedImage
+                        } catch {
+                            DDLogError("Unable to load animated gifs!")
+                        }
+                    }
+                }
+                animatedLoadingImage?.startAnimating()
+
             } else {
-                loadingIndicator.startAnimating()
+                NSLog("hide loading animation")
+                animatedLoadingImage?.stopAnimating()
+                animatedLoadingImage?.removeFromSuperview();
+                animatedLoadingImage = nil
             }
-            
+            loadingAnimationView.isHidden = !show
         }
     }
 

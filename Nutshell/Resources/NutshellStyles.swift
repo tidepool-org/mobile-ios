@@ -45,6 +45,8 @@ open class Styles: NSObject {
         // menu and account settings
         "rowSeparator": dimmedDarkGreyColor,
         "darkBackgroundButton": darkPurpleColor,
+        // list scene
+        "editButton" : UIColor.clear,
         // add/edit event scenes
         "loginButton": brightBlueColor,
     ]
@@ -63,6 +65,7 @@ open class Styles: NSObject {
         // event list table scene
         "profileCellNameText": (mediumSmallRegularFont, darkPurpleColor),
         "searchPlaceholder": (mediumLightFont, blackColor),
+        "editButton" : (smallRegularFont, blackishColor),
         // grouped event list table scene
         "groupedEventCellDate": (smallRegularFont, altDarkGreyColor),
         // event detail view scene
