@@ -31,7 +31,7 @@ class GraphContainerView: UIView {
     var graphCollectionView: UICollectionView?
     var graphUtils: GraphingUtils?
     
-    init(frame: CGRect, delegate: GraphContainerViewDelegate, layout: GraphLayout) {
+    init(frame: CGRect, delegate: GraphContainerViewDelegate?, layout: GraphLayout) {
         self.delegate = delegate
         self.layout = layout
         super.init(frame: frame)

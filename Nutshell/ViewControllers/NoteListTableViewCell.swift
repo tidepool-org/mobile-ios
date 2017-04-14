@@ -15,10 +15,17 @@
 
 import UIKit
 
-class NoteListTableViewCell: BaseUITableViewCell {
+class NoteListTableViewCell: BaseUITableViewCell, GraphContainerViewDelegate {
 
     var note: BlipNote?
-
+    var expanded: Bool = false
+    let kGraphHeight: CGFloat = 200.0
+    
+    @IBOutlet weak var dataVizView: UIView!
+    @IBOutlet weak var loadingAnimationView: UIView!
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    
+    @IBOutlet weak var noDataView: UIView!
     @IBOutlet weak var noteLabel: UILabel!
     @IBOutlet weak var dateLabel: NutshellUILabel!
     
@@ -34,6 +41,17 @@ class NoteListTableViewCell: BaseUITableViewCell {
         self.updateNoteFontStyling()
     }
 
+    func openGraphView(_ open: Bool) {
+        expanded = open
+        for c in self.dataVizView.constraints {
+            if c.firstAttribute == NSLayoutAttribute.height {
+                c.constant = open ? kGraphHeight : 0.0
+                NSLog("setting dataViz height to \(c.constant)")
+                break
+            }
+        }
+     }
+    
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         NSLog("setHighlighted \(highlighted) for \(String(describing: note?.messagetext))!")
         super.setHighlighted(highlighted, animated:animated)
@@ -43,7 +61,13 @@ class NoteListTableViewCell: BaseUITableViewCell {
         dateLabel.isHighlighted = highlighted
     }
     
+    override func prepareForReuse() {
+        removeGraphView()
+    }
+    
     func configureCell(_ note: BlipNote) {
+        expanded = false
+        openGraphView(false)
         self.note = note
         self.updateNoteFontStyling()
         dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
@@ -58,4 +82,96 @@ class NoteListTableViewCell: BaseUITableViewCell {
             noteLabel.attributedText = attributedText
         }
     }
+    
+    private var graphContainerView: TidepoolGraphView?
+    func removeGraphView() {
+        if (graphContainerView != nil) {
+        NSLog("Removing current graph view from cell: \(self)")
+        graphContainerView?.removeFromSuperview();
+        graphContainerView = nil;
+        }
+        hideLoadAnimation(true)
+        noDataView.isHidden = true
+    }
+
+    func configureGraphContainer() {
+        NSLog("EventListVC: configureGraphContainer")
+        removeGraphView()
+        if let note = note {
+            NSLog("Configuring graph for note id: \(note.id)")
+            // TODO: assume all notes created in current timezone?
+            let tzOffset = NSCalendar.current.timeZone.secondsFromGMT()
+            var graphFrame = dataVizView.bounds
+            graphFrame.size.height = kGraphHeight
+            graphContainerView = TidepoolGraphView.init(frame: graphFrame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: tzOffset)
+            if let graphContainerView = graphContainerView {
+                // while loading, and in between selections, put up loading view...
+                graphContainerView.configureGraph()
+                // delay to display notes until we get notified of data available...
+                graphContainerView.configureNotesToDisplay([note])
+                dataVizView.insertSubview(graphContainerView, at: 0)
+                updateGraph()
+            }
+        }
+    }
+    
+    func updateGraph() {
+        if let graphContainerView = graphContainerView {
+            graphContainerView.loadGraphData()
+            // will get called back at containerCellUpdated when collection view has been updated
+        }
+    }
+
+    func syncGraph() {
+        if let graphContainerView = graphContainerView {
+            let dataStillLoading = DatabaseUtils.sharedInstance.isLoadingTidepoolEvents()
+            var hideLoadingView = true
+            var hideNoDataView = true
+            if graphContainerView.dataFound() {
+                // ensure loading and no data shown are off
+                NSLog("\(#function) data found, show graph and grid")
+                graphContainerView.displayGridLines(true)
+            } else if dataStillLoading {
+                // show loading animation...
+                NSLog("\(#function) data still loading, show loading animation")
+                graphContainerView.displayGridLines(false)
+                hideLoadingView = false
+            } else {
+                // show no data found view...
+                NSLog("\(#function) no data found!")
+                graphContainerView.displayGridLines(false)
+                hideNoDataView = false
+            }
+            
+            hideLoadAnimation(hideLoadingView)
+            noDataView.isHidden = hideNoDataView
+        }
+    }
+
+    func hideLoadAnimation(_ hide: Bool) {
+        if loadingAnimationView.isHidden != hide {
+            loadingAnimationView.isHidden = hide
+            if hide {
+                loadingIndicator.stopAnimating()
+                
+            } else {
+                loadingIndicator.startAnimating()
+            }
+            
+        }
+    }
+
+    //
+    // MARK: - GraphContainerViewDelegate
+    //
+    
+    func containerCellUpdated() {
+        syncGraph()
+    }
+    
+    func pinchZoomEnded() {}
+    func dataPointTapped(_ dataPoint: GraphDataType, tapLocationInView: CGPoint) {}
+    func willDisplayGraphCell(_ cell: Int) {}
+    func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {}
+
 }

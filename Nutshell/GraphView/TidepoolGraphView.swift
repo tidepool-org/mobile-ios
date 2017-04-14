@@ -19,7 +19,7 @@ class TidepoolGraphView: GraphContainerView {
  
     fileprivate var tidepoolLayout: TidepoolGraphLayout!
 
-    init(frame: CGRect, delegate: GraphContainerViewDelegate, mainEventTime: Date, tzOffsetSecs: Int) {
+    init(frame: CGRect, delegate: GraphContainerViewDelegate?, mainEventTime: Date, tzOffsetSecs: Int) {
         let layout = TidepoolGraphLayout(viewSize: frame.size, mainEventTime: mainEventTime, tzOffsetSecs: tzOffsetSecs)
         super.init(frame: frame, delegate: delegate, layout: layout)
         tidepoolLayout = layout
@@ -50,6 +50,7 @@ class TidepoolGraphView: GraphContainerView {
     func displayGridLines(_ display: Bool) {
         if display != tidepoolLayout.displayGridLines {
             tidepoolLayout.displayGridLines = display
+            tidepoolLayout.configureGraph()
             configureBackground()
         } else {
             NSLog("\(#function) display: already in state \(display)")

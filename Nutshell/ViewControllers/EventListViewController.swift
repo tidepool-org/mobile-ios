@@ -18,11 +18,11 @@ import CoreData
 import CocoaLumberjack
 import FLAnimatedImage
 
-class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphContainerViewDelegate, NoteAPIWatcher, UIScrollViewDelegate {
+class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPIWatcher {
 
     
     @IBOutlet weak var eventListSceneContainer: UIControl!
-    @IBOutlet weak var dataVizView: UIView!
+//    @IBOutlet weak var dataVizView: UIView!
     
     @IBOutlet weak var menuButton: UIBarButtonItem!
     @IBOutlet weak var searchTextField: NutshellUITextField!
@@ -31,22 +31,22 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     @IBOutlet weak var coverView: UIControl!
     
     // data viz layout
-    @IBOutlet weak var graphLayerContainer: UIView!
-    @IBOutlet weak var loadingAnimationView: UIView!
-    @IBOutlet weak var animatedLoadingImage: FLAnimatedImageView!
-    @IBOutlet weak var noDataViewContainer: UIView!
+//    @IBOutlet weak var graphLayerContainer: UIView!
+//    @IBOutlet weak var loadingAnimationView: UIView!
+//    @IBOutlet weak var animatedLoadingImage: FLAnimatedImageView!
+//    @IBOutlet weak var noDataViewContainer: UIView!
     
     // support for displaying graph around current selection
     fileprivate var selectedIndexPath: IndexPath? = nil
     fileprivate var selectedNote: BlipNote?
-    fileprivate var graphContainerView: TidepoolGraphView?
+//    fileprivate var graphContainerView: TidepoolGraphView?
     fileprivate var eventTime = Date()
     
     // refresh control...
     var refreshControl:UIRefreshControl = UIRefreshControl()
 
     // Program timers
-    var graphUpdateTimer: Timer?
+//    var graphUpdateTimer: Timer?
     
     // misc
     let dataController = NutDataController.sharedInstance
@@ -97,14 +97,14 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         eventListSceneContainer.setNeedsLayout()
         eventListSceneContainer.layoutIfNeeded()
 
-        if let path = Bundle.main.path(forResource: "jump-jump-jump-jump", ofType: "gif") {
-            do {
-                let animatedImage = try FLAnimatedImage(animatedGIFData: Data(contentsOf: URL(fileURLWithPath: path)))
-                animatedLoadingImage.animatedImage = animatedImage
-            } catch {
-                DDLogError("Unable to load animated gifs!")
-            }
-        }
+//        if let path = Bundle.main.path(forResource: "jump-jump-jump-jump", ofType: "gif") {
+//            do {
+//                let animatedImage = try FLAnimatedImage(animatedGIFData: Data(contentsOf: URL(fileURLWithPath: path)))
+//                animatedLoadingImage.animatedImage = animatedImage
+//            } catch {
+//                DDLogError("Unable to load animated gifs!")
+//            }
+//        }
 
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSFontAttributeName: smallRegularFont, NSForegroundColorAttributeName: blackishColor])
         self.refreshControl.addTarget(self, action: #selector(EventListViewController.refresh), for: UIControlEvents.valueChanged)
@@ -169,7 +169,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     
     deinit {
         NotificationCenter.default.removeObserver(self)
-        graphUpdateTimer?.invalidate()
+//        graphUpdateTimer?.invalidate()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -483,7 +483,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
                 // TODO: also handle unsuccessful posts?
             } else {
                 // add was cancelled... need to ensure graph is correctly configured.
-                syncDataVizView()
+//                syncDataVizView()
             }
         }  else if let eventDetailVC = segue.source as? EventDetailViewController {
             if eventDetailVC.noteEdited {
@@ -643,112 +643,112 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     // MARK: - Data vizualization view
     //
     
-    enum DataVizDisplayState: Int {
-        case initial
-        case loadingNoSelect
-        case loadingSelected
-        case dataGraph
-        case noDataDisplay
-    }
-    private var dataVizState: DataVizDisplayState = .initial
-
-    private func updateDataVizForState(_ newState: DataVizDisplayState) {
-        if newState == dataVizState {
-            NSLog("\(#function) already in state \(newState)")
-            return
-        }
-        NSLog("\(#function) setting new state: \(newState)")
-        dataVizState = newState
-        var hideLoadingGif = true
-        var hideNoDataView = true
-        if newState == .initial {
-            if (graphContainerView != nil) {
-                NSLog("Removing current graph view...")
-                graphContainerView?.removeFromSuperview();
-                graphContainerView = nil;
-            }
-        } else if newState == .loadingNoSelect {
-            // no item selected, show loading gif, hiding any current data and graph gridlines
-            graphContainerView?.displayGraphData(false)
-            graphContainerView?.displayGridLines(false)
-            hideLoadingGif = false
-        } else if newState == .loadingSelected {
-            // item selected, show loading gif, hide gridlines, but allow data to load.
-            graphContainerView?.displayGraphData(true)
-            graphContainerView?.displayGridLines(false)
-            hideLoadingGif = false
-        } else if newState == .dataGraph {
-            // item selected and data found, ensure gridlines are on and data displayed (should already be)
-            graphContainerView?.displayGridLines(true)
-        } else if newState == .noDataDisplay {
-            // item selected, but no data found; hide gridlines and show the no data found overlay
-            graphContainerView?.displayGridLines(false)
-            hideNoDataView = false
-        }
-        if loadingAnimationView.isHidden != hideLoadingGif {
-            loadingAnimationView.isHidden = hideLoadingGif
-            if hideLoadingGif {
-                NSLog("\(#function) hide loading gif!")
-                animatedLoadingImage.stopAnimating()
-            } else {
-                NSLog("\(#function) start showing loading gif!")
-                animatedLoadingImage.startAnimating()
-            }
-        }
-        if noDataViewContainer.isHidden != hideNoDataView {
-            noDataViewContainer.isHidden = hideNoDataView
-            NSLog("\(#function) noDataViewContainer.isHidden = \(hideNoDataView)")
-        }
-    }
-    
-    func syncDataVizView() {
-        if let graphContainerView = graphContainerView {
-            let graphHasData = graphContainerView.dataFound()
-            NSLog("\(#function) - graphHasData: \(graphHasData)")
-            if dataVizState == .loadingNoSelect {
-                NSLog("\(#function) ignoring call in state .loadingNoSelect")
-                return
-            }
-            if graphHasData {
-                updateDataVizForState(.dataGraph)
-            } else {
-                // Show the no-data view if not still loading...
-                if !DatabaseUtils.sharedInstance.isLoadingTidepoolEvents() {
-                    updateDataVizForState(.noDataDisplay)
-                } else {
-                    NSLog("\(#function): Keep displaying loading screen as load is still in progress")
-                }
-            }
-        }
-    }
-
-    private let kGraphUpdateDelay: TimeInterval = 0.5
-    private func startGraphUpdateTimer() {
-        if graphUpdateTimer == nil {
-            graphUpdateTimer = Timer.scheduledTimer(timeInterval: kGraphUpdateDelay, target: self, selector: #selector(EventListViewController.graphUpdateTimerFired), userInfo: nil, repeats: false)
-        }
-    }
-    
-    private func stopGraphUpdateTimer() {
-        NSLog("\(#function)")
-        graphUpdateTimer?.invalidate()
-        graphUpdateTimer = nil
-    }
-    
-    func graphUpdateTimerFired() {
-        NSLog("\(#function)")
-        snapSelectedRowToTop()
-        configureGraphContainer()
-    }
-
-    private func clearGraphAndUpdateDelayed() {
-        NSLog("\(#function)")
-        stopGraphUpdateTimer()
-
-        // while loading, and in between selections, put up loading view...
-        updateDataVizForState(.loadingNoSelect)
-        startGraphUpdateTimer()
-    }
+//    enum DataVizDisplayState: Int {
+//        case initial
+//        case loadingNoSelect
+//        case loadingSelected
+//        case dataGraph
+//        case noDataDisplay
+//    }
+//    private var dataVizState: DataVizDisplayState = .initial
+//
+//    private func updateDataVizForState(_ newState: DataVizDisplayState) {
+//        if newState == dataVizState {
+//            NSLog("\(#function) already in state \(newState)")
+//            return
+//        }
+//        NSLog("\(#function) setting new state: \(newState)")
+//        dataVizState = newState
+//        var hideLoadingGif = true
+//        var hideNoDataView = true
+//        if newState == .initial {
+//            if (graphContainerView != nil) {
+//                NSLog("Removing current graph view...")
+//                graphContainerView?.removeFromSuperview();
+//                graphContainerView = nil;
+//            }
+//        } else if newState == .loadingNoSelect {
+//            // no item selected, show loading gif, hiding any current data and graph gridlines
+//            graphContainerView?.displayGraphData(false)
+//            graphContainerView?.displayGridLines(false)
+//            hideLoadingGif = false
+//        } else if newState == .loadingSelected {
+//            // item selected, show loading gif, hide gridlines, but allow data to load.
+//            graphContainerView?.displayGraphData(true)
+//            graphContainerView?.displayGridLines(false)
+//            hideLoadingGif = false
+//        } else if newState == .dataGraph {
+//            // item selected and data found, ensure gridlines are on and data displayed (should already be)
+//            graphContainerView?.displayGridLines(true)
+//        } else if newState == .noDataDisplay {
+//            // item selected, but no data found; hide gridlines and show the no data found overlay
+//            graphContainerView?.displayGridLines(false)
+//            hideNoDataView = false
+//        }
+//        if loadingAnimationView.isHidden != hideLoadingGif {
+//            loadingAnimationView.isHidden = hideLoadingGif
+//            if hideLoadingGif {
+//                NSLog("\(#function) hide loading gif!")
+//                animatedLoadingImage.stopAnimating()
+//            } else {
+//                NSLog("\(#function) start showing loading gif!")
+//                animatedLoadingImage.startAnimating()
+//            }
+//        }
+//        if noDataViewContainer.isHidden != hideNoDataView {
+//            noDataViewContainer.isHidden = hideNoDataView
+//            NSLog("\(#function) noDataViewContainer.isHidden = \(hideNoDataView)")
+//        }
+//    }
+//    
+//    func syncDataVizView() {
+//        if let graphContainerView = graphContainerView {
+//            let graphHasData = graphContainerView.dataFound()
+//            NSLog("\(#function) - graphHasData: \(graphHasData)")
+//            if dataVizState == .loadingNoSelect {
+//                NSLog("\(#function) ignoring call in state .loadingNoSelect")
+//                return
+//            }
+//            if graphHasData {
+//                updateDataVizForState(.dataGraph)
+//            } else {
+//                // Show the no-data view if not still loading...
+//                if !DatabaseUtils.sharedInstance.isLoadingTidepoolEvents() {
+//                    updateDataVizForState(.noDataDisplay)
+//                } else {
+//                    NSLog("\(#function): Keep displaying loading screen as load is still in progress")
+//                }
+//            }
+//        }
+//    }
+//
+//    private let kGraphUpdateDelay: TimeInterval = 0.5
+//    private func startGraphUpdateTimer() {
+//        if graphUpdateTimer == nil {
+//            graphUpdateTimer = Timer.scheduledTimer(timeInterval: kGraphUpdateDelay, target: self, selector: #selector(EventListViewController.graphUpdateTimerFired), userInfo: nil, repeats: false)
+//        }
+//    }
+//    
+//    private func stopGraphUpdateTimer() {
+//        NSLog("\(#function)")
+//        graphUpdateTimer?.invalidate()
+//        graphUpdateTimer = nil
+//    }
+//    
+//    func graphUpdateTimerFired() {
+//        NSLog("\(#function)")
+//        snapSelectedRowToTop()
+//        configureGraphContainer()
+//    }
+//
+//    private func clearGraphAndUpdateDelayed() {
+//        NSLog("\(#function)")
+//        stopGraphUpdateTimer()
+//
+//        // while loading, and in between selections, put up loading view...
+//        updateDataVizForState(.loadingNoSelect)
+//        startGraphUpdateTimer()
+//    }
     
     fileprivate func selectNote(_ note: BlipNote?) {
         NSLog("\(#function)")
@@ -757,7 +757,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         if note == nil {
             NSLog("Deselecting note...")
             self.selectedNote = nil
-            updateDataVizForState(.initial)
+//            updateDataVizForState(.initial)
             configureGraphContainer()
             return
         }
@@ -767,7 +767,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
             NSLog("Selecting a different note...")
             if currentNote.id != note!.id {
                 self.selectedNote = note
-                clearGraphAndUpdateDelayed()
+//                clearGraphAndUpdateDelayed()
                 return
              } else {
                 // same note, update graph if needed...
@@ -787,8 +787,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
         NSLog("\(#function)")
         if graphNeedsUpdate {
             graphNeedsUpdate = false
-            if let graphContainerView = graphContainerView {
-                graphContainerView.loadGraphData()
+            for cell in tableView.visibleCells {
+                guard let expandoCell = cell as? NoteListTableViewCell else { continue }
+                expandoCell.updateGraph()
             }
         }
     }
@@ -805,125 +806,99 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, GraphCo
     }
     
     fileprivate func recenterGraph() {
-        graphContainerView?.centerGraphOnEvent(animated: true)
+//        graphContainerView?.centerGraphOnEvent(animated: true)
     }
     
     /// Reloads the graph - this should be called after the header has been laid out and the graph section size has been figured. Pass in edgeOffset to place the nut event other than in the center.
     fileprivate func configureGraphContainer(_ edgeOffset: CGFloat = 0.0) {
         NSLog("EventListVC: configureGraphContainer")
-        if (graphContainerView != nil) {
-            NSLog("Removing current graph view...")
-            graphContainerView?.removeFromSuperview();
-            graphContainerView = nil;
-        }
-        
-        if let note = self.selectedNote {
-            NSLog("Configuring graph for note id: \(note.id)")
-
-            // TODO: assume all notes created in current timezone?
-            let tzOffset = NSCalendar.current.timeZone.secondsFromGMT()
-            graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: tzOffset)
-            if let graphContainerView = graphContainerView {
-                // while loading, and in between selections, put up loading view...
-                updateDataVizForState(.loadingSelected)
-                graphContainerView.configureGraph(edgeOffset)
-                // delay to display notes until we get notified of data available...
-                graphContainerView.configureNotesToDisplay([note])
-                graphLayerContainer.insertSubview(graphContainerView, at: 0)
-                graphContainerView.loadGraphData()
-            }
-        }
+//        if (graphContainerView != nil) {
+//            NSLog("Removing current graph view...")
+//            graphContainerView?.removeFromSuperview();
+//            graphContainerView = nil;
+//        }
+//        
+//        if let note = self.selectedNote {
+//            NSLog("Configuring graph for note id: \(note.id)")
+//
+//            // TODO: assume all notes created in current timezone?
+//            let tzOffset = NSCalendar.current.timeZone.secondsFromGMT()
+//            graphContainerView = TidepoolGraphView.init(frame: graphLayerContainer.frame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: tzOffset)
+//            if let graphContainerView = graphContainerView {
+//                // while loading, and in between selections, put up loading view...
+//                updateDataVizForState(.loadingSelected)
+//                graphContainerView.configureGraph(edgeOffset)
+//                // delay to display notes until we get notified of data available...
+//                graphContainerView.configureNotesToDisplay([note])
+//                graphLayerContainer.insertSubview(graphContainerView, at: 0)
+//                graphContainerView.loadGraphData()
+//            }
+//        }
     }
     
     //
     // MARK: - GraphContainerViewDelegate
     //
     
-    func containerCellUpdated() {
-        syncDataVizView()
-    }
+//    func containerCellUpdated() {
+//        syncDataVizView()
+//    }
+//
+//    func pinchZoomEnded() {
+//        //adjustZoomButtons()
+//        APIConnector.connector().trackMetric("Pinched to Zoom (Data Screen)")
+//    }
+//
+//    fileprivate var currentCell: Int?
+//    func willDisplayGraphCell(_ cell: Int) {
+//        if let currentCell = currentCell {
+//            if cell > currentCell {
+//                APIConnector.connector().trackMetric("Swiped to Pan Left (Data Screen)")
+//            } else if cell < currentCell {
+//                APIConnector.connector().trackMetric("Swiped to Pan Right (Data Screen)")
+//            }
+//        }
+//        currentCell = cell
+//    }
+//
+//    func dataPointTapped(_ dataPoint: GraphDataType, tapLocationInView: CGPoint) {
+//        var itemId: String?
+//        if let mealDataPoint = dataPoint as? MealGraphDataType {
+//            NSLog("tapped on meal!")
+//            itemId = mealDataPoint.id
+//        } else if let workoutDataPoint = dataPoint as? WorkoutGraphDataType {
+//            NSLog("tapped on workout!")
+//            itemId = workoutDataPoint.id
+//        }
+//        if let itemId = itemId {
+//            //NSLog("EventDetailVC: dataPointTapped")
+//            let nutEventItem = DatabaseUtils.sharedInstance.getNutEventItemWithId(itemId)
+//            if let nutEventItem = nutEventItem {
+//                // if the user tapped on some other event, switch to viewing that one instead!
+//                if nutEventItem.time != eventTime {
+//                    // TODO: handle by selecting appropriate event in table?
+////                    switchedEvents = true
+////                    // conjure up a NutWorkout and NutEvent for this new item!
+////                    self.eventGroup = NutEvent(firstEvent: nutEventItem)
+////                    self.eventItem = self.eventGroup?.itemArray[0]
+//                    // update view to show the new event, centered...
+//                    // keep point that was tapped at the same offset in the view in the new graph by setting the graph center point to be at the same x offset in the view...
+//                    configureGraphContainer(tapLocationInView.x)
+//                    // then animate to center...
+//                    if let graphContainerView = graphContainerView {
+//                        graphContainerView.centerGraphOnEvent(animated: true)
+//                    }
+//                }
+//            } else {
+//                NSLog("Couldn't find nut event item with id \(itemId)")
+//            }
+//        }
+//    }
+//
+//    func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {
+//        recenterGraph()
+//    }
 
-    func pinchZoomEnded() {
-        //adjustZoomButtons()
-        APIConnector.connector().trackMetric("Pinched to Zoom (Data Screen)")
-    }
-
-    fileprivate var currentCell: Int?
-    func willDisplayGraphCell(_ cell: Int) {
-        if let currentCell = currentCell {
-            if cell > currentCell {
-                APIConnector.connector().trackMetric("Swiped to Pan Left (Data Screen)")
-            } else if cell < currentCell {
-                APIConnector.connector().trackMetric("Swiped to Pan Right (Data Screen)")
-            }
-        }
-        currentCell = cell
-    }
-
-    func dataPointTapped(_ dataPoint: GraphDataType, tapLocationInView: CGPoint) {
-        var itemId: String?
-        if let mealDataPoint = dataPoint as? MealGraphDataType {
-            NSLog("tapped on meal!")
-            itemId = mealDataPoint.id
-        } else if let workoutDataPoint = dataPoint as? WorkoutGraphDataType {
-            NSLog("tapped on workout!")
-            itemId = workoutDataPoint.id
-        }
-        if let itemId = itemId {
-            //NSLog("EventDetailVC: dataPointTapped")
-            let nutEventItem = DatabaseUtils.sharedInstance.getNutEventItemWithId(itemId)
-            if let nutEventItem = nutEventItem {
-                // if the user tapped on some other event, switch to viewing that one instead!
-                if nutEventItem.time != eventTime {
-                    // TODO: handle by selecting appropriate event in table?
-//                    switchedEvents = true
-//                    // conjure up a NutWorkout and NutEvent for this new item!
-//                    self.eventGroup = NutEvent(firstEvent: nutEventItem)
-//                    self.eventItem = self.eventGroup?.itemArray[0]
-                    // update view to show the new event, centered...
-                    // keep point that was tapped at the same offset in the view in the new graph by setting the graph center point to be at the same x offset in the view...
-                    configureGraphContainer(tapLocationInView.x)
-                    // then animate to center...
-                    if let graphContainerView = graphContainerView {
-                        graphContainerView.centerGraphOnEvent(animated: true)
-                    }
-                }
-            } else {
-                NSLog("Couldn't find nut event item with id \(itemId)")
-            }
-        }
-    }
-
-    func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {
-        recenterGraph()
-    }
-
-    //
-    // Mark: - ScrollViewDelegate
-    //
-    
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        let x = targetContentOffset.pointee.x
-        let y = targetContentOffset.pointee.y
-        NSLog("scrollViewWillEndDragging: x is \(x), y is \(y)")
-        
-        let topRowPoint = CGPoint(x: 0.0, y: y + 35.0)
-        if let topIndexPath = tableView.indexPathForRow(at: topRowPoint) {
-            NSLog("top indexpath: \(topIndexPath)")
-            if let curSel = self.selectedIndexPath {
-                // just bow out if we already are there...
-                if curSel.row == topIndexPath.row {
-                    return
-                }
-            }
-            self.selectedIndexPath = topIndexPath
-            // Note: during a profile switch, table may momentarily be in a state with zero notes...
-            if let note = noteForIndexPath(topIndexPath) {
-                selectNote(note)
-                self.tableView.selectRow(at: topIndexPath, animated: true, scrollPosition: .top)
-            }
-        }
-    }
 }
 
 
@@ -943,14 +918,25 @@ extension EventListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let note = noteForIndexPath(indexPath) {
-            if selectedNote != nil && selectedNote!.id != note.id {
-                // set so we come back to this one
-                self.selectedIndexPath = indexPath
-                selectNote(note)
-            }
-            self.performSegue(withIdentifier: "segueToEventDetail", sender: self)
+        guard let expandoCell = tableView.cellForRow(at: indexPath) as? NoteListTableViewCell else { return }
+        
+        let openGraph = !expandoCell.expanded
+        if !openGraph {
+            expandoCell.removeGraphView()
+            expandoCell.setSelected(false, animated: false)
         }
+        
+        expandoCell.openGraphView(!expandoCell.expanded)
+        NSLog("setting row \(indexPath.row) expanded to: \(expandoCell.expanded)")
+        
+        tableView.beginUpdates()
+        tableView.endUpdates()
+        
+        if openGraph {
+            expandoCell.configureGraphContainer()
+        }
+        
+        tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
     }
 }
 
@@ -1028,21 +1014,6 @@ extension EventListViewController: UITableViewDataSource {
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
     }
     */
 
