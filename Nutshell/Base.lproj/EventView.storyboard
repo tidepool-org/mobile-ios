@@ -35,11 +35,79 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G15-x0-ayM" userLabel="navAreaDismissKeyboardButton">
+                                <rect key="frame" x="76" y="-44" width="168" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="lXO-DW-D4B"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="dismissKeyboard:" destination="oVB-ry-Lwj" eventType="touchUpInside" id="VfG-SW-9Xk"/>
+                                </connections>
+                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yu7-Gk-FTH" userLabel="eventListSceneContainer" customClass="UIControl">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W4V-dI-wa3" userLabel="searchView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="separatorLine" translatesAutoresizingMaskIntoConstraints="NO" id="53q-aG-llv" userLabel="separatorImageView">
+                                                <rect key="frame" x="0.0" y="49" width="320" height="1"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="tPZ-nc-Xd7"/>
+                                                </constraints>
+                                            </imageView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UK3-u0-owx" userLabel="searchButton">
+                                                <rect key="frame" x="14" y="15" width="22" height="21"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="21" id="Bjj-9W-avF"/>
+                                                    <constraint firstAttribute="width" constant="21.5" id="Wpv-1b-q7q"/>
+                                                </constraints>
+                                                <state key="normal" image="searchIcon"/>
+                                            </button>
+                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="G3r-qM-suN" userLabel="searchTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="50" y="0.0" width="262" height="50"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="searchText"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="searchEditingDidBegin:" destination="oVB-ry-Lwj" eventType="editingDidBegin" id="ZDm-7w-Kkp"/>
+                                                    <action selector="searchEditingDidEnd:" destination="oVB-ry-Lwj" eventType="editingDidEnd" id="Vln-IF-KgA"/>
+                                                </connections>
+                                            </textField>
+                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JwL-dD-CDl" userLabel="searchPlaceholder" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="50" y="0.0" width="54" height="50"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="searchPlaceholder"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="G3r-qM-suN" firstAttribute="centerY" secondItem="W4V-dI-wa3" secondAttribute="centerY" id="0B5-Sw-Ey5"/>
+                                            <constraint firstItem="53q-aG-llv" firstAttribute="leading" secondItem="W4V-dI-wa3" secondAttribute="leading" id="1R6-Oo-hXU"/>
+                                            <constraint firstItem="G3r-qM-suN" firstAttribute="leading" secondItem="UK3-u0-owx" secondAttribute="trailing" constant="14" id="K1r-9e-VWh"/>
+                                            <constraint firstAttribute="trailing" secondItem="G3r-qM-suN" secondAttribute="trailing" constant="8" id="KUv-xo-ZOV"/>
+                                            <constraint firstItem="G3r-qM-suN" firstAttribute="height" secondItem="W4V-dI-wa3" secondAttribute="height" id="Rnx-6H-zzk"/>
+                                            <constraint firstItem="JwL-dD-CDl" firstAttribute="centerY" secondItem="W4V-dI-wa3" secondAttribute="centerY" id="etB-91-ozE"/>
+                                            <constraint firstAttribute="trailing" secondItem="53q-aG-llv" secondAttribute="trailing" id="fBX-Dx-Zr0"/>
+                                            <constraint firstAttribute="height" constant="50" id="lCP-fY-tnr"/>
+                                            <constraint firstItem="UK3-u0-owx" firstAttribute="leading" secondItem="W4V-dI-wa3" secondAttribute="leading" constant="14" id="rDb-Mh-x9P"/>
+                                            <constraint firstItem="JwL-dD-CDl" firstAttribute="height" secondItem="W4V-dI-wa3" secondAttribute="height" id="sTu-OF-VVr"/>
+                                            <constraint firstItem="UK3-u0-owx" firstAttribute="centerY" secondItem="W4V-dI-wa3" secondAttribute="centerY" id="tRE-YB-a2S"/>
+                                            <constraint firstAttribute="bottom" secondItem="53q-aG-llv" secondAttribute="bottom" id="vuX-5E-EqN"/>
+                                            <constraint firstItem="JwL-dD-CDl" firstAttribute="leading" secondItem="UK3-u0-owx" secondAttribute="trailing" constant="14" id="znP-0E-9mW"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="102" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TkA-IK-Jxk" customClass="NutshellUITableView" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                        <rect key="frame" x="0.0" y="50" width="320" height="454"/>
                                         <color key="backgroundColor" red="0.94901960784313721" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="noteListCell" rowHeight="90" id="v6j-vL-aQN" userLabel="noteListTableCell" customClass="NoteListTableViewCell" customModule="Nutshell" customModuleProvider="target">
@@ -462,11 +530,14 @@
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="p1Z-R3-s10" firstAttribute="leading" secondItem="Yu7-Gk-FTH" secondAttribute="leading" id="6Xt-Mo-r1i"/>
+                                    <constraint firstItem="W4V-dI-wa3" firstAttribute="top" secondItem="Yu7-Gk-FTH" secondAttribute="top" id="7nr-UU-NOq"/>
                                     <constraint firstAttribute="bottom" secondItem="p1Z-R3-s10" secondAttribute="bottom" id="88L-ov-nwA"/>
+                                    <constraint firstAttribute="trailing" secondItem="W4V-dI-wa3" secondAttribute="trailing" id="BAS-nG-leJ"/>
                                     <constraint firstAttribute="bottom" secondItem="TkA-IK-Jxk" secondAttribute="bottom" id="EL9-mz-a35"/>
                                     <constraint firstItem="p1Z-R3-s10" firstAttribute="top" secondItem="Yu7-Gk-FTH" secondAttribute="top" id="I0e-Zd-0ve"/>
                                     <constraint firstAttribute="trailing" secondItem="p1Z-R3-s10" secondAttribute="trailing" id="IBo-Xv-iRX"/>
-                                    <constraint firstItem="TkA-IK-Jxk" firstAttribute="top" secondItem="Yu7-Gk-FTH" secondAttribute="top" id="iVe-Iu-50q"/>
+                                    <constraint firstItem="TkA-IK-Jxk" firstAttribute="top" secondItem="W4V-dI-wa3" secondAttribute="bottom" id="POc-qF-gj3"/>
+                                    <constraint firstItem="W4V-dI-wa3" firstAttribute="leading" secondItem="Yu7-Gk-FTH" secondAttribute="leading" id="dpW-Dk-QGU"/>
                                     <constraint firstItem="TkA-IK-Jxk" firstAttribute="leading" secondItem="Yu7-Gk-FTH" secondAttribute="leading" id="wtP-um-zr7"/>
                                     <constraint firstAttribute="trailing" secondItem="TkA-IK-Jxk" secondAttribute="trailing" id="zaL-Qk-xXR"/>
                                 </constraints>
@@ -475,9 +546,12 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Yu7-Gk-FTH" secondAttribute="trailing" id="6Cx-ow-G4u"/>
+                            <constraint firstItem="Pl9-hd-HdO" firstAttribute="top" secondItem="Yu7-Gk-FTH" secondAttribute="bottom" id="JQL-gW-UcI"/>
                             <constraint firstItem="Yu7-Gk-FTH" firstAttribute="leading" secondItem="vp9-lf-HJa" secondAttribute="leading" id="L7F-kx-ZGJ"/>
-                            <constraint firstItem="Pl9-hd-HdO" firstAttribute="top" secondItem="Yu7-Gk-FTH" secondAttribute="bottom" id="QHv-Rp-hSq"/>
-                            <constraint firstItem="Yu7-Gk-FTH" firstAttribute="top" secondItem="2ih-Oi-tIS" secondAttribute="bottom" id="w0t-01-pYQ"/>
+                            <constraint firstItem="G15-x0-ayM" firstAttribute="leading" secondItem="vp9-lf-HJa" secondAttribute="leadingMargin" constant="60" id="L9n-IF-WpV"/>
+                            <constraint firstItem="G15-x0-ayM" firstAttribute="top" secondItem="2ih-Oi-tIS" secondAttribute="bottom" constant="-44" id="Uzh-d7-W1e"/>
+                            <constraint firstItem="Yu7-Gk-FTH" firstAttribute="top" secondItem="2ih-Oi-tIS" secondAttribute="bottom" id="dE9-TR-dFF"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="G15-x0-ayM" secondAttribute="trailing" constant="60" id="fvO-d4-la5"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Note List" id="h4z-iC-Yiv">
@@ -493,6 +567,8 @@
                         <outlet property="coverView" destination="p1Z-R3-s10" id="x9s-ca-Xdd"/>
                         <outlet property="eventListSceneContainer" destination="Yu7-Gk-FTH" id="8kb-NH-Nyl"/>
                         <outlet property="menuButton" destination="71N-mf-LhE" id="YjU-Sn-W49"/>
+                        <outlet property="searchPlaceholderLabel" destination="JwL-dD-CDl" id="C9Z-6p-dP8"/>
+                        <outlet property="searchTextField" destination="G3r-qM-suN" id="gbW-YI-Ypz"/>
                         <outlet property="tableView" destination="TkA-IK-Jxk" id="qBO-FW-Unw"/>
                         <segue destination="dEI-AO-k52" kind="show" identifier="segueToSwitchProfile" id="Fhj-f1-jcN"/>
                         <segue destination="y6i-Ov-aeU" kind="presentation" identifier="segueToLogin" modalTransitionStyle="flipHorizontal" id="Bu4-Y4-A3A"/>
@@ -572,6 +648,8 @@
         <image name="add-button" width="23" height="23"/>
         <image name="cloud" width="130" height="78"/>
         <image name="menu-button" width="22" height="15"/>
+        <image name="searchIcon" width="21" height="21"/>
+        <image name="separatorLine" width="100" height="2"/>
         <image name="smallCloud" width="62" height="37"/>
     </resources>
 </document>

@@ -31,12 +31,16 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // refresh control...
     var refreshControl:UIRefreshControl = UIRefreshControl()
 
+    // All notes, kept sorted chronologically
+    var sortedNotes: [BlipNote] = []
+    var filteredNotes: [BlipNote] = []
+    fileprivate var filterString = ""
+    // Fetch all notes for now...
+    var loadingNotes = false
+    
     // misc
     let dataController = NutDataController.sharedInstance
-    fileprivate var sortedNutEvents = [(String, NutEvent)]()
-    fileprivate var filteredNutEvents = [(String, NutEvent)]()
-    fileprivate var filterString = ""
-        
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -80,15 +84,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         eventListSceneContainer.setNeedsLayout()
         eventListSceneContainer.layoutIfNeeded()
 
-//        if let path = Bundle.main.path(forResource: "jump-jump-jump-jump", ofType: "gif") {
-//            do {
-//                let animatedImage = try FLAnimatedImage(animatedGIFData: Data(contentsOf: URL(fileURLWithPath: path)))
-//                animatedLoadingImage.animatedImage = animatedImage
-//            } catch {
-//                DDLogError("Unable to load animated gifs!")
-//            }
-//        }
-
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSFontAttributeName: smallRegularFont, NSForegroundColorAttributeName: blackishColor])
         self.refreshControl.addTarget(self, action: #selector(EventListViewController.refresh), for: UIControlEvents.valueChanged)
         self.refreshControl.setNeedsLayout()
@@ -113,14 +108,14 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewIsForeground = true
-        //configureSearchUI()
+        configureSearchUI()
         if let sideMenu = self.sideMenuController()?.sideMenu {
             sideMenu.allowLeftSwipe = true
             sideMenu.allowRightSwipe = true
             sideMenu.allowPanGesture = true
        }
-        
-        if notes.isEmpty || eventListNeedsUpdate {
+
+        if sortedNotes.isEmpty || eventListNeedsUpdate {
             eventListNeedsUpdate = false
             loadNotes()
         }
@@ -156,7 +151,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        //searchTextField.resignFirstResponder()
+        searchTextField.resignFirstResponder()
         viewIsForeground = false
         if let sideMenu = self.sideMenuController()?.sideMenu {
             //NSLog("swipe disabled")
@@ -243,30 +238,27 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // MARK: - Notes methods
     //
     
-    // All notes, kept sorted chronologically
-    var notes: [BlipNote] = []
-    
-    // Fetch all notes for now...
-    var loadingNotes = false
-
     func switchProfile(_ newUser: BlipUser) {
         // change the world!
         dataController.currentViewedUser = newUser
         self.title = newUser.fullName ?? ""
-        notes = []
+        sortedNotes = []
+        filteredNotes = []
+        filterString = ""
         tableView.reloadData()
         refresh()
     }
     
     // Sort notes chronologically
     func sortNotesAndReload() {
-        notes.sort(by: {$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
+        sortedNotes.sort(by: {$0.timestamp.timeIntervalSinceNow > $1.timestamp.timeIntervalSinceNow})
+        updateFilteredAndReload()
         tableView.reloadData()
     }
 
     func indexPathForNoteId(_ noteId: String) -> IndexPath? {
-        for i in 0...notes.count {
-            if notes[i].id == noteId {
+        for i in 0...filteredNotes.count {
+            if filteredNotes[i].id == noteId {
                 let path = IndexPath(row: i, section: 0)
                 return path
             }
@@ -276,10 +268,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
     func noteForIndexPath(_ indexPath: IndexPath) -> BlipNote? {
         let noteIndex = indexPath.item
-        if noteIndex < self.notes.count {
-            return notes[noteIndex]
+        if noteIndex < self.filteredNotes.count {
+            return filteredNotes[noteIndex]
         } else {
-            NSLog("\(#function): index \(noteIndex) out of range of note count \(self.notes.count)!!!")
+            NSLog("\(#function): index \(noteIndex) out of range of note count \(self.filteredNotes.count)!!!")
             return nil
         }
     }
@@ -299,14 +291,14 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     
     func addNotes(_ notes: [BlipNote]) {
         NSLog("NoteAPIWatcher.addNotes")
-        self.notes = notes
+        self.sortedNotes = notes
         sortNotesAndReload()
     }
     
     func postComplete(_ note: BlipNote) {
         NSLog("NoteAPIWatcher.postComplete")
         
-        self.notes.insert(note, at: 0)
+        self.sortedNotes.insert(note, at: 0)
         // sort the notes, reload notes table
         sortNotesAndReload()
     }
@@ -314,7 +306,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func deleteComplete(_ deletedNote: BlipNote) {
         NSLog("NoteAPIWatcher.deleteComplete")
         if let deletedNotePath = self.indexPathForNoteId(deletedNote.id) {
-            self.notes.remove(at: deletedNotePath.row)
+            self.sortedNotes.remove(at: deletedNotePath.row)
             sortNotesAndReload()
         }
         noteToEdit = nil
@@ -356,7 +348,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         DDLogVerbose("trace)")
         
         if (!loadingNotes) {
-            notes = []
+            sortedNotes = []
+            filteredNotes = []
+            filterString = ""
             loadNotes()
         }
     }
@@ -498,7 +492,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     //
     
     @IBAction func dismissKeyboard(_ sender: AnyObject) {
-        //searchTextField.resignFirstResponder()
+        searchTextField.resignFirstResponder()
     }
     
     func textFieldDidChange() {
@@ -517,42 +511,42 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     fileprivate func searchMode() -> Bool {
-        let searchMode = false
-//        if searchTextField.isFirstResponder {
-//            searchMode = true
-//        } else if let searchText = searchTextField.text {
-//            if !searchText.isEmpty {
-//                searchMode = true
-//            }
-//        }
+        var searchMode = false
+        if searchTextField.isFirstResponder {
+            searchMode = true
+        } else if let searchText = searchTextField.text {
+            if !searchText.isEmpty {
+                searchMode = true
+            }
+        }
         return searchMode
     }
     
-    fileprivate func configureSearchUI() {
+    private func configureSearchUI() {
         let searchOn = searchMode()
         searchPlaceholderLabel.isHidden = searchOn
-        self.title = searchOn && !filterString.isEmpty ? "Events" : "All events"
+        //self.title = searchOn && !filterString.isEmpty ? "Events" : "All events"
     }
 
     fileprivate func updateFilteredAndReload() {
         if !searchMode() {
-            filteredNutEvents = sortedNutEvents
+            filteredNotes = sortedNotes
             filterString = ""
         } else if let searchText = searchTextField.text {
             if !searchText.isEmpty {
                 if searchText.localizedCaseInsensitiveContains(filterString) {
                     // if the search is just getting longer, no need to check already filtered out items
-                    filteredNutEvents = filteredNutEvents.filter() {
-                        $1.containsSearchString(searchText)
+                    filteredNotes = filteredNotes.filter() {
+                        $0.containsSearchString(searchText)
                     }
                 } else {
-                    filteredNutEvents = sortedNutEvents.filter() {
-                        $1.containsSearchString(searchText)
+                    filteredNotes = sortedNotes.filter() {
+                        $0.containsSearchString(searchText)
                     }
                 }
                 filterString = searchText
             } else {
-                filteredNutEvents = sortedNutEvents
+                filteredNotes = sortedNotes
                 filterString = ""
             }
             // Do this last, after filterString is configured
@@ -572,7 +566,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             }
         }
     }
-    
+
+    //
+    // MARK: - Graph support
+    //
+
     fileprivate var graphNeedsUpdate: Bool  = false
     func graphDataChanged(_ note: Notification) {
         graphNeedsUpdate = true
@@ -653,9 +651,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func editPressed(_ sender: UIButton!) {
         NSLog("cell with tag \(sender.tag) was pressed!")
         let index = sender.tag
-        if (index < notes.count) {
+        if (index < filteredNotes.count) {
             indexPathOfNoteToEdit = IndexPath(row: index, section: 0)
-            noteToEdit = notes[index]
+            noteToEdit = filteredNotes[index]
             self.performSegue(withIdentifier: "segueToEditView", sender: self)
         }
     }
@@ -678,6 +676,7 @@ extension EventListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        dismissKeyboard(self)
         guard let expandoCell = tableView.cellForRow(at: indexPath) as? NoteListTableViewCell else { return }
         
         let openGraph = !expandoCell.expanded
@@ -712,7 +711,7 @@ extension EventListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return notes.count
+        return filteredNotes.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -721,8 +720,8 @@ extension EventListViewController: UITableViewDataSource {
         var note: BlipNote?
         let group = dataController.currentViewedUser!
         
-        if (indexPath.item < notes.count) {
-            note = notes[indexPath.item]
+        if (indexPath.item < filteredNotes.count) {
+            note = filteredNotes[indexPath.item]
         }
         
         func configureEdit(_ cell: NoteListTableViewCell, note: BlipNote) {

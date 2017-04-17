@@ -71,4 +71,19 @@ class BlipNote {
         ]
         return jsonObject
     }
+
+    func containsSearchString(_ searchString: String) -> Bool {
+        if messagetext.localizedCaseInsensitiveContains(searchString) {
+            return true
+        }
+        if let user = user {
+            if let name = user.fullName {
+                if name.localizedCaseInsensitiveContains(searchString) {
+                    return true
+                }
+            }
+        }
+        return false;
+    }
+    
 }
