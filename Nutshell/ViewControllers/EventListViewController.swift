@@ -674,9 +674,17 @@ extension EventListViewController: UITableViewDelegate {
         return UITableViewAutomaticDimension;
     }
     
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        // use first tap on a row to dismiss search keyboard if it is up...
+        if searchTextField.isFirstResponder {
+            dismissKeyboard(self)
+            return false
+        }
+        return true
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        dismissKeyboard(self)
+ 
         guard let expandoCell = tableView.cellForRow(at: indexPath) as? NoteListTableViewCell else { return }
         
         let openGraph = !expandoCell.expanded

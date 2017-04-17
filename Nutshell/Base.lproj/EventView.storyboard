@@ -35,15 +35,6 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G15-x0-ayM" userLabel="navAreaDismissKeyboardButton">
-                                <rect key="frame" x="76" y="-44" width="168" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="lXO-DW-D4B"/>
-                                </constraints>
-                                <connections>
-                                    <action selector="dismissKeyboard:" destination="oVB-ry-Lwj" eventType="touchUpInside" id="VfG-SW-9Xk"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yu7-Gk-FTH" userLabel="eventListSceneContainer" customClass="UIControl">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <subviews>
@@ -548,10 +539,7 @@
                             <constraint firstAttribute="trailing" secondItem="Yu7-Gk-FTH" secondAttribute="trailing" id="6Cx-ow-G4u"/>
                             <constraint firstItem="Pl9-hd-HdO" firstAttribute="top" secondItem="Yu7-Gk-FTH" secondAttribute="bottom" id="JQL-gW-UcI"/>
                             <constraint firstItem="Yu7-Gk-FTH" firstAttribute="leading" secondItem="vp9-lf-HJa" secondAttribute="leading" id="L7F-kx-ZGJ"/>
-                            <constraint firstItem="G15-x0-ayM" firstAttribute="leading" secondItem="vp9-lf-HJa" secondAttribute="leadingMargin" constant="60" id="L9n-IF-WpV"/>
-                            <constraint firstItem="G15-x0-ayM" firstAttribute="top" secondItem="2ih-Oi-tIS" secondAttribute="bottom" constant="-44" id="Uzh-d7-W1e"/>
                             <constraint firstItem="Yu7-Gk-FTH" firstAttribute="top" secondItem="2ih-Oi-tIS" secondAttribute="bottom" id="dE9-TR-dFF"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="G15-x0-ayM" secondAttribute="trailing" constant="60" id="fvO-d4-la5"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Note List" id="h4z-iC-Yiv">
