@@ -17,7 +17,7 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 
-class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPIWatcher {
+class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPIWatcher, UIScrollViewDelegate {
 
     
     @IBOutlet weak var eventListSceneContainer: UIControl!
@@ -25,6 +25,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     @IBOutlet weak var menuButton: UIBarButtonItem!
     @IBOutlet weak var searchTextField: NutshellUITextField!
     @IBOutlet weak var searchPlaceholderLabel: NutshellUILabel!
+    @IBOutlet weak var searchView: NutshellUIView!
+    
     @IBOutlet weak var tableView: NutshellUITableView!
     @IBOutlet weak var coverView: UIControl!
     
@@ -491,6 +493,26 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // MARK: - Search 
     //
     
+    let kSearchHeight: CGFloat = 50.0
+    private var searchOpen: Bool = true
+    private var viewAdjustAnimationTime: Float = 0.25
+    private func openSearchView(_ open: Bool) {
+        if searchOpen == open {
+            return
+        }
+        searchOpen = open
+        for c in self.searchView.constraints {
+            if c.firstAttribute == NSLayoutAttribute.height {
+                c.constant = open ? kSearchHeight : 0.0
+                NSLog("setting search view height to \(c.constant)")
+                break
+            }
+        }
+        UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
+            self.eventListSceneContainer.layoutIfNeeded()
+        })
+    }
+    
     @IBAction func dismissKeyboard(_ sender: AnyObject) {
         searchTextField.resignFirstResponder()
     }
@@ -657,6 +679,50 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             self.performSegue(withIdentifier: "segueToEditView", sender: self)
         }
     }
+    
+    //
+    // MARK: - Table UIScrollViewDelegate
+    //
+    
+    private var startScrollY: CGFloat = 0.0
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        startScrollY = scrollView.contentOffset.y
+        NSLog("scrollViewWillBeginDragging: start offset is \(startScrollY)")
+    }
+    
+    private var lastScrollY: CGFloat = 0.0
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let yOffset = scrollView.contentOffset.y
+        var yIncreasing = true
+        let deltaY = yOffset - lastScrollY
+        if deltaY < 0 {
+            yIncreasing = false
+        }
+        //NSLog("scrollViewDidScroll: offset is \(yOffset), delta y: \(deltaY), increasing: \(yIncreasing), isTracking: \(scrollView.isTracking)")
+        lastScrollY = yOffset
+        if yOffset <= kSearchHeight {
+            NSLog("yOffset within search height!")
+        } else if scrollView.isTracking {
+            if searchOpen && yIncreasing && deltaY > 5.0 {
+                openSearchView(false)
+            } else if !searchOpen && !yIncreasing && deltaY < -5.0 {
+                openSearchView(true)
+            }
+        }
+    }
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let y = targetContentOffset.pointee.y
+        NSLog("scrollViewWillEndDragging: y is \(y)")
+        if y <= kSearchHeight {
+            if y <= kSearchHeight/2 {
+                openSearchView(true)
+            } else {
+                openSearchView(false)
+            }
+        }
+    }
+    
 }
 
 
@@ -705,6 +771,7 @@ extension EventListViewController: UITableViewDelegate {
         
         tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
     }
+    
 }
 
 
