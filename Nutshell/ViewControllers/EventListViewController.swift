@@ -769,7 +769,7 @@ extension EventListViewController: UITableViewDelegate {
             expandoCell.configureGraphContainer()
         }
         
-        tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+        //tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
     }
     
 }

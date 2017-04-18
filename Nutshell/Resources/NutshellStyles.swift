@@ -44,6 +44,7 @@ open class Styles: NSObject {
         "userDataEntry": whiteColor,
         // menu and account settings
         "rowSeparator": dimmedDarkGreyColor,
+        "noteSeparator": dimmedDarkGreyColor,
         "darkBackgroundButton": darkPurpleColor,
         // list scene
         "editButton" : UIColor.clear,
@@ -177,7 +178,7 @@ open class Styles: NSObject {
         static let lightDarkGreyColor: UIColor = UIColor(hex: 0x5c5c5c)//
         static let altDarkGreyColor: UIColor = UIColor(hex: 0x4d4e4c) 
         static let alt2DarkGreyColor: UIColor = UIColor(hex: 0x58595b)//
-        static let dimmedDarkGreyColor: UIColor = UIColor(hex: 0xcbcbcb
+        static let dimmedDarkGreyColor: UIColor = UIColor(hex: 0x9da2a7
             , opacity: 0.5)
         static let mediumLightGreyColor: UIColor = UIColor(hex: 0x7e7e7e)
         static let whiteColor: UIColor = UIColor(hex: 0xffffff)
