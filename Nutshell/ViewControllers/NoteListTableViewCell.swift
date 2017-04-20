@@ -23,6 +23,7 @@ class NoteListTableViewCell: BaseUITableViewCell, GraphContainerViewDelegate {
     var expanded: Bool = false
     let kGraphHeight: CGFloat = 200.0
     
+    @IBOutlet weak var separatorView: TPRowSeparatorView!
     @IBOutlet weak var dataVizView: UIView!
     @IBOutlet weak var loadingAnimationView: UIView!
     @IBOutlet weak var imageContainer: UIView!

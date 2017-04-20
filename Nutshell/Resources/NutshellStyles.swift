@@ -66,6 +66,7 @@ open class Styles: NSObject {
         "profileCellNameText": (mediumSmallRegularFont, darkPurpleColor),
         "searchPlaceholder": (mediumLightFont, blackColor),
         "editButton" : (smallRegularFont, brightBlueColor),
+        "addCommentText" : (mediumSmallSemiboldFont, mediumLightGreyColor),
         // grouped event list table scene
         "groupedEventCellDate": (smallRegularFont, altDarkGreyColor),
         // event detail view scene

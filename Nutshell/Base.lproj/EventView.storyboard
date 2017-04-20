@@ -13,6 +13,9 @@
         <array key="OpenSans-Regular.ttf">
             <string>OpenSans</string>
         </array>
+        <array key="OpenSans-Semibold.ttf">
+            <string>OpenSans-Semibold</string>
+        </array>
     </customFonts>
     <scenes>
         <!--Login-->
@@ -298,6 +301,7 @@
                                                     <outlet property="loadingAnimationView" destination="rOT-95-kGQ" id="hpb-YA-ZmB"/>
                                                     <outlet property="noDataView" destination="Mf1-qM-eOo" id="LYg-Ps-Gpr"/>
                                                     <outlet property="noteLabel" destination="oza-ZB-EKM" id="9Nk-fz-thb"/>
+                                                    <outlet property="separatorView" destination="vfa-qL-W91" id="iEE-ms-6tq"/>
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="noteListCellWithUser" rowHeight="110" id="sRl-vJ-GeN" userLabel="noteListTableCellWithUser" customClass="NoteListTableViewCellWithUser" customModule="Nutshell" customModuleProvider="target">
@@ -508,15 +512,65 @@
                                                     <outlet property="loadingAnimationView" destination="GfF-a0-hgs" id="6AU-WS-BzA"/>
                                                     <outlet property="noDataView" destination="UNx-Qb-g9a" id="O9q-OY-z3m"/>
                                                     <outlet property="noteLabel" destination="4Qa-ID-g12" id="XaO-52-8UT"/>
+                                                    <outlet property="separatorView" destination="1dQ-rB-2tb" id="UIE-9x-RrA"/>
                                                     <outlet property="userLabel" destination="nNn-IU-9ja" id="ScM-5j-GOu"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="addCommentCell" id="H8r-tf-0b5" userLabel="addCommentCell">
-                                                <rect key="frame" x="0.0" y="228" width="320" height="102"/>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="addCommentCell" rowHeight="46" id="H8r-tf-0b5" userLabel="addCommentCell" customClass="NoteListAddCommentCell" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="228" width="320" height="46"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="H8r-tf-0b5" id="Yz9-Hc-qvs">
-                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="102"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="46"/>
                                                     <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dwg-vC-SAF" userLabel="backgroundView" customClass="NutShellUIViewWithHighlight" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="34"/>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="normalBackground" value="whiteBackground"/>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="highlightedBackground" value="brightBackground"/>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="selectedBackground" value="whiteBackground"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </view>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addCommentIcon" translatesAutoresizingMaskIntoConstraints="NO" id="3tz-te-Sk5">
+                                                            <rect key="frame" x="16" y="4" width="23" height="19"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="19" id="74W-j9-Z9p"/>
+                                                                <constraint firstAttribute="width" constant="23" id="vYQ-Un-ZZa"/>
+                                                            </constraints>
+                                                        </imageView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Comment" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zj3-QQ-6d1" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="49" y="3" width="104" height="21"/>
+                                                            <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
+                                                            <color key="textColor" red="0.48627450980392156" green="0.48627450980392156" blue="0.48627450980392156" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="addCommentText"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
+                                                        <view contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="cKt-dV-ZtW" userLabel="separatorView" customClass="TPRowSeparatorView" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="34" width="320" height="12"/>
+                                                            <color key="backgroundColor" red="0.79607843140000001" green="0.79607843140000001" blue="0.79607843140000001" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="12" id="8v6-tw-Pxz"/>
+                                                            </constraints>
+                                                        </view>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="cKt-dV-ZtW" secondAttribute="bottom" id="60j-nv-dmv"/>
+                                                        <constraint firstItem="cKt-dV-ZtW" firstAttribute="leading" secondItem="Yz9-Hc-qvs" secondAttribute="leading" id="BgZ-dB-F0G"/>
+                                                        <constraint firstItem="cKt-dV-ZtW" firstAttribute="top" secondItem="dwg-vC-SAF" secondAttribute="bottom" id="FMs-PR-b9F"/>
+                                                        <constraint firstAttribute="trailing" secondItem="dwg-vC-SAF" secondAttribute="trailing" id="Hv5-5a-KW6"/>
+                                                        <constraint firstItem="dwg-vC-SAF" firstAttribute="top" secondItem="Yz9-Hc-qvs" secondAttribute="top" id="MB8-M8-xJx"/>
+                                                        <constraint firstItem="Zj3-QQ-6d1" firstAttribute="leading" secondItem="3tz-te-Sk5" secondAttribute="trailing" constant="10" id="MMa-0j-b2m"/>
+                                                        <constraint firstItem="3tz-te-Sk5" firstAttribute="top" secondItem="Yz9-Hc-qvs" secondAttribute="top" constant="4" id="N63-99-6Dj"/>
+                                                        <constraint firstAttribute="trailing" secondItem="cKt-dV-ZtW" secondAttribute="trailing" id="S5v-vQ-Svd"/>
+                                                        <constraint firstItem="cKt-dV-ZtW" firstAttribute="top" secondItem="Zj3-QQ-6d1" secondAttribute="bottom" constant="10" id="URw-Iu-He4"/>
+                                                        <constraint firstItem="3tz-te-Sk5" firstAttribute="leading" secondItem="Yz9-Hc-qvs" secondAttribute="leading" constant="16" id="cAL-Cd-i0H"/>
+                                                        <constraint firstItem="Zj3-QQ-6d1" firstAttribute="top" secondItem="Yz9-Hc-qvs" secondAttribute="top" constant="3" id="mAH-R7-G2G"/>
+                                                        <constraint firstItem="dwg-vC-SAF" firstAttribute="leading" secondItem="Yz9-Hc-qvs" secondAttribute="leading" id="sc6-Jz-cdz"/>
+                                                        <constraint firstItem="Zj3-QQ-6d1" firstAttribute="centerY" secondItem="3tz-te-Sk5" secondAttribute="centerY" id="w2t-u8-tav"/>
+                                                    </constraints>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
                                         </prototypes>
@@ -653,6 +707,7 @@
     </scenes>
     <resources>
         <image name="add-button" width="23" height="23"/>
+        <image name="addCommentIcon" width="23" height="18"/>
         <image name="cloud" width="130" height="78"/>
         <image name="menu-button" width="22" height="15"/>
         <image name="searchIcon" width="21" height="21"/>
