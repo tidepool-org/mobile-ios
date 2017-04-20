@@ -32,6 +32,7 @@ class NoteListTableViewCell: BaseUITableViewCell, GraphContainerViewDelegate {
     @IBOutlet weak var dateLabel: NutshellUILabel!
     
     @IBOutlet weak var editButton: NutshellSimpleUIButton!
+    @IBOutlet weak var editButtonLargeHitArea: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()

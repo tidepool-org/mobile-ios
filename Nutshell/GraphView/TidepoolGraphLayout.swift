@@ -144,11 +144,11 @@ class TidepoolGraphLayout: GraphLayout {
         super.configureGraph()
 
         self.headerHeight = 24.0
-        self.footerHeight = 20.0
+        self.footerHeight = 10.0
         self.yAxisLineLeftMargin = 26.0
         self.yAxisLineRightMargin = 10.0
         self.yAxisLineColor = UIColor(hex: 0xe2e4e7)
-        self.backgroundColor = UIColor.clear
+        self.backgroundColor = UIColor(hex: 0xf6f6f6)
         self.yAxisValuesWithLines = displayGridLines ? [80, 180] : []
         self.yAxisValuesWithLabels = [40, 80, 180, 300]
     

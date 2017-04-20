@@ -66,7 +66,7 @@ open class Styles: NSObject {
         // event list table scene
         "profileCellNameText": (mediumSmallRegularFont, darkPurpleColor),
         "searchPlaceholder": (mediumLightFont, blackColor),
-        "editButton" : (smallRegularFont, blackishColor),
+        "editButton" : (smallRegularFont, brightBlueColor),
         // grouped event list table scene
         "groupedEventCellDate": (smallRegularFont, altDarkGreyColor),
         // event detail view scene
@@ -105,7 +105,7 @@ open class Styles: NSObject {
     
     fileprivate struct FontCache {
         static let verySmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 10.0)!
-        static let smallRegularFont: UIFont = UIFont(name: "OpenSans", size: 12.0)!
+        static let smallRegularFont: UIFont = UIFont(name: "OpenSans", size: 12.5)!
         static let mediumRegularFont: UIFont = UIFont(name: "OpenSans", size: 17.0)!
         static let mediumSmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 15.0)!
         static let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 20.0)!

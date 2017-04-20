@@ -80,7 +80,7 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
         
         let circleColor = value < layout.lowBoundary ? layout.lowColor : value < layout.highBoundary ? layout.targetColor : layout.highColor
         let circleRect = CGRect(x: centerX-circleRadius, y: centerY-circleRadius, width: circleRadius*2, height: circleRadius*2)
-        let smallCircleRect = circleRect.insetBy(dx: 1.0, dy: 1.0)
+        //let smallCircleRect = circleRect.insetBy(dx: 1.0, dy: 1.0)
         
         if !lastCircleDrawn.intersects(circleRect) {
             let smallCirclePath = UIBezierPath(ovalIn: circleRect)
@@ -92,7 +92,7 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
             smallCirclePath.stroke()
         } else {
             // Don't draw border when circles intersect as it creates a distracting pattern
-            let smallCirclePath = UIBezierPath(ovalIn: smallCircleRect)
+            let smallCirclePath = UIBezierPath(ovalIn: circleRect)
             circleColor.setFill()
             smallCirclePath.fill()
         }

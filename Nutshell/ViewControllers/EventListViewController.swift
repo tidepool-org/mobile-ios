@@ -804,7 +804,9 @@ extension EventListViewController: UITableViewDataSource {
                 // editButton tag to be indexPath.row so can be used in editPressed notification handling
                 cell.editButton.isHidden = false
                 cell.editButton.tag = indexPath.row
-                cell.editButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)                
+                cell.editButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
+                cell.editButtonLargeHitArea.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
+                
             } else {
                 cell.editButton.isHidden = true
             }
