@@ -44,7 +44,6 @@ open class Styles: NSObject {
         "userDataEntry": whiteColor,
         // menu and account settings
         "rowSeparator": dimmedDarkGreyColor,
-        "noteSeparator": dimmedDarkGreyColor,
         "darkBackgroundButton": darkPurpleColor,
         // list scene
         "editButton" : UIColor.clear,

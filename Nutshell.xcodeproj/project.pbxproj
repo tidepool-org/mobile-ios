@@ -116,6 +116,7 @@
 		482ECC871C94BDE8002A015D /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC851C94BC47002A015D /* LogFormatter.swift */; };
 		482ECC881C94BFC4002A015D /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */; };
 		482ECC8A1C94C379002A015D /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */; };
+		482F481F1EA935A900733186 /* TPRowSeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482F481E1EA935A900733186 /* TPRowSeparatorView.swift */; };
 		4837C1661C11F9FC00D29B64 /* GraphContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837C1651C11F9FC00D29B64 /* GraphContainerView.swift */; };
 		4837CC651BA71EA400BA2CDE /* NutshellUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */; };
 		4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */; };
@@ -324,6 +325,7 @@
 		482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataUploader.swift; path = DataModel/HealthKit/HealthKitDataUploader.swift; sourceTree = "<group>"; };
 		482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = DataModel/HealthKit/HealthKitManager.swift; sourceTree = "<group>"; };
 		482ECC851C94BC47002A015D /* LogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogFormatter.swift; sourceTree = "<group>"; };
+		482F481E1EA935A900733186 /* TPRowSeparatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TPRowSeparatorView.swift; path = ViewControllers/Views/TPRowSeparatorView.swift; sourceTree = "<group>"; };
 		483475B11BE9CE2E00EE9106 /* Nutshell_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v2.xcdatamodel; sourceTree = "<group>"; };
 		4837C1651C11F9FC00D29B64 /* GraphContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphContainerView.swift; path = GraphView/GraphContainerView.swift; sourceTree = "<group>"; };
 		4837CC641BA71EA400BA2CDE /* NutshellUITextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUITextField.swift; path = Resources/NutshellUITextField.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -762,6 +764,7 @@
 				488E44DE1E831CC100A17AD7 /* HashtagBolder.swift */,
 				488E44DF1E831CC100A17AD7 /* HashtagsScrollView.swift */,
 				488E44E01E831CC100A17AD7 /* HashtagsView.swift */,
+				482F481E1EA935A900733186 /* TPRowSeparatorView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1229,6 +1232,7 @@
 				48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */,
 				48DA11101CE3CBD600B99C35 /* main.swift in Sources */,
 				48C4916A1C3B59B400F34630 /* BoluslGraphData.swift in Sources */,
+				482F481F1EA935A900733186 /* TPRowSeparatorView.swift in Sources */,
 				4854202B1BC44D290020CFE1 /* EventItem.swift in Sources */,
 				48867CFC1E81E32500C4E79D /* NoteListTableViewCell.swift in Sources */,
 				482ECC861C94BC47002A015D /* LogFormatter.swift in Sources */,
