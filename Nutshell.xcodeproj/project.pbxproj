@@ -110,6 +110,7 @@
 		48276A201E9D5941004CADB1 /* EventAdd.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A1F1E9D5941004CADB1 /* EventAdd.storyboard */; };
 		482BB3601E8C942E008CD02A /* NutshellUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482BB35F1E8C942E008CD02A /* NutshellUISwitch.swift */; };
 		482BB3621E8D5FCA008CD02A /* NoteGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482BB3611E8D5FCA008CD02A /* NoteGraphData.swift */; };
+		482C89B41EAAD22800EB88C9 /* NoteListCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482C89B31EAAD22800EB88C9 /* NoteListCommentCell.swift */; };
 		482ECC821C94BB9D002A015D /* HealthKitDataUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */; };
 		482ECC831C94BB9D002A015D /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */; };
 		482ECC861C94BC47002A015D /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC851C94BC47002A015D /* LogFormatter.swift */; };
@@ -323,6 +324,7 @@
 		48276A1F1E9D5941004CADB1 /* EventAdd.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = EventAdd.storyboard; path = Assets.xcassets/EventAdd.storyboard; sourceTree = "<group>"; };
 		482BB35F1E8C942E008CD02A /* NutshellUISwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutshellUISwitch.swift; path = Resources/NutshellUISwitch.swift; sourceTree = "<group>"; };
 		482BB3611E8D5FCA008CD02A /* NoteGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteGraphData.swift; path = "GraphView/Tidepool Graph/NoteGraphData.swift"; sourceTree = "<group>"; };
+		482C89B31EAAD22800EB88C9 /* NoteListCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListCommentCell.swift; path = ViewControllers/NoteListCommentCell.swift; sourceTree = "<group>"; };
 		482ECC7E1C94BB9D002A015D /* HealthKitDataUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataUploader.swift; path = DataModel/HealthKit/HealthKitDataUploader.swift; sourceTree = "<group>"; };
 		482ECC7F1C94BB9D002A015D /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = DataModel/HealthKit/HealthKitManager.swift; sourceTree = "<group>"; };
 		482ECC851C94BC47002A015D /* LogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogFormatter.swift; sourceTree = "<group>"; };
@@ -591,6 +593,7 @@
 				48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */,
 				48E16DC71EA16C9000EC8D48 /* NoteListTableViewCellWithUser.swift */,
 				48EC25771EA9526A00607F85 /* NoteListAddCommentCell.swift */,
+				482C89B31EAAD22800EB88C9 /* NoteListCommentCell.swift */,
 				48B7C7EA1E899BC10069B6DF /* NoteListTableViewCellWithComments.swift */,
 				48B7C7E81E8988160069B6DF /* NoteDetailTableViewCell.swift */,
 				48EDC2C51BD6B403003049D9 /* EventAddViewController.swift */,
@@ -1210,6 +1213,7 @@
 				48E16DC81EA16C9000EC8D48 /* NoteListTableViewCellWithUser.swift in Sources */,
 				0334CA281BA8DDFC00013096 /* BloodKetone.swift in Sources */,
 				486F5E111BA08DE900BA2A57 /* LoginViewController.swift in Sources */,
+				482C89B41EAAD22800EB88C9 /* NoteListCommentCell.swift in Sources */,
 				486894F51E831F89008B0732 /* UrchinConstants.swift in Sources */,
 				0334CA611BA8DDFC00013096 /* ReservoirChange.swift in Sources */,
 				0334CA131BA8DDFC00013096 /* Activity+CoreDataProperties.swift in Sources */,

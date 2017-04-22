@@ -478,11 +478,9 @@
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstItem="4Qa-ID-g12" firstAttribute="top" secondItem="Pav-fO-znl" secondAttribute="bottom" constant="10" id="6BZ-JE-ZEZ"/>
-                                                        <constraint firstItem="bBQ-7J-lyi" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="nNn-IU-9ja" secondAttribute="trailing" constant="10" id="7vX-DS-ZcC"/>
                                                         <constraint firstItem="hwk-Ns-bP9" firstAttribute="leading" secondItem="PHE-2c-TjE" secondAttribute="leading" id="B8e-4E-SJd"/>
                                                         <constraint firstItem="4Qa-ID-g12" firstAttribute="leading" secondItem="Pav-fO-znl" secondAttribute="leading" id="Bx9-ea-Qvu"/>
                                                         <constraint firstItem="1dQ-rB-2tb" firstAttribute="top" secondItem="3QJ-cW-wH7" secondAttribute="bottom" id="FKQ-Tq-Myp"/>
-                                                        <constraint firstItem="M8X-8Q-iZO" firstAttribute="centerX" secondItem="bBQ-7J-lyi" secondAttribute="centerX" id="Grq-pE-qmM"/>
                                                         <constraint firstItem="4Qa-ID-g12" firstAttribute="bottom" secondItem="hwk-Ns-bP9" secondAttribute="top" constant="-10" id="Ipo-Rz-lt8"/>
                                                         <constraint firstItem="nNn-IU-9ja" firstAttribute="leading" secondItem="PHE-2c-TjE" secondAttribute="leading" constant="20" id="K60-X8-svq"/>
                                                         <constraint firstItem="M8X-8Q-iZO" firstAttribute="centerY" secondItem="bBQ-7J-lyi" secondAttribute="centerY" id="KHi-sc-6ZK"/>
@@ -498,6 +496,7 @@
                                                         <constraint firstItem="3QJ-cW-wH7" firstAttribute="leading" secondItem="PHE-2c-TjE" secondAttribute="leading" id="jh3-23-WLO"/>
                                                         <constraint firstAttribute="trailing" secondItem="4Qa-ID-g12" secondAttribute="trailing" constant="20" id="nqr-pH-0Ma"/>
                                                         <constraint firstItem="bBQ-7J-lyi" firstAttribute="centerY" secondItem="nNn-IU-9ja" secondAttribute="centerY" id="pTf-uZ-uFY"/>
+                                                        <constraint firstItem="M8X-8Q-iZO" firstAttribute="centerX" secondItem="bBQ-7J-lyi" secondAttribute="centerX" id="rHE-zQ-EIX"/>
                                                         <constraint firstItem="3QJ-cW-wH7" firstAttribute="top" secondItem="PHE-2c-TjE" secondAttribute="top" id="x1F-cd-5EF"/>
                                                         <constraint firstAttribute="bottom" secondItem="1dQ-rB-2tb" secondAttribute="bottom" id="x9i-OR-cLv"/>
                                                     </constraints>
@@ -572,6 +571,97 @@
                                                         <constraint firstItem="Zj3-QQ-6d1" firstAttribute="centerY" secondItem="3tz-te-Sk5" secondAttribute="centerY" id="w2t-u8-tav"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
+                                            </tableViewCell>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="noteListCommentCell" rowHeight="80" id="6O8-VU-a9F" userLabel="noteListCommentCell" customClass="NoteListCommentCell" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="274" width="320" height="80"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6O8-VU-a9F" id="E92-Ks-Pcc">
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NWG-wF-ZSa" userLabel="backgroundView" customClass="NutShellUIViewWithHighlight" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="normalBackground" value="whiteBackground"/>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="highlightedBackground" value="brightBackground"/>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="selectedBackground" value="whiteBackground"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </view>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oY4-t1-amu" userLabel="userLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="20" y="10" width="62.5" height="31.5"/>
+                                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
+                                                            <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="commentUserText"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0X6-au-gcs" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="92.5" y="19" width="82.5" height="14"/>
+                                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
+                                                            <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="commentDateText"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
+                                                        <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2eJ-Wn-2aL" userLabel="editButtonLargeHitArea">
+                                                            <rect key="frame" x="264" y="-4.5" width="60" height="60.5"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="60" id="KFK-uS-YxW"/>
+                                                                <constraint firstAttribute="width" constant="60" id="XYd-nf-Tpz"/>
+                                                            </constraints>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="blH-Ce-jAg" userLabel="editButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="278" y="9" width="32" height="34"/>
+                                                            <state key="normal" title="Edit">
+                                                                <color key="titleColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            </state>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="editButton"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </button>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="752" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="752" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yrK-pH-3D0" userLabel="noteLabel">
+                                                            <rect key="frame" x="20" y="49.5" width="280" height="20.5"/>
+                                                            <attributedString key="attributedText">
+                                                                <fragment content="Tacos">
+                                                                    <attributes>
+                                                                        <color key="NSColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                        <font key="NSFont" size="15" name="OpenSans"/>
+                                                                    </attributes>
+                                                                </fragment>
+                                                            </attributedString>
+                                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="NWG-wF-ZSa" firstAttribute="leading" secondItem="E92-Ks-Pcc" secondAttribute="leading" id="B5l-K5-VEO"/>
+                                                        <constraint firstAttribute="trailing" secondItem="yrK-pH-3D0" secondAttribute="trailing" constant="20" id="Bzd-DK-yYX"/>
+                                                        <constraint firstItem="yrK-pH-3D0" firstAttribute="top" secondItem="oY4-t1-amu" secondAttribute="bottom" constant="8" id="CuG-ul-Xut"/>
+                                                        <constraint firstItem="oY4-t1-amu" firstAttribute="leading" secondItem="E92-Ks-Pcc" secondAttribute="leading" constant="20" id="JOO-GA-K7K"/>
+                                                        <constraint firstItem="2eJ-Wn-2aL" firstAttribute="centerY" secondItem="blH-Ce-jAg" secondAttribute="centerY" id="JYH-WE-2Gp"/>
+                                                        <constraint firstItem="yrK-pH-3D0" firstAttribute="leading" secondItem="E92-Ks-Pcc" secondAttribute="leading" constant="20" id="OPQ-4O-l7q"/>
+                                                        <constraint firstAttribute="bottom" secondItem="NWG-wF-ZSa" secondAttribute="bottom" id="QzP-TM-qDV"/>
+                                                        <constraint firstAttribute="trailing" secondItem="blH-Ce-jAg" secondAttribute="trailing" constant="10" id="Wcb-Bj-10G"/>
+                                                        <constraint firstItem="oY4-t1-amu" firstAttribute="top" secondItem="E92-Ks-Pcc" secondAttribute="top" constant="10" id="Xh4-t9-yQM"/>
+                                                        <constraint firstItem="NWG-wF-ZSa" firstAttribute="top" secondItem="E92-Ks-Pcc" secondAttribute="top" id="aIf-5R-2KY"/>
+                                                        <constraint firstAttribute="bottom" secondItem="yrK-pH-3D0" secondAttribute="bottom" constant="10" id="arQ-Gf-Xgg"/>
+                                                        <constraint firstItem="0X6-au-gcs" firstAttribute="centerY" secondItem="oY4-t1-amu" secondAttribute="centerY" id="eEo-zB-hZ7"/>
+                                                        <constraint firstItem="blH-Ce-jAg" firstAttribute="centerY" secondItem="oY4-t1-amu" secondAttribute="centerY" id="fhP-f1-VsV"/>
+                                                        <constraint firstItem="0X6-au-gcs" firstAttribute="leading" secondItem="oY4-t1-amu" secondAttribute="trailing" constant="10" id="h37-Kb-VSJ"/>
+                                                        <constraint firstAttribute="trailing" secondItem="NWG-wF-ZSa" secondAttribute="trailing" id="o8Q-WL-tdZ"/>
+                                                        <constraint firstItem="0X6-au-gcs" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="blH-Ce-jAg" secondAttribute="leading" constant="-10" id="pK8-KA-8Oo"/>
+                                                        <constraint firstItem="2eJ-Wn-2aL" firstAttribute="centerX" secondItem="blH-Ce-jAg" secondAttribute="centerX" id="rww-e9-q0U"/>
+                                                    </constraints>
+                                                </tableViewCellContentView>
+                                                <connections>
+                                                    <outlet property="dateLabel" destination="0X6-au-gcs" id="Fhd-Uw-K1Z"/>
+                                                    <outlet property="editButton" destination="blH-Ce-jAg" id="ldF-F4-d9Q"/>
+                                                    <outlet property="editButtonLargeHitArea" destination="2eJ-Wn-2aL" id="kcP-MO-UbI"/>
+                                                    <outlet property="noteLabel" destination="yrK-pH-3D0" id="NN0-cG-dWG"/>
+                                                    <outlet property="userLabel" destination="oY4-t1-amu" id="4AQ-te-eUJ"/>
+                                                </connections>
                                             </tableViewCell>
                                         </prototypes>
                                         <userDefinedRuntimeAttributes>

@@ -136,6 +136,10 @@ class EventDetailViewController: BaseUIViewController, GraphContainerViewDelegat
     }
     
     func addNotes(_ notes: [BlipNote]) {
+        NSLog("EventDetailVC! NoteAPIWatcher.addNotes")
+    }
+    
+    func addComments(_ notes: [BlipNote], messageId: String) {
         comments = []
         
         for comment in notes {

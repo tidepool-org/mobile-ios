@@ -66,7 +66,9 @@ open class Styles: NSObject {
         "profileCellNameText": (mediumSmallRegularFont, darkPurpleColor),
         "searchPlaceholder": (mediumLightFont, blackColor),
         "editButton" : (smallRegularFont, brightBlueColor),
-        "addCommentText" : (mediumSmallSemiboldFont, mediumLightGreyColor),
+        "addCommentText" : (mediumSmallSemiboldFont,mediumLightGreyColor),
+        "commentUserText": (smallSemiboldFont, darkGreyColor),
+        "commentDateText": (smallRegularFont, altLightGreyColor),
         // grouped event list table scene
         "groupedEventCellDate": (smallRegularFont, altDarkGreyColor),
         // event detail view scene
@@ -110,19 +112,19 @@ open class Styles: NSObject {
         static let mediumSmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 15.0)!
         static let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 20.0)!
         
-        static let smallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 12.0)!
+        static let smallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 12.5)!
         static let mediumSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 17.0)!
         static let mediumSmallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 15.0)!
         static let mediumVerySmallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 14.0)!
         static let veryLargeSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 25.5)!
         
-        static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.0)!
+        static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.5)!
         static let mediumSmallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 15.0)!
         static let mediumBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 16.0)!
         static let mediumLargeBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 17.5)!
         static let navTitleFont: UIFont = UIFont(name: "OpenSans", size: 17.5)!
         
-        static let smallLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 12.0)!
+        static let smallLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 12.5)!
         static let mediumLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 17.0)!
         
         // Fonts for special graph view
@@ -170,6 +172,7 @@ open class Styles: NSObject {
     fileprivate struct ColorCache {
         static let darkPurpleColor: UIColor = UIColor(hex: 0x281946)
         static let lightGreyColor: UIColor = UIColor(hex: 0xeaeff0)
+        static let altLightGreyColor: UIColor = UIColor(hex: 0xc9c9c9)
         static let veryLightGreyColor: UIColor = UIColor(hex: 0xF7F7F8)
         static let redErrorColor: UIColor = UIColor(hex: 0xff354e)
         static let pinkColor: UIColor = UIColor(hex: 0xf58fc7, opacity: 0.75)
@@ -197,6 +200,7 @@ open class Styles: NSObject {
     open class var darkPurpleColor: UIColor { return ColorCache.darkPurpleColor }
     open class var brightBlueColor: UIColor { return ColorCache.brightBlueColor }
     open class var lightGreyColor: UIColor { return ColorCache.lightGreyColor }
+    open class var altLightGreyColor: UIColor { return ColorCache.altLightGreyColor }
     open class var veryLightGreyColor: UIColor { return ColorCache.veryLightGreyColor }
 
     //

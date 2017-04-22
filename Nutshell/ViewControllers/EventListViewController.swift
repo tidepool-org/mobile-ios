@@ -267,7 +267,17 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func indexPathForNoteId(_ noteId: String) -> IndexPath? {
         for i in 0...filteredNotes.count {
             if filteredNotes[i].note.id == noteId {
-                let path = IndexPath(row: i, section: 0)
+                let path = IndexPath(row: 0, section: i)
+                return path
+            }
+        }
+        return nil
+    }
+
+    func sortedNotesIndexPathForNoteId(_ noteId: String) -> IndexPath? {
+        for i in 0...sortedNotes.count {
+            if sortedNotes[i].note.id == noteId {
+                let path = IndexPath(row: 0, section: i)
                 return path
             }
         }
@@ -306,6 +316,50 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         sortNotesAndReload()
     }
     
+    func addComments(_ notes: [BlipNote], messageId: String) {
+        NSLog("NoteAPIWatcher.addComments, count: \(notes.count)")
+        if let notePath = self.indexPathForNoteId(messageId) {
+            if let sortedNotePath = sortedNotesIndexPathForNoteId(messageId) {
+                var comments: [BlipNote] = []
+                for comment in notes {
+                    if comment.id != messageId {
+                        comments.append(comment)
+                    }
+                }
+                if comments.count > 0 {
+                    comments.sort(by: {$0.timestamp.timeIntervalSinceNow < $1.timestamp.timeIntervalSinceNow})
+                }
+
+                // no need to re-sort since adding comments won't change the sort order
+                // add to both sorted and filtered note arrays
+                let startCommentCount = filteredNotes[notePath.section].comments.count
+                sortedNotes[sortedNotePath.section].comments = comments
+                filteredNotes[notePath.section].comments = comments
+                tableView.beginUpdates()
+                
+                // if number of rows changed, need to add/delete rows
+                if startCommentCount != comments.count {
+                    // first delete any current comment rows
+                    var deletedRows: [IndexPath] = []
+                    // need to also delete row 1 (add comment) since it will move to last row...
+                    for i in 0...startCommentCount {
+                        deletedRows.append(IndexPath(row: i+1, section: notePath.section))
+                    }
+                    tableView.deleteRows(at: deletedRows, with: .automatic)
+                    
+                    // next add any we got with this fetch, plus one for the "add comment" row.
+                    var addedRows: [IndexPath] = []
+                    for i in 0...comments.count {
+                        addedRows.append(IndexPath(row: i+1, section: notePath.section))
+                    }
+                    tableView.insertRows(at: addedRows, with: .automatic)
+                }
+
+                tableView.endUpdates()
+            }
+        }
+    }
+  
     func postComplete(_ note: BlipNote) {
         NSLog("NoteAPIWatcher.postComplete")
         
@@ -317,7 +371,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func deleteComplete(_ deletedNote: BlipNote) {
         NSLog("NoteAPIWatcher.deleteComplete")
         if let deletedNotePath = self.indexPathForNoteId(deletedNote.id) {
-            self.sortedNotes.remove(at: deletedNotePath.row)
+            self.sortedNotes.remove(at: deletedNotePath.section)
             sortNotesAndReload()
         }
         noteToEdit = nil
@@ -784,8 +838,16 @@ extension EventListViewController: UITableViewDelegate {
         tableView.beginUpdates()
         if openGraph {
             expandoCell.separatorView.isHidden = true
-            // TODO: see if there are existing comments, and add rows for those too!
+            // always add a row for the "add comment" button - not actually at row 1 if there are comments!
             tableView.insertRows(at: [IndexPath(row: 1, section: noteSection)], with: .automatic)
+            // add rows for each comment...
+            if existingCommentRowCount > 0 {
+                var addedRows: [IndexPath] = []
+                for i in 1...existingCommentRowCount {
+                    addedRows.append(IndexPath(row: i+1, section: noteSection))
+                }
+                tableView.insertRows(at: addedRows, with: .automatic)
+            }
         } else {
             expandoCell.separatorView.isHidden = false
             var commentRows: [IndexPath] = []
@@ -799,6 +861,13 @@ extension EventListViewController: UITableViewDelegate {
         
         if openGraph {
             expandoCell.configureGraphContainer()
+            // each time we open a cell with no comments, try a fetch
+            // TODO: may want to update each open, even if there are comments; may want to skip fetch if we've just done one! Note that comments, like notes, are cached in this controller in ram and not persisted...
+            //if existingCommentRowCount == 0 {
+                let note = filteredNotes[noteSection].note
+                DDLogVerbose("Fetching comments for note \(note.id)")
+                APIConnector.connector().getMessageThreadForNote(self, messageId: note.id)
+            //}
         }
         
         //tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
@@ -837,6 +906,7 @@ extension EventListViewController: UITableViewDataSource {
         
         let note = filteredNotes[indexPath.section].note
         let noteOpened = filteredNotes[indexPath.section].opened
+        let comments = filteredNotes[indexPath.section].comments
         
         func configureEdit(_ cell: NoteListTableViewCell, note: BlipNote) {
             if note.userid == dataController.currentUserId {
@@ -882,12 +952,27 @@ extension EventListViewController: UITableViewDataSource {
                 return cell
             }
         } else {
-            // TODO: add rows for any comments!
-            // Last row is add comment...
-            let cellId = "addCommentCell"
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListAddCommentCell
-            return cell
-        }
+            let lastRow = 1 + comments.count
+            if indexPath.row == lastRow {
+                // Last row is add comment...
+                let cellId = "addCommentCell"
+                let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListAddCommentCell
+                return cell
+            } else {
+                // Other rows are comment rows
+                if indexPath.row <= comments.count {
+                    let comment = comments[indexPath.row-1]
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "noteListCommentCell", for: indexPath) as! NoteListCommentCell
+                    cell.configureCell(comment)
+                    // TODO: implement editing for comments!
+                    cell.editButton.isHidden = true
+                    return cell
+                } else {
+                    DDLogError("No comment at cellForRowAt \(indexPath)")
+                    return UITableViewCell()
+                }
+            }
+         }
     }
     
     /*

@@ -25,6 +25,7 @@ protocol NoteAPIWatcher {
     func loadingNotes(_ loading: Bool)
     func endRefresh()
     func addNotes(_ notes: [BlipNote])
+    func addComments(_ notes: [BlipNote], messageId: String)
     func postComplete(_ note: BlipNote)
     func deleteComplete(_ note: BlipNote)
     func updateComplete(_ originalNote: BlipNote, editedNote: BlipNote)
@@ -667,7 +668,7 @@ class APIConnector {
                         }
                     }
                     
-                    fetchWatcher.addNotes(notes)
+                    fetchWatcher.addComments(notes, messageId: messageId)
                 } else if (httpResponse.statusCode == 404) {
                     DDLogError("No notes retrieved, status code: \(httpResponse.statusCode), messageId: \(messageId)")
                 } else {
