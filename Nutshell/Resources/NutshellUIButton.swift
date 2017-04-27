@@ -25,6 +25,9 @@ import UIKit
         }
     }
     
+    // for buttons in cells...
+    var cellIndexPath: IndexPath?
+    
     fileprivate func updateStyling() {
         if let (font, textColor) = Styles.usageToFontWithColor[usage] {
             if let titleLabel = titleLabel {

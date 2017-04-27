@@ -737,6 +737,7 @@ class APIConnector {
         blipRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
     }
 
+    // update note or comment...
     func updateNote(_ updateWatcher: NoteAPIWatcher, editedNote: BlipNote, originalNote: BlipNote) {
         
         let urlExtension = "/message/edit/" + originalNote.id
@@ -773,6 +774,7 @@ class APIConnector {
         blipRequest("PUT", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
     }
     
+    // delete note or comment...
     func deleteNote(_ deleteWatcher: NoteAPIWatcher, noteToDelete: BlipNote) {
         let urlExtension = "/message/remove/" + noteToDelete.id
         

@@ -121,7 +121,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ogm-kb-e7S" userLabel="userLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="24" y="10" width="272" height="17.5"/>
+                                                            <rect key="frame" x="20" y="10" width="280" height="17.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -130,7 +130,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="752" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iPM-Jk-ybw" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="24" y="37.5" width="103" height="17.5"/>
+                                                            <rect key="frame" x="20" y="37.5" width="103" height="17.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -146,18 +146,16 @@
                                                                 <constraint firstAttribute="width" constant="60" id="iKg-xp-dle"/>
                                                             </constraints>
                                                         </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2iF-Hl-EhA" userLabel="editButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2iF-Hl-EhA" userLabel="editButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
                                                             <rect key="frame" x="270" y="2.5" width="30" height="32.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                            <state key="normal" title="Edit">
-                                                                <color key="titleColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            </state>
+                                                            <state key="normal" title="Edit"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="editButton"/>
                                                             </userDefinedRuntimeAttributes>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oza-ZB-EKM" userLabel="noteLabel">
-                                                            <rect key="frame" x="24" y="65" width="272" height="20.5"/>
+                                                            <rect key="frame" x="20" y="65" width="280" height="20.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <attributedString key="attributedText">
                                                                 <fragment content="Tacos">
@@ -291,7 +289,7 @@
                                                         <constraint firstItem="iPM-Jk-ybw" firstAttribute="top" secondItem="Kqd-t1-lUR" secondAttribute="bottom" constant="10" id="9x8-op-Ose"/>
                                                         <constraint firstItem="ogm-kb-e7S" firstAttribute="top" secondItem="Vjk-zO-K8S" secondAttribute="top" constant="10" id="AfI-5c-6Ik"/>
                                                         <constraint firstItem="oza-ZB-EKM" firstAttribute="top" secondItem="iPM-Jk-ybw" secondAttribute="bottom" constant="10" id="Aly-pK-Twc"/>
-                                                        <constraint firstAttribute="trailing" secondItem="oza-ZB-EKM" secondAttribute="trailing" constant="24" id="C0f-n9-FRx"/>
+                                                        <constraint firstAttribute="trailing" secondItem="oza-ZB-EKM" secondAttribute="trailing" constant="20" id="C0f-n9-FRx"/>
                                                         <constraint firstItem="vfa-qL-W91" firstAttribute="leading" secondItem="Vjk-zO-K8S" secondAttribute="leading" id="CF7-hx-Kyi"/>
                                                         <constraint firstItem="2iF-Hl-EhA" firstAttribute="centerY" secondItem="ogm-kb-e7S" secondAttribute="centerY" id="F3C-gX-IQy"/>
                                                         <constraint firstAttribute="trailing" secondItem="vfa-qL-W91" secondAttribute="trailing" id="Feu-mi-9d2"/>
@@ -300,15 +298,15 @@
                                                         <constraint firstAttribute="trailing" secondItem="9sr-8X-2eF" secondAttribute="trailing" id="RVA-KI-www"/>
                                                         <constraint firstItem="Kqd-t1-lUR" firstAttribute="top" secondItem="Vjk-zO-K8S" secondAttribute="top" id="UNT-d1-iZ5"/>
                                                         <constraint firstAttribute="bottom" secondItem="vfa-qL-W91" secondAttribute="bottom" id="Z8V-rD-fp1"/>
-                                                        <constraint firstItem="ogm-kb-e7S" firstAttribute="leading" secondItem="Vjk-zO-K8S" secondAttribute="leading" constant="24" id="ZYV-is-FJz"/>
-                                                        <constraint firstItem="iPM-Jk-ybw" firstAttribute="leading" secondItem="Vjk-zO-K8S" secondAttribute="leading" constant="24" id="gBe-PP-A7e"/>
+                                                        <constraint firstItem="ogm-kb-e7S" firstAttribute="leading" secondItem="Vjk-zO-K8S" secondAttribute="leading" constant="20" id="ZYV-is-FJz"/>
+                                                        <constraint firstItem="iPM-Jk-ybw" firstAttribute="leading" secondItem="Vjk-zO-K8S" secondAttribute="leading" constant="20" id="gBe-PP-A7e"/>
                                                         <constraint firstItem="oza-ZB-EKM" firstAttribute="leading" secondItem="iPM-Jk-ybw" secondAttribute="leading" id="gv2-Iu-U4p"/>
                                                         <constraint firstItem="9sr-8X-2eF" firstAttribute="bottom" secondItem="vfa-qL-W91" secondAttribute="top" id="hIX-hW-HgH"/>
                                                         <constraint firstItem="oza-ZB-EKM" firstAttribute="bottom" secondItem="9sr-8X-2eF" secondAttribute="top" constant="-10" id="osk-fe-yIk"/>
                                                         <constraint firstItem="NmN-1p-56X" firstAttribute="centerX" secondItem="2iF-Hl-EhA" secondAttribute="centerX" id="p5M-1c-X91"/>
                                                         <constraint firstAttribute="trailing" secondItem="2iF-Hl-EhA" secondAttribute="trailing" constant="20" id="uJ2-cz-fhX"/>
                                                         <constraint firstItem="NmN-1p-56X" firstAttribute="centerY" secondItem="2iF-Hl-EhA" secondAttribute="centerY" id="uVq-ZU-6Zz"/>
-                                                        <constraint firstAttribute="trailing" secondItem="ogm-kb-e7S" secondAttribute="trailing" constant="24" id="zqU-cZ-ziS"/>
+                                                        <constraint firstAttribute="trailing" secondItem="ogm-kb-e7S" secondAttribute="trailing" constant="20" id="zqU-cZ-ziS"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <connections>
@@ -429,11 +427,9 @@
                                                                 <constraint firstAttribute="width" constant="60" id="XYd-nf-Tpz"/>
                                                             </constraints>
                                                         </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="blH-Ce-jAg" userLabel="editButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="blH-Ce-jAg" userLabel="editButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
                                                             <rect key="frame" x="270" y="15" width="30" height="30"/>
-                                                            <state key="normal" title="Edit">
-                                                                <color key="titleColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            </state>
+                                                            <state key="normal" title="Edit"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="editButton"/>
                                                             </userDefinedRuntimeAttributes>

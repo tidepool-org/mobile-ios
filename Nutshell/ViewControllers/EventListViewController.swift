@@ -356,7 +356,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
 
     func indexPathForNoteId(_ noteId: String) -> IndexPath? {
-        for i in 0...filteredNotes.count {
+        for i in 0..<filteredNotes.count {
             if filteredNotes[i].note.id == noteId {
                 let path = IndexPath(row: 0, section: i)
                 return path
@@ -366,7 +366,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
 
     func sortedNotesIndexPathForNoteId(_ noteId: String) -> IndexPath? {
-        for i in 0...sortedNotes.count {
+        for i in 0..<sortedNotes.count {
             if sortedNotes[i].note.id == noteId {
                 let path = IndexPath(row: 0, section: i)
                 return path
@@ -384,13 +384,34 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             return nil
         }
     }
-    
-    func editPressed(_ sender: UIButton!) {
+ 
+    func commentForIndexPath(_ indexPath: IndexPath) -> BlipNote? {
+        let noteIndex = indexPath.section
+        if noteIndex < self.filteredNotes.count {
+            let comments = filteredNotes[noteIndex].comments
+            let commentIndex = indexPath.row - 1
+            if commentIndex < comments.count {
+                return comments[commentIndex]
+            }
+            NSLog("\(#function): index \(noteIndex) out of range of comment count \(comments.count)!!!")
+        } else {
+            NSLog("\(#function): index \(noteIndex) out of range of note count \(self.filteredNotes.count)!!!")
+        }
+        return nil
+    }
+
+    func editPressed(_ sender: NutshellSimpleUIButton!) {
         NSLog("cell with tag \(sender.tag) was pressed!")
-        let index = sender.tag
-        if (index < filteredNotes.count) {
-            noteToEdit = filteredNotes[index].note
-            self.performSegue(withIdentifier: "segueToEditView", sender: self)
+        if let indexPath = sender.cellIndexPath {
+            if indexPath.row == 0 {
+                if let note = self.noteForIndexPath(indexPath) {
+                    self.noteToEdit = note
+                    self.performSegue(withIdentifier: "segueToEditView", sender: self)
+                }
+            } else if let comment = commentForIndexPath(indexPath) {
+                self.noteToEdit = comment
+                self.performSegue(withIdentifier: "segueToEditView", sender: self)
+            }
         }
     }
     private var noteToEdit: BlipNote?
@@ -446,15 +467,15 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                         // first delete any current comment rows
                         var deletedRows: [IndexPath] = []
                         // need to also delete row 1 (add comment) since it will move to last row...
-                        for i in 0...startCommentCount {
-                            deletedRows.append(IndexPath(row: i+1, section: notePath.section))
+                        for i in 1...startCommentCount+1 {
+                            deletedRows.append(IndexPath(row: i, section: notePath.section))
                         }
                         tableView.deleteRows(at: deletedRows, with: .automatic)
                         
                         // next add any we got with this fetch, plus one for the "add comment" row.
                         var addedRows: [IndexPath] = []
-                        for i in 0...comments.count {
-                            addedRows.append(IndexPath(row: i+1, section: notePath.section))
+                        for i in 1...comments.count+1 {
+                            addedRows.append(IndexPath(row: i, section: notePath.section))
                         }
                         tableView.insertRows(at: addedRows, with: .automatic)
                     }
@@ -479,9 +500,25 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     
     func deleteComplete(_ deletedNote: BlipNote) {
         NSLog("NoteAPIWatcher.deleteComplete")
-        if let deletedNotePath = self.indexPathForNoteId(deletedNote.id) {
-            self.sortedNotes.remove(at: deletedNotePath.section)
-            sortNotesAndReload()
+        if deletedNote.parentmessage == nil {
+            if let deletedNotePath = self.indexPathForNoteId(deletedNote.id) {
+                self.sortedNotes.remove(at: deletedNotePath.section)
+                sortNotesAndReload()
+            }
+        } else {
+            // deleted comment, only need to refetch comments for this note...
+            if let deletedNotePath = self.indexPathForNoteId(deletedNote.parentmessage!) {
+                let noteIndex = deletedNotePath.section
+                var comments = filteredNotes[noteIndex].comments
+                for i in 0..<comments.count {
+                    if comments[i].id == deletedNote.id {
+                        comments.remove(at: i)
+                        filteredNotes[noteIndex].comments = comments
+                        tableView.reloadSections(IndexSet(integer: noteIndex), with: .automatic)
+                        break
+                    }
+                }
+            }
         }
     }
     
@@ -491,15 +528,30 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         originalNote.messagetext = editedNote.messagetext
         let timeChanged = originalNote.timestamp != editedNote.timestamp
         originalNote.timestamp = editedNote.timestamp
-        let indexPathOfEditedNote = self.indexPathForNoteId(originalNote.id)
-        if indexPathOfEditedNote != nil {
-            if timeChanged {
-                // sort order may have changed...
-                sortNotesAndReload()
-            } else {
-                self.tableView.beginUpdates()
-                self.tableView.reloadRows(at: [indexPathOfEditedNote!], with: .middle)
-                self.tableView.endUpdates()
+        if originalNote.parentmessage == nil {
+            let indexPathOfEditedNote = self.indexPathForNoteId(originalNote.id)
+            if indexPathOfEditedNote != nil {
+                if timeChanged {
+                    // sort order may have changed...
+                    sortNotesAndReload()
+                } else {
+                    self.tableView.beginUpdates()
+                    self.tableView.reloadRows(at: [indexPathOfEditedNote!], with: .middle)
+                    self.tableView.endUpdates()
+                }
+            }
+        } else {
+            // edited a comment...
+            let indexPathOfEditedNote = self.indexPathForNoteId(originalNote.parentmessage!)
+            if let noteIndexPath = indexPathOfEditedNote {
+                let noteIndex = noteIndexPath.section
+                var comments = filteredNotes[noteIndex].comments
+                for i in 0..<comments.count {
+                    if comments[i].id == originalNote.id {
+                        tableView.reloadRows(at: [IndexPath(row: i+1, section: noteIndex)], with: .automatic)
+                        break
+                    }
+                }
             }
         }
     }
@@ -966,8 +1018,8 @@ extension EventListViewController: UITableViewDelegate {
             expandoCell.separatorView.isHidden = false
             var commentRows: [IndexPath] = []
             // include +1 for "add comment" row...
-            for i in 0...existingCommentRowCount {
-                commentRows.append(IndexPath(row: i+1, section: noteSection))
+            for i in 1...existingCommentRowCount+1 {
+                commentRows.append(IndexPath(row: i, section: noteSection))
             }
             tableView.deleteRows(at: commentRows, with: .automatic)
         }
@@ -1018,19 +1070,19 @@ extension EventListViewController: UITableViewDataSource {
         let noteOpened = filteredNotes[indexPath.section].opened
         let comments = filteredNotes[indexPath.section].comments
         
-        func configureEdit(_ cell: NoteListTableViewCell, note: BlipNote) {
+        func configureEdit(note: BlipNote, editButton: NutshellSimpleUIButton, largeHitAreaButton: UIButton) {
             if note.userid == dataController.currentUserId {
                 // editButton tag to be indexPath.section so can be used in editPressed notification handling
-                cell.editButton.isHidden = false
-                cell.editButton.tag = indexPath.section
-                cell.editButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
-                cell.editButtonLargeHitArea.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
+                editButton.isHidden = false
+                editButton.cellIndexPath = indexPath
+                editButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
+                largeHitAreaButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
                 
             } else {
-                cell.editButton.isHidden = true
+                editButton.isHidden = true
             }
         }
-        
+ 
         // hide separator if note is "open", and show graph...
         func checkAndOpenGraph(_ cell: NoteListTableViewCell) {
             if noteOpened {
@@ -1047,7 +1099,7 @@ extension EventListViewController: UITableViewDataSource {
             let cellId = "noteListCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCell
             cell.configureCell(note, group: group)
-            configureEdit(cell, note: note)
+            configureEdit(note: note, editButton: cell.editButton, largeHitAreaButton: cell.editButtonLargeHitArea)
             checkAndOpenGraph(cell)
             return cell
         } else {
@@ -1073,8 +1125,7 @@ extension EventListViewController: UITableViewDataSource {
                     let comment = comments[indexPath.row-1]
                     let cell = tableView.dequeueReusableCell(withIdentifier: "noteListCommentCell", for: indexPath) as! NoteListCommentCell
                     cell.configureCell(comment)
-                    // TODO: implement editing for comments!
-                    cell.editButton.isHidden = true
+                    configureEdit(note: comment, editButton: cell.editButton, largeHitAreaButton: cell.editButtonLargeHitArea)
                     return cell
                 } else {
                     DDLogError("No comment at cellForRowAt \(indexPath)")
