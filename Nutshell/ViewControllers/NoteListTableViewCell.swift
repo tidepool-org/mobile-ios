@@ -17,7 +17,7 @@ import UIKit
 import FLAnimatedImage
 import CocoaLumberjack
 
-class NoteListTableViewCell: BaseUITableViewCell, GraphContainerViewDelegate {
+class NoteListTableViewCell: UITableViewCell, GraphContainerViewDelegate {
 
     var note: BlipNote?
     var expanded: Bool = false
@@ -30,10 +30,13 @@ class NoteListTableViewCell: BaseUITableViewCell, GraphContainerViewDelegate {
     
     @IBOutlet weak var noDataView: UIView!
     @IBOutlet weak var noteLabel: UILabel!
+    @IBOutlet weak var userLabel: NutshellUILabel!
     @IBOutlet weak var dateLabel: NutshellUILabel!
+    @IBOutlet weak var dateLabelSpacerView: TPIntrinsicSizeUIView!
     
     @IBOutlet weak var editButton: NutshellSimpleUIButton!
     @IBOutlet weak var editButtonLargeHitArea: UIButton!
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -44,29 +47,39 @@ class NoteListTableViewCell: BaseUITableViewCell, GraphContainerViewDelegate {
         NSLog("setSelected \(selected) for \(String(describing: note?.messagetext))!")
         
         super.setSelected(selected, animated: animated)
-        self.updateNoteFontStyling()
+        //self.updateNoteFontStyling()
     }
 
-    func openGraphView(_ open: Bool) {
-        expanded = open
-        // Change intrinsic size of dataVizView appropriately
-        dataVizView.height = open ? 200.0 : 0.0
-     }
-    
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         NSLog("setHighlighted \(highlighted) for \(String(describing: note?.messagetext))!")
         super.setHighlighted(highlighted, animated:animated)
         
         // Configure the view for the highlighted state
-        updateNoteFontStyling()
-        dateLabel.isHighlighted = highlighted
+        //updateNoteFontStyling()
+        //dateLabel.isHighlighted = highlighted
+        //userLabel.isHighlighted = highlighted
     }
     
     override func prepareForReuse() {
         removeGraphView()
     }
     
-    func configureCell(_ note: BlipNote) {
+    func openGraphView(_ open: Bool) {
+        expanded = open
+        // Change intrinsic size of dataVizView appropriately
+        dataVizView.height = open ? 200.0 : 0.0
+    }
+    
+    private func openUserLabel(_ open: Bool) {
+        if open {
+            dateLabelSpacerView.height = 27.5
+        } else {
+            dateLabelSpacerView.height = 0.0
+        }
+        userLabel.isHidden = open ? false : true
+    }
+    
+    func configureCell(_ note: BlipNote, group: BlipUser) {
         expanded = false
         openGraphView(false)
         self.note = note
@@ -74,12 +87,34 @@ class NoteListTableViewCell: BaseUITableViewCell, GraphContainerViewDelegate {
         dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
         noteLabel.isHighlighted = false
         dateLabel.isHighlighted = false
+        userLabel.isHighlighted = false
+        
+        if note.userid == note.groupid {
+            // If note was created by current viewed user, don't configure a title, but note is editable
+            openUserLabel(false)
+        } else {
+            // If note was created by someone else, put in "xxx to yyy" title and hide edit button
+            openUserLabel(true)
+            if note.userid == note.groupid {
+                self.userLabel.text = note.user?.fullName ?? ""
+            } else {
+                // note from someone else to current viewed user
+                var toFromUsers = ""
+                if let fromUser = note.user?.fullName {
+                    toFromUsers = fromUser
+                }
+                if let toUser = group.fullName {
+                    toFromUsers += " to " + toUser
+                }
+                self.userLabel.text = toFromUsers
+            }
+        }
     }
     
     private func updateNoteFontStyling() {
         if let note = note {
             let hashtagBolder = HashtagBolder()
-            let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString, highlighted: self.isHighlighted)
+            let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString, highlighted: false)
             noteLabel.attributedText = attributedText
         }
     }

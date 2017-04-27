@@ -15,7 +15,7 @@
 
 import UIKit
 
-class NoteListCommentCell: BaseUITableViewCell {
+class NoteListCommentCell: UITableViewCell {
 
     var note: BlipNote?
 
@@ -53,7 +53,7 @@ class NoteListCommentCell: BaseUITableViewCell {
     private func updateNoteFontStyling() {
         if let note = note {
             let hashtagBolder = HashtagBolder()
-            let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString, isComment: true, highlighted: self.isHighlighted)
+            let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString, isComment: true, highlighted: false)
             noteLabel.attributedText = attributedText
         }
     }

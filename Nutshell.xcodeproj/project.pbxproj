@@ -206,7 +206,6 @@
 		48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B7C7E91E8988160069B6DF /* NoteDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B7C7E81E8988160069B6DF /* NoteDetailTableViewCell.swift */; };
-		48B7C7EB1E899BC10069B6DF /* NoteListTableViewCellWithComments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B7C7EA1E899BC10069B6DF /* NoteListTableViewCellWithComments.swift */; };
 		48BA05B01E53911500212486 /* GraphCursorLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BA05AF1E53911500212486 /* GraphCursorLayer.swift */; };
 		48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */; };
 		48C423AD1BDB19810023D75E /* NutShellUIViewWithHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AC1BDB19810023D75E /* NutShellUIViewWithHighlight.swift */; };
@@ -231,7 +230,6 @@
 		48DDD30A1BA76D11007365FE /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
 		48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
 		48DF9B9B1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
-		48E16DC81EA16C9000EC8D48 /* NoteListTableViewCellWithUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E16DC71EA16C9000EC8D48 /* NoteListTableViewCellWithUser.swift */; };
 		48E4A4461BF015CE001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4451BF015CE001A7B35 /* Reachability.swift */; };
 		48E4A4471BF015CE001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4451BF015CE001A7B35 /* Reachability.swift */; };
 		48EC25781EA9526A00607F85 /* NoteListAddCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC25771EA9526A00607F85 /* NoteListAddCommentCell.swift */; };
@@ -403,7 +401,6 @@
 		48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ThreeTacosDemoPic.png; path = Images/ThreeTacosDemoPic.png; sourceTree = "<group>"; };
 		48B127B01BC4466E00061483 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseUtils.swift; path = "Utilities and Extensions/DatabaseUtils.swift"; sourceTree = "<group>"; };
 		48B7C7E81E8988160069B6DF /* NoteDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteDetailTableViewCell.swift; path = ViewControllers/NoteDetailTableViewCell.swift; sourceTree = "<group>"; };
-		48B7C7EA1E899BC10069B6DF /* NoteListTableViewCellWithComments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListTableViewCellWithComments.swift; path = ViewControllers/NoteListTableViewCellWithComments.swift; sourceTree = "<group>"; };
 		48BA05AF1E53911500212486 /* GraphCursorLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCursorLayer.swift; path = GraphView/GraphCursorLayer.swift; sourceTree = "<group>"; };
 		48BA1EA41C18865100C1B71C /* Data Model.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Data Model.txt"; path = "Manual Test Cases/Data Model.txt"; sourceTree = "<group>"; };
 		48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
@@ -426,7 +423,6 @@
 		48DA110F1CE3CBD600B99C35 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		48DB6CFE1E8965DB00C5F221 /* EventDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventDetailViewController.swift; path = ViewControllers/EventDetailViewController.swift; sourceTree = "<group>"; };
 		48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIApplicationExtension.swift; path = "Utilities and Extensions/UIApplicationExtension.swift"; sourceTree = "<group>"; };
-		48E16DC71EA16C9000EC8D48 /* NoteListTableViewCellWithUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListTableViewCellWithUser.swift; path = ViewControllers/NoteListTableViewCellWithUser.swift; sourceTree = "<group>"; };
 		48E4A4451BF015CE001A7B35 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = ServiceInterface/Reachability.swift; sourceTree = "<group>"; };
 		48EC25771EA9526A00607F85 /* NoteListAddCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListAddCommentCell.swift; path = ViewControllers/NoteListAddCommentCell.swift; sourceTree = "<group>"; };
 		48ECF6C91E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConnectToHealthCelebrationViewController.swift; path = ViewControllers/ConnectToHealthCelebrationViewController.swift; sourceTree = "<group>"; };
@@ -593,10 +589,8 @@
 				48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */,
 				48DB6CFE1E8965DB00C5F221 /* EventDetailViewController.swift */,
 				48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */,
-				48E16DC71EA16C9000EC8D48 /* NoteListTableViewCellWithUser.swift */,
 				48EC25771EA9526A00607F85 /* NoteListAddCommentCell.swift */,
 				482C89B31EAAD22800EB88C9 /* NoteListCommentCell.swift */,
-				48B7C7EA1E899BC10069B6DF /* NoteListTableViewCellWithComments.swift */,
 				48B7C7E81E8988160069B6DF /* NoteDetailTableViewCell.swift */,
 				48EDC2C51BD6B403003049D9 /* EventAddViewController.swift */,
 				488E44DB1E83198D00A17AD7 /* EventEditViewController.swift */,
@@ -1134,7 +1128,6 @@
 				485420211BC44D290020CFE1 /* Workout+CoreDataProperties.swift in Sources */,
 				484365C91C9DB3960046A2C5 /* HealthKitDataPusher.swift in Sources */,
 				0334CA671BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
-				48B7C7EB1E899BC10069B6DF /* NoteListTableViewCellWithComments.swift in Sources */,
 				488E44DC1E83198D00A17AD7 /* EventEditViewController.swift in Sources */,
 				0334CA791BA8DDFC00013096 /* TimeChange.swift in Sources */,
 				4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */,
@@ -1214,7 +1207,6 @@
 				0334CA311BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,
 				48867CF51E80AEAE00C4E79D /* BlipNote.swift in Sources */,
 				48C4916C1C3B771200F34630 /* WizardGraphData.swift in Sources */,
-				48E16DC81EA16C9000EC8D48 /* NoteListTableViewCellWithUser.swift in Sources */,
 				0334CA281BA8DDFC00013096 /* BloodKetone.swift in Sources */,
 				486F5E111BA08DE900BA2A57 /* LoginViewController.swift in Sources */,
 				482C89B41EAAD22800EB88C9 /* NoteListCommentCell.swift in Sources */,

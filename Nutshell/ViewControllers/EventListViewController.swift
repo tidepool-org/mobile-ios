@@ -31,8 +31,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     @IBOutlet weak var tableView: NutshellUITableView!
     @IBOutlet weak var coverView: UIControl!
 
-    // grow this view to make room for keyboard during comment edit
-    @IBOutlet weak var keyboardSpacerView: UIView!
+    // current "add comment" edit info, if edit in progress
     fileprivate var currentCommentEditCell: NoteListAddCommentCell?
     fileprivate var currentCommentEditIndexPath: IndexPath?
     
@@ -1045,23 +1044,12 @@ extension EventListViewController: UITableViewDataSource {
 
         if indexPath.row == 0 {
             let group = dataController.currentViewedUser!
-           // If note was created by current viewed user, don't configure a title, but note is editable
-            if note.userid == note.groupid {
-                let cellId = "noteListCell"
-                let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCell
-                cell.configureCell(note)
-                configureEdit(cell, note: note)
-                checkAndOpenGraph(cell)
-                return cell
-            } else {
-                // If note was created by someone else, put in "xxx to yyy" title and hide edit button
-                let cellId = "noteListCellWithUser"
-                let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCellWithUser
-                cell.configureCell(note, group: group)
-                configureEdit(cell, note: note)
-                checkAndOpenGraph(cell)
-                return cell
-            }
+            let cellId = "noteListCell"
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCell
+            cell.configureCell(note, group: group)
+            configureEdit(cell, note: note)
+            checkAndOpenGraph(cell)
+            return cell
         } else {
             let lastRow = 1 + comments.count
             if indexPath.row == lastRow {
