@@ -60,7 +60,7 @@
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="G3r-qM-suN" userLabel="searchTextField" customClass="NutshellUITextField" customModule="Nutshell" customModuleProvider="target">
                                                 <rect key="frame" x="50" y="0.0" width="262" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
+                                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="searchText"/>
                                                 </userDefinedRuntimeAttributes>
@@ -104,15 +104,15 @@
                                         <rect key="frame" x="0.0" y="50" width="320" height="454"/>
                                         <color key="backgroundColor" red="0.94901960784313721" green="0.95294117647058818" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="noteListCell" rowHeight="90" id="v6j-vL-aQN" userLabel="noteListTableCell" customClass="NoteListTableViewCell" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="28" width="320" height="90"/>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="noteListCell" rowHeight="290" id="v6j-vL-aQN" userLabel="noteListTableCell" customClass="NoteListTableViewCell" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="28" width="320" height="290"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="v6j-vL-aQN" id="Vjk-zO-K8S">
-                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="90"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="290"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rx7-aY-ZYS" userLabel="backgroundView" customClass="NutShellUIViewWithHighlight" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="78"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="278"/>
                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="normalBackground" value="whiteBackground"/>
@@ -120,8 +120,9 @@
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="selectedBackground" value="whiteBackground"/>
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iPM-Jk-ybw" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="24" y="12" width="82.5" height="25.5"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="752" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iPM-Jk-ybw" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="24" y="12" width="82.5" height="14"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -130,14 +131,15 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NmN-1p-56X" userLabel="editButtonLargeHitArea">
-                                                            <rect key="frame" x="254" y="-5" width="60" height="60"/>
+                                                            <rect key="frame" x="254" y="-11" width="60" height="60.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="60" id="EET-tp-zut"/>
                                                                 <constraint firstAttribute="width" constant="60" id="iKg-xp-dle"/>
                                                             </constraints>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2iF-Hl-EhA" userLabel="editButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="268" y="8" width="32" height="34"/>
+                                                            <rect key="frame" x="268" y="2.5" width="32" height="34"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <state key="normal" title="Edit">
                                                                 <color key="titleColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             </state>
@@ -146,29 +148,31 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oza-ZB-EKM" userLabel="noteLabel">
-                                                            <rect key="frame" x="24" y="47.5" width="272" height="20.5"/>
+                                                            <rect key="frame" x="24" y="36" width="272" height="20.5"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <attributedString key="attributedText">
                                                                 <fragment content="Tacos">
                                                                     <attributes>
                                                                         <color key="NSColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <font key="NSFont" size="15" name="OpenSans"/>
+                                                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                                     </attributes>
                                                                 </fragment>
                                                             </attributedString>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         </label>
-                                                        <view contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9sr-8X-2eF" userLabel="dataVizView">
-                                                            <rect key="frame" x="0.0" y="78" width="320" height="0.0"/>
+                                                        <view contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="749" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="9sr-8X-2eF" userLabel="dataVizView" customClass="TPIntrinsicSizeUIView" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="66.5" width="320" height="211.5"/>
                                                             <subviews>
-                                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="95N-hk-m3T" userLabel="graphLayerContainer">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="0.0"/>
+                                                                <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="95N-hk-m3T" userLabel="graphLayerContainer">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="211.5"/>
                                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </view>
                                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rOT-95-kGQ" userLabel="loadingAnimationView">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="0.0"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="211.5"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S4y-zX-Arf" userLabel="imageContainer">
-                                                                            <rect key="frame" x="40" y="-75" width="240" height="150"/>
+                                                                            <rect key="frame" x="40" y="31" width="240" height="150"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="150" id="fJE-PT-z8I"/>
@@ -183,24 +187,24 @@
                                                                     </constraints>
                                                                 </view>
                                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mf1-qM-eOo" userLabel="noDataView">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="0.0"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="211.5"/>
                                                                     <subviews>
                                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="smallCloud" translatesAutoresizingMaskIntoConstraints="NO" id="qsg-Pz-CPx" userLabel="smallCloudLeftImage">
-                                                                            <rect key="frame" x="-30" y="-18" width="62" height="37"/>
+                                                                            <rect key="frame" x="-30" y="61.5" width="62" height="37"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="62" id="RaO-l9-6vB"/>
                                                                                 <constraint firstAttribute="height" constant="37" id="XRG-K7-gS4"/>
                                                                             </constraints>
                                                                         </imageView>
                                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cloud" translatesAutoresizingMaskIntoConstraints="NO" id="KT4-x3-8Ht" userLabel="cloudCenterImage">
-                                                                            <rect key="frame" x="94.5" y="-39" width="131" height="78"/>
+                                                                            <rect key="frame" x="94.5" y="67" width="131" height="78"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="78" id="WxB-0Y-wTg"/>
                                                                                 <constraint firstAttribute="width" constant="131" id="vlI-5v-TlI"/>
                                                                             </constraints>
                                                                         </imageView>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="There is no data in here" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VO8-6Z-8xg">
-                                                                            <rect key="frame" x="125.5" y="-16" width="70" height="33"/>
+                                                                            <rect key="frame" x="125.5" y="95" width="70" height="33"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="70" id="7LD-aK-JZF"/>
                                                                             </constraints>
@@ -209,14 +213,14 @@
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="smallCloud" translatesAutoresizingMaskIntoConstraints="NO" id="RHp-Mt-Gjb" userLabel="smallCloudRightmage">
-                                                                            <rect key="frame" x="288" y="-18" width="62" height="37"/>
+                                                                            <rect key="frame" x="288" y="114" width="62" height="37"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="37" id="8qI-XD-Oa8"/>
                                                                                 <constraint firstAttribute="width" constant="62" id="Ot1-sE-imD"/>
                                                                             </constraints>
                                                                         </imageView>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="shA-V9-KcA" userLabel="howToUploadButton">
-                                                                            <rect key="frame" x="112.5" y="49" width="95" height="23"/>
+                                                                            <rect key="frame" x="112.5" y="155" width="95" height="23"/>
                                                                             <color key="backgroundColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="23" id="C1z-rM-XTH"/>
@@ -251,22 +255,27 @@
                                                                 <constraint firstAttribute="trailing" secondItem="rOT-95-kGQ" secondAttribute="trailing" id="Msk-BN-knj"/>
                                                                 <constraint firstAttribute="trailing" secondItem="95N-hk-m3T" secondAttribute="trailing" id="OuY-eK-LTq"/>
                                                                 <constraint firstItem="rOT-95-kGQ" firstAttribute="leading" secondItem="9sr-8X-2eF" secondAttribute="leading" id="QbZ-Aa-N2u"/>
-                                                                <constraint firstAttribute="height" id="XZF-yU-3qR"/>
                                                                 <constraint firstAttribute="bottom" secondItem="95N-hk-m3T" secondAttribute="bottom" id="dPi-Zg-3AI"/>
                                                                 <constraint firstAttribute="bottom" secondItem="rOT-95-kGQ" secondAttribute="bottom" id="dWg-qY-nTl"/>
                                                                 <constraint firstItem="rOT-95-kGQ" firstAttribute="top" secondItem="9sr-8X-2eF" secondAttribute="top" id="eQz-Zl-eik"/>
                                                                 <constraint firstItem="95N-hk-m3T" firstAttribute="leading" secondItem="9sr-8X-2eF" secondAttribute="leading" id="eV2-3b-N7b"/>
                                                                 <constraint firstAttribute="bottom" secondItem="Mf1-qM-eOo" secondAttribute="bottom" id="sJc-x1-N6D"/>
                                                             </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="height">
+                                                                    <real key="value" value="200"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <view contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="vfa-qL-W91" userLabel="separatorView" customClass="TPRowSeparatorView" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="78" width="320" height="12"/>
+                                                            <rect key="frame" x="0.0" y="278" width="320" height="12"/>
                                                             <color key="backgroundColor" red="0.79607843140000001" green="0.79607843140000001" blue="0.79607843140000001" alpha="1" colorSpace="calibratedRGB"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="12" id="ANT-1Y-F7x"/>
                                                             </constraints>
                                                         </view>
                                                     </subviews>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstItem="iPM-Jk-ybw" firstAttribute="top" secondItem="Vjk-zO-K8S" secondAttribute="top" constant="12" id="4rw-Sg-rLv"/>
                                                         <constraint firstItem="9sr-8X-2eF" firstAttribute="leading" secondItem="Vjk-zO-K8S" secondAttribute="leading" id="8PQ-Td-CGP"/>
@@ -292,7 +301,7 @@
                                                 </tableViewCellContentView>
                                                 <connections>
                                                     <outlet property="cellBackgroundView" destination="Rx7-aY-ZYS" id="nV2-Zv-R8l"/>
-                                                    <outlet property="dataVizView" destination="9sr-8X-2eF" id="Ua4-5G-EzK"/>
+                                                    <outlet property="dataVizView" destination="9sr-8X-2eF" id="NMR-qa-eEL"/>
                                                     <outlet property="dateLabel" destination="iPM-Jk-ybw" id="mGu-EB-i8W"/>
                                                     <outlet property="editButton" destination="2iF-Hl-EhA" id="tLn-xD-VnO"/>
                                                     <outlet property="editButtonLargeHitArea" destination="NmN-1p-56X" id="f20-ut-3Qu"/>
@@ -304,7 +313,7 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="noteListCellWithUser" rowHeight="110" id="sRl-vJ-GeN" userLabel="noteListTableCellWithUser" customClass="NoteListTableViewCellWithUser" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="118" width="320" height="110"/>
+                                                <rect key="frame" x="0.0" y="318" width="320" height="110"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sRl-vJ-GeN" id="PHE-2c-TjE">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="110"/>
@@ -515,7 +524,7 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="addCommentCell" rowHeight="46" id="H8r-tf-0b5" userLabel="addCommentCell" customClass="NoteListAddCommentCell" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="228" width="320" height="46"/>
+                                                <rect key="frame" x="0.0" y="428" width="320" height="46"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="H8r-tf-0b5" id="Yz9-Hc-qvs">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="46"/>
@@ -527,6 +536,16 @@
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="46" id="jCd-xz-apw"/>
                                                             </constraints>
+                                                        </view>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QWP-VF-bEE" userLabel="editTopSeparator" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
+                                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="1" id="cn3-ku-Dgc"/>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
+                                                            </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addCommentIcon" translatesAutoresizingMaskIntoConstraints="NO" id="3tz-te-Sk5">
                                                             <rect key="frame" x="16" y="4" width="23" height="19"/>
@@ -559,7 +578,9 @@
                                                         </view>
                                                     </subviews>
                                                     <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="QWP-VF-bEE" secondAttribute="trailing" id="3Sf-yP-iMZ"/>
                                                         <constraint firstAttribute="bottom" secondItem="cKt-dV-ZtW" secondAttribute="bottom" id="60j-nv-dmv"/>
+                                                        <constraint firstItem="QWP-VF-bEE" firstAttribute="top" secondItem="Yz9-Hc-qvs" secondAttribute="top" id="AYM-ki-nQy"/>
                                                         <constraint firstItem="cKt-dV-ZtW" firstAttribute="leading" secondItem="Yz9-Hc-qvs" secondAttribute="leading" id="BgZ-dB-F0G"/>
                                                         <constraint firstItem="zCx-QR-DoE" firstAttribute="top" secondItem="Yz9-Hc-qvs" secondAttribute="top" constant="3" id="FdP-Af-266"/>
                                                         <constraint firstAttribute="trailing" secondItem="zCx-QR-DoE" secondAttribute="trailing" constant="20" id="GTn-CJ-FZo"/>
@@ -572,6 +593,7 @@
                                                         <constraint firstAttribute="trailing" secondItem="svC-kt-CW2" secondAttribute="trailing" id="jiM-Xg-fvi"/>
                                                         <constraint firstAttribute="bottom" secondItem="zCx-QR-DoE" secondAttribute="bottom" constant="12" id="lwY-hm-Cfu"/>
                                                         <constraint firstItem="Zj3-QQ-6d1" firstAttribute="top" secondItem="Yz9-Hc-qvs" secondAttribute="top" constant="3" id="mAH-R7-G2G"/>
+                                                        <constraint firstItem="QWP-VF-bEE" firstAttribute="leading" secondItem="Yz9-Hc-qvs" secondAttribute="leading" id="oFs-pt-ZJg"/>
                                                         <constraint firstItem="svC-kt-CW2" firstAttribute="leading" secondItem="Yz9-Hc-qvs" secondAttribute="leading" id="sN2-hE-lfJ"/>
                                                         <constraint firstItem="Zj3-QQ-6d1" firstAttribute="centerY" secondItem="3tz-te-Sk5" secondAttribute="centerY" id="w2t-u8-tav"/>
                                                         <constraint firstItem="zCx-QR-DoE" firstAttribute="leading" secondItem="Yz9-Hc-qvs" secondAttribute="leading" constant="15" id="z8t-bX-qoY"/>
@@ -586,10 +608,11 @@
                                                     <outlet property="addCommentIcon" destination="3tz-te-Sk5" id="hDA-eN-HdR"/>
                                                     <outlet property="addCommentLabel" destination="Zj3-QQ-6d1" id="Nhr-5W-mG8"/>
                                                     <outlet property="addCommentTextView" destination="zCx-QR-DoE" id="cG9-JW-eJy"/>
+                                                    <outlet property="editTopSeparator" destination="QWP-VF-bEE" id="bEU-lR-7pv"/>
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="noteListCommentCell" rowHeight="80" id="6O8-VU-a9F" userLabel="noteListCommentCell" customClass="NoteListCommentCell" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="274" width="320" height="80"/>
+                                                <rect key="frame" x="0.0" y="474" width="320" height="80"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6O8-VU-a9F" id="E92-Ks-Pcc">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
@@ -748,6 +771,7 @@
                         <outlet property="searchPlaceholderLabel" destination="JwL-dD-CDl" id="C9Z-6p-dP8"/>
                         <outlet property="searchTextField" destination="G3r-qM-suN" id="gbW-YI-Ypz"/>
                         <outlet property="searchView" destination="W4V-dI-wa3" id="Df8-bC-Chm"/>
+                        <outlet property="searchViewHeightConstraint" destination="lCP-fY-tnr" id="YSP-kJ-VaD"/>
                         <outlet property="tableView" destination="TkA-IK-Jxk" id="qBO-FW-Unw"/>
                         <segue destination="dEI-AO-k52" kind="show" identifier="segueToSwitchProfile" id="Fhj-f1-jcN"/>
                         <segue destination="y6i-Ov-aeU" kind="presentation" identifier="segueToLogin" modalTransitionStyle="flipHorizontal" id="Bu4-Y4-A3A"/>

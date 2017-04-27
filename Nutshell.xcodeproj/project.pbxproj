@@ -108,6 +108,7 @@
 		48276A1B1E9D589F004CADB1 /* SwitchProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A191E9D589F004CADB1 /* SwitchProfile.storyboard */; };
 		48276A1E1E9D5900004CADB1 /* EventEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A1C1E9D5900004CADB1 /* EventEdit.storyboard */; };
 		48276A201E9D5941004CADB1 /* EventAdd.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A1F1E9D5941004CADB1 /* EventAdd.storyboard */; };
+		482971F91EB2655C00E171DF /* TPIntrinsicSizeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482971F81EB2655C00E171DF /* TPIntrinsicSizeUIView.swift */; };
 		482BB3601E8C942E008CD02A /* NutshellUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482BB35F1E8C942E008CD02A /* NutshellUISwitch.swift */; };
 		482BB3621E8D5FCA008CD02A /* NoteGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482BB3611E8D5FCA008CD02A /* NoteGraphData.swift */; };
 		482C89B41EAAD22800EB88C9 /* NoteListCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482C89B31EAAD22800EB88C9 /* NoteListCommentCell.swift */; };
@@ -322,6 +323,7 @@
 		48276A1A1E9D589F004CADB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SwitchProfile.storyboard; sourceTree = "<group>"; };
 		48276A1D1E9D5900004CADB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EventEdit.storyboard; sourceTree = "<group>"; };
 		48276A1F1E9D5941004CADB1 /* EventAdd.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = EventAdd.storyboard; path = Assets.xcassets/EventAdd.storyboard; sourceTree = "<group>"; };
+		482971F81EB2655C00E171DF /* TPIntrinsicSizeUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TPIntrinsicSizeUIView.swift; path = ViewControllers/Views/TPIntrinsicSizeUIView.swift; sourceTree = "<group>"; };
 		482BB35F1E8C942E008CD02A /* NutshellUISwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutshellUISwitch.swift; path = Resources/NutshellUISwitch.swift; sourceTree = "<group>"; };
 		482BB3611E8D5FCA008CD02A /* NoteGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteGraphData.swift; path = "GraphView/Tidepool Graph/NoteGraphData.swift"; sourceTree = "<group>"; };
 		482C89B31EAAD22800EB88C9 /* NoteListCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListCommentCell.swift; path = ViewControllers/NoteListCommentCell.swift; sourceTree = "<group>"; };
@@ -771,6 +773,7 @@
 				488E44DF1E831CC100A17AD7 /* HashtagsScrollView.swift */,
 				488E44E01E831CC100A17AD7 /* HashtagsView.swift */,
 				482F481E1EA935A900733186 /* TPRowSeparatorView.swift */,
+				482971F81EB2655C00E171DF /* TPIntrinsicSizeUIView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1145,6 +1148,7 @@
 				0334CA341BA8DDFC00013096 /* CommonData.swift in Sources */,
 				486F5E091B9FB1C600BA2A57 /* NutshellStyles.swift in Sources */,
 				482ECC821C94BB9D002A015D /* HealthKitDataUploader.swift in Sources */,
+				482971F91EB2655C00E171DF /* TPIntrinsicSizeUIView.swift in Sources */,
 				0334CA431BA8DDFC00013096 /* Food+CoreDataProperties.swift in Sources */,
 				0334CA8B1BA8DDFC00013096 /* User.swift in Sources */,
 				48B127971BC4447100061483 /* NutWorkout.swift in Sources */,

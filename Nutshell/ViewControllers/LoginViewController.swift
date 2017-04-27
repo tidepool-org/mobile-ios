@@ -235,15 +235,11 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     // MARK: - View handling for keyboard
     //
 
+    @IBOutlet weak var loginViewCenterYConstraint: NSLayoutConstraint!
     fileprivate var viewAdjustAnimationTime: Float = 0.25
     fileprivate func adjustLogInView(_ centerOffset: CGFloat) {
         
-        for c in logInScene.constraints {
-            if c.firstAttribute == NSLayoutAttribute.centerY {
-                c.constant = -centerOffset
-                break
-            }
-        }
+        loginViewCenterYConstraint.constant = -centerOffset
         UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
             self.logInScene.layoutIfNeeded()
         }) 

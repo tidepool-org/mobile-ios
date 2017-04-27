@@ -23,8 +23,8 @@ class NoteListTableViewCell: BaseUITableViewCell, GraphContainerViewDelegate {
     var expanded: Bool = false
     let kGraphHeight: CGFloat = 200.0
     
+    @IBOutlet weak var dataVizView: TPIntrinsicSizeUIView!
     @IBOutlet weak var separatorView: TPRowSeparatorView!
-    @IBOutlet weak var dataVizView: UIView!
     @IBOutlet weak var loadingAnimationView: UIView!
     @IBOutlet weak var imageContainer: UIView!
     
@@ -49,13 +49,8 @@ class NoteListTableViewCell: BaseUITableViewCell, GraphContainerViewDelegate {
 
     func openGraphView(_ open: Bool) {
         expanded = open
-        for c in self.dataVizView.constraints {
-            if c.firstAttribute == NSLayoutAttribute.height {
-                c.constant = open ? kGraphHeight : 0.0
-                NSLog("setting dataViz height to \(c.constant)")
-                break
-            }
-        }
+        // Change intrinsic size of dataVizView appropriately
+        dataVizView.height = open ? 200.0 : 0.0
      }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {

@@ -80,7 +80,7 @@
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wrong email or password!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bJV-Wt-zLG" userLabel="errorFeedbackLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="58.5" y="37.5" width="258.5" height="16.5"/>
+                                                <rect key="frame" x="58.5" y="39.5" width="258.5" height="14.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -122,7 +122,7 @@
                                                         </connections>
                                                     </textField>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NjG-Wi-o84" userLabel="forgotPasswordButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="10" y="81.5" width="124" height="33"/>
+                                                        <rect key="frame" x="10" y="83.5" width="99" height="29"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                         <state key="normal" title="Forgot password?">
                                                             <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -188,7 +188,7 @@
                                                 <rect key="frame" x="46.5" y="58" width="282.5" height="120"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are not currently connected to a network!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nYu-JU-kh6" userLabel="offlineMessage" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="25" y="33" width="232.5" height="54.5"/>
+                                                        <rect key="frame" x="25" y="40" width="232.5" height="41"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -332,6 +332,7 @@
                         <outlet property="logInScene" destination="zV2-Yb-tzp" id="qWX-g4-d9v"/>
                         <outlet property="loginButton" destination="hWu-5X-znl" id="Uwl-Eu-KYc"/>
                         <outlet property="loginIndicator" destination="75w-tb-LSw" id="dfD-21-TW1"/>
+                        <outlet property="loginViewCenterYConstraint" destination="qTh-J9-NUm" id="far-NU-ubF"/>
                         <outlet property="offlineMessageContainerView" destination="Pok-KF-0aG" id="JuZ-Kj-UCr"/>
                         <outlet property="passwordTextField" destination="yzu-4v-Bis" id="CbM-8W-WV7"/>
                         <outlet property="signUpButton" destination="XD9-cK-wuz" id="7E1-C1-xrr"/>

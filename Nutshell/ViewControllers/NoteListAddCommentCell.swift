@@ -20,6 +20,7 @@ class NoteListAddCommentCell: BaseUITableViewCell {
     @IBOutlet weak var addCommentIcon: UIImageView!
     @IBOutlet weak var addCommentLabel: NutshellUILabel!
     @IBOutlet weak var addCommentTextView: UITextView!
+    @IBOutlet weak var editTopSeparator: NutshellUIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -41,11 +42,10 @@ class NoteListAddCommentCell: BaseUITableViewCell {
     func configureCellForEdit(_ editMode: Bool, delegate: UITextViewDelegate? = nil) {
         addCommentIcon.isHidden = editMode
         addCommentLabel.isHidden = editMode
+        editTopSeparator.isHidden = !editMode
         addCommentTextView.isHidden = !editMode
         addCommentTextView.text = ""
         addCommentTextView.delegate = delegate
-        // TODO need to debug expansion if needed!
-        //expandTextView(editMode)
         if editMode {
             addCommentTextView.perform(
                 #selector(becomeFirstResponder),
@@ -58,26 +58,6 @@ class NoteListAddCommentCell: BaseUITableViewCell {
             addCommentTextView.resignFirstResponder()
             NSLog("comment view resignFirstResponder")
         }
-    }
-
-    var expanded: Bool = false
-    var closedHeight: CGFloat?
-    // TODO: figure out how to grow automatically!
-    let kOpenedHeight: CGFloat = 29.0
-    func expandTextView(_ open: Bool) {
-        expanded = open
-        if closedHeight == nil {
-            closedHeight = self.addCommentTextView.bounds.height
-        }
-        for c in self.addCommentTextView.constraints {
-            if c.firstAttribute == NSLayoutAttribute.height {
-                c.constant = open ? kOpenedHeight : closedHeight!
-                NSLog("setting addCommentTextView height to \(c.constant)")
-                break
-            }
-        }
-        self.setNeedsLayout()
-        self.layoutIfNeeded()
     }
 
 }

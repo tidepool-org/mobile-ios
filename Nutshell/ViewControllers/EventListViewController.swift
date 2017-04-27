@@ -80,8 +80,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
         // keyboard up/down
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.keyboardDidShow(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
         configureForReachability()
 
@@ -249,62 +247,42 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // MARK: - View handling for keyboard
     //
     
-    fileprivate func adjustKeyboardSpacerView(_ height: CGFloat) {
-        for c in keyboardSpacerView.constraints {
-            if c.firstAttribute == NSLayoutAttribute.height {
-                c.constant = height
-                break
-            }
-        }
-        if height != 0.0 {
-            // opening, no need to animate
-            self.eventListSceneContainer.layoutIfNeeded()
-            return
-        }
-        UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
-            self.eventListSceneContainer.layoutIfNeeded()
-        })
-    }
+    private var viewAdjustAnimationTime: TimeInterval = 0.25
+    private var keyboardFrame: CGRect?
     
-    // UIKeyboardWillShowNotification
+    // For add comment editing, scroll table so edit view is just above the keyboard when it opens.
+    // Also captures keyboard sizing and appropriate scroll animation timing.
     func keyboardWillShow(_ notification: Notification) {
         NSLog("\(#function)")
         viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
+        keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         // not necessary for search field editing!
         if searchTextField.isFirstResponder {
-            // readjust table view if necessary (user was editing a comment and changed to editing search)...
-            self.adjustKeyboardSpacerView(0.0)
             return
         }
+
+        self.adjustKeyboardSpacerView() // first time, ensure we have a table footer for last cell special case
+        self.adjustEditAboveKeyboard()
     }
-    
-    // TODO: what if keyboard is already up? Then we won't do this scroll, so we'd need to check for that!
-    func keyboardDidShow(_ notification: Notification) {
-        NSLog("\(#function)")
-        if let _ = currentCommentEditCell, let indexPath = currentCommentEditIndexPath {
-            let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-            let spaceNeeded = keyboardFrame.height
-            self.adjustKeyboardSpacerView(spaceNeeded)
-            // adjust current add comment row to bottom of table view which will now be just above the keyboard
-            NSLog("scrolling edit row at \(indexPath) to bottom of table...")
-            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
-            self.perform(#selector(EventListViewController.delayedTableAdjust), with: nil, afterDelay: 0.25)
+ 
+    // Ensure there is enough table footer to allow add comment editing for last note
+    fileprivate func adjustKeyboardSpacerView() {
+        if let keyboardFrame = keyboardFrame {
+            // add a footer view to the table that is the size of the keyboard, so last table row can be scrolled to the top of the table if necessary
+            let height = keyboardFrame.height
+            let curTableFooter = self.tableView.tableFooterView
+            if curTableFooter != nil && curTableFooter!.bounds.height >= height {
+                // table already adjusted...
+                return
+            }
+            
+            // add a footer view, possibly replace one that is too short (e.g., search keyboard is somewhat smaller than new comment edit keyboard)
+            var footerFrame = self.tableView.bounds
+            footerFrame.size.height = height
+            let footerView = UIView(frame: footerFrame)
+            footerView.backgroundColor = UIColor.white
+            self.tableView.tableFooterView = footerView
         }
-    }
-    
-    // TODO: figure out why this is needed to clean up the UITextView after shortening table for keyboard and scrolling table row on top of it. This does work "most of the time"
-    func delayedTableAdjust() {
-        if let _ = currentCommentEditCell, let _ = currentCommentEditIndexPath {
-            tableView.beginUpdates()
-            tableView.endUpdates()
-        }
-    }
-    
-    // UIKeyboardWillHideNotification
-    func keyboardWillHide(_ notification: Notification) {
-        NSLog("\(#function)")
-        // reposition login view if needed
-        self.adjustKeyboardSpacerView(0.0)
     }
     
     //
@@ -687,21 +665,15 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // MARK: - Search 
     //
     
+    @IBOutlet weak var searchViewHeightConstraint: NSLayoutConstraint!
     let kSearchHeight: CGFloat = 50.0
     private var searchOpen: Bool = true
-    private var viewAdjustAnimationTime: TimeInterval = 0.25
     private func openSearchView(_ open: Bool) {
         if searchOpen == open {
             return
         }
         searchOpen = open
-        for c in self.searchView.constraints {
-            if c.firstAttribute == NSLayoutAttribute.height {
-                c.constant = open ? kSearchHeight : 0.0
-                NSLog("setting search view height to \(c.constant)")
-                break
-            }
-        }
+        searchViewHeightConstraint.constant = open ? kSearchHeight : 0.0
         UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
             self.eventListSceneContainer.layoutIfNeeded()
         })
@@ -822,12 +794,16 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
     
+    
     // UITextViewDelegate methods
     func textViewDidChange(_ textView: UITextView) {
+        NSLog("current content offset: \(tableView.contentOffset.y)")
         if textView == self.currentCommentEditCell?.addCommentTextView {
             NSLog("note changed to \(textView.text)")
+            // adjust table if lines of text have changed...
             tableView.beginUpdates()
             tableView.endUpdates()
+            adjustEditAboveKeyboard()
         }
     }
     
@@ -836,7 +812,19 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             NSLog("\(#function)")
         }
     }
-    
+
+    func adjustEditAboveKeyboard() {
+        if let curEditCell = currentCommentEditCell, let keyboardFrame = keyboardFrame {
+            let cellContentOffset = curEditCell.frame.origin.y
+            let sizeAboveKeyboard = tableView.bounds.height - keyboardFrame.height
+            var targetOffset = tableView.contentOffset
+            // minus 10 for 10 of the 12 note boundary separator pixels... 
+            targetOffset.y = cellContentOffset - sizeAboveKeyboard  + curEditCell.bounds.height - 10.0
+            NSLog("setting table offset to \(targetOffset.y)")
+            tableView.setContentOffset(targetOffset, animated: true)
+        }
+    }
+
     //
     // MARK: - Table UIScrollViewDelegate
     //
