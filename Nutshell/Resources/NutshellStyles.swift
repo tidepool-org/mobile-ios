@@ -82,6 +82,9 @@ open class Styles: NSObject {
         "sidebarSettingHKEnable": (mediumSmallRegularFont, darkPurpleColor),
         "sidebarSettingHKMainStatus": (verySmallSemiboldFont, mediumLightGreyColor),
         "sidebarSettingHKMinorStatus": (verySmallRegularFont, mediumLightGreyColor),
+        // first time tips
+        "firstTimeTipText": (mediumSmallRegularFont, whiteColor),
+
     ]
 
     class func backgroundImageofSize(_ size: CGSize, style: String) -> UIImage? {
@@ -171,6 +174,7 @@ open class Styles: NSObject {
     
     fileprivate struct ColorCache {
         static let darkPurpleColor: UIColor = UIColor(hex: 0x281946)
+        static let darkPurple75Color: UIColor = UIColor(hex: 0x281946, opacity: 0.75)
         static let lightGreyColor: UIColor = UIColor(hex: 0xeaeff0)
         static let altLightGreyColor: UIColor = UIColor(hex: 0xc9c9c9)
         static let veryLightGreyColor: UIColor = UIColor(hex: 0xF7F7F8)
@@ -198,6 +202,7 @@ open class Styles: NSObject {
     }
 
     open class var darkPurpleColor: UIColor { return ColorCache.darkPurpleColor }
+    open class var darkPurple75Color: UIColor { return ColorCache.darkPurple75Color }
     open class var brightBlueColor: UIColor { return ColorCache.brightBlueColor }
     open class var lightGreyColor: UIColor { return ColorCache.lightGreyColor }
     open class var altLightGreyColor: UIColor { return ColorCache.altLightGreyColor }

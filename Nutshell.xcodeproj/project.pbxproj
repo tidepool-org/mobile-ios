@@ -104,7 +104,6 @@
 		4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
 		4820ED6A1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
 		4820ED6B1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
-		48276A181E9D582D004CADB1 /* Celebration.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A161E9D582D004CADB1 /* Celebration.storyboard */; };
 		48276A1B1E9D589F004CADB1 /* SwitchProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A191E9D589F004CADB1 /* SwitchProfile.storyboard */; };
 		48276A1E1E9D5900004CADB1 /* EventEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A1C1E9D5900004CADB1 /* EventEdit.storyboard */; };
 		48276A201E9D5941004CADB1 /* EventAdd.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A1F1E9D5941004CADB1 /* EventAdd.storyboard */; };
@@ -146,7 +145,6 @@
 		4854202C1BC44D290020CFE1 /* EventItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485420201BC44D290020CFE1 /* EventItem.swift */; };
 		4854202D1BC4790D0020CFE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4859FCC21B9A4DE4000C1269 /* Assets.xcassets */; };
 		4859229B1B9A61510056E605 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 485922991B9A61510056E605 /* Login.storyboard */; };
-		485922A81B9C98420056E605 /* splash_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 485922A61B9C98420056E605 /* splash_logo@2x.png */; };
 		4859FCB91B9A4DE4000C1269 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */; };
 		4859FCBE1B9A4DE4000C1269 /* EventView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4859FCBC1B9A4DE4000C1269 /* EventView.storyboard */; };
 		4859FCC11B9A4DE4000C1269 /* Nutshell.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */; };
@@ -162,8 +160,6 @@
 		486F5DFB1B9F874A00BA2A57 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DF11B9F874A00BA2A57 /* OpenSans-Semibold.ttf */; };
 		486F5E091B9FB1C600BA2A57 /* NutshellStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */; };
 		486F5E111BA08DE900BA2A57 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E101BA08DE900BA2A57 /* LoginViewController.swift */; };
-		486F5E151BA0908900BA2A57 /* login_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 486F5E141BA0908900BA2A57 /* login_logo@2x.png */; };
-		486F5E161BA0908900BA2A57 /* login_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 486F5E141BA0908900BA2A57 /* login_logo@2x.png */; };
 		486F5E241BA0DC1000BA2A57 /* APIConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E231BA0DC1000BA2A57 /* APIConnect.swift */; };
 		486F5E251BA0DC1000BA2A57 /* APIConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E231BA0DC1000BA2A57 /* APIConnect.swift */; };
 		486F5E2B1BA0DC6700BA2A57 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
@@ -199,10 +195,6 @@
 		48B127951BC4445800061483 /* NutEventItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127931BC4445500061483 /* NutEventItem.swift */; };
 		48B127971BC4447100061483 /* NutWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127961BC4447100061483 /* NutWorkout.swift */; };
 		48B127981BC4447100061483 /* NutWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127961BC4447100061483 /* NutWorkout.swift */; };
-		48B127A81BC444FE00061483 /* applejuicedemopic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B127A41BC444FE00061483 /* applejuicedemopic.png */; };
-		48B127A91BC444FE00061483 /* applejuicedemopic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B127A41BC444FE00061483 /* applejuicedemopic.png */; };
-		48B127AC1BC444FE00061483 /* ThreeTacosDemoPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */; };
-		48B127AD1BC444FE00061483 /* ThreeTacosDemoPic.png in Resources */ = {isa = PBXBuildFile; fileRef = 48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */; };
 		48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B7C7E91E8988160069B6DF /* NoteDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B7C7E81E8988160069B6DF /* NoteDetailTableViewCell.swift */; };
@@ -236,16 +228,8 @@
 		48EC25781EA9526A00607F85 /* NoteListAddCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC25771EA9526A00607F85 /* NoteListAddCommentCell.swift */; };
 		48EC32301BA7BDD700A75103 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
 		48EC32321BA7BDDE00A75103 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
-		48ECF6CA1E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ECF6C91E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift */; };
-		48ECF6CC1E96FDD3007EE5D3 /* celebration-animated-dots.gif in Resources */ = {isa = PBXBuildFile; fileRef = 48ECF6CB1E96FDD3007EE5D3 /* celebration-animated-dots.gif */; };
 		48ECF6CE1E96FE18007EE5D3 /* jump-jump-jump-jump.gif in Resources */ = {isa = PBXBuildFile; fileRef = 48ECF6CD1E96FE18007EE5D3 /* jump-jump-jump-jump.gif */; };
 		48ED0D341BADAF8B009D0D6F /* GraphUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */; };
-		48ED0D3C1BAF22CC009D0D6F /* addAnimation-01.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D361BAF22CC009D0D6F /* addAnimation-01.png */; };
-		48ED0D3D1BAF22CC009D0D6F /* addAnimation-02.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D371BAF22CC009D0D6F /* addAnimation-02.png */; };
-		48ED0D3E1BAF22CC009D0D6F /* addAnimation-03.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D381BAF22CC009D0D6F /* addAnimation-03.png */; };
-		48ED0D3F1BAF22CC009D0D6F /* addAnimation-04.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D391BAF22CC009D0D6F /* addAnimation-04.png */; };
-		48ED0D401BAF22CC009D0D6F /* addAnimation-05.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D3A1BAF22CC009D0D6F /* addAnimation-05.png */; };
-		48ED0D411BAF22CC009D0D6F /* addAnimation-06.png in Resources */ = {isa = PBXBuildFile; fileRef = 48ED0D3B1BAF22CC009D0D6F /* addAnimation-06.png */; };
 		48EDC2C91BD99141003049D9 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */; };
 		48FB1E4D1C17C38600C89F8E /* NutshellDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */; };
 		48FB1E4E1C17C38600C89F8E /* NutshellDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */; };
@@ -318,7 +302,6 @@
 		48103E9C1C1E05660055C27A /* Nutshell-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Nutshell-Bridging-Header.h"; sourceTree = "<group>"; };
 		4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/Pods-Nutshell/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		4820ED691C21E8E3008C754A /* GraphDataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataTypes.swift; path = GraphView/GraphDataTypes.swift; sourceTree = "<group>"; };
-		48276A171E9D582D004CADB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Celebration.storyboard; sourceTree = "<group>"; };
 		48276A1A1E9D589F004CADB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SwitchProfile.storyboard; sourceTree = "<group>"; };
 		48276A1D1E9D5900004CADB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EventEdit.storyboard; sourceTree = "<group>"; };
 		48276A1F1E9D5941004CADB1 /* EventAdd.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = EventAdd.storyboard; path = Assets.xcassets/EventAdd.storyboard; sourceTree = "<group>"; };
@@ -351,7 +334,6 @@
 		4854201F1BC44D290020CFE1 /* EventItem+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EventItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		485420201BC44D290020CFE1 /* EventItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventItem.swift; sourceTree = "<group>"; };
 		4859229A1B9A61510056E605 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
-		485922A61B9C98420056E605 /* splash_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "splash_logo@2x.png"; path = "Images/splash_logo@2x.png"; sourceTree = "<group>"; };
 		4859FCB51B9A4DE4000C1269 /* Nutshell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nutshell.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4859FCBD1B9A4DE4000C1269 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EventView.storyboard; sourceTree = "<group>"; };
@@ -370,7 +352,6 @@
 		486F5DF11B9F874A00BA2A57 /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Semibold.ttf"; path = "Resources/OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
 		486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellStyles.swift; path = Resources/NutshellStyles.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		486F5E101BA08DE900BA2A57 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ViewControllers/LoginViewController.swift; sourceTree = "<group>"; };
-		486F5E141BA0908900BA2A57 /* login_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "login_logo@2x.png"; path = "Images/login_logo@2x.png"; sourceTree = "<group>"; };
 		486F5E231BA0DC1000BA2A57 /* APIConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIConnect.swift; path = ServiceInterface/APIConnect.swift; sourceTree = "<group>"; };
 		486F5E291BA0DC6700BA2A57 /* NutEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutEvent.swift; path = DataModel/NutEvent.swift; sourceTree = "<group>"; };
 		486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIDateFormatterExtension.swift; path = "Utilities and Extensions/UIDateFormatterExtension.swift"; sourceTree = "<group>"; };
@@ -398,8 +379,6 @@
 		48A839021C596A1D00FAFE1B /* GraphCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCollectionCell.swift; path = GraphView/GraphCollectionCell.swift; sourceTree = "<group>"; };
 		48B127931BC4445500061483 /* NutEventItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutEventItem.swift; path = DataModel/NutEventItem.swift; sourceTree = "<group>"; };
 		48B127961BC4447100061483 /* NutWorkout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutWorkout.swift; path = DataModel/NutWorkout.swift; sourceTree = "<group>"; };
-		48B127A41BC444FE00061483 /* applejuicedemopic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = applejuicedemopic.png; path = Images/applejuicedemopic.png; sourceTree = "<group>"; };
-		48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ThreeTacosDemoPic.png; path = Images/ThreeTacosDemoPic.png; sourceTree = "<group>"; };
 		48B127B01BC4466E00061483 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseUtils.swift; path = "Utilities and Extensions/DatabaseUtils.swift"; sourceTree = "<group>"; };
 		48B7C7E81E8988160069B6DF /* NoteDetailTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteDetailTableViewCell.swift; path = ViewControllers/NoteDetailTableViewCell.swift; sourceTree = "<group>"; };
 		48BA05AF1E53911500212486 /* GraphCursorLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCursorLayer.swift; path = GraphView/GraphCursorLayer.swift; sourceTree = "<group>"; };
@@ -427,16 +406,8 @@
 		48E4A4451BF015CE001A7B35 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = ServiceInterface/Reachability.swift; sourceTree = "<group>"; };
 		48E5C2101EB2D17100D5923A /* TPUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TPUIButton.swift; path = ViewControllers/Views/TPUIButton.swift; sourceTree = "<group>"; };
 		48EC25771EA9526A00607F85 /* NoteListAddCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListAddCommentCell.swift; path = ViewControllers/NoteListAddCommentCell.swift; sourceTree = "<group>"; };
-		48ECF6C91E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConnectToHealthCelebrationViewController.swift; path = ViewControllers/ConnectToHealthCelebrationViewController.swift; sourceTree = "<group>"; };
-		48ECF6CB1E96FDD3007EE5D3 /* celebration-animated-dots.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = "celebration-animated-dots.gif"; path = "Images/celebration-animated-dots.gif"; sourceTree = "<group>"; };
 		48ECF6CD1E96FE18007EE5D3 /* jump-jump-jump-jump.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = "jump-jump-jump-jump.gif"; path = "Images/jump-jump-jump-jump.gif"; sourceTree = "<group>"; };
 		48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphUIView.swift; path = GraphView/GraphUIView.swift; sourceTree = "<group>"; };
-		48ED0D361BAF22CC009D0D6F /* addAnimation-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-01.png"; path = "Images/addAnimation/addAnimation-01.png"; sourceTree = "<group>"; };
-		48ED0D371BAF22CC009D0D6F /* addAnimation-02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-02.png"; path = "Images/addAnimation/addAnimation-02.png"; sourceTree = "<group>"; };
-		48ED0D381BAF22CC009D0D6F /* addAnimation-03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-03.png"; path = "Images/addAnimation/addAnimation-03.png"; sourceTree = "<group>"; };
-		48ED0D391BAF22CC009D0D6F /* addAnimation-04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-04.png"; path = "Images/addAnimation/addAnimation-04.png"; sourceTree = "<group>"; };
-		48ED0D3A1BAF22CC009D0D6F /* addAnimation-05.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-05.png"; path = "Images/addAnimation/addAnimation-05.png"; sourceTree = "<group>"; };
-		48ED0D3B1BAF22CC009D0D6F /* addAnimation-06.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "addAnimation-06.png"; path = "Images/addAnimation/addAnimation-06.png"; sourceTree = "<group>"; };
 		48EDC2C51BD6B403003049D9 /* EventAddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventAddViewController.swift; path = ViewControllers/EventAddViewController.swift; sourceTree = "<group>"; };
 		48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutshellDataController.swift; path = DataModel/NutshellDataController.swift; sourceTree = "<group>"; };
@@ -551,7 +522,6 @@
 				48276A1F1E9D5941004CADB1 /* EventAdd.storyboard */,
 				48276A1C1E9D5900004CADB1 /* EventEdit.storyboard */,
 				48276A191E9D589F004CADB1 /* SwitchProfile.storyboard */,
-				48276A161E9D582D004CADB1 /* Celebration.storyboard */,
 			);
 			name = Storyboards;
 			sourceTree = "<group>";
@@ -598,7 +568,6 @@
 				488E44DB1E83198D00A17AD7 /* EventEditViewController.swift */,
 				4872118C1E8D818300BAD5CE /* SwitchProfileTableViewController.swift */,
 				4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */,
-				48ECF6C91E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift */,
 			);
 			name = EventViewControllers;
 			sourceTree = "<group>";
@@ -607,12 +576,6 @@
 			isa = PBXGroup;
 			children = (
 				48ECF6CD1E96FE18007EE5D3 /* jump-jump-jump-jump.gif */,
-				48ECF6CB1E96FDD3007EE5D3 /* celebration-animated-dots.gif */,
-				48ED0D351BAF221C009D0D6F /* AddAnimation */,
-				48B127A41BC444FE00061483 /* applejuicedemopic.png */,
-				48B127A61BC444FE00061483 /* ThreeTacosDemoPic.png */,
-				486F5E141BA0908900BA2A57 /* login_logo@2x.png */,
-				485922A61B9C98420056E605 /* splash_logo@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -837,19 +800,6 @@
 			name = "Graph View";
 			sourceTree = "<group>";
 		};
-		48ED0D351BAF221C009D0D6F /* AddAnimation */ = {
-			isa = PBXGroup;
-			children = (
-				48ED0D361BAF22CC009D0D6F /* addAnimation-01.png */,
-				48ED0D371BAF22CC009D0D6F /* addAnimation-02.png */,
-				48ED0D381BAF22CC009D0D6F /* addAnimation-03.png */,
-				48ED0D391BAF22CC009D0D6F /* addAnimation-04.png */,
-				48ED0D3A1BAF22CC009D0D6F /* addAnimation-05.png */,
-				48ED0D3B1BAF22CC009D0D6F /* addAnimation-06.png */,
-			);
-			name = AddAnimation;
-			sourceTree = "<group>";
-		};
 		5DDCC4F4B91F286431C02C8A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -961,31 +911,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48ED0D401BAF22CC009D0D6F /* addAnimation-05.png in Resources */,
-				485922A81B9C98420056E605 /* splash_logo@2x.png in Resources */,
 				4859229B1B9A61510056E605 /* Login.storyboard in Resources */,
 				484365D91CA1118A0046A2C5 /* Menu.storyboard in Resources */,
 				486F5DFB1B9F874A00BA2A57 /* OpenSans-Semibold.ttf in Resources */,
-				486F5E151BA0908900BA2A57 /* login_logo@2x.png in Resources */,
 				48276A1E1E9D5900004CADB1 /* EventEdit.storyboard in Resources */,
 				4859FCC61B9A4DE4000C1269 /* LaunchScreen.storyboard in Resources */,
 				486F5DF51B9F874A00BA2A57 /* OpenSans-Bold.ttf in Resources */,
 				486F5DF81B9F874A00BA2A57 /* OpenSans-Regular.ttf in Resources */,
-				48ED0D3C1BAF22CC009D0D6F /* addAnimation-01.png in Resources */,
 				48276A201E9D5941004CADB1 /* EventAdd.storyboard in Resources */,
-				48276A181E9D582D004CADB1 /* Celebration.storyboard in Resources */,
-				48ED0D3E1BAF22CC009D0D6F /* addAnimation-03.png in Resources */,
-				48B127AC1BC444FE00061483 /* ThreeTacosDemoPic.png in Resources */,
-				48ED0D411BAF22CC009D0D6F /* addAnimation-06.png in Resources */,
-				48ED0D3D1BAF22CC009D0D6F /* addAnimation-02.png in Resources */,
 				4859FCC31B9A4DE4000C1269 /* Assets.xcassets in Resources */,
-				48ED0D3F1BAF22CC009D0D6F /* addAnimation-04.png in Resources */,
 				48ECF6CE1E96FE18007EE5D3 /* jump-jump-jump-jump.gif in Resources */,
 				48276A1B1E9D589F004CADB1 /* SwitchProfile.storyboard in Resources */,
 				4859FCBE1B9A4DE4000C1269 /* EventView.storyboard in Resources */,
 				48EDC2C91BD99141003049D9 /* OpenSans-Light.ttf in Resources */,
-				48ECF6CC1E96FDD3007EE5D3 /* celebration-animated-dots.gif in Resources */,
-				48B127A81BC444FE00061483 /* applejuicedemopic.png in Resources */,
 				48D056921BDFDD16009D1591 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -994,11 +932,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				48B127AD1BC444FE00061483 /* ThreeTacosDemoPic.png in Resources */,
-				486F5E161BA0908900BA2A57 /* login_logo@2x.png in Resources */,
 				4854202D1BC4790D0020CFE1 /* Assets.xcassets in Resources */,
 				48A7925E1C4C0B39008D2244 /* Transitions between scenes.txt in Resources */,
-				48B127A91BC444FE00061483 /* applejuicedemopic.png in Resources */,
 				48D056931BDFDD16009D1591 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1194,7 +1129,6 @@
 				486F5E2B1BA0DC6700BA2A57 /* NutEvent.swift in Sources */,
 				0334CA161BA8DDFC00013096 /* Activity.swift in Sources */,
 				483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */,
-				48ECF6CA1E96FDBD007EE5D3 /* ConnectToHealthCelebrationViewController.swift in Sources */,
 				4892996B1CB4297B001F24D6 /* NutshellHealthKitConfiguration.swift in Sources */,
 				4872118F1E8DC33200BAD5CE /* ProfileListTableViewCell.swift in Sources */,
 				0334CA1C1BA8DDFC00013096 /* Alarm.swift in Sources */,
@@ -1345,14 +1279,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		48276A161E9D582D004CADB1 /* Celebration.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				48276A171E9D582D004CADB1 /* Base */,
-			);
-			name = Celebration.storyboard;
-			sourceTree = "<group>";
-		};
 		48276A191E9D589F004CADB1 /* SwitchProfile.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

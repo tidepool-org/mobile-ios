@@ -38,6 +38,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // refresh control...
     var refreshControl:UIRefreshControl = UIRefreshControl()
 
+    // first time screens
+    @IBOutlet weak var firstTimeHealthTip: NutshellUIView!
+    
+    
+    
     fileprivate struct NoteInEventListTable {
         var note: BlipNote
         var opened: Bool = false
@@ -196,6 +201,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func sideMenuWillOpen() {
         NSLog("EventList sideMenuWillOpen")
         configureForMenuOpen(true)
+        firstTimeHealthTip.isHidden = true
     }
     
     func sideMenuWillClose() {
@@ -608,9 +614,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         } else if segue.identifier == "segueToSwitchProfile" {
             let _ = segue.destination as! SwitchProfileTableViewController
             APIConnector.connector().trackMetric("Clicked switch profile (Home screen)")
-        }  else if segue.identifier == "segueToCelebrationView" {
-            let _ = segue.destination as! ConnectToHealthCelebrationViewController
-            APIConnector.connector().trackMetric("Showing connect to health celebration (Home screen)")
         } else {
             NSLog("Unprepped segue from eventList \(String(describing: segue.identifier))")
         }
@@ -695,7 +698,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // Show connect to health celebration
         if (EventListViewController.oneShotTestCelebrate || (AppDelegate.shouldShowHealthKitUI() && !UserDefaults.standard.bool(forKey: "ConnectToHealthCelebrationHasBeenShown"))) {
             EventListViewController.oneShotTestCelebrate = false
-            self.performSegue(withIdentifier: "segueToCelebrationView", sender: self)
+            //self.performSegue(withIdentifier: "segueToCelebrationView", sender: self)
+            firstTimeHealthTip.isHidden = false
         }
     }
     

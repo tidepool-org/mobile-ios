@@ -2,16 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "celebration-arc.png",
+      "filename" : "firstTimeHealthIcon.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "celebration-arc@2x.png",
+      "filename" : "firstTimeHealthIcon@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
+      "filename" : "firstTimeHealthIcon@3x.png",
       "scale" : "3x"
     }
   ],
