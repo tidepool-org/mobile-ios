@@ -63,13 +63,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         
         self.title = dataController.currentViewedUser?.fullName ?? ""
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-
-
         // Add a notification for when the database changes
         let moc = dataController.mocForNutEvents()
         let notificationCenter = NotificationCenter.default
@@ -133,7 +126,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
         
         configureRightNavButton()
-        checkNotifyUserOfTestMode()
+
         // periodically check for authentication issues in case we need to force a new login
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         appDelegate?.checkConnection()
@@ -141,21 +134,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         
         // one-time check to show celebrate UI
         celebrateCheck()
-    }
-    
-    // each first time launch of app, let user know we are still in test mode!
-    fileprivate func checkNotifyUserOfTestMode() {
-        if AppDelegate.testMode && !AppDelegate.testModeNotification {
-            AppDelegate.testModeNotification = true
-            let alert = UIAlertController(title: "Test Mode", message: "Nutshell has Test Mode enabled!", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { Void in
-                return
-            }))
-            alert.addAction(UIAlertAction(title: "Turn Off", style: .default, handler: { Void in
-                AppDelegate.testMode = false
-            }))
-            self.present(alert, animated: true, completion: nil)
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -180,6 +158,18 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         NSLog("TODO: figure out connectivity story! Connected: \(connected)")
     }
 
+    fileprivate func networkIsUnreachable(alertUser: Bool) -> Bool {
+        if APIConnector.connector().serviceAvailable() {
+            return false
+        }
+        let alert = UIAlertController(title: "Not Connected to Network", message: "This application requires a network to access the Tidepool service!", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { Void in
+            return
+        }))
+        self.present(alert, animated: true, completion: nil)
+        return true
+    }
+    
     @IBAction func toggleSideMenu(_ sender: AnyObject) {
         APIConnector.connector().trackMetric("Clicked Hamburger (Home Screen)")
         toggleSideMenuView()
@@ -289,6 +279,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     //
     
     @IBAction func navBarRightButtonHandler(_ sender: Any) {
+        if networkIsUnreachable(alertUser: true) {
+            return
+        }
+
         if rightNavConfiguredForAdd {
             performSegue(withIdentifier: "segueToEventAdd", sender: self)
         } else {
@@ -402,6 +396,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
     func editPressed(_ sender: NutshellSimpleUIButton!) {
         NSLog("cell with tag \(sender.tag) was pressed!")
+        
+        if networkIsUnreachable(alertUser: true) {
+            return
+        }
+        
         if let indexPath = sender.cellIndexPath {
             if indexPath.row == 0 {
                 if let note = self.noteForIndexPath(indexPath) {
@@ -957,14 +956,16 @@ extension EventListViewController: UITableViewDelegate {
             let lastRow = 1 + comments.count
             if noteRow == lastRow {
                 guard let addCommentCell = tableView.cellForRow(at: indexPath) as? NoteListAddCommentCell else { return }
-                // configure the cell's uitextview for editing, bring up keyboard,
-                self.currentCommentEditCell = addCommentCell
-                self.currentCommentEditIndexPath = indexPath
-                configureRightNavButton()
-                tableView.beginUpdates()
-                tableView.reloadRows(at: [indexPath], with: .none)
-                tableView.endUpdates()
-                NSLog("Opening add comment for edit!")
+                // configure the cell's uitextview for editing, bring up keyboard, etc.
+                if !networkIsUnreachable(alertUser: true) {
+                    self.currentCommentEditCell = addCommentCell
+                    self.currentCommentEditIndexPath = indexPath
+                    configureRightNavButton()
+                    tableView.beginUpdates()
+                    tableView.reloadRows(at: [indexPath], with: .none)
+                    tableView.endUpdates()
+                    NSLog("Opening add comment for edit!")
+                }
             } else {
                 NSLog("tapped on other comments... close any edit")
                 // clicking on another comment closes up any current comment edit in this section...
@@ -1074,6 +1075,7 @@ extension EventListViewController: UITableViewDataSource {
             if note.userid == dataController.currentUserId {
                 // editButton tag to be indexPath.section so can be used in editPressed notification handling
                 editButton.isHidden = false
+                editButton.tag = indexPath.section
                 editButton.cellIndexPath = indexPath
                 editButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
                 largeHitAreaButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
