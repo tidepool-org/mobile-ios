@@ -24,7 +24,7 @@ class NoteListCommentCell: UITableViewCell {
     @IBOutlet weak var userLabel: NutshellUILabel!
 
     @IBOutlet weak var editButton: NutshellSimpleUIButton!
-    @IBOutlet weak var editButtonLargeHitArea: UIButton!
+    @IBOutlet weak var editButtonLargeHitArea: TPUIButton!
 
     override func awakeFromNib() {
         super.awakeFromNib()

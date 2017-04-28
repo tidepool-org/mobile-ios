@@ -1071,12 +1071,12 @@ extension EventListViewController: UITableViewDataSource {
         let noteOpened = filteredNotes[indexPath.section].opened
         let comments = filteredNotes[indexPath.section].comments
         
-        func configureEdit(note: BlipNote, editButton: NutshellSimpleUIButton, largeHitAreaButton: UIButton) {
+        func configureEdit(note: BlipNote, editButton: NutshellSimpleUIButton, largeHitAreaButton: TPUIButton) {
             if note.userid == dataController.currentUserId {
-                // editButton tag to be indexPath.section so can be used in editPressed notification handling
+                // editButton stores indexPath so can be used in editPressed notification handling
                 editButton.isHidden = false
-                editButton.tag = indexPath.section
                 editButton.cellIndexPath = indexPath
+                largeHitAreaButton.cellIndexPath = indexPath
                 editButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
                 largeHitAreaButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
                 

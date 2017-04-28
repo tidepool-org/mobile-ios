@@ -35,7 +35,7 @@ class NoteListTableViewCell: UITableViewCell, GraphContainerViewDelegate {
     @IBOutlet weak var dateLabelSpacerView: TPIntrinsicSizeUIView!
     
     @IBOutlet weak var editButton: NutshellSimpleUIButton!
-    @IBOutlet weak var editButtonLargeHitArea: UIButton!
+    @IBOutlet weak var editButtonLargeHitArea: TPUIButton!
     
     
     override func awakeFromNib() {

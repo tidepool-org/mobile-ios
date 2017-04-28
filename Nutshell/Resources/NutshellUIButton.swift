@@ -17,16 +17,13 @@ import UIKit
 
 // This intermediate class is used to enable UIButton views in storyboards to have fonts and backgrounds determined by NutshellStyles data.
 
-@IBDesignable class NutshellSimpleUIButton: UIButton {
+@IBDesignable class NutshellSimpleUIButton: TPUIButton {
     
     @IBInspectable var usage: String = "" {
         didSet {
             updateStyling()
         }
     }
-    
-    // for buttons in cells...
-    var cellIndexPath: IndexPath?
     
     fileprivate func updateStyling() {
         if let (font, textColor) = Styles.usageToFontWithColor[usage] {
