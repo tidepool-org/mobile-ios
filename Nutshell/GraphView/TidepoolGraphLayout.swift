@@ -132,7 +132,7 @@ class TidepoolGraphLayout: GraphLayout {
     fileprivate let kGraphBolusBaseOffset: CGFloat = 2.0
     fileprivate let kGraphBasalBaseOffset: CGFloat = 2.0
     fileprivate let kGraphWorkoutBaseOffset: CGFloat = 2.0
-    fileprivate let kGraphBottomEdge: CGFloat = 2.0
+    fileprivate let kGraphBottomEdge: CGFloat = 0.0
     
     //
     // MARK: - Configuration
@@ -144,7 +144,7 @@ class TidepoolGraphLayout: GraphLayout {
         super.configureGraph()
 
         self.headerHeight = 24.0
-        self.footerHeight = 10.0
+        self.footerHeight = 8.0
         self.yAxisLineLeftMargin = 26.0
         self.yAxisLineRightMargin = 10.0
         self.yAxisLineColor = UIColor(hex: 0xe2e4e7)
