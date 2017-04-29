@@ -54,7 +54,7 @@ fileprivate extension UIColor {
         let gradient = CGGradient(colorsSpace: nil, colors: [gradientColor.cgColor, gradientColor.blended(withFraction: 0.5, of: gradientColor2).cgColor, gradientColor2.cgColor] as CFArray, locations: [0, 0.24, 1])!
         
         //// Rectangle Drawing
-        let rectangleRect = CGRect(x: frame.minX, y: frame.minY, width: 375, height: 12)
+        let rectangleRect = frame
         let rectanglePath = UIBezierPath(rect: rectangleRect)
         context.saveGState()
         rectanglePath.addClip()
