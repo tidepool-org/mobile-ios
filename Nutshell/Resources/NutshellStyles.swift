@@ -55,7 +55,6 @@ open class Styles: NSObject {
     static var usageToFontWithColor = [
         // general usage
         "brightBackgroundButton": (largeRegularFont, whiteColor),
-        "darkBackgroundButton": (largeRegularFont, whiteColor),
         "loginButton": (mediumSemiboldFont, whiteColor),
         // login & signup scenes
         "userDataEntry": (mediumRegularFont, blackColor),
@@ -83,8 +82,8 @@ open class Styles: NSObject {
         "sidebarSettingHKMainStatus": (verySmallSemiboldFont, mediumLightGreyColor),
         "sidebarSettingHKMinorStatus": (verySmallRegularFont, mediumLightGreyColor),
         // first time tips
-        "firstTimeTipText": (mediumSmallRegularFont, whiteColor),
-
+        "firstTimeTipText": (mediumSmallSemiboldFont, whiteColor),
+        "darkBackgroundButton": (mediumVerySmallSemiboldFont, whiteColor),
     ]
 
     class func backgroundImageofSize(_ size: CGSize, style: String) -> UIImage? {

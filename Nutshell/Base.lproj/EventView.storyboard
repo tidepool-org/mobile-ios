@@ -508,7 +508,7 @@
                                                         </constraints>
                                                     </imageView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect Health to get your CGM and exercise data to start flowing in." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B4A-qb-qHW" userLabel="firstTimeHealthLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="90" y="40" width="184" height="21"/>
+                                                        <rect key="frame" x="90" y="20" width="184" height="61.5"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
@@ -543,6 +543,130 @@
                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkPurple75Color"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W3p-JG-ig2" userLabel="firstTimeAddNoteTip" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="firstTimeUpArrow" translatesAutoresizingMaskIntoConstraints="NO" id="dWe-oT-pXc">
+                                                <rect key="frame" x="281" y="0.0" width="22" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="22" id="4zz-xP-Kzc"/>
+                                                    <constraint firstAttribute="height" constant="50" id="dfj-ht-OWj"/>
+                                                </constraints>
+                                            </imageView>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PBq-C5-9mp" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="13" y="38" width="294" height="64"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Now, add an event, a meal, or note." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2uq-Ah-EPW" userLabel="firstTimeAddNoteLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="20" y="11.5" width="254" height="41"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="firstTimeTipText"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="64" id="8rS-Qi-ZAX"/>
+                                                    <constraint firstItem="2uq-Ah-EPW" firstAttribute="centerY" secondItem="PBq-C5-9mp" secondAttribute="centerY" id="Ije-aV-2Xk"/>
+                                                    <constraint firstItem="2uq-Ah-EPW" firstAttribute="leading" secondItem="PBq-C5-9mp" secondAttribute="leading" constant="20" id="gLc-Is-tdp"/>
+                                                    <constraint firstAttribute="trailing" secondItem="2uq-Ah-EPW" secondAttribute="trailing" constant="20" id="jMp-Zn-UJX"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightBackground"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.15686274510000001" green="0.098039215690000001" blue="0.27450980390000002" alpha="0.74898330479999997" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="PBq-C5-9mp" firstAttribute="top" secondItem="dWe-oT-pXc" secondAttribute="bottom" constant="-12" id="2iI-hJ-lSh"/>
+                                            <constraint firstItem="PBq-C5-9mp" firstAttribute="leading" secondItem="W3p-JG-ig2" secondAttribute="leading" constant="13" id="C4H-HW-dZE"/>
+                                            <constraint firstAttribute="trailing" secondItem="PBq-C5-9mp" secondAttribute="trailing" constant="13" id="IFS-5R-sMI"/>
+                                            <constraint firstItem="dWe-oT-pXc" firstAttribute="trailing" secondItem="PBq-C5-9mp" secondAttribute="trailing" constant="-4" id="Myt-R7-4mu"/>
+                                            <constraint firstItem="PBq-C5-9mp" firstAttribute="top" secondItem="W3p-JG-ig2" secondAttribute="top" constant="38" id="d8Q-4x-Owl"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkPurple75Color"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dyq-A2-0VW" userLabel="firstTimeNeedUploaderTip">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vAW-Kz-cbZ" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="304" width="320" height="200"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zbf-U4-kna" userLabel="firstTimeNeedUploaderLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="55" y="17" width="210" height="102.5"/>
+                                                        <string key="text">Woo hoo!
+
+Last step, to get pump data, you need the TIdepool Uploader on your computer.</string>
+                                                        <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="firstTimeTipText"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="3q1-r0-4IL">
+                                                        <rect key="frame" x="13" y="145" width="294" height="47"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n2w-Kf-WHE" userLabel="emailALinkButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="145" height="47"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="47" id="dr7-xH-yTd"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="14"/>
+                                                                <state key="normal" title="Email me a link"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackgroundButton"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="emailALinkButtonHandler:" destination="oVB-ry-Lwj" eventType="touchUpInside" id="TQb-3J-NFb"/>
+                                                                </connections>
+                                                            </button>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6QL-Rq-YCV" userLabel="okButton" customClass="NutshellUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="149" y="0.0" width="145" height="47"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="height" constant="47" id="b24-qD-dFN"/>
+                                                                </constraints>
+                                                                <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
+                                                                <state key="normal" title="Ok"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackgroundButton"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="firstTimeNeedUploaderOkButtonHandler:" destination="oVB-ry-Lwj" eventType="touchUpInside" id="GeN-oM-5ev"/>
+                                                                </connections>
+                                                            </button>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="6QL-Rq-YCV" firstAttribute="width" secondItem="n2w-Kf-WHE" secondAttribute="width" id="LMH-VM-tjO"/>
+                                                        </constraints>
+                                                    </stackView>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstItem="zbf-U4-kna" firstAttribute="leading" secondItem="vAW-Kz-cbZ" secondAttribute="leading" constant="55" id="44i-wO-k5J"/>
+                                                    <constraint firstAttribute="trailing" secondItem="3q1-r0-4IL" secondAttribute="trailing" constant="13" id="4qo-hs-hi8"/>
+                                                    <constraint firstAttribute="trailing" secondItem="zbf-U4-kna" secondAttribute="trailing" constant="55" id="9NU-uc-qUQ"/>
+                                                    <constraint firstItem="zbf-U4-kna" firstAttribute="top" secondItem="vAW-Kz-cbZ" secondAttribute="top" constant="17" id="AKJ-Nk-AHX"/>
+                                                    <constraint firstItem="3q1-r0-4IL" firstAttribute="leading" secondItem="vAW-Kz-cbZ" secondAttribute="leading" constant="13" id="G7f-Yf-nTX"/>
+                                                    <constraint firstAttribute="height" constant="200" id="Ibo-Sc-UuY"/>
+                                                    <constraint firstAttribute="bottom" secondItem="3q1-r0-4IL" secondAttribute="bottom" constant="8" id="J1D-Cr-NXr"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightBackground"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="vAW-Kz-cbZ" secondAttribute="trailing" id="J5j-hm-ZkD"/>
+                                            <constraint firstItem="vAW-Kz-cbZ" firstAttribute="leading" secondItem="Dyq-A2-0VW" secondAttribute="leading" id="JcG-rj-n8z"/>
+                                            <constraint firstAttribute="bottom" secondItem="vAW-Kz-cbZ" secondAttribute="bottom" id="wMA-N5-Tl8"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -553,9 +677,17 @@
                                     <constraint firstItem="W4V-dI-wa3" firstAttribute="top" secondItem="Yu7-Gk-FTH" secondAttribute="top" id="7nr-UU-NOq"/>
                                     <constraint firstAttribute="bottom" secondItem="p1Z-R3-s10" secondAttribute="bottom" id="88L-ov-nwA"/>
                                     <constraint firstAttribute="trailing" secondItem="W4V-dI-wa3" secondAttribute="trailing" id="BAS-nG-leJ"/>
+                                    <constraint firstItem="Dyq-A2-0VW" firstAttribute="leading" secondItem="p1Z-R3-s10" secondAttribute="leading" id="CZC-oQ-lgO"/>
+                                    <constraint firstItem="W3p-JG-ig2" firstAttribute="bottom" secondItem="p1Z-R3-s10" secondAttribute="bottom" id="E0N-KN-bKF"/>
+                                    <constraint firstItem="W3p-JG-ig2" firstAttribute="trailing" secondItem="p1Z-R3-s10" secondAttribute="trailing" id="FwO-5p-2Ix"/>
+                                    <constraint firstItem="W3p-JG-ig2" firstAttribute="top" secondItem="p1Z-R3-s10" secondAttribute="top" id="GHH-5G-bt1"/>
                                     <constraint firstItem="p1Z-R3-s10" firstAttribute="top" secondItem="Yu7-Gk-FTH" secondAttribute="top" id="I0e-Zd-0ve"/>
                                     <constraint firstAttribute="trailing" secondItem="p1Z-R3-s10" secondAttribute="trailing" id="IBo-Xv-iRX"/>
+                                    <constraint firstItem="Dyq-A2-0VW" firstAttribute="top" secondItem="p1Z-R3-s10" secondAttribute="top" id="M34-CU-YXj"/>
+                                    <constraint firstItem="Dyq-A2-0VW" firstAttribute="trailing" secondItem="p1Z-R3-s10" secondAttribute="trailing" id="Tyy-RN-39E"/>
+                                    <constraint firstItem="Dyq-A2-0VW" firstAttribute="bottom" secondItem="p1Z-R3-s10" secondAttribute="bottom" id="aSp-IP-xRH"/>
                                     <constraint firstItem="W4V-dI-wa3" firstAttribute="leading" secondItem="Yu7-Gk-FTH" secondAttribute="leading" id="dpW-Dk-QGU"/>
+                                    <constraint firstItem="W3p-JG-ig2" firstAttribute="leading" secondItem="p1Z-R3-s10" secondAttribute="leading" id="em9-xA-Ah8"/>
                                     <constraint firstItem="IgM-HA-v6s" firstAttribute="bottom" secondItem="p1Z-R3-s10" secondAttribute="bottom" id="n58-Mk-c48"/>
                                     <constraint firstItem="IgM-HA-v6s" firstAttribute="leading" secondItem="p1Z-R3-s10" secondAttribute="leading" id="oEA-9q-XkZ"/>
                                     <constraint firstItem="IgM-HA-v6s" firstAttribute="top" secondItem="p1Z-R3-s10" secondAttribute="top" id="wqa-fp-lqO"/>
@@ -584,7 +716,9 @@
                     <connections>
                         <outlet property="coverView" destination="p1Z-R3-s10" id="x9s-ca-Xdd"/>
                         <outlet property="eventListSceneContainer" destination="Yu7-Gk-FTH" id="8kb-NH-Nyl"/>
+                        <outlet property="firstTimeAddNoteTip" destination="W3p-JG-ig2" id="aHY-23-egq"/>
                         <outlet property="firstTimeHealthTip" destination="IgM-HA-v6s" id="9BT-Jn-LAo"/>
+                        <outlet property="firstTimeNeedUploaderTip" destination="Dyq-A2-0VW" id="rYz-ER-blp"/>
                         <outlet property="menuButton" destination="71N-mf-LhE" id="YjU-Sn-W49"/>
                         <outlet property="navItem" destination="h4z-iC-Yiv" id="25V-cj-lgX"/>
                         <outlet property="searchPlaceholderLabel" destination="JwL-dD-CDl" id="C9Z-6p-dP8"/>

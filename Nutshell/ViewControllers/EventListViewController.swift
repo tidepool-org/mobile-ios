@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2015, Tidepool Project
+* Copyright (c) 2017, Tidepool Project
 *
 * This program is free software; you can redistribute it and/or modify it under
 * the terms of the associated License, which is identical to the BSD 2-Clause
@@ -15,9 +15,10 @@
 
 import UIKit
 import CoreData
+import MessageUI
 import CocoaLumberjack
 
-class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPIWatcher, UIScrollViewDelegate, UITextViewDelegate {
+class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPIWatcher, UIScrollViewDelegate, UITextViewDelegate, MFMailComposeViewControllerDelegate {
 
     
     @IBOutlet weak var eventListSceneContainer: UIControl!
@@ -40,8 +41,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
     // first time screens
     @IBOutlet weak var firstTimeHealthTip: NutshellUIView!
-    
-    
+    @IBOutlet weak var firstTimeAddNoteTip: NutshellUIView!
+    @IBOutlet weak var firstTimeNeedUploaderTip: UIView!
     
     fileprivate struct NoteInEventListTable {
         var note: BlipNote
@@ -137,8 +138,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         appDelegate?.checkConnection()
         APIConnector.connector().trackMetric("Viewed Home Screen (Home Screen)")
         
-        // one-time check to show celebrate UI
-        celebrateCheck()
+        // one-time check to show first time healthKit connect tip...
+        firstTimeHealthKitConnectCheck()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -201,7 +202,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func sideMenuWillOpen() {
         NSLog("EventList sideMenuWillOpen")
         configureForMenuOpen(true)
-        firstTimeHealthTip.isHidden = true
+        // one-time check for health tip screen!
+        if !firstTimeHealthTip.isHidden {
+            firstTimeHealthTip.isHidden = true
+            checkDisplayFirstTimeScreens()
+        }
     }
     
     func sideMenuWillClose() {
@@ -291,6 +296,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
         if rightNavConfiguredForAdd {
             performSegue(withIdentifier: "segueToEventAdd", sender: self)
+            if !firstTimeAddNoteTip.isHidden {
+                firstTimeAddNoteTip.isHidden = true
+            }
         } else {
             // post new comment!
             if let currentEditCell = currentCommentEditCell, let currentEditIndex = currentCommentEditIndexPath {
@@ -428,6 +436,12 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func loadingNotes(_ loading: Bool) {
         NSLog("NoteAPIWatcher.loadingNotes: \(loading)")
         loadingNotes = loading
+        if loadingNotes {
+            return
+        }
+        
+        // done loading, won't call addNotes if there are no notes, so have to splice in here for first time dialogs...
+        checkDisplayFirstTimeScreens()
     }
     
     func endRefresh() {
@@ -509,6 +523,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             if let deletedNotePath = self.indexPathForNoteId(deletedNote.id) {
                 self.sortedNotes.remove(at: deletedNotePath.section)
                 sortNotesAndReload()
+                // in case we went to zero...
+                checkDisplayFirstTimeScreens()
             }
         } else {
             // deleted comment, only need to refetch comments for this note...
@@ -694,25 +710,101 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     
     // Note: to test celebrate, change the following to true, and it will come up once on each app launch...
     static var oneShotTestCelebrate = false
-    private func celebrateCheck() {
+    private func firstTimeHealthKitConnectCheck() {
         // Show connect to health celebration
-        if (EventListViewController.oneShotTestCelebrate || (AppDelegate.shouldShowHealthKitUI() && !UserDefaults.standard.bool(forKey: "ConnectToHealthCelebrationHasBeenShown"))) {
+        if (EventListViewController.oneShotTestCelebrate || (AppDelegate.shouldShowHealthKitUI() && oneShotIncompleteCheck("ConnectToHealthCelebrationHasBeenShown"))) {
             EventListViewController.oneShotTestCelebrate = false
-            //self.performSegue(withIdentifier: "segueToCelebrationView", sender: self)
+            // One-shot finished!
+            oneShotCompleted("ConnectToHealthCelebrationHasBeenShown")
             firstTimeHealthTip.isHidden = false
         }
     }
     
-    @IBAction func unwindFromCelebrate(_ sender: UIStoryboardSegue) {
-        NSLog("EventList: \(#function)")
-        // Celebration finished!
-        UserDefaults.standard.set(true, forKey: "ConnectToHealthCelebrationHasBeenShown")
-        UserDefaults.standard.synchronize()
+    private func checkDisplayFirstTimeScreens() {
+        if loadingNotes {
+            // wait until note loading is completed (for firstTimeHealthKitConnectCheck path)
+            NSLog("\(#function) loading notes...")
+            return
+        }
+        if self.sortedNotes.count == 0 {
+            if firstTimeHealthTip.isHidden {
+                firstTimeAddNoteTip.isHidden = false
+            }
+        } else if self.sortedNotes.count == 1 {
+            if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
+                firstTimeNeedUploaderTip.isHidden = false
+                oneShotCompleted("NeedUploaderTipHasBeenShown")
+            }
+        }
     }
     
+    private func oneShotIncompleteCheck(_ oneShotId: String) -> Bool {
+        return !UserDefaults.standard.bool(forKey: oneShotId)
+    }
 
+    private func oneShotCompleted(_ oneShotId: String) {
+        UserDefaults.standard.set(true, forKey: oneShotId)
+    }
+    
+    @IBAction func emailALinkButtonHandler(_ sender: Any) {
+        
+        var onSimulator = false
+        #if (TARGET_IPHONE_SIMULATOR)
+            onSimulator = true
+        #endif
+
+        if !MFMailComposeViewController.canSendMail() || onSimulator {
+            NSLog("Mail services are not available")
+            let alertController = UIAlertController(title: "Error", message: "You must set up a mail service account in order to email a log!", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
+        
+        let emailVC = MFMailComposeViewController()
+        emailVC.mailComposeDelegate = self
+        
+        // Configure the fields of the interface.
+        emailVC.setSubject("How to set up the Tidepool Uploader")
+        let messageText = "Please go to the following link on your computer to learn about setting up the Tidepool Uploader: http://support.tidepool.org/article/6-how-to-install-or-update-the-tidepool-uploader-gen"
+        emailVC.setMessageBody(messageText, isHTML: false)
+        // Present the view controller modally.
+        self.present(emailVC, animated: true, completion: nil)
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController,
+                               didFinishWith result: MFMailComposeResult, error: Error?) {
+        // Check the result or perform other tasks.
+        switch result
+        {
+        case .cancelled:
+            NSLog("Mail cancelled")
+        case .saved:
+            NSLog("Mail saved")
+        case .sent:
+            NSLog("Mail sent")
+        case .failed:
+            if let error = error {
+                NSLog("Mail sent failure: \(error.localizedDescription)")
+            } else {
+                NSLog("Mail sent failure!")
+            }
+        }
+        // Dismiss the mail compose view controller.
+        controller.dismiss(animated: true, completion: nil)
+    }
+
+    @IBAction func firstTimeNeedUploaderOkButtonHandler(_ sender: Any) {
+        // TODO: metric?
+        firstTimeNeedUploaderTip.isHidden = true
+    }
+    
     @IBAction func howToUploadButtonHandler(_ sender: Any) {
-        NSLog("TODO!")
+        // TODO: add metric?
+        let url = URL(string: "http://support.tidepool.org/article/11-how-to-use-the-tidepool-uploader")
+        if let url = url {
+            UIApplication.shared.openURL(url)
+        }
     }
 
     //
