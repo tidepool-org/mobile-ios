@@ -123,6 +123,7 @@
 		4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */; };
 		4837CC691BA7394E00BA2CDE /* NutshellUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC681BA7394E00BA2CDE /* NutshellUIButton.swift */; };
 		4837CC6B1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */; };
+		4839FD231EB7E16F003E5BF7 /* NoteListGraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4839FD221EB7E16F003E5BF7 /* NoteListGraphCell.swift */; };
 		483E3C361B9F4A6300DA49E7 /* BaseUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */; };
 		483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */; };
 		484365C91C9DB3960046A2C5 /* HealthKitDataPusher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484365C81C9DB3950046A2C5 /* HealthKitDataPusher.swift */; };
@@ -319,6 +320,7 @@
 		4837CC661BA730F000BA2CDE /* NutshellUILabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUILabel.swift; path = Resources/NutshellUILabel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4837CC681BA7394E00BA2CDE /* NutshellUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = NutshellUIButton.swift; path = Resources/NutshellUIButton.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuAccountSettingsViewController.swift; path = ViewControllers/MenuAccountSettingsViewController.swift; sourceTree = "<group>"; };
+		4839FD221EB7E16F003E5BF7 /* NoteListGraphCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListGraphCell.swift; path = ViewControllers/NoteListGraphCell.swift; sourceTree = "<group>"; };
 		483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUIViewController.swift; path = ViewControllers/BaseUIViewController.swift; sourceTree = "<group>"; };
 		483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewController.swift; path = ViewControllers/BaseUITableViewController.swift; sourceTree = "<group>"; };
 		484365C81C9DB3950046A2C5 /* HealthKitDataPusher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataPusher.swift; path = DataModel/HealthKit/HealthKitDataPusher.swift; sourceTree = "<group>"; };
@@ -561,6 +563,7 @@
 				48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */,
 				48DB6CFE1E8965DB00C5F221 /* EventDetailViewController.swift */,
 				48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */,
+				4839FD221EB7E16F003E5BF7 /* NoteListGraphCell.swift */,
 				48EC25771EA9526A00607F85 /* NoteListAddCommentCell.swift */,
 				482C89B31EAAD22800EB88C9 /* NoteListCommentCell.swift */,
 				48B7C7E81E8988160069B6DF /* NoteDetailTableViewCell.swift */,
@@ -1096,6 +1099,7 @@
 				0334CA5E1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift in Sources */,
 				0334CA821BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift in Sources */,
 				4806E33A1E995A350024A497 /* TPMenuButton.swift in Sources */,
+				4839FD231EB7E16F003E5BF7 /* NoteListGraphCell.swift in Sources */,
 				483E3C361B9F4A6300DA49E7 /* BaseUIViewController.swift in Sources */,
 				0334CA7C1BA8DDFC00013096 /* Upload+CoreDataProperties.swift in Sources */,
 				0334CA3A1BA8DDFC00013096 /* ContinuousGlucose.swift in Sources */,

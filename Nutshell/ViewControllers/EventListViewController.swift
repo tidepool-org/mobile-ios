@@ -50,6 +50,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         var comments: [BlipNote] = []
     }
 
+
     // All notes, kept sorted chronologically. Second tuple is non-nil count of comments if note is "open".
     fileprivate var sortedNotes: [NoteInEventListTable] = []
     fileprivate var filteredNotes: [NoteInEventListTable] = []
@@ -485,16 +486,16 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                     if startCommentCount != comments.count {
                         // first delete any current comment rows
                         var deletedRows: [IndexPath] = []
-                        // need to also delete row 1 (add comment) since it will move to last row...
-                        for i in 1...startCommentCount+1 {
-                            deletedRows.append(IndexPath(row: i, section: notePath.section))
+                        // need to also delete row 2 (add comment) since it will move to last row...
+                        for i in 0..<startCommentCount+1 {
+                            deletedRows.append(IndexPath(row: kFirstCommentRow+i, section: notePath.section))
                         }
                         tableView.deleteRows(at: deletedRows, with: .automatic)
                         
                         // next add any we got with this fetch, plus one for the "add comment" row.
                         var addedRows: [IndexPath] = []
-                        for i in 1...comments.count+1 {
-                            addedRows.append(IndexPath(row: i, section: notePath.section))
+                        for i in 0..<comments.count+1 {
+                            addedRows.append(IndexPath(row: kFirstCommentRow+i, section: notePath.section))
                         }
                         tableView.insertRows(at: addedRows, with: .automatic)
                     }
@@ -569,7 +570,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                 var comments = filteredNotes[noteIndex].comments
                 for i in 0..<comments.count {
                     if comments[i].id == originalNote.id {
-                        tableView.reloadRows(at: [IndexPath(row: i+1, section: noteIndex)], with: .automatic)
+                        tableView.reloadRows(at: [IndexPath(row: i+kFirstCommentRow, section: noteIndex)], with: .automatic)
                         break
                     }
                 }
@@ -899,8 +900,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         if graphNeedsUpdate {
             graphNeedsUpdate = false
             for cell in tableView.visibleCells {
-                guard let expandoCell = cell as? NoteListTableViewCell else { continue }
-                expandoCell.updateGraph()
+                guard let graphCell = cell as? NoteListGraphCell else { continue }
+                graphCell.updateGraph()
             }
         }
     }
@@ -1016,8 +1017,21 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
     
+    //
+    // MARK: - Table Misc
+    //
+    
+    fileprivate let kNoteRow: Int = 0
+    fileprivate let kGraphRow: Int = 1
+    fileprivate let kPreCommentRows: Int = 2
+    fileprivate let kDefaultAddCommentRow: Int = 2 // when there are no comments!
+    fileprivate let kFirstCommentRow: Int = 2
+    
+    fileprivate func addCommentRow(commentCount: Int) -> Int {
+        return kPreCommentRows + commentCount
+    }
+    
 }
-
 
 //
 // MARK: - Table view delegate
@@ -1045,12 +1059,11 @@ extension EventListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
  
         let noteSection = indexPath.section
-        let noteRow = indexPath.row
+        let row = indexPath.row
         let comments = filteredNotes[indexPath.section].comments
         
-        if noteRow > 0 {
-            let lastRow = 1 + comments.count
-            if noteRow == lastRow {
+        if row > kNoteRow {
+            if row == addCommentRow(commentCount: comments.count) {
                 guard let addCommentCell = tableView.cellForRow(at: indexPath) as? NoteListAddCommentCell else { return }
                 // configure the cell's uitextview for editing, bring up keyboard, etc.
                 if !networkIsUnreachable(alertUser: true) {
@@ -1063,7 +1076,7 @@ extension EventListViewController: UITableViewDelegate {
                     NSLog("Opening add comment for edit!")
                 }
             } else {
-                NSLog("tapped on other comments... close any edit")
+                NSLog("tapped on graph or other comments... close any edit")
                 // clicking on another comment closes up any current comment edit in this section...
                 if let currentEdit = currentCommentEditIndexPath {
                     if currentEdit.section == indexPath.section {
@@ -1085,45 +1098,38 @@ extension EventListViewController: UITableViewDelegate {
             clearCurrentComment()
         }
         
-        guard let expandoCell = tableView.cellForRow(at: indexPath) as? NoteListTableViewCell else { return }
-        let openGraph = !expandoCell.expanded
-        if !openGraph {
-            expandoCell.removeGraphView()
-            expandoCell.setSelected(false, animated: false)
-        }
-        
-        expandoCell.openGraphView(!expandoCell.expanded)
-        NSLog("setting section \(noteSection) expanded to: \(expandoCell.expanded)")
-        
-        let existingCommentRowCount = filteredNotes[indexPath.section].comments.count
-        filteredNotes[noteSection].opened = openGraph ? true : false
+        guard let noteCell = tableView.cellForRow(at: indexPath) as? NoteListTableViewCell else { return }
+        noteCell.setSelected(false, animated: false)
+        let openNote = !filteredNotes[noteSection].opened
+        filteredNotes[noteSection].opened = openNote
         
         tableView.beginUpdates()
-        if openGraph {
-            expandoCell.separatorView.isHidden = true
-            // always add a row for the "add comment" button - not actually at row 1 if there are comments!
-            tableView.insertRows(at: [IndexPath(row: 1, section: noteSection)], with: .automatic)
+        if openNote {
+            noteCell.separatorView.isHidden = true
+            // always add rows for the graph and for the "add comment" button - not actually at row 2 if there are comments!
+            tableView.insertRows(at: [IndexPath(row: kGraphRow, section: noteSection), IndexPath(row: kDefaultAddCommentRow, section: noteSection)], with: .automatic)
             // add rows for each comment...
-            if existingCommentRowCount > 0 {
+            if comments.count > 0 {
                 var addedRows: [IndexPath] = []
-                for i in 1...existingCommentRowCount {
-                    addedRows.append(IndexPath(row: i+1, section: noteSection))
+                for i in 0..<comments.count {
+                    addedRows.append(IndexPath(row: i+kFirstCommentRow+1, section: noteSection))
                 }
                 tableView.insertRows(at: addedRows, with: .automatic)
             }
         } else {
-            expandoCell.separatorView.isHidden = false
+            noteCell.separatorView.isHidden = false
             var commentRows: [IndexPath] = []
-            // include +1 for "add comment" row...
-            for i in 1...existingCommentRowCount+1 {
-                commentRows.append(IndexPath(row: i, section: noteSection))
+            // include +2 for graph row and "add comment" row...
+            let deleteRowCount = 2 + comments.count
+            for i in 0..<deleteRowCount {
+                // delete all rows except the first!
+                commentRows.append(IndexPath(row: i+1, section: noteSection))
             }
             tableView.deleteRows(at: commentRows, with: .automatic)
         }
         tableView.endUpdates()
         
-        if openGraph {
-            expandoCell.configureGraphContainer()
+        if openNote {
             // each time we open a cell, try a fetch
             // TODO: may want to skip fetch if we've just done one! Note that comments, like notes, are cached in this controller in ram and not persisted...
             let note = filteredNotes[noteSection].note
@@ -1131,7 +1137,6 @@ extension EventListViewController: UITableViewDelegate {
             APIConnector.connector().getMessageThreadForNote(self, messageId: note.id)
         }
     }
-    
 }
 
 
@@ -1144,18 +1149,18 @@ extension EventListViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return filteredNotes.count
     }
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if filteredNotes[section].opened {
-            // for opened notes, one row per comment, one for add comment, one for note...
+            // for opened notes, one row for note, one row for graph, one row per comment, one for add comment
             let commentCount = filteredNotes[section].comments.count
-            return commentCount + 2
+            return commentCount + 3
         } else {
             // only 1 row for closed up notes...
             return 1
         }
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if (indexPath.section > filteredNotes.count) {
@@ -1166,6 +1171,7 @@ extension EventListViewController: UITableViewDataSource {
         let note = filteredNotes[indexPath.section].note
         let noteOpened = filteredNotes[indexPath.section].opened
         let comments = filteredNotes[indexPath.section].comments
+        let row = indexPath.row
         
         func configureEdit(note: BlipNote, editButton: NutshellSimpleUIButton, largeHitAreaButton: TPUIButton) {
             if note.userid == dataController.currentUserId {
@@ -1180,77 +1186,49 @@ extension EventListViewController: UITableViewDataSource {
                 editButton.isHidden = true
             }
         }
- 
-        // hide separator if note is "open", and show graph...
-        func checkAndOpenGraph(_ cell: NoteListTableViewCell) {
-            if noteOpened {
-                cell.separatorView.isHidden = true
-                cell.openGraphView(true)
-                cell.configureGraphContainer()
-            } else {
-                cell.separatorView.isHidden = false
-            }
-        }
-
-        if indexPath.row == 0 {
+        
+        if row == kNoteRow {
             let group = dataController.currentViewedUser!
             let cellId = "noteListCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCell
             cell.configureCell(note, group: group)
             configureEdit(note: note, editButton: cell.editButton, largeHitAreaButton: cell.editButtonLargeHitArea)
-            checkAndOpenGraph(cell)
+            cell.separatorView.isHidden = noteOpened
             return cell
-        } else {
-            let lastRow = 1 + comments.count
-            if indexPath.row == lastRow {
-                // Last row is add comment...
-                let cellId = "addCommentCell"
-                let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListAddCommentCell
-                // need to get from text view back to cell!
-                cell.addCommentTextView.tag = indexPath.section
-                var configureForEdit = false
-                if let currentEditPath = self.currentCommentEditIndexPath {
-                    if currentEditPath == indexPath {
-                        self.currentCommentEditCell = cell
-                        configureForEdit = true
-                    }
-                }
-                cell.configureCellForEdit(configureForEdit, delegate: self)
-                return cell
-            } else {
-                // Other rows are comment rows
-                if indexPath.row <= comments.count {
-                    let comment = comments[indexPath.row-1]
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "noteListCommentCell", for: indexPath) as! NoteListCommentCell
-                    cell.configureCell(comment)
-                    configureEdit(note: comment, editButton: cell.editButton, largeHitAreaButton: cell.editButtonLargeHitArea)
-                    return cell
-                } else {
-                    DDLogError("No comment at cellForRowAt \(indexPath)")
-                    return UITableViewCell()
+        } else if row == kGraphRow {
+            let cellId = "noteListGraphCell"
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListGraphCell
+            cell.configureCell(note)
+            cell.configureGraphContainer()
+            return cell
+        } else if row == addCommentRow(commentCount: comments.count) {
+            // Last row is add comment...
+            let cellId = "addCommentCell"
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListAddCommentCell
+            // need to get from text view back to cell!
+            cell.addCommentTextView.tag = indexPath.section
+            var configureForEdit = false
+            if let currentEditPath = self.currentCommentEditIndexPath {
+                if currentEditPath == indexPath {
+                    self.currentCommentEditCell = cell
+                    configureForEdit = true
                 }
             }
-         }
+            cell.configureCellForEdit(configureForEdit, delegate: self)
+            return cell
+        } else {
+            // Other rows are comment rows
+            if row < kFirstCommentRow + comments.count {
+                let comment = comments[row-kFirstCommentRow]
+                let cell = tableView.dequeueReusableCell(withIdentifier: "noteListCommentCell", for: indexPath) as! NoteListCommentCell
+                cell.configureCell(comment)
+                configureEdit(note: comment, editButton: cell.editButton, largeHitAreaButton: cell.editButtonLargeHitArea)
+                return cell
+            } else {
+                DDLogError("No comment at cellForRowAt \(indexPath)")
+                return UITableViewCell()
+            }
+        }
     }
-    
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
 }
+
