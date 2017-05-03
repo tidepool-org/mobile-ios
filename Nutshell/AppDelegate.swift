@@ -17,6 +17,7 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 import HealthKit
+import Bugsee
 
 var fileLogger: DDFileLogger!
 
@@ -38,6 +39,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        let logger = BugseeLogger.sharedInstance() as? DDLogger
+        DDLog.add(logger)
+
+        // Only enable Bugsee for TestFlight betas and debug builds, not for iTunes App Store releases (at least for now)
+        let isRunningTestFlightBeta = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+        if isRunningTestFlightBeta {
+            Bugsee.launch(token:"d3170420-a6f0-4db3-970c-c4c571e5d31a")
+        }
+
         DDLogVerbose("trace")
 
         // Override point for customization after application launch.
