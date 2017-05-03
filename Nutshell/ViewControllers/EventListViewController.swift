@@ -1198,6 +1198,8 @@ extension EventListViewController: UITableViewDataSource {
         } else if row == kGraphRow {
             let cellId = "noteListGraphCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListGraphCell
+            // graph does not have constraints, and since the cell hasn't been added to the parent table yet, size is storyboard size...
+            cell.bounds.size.width = tableView.bounds.width
             cell.configureCell(note)
             cell.configureGraphContainer()
             return cell

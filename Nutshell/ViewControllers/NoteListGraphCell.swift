@@ -63,13 +63,13 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     }
     
     func configureGraphContainer() {
-        NSLog("EventListVC: configureGraphContainer")
+        NSLog("NoteListGraphCell: configureGraphContainer")
         removeGraphView()
         if let note = note {
-            NSLog("Configuring graph for note id: \(note.id)")
             // TODO: assume all notes created in current timezone?
             let tzOffset = NSCalendar.current.timeZone.secondsFromGMT()
-            var graphFrame = dataVizView.bounds
+            var graphFrame = self.bounds
+            NSLog("Configuring graph for note id: \(note.id), frame: \(graphFrame)")
             graphFrame.size.height = kGraphHeight
             graphContainerView = TidepoolGraphView.init(frame: graphFrame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: tzOffset)
             if let graphContainerView = graphContainerView {
