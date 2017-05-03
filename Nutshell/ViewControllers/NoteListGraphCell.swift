@@ -22,7 +22,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     var note: BlipNote?
     let kGraphHeight: CGFloat = 200.0
     
-    @IBOutlet weak var dataVizView: NutshellUIView!
+    @IBOutlet weak var dataVizView: TPIntrinsicSizeUIView!
     @IBOutlet weak var loadingAnimationView: UIView!
     @IBOutlet weak var imageContainer: UIView!
     
