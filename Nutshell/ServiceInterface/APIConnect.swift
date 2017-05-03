@@ -268,8 +268,8 @@ class APIConnector {
         }
         
         let nextMetric = metricsCache.removeFirst()
-        let endpoint = "metrics/thisuser/nutshell-" + nextMetric
-        let parameters = ["source": "nutshell", "sourceVersion": UIApplication.appVersion()]
+        let endpoint = "metrics/thisuser/tidepool-" + nextMetric
+        let parameters = ["source": "tidepool", "sourceVersion": UIApplication.appVersion()]
         metricSendInProgress = true
         sendRequest(.get, endpoint: endpoint, parameters: parameters as [String : AnyObject]?).responseJSON { response in
             self.metricSendInProgress = false
@@ -680,7 +680,7 @@ class APIConnector {
                 let notification = Notification(name: Notification.Name(rawValue: "doneFetching"), object: nil)
                 NotificationCenter.default.post(notification)
             } else {
-                DDLogError("No notes retrieved - could not parse response")
+                DDLogError("No comments retrieved - could not parse response")
                 self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
             }
         }
