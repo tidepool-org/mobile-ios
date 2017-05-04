@@ -300,7 +300,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             if !firstTimeAddNoteTip.isHidden {
                 firstTimeAddNoteTip.isHidden = true
             }
-        } else {
+        }
             // post new comment!
             if let currentEditCell = currentCommentEditCell, let currentEditIndex = currentCommentEditIndexPath {
                 if let note = noteForIndexPath(currentEditIndex) {
@@ -320,22 +320,15 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                     }
                 }
             }
-        }
     }
     
     fileprivate var rightNavConfiguredForAdd: Bool = true
     fileprivate func configureRightNavButton() {
-        let forAdd: Bool = currentCommentEditCell == nil
-        if forAdd == rightNavConfiguredForAdd {
+        if rightNavConfiguredForAdd {
             return
         }
-        rightNavConfiguredForAdd = forAdd
-        var newBarItem: UIBarButtonItem
-        if forAdd {
-            newBarItem = UIBarButtonItem(image: UIImage(named:"add-button"), style: .plain, target: self, action: #selector(EventListViewController.navBarRightButtonHandler(_:)))
-        } else {
-            newBarItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(EventListViewController.navBarRightButtonHandler(_:)))
-        }
+        rightNavConfiguredForAdd = true
+        let newBarItem = UIBarButtonItem(image: UIImage(named:"add-button"), style: .plain, target: self, action: #selector(EventListViewController.navBarRightButtonHandler(_:)))
         newBarItem.tintColor = Styles.brightBlueColor
         navItem.rightBarButtonItem = newBarItem
     }
@@ -669,8 +662,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
     // Back button from add comment.
     @IBAction func doneAddComment(_ segue: UIStoryboardSegue) {
-        
-        
+        if let commentEditVC = segue.source as? EditCommentViewController {
+            if let newNote = commentEditVC.newComment {
+                APIConnector.connector().doPostWithNote(self, note: newNote)
+                // will be called back at addComments
+                clearCurrentComment()
+            }
+        }
     }
     
     // Multiple VC's on the navigation stack return all the way back to this initial VC via this segue, when nut events go away due to deletion, for test purposes, etc.

@@ -45,7 +45,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = dataController.currentViewedUser?.fullName ?? ""
+        //self.title = dataController.currentViewedUser?.fullName ?? ""
         
         // Add a notification for when the database changes
         let notificationCenter = NotificationCenter.default
@@ -148,33 +148,6 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     }
     
     //
-    // MARK: - Nav Bar right button handling
-    //
-    
-    @IBAction func postButtonHandler(_ sender: Any) {
-        if networkIsUnreachable(alertUser: true) {
-            return
-        }
-
-        // post new comment!
-        if let currentEditCell = currentCommentEditCell {
-            if let note = self.note {
-                let commentText = currentEditCell.addCommentTextView.text
-                if commentText?.isEmpty == false {
-                    let newNote = BlipNote()
-                    newNote.user = dataController.currentLoggedInUser!
-                    newNote.groupid = note.groupid
-                    newNote.messagetext = commentText!
-                    newNote.parentmessage = note.id
-                    newNote.timestamp = Date()
-                    newComment = newNote
-                    // TODO: segue back to caller!
-                }
-            }
-        }
-    }
-    
-    //
     // MARK: - Notes methods
     //
     
@@ -201,7 +174,6 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         super.prepare(for: segue, sender: sender)
     }
     
-    
     /// Works with graphDataChanged to ensure graph is up-to-date after notification of database changes whether this VC is in the foreground or background.
     fileprivate func checkUpdateGraph() {
         NSLog("\(#function)")
@@ -214,6 +186,33 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         }
     }
 
+    @IBAction func backButtonHandler(_ sender: Any) {
+        performSegue(withIdentifier: "unwindFromEditComment", sender: self)
+    }
+    
+    @IBAction func postButtonHandler(_ sender: Any) {
+        if networkIsUnreachable(alertUser: true) {
+            return
+        }
+        
+        // post new comment!
+        if let currentEditCell = currentCommentEditCell {
+            if let note = self.note {
+                let commentText = currentEditCell.addCommentTextView.text
+                if commentText?.isEmpty == false {
+                    let newNote = BlipNote()
+                    newNote.user = dataController.currentLoggedInUser!
+                    newNote.groupid = note.groupid
+                    newNote.messagetext = commentText!
+                    newNote.parentmessage = note.id
+                    newNote.timestamp = Date()
+                    newComment = newNote
+                    performSegue(withIdentifier: "unwindFromEditComment", sender: self)
+                }
+            }
+        }
+    }
+    
     //
     // MARK: - Graph support
     //
