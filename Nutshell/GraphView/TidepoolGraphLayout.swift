@@ -34,7 +34,10 @@ class TidepoolGraphLayout: GraphLayout {
         let graphTI = cellTI * TimeInterval(numberOfTiles)
         let startTime = mainEventTime.addingTimeInterval(-graphTI/2.0)
         super.init(viewSize: viewSize, startTime: startTime, timeIntervalPerTile: cellTI, numberOfTiles: numberOfTiles, tilesInView: 1, tzOffsetSecs: tzOffsetSecs)
-    }
+
+        self.yAxisValuesWithLines = displayGridLines ? [80, 180] : []
+        self.yAxisValuesWithLabels = [40, 80, 180, 300]
+}
 
     //
     // MARK: - Overrides for graph customization
@@ -81,6 +84,22 @@ class TidepoolGraphLayout: GraphLayout {
     // MARK: - Configuration vars
     //
 
+    func setLowAndHighBGBounds(low: Int?, high: Int?) {
+        if let low = low, let high = high {
+            NSLog("\(#function), low: \(low), high: \(high)")
+            highBoundary = CGFloat(high)
+            lowBoundary = CGFloat(low)
+            self.yAxisValuesWithLines = displayGridLines ? [low, high] : []
+            // a bit of a hack to avoid numbers running into each other...
+            if low - 40 >= 40 {
+                self.yAxisValuesWithLabels = [40, low, high, 300]
+            } else {
+                self.yAxisValuesWithLabels = [low, high, 300]
+            }
+            
+        }
+    }
+    
     //
     // Blood glucose data (cbg and smbg)
     //
@@ -89,8 +108,8 @@ class TidepoolGraphLayout: GraphLayout {
     let kGlucoseMaxValue: CGFloat = 340.0
     let kGlucoseRange: CGFloat = 340.0
     let kGlucoseConversionToMgDl: CGFloat = 18.0
-    let highBoundary: CGFloat = 180.0
-    let lowBoundary: CGFloat = 80.0
+    var highBoundary: CGFloat = 180.0
+    var lowBoundary: CGFloat = 80.0
     // Colors
     let highColor = Styles.purpleColor
     let targetColor = Styles.greenColor
@@ -149,8 +168,6 @@ class TidepoolGraphLayout: GraphLayout {
         self.yAxisLineRightMargin = 10.0
         self.yAxisLineColor = UIColor(hex: 0xe2e4e7)
         self.backgroundColor = UIColor(hex: 0xf6f6f6)
-        self.yAxisValuesWithLines = displayGridLines ? [80, 180] : []
-        self.yAxisValuesWithLabels = [40, 80, 180, 300]
     
         self.axesLabelTextColor = Styles.alt2DarkGreyColor
         self.axesLabelTextFont = Styles.smallRegularFont

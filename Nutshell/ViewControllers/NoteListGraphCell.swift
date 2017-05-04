@@ -62,7 +62,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
         noDataView.isHidden = true
     }
     
-    func configureGraphContainer() {
+    func configureGraphContainer(lowBGBounds: Int? = nil, highBGBounds: Int? = nil) {
         NSLog("NoteListGraphCell: configureGraphContainer")
         removeGraphView()
         if let note = note {
@@ -71,7 +71,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
             var graphFrame = self.bounds
             NSLog("Configuring graph for note id: \(note.id), frame: \(graphFrame)")
             graphFrame.size.height = kGraphHeight
-            graphContainerView = TidepoolGraphView.init(frame: graphFrame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: tzOffset)
+            graphContainerView = TidepoolGraphView.init(frame: graphFrame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: tzOffset, lowBGBounds: lowBGBounds, highBGBounds: highBGBounds)
             if let graphContainerView = graphContainerView {
                 // while loading, and in between selections, put up loading view...
                 graphContainerView.configureGraph()

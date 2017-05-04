@@ -234,6 +234,24 @@ class APIConnector {
         }
     }
 
+    func fetchUserSettings(_ userId: String, _ completion: @escaping (Result<JSON>) -> (Void)) {
+        // Set our endpoint for the user profile
+        // format is like: https://api.tidepool.org/metadata/f934a287c4/settings
+        let endpoint = "metadata/" + userId + "/settings"
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        sendRequest(.get, endpoint: endpoint).responseJSON { response in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            if ( response.result.isSuccess ) {
+                let json = JSON(response.result.value!)
+                completion(Result.success(json))
+            } else {
+                // Failure
+                completion(Result.failure(response.result.error!))
+            }
+        }
+    }
+    
+
 // TODO: figure out how to process the JSON coming back into an array of keys
 //    func getAllViewableUsers(_ completion: @escaping (Result<JSON>) -> (Void)) {
 //        // Set our endpoint for the user profile

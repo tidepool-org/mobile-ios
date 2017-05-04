@@ -19,8 +19,9 @@ class TidepoolGraphView: GraphContainerView {
  
     fileprivate var tidepoolLayout: TidepoolGraphLayout!
 
-    init(frame: CGRect, delegate: GraphContainerViewDelegate?, mainEventTime: Date, tzOffsetSecs: Int) {
+    init(frame: CGRect, delegate: GraphContainerViewDelegate?, mainEventTime: Date, tzOffsetSecs: Int, lowBGBounds: Int? = nil, highBGBounds: Int? = nil) {
         let layout = TidepoolGraphLayout(viewSize: frame.size, mainEventTime: mainEventTime, tzOffsetSecs: tzOffsetSecs)
+        layout.setLowAndHighBGBounds(low: lowBGBounds, high: highBGBounds)
         super.init(frame: frame, delegate: delegate, layout: layout)
         tidepoolLayout = layout
     }

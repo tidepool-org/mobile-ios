@@ -1201,7 +1201,15 @@ extension EventListViewController: UITableViewDataSource {
             // graph does not have constraints, and since the cell hasn't been added to the parent table yet, size is storyboard size...
             cell.bounds.size.width = tableView.bounds.width
             cell.configureCell(note)
-            cell.configureGraphContainer()
+
+            var lowBounds: Int?
+            var highBounds: Int?
+            if let bgLowBounds = dataController.currentViewedUser?.bgTargetLow, let bgHighBounds = dataController.currentViewedUser?.bgTargetHigh {
+                lowBounds = Int(bgLowBounds)
+                highBounds = Int(bgHighBounds)
+            }
+            cell.configureGraphContainer(lowBGBounds: lowBounds, highBGBounds: highBounds)
+            
             return cell
         } else if row == addCommentRow(commentCount: comments.count) {
             // Last row is add comment...

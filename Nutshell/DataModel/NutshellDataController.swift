@@ -16,6 +16,7 @@
 
 import UIKit
 import CoreData
+import Alamofire
 import SwiftyJSON
 import HealthKit
 import CocoaLumberjack
@@ -114,6 +115,7 @@ class NutDataController: NSObject
                 if let user = self.currentLoggedInUser {
                     NSLog("Current viewable user is \(String(describing: _currentViewedUser?.fullName))")
                     _currentViewedUser = user
+                    loadUserSettings()
                 }
             }
             return _currentViewedUser
@@ -123,10 +125,27 @@ class NutDataController: NSObject
             NSLog("Current viewable user changed to \(String(describing: _currentViewedUser!.fullName))")
             self.deleteAnyTidepoolData()
             configureHealthKitInterface()
+            loadUserSettings()
         }
     }
     fileprivate var _currentViewedUser: BlipUser?
 
+    fileprivate func loadUserSettings() {
+        
+        if let settingsUser = _currentViewedUser {
+            // only fetch if we haven't yet...
+            if settingsUser.bgTargetLow == nil && settingsUser.bgTargetHigh == nil {
+                APIConnector.connector().fetchUserSettings(settingsUser.userid) { (result:Alamofire.Result<JSON>) -> (Void) in
+                    NSLog("Settings fetch result: \(result)")
+                    if (result.isSuccess) {
+                        if let json = result.value {
+                            settingsUser.processSettingsJSON(json)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     /// Call this at login/logout, token refresh(?), and upon enabling or disabling the HealthKit interface.
     func configureHealthKitInterface() {

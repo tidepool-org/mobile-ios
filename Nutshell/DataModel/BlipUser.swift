@@ -23,6 +23,8 @@ class BlipUser {
     var fullName: String?
     let userid: String
     var patient: BlipPatient?
+    var bgTargetLow: NSNumber?
+    var bgTargetHigh: NSNumber?
     
     init(userid: String) {
         self.userid = userid
@@ -81,4 +83,24 @@ class BlipUser {
             self.patient = patient
         }
     }
+    
+    /*
+     {
+     "bgTarget": {
+     "low": 110,
+     "high": 130
+     },
+     "siteChangeSource": "cannulaPrime",
+     "units": {
+     "bg": "mg/dL"
+     }
+     }
+    */
+    func processSettingsJSON(_ json: JSON) {
+        NSLog("settings json: \(json)")
+        self.bgTargetLow = json["bgTarget"]["low"].number
+        self.bgTargetHigh = json["bgTarget"]["high"].number
+        NSLog("Low: \(String(describing: bgTargetLow)), High: \(String(describing: bgTargetHigh))")
+    }
+
 }
