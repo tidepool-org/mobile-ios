@@ -727,16 +727,20 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             NSLog("\(#function) loading notes...")
             return
         }
+        var hideAddNoteTip = true
+        var hideNeedUploaderTip = true
         if self.sortedNotes.count == 0 {
             if firstTimeHealthTip.isHidden {
-                firstTimeAddNoteTip.isHidden = false
+                hideAddNoteTip = false
             }
         } else if self.sortedNotes.count == 1 {
             if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
-                firstTimeNeedUploaderTip.isHidden = false
+                hideNeedUploaderTip = false
                 oneShotCompleted("NeedUploaderTipHasBeenShown")
             }
         }
+        firstTimeAddNoteTip.isHidden = hideAddNoteTip
+        firstTimeNeedUploaderTip.isHidden = hideNeedUploaderTip
     }
     
     private func oneShotIncompleteCheck(_ oneShotId: String) -> Bool {
