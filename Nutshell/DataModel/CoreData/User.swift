@@ -35,6 +35,8 @@ class User: NSManagedObject {
         }
         let patient = json["patient"]
         let isDSA = patient != JSON.null
-        accountIsDSA = NSNumber.init(value: isDSA)
+        if isDSA {
+            accountIsDSA = NSNumber.init(value: isDSA)
+        }
     }
 }

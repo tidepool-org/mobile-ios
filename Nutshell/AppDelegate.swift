@@ -71,21 +71,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Note: for non-background launches, this will continue in applicationDidBecomeActive...
     }
     
-    class func shouldShowHealthKitUI() -> Bool {
-        var showHealthKitUI = true
-        // Note: Right now this is hard-wired true
-        if !HKHealthStore.isHealthDataAvailable() {
-            showHealthKitUI = false
-        }
-        // isDSAUser is used as main control of whether we show the HealthKit UI.
-        if let isDSAUser = NutDataController.sharedInstance.isDSAUser {
-            if !isDSAUser {
-                showHealthKitUI = false
-            }
-        }
-        return showHealthKitUI
-    }
-    
     static var testMode: Bool {
         set(newValue) {
             UserDefaults.standard.set(newValue, forKey: kTestModeSettingKey)

@@ -181,6 +181,8 @@ class NutDataController: NSObject
             _ = DatabaseUtils.databaseSave(user.managedObjectContext!)
             _currentLoggedInUser = nil  // update currentLoggedInUser too...
             _currentViewedUser = nil  // and current viewable user as well
+            // reconfigure after profile fetch because we know isDSAUser now!
+            configureHealthKitInterface()
         }
     }
     

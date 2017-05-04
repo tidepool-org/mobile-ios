@@ -726,7 +726,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     static var oneShotTestCelebrate = false
     private func firstTimeHealthKitConnectCheck() {
         // Show connect to health celebration
-        if (EventListViewController.oneShotTestCelebrate || (AppDelegate.shouldShowHealthKitUI() && oneShotIncompleteCheck("ConnectToHealthCelebrationHasBeenShown"))) {
+        if (EventListViewController.oneShotTestCelebrate || (appHealthKitConfiguration.shouldShowHealthKitUI() && oneShotIncompleteCheck("ConnectToHealthCelebrationHasBeenShown"))) {
             EventListViewController.oneShotTestCelebrate = false
             // One-shot finished!
             oneShotCompleted("ConnectToHealthCelebrationHasBeenShown")

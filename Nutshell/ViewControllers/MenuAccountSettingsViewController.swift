@@ -168,7 +168,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
             stopHKTimeRefreshTimer()
         }
         
-        let hideHealthKitUI = !AppDelegate.shouldShowHealthKitUI()
+        let hideHealthKitUI = !appHealthKitConfiguration.shouldShowHealthKitUI()
         healthKitSwitch.isHidden = hideHealthKitUI
         healthKitLabel.isHidden = hideHealthKitUI
         healthStatusContainerView.isHidden = hideHealthKitUI || !hkCurrentEnable
