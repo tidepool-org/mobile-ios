@@ -631,6 +631,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         } else if segue.identifier == "segueToSwitchProfile" {
             let _ = segue.destination as! SwitchProfileTableViewController
             APIConnector.connector().trackMetric("Clicked switch profile (Home screen)")
+        } else if segue.identifier == "segueToEditComment" {
+            let addCommentVC = segue.destination as! EditCommentViewController
+            if let noteIndex = currentCommentEditIndexPath?.section {
+                addCommentVC.note = filteredNotes[noteIndex].note
+                addCommentVC.comments = filteredNotes[noteIndex].comments
+            }
+            APIConnector.connector().trackMetric("Clicked add a comment (Home screen)")
         } else {
             NSLog("Unprepped segue from eventList \(String(describing: segue.identifier))")
         }
@@ -660,6 +667,12 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
 
+    // Back button from add comment.
+    @IBAction func doneAddComment(_ segue: UIStoryboardSegue) {
+        
+        
+    }
+    
     // Multiple VC's on the navigation stack return all the way back to this initial VC via this segue, when nut events go away due to deletion, for test purposes, etc.
     @IBAction func home(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventList home!")
@@ -1073,10 +1086,11 @@ extension EventListViewController: UITableViewDelegate {
                 if !networkIsUnreachable(alertUser: true) {
                     self.currentCommentEditCell = addCommentCell
                     self.currentCommentEditIndexPath = indexPath
-                    configureRightNavButton()
-                    tableView.beginUpdates()
-                    tableView.reloadRows(at: [indexPath], with: .none)
-                    tableView.endUpdates()
+                    //configureRightNavButton()
+                    //tableView.beginUpdates()
+                    //tableView.reloadRows(at: [indexPath], with: .none)
+                    //tableView.endUpdates()
+                     performSegue(withIdentifier: "segueToEditComment", sender: self)
                     NSLog("Opening add comment for edit!")
                 }
             } else {

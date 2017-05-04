@@ -169,6 +169,7 @@
 		486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
 		4872118D1E8D818300BAD5CE /* SwitchProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4872118C1E8D818300BAD5CE /* SwitchProfileTableViewController.swift */; };
 		4872118F1E8DC33200BAD5CE /* ProfileListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */; };
+		4874E7931EBA966D00A3EBFA /* EditCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4874E7921EBA966D00A3EBFA /* EditCommentViewController.swift */; };
 		487ED2511C3DA40A00EE36DF /* TidepoolGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */; };
 		48867CF51E80AEAE00C4E79D /* BlipNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CEF1E80A98C00C4E79D /* BlipNote.swift */; };
 		48867CF61E819F2000C4E79D /* BlipNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CEF1E80A98C00C4E79D /* BlipNote.swift */; };
@@ -361,6 +362,7 @@
 		486F5E771BA3891600BA2A57 /* NutUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutUtils.swift; path = "Utilities and Extensions/NutUtils.swift"; sourceTree = "<group>"; };
 		4872118C1E8D818300BAD5CE /* SwitchProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwitchProfileTableViewController.swift; path = ViewControllers/SwitchProfileTableViewController.swift; sourceTree = "<group>"; };
 		4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileListTableViewCell.swift; path = ViewControllers/ProfileListTableViewCell.swift; sourceTree = "<group>"; };
+		4874E7921EBA966D00A3EBFA /* EditCommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditCommentViewController.swift; path = ViewControllers/EditCommentViewController.swift; sourceTree = "<group>"; };
 		487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolGraphData.swift; path = "GraphView/Tidepool Graph/TidepoolGraphData.swift"; sourceTree = "<group>"; };
 		48867CEF1E80A98C00C4E79D /* BlipNote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlipNote.swift; path = DataModel/BlipNote.swift; sourceTree = "<group>"; };
 		48867CF01E80A98C00C4E79D /* BlipPatient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlipPatient.swift; path = DataModel/BlipPatient.swift; sourceTree = "<group>"; };
@@ -561,6 +563,7 @@
 			isa = PBXGroup;
 			children = (
 				48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */,
+				4874E7921EBA966D00A3EBFA /* EditCommentViewController.swift */,
 				48DB6CFE1E8965DB00C5F221 /* EventDetailViewController.swift */,
 				48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */,
 				4839FD221EB7E16F003E5BF7 /* NoteListGraphCell.swift */,
@@ -1178,6 +1181,7 @@
 				48C491651C3B2DEE00F34630 /* MealGraphData.swift in Sources */,
 				48501BF01C1FC5EC00A7ADA8 /* EventListViewController.swift in Sources */,
 				48C491611C3B2D1A00F34630 /* CbgGraphData.swift in Sources */,
+				4874E7931EBA966D00A3EBFA /* EditCommentViewController.swift in Sources */,
 				0334CA701BA8DDFC00013096 /* Status+CoreDataProperties.swift in Sources */,
 				48DA110D1CE3C77200B99C35 /* NSDateExtension.swift in Sources */,
 				0334CA7F1BA8DDFC00013096 /* Upload.swift in Sources */,
