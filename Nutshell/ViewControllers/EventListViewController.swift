@@ -32,10 +32,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     @IBOutlet weak var tableView: NutshellUITableView!
     @IBOutlet weak var coverView: UIControl!
 
-    // current "add comment" edit info, if edit in progress
-    fileprivate var currentCommentEditCell: NoteListAddCommentCell?
-    fileprivate var currentCommentEditIndexPath: IndexPath?
-    
     // refresh control...
     var refreshControl:UIRefreshControl = UIRefreshControl()
 
@@ -70,6 +66,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         
         self.title = dataController.currentViewedUser?.fullName ?? ""
         
+        // Note: these notifications may fire when this VC is in the background!
         // Add a notification for when the database changes
         let moc = dataController.mocForNutEvents()
         let notificationCenter = NotificationCenter.default
@@ -109,6 +106,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         self.refreshControl.setNeedsLayout()
         self.tableView.addSubview(refreshControl)
         self.tableView.rowHeight = UITableViewAutomaticDimension
+        // table seems to need a header for latest iOS, give it a small one...
+        self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: 1.0))
     }
 
     override func didReceiveMemoryWarning() {
@@ -132,8 +131,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             loadNotes()
         }
         
-        configureRightNavButton()
-
         // periodically check for authentication issues in case we need to force a new login
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         appDelegate?.checkConnection()
@@ -141,6 +138,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         
         // one-time check to show first time healthKit connect tip...
         firstTimeHealthKitConnectCheck()
+        
+        // in case we loaded data while in the background...
+        checkUpdateGraph()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -249,43 +249,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     //
     
     private var viewAdjustAnimationTime: TimeInterval = 0.25
-    private var keyboardFrame: CGRect?
     
-    // For add comment editing, scroll table so edit view is just above the keyboard when it opens.
-    // Also captures keyboard sizing and appropriate scroll animation timing.
+    // Capture appropriate scroll animation timing.
     func keyboardWillShow(_ notification: Notification) {
         NSLog("\(#function)")
         viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
-        keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        // not necessary for search field editing!
-        if searchTextField.isFirstResponder {
-            return
-        }
-
-        self.adjustKeyboardSpacerView() // first time, ensure we have a table footer for last cell special case
-        self.adjustEditAboveKeyboard()
     }
  
-    // Ensure there is enough table footer to allow add comment editing for last note
-    fileprivate func adjustKeyboardSpacerView() {
-        if let keyboardFrame = keyboardFrame {
-            // add a footer view to the table that is the size of the keyboard, so last table row can be scrolled to the top of the table if necessary
-            let height = keyboardFrame.height
-            let curTableFooter = self.tableView.tableFooterView
-            if curTableFooter != nil && curTableFooter!.bounds.height >= height {
-                // table already adjusted...
-                return
-            }
-            
-            // add a footer view, possibly replace one that is too short (e.g., search keyboard is somewhat smaller than new comment edit keyboard)
-            var footerFrame = self.tableView.bounds
-            footerFrame.size.height = height
-            let footerView = UIView(frame: footerFrame)
-            footerView.backgroundColor = UIColor.white
-            self.tableView.tableFooterView = footerView
-        }
-    }
-    
     //
     // MARK: - Nav Bar right button handling
     //
@@ -294,43 +264,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         if networkIsUnreachable(alertUser: true) {
             return
         }
-
-        if rightNavConfiguredForAdd {
-            performSegue(withIdentifier: "segueToEventAdd", sender: self)
-            if !firstTimeAddNoteTip.isHidden {
-                firstTimeAddNoteTip.isHidden = true
-            }
+        performSegue(withIdentifier: "segueToEventAdd", sender: self)
+        if !firstTimeAddNoteTip.isHidden {
+            firstTimeAddNoteTip.isHidden = true
         }
-            // post new comment!
-            if let currentEditCell = currentCommentEditCell, let currentEditIndex = currentCommentEditIndexPath {
-                if let note = noteForIndexPath(currentEditIndex) {
-                    let commentText = currentEditCell.addCommentTextView.text
-                    if commentText?.isEmpty == false {
-                        let newNote = BlipNote()
-                        newNote.user = dataController.currentLoggedInUser!
-                        newNote.groupid = note.groupid
-                        newNote.messagetext = commentText!
-                        newNote.parentmessage = note.id
-                        newNote.timestamp = Date()
-                        
-                        APIConnector.connector().doPostWithNote(self, note: newNote)
-                        // will be called back at addComments
-                        clearCurrentComment()
-                        tableView.reloadRows(at: [currentEditIndex], with: .none)
-                    }
-                }
-            }
-    }
-    
-    fileprivate var rightNavConfiguredForAdd: Bool = true
-    fileprivate func configureRightNavButton() {
-        if rightNavConfiguredForAdd {
-            return
-        }
-        rightNavConfiguredForAdd = true
-        let newBarItem = UIBarButtonItem(image: UIImage(named:"add-button"), style: .plain, target: self, action: #selector(EventListViewController.navBarRightButtonHandler(_:)))
-        newBarItem.tintColor = Styles.brightBlueColor
-        navItem.rightBarButtonItem = newBarItem
     }
     
     //
@@ -344,7 +281,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         sortedNotes = []
         filteredNotes = []
         filterString = ""
-        clearCurrentComment()
         tableView.reloadData()
         refresh()
     }
@@ -353,7 +289,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func sortNotesAndReload() {
         sortedNotes.sort(by: {$0.note.timestamp.timeIntervalSinceNow > $1.note.timestamp.timeIntervalSinceNow})
         updateFilteredAndReload()
-        clearCurrentComment()
         tableView.reloadData()
     }
 
@@ -421,7 +356,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             }
         }
     }
-    private var noteToEdit: BlipNote?
     
     //
     // MARK: - NoteAPIWatcher Delegate
@@ -606,6 +540,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         return true
     }
     
+    // index path to comment to add...
+    fileprivate var currentCommentEditIndexPath: IndexPath?
+    // note to edit...
+    private var noteToEdit: BlipNote?
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
@@ -666,7 +605,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             if let newNote = commentEditVC.newComment {
                 APIConnector.connector().doPostWithNote(self, note: newNote)
                 // will be called back at addComments
-                clearCurrentComment()
             }
         }
     }
@@ -846,6 +784,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     func textFieldDidChangeNotifyHandler(_ note: Notification) {
+        if !viewIsForeground {
+            // not for us...
+            return
+        }
         if let textField = note.object as? UITextField {
             if textField == searchTextField {
                 if viewIsForeground {
@@ -905,7 +847,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             // Do this last, after filterString is configured
             configureSearchUI()
         }
-        clearCurrentComment()
         tableView.reloadData()
     }
     
@@ -936,56 +877,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
     
-
-    //
-    // MARK: - Add Comment UITextField Handling
-    //
-    
-    // clear any comment add in progress
-    fileprivate func clearCurrentComment() {
-        self.currentCommentEditCell = nil
-        self.currentCommentEditIndexPath = nil
-        configureRightNavButton()
-    }
-    
-    func textViewDidChangeNotifyHandler(_ note: Notification) {
-        if let textView = note.object as? UITextView {
-            if textView == self.currentCommentEditCell?.addCommentTextView {
-                NSLog("note changed to \(textView.text)")
-            }
-        }
-    }
-    
-    
-    // UITextViewDelegate methods
-    func textViewDidChange(_ textView: UITextView) {
-        NSLog("current content offset: \(tableView.contentOffset.y)")
-        if textView == self.currentCommentEditCell?.addCommentTextView {
-            NSLog("note changed to \(textView.text)")
-            // adjust table if lines of text have changed...
-            tableView.beginUpdates()
-            tableView.endUpdates()
-            adjustEditAboveKeyboard()
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView == self.currentCommentEditCell?.addCommentTextView {
-            NSLog("\(#function)")
-        }
-    }
-
-    func adjustEditAboveKeyboard() {
-        if let curEditCell = currentCommentEditCell, let keyboardFrame = keyboardFrame {
-            let cellContentOffset = curEditCell.frame.origin.y
-            let sizeAboveKeyboard = tableView.bounds.height - keyboardFrame.height
-            var targetOffset = tableView.contentOffset
-            // minus 10 for 10 of the 12 note boundary separator pixels... 
-            targetOffset.y = cellContentOffset - sizeAboveKeyboard  + curEditCell.bounds.height - 10.0
-            NSLog("setting table offset to \(targetOffset.y)")
-            tableView.setContentOffset(targetOffset, animated: true)
-        }
-    }
 
     //
     // MARK: - Table UIScrollViewDelegate
@@ -1045,7 +936,23 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     fileprivate func addCommentRow(commentCount: Int) -> Int {
         return kPreCommentRows + commentCount
     }
-    
+
+    func configureEdit(_ indexPath: IndexPath, note: BlipNote, editButton: NutshellSimpleUIButton, largeHitAreaButton: TPUIButton, hide: Bool = false) {
+        if !hide && note.userid == dataController.currentUserId {
+            // editButton stores indexPath so can be used in editPressed notification handling
+            editButton.isHidden = false
+            editButton.cellIndexPath = indexPath
+            largeHitAreaButton.isHidden = false
+            largeHitAreaButton.cellIndexPath = indexPath
+            editButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
+            largeHitAreaButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
+            
+        } else {
+            editButton.isHidden = true
+            largeHitAreaButton.isHidden = true
+        }
+    }
+
 }
 
 //
@@ -1062,6 +969,19 @@ extension EventListViewController: UITableViewDelegate {
         return UITableViewAutomaticDimension;
     }
     
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        var footerFrame = tableView.bounds
+        footerFrame.size.height = 12.0
+        //let footer = UIView(frame: footerFrame)
+        //footer.backgroundColor = UIColor.yellow
+        //return footer
+        return TPRowSeparatorView(frame: footerFrame)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 12.0
+    }
+    
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         // use first tap on a row to dismiss search keyboard if it is up...
         if searchTextField.isFirstResponder {
@@ -1076,42 +996,20 @@ extension EventListViewController: UITableViewDelegate {
         let noteSection = indexPath.section
         let row = indexPath.row
         let comments = filteredNotes[indexPath.section].comments
+        let note = filteredNotes[indexPath.section].note
         
         if row > kNoteRow {
             if row == addCommentRow(commentCount: comments.count) {
-                guard let addCommentCell = tableView.cellForRow(at: indexPath) as? NoteListAddCommentCell else { return }
-                // configure the cell's uitextview for editing, bring up keyboard, etc.
+                // go to comment add/edit controller if we have network connectivity...
                 if !networkIsUnreachable(alertUser: true) {
-                    self.currentCommentEditCell = addCommentCell
                     self.currentCommentEditIndexPath = indexPath
-                    //configureRightNavButton()
-                    //tableView.beginUpdates()
-                    //tableView.reloadRows(at: [indexPath], with: .none)
-                    //tableView.endUpdates()
-                     performSegue(withIdentifier: "segueToEditComment", sender: self)
+                    performSegue(withIdentifier: "segueToEditComment", sender: self)
                     NSLog("Opening add comment for edit!")
                 }
             } else {
                 NSLog("tapped on graph or other comments... close any edit")
-                // clicking on another comment closes up any current comment edit in this section...
-                if let currentEdit = currentCommentEditIndexPath {
-                    if currentEdit.section == indexPath.section {
-                        clearCurrentComment()
-                        tableView.beginUpdates()
-                        tableView.reloadRows(at: [currentEdit], with: .none)
-                        tableView.endUpdates()
-                    }
-                }
             }
             return
-        }
-        
-        // when open/closing a note, reset any existing comment editing...
-        if currentCommentEditIndexPath != nil {
-            if let commentCell = currentCommentEditCell {
-                commentCell.addCommentTextView.resignFirstResponder()
-            }
-            clearCurrentComment()
         }
         
         guard let noteCell = tableView.cellForRow(at: indexPath) as? NoteListTableViewCell else { return }
@@ -1120,8 +1018,8 @@ extension EventListViewController: UITableViewDelegate {
         filteredNotes[noteSection].opened = openNote
         
         tableView.beginUpdates()
+        self.configureEdit(indexPath, note: note, editButton: noteCell.editButton, largeHitAreaButton: noteCell.editButtonLargeHitArea, hide: !openNote)
         if openNote {
-            noteCell.separatorView.isHidden = true
             // always add rows for the graph and for the "add comment" button - not actually at row 2 if there are comments!
             tableView.insertRows(at: [IndexPath(row: kGraphRow, section: noteSection), IndexPath(row: kDefaultAddCommentRow, section: noteSection)], with: .automatic)
             // add rows for each comment...
@@ -1133,7 +1031,6 @@ extension EventListViewController: UITableViewDelegate {
                 tableView.insertRows(at: addedRows, with: .automatic)
             }
         } else {
-            noteCell.separatorView.isHidden = false
             var commentRows: [IndexPath] = []
             // include +2 for graph row and "add comment" row...
             let deleteRowCount = 2 + comments.count
@@ -1153,8 +1050,40 @@ extension EventListViewController: UITableViewDelegate {
             APIConnector.connector().getMessageThreadForNote(self, messageId: note.id)
         }
     }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        if indexPath.row == 0 {
+            return .delete
+        } else {
+            return .none
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        if indexPath.row > 0 {
+            return nil
+        }
+        let rowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "delete") {_,indexPath in
+            // use dialog to confirm delete with user!
+            APIConnector.connector().trackMetric("Clicked Delete Note")
+             let alert = UIAlertController(title: trashAlertTitle, message: trashAlertMessage, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: trashAlertCancel, style: .cancel, handler: { Void in
+                DDLogVerbose("Do not trash note")
+            }))
+            alert.addAction(UIAlertAction(title: trashAlertOkay, style: .destructive, handler: { Void in
+                DDLogVerbose("Trash note")
+                // handle delete!
+                if let noteToDelete = self.noteForIndexPath(indexPath) {
+                    APIConnector.connector().deleteNote(self, noteToDelete: noteToDelete)
+                    // will be called back on successful delete!
+                }
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }
+        //rowAction.backgroundColor = UIColor.white
+        return [rowAction]
+    }
 }
-
 
 //
 // MARK: - Table view data source
@@ -1189,27 +1118,15 @@ extension EventListViewController: UITableViewDataSource {
         let comments = filteredNotes[indexPath.section].comments
         let row = indexPath.row
         
-        func configureEdit(note: BlipNote, editButton: NutshellSimpleUIButton, largeHitAreaButton: TPUIButton) {
-            if note.userid == dataController.currentUserId {
-                // editButton stores indexPath so can be used in editPressed notification handling
-                editButton.isHidden = false
-                editButton.cellIndexPath = indexPath
-                largeHitAreaButton.cellIndexPath = indexPath
-                editButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
-                largeHitAreaButton.addTarget(self, action: #selector(EventListViewController.editPressed(_:)), for: .touchUpInside)
-                
-            } else {
-                editButton.isHidden = true
-            }
-        }
         
         if row == kNoteRow {
             let group = dataController.currentViewedUser!
             let cellId = "noteListCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCell
             cell.configureCell(note, group: group)
-            configureEdit(note: note, editButton: cell.editButton, largeHitAreaButton: cell.editButtonLargeHitArea)
-            cell.separatorView.isHidden = noteOpened
+            if noteOpened {
+                configureEdit(indexPath, note: note, editButton: cell.editButton, largeHitAreaButton: cell.editButtonLargeHitArea)
+            }
             return cell
         } else if row == kGraphRow {
             let cellId = "noteListGraphCell"
@@ -1232,15 +1149,7 @@ extension EventListViewController: UITableViewDataSource {
             let cellId = "addCommentCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListAddCommentCell
             // need to get from text view back to cell!
-            cell.addCommentTextView.tag = indexPath.section
-            var configureForEdit = false
-            if let currentEditPath = self.currentCommentEditIndexPath {
-                if currentEditPath == indexPath {
-                    self.currentCommentEditCell = cell
-                    configureForEdit = true
-                }
-            }
-            cell.configureCellForEdit(configureForEdit, delegate: self)
+            cell.configure()
             return cell
         } else {
             // Other rows are comment rows
@@ -1248,7 +1157,7 @@ extension EventListViewController: UITableViewDataSource {
                 let comment = comments[row-kFirstCommentRow]
                 let cell = tableView.dequeueReusableCell(withIdentifier: "noteListCommentCell", for: indexPath) as! NoteListCommentCell
                 cell.configureCell(comment)
-                configureEdit(note: comment, editButton: cell.editButton, largeHitAreaButton: cell.editButtonLargeHitArea)
+                configureEdit(indexPath, note: comment, editButton: cell.editButton, largeHitAreaButton: cell.editButtonLargeHitArea)
                 return cell
             } else {
                 DDLogError("No comment at cellForRowAt \(indexPath)")

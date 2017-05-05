@@ -24,7 +24,6 @@ class NoteListTableViewCell: UITableViewCell {
     @IBOutlet weak var userLabel: NutshellUILabel!
     @IBOutlet weak var dateLabel: NutshellUILabel!
     @IBOutlet weak var dateLabelSpacerView: TPIntrinsicSizeUIView!
-    @IBOutlet weak var separatorView: TPRowSeparatorView!
     
     @IBOutlet weak var editButton: NutshellSimpleUIButton!
     @IBOutlet weak var editButtonLargeHitArea: TPUIButton!
@@ -71,6 +70,8 @@ class NoteListTableViewCell: UITableViewCell {
         noteLabel.isHighlighted = false
         dateLabel.isHighlighted = false
         userLabel.isHighlighted = false
+        editButton.isHidden = true
+        editButtonLargeHitArea.isHidden = true
         
         if note.userid == note.groupid {
             // If note was created by current viewed user, don't configure a title, but note is editable

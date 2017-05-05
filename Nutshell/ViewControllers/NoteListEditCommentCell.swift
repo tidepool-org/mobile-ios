@@ -15,17 +15,11 @@
 
 import UIKit
 
-class NoteListCommentCell: UITableViewCell {
+class NoteListEditCommentCell: BaseUITableViewCell {
 
-    var note: BlipNote?
-
-    @IBOutlet weak var noteLabel: UILabel!
-    @IBOutlet weak var dateLabel: NutshellUILabel!
-    @IBOutlet weak var userLabel: NutshellUILabel!
-
-    @IBOutlet weak var editButton: NutshellSimpleUIButton!
-    @IBOutlet weak var editButtonLargeHitArea: TPUIButton!
-
+    @IBOutlet weak var addCommentTextView: UITextView!
+    @IBOutlet weak var editTopSeparator: NutshellUIView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -42,23 +36,11 @@ class NoteListCommentCell: UITableViewCell {
     override func prepareForReuse() {
     }
     
-    func configureCell(_ note: BlipNote) {
-        self.note = note
-        editButton.isHidden = true
-        editButtonLargeHitArea.isHidden = true
-
-        self.updateNoteFontStyling()
-
-        dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
-        self.userLabel.text = note.user?.fullName ?? ""
+    func configureCell(startText: String, delegate: UITextViewDelegate? = nil) {
+        addCommentTextView.text = startText
+        addCommentTextView.delegate = delegate
+        addCommentTextView.keyboardAppearance = UIKeyboardAppearance.dark
+        NSLog("comment view becomeFirstResponder delayed until after it becomes part of view hierarchy!")
     }
-    
-    private func updateNoteFontStyling() {
-        if let note = note {
-            let hashtagBolder = HashtagBolder()
-            let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString, isComment: true, highlighted: false)
-            noteLabel.attributedText = attributedText
-        }
-    }
-    
+
 }

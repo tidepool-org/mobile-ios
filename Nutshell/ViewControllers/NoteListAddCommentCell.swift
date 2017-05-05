@@ -19,8 +19,6 @@ class NoteListAddCommentCell: BaseUITableViewCell {
 
     @IBOutlet weak var addCommentIcon: UIImageView!
     @IBOutlet weak var addCommentLabel: NutshellUILabel!
-    @IBOutlet weak var addCommentTextView: UITextView!
-    @IBOutlet weak var editTopSeparator: NutshellUIView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,29 +33,7 @@ class NoteListAddCommentCell: BaseUITableViewCell {
          //super.setHighlighted(highlighted, animated:animated)
     }
     
-    override func prepareForReuse() {
-        configureCellForEdit(false)
-    }
-    
-    func configureCellForEdit(_ editMode: Bool, delegate: UITextViewDelegate? = nil) {
-        addCommentIcon.isHidden = editMode
-        addCommentLabel.isHidden = editMode
-        editTopSeparator.isHidden = !editMode
-        addCommentTextView.isHidden = !editMode
-        addCommentTextView.text = ""
-        addCommentTextView.delegate = delegate
-        if editMode {
-            addCommentTextView.perform(
-                #selector(becomeFirstResponder),
-                with: nil,
-                afterDelay: 0.1
-            )
-            //addCommentTextView.becomeFirstResponder()
-            NSLog("comment view becomeFirstResponder delayed until after it becomes part of view hierarchy!")
-        } else if addCommentTextView.isFirstResponder {
-            addCommentTextView.resignFirstResponder()
-            NSLog("comment view resignFirstResponder")
-        }
+    func configure() {
     }
 
 }

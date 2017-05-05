@@ -33,7 +33,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     var newComment: BlipNote?
     
     // Current "add comment" edit info, if edit in progress
-    fileprivate var currentCommentEditCell: NoteListAddCommentCell?
+    fileprivate var currentCommentEditCell: NoteListEditCommentCell?
 
     // Misc
     let dataController = NutDataController.sharedInstance
@@ -267,8 +267,10 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
             var targetOffset = tableView.contentOffset
             // minus 10 for 10 of the 12 note boundary separator pixels... 
             targetOffset.y = cellContentOffset - sizeAboveKeyboard  + curEditCell.bounds.height - 10.0
-            NSLog("setting table offset to \(targetOffset.y)")
-            tableView.setContentOffset(targetOffset, animated: true)
+            if tableView.contentOffset.y < targetOffset.y {
+                NSLog("setting table offset to \(targetOffset.y)")
+                tableView.setContentOffset(targetOffset, animated: true)
+            }
         }
     }
 
@@ -340,7 +342,6 @@ extension EditCommentViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCell
             cell.configureCell(note!, group: group)
             cell.editButton.isHidden = true
-            cell.separatorView.isHidden = true
             return cell
         } else if row == kGraphRow {
             let cellId = "noteListGraphCell"
@@ -352,12 +353,16 @@ extension EditCommentViewController: UITableViewDataSource {
             return cell
         } else if row == addCommentRow(commentCount: comments.count) {
             // Last row is add comment...
-            let cellId = "addCommentCell"
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListAddCommentCell
+            let cellId = "editCommentCell"
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListEditCommentCell
             // need to get from text view back to cell!
             cell.addCommentTextView.tag = indexPath.section
-            cell.configureCellForEdit(true, delegate: self)
+            cell.configureCell(startText: "", delegate: self)
             self.currentCommentEditCell = cell
+            cell.addCommentTextView.perform(
+                #selector(becomeFirstResponder),
+                with: nil,
+                afterDelay: 0.25)
             return cell
         } else {
             // Other rows are comment rows
