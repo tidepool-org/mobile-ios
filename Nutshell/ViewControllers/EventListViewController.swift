@@ -326,7 +326,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         let noteIndex = indexPath.section
         if noteIndex < self.filteredNotes.count {
             let comments = filteredNotes[noteIndex].comments
-            let commentIndex = indexPath.row - 1
+            let commentIndex = indexPath.row - kFirstCommentRow
             if commentIndex < comments.count {
                 return comments[commentIndex]
             }
@@ -436,13 +436,25 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func postComplete(_ note: BlipNote) {
         NSLog("NoteAPIWatcher.postComplete")
         if note.parentmessage != nil {
-            // adding a comment, no need to resort and reload, but refetch comments...
-            APIConnector.connector().getMessageThreadForNote(self, messageId: note.parentmessage!)
-            return
+            // added a comment, insert and update!
+            let notePath = self.indexPathForNoteId(note.parentmessage!)
+            let sortedNotePath = sortedNotesIndexPathForNoteId(note.parentmessage!)
+            if let notePath = notePath, let sortedNotePath = sortedNotePath {
+                let noteIndex = notePath.section
+                let sortedNoteIndex = sortedNotePath.section
+                var comments = filteredNotes[noteIndex].comments
+                comments.append(note)
+                comments.sort(by: {$0.timestamp.timeIntervalSinceNow < $1.timestamp.timeIntervalSinceNow})
+                filteredNotes[noteIndex].comments = comments
+                sortedNotes[sortedNoteIndex].comments = comments
+                tableView.reloadSections(IndexSet(integer: noteIndex), with: .automatic)
+            }
+         } else {
+            // added a note...
+            self.sortedNotes.insert(NoteInEventListTable(note: note, opened: false, comments: []), at: 0)
+            // sort the notes, reload notes table
+            sortNotesAndReload()
         }
-        self.sortedNotes.insert(NoteInEventListTable(note: note, opened: false, comments: []), at: 0)
-        // sort the notes, reload notes table
-        sortNotesAndReload()
     }
     
     func deleteComplete(_ deletedNote: BlipNote) {
@@ -1052,15 +1064,30 @@ extension EventListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        if indexPath.row == 0 {
-            return .delete
-        } else {
-            return .none
+        let commentCount = filteredNotes[indexPath.section].comments.count
+        let row = indexPath.row
+        if row > kNoteRow {
+            // only graph row and add comment button row are not delete-able...
+            if row == addCommentRow(commentCount: commentCount) || row == kGraphRow {
+                return .none
+            }
         }
+        return .delete
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        if indexPath.row > 0 {
+        var noteToDelete = self.noteForIndexPath(indexPath)
+        let comments = filteredNotes[indexPath.section].comments
+        let row = indexPath.row
+            if row > kNoteRow {
+                // only graph row and add comment button row are not delete-able...
+                if row == addCommentRow(commentCount: comments.count) || row == kGraphRow {
+                return nil
+            }
+            noteToDelete = comments[row-kFirstCommentRow]
+        }
+        if noteToDelete == nil {
+            NSLog("Error: note not found at \(#function)!")
             return nil
         }
         let rowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "delete") {_,indexPath in
@@ -1073,10 +1100,8 @@ extension EventListViewController: UITableViewDelegate {
             alert.addAction(UIAlertAction(title: trashAlertOkay, style: .destructive, handler: { Void in
                 DDLogVerbose("Trash note")
                 // handle delete!
-                if let noteToDelete = self.noteForIndexPath(indexPath) {
-                    APIConnector.connector().deleteNote(self, noteToDelete: noteToDelete)
-                    // will be called back on successful delete!
-                }
+                APIConnector.connector().deleteNote(self, noteToDelete: noteToDelete!)
+                // will be called back on successful delete!
             }))
             self.present(alert, animated: true, completion: nil)
         }

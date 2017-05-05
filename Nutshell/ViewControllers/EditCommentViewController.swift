@@ -205,6 +205,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
                     newNote.groupid = note.groupid
                     newNote.messagetext = commentText!
                     newNote.parentmessage = note.id
+                    newNote.userid = note.user!.userid
                     newNote.timestamp = Date()
                     newComment = newNote
                     performSegue(withIdentifier: "unwindFromEditComment", sender: self)
@@ -370,7 +371,6 @@ extension EditCommentViewController: UITableViewDataSource {
                 let comment = comments[row-kFirstCommentRow]
                 let cell = tableView.dequeueReusableCell(withIdentifier: "noteListCommentCell", for: indexPath) as! NoteListCommentCell
                 cell.configureCell(comment)
-                cell.editButton.isHidden = false
                 return cell
             } else {
                 DDLogError("No comment at cellForRowAt \(indexPath)")
