@@ -337,26 +337,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         return nil
     }
 
-    func editPressed(_ sender: NutshellSimpleUIButton!) {
-        NSLog("cell with tag \(sender.tag) was pressed!")
-        
-        if networkIsUnreachable(alertUser: true) {
-            return
-        }
-        
-        if let indexPath = sender.cellIndexPath {
-            if indexPath.row == 0 {
-                if let note = self.noteForIndexPath(indexPath) {
-                    self.noteToEdit = note
-                    self.performSegue(withIdentifier: "segueToEditView", sender: self)
-                }
-            } else if let comment = commentForIndexPath(indexPath) {
-                self.noteToEdit = comment
-                self.performSegue(withIdentifier: "segueToEditView", sender: self)
-            }
-        }
-    }
-    
     //
     // MARK: - NoteAPIWatcher Delegate
     //
@@ -580,6 +560,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             if let noteIndex = currentCommentEditIndexPath?.section {
                 addCommentVC.note = filteredNotes[noteIndex].note
                 addCommentVC.comments = filteredNotes[noteIndex].comments
+                if let comment = self.noteToEdit {
+                    // edit existing comment
+                    addCommentVC.commentToEdit = comment
+                    self.noteToEdit = nil
+                }
             }
             APIConnector.connector().trackMetric("Clicked add a comment (Home screen)")
         } else {
@@ -593,10 +578,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         if let eventEditVC = segue.source as? EventEditViewController {
             if let originalNote = eventEditVC.note, let editedNote = eventEditVC.editedNote {
                 APIConnector.connector().updateNote(self, editedNote: editedNote, originalNote: originalNote)
-                // will be called back on successful update!
+                // will be called back on at updateComplete on successful update!
                 // TODO: also handle unsuccessful updates?
             } else {
-                NSLog("No note to delete!")
+                NSLog("No note to update!")
             }
         } else if let eventAddVC = segue.source as? EventAddViewController {
             if let newNote = eventAddVC.newNote {
@@ -611,7 +596,18 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
 
-    // Back button from add comment.
+    // Save button from edit comment.
+    @IBAction func doneEditComment(_ segue: UIStoryboardSegue) {
+        if let commentEditVC = segue.source as? EditCommentViewController {
+            if let comment = commentEditVC.commentToEdit, let commentEdits = commentEditVC.newComment {
+                APIConnector.connector().updateNote(self, editedNote: commentEdits, originalNote: comment)
+                // will be called back on at updateComplete on successful update!
+                // TODO: also handle unsuccessful updates?
+            }
+        }
+    }
+
+    // Post button from add comment.
     @IBAction func doneAddComment(_ segue: UIStoryboardSegue) {
         if let commentEditVC = segue.source as? EditCommentViewController {
             if let newNote = commentEditVC.newComment {
@@ -670,6 +666,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
     
+    //
+    // MARK: - First time screen support
+    //
+
     // Note: to test celebrate, change the following to true, and it will come up once on each app launch...
     static var oneShotTestCelebrate = false
     private func firstTimeHealthKitConnectCheck() {
@@ -765,14 +765,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         firstTimeNeedUploaderTip.isHidden = true
     }
     
-    @IBAction func howToUploadButtonHandler(_ sender: Any) {
-        // TODO: add metric?
-        let url = URL(string: "http://support.tidepool.org/article/11-how-to-use-the-tidepool-uploader")
-        if let url = url {
-            UIApplication.shared.openURL(url)
-        }
-    }
-
     //
     // MARK: - Search 
     //
@@ -889,6 +881,14 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
     
+    @IBAction func howToUploadButtonHandler(_ sender: Any) {
+        // TODO: add metric?
+        let url = URL(string: "http://support.tidepool.org/article/11-how-to-use-the-tidepool-uploader")
+        if let url = url {
+            UIApplication.shared.openURL(url)
+        }
+    }
+    
 
     //
     // MARK: - Table UIScrollViewDelegate
@@ -964,6 +964,28 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             largeHitAreaButton.isHidden = true
         }
     }
+    
+    func editPressed(_ sender: NutshellSimpleUIButton!) {
+        NSLog("cell with tag \(sender.tag) was pressed!")
+        
+        if networkIsUnreachable(alertUser: true) {
+            return
+        }
+        
+        if let indexPath = sender.cellIndexPath {
+            if indexPath.row == 0 {
+                if let note = self.noteForIndexPath(indexPath) {
+                    self.noteToEdit = note
+                    self.performSegue(withIdentifier: "segueToEditView", sender: self)
+                }
+            } else if let comment = commentForIndexPath(indexPath) {
+                self.noteToEdit = comment
+                self.currentCommentEditIndexPath = indexPath
+                performSegue(withIdentifier: "segueToEditComment", sender: self)
+                NSLog("Segue to edit comment!")
+            }
+        }
+    }
 
 }
 
@@ -1016,7 +1038,7 @@ extension EventListViewController: UITableViewDelegate {
                 if !networkIsUnreachable(alertUser: true) {
                     self.currentCommentEditIndexPath = indexPath
                     performSegue(withIdentifier: "segueToEditComment", sender: self)
-                    NSLog("Opening add comment for edit!")
+                    NSLog("Segue to add comment!")
                 }
             } else {
                 NSLog("tapped on graph or other comments... close any edit")

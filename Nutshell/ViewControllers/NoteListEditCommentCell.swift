@@ -19,7 +19,13 @@ class NoteListEditCommentCell: BaseUITableViewCell {
 
     @IBOutlet weak var addCommentTextView: UITextView!
     @IBOutlet weak var editTopSeparator: NutshellUIView!
+
+    @IBOutlet weak var saveButton: NutshellSimpleUIButton!
+    @IBOutlet weak var saveButtonLargeHitArea: TPUIButton!
     
+    // set if editing existing comment...
+    var note: BlipNote?
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -36,11 +42,13 @@ class NoteListEditCommentCell: BaseUITableViewCell {
     override func prepareForReuse() {
     }
     
-    func configureCell(startText: String, delegate: UITextViewDelegate? = nil) {
-        addCommentTextView.text = startText
+    func configureCell(note: BlipNote?, delegate: UITextViewDelegate? = nil) {
+        addCommentTextView.text = note != nil ? note!.messagetext : ""
         addCommentTextView.delegate = delegate
         addCommentTextView.keyboardAppearance = UIKeyboardAppearance.dark
-        NSLog("comment view becomeFirstResponder delayed until after it becomes part of view hierarchy!")
+        saveButton.isEnabled = false
+        saveButton.setTitle(note != nil ? "Save" : "Post", for: .normal)
+        saveButtonLargeHitArea.isEnabled = false
     }
 
 }

@@ -27,9 +27,10 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     @IBOutlet weak var tableView: NutshellUITableView!
 
     // Configured by calling VC
-    var note: BlipNote?
-    var comments: [BlipNote] = []
-    // New comment returned to calling VC
+    var note: BlipNote?             // must be set
+    var commentToEdit: BlipNote?    // set if editing an existing comment
+    var comments: [BlipNote] = []   // existing set of comments for the note
+    // New comment returned to calling VC, if adding...
     var newComment: BlipNote?
     
     // Current "add comment" edit info, if edit in progress
@@ -45,7 +46,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //self.title = dataController.currentViewedUser?.fullName ?? ""
+        self.title = commentToEdit != nil ? "Edit Comment" : "Add Comment"
         
         // Add a notification for when the database changes
         let notificationCenter = NotificationCenter.default
@@ -98,6 +99,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         NSLog("TODO: figure out connectivity story! Connected: \(connected)")
     }
 
+    // TODO: move to a shared file!
     fileprivate func networkIsUnreachable(alertUser: Bool) -> Bool {
         if APIConnector.connector().serviceAvailable() {
             return false
@@ -190,7 +192,8 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         performSegue(withIdentifier: "unwindFromEditComment", sender: self)
     }
     
-    @IBAction func postButtonHandler(_ sender: Any) {
+    func editPressed(_ sender: NutshellSimpleUIButton!) {
+        NSLog("cell with tag \(sender.tag) was pressed!")
         if networkIsUnreachable(alertUser: true) {
             return
         }
@@ -198,22 +201,34 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         // post new comment!
         if let currentEditCell = currentCommentEditCell {
             if let note = self.note {
-                let commentText = currentEditCell.addCommentTextView.text
-                if commentText?.isEmpty == false {
-                    let newNote = BlipNote()
-                    newNote.user = dataController.currentLoggedInUser!
-                    newNote.groupid = note.groupid
-                    newNote.messagetext = commentText!
-                    newNote.parentmessage = note.id
-                    newNote.userid = note.user!.userid
-                    newNote.timestamp = Date()
-                    newComment = newNote
-                    performSegue(withIdentifier: "unwindFromEditComment", sender: self)
+                if let commentText = currentEditCell.addCommentTextView.text {
+                    if commentText.isEmpty {
+                        return
+                    }
+                    if let commentToEdit = self.commentToEdit {
+                        // editing an existing comment
+                        let newNote = BlipNote()
+                        newNote.messagetext = commentText
+                        newNote.timestamp = commentToEdit.timestamp
+                        self.newComment = newNote
+                        performSegue(withIdentifier: "unwindFromEditComment", sender: self)
+                    } else {
+                        // adding a new comment
+                        let newNote = BlipNote()
+                        newNote.user = dataController.currentLoggedInUser!
+                        newNote.groupid = note.groupid
+                        newNote.messagetext = commentText
+                        newNote.parentmessage = note.id
+                        newNote.userid = note.user!.userid
+                        newNote.timestamp = Date()
+                        self.newComment = newNote
+                        performSegue(withIdentifier: "unwindFromAddComment", sender: self)
+                    }
                 }
             }
         }
     }
-    
+
     //
     // MARK: - Graph support
     //
@@ -246,8 +261,16 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     // UITextViewDelegate methods
     func textViewDidChange(_ textView: UITextView) {
         NSLog("current content offset: \(tableView.contentOffset.y)")
-        if textView == self.currentCommentEditCell?.addCommentTextView {
+        if let editCell = self.currentCommentEditCell {
             NSLog("note changed to \(textView.text)")
+            var originalText = ""
+            if let comment = self.commentToEdit {
+                originalText = comment.messagetext
+            }
+            let enableSave = originalText != textView.text
+            editCell.saveButton.isEnabled = enableSave
+            editCell.saveButtonLargeHitArea.isEnabled = enableSave
+            
             // adjust table if lines of text have changed...
             tableView.beginUpdates()
             tableView.endUpdates()
@@ -324,8 +347,9 @@ extension EditCommentViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // one row for note, one row for graph, one row per comment, one for add comment
-        return self.comments.count + 3
+        // one row for note, one row for graph, one row per comment, one for add comment (unless we are just editing a comment)...
+        let newCommentCount = commentToEdit != nil ? 0 : 1
+        return self.comments.count + kPreCommentRows + newCommentCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -352,29 +376,46 @@ extension EditCommentViewController: UITableViewDataSource {
             cell.configureCell(note!)
             cell.configureGraphContainer()
             return cell
-        } else if row == addCommentRow(commentCount: comments.count) {
-            // Last row is add comment...
-            let cellId = "editCommentCell"
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListEditCommentCell
-            // need to get from text view back to cell!
-            cell.addCommentTextView.tag = indexPath.section
-            cell.configureCell(startText: "", delegate: self)
-            self.currentCommentEditCell = cell
-            cell.addCommentTextView.perform(
-                #selector(becomeFirstResponder),
-                with: nil,
-                afterDelay: 0.25)
-            return cell
         } else {
-            // Other rows are comment rows
+            if row > addCommentRow(commentCount: comments.count) {
+                DDLogError("Index past last row at cellForRowAt \(indexPath)")
+                return UITableViewCell()
+            }
+            
+            var comment: BlipNote? = nil
+            var addOrEdit = false
             if row < kFirstCommentRow + comments.count {
-                let comment = comments[row-kFirstCommentRow]
-                let cell = tableView.dequeueReusableCell(withIdentifier: "noteListCommentCell", for: indexPath) as! NoteListCommentCell
-                cell.configureCell(comment)
+                comment = comments[row-kFirstCommentRow]
+                addOrEdit = comment?.id == self.commentToEdit?.id
+            } else {
+                addOrEdit = true
+            }
+            
+            if addOrEdit {
+                let cellId = "editCommentCell"
+                let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListEditCommentCell
+                cell.configureCell(note: comment, delegate: self)
+                self.currentCommentEditCell = cell
+                cell.saveButton.cellIndexPath = indexPath
+                cell.saveButtonLargeHitArea.cellIndexPath = indexPath
+                cell.saveButton.addTarget(self, action: #selector(EditCommentViewController.editPressed(_:)), for: .touchUpInside)
+                cell.saveButtonLargeHitArea.addTarget(self, action: #selector(EditCommentViewController.editPressed(_:)), for: .touchUpInside)
+                
+                
+                cell.addCommentTextView.perform(
+                    #selector(becomeFirstResponder),
+                    with: nil,
+                    afterDelay: 0.25)
                 return cell
             } else {
-                DDLogError("No comment at cellForRowAt \(indexPath)")
-                return UITableViewCell()
+                if let comment = comment {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "noteListCommentCell", for: indexPath) as! NoteListCommentCell
+                    cell.configureCell(comment)
+                    return cell
+                } else {
+                    DDLogError("No comment at cellForRowAt \(indexPath)")
+                    return UITableViewCell()
+                }
             }
         }
     }

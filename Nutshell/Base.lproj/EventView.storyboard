@@ -1091,25 +1091,58 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="752" verticalCompressionResistancePriority="752" scrollEnabled="NO" text=" " translatesAutoresizingMaskIntoConstraints="NO" id="cm5-Qi-KGg" userLabel="editCommentTextView">
-                                                            <rect key="frame" x="15" y="12" width="285" height="24"/>
+                                                            <rect key="frame" x="15" y="12" width="245" height="24"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                         </textView>
+                                                        <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gjm-bk-lTD" userLabel="saveButtonLargeHitArea" customClass="TPUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="255" y="-7" width="60" height="60.5"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="60" id="365-4A-TNm"/>
+                                                                <constraint firstAttribute="height" constant="60" id="A9U-aR-0bL"/>
+                                                            </constraints>
+                                                        </button>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hjb-HN-EnG" userLabel="saveButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="270" y="9" width="30" height="30"/>
+                                                            <state key="normal" title="Save"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="editButton"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </button>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oIy-WP-tWx" userLabel="editBottomSeparator" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="45" width="320" height="1"/>
+                                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="1" id="e9U-ox-WfH"/>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </view>
                                                     </subviews>
                                                     <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="Hjb-HN-EnG" secondAttribute="trailing" constant="20" id="3te-I4-GFT"/>
                                                         <constraint firstItem="cm5-Qi-KGg" firstAttribute="leading" secondItem="vyN-4N-9vr" secondAttribute="leading" constant="15" id="83N-Em-6E3"/>
                                                         <constraint firstAttribute="bottom" secondItem="cm5-Qi-KGg" secondAttribute="bottom" constant="10" id="Bib-T9-nsg"/>
+                                                        <constraint firstItem="Hjb-HN-EnG" firstAttribute="centerY" secondItem="cm5-Qi-KGg" secondAttribute="centerY" id="Dk4-Tz-kpo"/>
                                                         <constraint firstAttribute="trailing" secondItem="6Ll-0H-y8i" secondAttribute="trailing" id="K8Z-fz-NZ7"/>
+                                                        <constraint firstAttribute="bottom" secondItem="oIy-WP-tWx" secondAttribute="bottom" id="LMv-Sb-G7K"/>
                                                         <constraint firstItem="6Ll-0H-y8i" firstAttribute="top" secondItem="vyN-4N-9vr" secondAttribute="top" id="UCC-Ch-cbK"/>
+                                                        <constraint firstItem="gjm-bk-lTD" firstAttribute="centerY" secondItem="Hjb-HN-EnG" secondAttribute="centerY" id="XM0-L5-MQY"/>
+                                                        <constraint firstAttribute="trailing" secondItem="oIy-WP-tWx" secondAttribute="trailing" id="ZIR-TA-bsv"/>
+                                                        <constraint firstItem="gjm-bk-lTD" firstAttribute="centerX" secondItem="Hjb-HN-EnG" secondAttribute="centerX" id="iIW-ym-bun"/>
                                                         <constraint firstItem="cm5-Qi-KGg" firstAttribute="top" secondItem="vyN-4N-9vr" secondAttribute="top" constant="12" id="pIu-PB-Tiy"/>
-                                                        <constraint firstAttribute="trailing" secondItem="cm5-Qi-KGg" secondAttribute="trailing" constant="20" id="rdZ-VN-ApM"/>
+                                                        <constraint firstAttribute="trailing" secondItem="cm5-Qi-KGg" secondAttribute="trailing" constant="60" id="rdZ-VN-ApM"/>
+                                                        <constraint firstItem="oIy-WP-tWx" firstAttribute="leading" secondItem="vyN-4N-9vr" secondAttribute="leading" id="vCU-bx-4oh"/>
                                                         <constraint firstItem="6Ll-0H-y8i" firstAttribute="leading" secondItem="vyN-4N-9vr" secondAttribute="leading" id="zJW-49-4ap"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <connections>
                                                     <outlet property="addCommentTextView" destination="cm5-Qi-KGg" id="KBB-V0-R9d"/>
                                                     <outlet property="editTopSeparator" destination="6Ll-0H-y8i" id="ikY-lT-tW0"/>
+                                                    <outlet property="saveButton" destination="Hjb-HN-EnG" id="wdO-Lo-90p"/>
+                                                    <outlet property="saveButtonLargeHitArea" destination="gjm-bk-lTD" id="dqT-WZ-AK1"/>
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>
@@ -1145,17 +1178,13 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                 <action selector="backButtonHandler:" destination="jHd-me-gvT" id="Ldr-Uq-lzI"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Post" id="8yw-QX-Ypt">
-                            <connections>
-                                <action selector="postButtonHandler:" destination="jHd-me-gvT" id="Zea-WZ-vmG"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="editCommentSceneContainer" destination="rAB-Jy-8U8" id="Zsa-vD-0wh"/>
                         <outlet property="navItem" destination="213-bT-2cG" id="ghj-dC-Bis"/>
                         <outlet property="tableView" destination="Ihh-FV-Je1" id="dME-yk-vVB"/>
-                        <segue destination="sV5-ej-lTB" kind="unwind" identifier="unwindFromEditComment" unwindAction="doneAddComment:" id="MRv-vB-c5o"/>
+                        <segue destination="sV5-ej-lTB" kind="unwind" identifier="unwindFromEditComment" unwindAction="doneEditComment:" id="MRv-vB-c5o"/>
+                        <segue destination="sV5-ej-lTB" kind="unwind" identifier="unwindFromAddComment" unwindAction="doneAddComment:" id="k1q-rz-fnu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6MD-yh-Ftd" userLabel="First Responder" sceneMemberID="firstResponder"/>
