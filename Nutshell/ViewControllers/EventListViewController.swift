@@ -264,7 +264,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         if networkIsUnreachable(alertUser: true) {
             return
         }
-        performSegue(withIdentifier: "segueToEventAdd", sender: self)
+        performSegue(withIdentifier: "segueToAddNote", sender: self)
         if !firstTimeAddNoteTip.isHidden {
             firstTimeAddNoteTip.isHidden = true
         }
@@ -541,14 +541,16 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         super.prepare(for: segue, sender: sender)
-        if (segue.identifier) == "segueToEditView" {
-            let eventEditVC = segue.destination as! EventEditViewController
+        if (segue.identifier) == "segueToEditNote" {
+            let eventEditVC = segue.destination as! EventAddEditViewController
             eventEditVC.note = self.noteToEdit
+            eventEditVC.isAddNote = false
             self.noteToEdit = nil
             APIConnector.connector().trackMetric("Clicked edit a note (Home screen)")
-        } else if segue.identifier == "segueToEventAdd" {
-            let eventAddVC = segue.destination as! EventAddViewController
+        } else if segue.identifier == "segueToAddNote" {
+            let eventAddVC = segue.destination as! EventAddEditViewController
             // Pass along group (logged in user) and selected profile user...
+            eventAddVC.isAddNote = true
             eventAddVC.user = dataController.currentLoggedInUser!
             eventAddVC.group = dataController.currentViewedUser!
             APIConnector.connector().trackMetric("Clicked add a note (Home screen)")
@@ -572,10 +574,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
     
-    // Back button from group or detail viewer.
-    @IBAction func done(_ segue: UIStoryboardSegue) {
-        NSLog("unwind segue to eventListVC done!")
-        if let eventEditVC = segue.source as? EventEditViewController {
+    @IBAction func doneEditNote(_ segue: UIStoryboardSegue) {
+        NSLog("unwind segue to eventListVC doneEditNote!")
+        if let eventEditVC = segue.source as? EventAddEditViewController {
             if let originalNote = eventEditVC.note, let editedNote = eventEditVC.editedNote {
                 APIConnector.connector().updateNote(self, editedNote: editedNote, originalNote: originalNote)
                 // will be called back on at updateComplete on successful update!
@@ -583,7 +584,15 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             } else {
                 NSLog("No note to update!")
             }
-        } else if let eventAddVC = segue.source as? EventAddViewController {
+        } else {
+            NSLog("Unknown segue source!")
+        }
+    }
+    
+    @IBAction func doneAddNote(_ segue: UIStoryboardSegue) {
+        NSLog("unwind segue to eventListVC doneAddNote!")
+        if let eventAddVC = segue.source as? EventAddEditViewController {
+            // TODO: add case here, need to add edit case...
             if let newNote = eventAddVC.newNote {
                 APIConnector.connector().doPostWithNote(self, note: newNote)
                 // will be called back at postComplete on successful post!
@@ -634,22 +643,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
 
-    // The add/edit VC will return here when a meal event is deleted, and detail vc was transitioned to directly from this vc (i.e., the Nut event contained a single meal event which was deleted).
-    @IBAction func doneItemDeleted(_ segue: UIStoryboardSegue) {
-        NSLog("unwind segue to eventList doneItemDeleted")
-        if let eventEditVC = segue.source as? EventEditViewController {
-            if let noteToDelete = eventEditVC.note {
-                APIConnector.connector().deleteNote(self, noteToDelete: noteToDelete)
-                // will be called back on successful delete!
-                // TODO: also handle unsuccessful deletes?
-            } else {
-                NSLog("No note to delete!")
-            }
-        } else {
-            NSLog("Unknown segue source!")
-        }
-    }
-
     @IBAction func cancel(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventList cancel")
     }
@@ -662,7 +655,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             // TODO: will be needed if notes go into a database but unused right now...
             //loadNotes()
         } else {
-            eventListNeedsUpdate = true
+            // TODO: this event can be triggered by update of hashtags in database, resulting in a refresh just as we are saving edits to a note. We update the note, but then get the refresh which overwrites it, and then the update goes out, and we miss the new edits until a later refresh. 
+            //eventListNeedsUpdate = true
         }
     }
     
@@ -976,7 +970,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             if indexPath.row == 0 {
                 if let note = self.noteForIndexPath(indexPath) {
                     self.noteToEdit = note
-                    self.performSegue(withIdentifier: "segueToEditView", sender: self)
+                    self.performSegue(withIdentifier: "segueToEditNote", sender: self)
                 }
             } else if let comment = commentForIndexPath(indexPath) {
                 self.noteToEdit = comment

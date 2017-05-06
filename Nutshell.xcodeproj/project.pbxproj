@@ -105,8 +105,7 @@
 		4820ED6A1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
 		4820ED6B1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
 		48276A1B1E9D589F004CADB1 /* SwitchProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A191E9D589F004CADB1 /* SwitchProfile.storyboard */; };
-		48276A1E1E9D5900004CADB1 /* EventEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A1C1E9D5900004CADB1 /* EventEdit.storyboard */; };
-		48276A201E9D5941004CADB1 /* EventAdd.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A1F1E9D5941004CADB1 /* EventAdd.storyboard */; };
+		48276A201E9D5941004CADB1 /* EventAddEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A1F1E9D5941004CADB1 /* EventAddEdit.storyboard */; };
 		482971F91EB2655C00E171DF /* TPIntrinsicSizeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482971F81EB2655C00E171DF /* TPIntrinsicSizeUIView.swift */; };
 		482BB3601E8C942E008CD02A /* NutshellUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482BB35F1E8C942E008CD02A /* NutshellUISwitch.swift */; };
 		482BB3621E8D5FCA008CD02A /* NoteGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482BB3611E8D5FCA008CD02A /* NoteGraphData.swift */; };
@@ -154,7 +153,7 @@
 		4859FCD11B9A4DE5000C1269 /* NutshellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCD01B9A4DE5000C1269 /* NutshellTests.swift */; };
 		486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */; };
 		486894F51E831F89008B0732 /* UrchinConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486894F41E831F89008B0732 /* UrchinConstants.swift */; };
-		486894F61E83288C008B0732 /* EventAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EDC2C51BD6B403003049D9 /* EventAddViewController.swift */; };
+		486894F61E83288C008B0732 /* EventAddEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EDC2C51BD6B403003049D9 /* EventAddEditViewController.swift */; };
 		486EAA7A1C305E38003B4497 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 486EAA791C305E38003B4497 /* HealthKit.framework */; };
 		486F5DF51B9F874A00BA2A57 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DEF1B9F874A00BA2A57 /* OpenSans-Bold.ttf */; };
 		486F5DF81B9F874A00BA2A57 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DF01B9F874A00BA2A57 /* OpenSans-Regular.ttf */; };
@@ -179,7 +178,6 @@
 		48867CF91E81A4BB00C4E79D /* BlipPatient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CF01E80A98C00C4E79D /* BlipPatient.swift */; };
 		48867CFA1E81A4BF00C4E79D /* BlipPatient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CF01E80A98C00C4E79D /* BlipPatient.swift */; };
 		48867CFC1E81E32500C4E79D /* NoteListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */; };
-		488E44DC1E83198D00A17AD7 /* EventEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488E44DB1E83198D00A17AD7 /* EventEditViewController.swift */; };
 		488E44E11E831CC100A17AD7 /* HashtagBolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488E44DE1E831CC100A17AD7 /* HashtagBolder.swift */; };
 		488E44E21E831CC100A17AD7 /* HashtagsScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488E44DF1E831CC100A17AD7 /* HashtagsScrollView.swift */; };
 		488E44E31E831CC100A17AD7 /* HashtagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488E44E01E831CC100A17AD7 /* HashtagsView.swift */; };
@@ -304,8 +302,7 @@
 		4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/Pods-Nutshell/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		4820ED691C21E8E3008C754A /* GraphDataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataTypes.swift; path = GraphView/GraphDataTypes.swift; sourceTree = "<group>"; };
 		48276A1A1E9D589F004CADB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SwitchProfile.storyboard; sourceTree = "<group>"; };
-		48276A1D1E9D5900004CADB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EventEdit.storyboard; sourceTree = "<group>"; };
-		48276A1F1E9D5941004CADB1 /* EventAdd.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = EventAdd.storyboard; path = Assets.xcassets/EventAdd.storyboard; sourceTree = "<group>"; };
+		48276A1F1E9D5941004CADB1 /* EventAddEdit.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = EventAddEdit.storyboard; path = Assets.xcassets/EventAddEdit.storyboard; sourceTree = "<group>"; };
 		482971F81EB2655C00E171DF /* TPIntrinsicSizeUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TPIntrinsicSizeUIView.swift; path = ViewControllers/Views/TPIntrinsicSizeUIView.swift; sourceTree = "<group>"; };
 		482BB35F1E8C942E008CD02A /* NutshellUISwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutshellUISwitch.swift; path = Resources/NutshellUISwitch.swift; sourceTree = "<group>"; };
 		482BB3611E8D5FCA008CD02A /* NoteGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteGraphData.swift; path = "GraphView/Tidepool Graph/NoteGraphData.swift"; sourceTree = "<group>"; };
@@ -368,7 +365,6 @@
 		48867CF01E80A98C00C4E79D /* BlipPatient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlipPatient.swift; path = DataModel/BlipPatient.swift; sourceTree = "<group>"; };
 		48867CF11E80A98C00C4E79D /* BlipUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlipUser.swift; path = DataModel/BlipUser.swift; sourceTree = "<group>"; };
 		48867CFB1E81E32500C4E79D /* NoteListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListTableViewCell.swift; path = ViewControllers/NoteListTableViewCell.swift; sourceTree = "<group>"; };
-		488E44DB1E83198D00A17AD7 /* EventEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventEditViewController.swift; path = ViewControllers/EventEditViewController.swift; sourceTree = "<group>"; };
 		488E44DE1E831CC100A17AD7 /* HashtagBolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HashtagBolder.swift; path = ViewControllers/Views/HashtagBolder.swift; sourceTree = "<group>"; };
 		488E44DF1E831CC100A17AD7 /* HashtagsScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HashtagsScrollView.swift; path = ViewControllers/Views/HashtagsScrollView.swift; sourceTree = "<group>"; };
 		488E44E01E831CC100A17AD7 /* HashtagsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HashtagsView.swift; path = ViewControllers/Views/HashtagsView.swift; sourceTree = "<group>"; };
@@ -410,7 +406,7 @@
 		48EC25771EA9526A00607F85 /* NoteListAddCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListAddCommentCell.swift; path = ViewControllers/NoteListAddCommentCell.swift; sourceTree = "<group>"; };
 		48ECF6CD1E96FE18007EE5D3 /* jump-jump-jump-jump.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = "jump-jump-jump-jump.gif"; path = "Images/jump-jump-jump-jump.gif"; sourceTree = "<group>"; };
 		48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphUIView.swift; path = GraphView/GraphUIView.swift; sourceTree = "<group>"; };
-		48EDC2C51BD6B403003049D9 /* EventAddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventAddViewController.swift; path = ViewControllers/EventAddViewController.swift; sourceTree = "<group>"; };
+		48EDC2C51BD6B403003049D9 /* EventAddEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventAddEditViewController.swift; path = ViewControllers/EventAddEditViewController.swift; sourceTree = "<group>"; };
 		48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutshellDataController.swift; path = DataModel/NutshellDataController.swift; sourceTree = "<group>"; };
 		71627230DDF0C03F73CA817F /* Pods_Nutshell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nutshell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -521,8 +517,7 @@
 				485922991B9A61510056E605 /* Login.storyboard */,
 				484365D71CA1118A0046A2C5 /* Menu.storyboard */,
 				4859FCBC1B9A4DE4000C1269 /* EventView.storyboard */,
-				48276A1F1E9D5941004CADB1 /* EventAdd.storyboard */,
-				48276A1C1E9D5900004CADB1 /* EventEdit.storyboard */,
+				48276A1F1E9D5941004CADB1 /* EventAddEdit.storyboard */,
 				48276A191E9D589F004CADB1 /* SwitchProfile.storyboard */,
 			);
 			name = Storyboards;
@@ -567,8 +562,7 @@
 				48EC25771EA9526A00607F85 /* NoteListAddCommentCell.swift */,
 				4874E7971EBCC01700A3EBFA /* NoteListEditCommentCell.swift */,
 				482C89B31EAAD22800EB88C9 /* NoteListCommentCell.swift */,
-				48EDC2C51BD6B403003049D9 /* EventAddViewController.swift */,
-				488E44DB1E83198D00A17AD7 /* EventEditViewController.swift */,
+				48EDC2C51BD6B403003049D9 /* EventAddEditViewController.swift */,
 				4872118C1E8D818300BAD5CE /* SwitchProfileTableViewController.swift */,
 				4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */,
 			);
@@ -918,11 +912,10 @@
 				4859229B1B9A61510056E605 /* Login.storyboard in Resources */,
 				484365D91CA1118A0046A2C5 /* Menu.storyboard in Resources */,
 				486F5DFB1B9F874A00BA2A57 /* OpenSans-Semibold.ttf in Resources */,
-				48276A1E1E9D5900004CADB1 /* EventEdit.storyboard in Resources */,
 				4859FCC61B9A4DE4000C1269 /* LaunchScreen.storyboard in Resources */,
 				486F5DF51B9F874A00BA2A57 /* OpenSans-Bold.ttf in Resources */,
 				486F5DF81B9F874A00BA2A57 /* OpenSans-Regular.ttf in Resources */,
-				48276A201E9D5941004CADB1 /* EventAdd.storyboard in Resources */,
+				48276A201E9D5941004CADB1 /* EventAddEdit.storyboard in Resources */,
 				4859FCC31B9A4DE4000C1269 /* Assets.xcassets in Resources */,
 				48ECF6CE1E96FE18007EE5D3 /* jump-jump-jump-jump.gif in Resources */,
 				48276A1B1E9D589F004CADB1 /* SwitchProfile.storyboard in Resources */,
@@ -1084,13 +1077,12 @@
 				485420211BC44D290020CFE1 /* Workout+CoreDataProperties.swift in Sources */,
 				484365C91C9DB3960046A2C5 /* HealthKitDataPusher.swift in Sources */,
 				0334CA671BA8DDFC00013096 /* SelfMonitoringGlucose.swift in Sources */,
-				488E44DC1E83198D00A17AD7 /* EventEditViewController.swift in Sources */,
 				0334CA791BA8DDFC00013096 /* TimeChange.swift in Sources */,
 				4837CC671BA730F000BA2CDE /* NutshellUILabel.swift in Sources */,
 				0334CAA81BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */,
 				0334CAAB1BA8E22E00013096 /* Bolus.swift in Sources */,
 				0334CA851BA8DDFC00013096 /* UrineKetone.swift in Sources */,
-				486894F61E83288C008B0732 /* EventAddViewController.swift in Sources */,
+				486894F61E83288C008B0732 /* EventAddEditViewController.swift in Sources */,
 				0334CA551BA8DDFC00013096 /* Note.swift in Sources */,
 				4820ED6A1C21E8E3008C754A /* GraphDataTypes.swift in Sources */,
 				0334CA6D1BA8DDFC00013096 /* Settings.swift in Sources */,
@@ -1303,14 +1295,6 @@
 				48276A1A1E9D589F004CADB1 /* Base */,
 			);
 			name = SwitchProfile.storyboard;
-			sourceTree = "<group>";
-		};
-		48276A1C1E9D5900004CADB1 /* EventEdit.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				48276A1D1E9D5900004CADB1 /* Base */,
-			);
-			name = EventEdit.storyboard;
 			sourceTree = "<group>";
 		};
 		484365D71CA1118A0046A2C5 /* Menu.storyboard */ = {

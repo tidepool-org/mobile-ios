@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2015, Tidepool Project
+* Copyright (c) 2017, Tidepool Project
 *
 * This program is free software; you can redistribute it and/or modify it under
 * the terms of the associated License, which is identical to the BSD 2-Clause
@@ -18,84 +18,94 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 
-class EventEditViewController: BaseUIViewController, UITextViewDelegate {
-    
-    // UI Elements
-    // From storyboard
-    
+class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
+
     @IBOutlet weak var sceneContainerView: NutshellUIView!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var navItem: UINavigationItem!
     
-    // Manual
+    // Global so it can be removed and added back at will
+    let closeButton: UIBarButtonItem = UIBarButtonItem()
     
-    // date & time, change label
+    // Current time and 'button' to change time
     let timedateLabel: UILabel = UILabel()
     let changeDateLabel: UILabel = UILabel()
     let dateFormatter = DateFormatter()
-   
-    // datePicker helpers, and datePicker
+
+    // datePicker and helpers for animation
     var datePickerShown: Bool = false
     var isAnimating: Bool = false
     let datePicker: UIDatePicker = UIDatePicker()
+    private var previousDate: Date!
     
-    // Separator between date and hashtagsView
+    // Separator between date/time and hashtags
     let separatorOne: UIView = UIView()
     
-    //hashtagsView for appending hashtags to messages
-    private var hashtagsScrollView = HashtagsScrollView()
+    // hashtagsView for putting hashtags in your messages
+    let hashtagsScrollView = HashtagsScrollView()
     
     // Separator between hashtags and messageBox
     let separatorTwo: UIView = UIView()
     
-    // More UI Elements
+    // UI Elements
     let messageBox: UITextView = UITextView()
     
-    let postButtonW: CGFloat = 112
-    let postButtonH: CGFloat = 41
-    let postButton: UIButton = UIButton()
+    // Data
+    var isAddNote: Bool = false
     
-    // Original note, edited note, and the full name for the group
-    // Note must be set by launching controller in prepareForSegue!
-    var note: BlipNote!
+    // Group and user must be set by launching controller in prepareForSegue - for Add Note case
+    var group: BlipUser!
+    var user: BlipUser!
+    
+    // Returns newNote if successful, add note case
+    var newNote: BlipNote? = nil
+    // Returns editedNote if successful, edit note case
     var editedNote: BlipNote!
-    private var previousDate: Date!
+    // Original note, edit case, or note in progress, add case
+    var note: BlipNote!
     
-    // Keyboard frame for positioning UI Elements
+    // Keyboard frame for positioning UI Elements, initially zero
     var keyboardFrame: CGRect = CGRect.zero
+    // Post button used to be in view, now just historical for sizing...
+    var postButtonFrame = CGRect.zero
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // data
-        self.editedNote = BlipNote()
-        editedNote.createdtime = note.createdtime
-        editedNote.messagetext = note.messagetext
+        if isAddNote {
+            note = BlipNote()
+            note.user = user
+            note.groupid = group.userid
+            note.messagetext = ""
+            // the following is non-nil if this is a message reply
+            note.parentmessage = nil
+            self.previousDate = datePicker.date
+        } else {
+            self.editedNote = BlipNote()
+            editedNote.createdtime = note.createdtime
+            editedNote.messagetext = note.messagetext
+            
+            self.previousDate = note.timestamp as Date
+        }
         
-        self.previousDate = note.timestamp as Date
-        
-        // Initialize keyboard frame of size Zero
-        keyboardFrame = CGRect.zero
-        
+
         // Set background color to light grey color
         self.sceneContainerView.backgroundColor = lightGreyColor
         
         // Add observers for notificationCenter to handle keyboard events
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(EventEditViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventEditViewController.keyboardDidShow(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventEditViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardDidShow(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
         // Add an observer to notificationCenter to handle hashtagPress events from HashtagsView
-        notificationCenter.addObserver(self, selector: #selector(EventEditViewController.hashtagPressed(_:)), name: NSNotification.Name(rawValue: "hashtagPressed"), object: nil)
-    }
+        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.hashtagPressed(_:)), name: NSNotification.Name(rawValue: "hashtagPressed"), object: nil)
+     }
 
-    deinit {
+     deinit {
         NotificationCenter.default.removeObserver(self)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
+     }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
@@ -107,13 +117,13 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
     override func viewDidLayoutSubviews() {
         let frame = self.sceneContainerView.frame
         NSLog("viewDidLayoutSubviews: \(frame)")
-
+        
         if (subviewsInitialized) {
             return
         }
         subviewsInitialized = true
-        
-        self.hashtagsScrollView = HashtagsScrollView()
+
+        configureTitleView()
         
         // configure date label
         timedateLabel.attributedText = dateFormatter.attributedStringFromDate(note.timestamp)
@@ -121,7 +131,7 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
         timedateLabel.frame.origin.x = labelInset
         timedateLabel.frame.origin.y = labelInset
         
-        // configure change button
+        // configure change date label
         changeDateLabel.text = changeDateText
         changeDateLabel.font = smallRegularFont
         changeDateLabel.textColor = Styles.brightBlueColor
@@ -134,8 +144,8 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
         let changeDateH = labelInset + timedateLabel.frame.height + labelInset
         let changeDateView = UIView(frame: CGRect(x: 0, y: 0, width: self.sceneContainerView.frame.width, height: changeDateH))
         changeDateView.backgroundColor = UIColor.clear
-        // tapGesture triggers animation
-        let tap = UITapGestureRecognizer(target: self, action: #selector(EventEditViewController.changeDatePressed(_:)))
+        // tapGesture in view triggers animation
+        let tap = UITapGestureRecognizer(target: self, action: #selector(EventAddEditViewController.changeDatePressed(_:)))
         changeDateView.addGestureRecognizer(tap)
         // add labels to view
         changeDateView.addSubview(timedateLabel)
@@ -145,11 +155,13 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
         
         // configure date picker
         datePicker.datePickerMode = .dateAndTime
-        datePicker.date = note.timestamp as Date
+        if !isAddNote {
+            datePicker.date = note.timestamp as Date
+        }
         datePicker.frame.origin.x = 0
         datePicker.frame.origin.y = timedateLabel.frame.maxY + labelInset / 2
         datePicker.isHidden = true
-        datePicker.addTarget(self, action: #selector(EventEditViewController.datePickerAction(_:)), for: .valueChanged)
+        datePicker.addTarget(self, action: #selector(EventAddEditViewController.datePickerAction(_:)), for: .valueChanged)
         
         self.sceneContainerView.addSubview(datePicker)
         
@@ -178,28 +190,30 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
         self.sceneContainerView.addSubview(separatorTwo)
         
         // configure post button
-        postButton.setAttributedTitle(NSAttributedString(string: postButtonSave,
-                                                         attributes:[NSForegroundColorAttributeName: postButtonTextColor, NSFontAttributeName: mediumRegularFont]), for: UIControlState())
-        postButton.backgroundColor = Styles.brightBlueColor
-        postButton.alpha = 0.5
-        postButton.addTarget(self, action: #selector(EventEditViewController.saveNote), for: .touchUpInside)
-        postButton.frame.size = CGSize(width: postButtonW, height: postButtonH)
-        postButton.frame.origin.x = self.sceneContainerView.frame.size.width - (labelInset + postButton.frame.width)
-        //let navBarH = self.navigationController!.navigationBar.frame.size.height
+        // TODO: with post/save button now in navigation bar, don't need it except for measurements!
+        let postButtonW: CGFloat = 112
+        let postButtonH: CGFloat = 0
+        postButtonFrame.size = CGSize(width: postButtonW, height: postButtonH)
+        postButtonFrame.origin.x = self.sceneContainerView.frame.size.width - (labelInset + postButtonFrame.width)
         let statusBarH = UIApplication.shared.statusBarFrame.size.height
-        postButton.frame.origin.y = self.sceneContainerView.frame.size.height - (labelInset + postButton.frame.height /* + navBarH*/ + statusBarH)
-        
-        self.sceneContainerView.addSubview(postButton)
+        postButtonFrame.origin.y = self.sceneContainerView.frame.size.height - (labelInset + postButtonFrame.height + statusBarH)
         
         // configure message box
         //      initializes with default placeholder text
         messageBox.backgroundColor = lightGreyColor
         messageBox.font = mediumRegularFont
-        let hashtagBolder = HashtagBolder()
-        let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString)
-        messageBox.attributedText = attributedText
+        
+        if isAddNote {
+            messageBox.text = defaultMessage
+            messageBox.textColor = messageTextColor
+        } else {
+            let hashtagBolder = HashtagBolder()
+            let attributedText = hashtagBolder.boldHashtags(note.messagetext as NSString)
+            messageBox.attributedText = attributedText
+        }
+
         let messageBoxW = self.sceneContainerView.frame.width - 2 * labelInset
-        let messageBoxH = (postButton.frame.minY - separatorTwo.frame.maxY) - 2 * labelInset
+        let messageBoxH = (postButtonFrame.minY - separatorTwo.frame.maxY) - 2 * labelInset
         messageBox.frame.size = CGSize(width: messageBoxW, height: messageBoxH)
         messageBox.frame.origin.x = labelInset
         messageBox.frame.origin.y = separatorTwo.frame.maxY + labelInset
@@ -207,33 +221,66 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
         messageBox.autocapitalizationType = UITextAutocapitalizationType.sentences
         messageBox.autocorrectionType = UITextAutocorrectionType.yes
         messageBox.spellCheckingType = UITextSpellCheckingType.yes
-        messageBox.keyboardAppearance = UIKeyboardAppearance.light
+        messageBox.keyboardAppearance = UIKeyboardAppearance.dark
         messageBox.keyboardType = UIKeyboardType.default
         messageBox.returnKeyType = UIReturnKeyType.default
         messageBox.isSecureTextEntry = false
         
         self.sceneContainerView.addSubview(messageBox)
     }
-
-
-    @IBAction func dismissKeyboardHandler(_ sender: Any) {
-        NSLog("\(#function)")
-    }
     
-    @IBAction func cancelButtonHandler(_ sender: Any) {
-        NSLog("\(#function)")
-        self.closeVC()
-    }
-
-    @IBAction func deleteButtonHandler(_ sender: Any) {
-        NSLog("\(#function)")
-        self.deleteNote()
+        
+    // Configure title of navigationBar to given string
+    func configureTitleView() {
+        self.navItem.title = isAddNote ? "Add Note" : "Edit Note"
     }
     
     // close the VC on button press from leftBarButtonItem
-    func closeVC() {
+    @IBAction func cancelButtonPressed(_ sender: Any) {
         APIConnector.connector().trackMetric("Clicked Close Add or Edit Note")
         
+        if isAddNote {
+            if self.doAlertOnAddCancel() {
+                return
+            }
+        } else {
+            if self.doAlertOnEditCancel() {
+                return
+            }
+        }
+        
+        // No alert needed, dismiss the VC
+        self.view.endEditing(true)
+        self.closeDatePicker(false)
+        // close the VC
+        self.performSegue(withIdentifier: "unwindToCancel", sender: self)
+     }
+    
+    private func doAlertOnAddCancel() -> Bool {
+        if (!messageBox.text.isEmpty && messageBox.text != defaultMessage) {
+            // If the note has been edited, show an alert
+            // DOES NOT show alert if date or group has been changed
+            let alert = UIAlertController(title: addAlertTitle, message: addAlertMessage, preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: addAlertCancel, style: .cancel, handler: { Void in
+                DDLogVerbose("Cancel alert and return to note")
+            }))
+            alert.addAction(UIAlertAction(title: addAlertOkay, style: .default, handler: { Void in
+                DDLogVerbose("Do not add note and close view controller")
+                
+                self.view.endEditing(true)
+                self.closeDatePicker(false)
+                // close the VC
+                self.performSegue(withIdentifier: "unwindToCancel", sender: self)
+            }))
+            self.present(alert, animated: true, completion: nil)
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    private func doAlertOnEditCancel() -> Bool {
         if (note.messagetext != messageBox.text || note.timestamp as Date != datePicker.date) {
             
             // If the note has been changed, show an alert
@@ -249,45 +296,19 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
             alert.addAction(UIAlertAction(title: editAlertSave, style: .default, handler: { Void in
                 DDLogVerbose("Save edited note")
                 
-                self.saveNote()
+                self.doSaveNote()
             }))
             self.present(alert, animated: true, completion: nil)
-            
+            return true
         } else {
-            self.view.endEditing(true)
-            self.closeDatePicker(false)
-            self.performSegue(withIdentifier: "unwindToCancel", sender: self)
+            return false
         }
     }
-    
-    func deleteNote() {
-        APIConnector.connector().trackMetric("Clicked Delete Note")
-        
-        let alert = UIAlertController(title: trashAlertTitle, message: trashAlertMessage, preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: trashAlertCancel, style: .cancel, handler: { Void in
-            
-            DDLogVerbose("Do not trash note")
-            
-        }))
-        alert.addAction(UIAlertAction(title: trashAlertOkay, style: .destructive, handler: { Void in
-            
-            DDLogVerbose("Trash note")
-            
-            // Done editing note
-            self.view.endEditing(true)
-            self.closeDatePicker(false)
-            self.performSegue(withIdentifier: "unwindToDelete", sender: self)
-            
-        }))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
+
     // Toggle the datepicker open or closed depending on if it is currently showing
     // Called by the changeDateView
     func changeDatePressed(_ sender: UIView!) {
         APIConnector.connector().trackMetric("Clicked Change Date")
-        
         if (!datePicker.isHidden) {
             closeDatePicker(false)
         } else {
@@ -306,13 +327,14 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
             })
             // Move all affected UI elements with animation
             UIView.animateKeyframes(withDuration: animationTime, delay: 0.0, options: [], animations: { () -> Void in
+                
                 // UI element location (and some sizing)
                 self.separatorOne.frame.origin.y = self.timedateLabel.frame.maxY + labelInset
                 //          note: hashtagsView completely expanded
                 self.hashtagsScrollView.pagedHashtagsView()
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
+                let messageBoxH = (self.postButtonFrame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
                 self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
                 self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
                 
@@ -343,7 +365,7 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
                 self.hashtagsScrollView.sizeZeroHashtagsView()
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 self.separatorTwo.frame.origin.y = self.separatorOne.frame.minY
-                let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
+                let messageBoxH = (self.postButtonFrame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
                 self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
                 self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
                 
@@ -387,12 +409,12 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
                 let separatorToBottom: CGFloat = self.sceneContainerView.frame.height - self.separatorTwo.frame.maxY
                 if (separatorToBottom > 300) {
-                    // Larger device
+                    // Larger Device
                     
                     // Move up controls
-                    self.postButton.frame.origin.y = self.sceneContainerView.frame.height - (self.keyboardFrame.height + labelInset + self.postButton.frame.height)
+                    self.postButtonFrame.origin.y = self.sceneContainerView.frame.height - (self.keyboardFrame.height + labelInset + self.postButtonFrame.height)
                     // Resize messageBox
-                    let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
+                    let messageBoxH = (self.postButtonFrame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
                     self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
                     self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
                 } else {
@@ -409,6 +431,7 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
                 if (completed) {
                     let separatorToBottom: CGFloat = self.sceneContainerView.frame.height - self.separatorTwo.frame.maxY
                     if (separatorToBottom < 300) {
+                        // For small view, change the button to be 'done'
                         self.changeDateLabel.text = doneDateText
                         self.changeDateLabel.font = smallBoldFont
                         self.changeDateLabel.sizeToFit()
@@ -422,7 +445,7 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
         }
     }
     
-    // Open hashtagsView completely to full view with animation
+    // Open hashtagsView completely to full view
     func openHashtagsCompletely() {
         if (hashtagsScrollView.hashtagsCollapsed && !isAnimating) {
             isAnimating = true
@@ -433,8 +456,8 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
                 self.hashtagsScrollView.frame.origin.y = self.separatorOne.frame.maxY
                 // position affected UI elements
                 self.separatorTwo.frame.origin.y = self.hashtagsScrollView.frame.maxY
-                self.postButton.frame.origin.y = self.sceneContainerView.frame.height - (labelInset + self.postButton.frame.height)
-                let messageBoxH = (self.postButton.frame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
+                self.postButtonFrame.origin.y = self.sceneContainerView.frame.height - (labelInset + self.postButtonFrame.height)
+                let messageBoxH = (self.postButtonFrame.minY - self.separatorTwo.frame.maxY) - 2 * labelInset
                 self.messageBox.frame.size = CGSize(width: self.messageBox.frame.width, height: messageBoxH)
                 self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
                 
@@ -442,7 +465,7 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
                 self.isAnimating = false
                 if (completed) {
                     if (self.changeDateLabel.text == doneDateText) {
-                        // If label says 'done', change back to 'change'
+                        // Label says 'done', change back to 'change'
                         self.changeDateLabel.text = changeDateText
                         self.changeDateLabel.font = smallRegularFont
                         self.changeDateLabel.sizeToFit()
@@ -477,8 +500,15 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
         textViewDidChange(messageBox)
     }
     
-    // saveNote action from saveNoteButton
-    func saveNote() {
+    @IBAction func saveButtonHandler(_ sender: Any) {
+        if isAddNote {
+            doPostNote()
+        } else {
+            doSaveNote()
+        }
+    }
+    
+    func doSaveNote() {
         if ((note.messagetext != messageBox.text || note.timestamp as Date != datePicker.date) && messageBox.text != defaultMessage && !messageBox.text.isEmpty) {
             APIConnector.connector().trackMetric("Clicked Save Note")
             
@@ -488,79 +518,109 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
             self.editedNote.timestamp = self.datePicker.date
             
             // Identify hashtags
-            let words = self.editedNote.messagetext.components(separatedBy: " ")
-            
-            for word in words {
-                if (word.hasPrefix("#")) {
-                    // hashtag found!
-                    // algorithm to determine length of hashtag without symbols or punctuation (common practice)
-                    var charsInHashtag: Int = 0
-                    let symbols = CharacterSet.symbols
-                    let punctuation = CharacterSet.punctuationCharacters
-                    for char in word.unicodeScalars {
-                        if (char == "#" && charsInHashtag == 0) {
-                            charsInHashtag += 1
-                            continue
-                        }
-                        if (!punctuation.contains(UnicodeScalar(char.value)!) && !symbols.contains(UnicodeScalar(char.value)!)) {
-                            charsInHashtag += 1
-                        } else {
-                            break
-                        }
-                    }
-                    
-                    let newword = (word as NSString).substring(to: charsInHashtag)
-                    
-                    // Save the hashtag in CoreData
-                    self.hashtagsScrollView.hashtagsView.handleHashtagCoreData(newword)
-                }
-            }
+            saveNewHashTags(self.editedNote)
             
             // End editing and close the datePicker
             self.view.endEditing(true)
             self.closeDatePicker(false)
             
             // close the VC
-            self.performSegue(withIdentifier: "unwindToDone", sender: self)
+            self.performSegue(withIdentifier: "unwindToDoneEditNote", sender: self)
+        }
+    }
+
+    func doPostNote() {
+        if (messageBox.text != defaultMessage && !messageBox.text.isEmpty) {
+            APIConnector.connector().trackMetric("Clicked Post Note")
+            
+            // if messageBox has text (not default message or empty) --> set the note to have values
+            self.note.messagetext = self.messageBox.text
+            self.note.groupid = self.group.userid
+            self.note.timestamp = self.datePicker.date
+            self.note.userid = self.note.user!.userid
+            
+            // Identify hashtags
+            saveNewHashTags(self.note)
+            
+            // End editing and close the datePicker
+            self.view.endEditing(true)
+            self.closeDatePicker(false)
+            
+            // close the VC, passing along new note...
+            self.newNote = note
+            self.performSegue(withIdentifier: "unwindToDoneAddNote", sender: self)
+        }
+    }
+    
+    private func saveNewHashTags(_ note: BlipNote) {
+        // Identify hashtags
+        let separators = CharacterSet(charactersIn: " \n\t")
+        let words = note.messagetext.components(separatedBy: separators)
+        
+        for word in words {
+            if (word.hasPrefix("#")) {
+                // hashtag found!
+                // algorithm to determine length of hashtag without symbols or punctuation (common practice)
+                var charsInHashtag: Int = 0
+                let symbols = CharacterSet.symbols
+                let punctuation = CharacterSet.punctuationCharacters
+                for char in word.unicodeScalars {
+                    if (char == "#" && charsInHashtag == 0) {
+                        charsInHashtag += 1
+                        continue
+                    }
+                    if (!punctuation.contains(UnicodeScalar(char.value)!) && !symbols.contains(UnicodeScalar(char.value)!)) {
+                        charsInHashtag += 1
+                    } else {
+                        break
+                    }
+                }
+                
+                let newword = (word as NSString).substring(to: charsInHashtag)
+                
+                // Save the hashtag in CoreData
+                self.hashtagsScrollView.hashtagsView.handleHashtagCoreData(newword)
+            }
         }
     }
     
     // Handle hashtagPressed notification from hashtagsView (hashtag button was pressed)
     func hashtagPressed(_ notification: Notification) {
+        // unwrap the hashtag from userInfo
         
         APIConnector.connector().trackMetric("Clicked Hashtag")
         
-        if let info = notification.userInfo {
-            if let hashtag = info["hashtag"] as? String {
-                // append hashtag to messageBox.text
-                if (messageBox.text == defaultMessage || messageBox.text.isEmpty) {
-                    // currently default message
-                    messageBox.text = hashtag
+        // TODO: replace use of notification with protocol callback...
+        if let hashtag = notification.userInfo?["hashtag"] as? String {
+            // append hashtag to messageBox.text
+            if (messageBox.text == defaultMessage || messageBox.text.isEmpty) {
+                // currently default message
+                messageBox.text = hashtag
+            } else {
+                // not default message, check if there's already a space
+                if (self.messageBox.text.hasSuffix(" ")) {
+                    // already a space, append hashtag
+                    messageBox.text = messageBox.text + hashtag
                 } else {
-                    // not default message, check if there's already a space
-                    if (self.messageBox.text.hasSuffix(" ")) {
-                        // already a space, append hashtag
-                        messageBox.text = messageBox.text + hashtag
-                    } else {
-                        // no space yet, throw a space in before hashtag
-                        messageBox.text = messageBox.text + " " + hashtag
-                    }
+                    // no space yet, throw a space in before hashtag
+                    messageBox.text = messageBox.text + " " + hashtag
                 }
-                // call textViewDidChange to format hashtags with bolding
-                textViewDidChange(messageBox)
             }
+            // call textViewDidChange to format hashtags with bolding
+            textViewDidChange(messageBox)
         }
     }
     
     // Handle touches in the view
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
+            
             // determine if the touch (first touch) is in the hashtagsView
             let touchLocation = touch.location(in: self.sceneContainerView)
             let viewFrame = self.sceneContainerView.convert(hashtagsScrollView.frame, from: hashtagsScrollView.superview)
             
-            // if outside hashtagsView, endEditing, close keyboard, animate, etc.
             if !viewFrame.contains(touchLocation) {
+                // if outside hashtagsView, endEditing, close keyboard, animate, etc.
                 if (!isAnimating) {
                     view.endEditing(true)
                 }
@@ -594,12 +654,27 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
         self.openHashtagsCompletely()
     }
     
-    // Lock in portrait orientation
-    override var shouldAutorotate : Bool {
-        return false
+    //
+    //  MARK: - UITextViewDelegate
+    //
+
+    // textViewDidBeginEditing, clear the messageBox if default message
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        APIConnector.connector().trackMetric("Clicked On Message Box")
+        
+        if (textView.text == defaultMessage) {
+            textView.text = nil
+        }
     }
     
-    // MARK: - UITextViewDelegate
+    // textViewDidEndEditing, if empty set back to default message
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = defaultMessage
+            textView.font = mediumRegularFont
+            textView.textColor = messageTextColor
+        }
+    }
     
     func textViewDidChange(_ textView: UITextView) {
         if (textView.text != defaultMessage) {
@@ -616,29 +691,20 @@ class EventEditViewController: BaseUIViewController, UITextViewDelegate {
             // put the cursor back in the same position
             textView.selectedTextRange = range
         }
-        if ((note.messagetext != textView.text || note.timestamp as Date != datePicker.date) && textView.text != defaultMessage && !textView.text.isEmpty) {
-            postButton.alpha = 1.0
+        if isAddNote {
+            if (textView.text != defaultMessage && !textView.text.isEmpty) {
+                self.saveButton.isEnabled = true
+            } else {
+                self.saveButton.isEnabled = false
+            }
         } else {
-            postButton.alpha = 0.5
+            if ((note.messagetext != textView.text || note.timestamp as Date != datePicker.date) && textView.text != defaultMessage && !textView.text.isEmpty) {
+                self.saveButton.isEnabled = true
+            } else {
+                self.saveButton.isEnabled = false
+            }
         }
     }
-    
-    // textViewDidBeginEditing, clear the messageBox if default message
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        APIConnector.connector().trackMetric("Clicked On Message Box")
-        
-        if (textView.text == defaultMessage) {
-            textView.text = nil
-        }
-    }
-    
-    // textViewDidEndEditing, if empty set back to default message
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.isEmpty {
-            textView.text = defaultMessage
-            textView.textColor = messageTextColor
-        }
-    }
-
 }
+
 

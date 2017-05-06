@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="stl-aU-t9r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="stl-aU-t9r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--EventAdd-->
+        <!--EventAddEdit-->
         <scene sceneID="83B-9n-l36">
             <objects>
-                <viewController title="EventAdd" id="stl-aU-t9r" customClass="EventAddViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="EventAddEdit" id="stl-aU-t9r" customClass="EventAddEditViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Riq-je-Tgm"/>
                         <viewControllerLayoutGuide type="bottom" id="x3z-Pr-jvd"/>
@@ -30,17 +30,17 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                                 <items>
-                                                    <navigationItem title="New Note/Comment" id="KY8-jf-nzQ">
-                                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="vih-8x-uIO" userLabel="cancelButton">
+                                                    <navigationItem title="Add/Edit Note" id="KY8-jf-nzQ">
+                                                        <barButtonItem key="leftBarButtonItem" image="xIconSmall" id="vih-8x-uIO" userLabel="cancelButton">
                                                             <color key="tintColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <connections>
-                                                                <action selector="cancelButtonPressed:" destination="stl-aU-t9r" id="ul0-39-Qgr"/>
+                                                                <action selector="cancelButtonPressed:" destination="stl-aU-t9r" id="lsS-q7-53K"/>
                                                             </connections>
                                                         </barButtonItem>
-                                                        <barButtonItem key="rightBarButtonItem" enabled="NO" systemItem="save" id="l8u-ZM-ASl" userLabel="editBarButtonItem">
+                                                        <barButtonItem key="rightBarButtonItem" enabled="NO" systemItem="save" id="l8u-ZM-ASl" userLabel="saveButton">
                                                             <color key="tintColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <connections>
-                                                                <action selector="saveButtonHandler:" destination="stl-aU-t9r" id="kvv-i4-9dr"/>
+                                                                <action selector="saveButtonHandler:" destination="stl-aU-t9r" id="Fhy-y3-uUQ"/>
                                                             </connections>
                                                         </barButtonItem>
                                                     </navigationItem>
@@ -99,10 +99,12 @@
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <connections>
-                        <outlet property="navItem" destination="KY8-jf-nzQ" id="NdG-qW-4kQ"/>
-                        <outlet property="saveButton" destination="l8u-ZM-ASl" id="sZx-X2-UE6"/>
-                        <outlet property="sceneContainerView" destination="eQn-GO-3ak" id="qE0-8s-30A"/>
-                        <segue destination="Ydi-yO-Q5f" kind="unwind" identifier="unwindToDone" unwindAction="done:" id="cfI-4d-TG8"/>
+                        <outlet property="navItem" destination="KY8-jf-nzQ" id="WHk-SL-cWv"/>
+                        <outlet property="saveButton" destination="l8u-ZM-ASl" id="7bq-Yr-Vr1"/>
+                        <outlet property="sceneContainerView" destination="eQn-GO-3ak" id="3nE-qm-hMQ"/>
+                        <segue destination="Ydi-yO-Q5f" kind="unwind" identifier="unwindToDoneAddNote" unwindAction="doneAddNote:" id="cfI-4d-TG8"/>
+                        <segue destination="Ydi-yO-Q5f" kind="unwind" identifier="unwindToDoneEditNote" unwindAction="doneEditNote:" id="dff-zm-EE2"/>
+                        <segue destination="Ydi-yO-Q5f" kind="unwind" identifier="unwindToCancel" unwindAction="cancel:" id="sZe-Hk-zY7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cUh-Ja-S5J" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -111,4 +113,7 @@
             <point key="canvasLocation" x="2234" y="-1366"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="xIconSmall" width="15" height="15"/>
+    </resources>
 </document>
