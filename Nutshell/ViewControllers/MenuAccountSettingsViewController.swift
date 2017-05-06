@@ -15,6 +15,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
     var userSelectedSwitchProfile = false
     var userSelectedLogout = false
+    var userSelectedLoggedInUser = false
     var userSelectedExternalLink: URL? = nil
     
     @IBOutlet weak var loginAccount: UILabel!
@@ -72,6 +73,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     
     func menuWillOpen() {
         // Treat this like viewWillAppear...
+        userSelectedLoggedInUser = false
         userSelectedSwitchProfile = false
         userSelectedLogout = false
         userSelectedExternalLink = nil
@@ -96,6 +98,11 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     //
     // MARK: - Button/switch handling
     //
+    
+    @IBAction func selectLoggedInUserButton(_ sender: Any) {
+        userSelectedLoggedInUser = true
+        self.hideSideMenuView()
+    }
     
     @IBAction func switchProfileTapped(_ sender: AnyObject) {
         userSelectedSwitchProfile = true

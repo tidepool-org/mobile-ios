@@ -224,7 +224,16 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         NSLog("EventList sideMenuDidClose")
         configureForMenuOpen(false)
         if let sideMenuController = self.sideMenuController()?.sideMenu?.menuViewController as? MenuAccountSettingsViewController {
-            if sideMenuController.userSelectedSwitchProfile {
+            if sideMenuController.userSelectedLoggedInUser {
+                if let loggedInUser = dataController.currentLoggedInUser {
+                    if loggedInUser.userid != dataController.currentViewedUser?.userid {
+                        NSLog("Switching to logged in user, id: \(String(describing: loggedInUser.fullName))")
+                        switchProfile(loggedInUser)
+                    } else {
+                        NSLog("Ignore select of logged in user, already selected!")
+                    }
+                }
+            } else if sideMenuController.userSelectedSwitchProfile {
                 sideMenuController.userSelectedSwitchProfile = false
                 performSegue(withIdentifier: "segueToSwitchProfile", sender: self)
             } else if sideMenuController.userSelectedLogout {
@@ -592,7 +601,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     @IBAction func doneAddNote(_ segue: UIStoryboardSegue) {
         NSLog("unwind segue to eventListVC doneAddNote!")
         if let eventAddVC = segue.source as? EventAddEditViewController {
-            // TODO: add case here, need to add edit case...
             if let newNote = eventAddVC.newNote {
                 APIConnector.connector().doPostWithNote(self, note: newNote)
                 // will be called back at postComplete on successful post!
@@ -631,8 +639,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         NSLog("unwind segue to eventList home!")
         if let switchProfileVC = segue.source as? SwitchProfileTableViewController {
             if let newViewedUser = switchProfileVC.newViewedUser {
-                NSLog("TODO: switch to user \(String(describing: newViewedUser.fullName))")
                 if newViewedUser.userid != dataController.currentViewedUser?.userid {
+                    NSLog("Switch to user \(String(describing: newViewedUser.fullName))")
                     switchProfile(newViewedUser)
                 }
             } else {
@@ -651,11 +659,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func databaseChanged(_ note: Notification) {
         NSLog("EventList: Database Change Notification")
         if viewIsForeground {
-            // TODO: this crashed on logout, we're still foreground, and moc is being saved...
-            // TODO: will be needed if notes go into a database but unused right now...
+            // Note: this crashed on logout, we're still foreground, and moc is being saved...
+            // This will be needed if notes go into a database but unused right now...
             //loadNotes()
         } else {
-            // TODO: this event can be triggered by update of hashtags in database, resulting in a refresh just as we are saving edits to a note. We update the note, but then get the refresh which overwrites it, and then the update goes out, and we miss the new edits until a later refresh. 
+            // Note: this event can be triggered by update of hashtags in database, resulting in a refresh just as we are saving edits to a note. We update the note, but then get the refresh which overwrites it, and then the update goes out, and we miss the new edits until a later refresh.
             //eventListNeedsUpdate = true
         }
     }

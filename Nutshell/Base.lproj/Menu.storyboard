@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -40,6 +40,15 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wmi-HA-2WR" userLabel="usernameSection">
                                                 <rect key="frame" x="0.0" y="0.0" width="255" height="54"/>
                                                 <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hvG-Ot-neC" userLabel="selectLoggedInUserButton">
+                                                        <rect key="frame" x="0.0" y="0.0" width="255" height="54"/>
+                                                        <state key="normal">
+                                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        </state>
+                                                        <connections>
+                                                            <action selector="selectLoggedInUserButton:" destination="jOa-f6-dl3" eventType="touchUpInside" id="XMc-GQ-pHM"/>
+                                                        </connections>
+                                                    </button>
                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profileIcon" translatesAutoresizingMaskIntoConstraints="NO" id="FLn-oX-1ox">
                                                         <rect key="frame" x="16" y="15" width="24" height="24"/>
                                                         <constraints>
@@ -56,44 +65,19 @@
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingUserName"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xsQ-vI-ULY" userLabel="rightButtonView">
-                                                        <rect key="frame" x="215" y="0.0" width="40" height="54"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hvG-Ot-neC" userLabel="userSelectLargeHitArea">
-                                                                <rect key="frame" x="0.0" y="0.0" width="40" height="54"/>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XBj-Gn-9Yg" userLabel="userSelectButton">
-                                                                <rect key="frame" x="13" y="18" width="11" height="17"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="width" constant="11" id="Cjq-2u-HnT"/>
-                                                                    <constraint firstAttribute="height" constant="17" id="jW5-zi-iJg"/>
-                                                                </constraints>
-                                                                <state key="normal" image="rightDisclosureArrow"/>
-                                                            </button>
-                                                        </subviews>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        <constraints>
-                                                            <constraint firstItem="hvG-Ot-neC" firstAttribute="leading" secondItem="xsQ-vI-ULY" secondAttribute="leading" id="7YE-gD-WQx"/>
-                                                            <constraint firstAttribute="trailing" secondItem="hvG-Ot-neC" secondAttribute="trailing" id="CK7-zT-mgY"/>
-                                                            <constraint firstAttribute="trailing" secondItem="XBj-Gn-9Yg" secondAttribute="trailing" constant="16" id="TAh-fJ-Sz4"/>
-                                                            <constraint firstAttribute="width" constant="40" id="YnR-9c-rDU"/>
-                                                            <constraint firstItem="hvG-Ot-neC" firstAttribute="top" secondItem="xsQ-vI-ULY" secondAttribute="top" id="ZcQ-iF-d1H"/>
-                                                            <constraint firstAttribute="bottom" secondItem="hvG-Ot-neC" secondAttribute="bottom" id="mem-Vx-SJK"/>
-                                                            <constraint firstItem="XBj-Gn-9Yg" firstAttribute="centerY" secondItem="xsQ-vI-ULY" secondAttribute="centerY" id="zFj-Mj-php"/>
-                                                        </constraints>
-                                                    </view>
                                                 </subviews>
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
+                                                    <constraint firstAttribute="bottom" secondItem="hvG-Ot-neC" secondAttribute="bottom" id="0Ct-m8-5R3"/>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="54" id="0bF-Iy-U7d"/>
                                                     <constraint firstItem="FLn-oX-1ox" firstAttribute="leading" secondItem="Wmi-HA-2WR" secondAttribute="leading" constant="16" id="1dm-P3-plO"/>
                                                     <constraint firstItem="8eU-B6-eOM" firstAttribute="leading" secondItem="FLn-oX-1ox" secondAttribute="trailing" constant="10" id="8Xc-8q-qxh"/>
-                                                    <constraint firstAttribute="trailing" secondItem="xsQ-vI-ULY" secondAttribute="trailing" id="9DL-Ii-aZG"/>
-                                                    <constraint firstItem="xsQ-vI-ULY" firstAttribute="top" secondItem="Wmi-HA-2WR" secondAttribute="top" id="J9m-xi-ocB"/>
-                                                    <constraint firstAttribute="bottom" secondItem="xsQ-vI-ULY" secondAttribute="bottom" id="QJH-tP-0eo"/>
                                                     <constraint firstItem="8eU-B6-eOM" firstAttribute="centerY" secondItem="Wmi-HA-2WR" secondAttribute="centerY" id="WA7-DJ-v0W"/>
                                                     <constraint firstItem="FLn-oX-1ox" firstAttribute="centerY" secondItem="Wmi-HA-2WR" secondAttribute="centerY" id="X9J-cN-3kI"/>
+                                                    <constraint firstItem="hvG-Ot-neC" firstAttribute="top" secondItem="Wmi-HA-2WR" secondAttribute="top" id="d1s-pT-OKM"/>
+                                                    <constraint firstAttribute="trailing" secondItem="hvG-Ot-neC" secondAttribute="trailing" id="hXG-cD-BeO"/>
                                                     <constraint firstAttribute="height" constant="54" id="jhI-kU-Xdf"/>
+                                                    <constraint firstItem="hvG-Ot-neC" firstAttribute="leading" secondItem="Wmi-HA-2WR" secondAttribute="leading" id="kg9-1U-3vX"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ls-ZC-LIS" userLabel="healthkitSection">
