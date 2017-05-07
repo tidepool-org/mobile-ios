@@ -306,7 +306,7 @@ class APIConnector {
                     }
                 }
             } else {
-                NSLog("Invalid response for tracking metric")
+                NSLog("Invalid response for tracking metric: \(response.result.error!)")
             }
         }
     }
@@ -643,7 +643,6 @@ class APIConnector {
                     
                     NSLog("notes: \(jsonResult)")
                     let messages: NSArray = jsonResult.value(forKey: "messages") as! NSArray
-                    NSLog("\(messages)")
                     let dateFormatter = DateFormatter()
                     
                     for message in messages {
@@ -823,9 +822,9 @@ class APIConnector {
     
     let unknownError: String = "Unknown Error Occurred"
     let unknownErrorMessage: String = "An unknown error occurred. We are working hard to resolve this issue."
-    fileprivate var isShowingAlert = false
+    private var isShowingAlert = false
     
-    func alertWithOkayButton(_ title: String, message: String) {
+    private func alertWithOkayButton(_ title: String, message: String) {
         DDLogInfo("title: \(title), message: \(message)")
         if defaultDebugLevel != DDLogLevel.off {
             let callStackSymbols = Thread.callStackSymbols
@@ -840,17 +839,31 @@ class APIConnector {
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { Void in
                 self.isShowingAlert = false
             }))
-            if var topController = UIApplication.shared.keyWindow?.rootViewController {
-                while let presentedViewController = topController.presentedViewController {
-                    topController = presentedViewController
-                }
-                
-                topController.present(alert, animated: true, completion: nil)
-            }
+            presentAlert(alert)
         }
     }
 
+    private func presentAlert(_ alert: UIAlertController) {
+        if var topController = UIApplication.shared.keyWindow?.rootViewController {
+            while let presentedViewController = topController.presentedViewController {
+                topController = presentedViewController
+            }
+            topController.present(alert, animated: true, completion: nil)
+        }
+    }
     
+    func alertIfNetworkIsUnreachable() -> Bool {
+        if APIConnector.connector().serviceAvailable() {
+            return false
+        }
+        let alert = UIAlertController(title: "Not Connected to Network", message: "This application requires a network to access the Tidepool service!", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { Void in
+            return
+        }))
+        presentAlert(alert)
+        return true
+    }
+
     //
     // MARK: - Blood glucose sample upload
     //

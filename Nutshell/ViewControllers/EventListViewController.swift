@@ -76,8 +76,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
         // keyboard up/down
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
-        configureForReachability()
 
         if let sideMenu = self.sideMenuController()?.sideMenu {
             sideMenu.delegate = self
@@ -153,28 +151,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             sideMenu.allowRightSwipe = false
             sideMenu.allowPanGesture = false
         }
-    }
-
-    func reachabilityChanged(_ note: Notification) {
-        configureForReachability()
-    }
-
-    fileprivate func configureForReachability() {
-        let connected = APIConnector.connector().isConnectedToNetwork()
-        //missingDataAdvisoryTitle.text = connected ? "There is no data in here!" : "You are currently offline!"
-        NSLog("TODO: figure out connectivity story! Connected: \(connected)")
-    }
-
-    fileprivate func networkIsUnreachable(alertUser: Bool) -> Bool {
-        if APIConnector.connector().serviceAvailable() {
-            return false
-        }
-        let alert = UIAlertController(title: "Not Connected to Network", message: "This application requires a network to access the Tidepool service!", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { Void in
-            return
-        }))
-        self.present(alert, animated: true, completion: nil)
-        return true
     }
     
     @IBAction func toggleSideMenu(_ sender: AnyObject) {
@@ -270,7 +246,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     //
     
     @IBAction func navBarRightButtonHandler(_ sender: Any) {
-        if networkIsUnreachable(alertUser: true) {
+        if APIConnector.connector().alertIfNetworkIsUnreachable() {
             return
         }
         performSegue(withIdentifier: "segueToAddNote", sender: self)
@@ -970,7 +946,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func editPressed(_ sender: NutshellSimpleUIButton!) {
         NSLog("cell with tag \(sender.tag) was pressed!")
         
-        if networkIsUnreachable(alertUser: true) {
+        if APIConnector.connector().alertIfNetworkIsUnreachable() {
             return
         }
         
@@ -1037,7 +1013,7 @@ extension EventListViewController: UITableViewDelegate {
         if row > kNoteRow {
             if row == addCommentRow(commentCount: comments.count) {
                 // go to comment add/edit controller if we have network connectivity...
-                if !networkIsUnreachable(alertUser: true) {
+                if !APIConnector.connector().alertIfNetworkIsUnreachable() {
                     self.currentCommentEditIndexPath = indexPath
                     performSegue(withIdentifier: "segueToEditComment", sender: self)
                     NSLog("Segue to add comment!")

@@ -48,15 +48,12 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         
         self.title = commentToEdit != nil ? "Edit Comment" : "Add Comment"
         
-        // Add a notification for when the database changes
+        // Add notification observers...
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChangeNotifyHandler(_:)), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
         // graph data changes
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
         // keyboard up/down
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
-        configureForReachability()
+        notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
    
     // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
@@ -89,29 +86,6 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         viewIsForeground = false
     }
 
-    func reachabilityChanged(_ note: Notification) {
-        configureForReachability()
-    }
-
-    fileprivate func configureForReachability() {
-        let connected = APIConnector.connector().isConnectedToNetwork()
-        //missingDataAdvisoryTitle.text = connected ? "There is no data in here!" : "You are currently offline!"
-        NSLog("TODO: figure out connectivity story! Connected: \(connected)")
-    }
-
-    // TODO: move to a shared file!
-    fileprivate func networkIsUnreachable(alertUser: Bool) -> Bool {
-        if APIConnector.connector().serviceAvailable() {
-            return false
-        }
-        let alert = UIAlertController(title: "Not Connected to Network", message: "This application requires a network to access the Tidepool service!", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { Void in
-            return
-        }))
-        self.present(alert, animated: true, completion: nil)
-        return true
-    }
-    
     //
     // MARK: - View handling for keyboard
     //
@@ -194,7 +168,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     
     func editPressed(_ sender: NutshellSimpleUIButton!) {
         NSLog("cell with tag \(sender.tag) was pressed!")
-        if networkIsUnreachable(alertUser: true) {
+        if APIConnector.connector().alertIfNetworkIsUnreachable() {
             return
         }
         
