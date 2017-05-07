@@ -62,6 +62,13 @@ import UIKit
         .loginButton: .center,
         ]
 
+    private let buttonTypeToCornerRadius: [ButtonTypeEnum: CGFloat] = [
+        .blueTextMenuButton: 0.0,
+        .greyTextMenuButton: 0.0,
+        .greyAddCommentButton: 0.0,
+        .loginButton: 3.0,
+        ]
+
     @IBInspectable var buttonStyling: String = "" {
         didSet {
             stylingEnum = buttonTypeStringToEnum[buttonStyling]!
@@ -89,48 +96,52 @@ import UIKit
     }
     
     func updateStyle() {
-        if let textColor = buttonTypeToTextNormalColor[stylingEnum], let backColor = buttonTypeToBackgroundNormalColor[stylingEnum], let textAlign = buttonTypeToTextAlignment[stylingEnum] {
-            if let image = imageForButton(textColor: textColor, backColor: backColor, textAlign: textAlign) {
+        if let textColor = buttonTypeToTextNormalColor[stylingEnum], let backColor = buttonTypeToBackgroundNormalColor[stylingEnum], let textAlign = buttonTypeToTextAlignment[stylingEnum], let radius = buttonTypeToCornerRadius[stylingEnum] {
+            var font = Styles.mediumSmallRegularFont
+            if let (fontFromStyles, _) = Styles.usageToFontWithColor[buttonStyling] {
+                font = fontFromStyles
+            }
+            if let image = imageForButton(textColor: textColor, backColor: backColor, textAlign: textAlign, font: font, cornerRadius: radius) {
                 self.setImage(image, for: UIControlState.normal)
             }
         }
         
-        if let textColor = buttonTypeToTextHighlightColor[stylingEnum], let backColor = buttonTypeToBackgroundHighlightColor[stylingEnum], let textAlign = buttonTypeToTextAlignment[stylingEnum] {
-            if let image = imageForButton(textColor: textColor, backColor: backColor, textAlign: textAlign) {
+        if let textColor = buttonTypeToTextHighlightColor[stylingEnum], let backColor = buttonTypeToBackgroundHighlightColor[stylingEnum], let textAlign = buttonTypeToTextAlignment[stylingEnum], let radius = buttonTypeToCornerRadius[stylingEnum] {
+            var font = Styles.mediumSmallRegularFont
+            if let (fontFromStyles, _) = Styles.usageToFontWithColor[buttonStyling] {
+                font = fontFromStyles
+            }
+            if let image = imageForButton(textColor: textColor, backColor: backColor, textAlign: textAlign, font: font, cornerRadius: radius) {
                 self.setImage(image, for: UIControlState.highlighted)
             }
         }
         styledToSize = self.bounds.size
     }
     
-    private func imageForButton(textColor: UIColor, backColor: UIColor, textAlign: NSTextAlignment) -> UIImage? {
+    private func imageForButton(textColor: UIColor, backColor: UIColor, textAlign: NSTextAlignment, font: UIFont, cornerRadius: CGFloat) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, 0)
-        drawRectShape(self.bounds.size, textColor: textColor, backColor: backColor, textAlign: textAlign)
+        drawRectShape(self.bounds.size, textColor: textColor, backColor: backColor, textAlign: textAlign, font: font, cornerRadius: cornerRadius)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
     }
 
-//    private func drawRoundRectShape(_ size: CGSize, fillColor: UIColor, radius: CGFloat) {
-//        let backgroundPath = UIBezierPath(roundedRect: CGRect(x:0, y:0, width:size.width, height:size.height), cornerRadius: radius)
-//        fillColor.setFill()
-//        backgroundPath.fill()
-//    }
-
     private let titleIndent: CGFloat = 18.0
-    private func drawRectShape(_ size: CGSize, textColor: UIColor, backColor: UIColor, textAlign: NSTextAlignment) {
+    private func drawRectShape(_ size: CGSize, textColor: UIColor, backColor: UIColor, textAlign: NSTextAlignment, font: UIFont, cornerRadius: CGFloat) {
         let textIndent: CGFloat = textAlign == .center ? 0.0 : titleIndent
         let context = UIGraphicsGetCurrentContext()!
         let rectangleRect = CGRect(x:0, y:0, width:size.width, height:size.height)
         let rectangleInset = CGRect(x:textIndent, y:0, width:size.width-textIndent, height:size.height)
-        let rectanglePath = UIBezierPath(rect: rectangleRect)
+        let rectanglePath: UIBezierPath = cornerRadius > 0.0 ?
+            UIBezierPath(roundedRect: rectangleRect, cornerRadius: cornerRadius) :
+            UIBezierPath(rect: rectangleRect)
         backColor.setFill()
         rectanglePath.fill()
         
         let rectangleTextContent = buttonTitle
         let rectangleStyle = NSMutableParagraphStyle()
         rectangleStyle.alignment = textAlign
-        let rectangleFontAttributes = [NSFontAttributeName: Styles.mediumSmallRegularFont, NSForegroundColorAttributeName: textColor, NSParagraphStyleAttributeName: rectangleStyle]
+        let rectangleFontAttributes = [NSFontAttributeName: font, NSForegroundColorAttributeName: textColor, NSParagraphStyleAttributeName: rectangleStyle]
         
         let rectangleTextHeight: CGFloat = rectangleTextContent.boundingRect(with: CGSize(width: rectangleInset.width, height: CGFloat.infinity), options: .usesLineFragmentOrigin, attributes: rectangleFontAttributes, context: nil).height
         context.saveGState()

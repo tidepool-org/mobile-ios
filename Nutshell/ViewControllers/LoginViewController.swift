@@ -62,6 +62,16 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         passwordTextField.keyboardAppearance = UIKeyboardAppearance.dark
         emailTextField.keyboardAppearance = UIKeyboardAppearance.dark
         
+        let borderColor = Styles.alt2LightGreyColor
+        
+        passwordTextField.layer.borderColor = borderColor.cgColor
+        passwordTextField.layer.borderWidth = 1.0;
+        //passwordTextField.layer.cornerRadius = 2.0;
+
+        emailTextField.layer.borderColor = borderColor.cgColor
+        emailTextField.layer.borderWidth = 1.0;
+        //emailTextField.layer.cornerRadius = 2.0;
+
         let notificationCenter = NotificationCenter.default
 
         notificationCenter.addObserver(self, selector: #selector(LoginViewController.textFieldDidChange), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
@@ -157,6 +167,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     
     @IBAction func login_button_tapped(_ sender: AnyObject) {
         updateButtonStates()
+        tapOutsideFieldHandler(self)
         loginIndicator.startAnimating()
         
         APIConnector.connector().login(emailTextField.text!,
@@ -239,9 +250,16 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
 
     @IBOutlet weak var loginViewCenterYConstraint: NSLayoutConstraint!
     fileprivate var viewAdjustAnimationTime: Float = 0.25
-    fileprivate func adjustLogInView(_ centerOffset: CGFloat) {
-        
-        loginViewCenterYConstraint.constant = -centerOffset
+    fileprivate var originalOffsetConstant: CGFloat? = nil
+    fileprivate func adjustLogInView(_ extraSpaceNeeded: CGFloat? = nil) {
+        if originalOffsetConstant == nil {
+            originalOffsetConstant = loginViewCenterYConstraint.constant
+        }
+        var newOffsetConstant = originalOffsetConstant!
+        if let extraSpace = extraSpaceNeeded {
+            newOffsetConstant -= extraSpace
+        }
+        loginViewCenterYConstraint.constant = newOffsetConstant
         UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
             self.logInScene.layoutIfNeeded()
         }) 
@@ -253,7 +271,8 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! Float
         let loginViewDistanceToBottom = logInScene.frame.height - logInEntryContainer.frame.origin.y - logInEntryContainer.frame.size.height
-        let additionalKeyboardRoom = keyboardFrame.height - loginViewDistanceToBottom
+        // allow 4 pixels for margin...
+        let additionalKeyboardRoom = keyboardFrame.height - loginViewDistanceToBottom + 4.0
         if (additionalKeyboardRoom > 0) {
             self.adjustLogInView(additionalKeyboardRoom)
         }
@@ -262,7 +281,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     // UIKeyboardWillHideNotification
     func keyboardWillHide(_ notification: Notification) {
         // reposition login view if needed
-        self.adjustLogInView(0.0)
+        self.adjustLogInView()
     }
 
     // MARK: - Debug Config

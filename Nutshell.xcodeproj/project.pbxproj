@@ -582,7 +582,6 @@
 			children = (
 				48103E981C1DE7BC0055C27A /* EventViewNavController.swift */,
 				4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */,
-				4806E3391E995A350024A497 /* TPMenuButton.swift */,
 			);
 			name = MenuViewControllers;
 			sourceTree = "<group>";
@@ -731,6 +730,7 @@
 				482F481E1EA935A900733186 /* TPRowSeparatorView.swift */,
 				482971F81EB2655C00E171DF /* TPIntrinsicSizeUIView.swift */,
 				48E5C2101EB2D17100D5923A /* TPUIButton.swift */,
+				4806E3391E995A350024A497 /* TPMenuButton.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";

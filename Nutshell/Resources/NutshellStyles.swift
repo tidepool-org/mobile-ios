@@ -55,11 +55,11 @@ open class Styles: NSObject {
     static var usageToFontWithColor = [
         // general usage
         "brightBackgroundButton": (largeRegularFont, whiteColor),
-        "loginButton": (mediumSemiboldFont, whiteColor),
+        "loginButton": (largeSemiboldFont, whiteColor),
         // login & signup scenes
-        "userDataEntry": (mediumRegularFont, blackColor),
-        "dataEntryErrorFeedback": (smallSemiboldFont, redErrorColor),
-        "forgotPasswordText": (mediumSmallRegularFont, blackColor),
+        "userDataEntry": (largeRegularFont, blackColor),
+        "dataEntryErrorFeedback": (mediumSemiboldFont, redErrorColor),
+        "forgotPasswordText": (mediumRegularFont, warmGreyColor),
         "networkDisconnectText" : (largeRegularFont, whiteColor),
         // event list table scene
         "profileCellNameText": (mediumSmallRegularFont, darkPurpleColor),
@@ -112,10 +112,11 @@ open class Styles: NSObject {
         static let smallRegularFont: UIFont = UIFont(name: "OpenSans", size: 12.5)!
         static let mediumRegularFont: UIFont = UIFont(name: "OpenSans", size: 17.0)!
         static let mediumSmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 15.0)!
-        static let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 20.0)!
+        static let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 19.0)!
         
         static let smallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 12.5)!
         static let mediumSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 17.0)!
+        static let largeSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 19.0)!
         static let mediumSmallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 15.0)!
         static let mediumVerySmallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 14.0)!
         static let veryLargeSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 25.5)!
@@ -145,6 +146,7 @@ open class Styles: NSObject {
 
     open class var smallSemiboldFont: UIFont { return FontCache.smallSemiboldFont }
     open class var mediumSemiboldFont: UIFont { return FontCache.mediumSemiboldFont }
+    open class var largeSemiboldFont: UIFont { return FontCache.largeSemiboldFont }
     open class var mediumSmallSemiboldFont: UIFont { return FontCache.mediumSmallSemiboldFont }
     open class var mediumVerySmallSemiboldFont: UIFont { return FontCache.mediumVerySmallSemiboldFont }
     open class var veryLargeSemiboldFont: UIFont { return FontCache.veryLargeSemiboldFont }
@@ -176,6 +178,7 @@ open class Styles: NSObject {
         static let darkPurple75Color: UIColor = UIColor(hex: 0x281946, opacity: 0.75)
         static let lightGreyColor: UIColor = UIColor(hex: 0xeaeff0)
         static let altLightGreyColor: UIColor = UIColor(hex: 0xc9c9c9)
+        static let alt2LightGreyColor: UIColor = UIColor(hex: 0xe2e3e4)
         static let veryLightGreyColor: UIColor = UIColor(hex: 0xF7F7F8)
         static let redErrorColor: UIColor = UIColor(hex: 0xff354e)
         static let pinkColor: UIColor = UIColor(hex: 0xf58fc7, opacity: 0.75)
@@ -186,6 +189,7 @@ open class Styles: NSObject {
         static let alt2DarkGreyColor: UIColor = UIColor(hex: 0x58595b)//
         static let dimmedDarkGreyColor: UIColor = UIColor(hex: 0x9da2a7
             , opacity: 0.5)
+        static let warmGreyColor: UIColor = UIColor(hex: 0x9b9b9b)
         static let mediumLightGreyColor: UIColor = UIColor(hex: 0x7e7e7e)
         static let whiteColor: UIColor = UIColor(hex: 0xffffff)
         static let dimmedWhiteColor: UIColor = UIColor(hex: 0xffffff, opacity: 0.30)
@@ -205,6 +209,7 @@ open class Styles: NSObject {
     open class var brightBlueColor: UIColor { return ColorCache.brightBlueColor }
     open class var lightGreyColor: UIColor { return ColorCache.lightGreyColor }
     open class var altLightGreyColor: UIColor { return ColorCache.altLightGreyColor }
+    open class var alt2LightGreyColor: UIColor { return ColorCache.alt2LightGreyColor }
     open class var veryLightGreyColor: UIColor { return ColorCache.veryLightGreyColor }
 
     //
@@ -217,6 +222,7 @@ open class Styles: NSObject {
     open class var lightDarkGreyColor: UIColor { return ColorCache.lightDarkGreyColor }
     open class var altDarkGreyColor: UIColor { return ColorCache.altDarkGreyColor }
     open class var alt2DarkGreyColor: UIColor { return ColorCache.alt2DarkGreyColor }
+    open class var warmGreyColor: UIColor { return ColorCache.warmGreyColor }
     open class var mediumLightGreyColor: UIColor { return ColorCache.mediumLightGreyColor }
     open class var whiteColor: UIColor { return ColorCache.whiteColor }
     open class var dimmedWhiteColor: UIColor { return ColorCache.dimmedWhiteColor }
