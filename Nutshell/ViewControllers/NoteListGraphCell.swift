@@ -27,6 +27,8 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     @IBOutlet weak var imageContainer: UIView!
     
     @IBOutlet weak var noDataView: UIView!
+    @IBOutlet weak var dataAvailabilityLabel: UILabel!
+    @IBOutlet weak var howToUploadButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -49,6 +51,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     
     func configureCell(_ note: BlipNote) {
         self.note = note
+        configureNoData()
     }
     
     private var graphContainerView: TidepoolGraphView?
@@ -62,7 +65,15 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
         noDataView.isHidden = true
     }
     
-    func configureGraphContainer(lowBGBounds: Int? = nil, highBGBounds: Int? = nil) {
+    func configureGraphContainer() {
+        var lowBGBounds: Int?
+        var highBGBounds: Int?
+        let dataController = NutDataController.sharedInstance
+        if let bgLowBounds = dataController.currentViewedUser?.bgTargetLow, let bgHighBounds = dataController.currentViewedUser?.bgTargetHigh {
+            lowBGBounds = Int(bgLowBounds)
+            highBGBounds = Int(bgHighBounds)
+        }
+        
         NSLog("NoteListGraphCell: configureGraphContainer")
         removeGraphView()
         if let note = note {
@@ -90,6 +101,26 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
         }
     }
     
+    let kDataDelay: TimeInterval = (60*60*3)    // 3 hours
+    func configureNoData() {
+        var dataIsComing = false
+        if appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser() {
+            if let note = note {
+                let passedTime = note.createdtime.timeIntervalSinceNow
+                if passedTime > -kDataDelay {
+                    dataIsComing = true
+                }
+            }
+        }
+        if dataIsComing {
+            dataAvailabilityLabel.text = "Data is coming..."
+            howToUploadButton.isHidden = true
+       } else {
+            dataAvailabilityLabel.text = "No data"
+            howToUploadButton.isHidden = false
+        }
+    }
+    
     func syncGraph() {
         if let graphContainerView = graphContainerView {
             let dataStillLoading = DatabaseUtils.sharedInstance.isLoadingTidepoolEvents()
@@ -98,16 +129,16 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
             if graphContainerView.dataFound() {
                 // ensure loading and no data shown are off
                 NSLog("\(#function) data found, show graph and grid")
-                graphContainerView.displayGridLines(true)
+                //graphContainerView.displayGridLines(true)
             } else if dataStillLoading {
                 // show loading animation...
                 NSLog("\(#function) data still loading, show loading animation")
-                graphContainerView.displayGridLines(false)
+                //graphContainerView.displayGridLines(false)
                 hideLoadingView = false
             } else {
                 // show no data found view...
                 NSLog("\(#function) no data found!")
-                graphContainerView.displayGridLines(false)
+                //graphContainerView.displayGridLines(false)
                 hideNoDataView = false
             }
             

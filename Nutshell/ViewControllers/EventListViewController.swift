@@ -965,6 +965,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
 
+    func howToUploadPressed(_ sender: UIButton!) {
+        NSLog("howToUploadPressed was pressed!")
+        if let url = URL(string: "http://support.tidepool.org") {
+            UIApplication.shared.openURL(url)
+        }
+    }
+    
 }
 
 //
@@ -1160,14 +1167,8 @@ extension EventListViewController: UITableViewDataSource {
             cell.bounds.size.width = tableView.bounds.width
             cell.configureCell(note)
 
-            var lowBounds: Int?
-            var highBounds: Int?
-            if let bgLowBounds = dataController.currentViewedUser?.bgTargetLow, let bgHighBounds = dataController.currentViewedUser?.bgTargetHigh {
-                lowBounds = Int(bgLowBounds)
-                highBounds = Int(bgHighBounds)
-            }
-            cell.configureGraphContainer(lowBGBounds: lowBounds, highBGBounds: highBounds)
-            
+            cell.configureGraphContainer()
+            cell.howToUploadButton.addTarget(self, action: #selector(EventListViewController.howToUploadPressed(_:)), for: .touchUpInside)
             return cell
         } else if row == addCommentRow(commentCount: comments.count) {
             // Last row is add comment...

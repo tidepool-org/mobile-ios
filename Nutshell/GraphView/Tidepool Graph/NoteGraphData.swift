@@ -57,9 +57,9 @@ class NoteGraphDataLayer: GraphDataLayer {
         dataArray = []
         
         // TODO: come up with a more elegant way to hide/show this layer...
-        if layout.dataDetected == false {
-            return
-        }
+//        if layout.dataDetected == false {
+//            return
+//        }
         
         let timeExtensionForDataFetch = TimeInterval(kNoteTriangleTopWidth/viewPixelsPerSec)
         let earlyStartTime = startTime.addingTimeInterval(-timeExtensionForDataFetch)

@@ -68,6 +68,9 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         editCommentSceneContainer.layoutIfNeeded()
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.reloadData()
+        
+        // ensure row with edit is visible so keyboard will come up!
+        self.tableView.scrollToRow(at: indexPathOfRowWithEdit(), at: .none, animated: false)
     }
 
     override func didReceiveMemoryWarning() {
@@ -258,6 +261,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         }
     }
 
+    private var animateOnAdjust = false
     func adjustEditAboveKeyboard() {
         if let curEditCell = currentCommentEditCell, let keyboardFrame = keyboardFrame {
             let cellContentOffset = curEditCell.frame.origin.y
@@ -267,7 +271,9 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
             targetOffset.y = cellContentOffset - sizeAboveKeyboard  + curEditCell.bounds.height - 10.0
             if tableView.contentOffset.y < targetOffset.y {
                 NSLog("setting table offset to \(targetOffset.y)")
-                tableView.setContentOffset(targetOffset, animated: true)
+                // Note: don't animate on first layout, too jumpy...
+                tableView.setContentOffset(targetOffset, animated: animateOnAdjust)
+                animateOnAdjust = true
             }
         }
     }
@@ -286,7 +292,26 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     fileprivate func addCommentRow(commentCount: Int) -> Int {
         return kPreCommentRows + commentCount
     }
-    
+
+    func howToUploadPressed(_ sender: UIButton!) {
+        NSLog("howToUploadPressed was pressed!")
+        if let url = URL(string: "http://support.tidepool.org") {
+            UIApplication.shared.openURL(url)
+        }
+    }
+
+    fileprivate func indexPathOfRowWithEdit() -> IndexPath {
+        var row = addCommentRow(commentCount: comments.count)
+        if let commentToEdit = commentToEdit {
+            for i in 0..<comments.count {
+                if comments[i].id == commentToEdit.id {
+                    row = kPreCommentRows + i
+                    break
+                }
+            }
+        }
+        return IndexPath(row: row, section: 0)
+    }
 }
 
 //
@@ -349,6 +374,7 @@ extension EditCommentViewController: UITableViewDataSource {
             cell.bounds.size.width = tableView.bounds.width
             cell.configureCell(note!)
             cell.configureGraphContainer()
+            cell.howToUploadButton.addTarget(self, action: #selector(EditCommentViewController.howToUploadPressed(_:)), for: .touchUpInside)
             return cell
         } else {
             if row > addCommentRow(commentCount: comments.count) {
