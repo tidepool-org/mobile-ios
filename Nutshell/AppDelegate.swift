@@ -234,19 +234,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return
             }
             
-            if !api.isConnectedToNetwork() {
-                // Set to refresh next time we come to foreground...
-                NSLog("Offline, set to refresh token next time app enters foreground")
-                self.refreshTokenNextActive = true
-                self.setupUIForLoginSuccess()
-                return
-            }
+            // TODO: only needed if we want to start working offline, but we will need to cache notes to make this usable...
+//            if !api.isConnectedToNetwork() {
+//                // Set to refresh next time we come to foreground...
+//                NSLog("Offline, set to refresh token next time app enters foreground")
+//                self.refreshTokenNextActive = true
+//                self.setupUIForLoginSuccess()
+//                return
+//            }
             
             NSLog("AppDelegate: attempting to refresh token...")
             api.refreshToken() { succeeded -> (Void) in
                 if succeeded {
-                    NutDataController.sharedInstance.configureHealthKitInterface()
-                    self.setupUIForLoginSuccess()
+                    let dataController = NutDataController.sharedInstance
+                    dataController.checkRestoreCurrentViewedUser {
+                        dataController.configureHealthKitInterface()
+                        self.setupUIForLoginSuccess()
+                    }
                 } else {
                     NSLog("Refresh token failed, need to log in normally")
                     api.logout() {

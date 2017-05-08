@@ -548,7 +548,7 @@ class APIConnector {
                     
                     let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
                     
-                    NSLog("notes: \(jsonResult)")
+                    //NSLog("notes: \(JSON(data!))")
                     let messages: NSArray = jsonResult.value(forKey: "messages") as! NSArray
                     
                     let dateFormatter = DateFormatter()

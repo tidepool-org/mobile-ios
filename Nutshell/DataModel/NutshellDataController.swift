@@ -124,6 +124,7 @@ class NutDataController: NSObject
             _currentViewedUser = newUser
             NSLog("Current viewable user changed to \(String(describing: _currentViewedUser!.fullName))")
             self.deleteAnyTidepoolData()
+            self.saveCurrentViewedUserId()
             configureHealthKitInterface()
             loadUserSettings()
         }
@@ -168,6 +169,7 @@ class NutDataController: NSObject
     /// Call this after logging out of the service to deconfigure the data model and clear the persisted user. Only the Meal and Workout events should remain persisted after this.
     func logoutUser() {
         self.deleteAnyTidepoolData()
+        self.deleteSavedCurrentViewedUserId()
         self.currentUser = nil
         _currentUserId = nil
         _currentLoggedInUser = nil
@@ -209,6 +211,48 @@ class NutDataController: NSObject
         }
     }
 
+    //
+    // MARK: - Save/restore/delete current profile id
+    //
+    let kSavedCurrentViewerIdKey = "CurrentViewerIdKey"
+    func saveCurrentViewedUserId() {
+        if let user = self.currentViewedUser {
+            let id = user.userid
+            let defaults = UserDefaults.standard
+            defaults.setValue(id, forKey: kSavedCurrentViewerIdKey)
+            defaults.synchronize()
+        }
+    }
+    
+    func deleteSavedCurrentViewedUserId() {
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: kSavedCurrentViewerIdKey)
+        defaults.synchronize()
+    }
+    
+    func checkRestoreCurrentViewedUser(_ completion: @escaping (Void) -> (Void)) {
+        let defaults = UserDefaults.standard
+        if let userId = defaults.string(forKey: kSavedCurrentViewerIdKey) {
+            if let loggedInUserId = currentLoggedInUser?.userid {
+                if userId != loggedInUserId {
+                    APIConnector.connector().fetchProfile(userId) { (result:Alamofire.Result<JSON>) -> (Void) in
+                        NSLog("Profile fetch result: \(result)")
+                        if (result.isSuccess) {
+                            if let json = result.value {
+                                let user = BlipUser(userid: userId)
+                                user.processProfileJSON(json)
+                                self.currentViewedUser = user
+                            }
+                        }
+                        completion()
+                    }
+                    return
+                }
+            }
+        }
+        completion()
+    }
+    
     //
     // MARK: - HealthKit user info
     //
