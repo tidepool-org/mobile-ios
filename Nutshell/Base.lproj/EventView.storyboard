@@ -111,7 +111,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kqd-t1-lUR" userLabel="dateLabelSpacerView" customClass="TPIntrinsicSizeUIView" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="42"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="height">
@@ -120,7 +120,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ogm-kb-e7S" userLabel="userLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="10" width="280" height="18"/>
+                                                            <rect key="frame" x="20" y="7" width="280" height="18"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -129,7 +129,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="752" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iPM-Jk-ybw" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="52" width="103" height="17.5"/>
+                                                            <rect key="frame" x="20" y="58" width="103" height="17.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -139,14 +139,14 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NmN-1p-56X" userLabel="editButtonLargeHitArea" customClass="TPUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="-11" width="60" height="60.5"/>
+                                                            <rect key="frame" x="255" y="-14" width="60" height="60.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="60" id="EET-tp-zut"/>
                                                                 <constraint firstAttribute="width" constant="60" id="iKg-xp-dle"/>
                                                             </constraints>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2iF-Hl-EhA" userLabel="editButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="270" y="2.5" width="30" height="33"/>
+                                                            <rect key="frame" x="270" y="2.5" width="30" height="27"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <state key="normal" title="Edit"/>
                                                             <userDefinedRuntimeAttributes>
@@ -154,7 +154,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oza-ZB-EKM" userLabel="noteLabel">
-                                                            <rect key="frame" x="20" y="79.5" width="280" height="20.5"/>
+                                                            <rect key="frame" x="20" y="82.5" width="280" height="20.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <attributedString key="attributedText">
                                                                 <fragment content="Tacos">
@@ -171,9 +171,9 @@
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstItem="Kqd-t1-lUR" firstAttribute="leading" secondItem="Vjk-zO-K8S" secondAttribute="leading" id="49t-7a-ZwD"/>
-                                                        <constraint firstItem="iPM-Jk-ybw" firstAttribute="top" secondItem="Kqd-t1-lUR" secondAttribute="bottom" constant="10" id="9x8-op-Ose"/>
-                                                        <constraint firstItem="ogm-kb-e7S" firstAttribute="top" secondItem="Vjk-zO-K8S" secondAttribute="top" constant="10" id="AfI-5c-6Ik"/>
-                                                        <constraint firstItem="oza-ZB-EKM" firstAttribute="top" secondItem="iPM-Jk-ybw" secondAttribute="bottom" constant="10" id="Aly-pK-Twc"/>
+                                                        <constraint firstItem="iPM-Jk-ybw" firstAttribute="top" secondItem="Kqd-t1-lUR" secondAttribute="bottom" constant="7" id="9x8-op-Ose"/>
+                                                        <constraint firstItem="ogm-kb-e7S" firstAttribute="top" secondItem="Vjk-zO-K8S" secondAttribute="top" constant="7" id="AfI-5c-6Ik"/>
+                                                        <constraint firstItem="oza-ZB-EKM" firstAttribute="top" secondItem="iPM-Jk-ybw" secondAttribute="bottom" constant="7" id="Aly-pK-Twc"/>
                                                         <constraint firstAttribute="trailing" secondItem="oza-ZB-EKM" secondAttribute="trailing" constant="20" id="C0f-n9-FRx"/>
                                                         <constraint firstItem="2iF-Hl-EhA" firstAttribute="centerY" secondItem="ogm-kb-e7S" secondAttribute="centerY" id="F3C-gX-IQy"/>
                                                         <constraint firstItem="2iF-Hl-EhA" firstAttribute="top" secondItem="Vjk-zO-K8S" secondAttribute="top" constant="2.5" id="Lmd-yl-rho"/>
@@ -182,7 +182,7 @@
                                                         <constraint firstItem="ogm-kb-e7S" firstAttribute="leading" secondItem="Vjk-zO-K8S" secondAttribute="leading" constant="20" id="ZYV-is-FJz"/>
                                                         <constraint firstItem="iPM-Jk-ybw" firstAttribute="leading" secondItem="Vjk-zO-K8S" secondAttribute="leading" constant="20" id="gBe-PP-A7e"/>
                                                         <constraint firstItem="oza-ZB-EKM" firstAttribute="leading" secondItem="iPM-Jk-ybw" secondAttribute="leading" id="gv2-Iu-U4p"/>
-                                                        <constraint firstAttribute="bottom" secondItem="oza-ZB-EKM" secondAttribute="bottom" constant="10" id="jo7-qN-teu"/>
+                                                        <constraint firstAttribute="bottom" secondItem="oza-ZB-EKM" secondAttribute="bottom" constant="7" id="jo7-qN-teu"/>
                                                         <constraint firstItem="NmN-1p-56X" firstAttribute="centerX" secondItem="2iF-Hl-EhA" secondAttribute="centerX" id="p5M-1c-X91"/>
                                                         <constraint firstAttribute="trailing" secondItem="2iF-Hl-EhA" secondAttribute="trailing" constant="20" id="uJ2-cz-fhX"/>
                                                         <constraint firstItem="NmN-1p-56X" firstAttribute="centerY" secondItem="2iF-Hl-EhA" secondAttribute="centerY" id="uVq-ZU-6Zz"/>
@@ -198,25 +198,25 @@
                                                     <outlet property="userLabel" destination="ogm-kb-e7S" id="W7o-lY-vgr"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="noteListGraphCell" rowHeight="200" id="8FW-dy-em3" userLabel="noteListGraphCell" customClass="NoteListGraphCell" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="165.5" width="320" height="200"/>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="noteListGraphCell" rowHeight="180" id="8FW-dy-em3" userLabel="noteListGraphCell" customClass="NoteListGraphCell" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="165.5" width="320" height="180"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8FW-dy-em3" id="QYN-d6-o8l">
-                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="749" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="Up0-Yl-gtq" userLabel="dataVizView" customClass="TPIntrinsicSizeUIView" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                             <subviews>
                                                                 <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ncw-Tt-9F9" userLabel="graphLayerContainer">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </view>
                                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gGn-g3-34M" userLabel="loadingAnimationView">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EIK-1x-Wx8" userLabel="imageContainer">
-                                                                            <rect key="frame" x="40" y="25.5" width="240" height="150"/>
+                                                                            <rect key="frame" x="40" y="15.5" width="240" height="150"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="240" id="Sjf-Ir-vKP"/>
@@ -230,34 +230,40 @@
                                                                         <constraint firstItem="EIK-1x-Wx8" firstAttribute="centerY" secondItem="gGn-g3-34M" secondAttribute="centerY" id="AqG-Yb-gfA"/>
                                                                     </constraints>
                                                                 </view>
-                                                                <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M3W-do-eHp" userLabel="noDataView">
-                                                                    <rect key="frame" x="0.0" y="-0.5" width="320" height="200"/>
+                                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M3W-do-eHp" userLabel="noDataView">
+                                                                    <rect key="frame" x="0.0" y="-0.5" width="320" height="180"/>
                                                                     <subviews>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No data" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zUt-iY-jJS" userLabel="dataAvailabilityLabel">
-                                                                            <rect key="frame" x="199" y="159.5" width="44.5" height="16.5"/>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Data is coming…" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9gx-DA-c2l" userLabel="dataIsComingLabel">
+                                                                            <rect key="frame" x="26" y="72" width="92" height="16.5"/>
                                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                                             <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OfN-E5-RLy" userLabel="howToUploadButton">
-                                                                            <rect key="frame" x="193" y="170" width="114" height="30"/>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No data" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zUt-iY-jJS" userLabel="noDataLabel">
+                                                                            <rect key="frame" x="199" y="139.5" width="44.5" height="16.5"/>
+                                                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
+                                                                            <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                            <nil key="highlightedColor"/>
+                                                                        </label>
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OfN-E5-RLy" userLabel="howToUploadButton">
+                                                                            <rect key="frame" x="193" y="150" width="114" height="30"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="114" id="L4V-6k-BOw"/>
                                                                                 <constraint firstAttribute="height" constant="30" id="uXi-HC-blr"/>
                                                                             </constraints>
                                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
-                                                                            <state key="normal" title="  How to upload  ">
-                                                                                <color key="titleColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                            </state>
+                                                                            <state key="normal" title="  How to upload  "/>
                                                                         </button>
                                                                     </subviews>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="trailing" secondItem="OfN-E5-RLy" secondAttribute="trailing" constant="13" id="GCX-Bz-nzR"/>
                                                                         <constraint firstItem="zUt-iY-jJS" firstAttribute="leading" secondItem="OfN-E5-RLy" secondAttribute="leading" constant="6" id="GUD-Hc-RGJ"/>
+                                                                        <constraint firstItem="9gx-DA-c2l" firstAttribute="top" secondItem="M3W-do-eHp" secondAttribute="top" constant="72" id="J9l-NC-akX"/>
                                                                         <constraint firstItem="OfN-E5-RLy" firstAttribute="top" secondItem="zUt-iY-jJS" secondAttribute="bottom" constant="-6" id="Og5-Ng-yQj"/>
                                                                         <constraint firstAttribute="bottom" secondItem="OfN-E5-RLy" secondAttribute="bottom" id="aX0-R6-81Q"/>
+                                                                        <constraint firstItem="9gx-DA-c2l" firstAttribute="leading" secondItem="M3W-do-eHp" secondAttribute="leading" constant="26" id="g9w-WP-84x"/>
                                                                     </constraints>
                                                                 </view>
                                                             </subviews>
@@ -278,7 +284,7 @@
                                                             </constraints>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="height">
-                                                                    <real key="value" value="200"/>
+                                                                    <real key="value" value="180"/>
                                                                 </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
@@ -292,16 +298,17 @@
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <connections>
-                                                    <outlet property="dataAvailabilityLabel" destination="zUt-iY-jJS" id="9cx-M8-MuS"/>
+                                                    <outlet property="dataIsComingLabel" destination="9gx-DA-c2l" id="vA1-7d-6y7"/>
                                                     <outlet property="dataVizView" destination="Up0-Yl-gtq" id="O5e-w9-JdV"/>
                                                     <outlet property="howToUploadButton" destination="OfN-E5-RLy" id="lxb-aG-wa6"/>
                                                     <outlet property="imageContainer" destination="EIK-1x-Wx8" id="hqH-I9-C9e"/>
                                                     <outlet property="loadingAnimationView" destination="gGn-g3-34M" id="V8N-zt-ISe"/>
+                                                    <outlet property="noDataLabel" destination="zUt-iY-jJS" id="kch-QG-1L1"/>
                                                     <outlet property="noDataView" destination="M3W-do-eHp" id="Gf8-ki-4CN"/>
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="addCommentCell" rowHeight="46" id="H8r-tf-0b5" userLabel="addCommentCell" customClass="NoteListAddCommentCell" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="365.5" width="320" height="46"/>
+                                                <rect key="frame" x="0.0" y="345.5" width="320" height="46"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="H8r-tf-0b5" id="Yz9-Hc-qvs">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="46"/>
@@ -315,7 +322,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Comment" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zj3-QQ-6d1" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="49" y="10" width="104" height="26"/>
+                                                            <rect key="frame" x="49" y="7" width="104" height="32"/>
                                                             <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
                                                             <color key="textColor" red="0.48627450980392156" green="0.48627450980392156" blue="0.48627450980392156" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -325,8 +332,8 @@
                                                         </label>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstItem="Zj3-QQ-6d1" firstAttribute="top" secondItem="Yz9-Hc-qvs" secondAttribute="top" constant="10" id="BXq-jF-VnI"/>
-                                                        <constraint firstAttribute="bottom" secondItem="Zj3-QQ-6d1" secondAttribute="bottom" constant="10" id="E5N-hB-xyE"/>
+                                                        <constraint firstItem="Zj3-QQ-6d1" firstAttribute="top" secondItem="Yz9-Hc-qvs" secondAttribute="top" constant="7" id="BXq-jF-VnI"/>
+                                                        <constraint firstAttribute="bottom" secondItem="Zj3-QQ-6d1" secondAttribute="bottom" constant="7" id="E5N-hB-xyE"/>
                                                         <constraint firstItem="Zj3-QQ-6d1" firstAttribute="leading" secondItem="3tz-te-Sk5" secondAttribute="trailing" constant="10" id="MMa-0j-b2m"/>
                                                         <constraint firstItem="3tz-te-Sk5" firstAttribute="leading" secondItem="Yz9-Hc-qvs" secondAttribute="leading" constant="16" id="cAL-Cd-i0H"/>
                                                         <constraint firstItem="Zj3-QQ-6d1" firstAttribute="centerY" secondItem="3tz-te-Sk5" secondAttribute="centerY" id="w2t-u8-tav"/>
@@ -338,14 +345,14 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="noteListCommentCell" rowHeight="80" id="6O8-VU-a9F" userLabel="noteListCommentCell" customClass="NoteListCommentCell" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="411.5" width="320" height="80"/>
+                                                <rect key="frame" x="0.0" y="391.5" width="320" height="80"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6O8-VU-a9F" id="E92-Ks-Pcc">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oY4-t1-amu" userLabel="userLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="10" width="64.5" height="39.5"/>
+                                                            <rect key="frame" x="20" y="7" width="64.5" height="45.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -377,7 +384,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="752" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="752" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yrK-pH-3D0" userLabel="noteLabel">
-                                                            <rect key="frame" x="20" y="49.5" width="280" height="20.5"/>
+                                                            <rect key="frame" x="20" y="52.5" width="280" height="20.5"/>
                                                             <attributedString key="attributedText">
                                                                 <fragment content="Tacos">
                                                                     <attributes>
@@ -396,8 +403,8 @@
                                                         <constraint firstItem="2eJ-Wn-2aL" firstAttribute="centerY" secondItem="blH-Ce-jAg" secondAttribute="centerY" id="JYH-WE-2Gp"/>
                                                         <constraint firstItem="yrK-pH-3D0" firstAttribute="leading" secondItem="E92-Ks-Pcc" secondAttribute="leading" constant="20" id="OPQ-4O-l7q"/>
                                                         <constraint firstAttribute="trailing" secondItem="blH-Ce-jAg" secondAttribute="trailing" constant="20" id="Wcb-Bj-10G"/>
-                                                        <constraint firstItem="oY4-t1-amu" firstAttribute="top" secondItem="E92-Ks-Pcc" secondAttribute="top" constant="10" id="Xh4-t9-yQM"/>
-                                                        <constraint firstAttribute="bottom" secondItem="yrK-pH-3D0" secondAttribute="bottom" constant="10" id="arQ-Gf-Xgg"/>
+                                                        <constraint firstItem="oY4-t1-amu" firstAttribute="top" secondItem="E92-Ks-Pcc" secondAttribute="top" constant="7" id="Xh4-t9-yQM"/>
+                                                        <constraint firstAttribute="bottom" secondItem="yrK-pH-3D0" secondAttribute="bottom" constant="7" id="arQ-Gf-Xgg"/>
                                                         <constraint firstItem="0X6-au-gcs" firstAttribute="centerY" secondItem="oY4-t1-amu" secondAttribute="centerY" id="eEo-zB-hZ7"/>
                                                         <constraint firstItem="blH-Ce-jAg" firstAttribute="centerY" secondItem="oY4-t1-amu" secondAttribute="centerY" id="fhP-f1-VsV"/>
                                                         <constraint firstItem="0X6-au-gcs" firstAttribute="leading" secondItem="oY4-t1-amu" secondAttribute="trailing" constant="10" id="h37-Kb-VSJ"/>
@@ -753,7 +760,7 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wry-fe-dMx" userLabel="dateLabelSpacerView" customClass="TPIntrinsicSizeUIView" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="39"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="height">
@@ -762,7 +769,7 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="edd-RJ-jbi" userLabel="userLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="10" width="280" height="18"/>
+                                                            <rect key="frame" x="20" y="7" width="280" height="18"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -771,7 +778,7 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="752" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xa8-xT-Ys1" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="40" width="103" height="17.5"/>
+                                                            <rect key="frame" x="20" y="46" width="103" height="17.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -781,14 +788,14 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vny-eQ-Lh0" userLabel="editButtonLargeHitArea" customClass="TPUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="-11" width="60" height="60.5"/>
+                                                            <rect key="frame" x="255" y="-14" width="60" height="60.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="60" id="2UA-hD-Rlz"/>
                                                                 <constraint firstAttribute="height" constant="60" id="Z8V-oa-ejx"/>
                                                             </constraints>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="31H-Rg-tAb" userLabel="editButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="270" y="2.5" width="30" height="33"/>
+                                                            <rect key="frame" x="270" y="2.5" width="30" height="27"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <state key="normal" title="Edit"/>
                                                             <userDefinedRuntimeAttributes>
@@ -796,7 +803,7 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="751" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DKK-iw-WaO" userLabel="noteLabel">
-                                                            <rect key="frame" x="20" y="67.5" width="280" height="20.5"/>
+                                                            <rect key="frame" x="20" y="70.5" width="280" height="20.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <attributedString key="attributedText">
                                                                 <fragment content="Tacos">
@@ -814,9 +821,9 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="edd-RJ-jbi" secondAttribute="trailing" constant="20" id="00M-93-oay"/>
                                                         <constraint firstItem="31H-Rg-tAb" firstAttribute="top" secondItem="2v9-bN-gEr" secondAttribute="top" constant="2.5" id="4cM-X5-sir"/>
-                                                        <constraint firstAttribute="bottom" secondItem="DKK-iw-WaO" secondAttribute="bottom" constant="10" id="8gi-n1-Meb"/>
+                                                        <constraint firstAttribute="bottom" secondItem="DKK-iw-WaO" secondAttribute="bottom" constant="7" id="8gi-n1-Meb"/>
                                                         <constraint firstAttribute="trailing" secondItem="31H-Rg-tAb" secondAttribute="trailing" constant="20" id="9sJ-w7-ehp"/>
-                                                        <constraint firstItem="DKK-iw-WaO" firstAttribute="top" secondItem="xa8-xT-Ys1" secondAttribute="bottom" constant="10" id="B2y-xM-YiC"/>
+                                                        <constraint firstItem="DKK-iw-WaO" firstAttribute="top" secondItem="xa8-xT-Ys1" secondAttribute="bottom" constant="7" id="B2y-xM-YiC"/>
                                                         <constraint firstAttribute="trailing" secondItem="DKK-iw-WaO" secondAttribute="trailing" constant="20" id="Hwb-SB-Gym"/>
                                                         <constraint firstItem="DKK-iw-WaO" firstAttribute="leading" secondItem="xa8-xT-Ys1" secondAttribute="leading" id="Lzs-PP-BUO"/>
                                                         <constraint firstItem="wry-fe-dMx" firstAttribute="top" secondItem="2v9-bN-gEr" secondAttribute="top" id="NXz-6e-dkY"/>
@@ -825,8 +832,8 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                         <constraint firstItem="edd-RJ-jbi" firstAttribute="leading" secondItem="2v9-bN-gEr" secondAttribute="leading" constant="20" id="Sf8-te-Lhe"/>
                                                         <constraint firstItem="Vny-eQ-Lh0" firstAttribute="centerX" secondItem="31H-Rg-tAb" secondAttribute="centerX" id="bMY-8p-B9N"/>
                                                         <constraint firstItem="wry-fe-dMx" firstAttribute="leading" secondItem="2v9-bN-gEr" secondAttribute="leading" id="c5I-5u-PpB"/>
-                                                        <constraint firstItem="xa8-xT-Ys1" firstAttribute="top" secondItem="wry-fe-dMx" secondAttribute="bottom" constant="10" id="cQf-Gw-4mK"/>
-                                                        <constraint firstItem="edd-RJ-jbi" firstAttribute="top" secondItem="2v9-bN-gEr" secondAttribute="top" constant="10" id="jhC-TT-LLf"/>
+                                                        <constraint firstItem="xa8-xT-Ys1" firstAttribute="top" secondItem="wry-fe-dMx" secondAttribute="bottom" constant="7" id="cQf-Gw-4mK"/>
+                                                        <constraint firstItem="edd-RJ-jbi" firstAttribute="top" secondItem="2v9-bN-gEr" secondAttribute="top" constant="7" id="jhC-TT-LLf"/>
                                                         <constraint firstAttribute="trailing" secondItem="wry-fe-dMx" secondAttribute="trailing" id="vic-wf-MWZ"/>
                                                         <constraint firstItem="Vny-eQ-Lh0" firstAttribute="centerY" secondItem="31H-Rg-tAb" secondAttribute="centerY" id="zx1-lc-GGW"/>
                                                     </constraints>
@@ -840,25 +847,25 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                     <outlet property="userLabel" destination="edd-RJ-jbi" id="h8Y-sM-SN3"/>
                                                 </connections>
                                             </tableViewCell>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="noteListGraphCell" rowHeight="200" id="bFr-9k-zm8" userLabel="noteListGraphCell" customClass="NoteListGraphCell" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="126" width="320" height="200"/>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="noteListGraphCell" rowHeight="180" id="bFr-9k-zm8" userLabel="noteListGraphCell" customClass="NoteListGraphCell" customModule="Nutshell" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="126" width="320" height="180"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bFr-9k-zm8" id="8L7-Aa-Db2">
-                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="749" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="8av-Ss-laf" userLabel="dataVizView" customClass="TPIntrinsicSizeUIView" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                             <subviews>
                                                                 <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="er5-RW-G8y" userLabel="graphLayerContainer">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </view>
                                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uS6-4l-KEB" userLabel="loadingAnimationView">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="czQ-lv-cyn" userLabel="imageContainer">
-                                                                            <rect key="frame" x="40" y="25.5" width="240" height="150"/>
+                                                                            <rect key="frame" x="40" y="15.5" width="240" height="150"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="240" id="3C0-dl-bLQ"/>
@@ -872,34 +879,40 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                                         <constraint firstItem="czQ-lv-cyn" firstAttribute="centerX" secondItem="uS6-4l-KEB" secondAttribute="centerX" id="p3s-VT-crN"/>
                                                                     </constraints>
                                                                 </view>
-                                                                <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8qg-TS-9wz" userLabel="noDataView">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8qg-TS-9wz" userLabel="noDataView">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                                     <subviews>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No data" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5sJ-zj-IYj" userLabel="dataAvailabilityLabel">
-                                                                            <rect key="frame" x="199" y="159.5" width="44.5" height="16.5"/>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Data is coming…" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9bX-Pe-mqv" userLabel="dataIsComingLabel">
+                                                                            <rect key="frame" x="26" y="72" width="92" height="16.5"/>
+                                                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
+                                                                            <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                            <nil key="highlightedColor"/>
+                                                                        </label>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No data" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5sJ-zj-IYj" userLabel="noDataLabel">
+                                                                            <rect key="frame" x="199" y="139.5" width="44.5" height="16.5"/>
                                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                                             <color key="textColor" red="0.49411764705882355" green="0.49411764705882355" blue="0.49411764705882355" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0N4-8J-yTv" userLabel="howToUploadButton">
-                                                                            <rect key="frame" x="193" y="170" width="114" height="30"/>
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0N4-8J-yTv" userLabel="howToUploadButton">
+                                                                            <rect key="frame" x="193" y="150" width="114" height="30"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="30" id="NQH-2F-ZNK"/>
                                                                                 <constraint firstAttribute="width" constant="114" id="iMS-RO-Bue"/>
                                                                             </constraints>
                                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
-                                                                            <state key="normal" title="  How to upload  ">
-                                                                                <color key="titleColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                            </state>
+                                                                            <state key="normal" title="  How to upload  "/>
                                                                         </button>
                                                                     </subviews>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                     <constraints>
+                                                                        <constraint firstItem="9bX-Pe-mqv" firstAttribute="leading" secondItem="8qg-TS-9wz" secondAttribute="leading" constant="26" id="11F-RP-zCC"/>
                                                                         <constraint firstAttribute="trailing" secondItem="0N4-8J-yTv" secondAttribute="trailing" constant="13" id="4MM-ly-dOV"/>
                                                                         <constraint firstItem="0N4-8J-yTv" firstAttribute="top" secondItem="5sJ-zj-IYj" secondAttribute="bottom" constant="-6" id="ByM-JY-fzm"/>
                                                                         <constraint firstItem="5sJ-zj-IYj" firstAttribute="leading" secondItem="0N4-8J-yTv" secondAttribute="leading" constant="6" id="SuG-rp-llO"/>
                                                                         <constraint firstAttribute="bottom" secondItem="0N4-8J-yTv" secondAttribute="bottom" id="TL6-ub-Vpl"/>
+                                                                        <constraint firstItem="9bX-Pe-mqv" firstAttribute="top" secondItem="8qg-TS-9wz" secondAttribute="top" constant="72" id="ar2-m8-tZY"/>
                                                                     </constraints>
                                                                 </view>
                                                             </subviews>
@@ -920,7 +933,7 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                             </constraints>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="height">
-                                                                    <real key="value" value="200"/>
+                                                                    <real key="value" value="180"/>
                                                                 </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
@@ -934,23 +947,24 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <connections>
-                                                    <outlet property="dataAvailabilityLabel" destination="5sJ-zj-IYj" id="G7R-OU-7Z5"/>
+                                                    <outlet property="dataIsComingLabel" destination="9bX-Pe-mqv" id="xbG-XU-Kee"/>
                                                     <outlet property="dataVizView" destination="8av-Ss-laf" id="xcn-g9-sCj"/>
                                                     <outlet property="howToUploadButton" destination="0N4-8J-yTv" id="PYA-hP-Htv"/>
                                                     <outlet property="imageContainer" destination="er5-RW-G8y" id="253-IU-IlN"/>
                                                     <outlet property="loadingAnimationView" destination="uS6-4l-KEB" id="cMu-l4-wT7"/>
+                                                    <outlet property="noDataLabel" destination="5sJ-zj-IYj" id="9h2-Vm-c76"/>
                                                     <outlet property="noDataView" destination="8qg-TS-9wz" id="lfj-hz-dAI"/>
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="noteListCommentCell" rowHeight="80" id="Pfl-So-Me3" userLabel="noteListCommentCell" customClass="NoteListCommentCell" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="326" width="320" height="80"/>
+                                                <rect key="frame" x="0.0" y="306" width="320" height="80"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Pfl-So-Me3" id="XTq-a4-ksr">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34S-pq-Xwd" userLabel="userLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="10" width="64.5" height="39.5"/>
+                                                            <rect key="frame" x="20" y="7" width="64.5" height="45.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -982,7 +996,7 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </button>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="751" verticalHuggingPriority="752" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="752" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aLL-T5-0s4" userLabel="noteLabel">
-                                                            <rect key="frame" x="20" y="49.5" width="280" height="20.5"/>
+                                                            <rect key="frame" x="20" y="52.5" width="280" height="20.5"/>
                                                             <attributedString key="attributedText">
                                                                 <fragment content="Tacos">
                                                                     <attributes>
@@ -995,7 +1009,7 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                         </label>
                                                     </subviews>
                                                     <constraints>
-                                                        <constraint firstAttribute="bottom" secondItem="aLL-T5-0s4" secondAttribute="bottom" constant="10" id="4NB-BR-d1k"/>
+                                                        <constraint firstAttribute="bottom" secondItem="aLL-T5-0s4" secondAttribute="bottom" constant="7" id="4NB-BR-d1k"/>
                                                         <constraint firstItem="aLL-T5-0s4" firstAttribute="leading" secondItem="XTq-a4-ksr" secondAttribute="leading" constant="20" id="6By-zn-LLh"/>
                                                         <constraint firstItem="rS3-P9-Gem" firstAttribute="centerY" secondItem="34S-pq-Xwd" secondAttribute="centerY" id="8Ow-NH-MWm"/>
                                                         <constraint firstItem="aLL-T5-0s4" firstAttribute="top" secondItem="34S-pq-Xwd" secondAttribute="bottom" id="9uO-qo-K1s"/>
@@ -1006,7 +1020,7 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                         <constraint firstItem="34S-pq-Xwd" firstAttribute="leading" secondItem="XTq-a4-ksr" secondAttribute="leading" constant="20" id="jTI-xr-9p4"/>
                                                         <constraint firstItem="yNh-CL-w7U" firstAttribute="centerX" secondItem="rS3-P9-Gem" secondAttribute="centerX" id="jo5-Jl-4FB"/>
                                                         <constraint firstItem="4Bm-JW-9pW" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="rS3-P9-Gem" secondAttribute="leading" constant="-10" id="oCr-Tb-ynv"/>
-                                                        <constraint firstItem="34S-pq-Xwd" firstAttribute="top" secondItem="XTq-a4-ksr" secondAttribute="top" constant="10" id="wxP-Jb-VMP"/>
+                                                        <constraint firstItem="34S-pq-Xwd" firstAttribute="top" secondItem="XTq-a4-ksr" secondAttribute="top" constant="7" id="wxP-Jb-VMP"/>
                                                         <constraint firstAttribute="trailing" secondItem="rS3-P9-Gem" secondAttribute="trailing" constant="20" id="yaR-bz-qRT"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
@@ -1019,7 +1033,7 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="editCommentCell" rowHeight="46" id="ZhG-SS-gkk" userLabel="noteListEditCommentCell" customClass="NoteListEditCommentCell" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="406" width="320" height="46"/>
+                                                <rect key="frame" x="0.0" y="386" width="320" height="46"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZhG-SS-gkk" id="vyN-4N-9vr">
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="46"/>
@@ -1036,20 +1050,20 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="752" verticalCompressionResistancePriority="752" scrollEnabled="NO" text=" " translatesAutoresizingMaskIntoConstraints="NO" id="cm5-Qi-KGg" userLabel="editCommentTextView">
-                                                            <rect key="frame" x="15" y="12" width="245" height="24"/>
+                                                            <rect key="frame" x="15" y="10" width="245" height="29"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                         </textView>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gjm-bk-lTD" userLabel="saveButtonLargeHitArea" customClass="TPUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="-7" width="60" height="60.5"/>
+                                                            <rect key="frame" x="255" y="-6.5" width="60" height="60.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="60" id="365-4A-TNm"/>
                                                                 <constraint firstAttribute="height" constant="60" id="A9U-aR-0bL"/>
                                                             </constraints>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hjb-HN-EnG" userLabel="saveButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="270" y="9" width="30" height="30"/>
+                                                            <rect key="frame" x="270" y="9.5" width="30" height="30"/>
                                                             <state key="normal" title="Save"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="editButton"/>
@@ -1069,7 +1083,7 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="Hjb-HN-EnG" secondAttribute="trailing" constant="20" id="3te-I4-GFT"/>
                                                         <constraint firstItem="cm5-Qi-KGg" firstAttribute="leading" secondItem="vyN-4N-9vr" secondAttribute="leading" constant="15" id="83N-Em-6E3"/>
-                                                        <constraint firstAttribute="bottom" secondItem="cm5-Qi-KGg" secondAttribute="bottom" constant="10" id="Bib-T9-nsg"/>
+                                                        <constraint firstAttribute="bottom" secondItem="cm5-Qi-KGg" secondAttribute="bottom" constant="7" id="Bib-T9-nsg"/>
                                                         <constraint firstItem="Hjb-HN-EnG" firstAttribute="centerY" secondItem="cm5-Qi-KGg" secondAttribute="centerY" id="Dk4-Tz-kpo"/>
                                                         <constraint firstAttribute="trailing" secondItem="6Ll-0H-y8i" secondAttribute="trailing" id="K8Z-fz-NZ7"/>
                                                         <constraint firstAttribute="bottom" secondItem="oIy-WP-tWx" secondAttribute="bottom" id="LMv-Sb-G7K"/>
@@ -1077,7 +1091,7 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                         <constraint firstItem="gjm-bk-lTD" firstAttribute="centerY" secondItem="Hjb-HN-EnG" secondAttribute="centerY" id="XM0-L5-MQY"/>
                                                         <constraint firstAttribute="trailing" secondItem="oIy-WP-tWx" secondAttribute="trailing" id="ZIR-TA-bsv"/>
                                                         <constraint firstItem="gjm-bk-lTD" firstAttribute="centerX" secondItem="Hjb-HN-EnG" secondAttribute="centerX" id="iIW-ym-bun"/>
-                                                        <constraint firstItem="cm5-Qi-KGg" firstAttribute="top" secondItem="vyN-4N-9vr" secondAttribute="top" constant="12" id="pIu-PB-Tiy"/>
+                                                        <constraint firstItem="cm5-Qi-KGg" firstAttribute="top" secondItem="vyN-4N-9vr" secondAttribute="top" constant="10" id="pIu-PB-Tiy"/>
                                                         <constraint firstAttribute="trailing" secondItem="cm5-Qi-KGg" secondAttribute="trailing" constant="60" id="rdZ-VN-ApM"/>
                                                         <constraint firstItem="oIy-WP-tWx" firstAttribute="leading" secondItem="vyN-4N-9vr" secondAttribute="leading" id="vCU-bx-4oh"/>
                                                         <constraint firstItem="6Ll-0H-y8i" firstAttribute="leading" secondItem="vyN-4N-9vr" secondAttribute="leading" id="zJW-49-4ap"/>

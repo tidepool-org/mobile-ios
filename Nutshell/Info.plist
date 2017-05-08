@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.5</string>
+	<string>1.2.7</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -28,8 +28,8 @@
 	<true/>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Tidepool reads Dexcom glucose data from HealthKit so you can view that data in Tidepool apps and other apps that connect to your Tidepool account.</string>
-    <key>NSHealthUpdateUsageDescription</key>
-    <string>Tidepool writes glucose data to HealthKit so you can view data you‘ve uploaded to Tidepool using other apps on your iPhone.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Tidepool writes glucose data to HealthKit so you can view data you‘ve uploaded to Tidepool using other apps on your iPhone.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>OpenSans-Bold.ttf</string>

@@ -20,15 +20,16 @@ import CocoaLumberjack
 class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     
     var note: BlipNote?
-    let kGraphHeight: CGFloat = 200.0
+    let kGraphHeight: CGFloat = 180.0
     
     @IBOutlet weak var dataVizView: TPIntrinsicSizeUIView!
     @IBOutlet weak var loadingAnimationView: UIView!
     @IBOutlet weak var imageContainer: UIView!
     
     @IBOutlet weak var noDataView: UIView!
-    @IBOutlet weak var dataAvailabilityLabel: UILabel!
+    @IBOutlet weak var noDataLabel: UILabel!
     @IBOutlet weak var howToUploadButton: UIButton!
+    @IBOutlet weak var dataIsComingLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -113,11 +114,13 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
             }
         }
         if dataIsComing {
-            dataAvailabilityLabel.text = "Data is coming..."
+            dataIsComingLabel.isHidden = false
             howToUploadButton.isHidden = true
+            noDataLabel.isHidden = true
        } else {
-            dataAvailabilityLabel.text = "No data"
+            dataIsComingLabel.isHidden = true
             howToUploadButton.isHidden = false
+            noDataLabel.isHidden = false
         }
     }
     

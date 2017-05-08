@@ -917,6 +917,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // MARK: - Table Misc
     //
     
+    fileprivate let kFooterHeight: CGFloat = 10.0
     fileprivate let kNoteRow: Int = 0
     fileprivate let kGraphRow: Int = 1
     fileprivate let kPreCommentRows: Int = 2
@@ -990,7 +991,7 @@ extension EventListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         var footerFrame = tableView.bounds
-        footerFrame.size.height = 12.0
+        footerFrame.size.height = kFooterHeight
         //let footer = UIView(frame: footerFrame)
         //footer.backgroundColor = UIColor.yellow
         //return footer
@@ -998,7 +999,7 @@ extension EventListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 12.0
+        return kFooterHeight
     }
     
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
