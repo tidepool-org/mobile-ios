@@ -179,16 +179,17 @@ public extension Reachability {
         
         guard isReachableFlagSet else { return false }
         
-        if isConnectionRequiredAndTransientFlagSet {
-            return false
-        }
-        
-        if isRunningOnDevice {
-            if isOnWWANFlagSet && !reachableOnWWAN {
-                // We don't want to connect when on 3G.
-                return false
-            }
-        }
+        // Note: for Tidepool mobile, any connection is ok, until proven otherwise!
+//        if isConnectionRequiredAndTransientFlagSet {
+//            return false
+//        }
+//        
+//        if isRunningOnDevice {
+//            if isOnWWANFlagSet && !reachableOnWWAN {
+//                // We don't want to connect when on 3G.
+//                return false
+//            }
+//        }
         
         return true
     }

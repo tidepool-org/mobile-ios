@@ -50,12 +50,8 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let curService = APIConnector.connector().currentService!
-        if curService == "Production" {
-            versionLabel.text = "v" + UIApplication.appVersion()
-        } else{
-            versionLabel.text = "v" + UIApplication.appVersion() + " on " + curService
-        }
+        
+        configureVersion()
 
         self.signUpButton.setTitleColor(Styles.lightDarkGreyColor, for: .highlighted)
         self.loginIndicator.color = UIColor.black
@@ -95,26 +91,16 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         }
     }
     
-    func reachabilityChanged(_ note: Notification) {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            // try token refresh if we are now connected...
-            // TODO: change message to "attempting token refresh"?
-            let api = APIConnector.connector()
-            if api.isConnectedToNetwork() && api.sessionToken != nil {
-                NSLog("Login: attempting to refresh token...")
-                api.refreshToken() { succeeded -> (Void) in
-                    if succeeded {
-                        appDelegate.setupUIForLoginSuccess()
-                    } else {
-                        NSLog("Refresh token failed, need to log in normally")
-                        api.logout() {
-                            self.configureForReachability()
-                        }
-                    }
-                }
-                return
-            }
+    private func configureVersion() {
+        let curService = APIConnector.connector().currentService!
+        if curService == "Production" {
+            versionLabel.text = "v" + UIApplication.appVersion()
+        } else{
+            versionLabel.text = "v" + UIApplication.appVersion() + " on " + curService
         }
+    }
+    
+    func reachabilityChanged(_ note: Notification) {
         configureForReachability()
     }
 
@@ -329,6 +315,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
             actionSheet.addAction(UIAlertAction(title: server.0, style: .default, handler: { Void in
                 let serverName = server.0
                 api.switchToServer(serverName)
+                self.configureVersion()
             }))
         }
         actionSheet.addAction(UIAlertAction(title: "Count HealthKit Blood Glucose Samples", style: .default, handler: {
