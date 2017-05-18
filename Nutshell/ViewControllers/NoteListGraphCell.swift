@@ -20,7 +20,7 @@ import CocoaLumberjack
 class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     
     var note: BlipNote?
-    let kGraphHeight: CGFloat = 180.0
+    let kGraphHeight: CGFloat = TPConstants.kGraphViewHeight
     
     @IBOutlet weak var dataVizView: TPIntrinsicSizeUIView!
     @IBOutlet weak var loadingAnimationView: UIView!

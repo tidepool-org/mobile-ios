@@ -74,8 +74,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChangeNotifyHandler(_:)), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
         // graph data changes
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
-        // keyboard up/down
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
 
         if let sideMenu = self.sideMenuController()?.sideMenu {
             sideMenu.delegate = self
@@ -228,19 +226,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         configureForMenuOpen(true)
         APIConnector.connector().trackMetric("Viewed Hamburger Menu (Hamburger)")
     }
-
-    //
-    // MARK: - View handling for keyboard
-    //
     
-    private var viewAdjustAnimationTime: TimeInterval = 0.25
-    
-    // Capture appropriate scroll animation timing.
-    func keyboardWillShow(_ notification: Notification) {
-        NSLog("\(#function)")
-        viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
-    }
- 
     //
     // MARK: - Nav Bar right button handling
     //
@@ -747,6 +733,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // MARK: - Search 
     //
     
+    private var viewAdjustAnimationTime: TimeInterval = 0.25
     @IBOutlet weak var searchViewHeightConstraint: NSLayoutConstraint!
     let kSearchHeight: CGFloat = 50.0
     private var searchOpen: Bool = true
@@ -982,11 +969,21 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 extension EventListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt estimatedHeightForRowAtIndexPath: IndexPath) -> CGFloat {
-        return 90.0;
+        let row = estimatedHeightForRowAtIndexPath.row
+        if row == kGraphRow {
+            return TPConstants.kGraphViewHeight
+        } else {
+            return 90.0;
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt heightForRowAtIndexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension;
+        let row = heightForRowAtIndexPath.row
+        if row == kGraphRow {
+            return TPConstants.kGraphViewHeight
+        } else {
+            return UITableViewAutomaticDimension;
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {

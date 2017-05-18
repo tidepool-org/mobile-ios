@@ -54,11 +54,13 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
         // keyboard up/down
         notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        configureTableFooter()
     }
    
     // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
     private var subviewsInitialized = false
     override func viewDidLayoutSubviews() {
+        //NSLog("\(#function)")
         if (subviewsInitialized) {
             return
         }
@@ -67,12 +69,22 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         editCommentSceneContainer.setNeedsLayout()
         editCommentSceneContainer.layoutIfNeeded()
         self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.reloadData()
         
         // ensure row with edit is visible so keyboard will come up!
         self.tableView.scrollToRow(at: indexPathOfRowWithEdit(), at: .none, animated: false)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        //NSLog("\(#function)")
+        self.currentCommentEditCell?.addCommentTextView.becomeFirstResponder()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.currentCommentEditCell?.addCommentTextView.resignFirstResponder()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -94,21 +106,22 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     //
     
     private var viewAdjustAnimationTime: TimeInterval = 0.25
-    private var keyboardFrame: CGRect?
+    static var keyboardFrame: CGRect?
     
     // For add comment editing, scroll table so edit view is just above the keyboard when it opens.
     // Also captures keyboard sizing and appropriate scroll animation timing.
     func keyboardWillShow(_ notification: Notification) {
-        NSLog("\(#function)")
+        //NSLog("EditCommentViewController \(#function)")
         viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
-        keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        EditCommentViewController.keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         self.adjustKeyboardSpacerView() // first time, ensure we have a table footer for last cell special case
         self.adjustEditAboveKeyboard()
     }
  
+    
     // Ensure there is enough table footer to allow add comment editing for last note
     fileprivate func adjustKeyboardSpacerView() {
-        if let keyboardFrame = keyboardFrame {
+        if let keyboardFrame = EditCommentViewController.keyboardFrame {
             // add a footer view to the table that is the size of the keyboard, so last table row can be scrolled to the top of the table if necessary
             let height = keyboardFrame.height
             let curTableFooter = self.tableView.tableFooterView
@@ -118,12 +131,21 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
             }
             
             // add a footer view, possibly replace one that is too short (e.g., search keyboard is somewhat smaller than new comment edit keyboard)
-            var footerFrame = self.tableView.bounds
-            footerFrame.size.height = height
-            let footerView = UIView(frame: footerFrame)
-            footerView.backgroundColor = UIColor.white
-            self.tableView.tableFooterView = footerView
+            configureTableFooter()
         }
+    }
+
+    private func configureTableFooter() {
+        var keyboardHeight: CGFloat = 258.0
+        if let keyboardFrame = EditCommentViewController.keyboardFrame {
+            keyboardHeight = keyboardFrame.height
+        }
+        let footerHeight = keyboardHeight + 4.0
+        var footerFrame = self.tableView.bounds
+        footerFrame.size.height = footerHeight
+        let footerView = UIView(frame: footerFrame)
+        footerView.backgroundColor = UIColor.clear
+        self.tableView.tableFooterView = footerView
     }
     
     //
@@ -155,7 +177,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     
     /// Works with graphDataChanged to ensure graph is up-to-date after notification of database changes whether this VC is in the foreground or background.
     fileprivate func checkUpdateGraph() {
-        NSLog("\(#function)")
+        //NSLog("\(#function)")
         if graphNeedsUpdate {
             graphNeedsUpdate = false
             for cell in tableView.visibleCells {
@@ -169,8 +191,8 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         performSegue(withIdentifier: "unwindFromEditComment", sender: self)
     }
     
-    func editPressed(_ sender: NutshellSimpleUIButton!) {
-        NSLog("cell with tag \(sender.tag) was pressed!")
+    func savePressed(_ sender: NutshellSimpleUIButton!) {
+        //NSLog("cell with tag \(sender.tag) was pressed!")
         if APIConnector.connector().alertIfNetworkIsUnreachable() {
             return
         }
@@ -214,10 +236,10 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     func graphDataChanged(_ note: Notification) {
         graphNeedsUpdate = true
         if viewIsForeground {
-            NSLog("EventListVC: graphDataChanged, reloading")
+            NSLog("EditCommentVC: graphDataChanged, reloading")
             checkUpdateGraph()
         } else {
-            NSLog("EventListVC: graphDataChanged, in background")
+            NSLog("EditCommentVC: graphDataChanged, in background")
         }
     }
     
@@ -226,20 +248,11 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     // MARK: - Add Comment UITextField Handling
     //
     
-    func textViewDidChangeNotifyHandler(_ note: Notification) {
-        if let textView = note.object as? UITextView {
-            if textView == self.currentCommentEditCell?.addCommentTextView {
-                NSLog("note changed to \(textView.text)")
-            }
-        }
-    }
-    
-    
     // UITextViewDelegate methods
     func textViewDidChange(_ textView: UITextView) {
-        NSLog("current content offset: \(tableView.contentOffset.y)")
+        //NSLog("current content offset: \(tableView.contentOffset.y)")
         if let editCell = self.currentCommentEditCell {
-            NSLog("note changed to \(textView.text)")
+            //NSLog("note changed to \(textView.text)")
             var originalText = ""
             if let comment = self.commentToEdit {
                 originalText = comment.messagetext
@@ -248,36 +261,35 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
             editCell.saveButton.isEnabled = enableSave
             editCell.saveButtonLargeHitArea.isEnabled = enableSave
             
+
             // adjust table if lines of text have changed...
-            tableView.beginUpdates()
-            tableView.endUpdates()
+            // begin/end updates also scrolls table, so turn off animations and save/restore the content offset...
+            UIView.setAnimationsEnabled(false)
+            let contentOffset = self.tableView.contentOffset
+            self.tableView.beginUpdates()
+            self.tableView.endUpdates()
+            self.tableView.contentOffset = contentOffset
+            UIView.setAnimationsEnabled(true)
+            
+            // do any adjust needed if size of field has changed...
             adjustEditAboveKeyboard()
         }
     }
     
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView == self.currentCommentEditCell?.addCommentTextView {
-            NSLog("\(#function)")
-        }
-    }
-
-    private var animateOnAdjust = false
     func adjustEditAboveKeyboard() {
-        if let curEditCell = currentCommentEditCell, let keyboardFrame = keyboardFrame {
-            let cellContentOffset = curEditCell.frame.origin.y
+        if let curEditCell = currentCommentEditCell, let keyboardFrame = EditCommentViewController.keyboardFrame {
+            var tableContentOffset = tableView.contentOffset
+            let cellContentOffsetY = curEditCell.frame.origin.y
             let sizeAboveKeyboard = tableView.bounds.height - keyboardFrame.height
-            var targetOffset = tableView.contentOffset
-            // minus 10 for 10 of the 12 note boundary separator pixels... 
-            targetOffset.y = cellContentOffset - sizeAboveKeyboard  + curEditCell.bounds.height - 10.0
-            if tableView.contentOffset.y < targetOffset.y {
-                NSLog("setting table offset to \(targetOffset.y)")
-                // Note: don't animate on first layout, too jumpy...
-                tableView.setContentOffset(targetOffset, animated: animateOnAdjust)
-                animateOnAdjust = true
+            // figure offset needed to place bottom of edit cell right on top of keyboard
+            tableContentOffset.y = (cellContentOffsetY + curEditCell.bounds.height) - sizeAboveKeyboard + 4.0
+            //NSLog("above kbd: \(sizeAboveKeyboard), cellTopOffset: \(cellContentOffsetY), cell ht: \(curEditCell.bounds.height)")
+            //NSLog("setting table offset to \(tableContentOffset.y) from \(tableView.contentOffset.y)")
+            if tableView.contentOffset.y < tableContentOffset.y {
+                tableView.setContentOffset(tableContentOffset, animated: true)
             }
         }
     }
-
     
     //
     // MARK: - Table Misc
@@ -294,7 +306,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     }
 
     func howToUploadPressed(_ sender: UIButton!) {
-        NSLog("howToUploadPressed was pressed!")
+        NSLog("TODO: add metric?")
         if let url = URL(string: TPConstants.kHowToUploadURL) {
             UIApplication.shared.openURL(url)
         }
@@ -321,11 +333,21 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
 extension EditCommentViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt estimatedHeightForRowAtIndexPath: IndexPath) -> CGFloat {
-        return 90.0;
+        let row = estimatedHeightForRowAtIndexPath.row
+        if row == kGraphRow {
+            return TPConstants.kGraphViewHeight
+        } else {
+            return 60.0
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt heightForRowAtIndexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension;
+        let row = heightForRowAtIndexPath.row
+        if row == kGraphRow {
+            return TPConstants.kGraphViewHeight
+        } else {
+            return UITableViewAutomaticDimension;
+        }
     }
     
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
@@ -388,6 +410,7 @@ extension EditCommentViewController: UITableViewDataSource {
                 comment = comments[row-kFirstCommentRow]
                 addOrEdit = comment?.id == self.commentToEdit?.id
             } else {
+                // add comment row...
                 addOrEdit = true
             }
             
@@ -398,14 +421,8 @@ extension EditCommentViewController: UITableViewDataSource {
                 self.currentCommentEditCell = cell
                 cell.saveButton.cellIndexPath = indexPath
                 cell.saveButtonLargeHitArea.cellIndexPath = indexPath
-                cell.saveButton.addTarget(self, action: #selector(EditCommentViewController.editPressed(_:)), for: .touchUpInside)
-                cell.saveButtonLargeHitArea.addTarget(self, action: #selector(EditCommentViewController.editPressed(_:)), for: .touchUpInside)
-                
-                
-                cell.addCommentTextView.perform(
-                    #selector(becomeFirstResponder),
-                    with: nil,
-                    afterDelay: 0.25)
+                cell.saveButton.addTarget(self, action: #selector(EditCommentViewController.savePressed(_:)), for: .touchUpInside)
+                cell.saveButtonLargeHitArea.addTarget(self, action: #selector(EditCommentViewController.savePressed(_:)), for: .touchUpInside)
                 return cell
             } else {
                 if let comment = comment {

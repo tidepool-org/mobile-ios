@@ -61,12 +61,12 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         let borderColor = Styles.alt2LightGreyColor
         
         passwordTextField.layer.borderColor = borderColor.cgColor
-        passwordTextField.layer.borderWidth = 1.0;
-        //passwordTextField.layer.cornerRadius = 2.0;
+        passwordTextField.layer.borderWidth = 1.0
+        //passwordTextField.layer.cornerRadius = 2.0
 
         emailTextField.layer.borderColor = borderColor.cgColor
-        emailTextField.layer.borderWidth = 1.0;
-        //emailTextField.layer.cornerRadius = 2.0;
+        emailTextField.layer.borderWidth = 1.0
+        //emailTextField.layer.cornerRadius = 2.0
 
         let notificationCenter = NotificationCenter.default
 
