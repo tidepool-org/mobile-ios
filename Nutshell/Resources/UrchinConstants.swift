@@ -16,6 +16,8 @@
 import Foundation
 import UIKit
 
+// TODO: move relevant items to TPConstants.swift, and delete the rest!
+
 // ------------ USED EVERYWHERE ------------
 
 
@@ -579,29 +581,6 @@ let verticalHashtagSpacing: CGFloat = 1.5 * labelSpacing
  */
 let horizontalHashtagSpacing: CGFloat = 2 * labelSpacing
 
-// ------------ Loading View ------------
-
-/*
- Coloring for loading view
- background
- indicator
- text
- */
-let loadingViewBackground: UIColor = blackishColor
-let loadingIndicatorColor: UIColor = tealColor
-let loadingTextColor: UIColor = tealColor
-
-/*
- Roundedness of the loading view corners
- */
-let loadingCornerRadius: CGFloat = 10
-
-/*
- Commonly used loading descriptions
- */
-let loadingLogIn: String = "Logging in..."
-let loadingTeams: String = "Loading teams..."
-let loadingNotes: String = "Loading notes..."
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

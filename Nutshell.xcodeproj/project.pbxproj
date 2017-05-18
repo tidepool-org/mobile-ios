@@ -125,6 +125,7 @@
 		4839FD231EB7E16F003E5BF7 /* NoteListGraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4839FD221EB7E16F003E5BF7 /* NoteListGraphCell.swift */; };
 		483E3C361B9F4A6300DA49E7 /* BaseUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */; };
 		483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */; };
+		4841BB6E1EC6326E007FBCEB /* TPConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4841BB6D1EC6326E007FBCEB /* TPConstants.swift */; };
 		484365C91C9DB3960046A2C5 /* HealthKitDataPusher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484365C81C9DB3950046A2C5 /* HealthKitDataPusher.swift */; };
 		484365CA1C9DB3970046A2C5 /* HealthKitDataPusher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484365C81C9DB3950046A2C5 /* HealthKitDataPusher.swift */; };
 		484365D91CA1118A0046A2C5 /* Menu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 484365D71CA1118A0046A2C5 /* Menu.storyboard */; };
@@ -320,6 +321,7 @@
 		4839FD221EB7E16F003E5BF7 /* NoteListGraphCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListGraphCell.swift; path = ViewControllers/NoteListGraphCell.swift; sourceTree = "<group>"; };
 		483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUIViewController.swift; path = ViewControllers/BaseUIViewController.swift; sourceTree = "<group>"; };
 		483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewController.swift; path = ViewControllers/BaseUITableViewController.swift; sourceTree = "<group>"; };
+		4841BB6D1EC6326E007FBCEB /* TPConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TPConstants.swift; path = Resources/TPConstants.swift; sourceTree = "<group>"; };
 		484365C81C9DB3950046A2C5 /* HealthKitDataPusher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitDataPusher.swift; path = DataModel/HealthKit/HealthKitDataPusher.swift; sourceTree = "<group>"; };
 		484365D81CA1118A0046A2C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Menu.storyboard; sourceTree = "<group>"; };
 		48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListViewController.swift; path = ViewControllers/EventListViewController.swift; sourceTree = "<group>"; };
@@ -641,6 +643,7 @@
 			isa = PBXGroup;
 			children = (
 				486894F41E831F89008B0732 /* UrchinConstants.swift */,
+				4841BB6D1EC6326E007FBCEB /* TPConstants.swift */,
 				48D056951BDFDD16009D1591 /* Localizable.strings */,
 				4851C6931BA628A500F8E0EE /* UIDesignNotes.rtf */,
 				486F5E081B9FB1C600BA2A57 /* NutshellStyles.swift */,
@@ -1136,6 +1139,7 @@
 				48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */,
 				48867CF71E81A4AD00C4E79D /* BlipUser.swift in Sources */,
 				4837CC6B1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift in Sources */,
+				4841BB6E1EC6326E007FBCEB /* TPConstants.swift in Sources */,
 				486F5E2B1BA0DC6700BA2A57 /* NutEvent.swift in Sources */,
 				0334CA161BA8DDFC00013096 /* Activity.swift in Sources */,
 				483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */,

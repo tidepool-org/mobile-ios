@@ -968,7 +968,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
     func howToUploadPressed(_ sender: UIButton!) {
         NSLog("howToUploadPressed was pressed!")
-        if let url = URL(string: "http://support.tidepool.org") {
+        if let url = URL(string: TPConstants.kHowToUploadURL) {
             UIApplication.shared.openURL(url)
         }
     }
