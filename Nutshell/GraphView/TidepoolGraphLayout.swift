@@ -35,8 +35,8 @@ class TidepoolGraphLayout: GraphLayout {
         let startTime = mainEventTime.addingTimeInterval(-graphTI/2.0)
         super.init(viewSize: viewSize, startTime: startTime, timeIntervalPerTile: cellTI, numberOfTiles: numberOfTiles, tilesInView: 1, tzOffsetSecs: tzOffsetSecs)
 
-        self.yAxisValuesWithLines = displayGridLines ? [80, 180] : []
-        self.yAxisValuesWithLabels = [40, 80, 180, 300]
+        self.yAxisValuesWithLines = displayGridLines ? [70, 180] : []
+        self.yAxisValuesWithLabels = [70, 180, 300]
 }
 
     //
