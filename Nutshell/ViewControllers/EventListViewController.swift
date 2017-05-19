@@ -1089,6 +1089,12 @@ extension EventListViewController: UITableViewDelegate {
                 return .none
             }
         }
+        if let noteToDelete = self.noteForIndexPath(indexPath) {
+            if noteToDelete.userid != dataController.currentUserId {
+                // only allow delete of notes created by current logged in user...
+                return .none
+            }
+        }
         return .delete
     }
     
