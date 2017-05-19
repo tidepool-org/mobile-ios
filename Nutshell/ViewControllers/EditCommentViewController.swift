@@ -54,7 +54,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
         // keyboard up/down
         notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        configureTableFooter()
+        configureTableSize()
     }
    
     // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
@@ -108,44 +108,24 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     private var viewAdjustAnimationTime: TimeInterval = 0.25
     static var keyboardFrame: CGRect?
     
-    // For add comment editing, scroll table so edit view is just above the keyboard when it opens.
-    // Also captures keyboard sizing and appropriate scroll animation timing.
+    // Capture keyboard sizing and appropriate scroll animation timing. Fine tune table sizing for current keyboard sizing, and place edit row at bottom of table view, just above the keyboard.
     func keyboardWillShow(_ notification: Notification) {
         //NSLog("EditCommentViewController \(#function)")
         viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
         EditCommentViewController.keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        self.adjustKeyboardSpacerView() // first time, ensure we have a table footer for last cell special case
+        self.configureTableSize() // first time, ensure table is correctly sized to leave room for keyboard
         self.adjustEditAboveKeyboard()
     }
- 
-    
-    // Ensure there is enough table footer to allow add comment editing for last note
-    fileprivate func adjustKeyboardSpacerView() {
-        if let keyboardFrame = EditCommentViewController.keyboardFrame {
-            // add a footer view to the table that is the size of the keyboard, so last table row can be scrolled to the top of the table if necessary
-            let height = keyboardFrame.height
-            let curTableFooter = self.tableView.tableFooterView
-            if curTableFooter != nil && curTableFooter!.bounds.height >= height {
-                // table already adjusted...
-                return
-            }
-            
-            // add a footer view, possibly replace one that is too short (e.g., search keyboard is somewhat smaller than new comment edit keyboard)
-            configureTableFooter()
-        }
-    }
 
-    private func configureTableFooter() {
+    
+    @IBOutlet weak var tableToBottomConstraint: NSLayoutConstraint!
+    private func configureTableSize() {
         var keyboardHeight: CGFloat = 258.0
         if let keyboardFrame = EditCommentViewController.keyboardFrame {
             keyboardHeight = keyboardFrame.height
         }
-        let footerHeight = keyboardHeight + 4.0
-        var footerFrame = self.tableView.bounds
-        footerFrame.size.height = footerHeight
-        let footerView = UIView(frame: footerFrame)
-        footerView.backgroundColor = UIColor.clear
-        self.tableView.tableFooterView = footerView
+        // leave 4 pixels at bottom to show row bottom border
+        tableToBottomConstraint.constant = keyboardHeight + 4.0
     }
     
     //
@@ -261,34 +241,22 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
             editCell.saveButton.isEnabled = enableSave
             editCell.saveButtonLargeHitArea.isEnabled = enableSave
             
-
             // adjust table if lines of text have changed...
-            // begin/end updates also scrolls table, so turn off animations and save/restore the content offset...
-            UIView.setAnimationsEnabled(false)
-            let contentOffset = self.tableView.contentOffset
             self.tableView.beginUpdates()
             self.tableView.endUpdates()
-            self.tableView.contentOffset = contentOffset
-            UIView.setAnimationsEnabled(true)
             
             // do any adjust needed if size of field has changed...
             adjustEditAboveKeyboard()
         }
     }
     
+    
+    var firstTimeAnimate = true
     func adjustEditAboveKeyboard() {
-        if let curEditCell = currentCommentEditCell, let keyboardFrame = EditCommentViewController.keyboardFrame {
-            var tableContentOffset = tableView.contentOffset
-            let cellContentOffsetY = curEditCell.frame.origin.y
-            let sizeAboveKeyboard = tableView.bounds.height - keyboardFrame.height
-            // figure offset needed to place bottom of edit cell right on top of keyboard
-            tableContentOffset.y = (cellContentOffsetY + curEditCell.bounds.height) - sizeAboveKeyboard + 4.0
-            //NSLog("above kbd: \(sizeAboveKeyboard), cellTopOffset: \(cellContentOffsetY), cell ht: \(curEditCell.bounds.height)")
-            //NSLog("setting table offset to \(tableContentOffset.y) from \(tableView.contentOffset.y)")
-            if tableView.contentOffset.y < tableContentOffset.y {
-                tableView.setContentOffset(tableContentOffset, animated: true)
-            }
-        }
+        let editRowIndexPath = indexPathOfRowWithEdit()
+        tableView.scrollToRow(at: editRowIndexPath, at: .bottom, animated: firstTimeAnimate)
+        // once we're adjusted above the keyboard and just making fine adjustments for the edit view to accomodate number of lines changing, don't animate since it can be a little jumpy...
+        firstTimeAnimate = false
     }
     
     //
@@ -337,7 +305,7 @@ extension EditCommentViewController: UITableViewDelegate {
         if row == kGraphRow {
             return TPConstants.kGraphViewHeight
         } else {
-            return 60.0
+            return UITableViewAutomaticDimension
         }
     }
 
@@ -346,7 +314,7 @@ extension EditCommentViewController: UITableViewDelegate {
         if row == kGraphRow {
             return TPConstants.kGraphViewHeight
         } else {
-            return UITableViewAutomaticDimension;
+            return UITableViewAutomaticDimension
         }
     }
     
