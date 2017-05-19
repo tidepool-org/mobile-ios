@@ -537,9 +537,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                     // edit existing comment
                     addCommentVC.commentToEdit = comment
                     self.noteToEdit = nil
+                    APIConnector.connector().trackMetric("Clicked edit comment")
+                } else {
+                    APIConnector.connector().trackMetric("Clicked add comment")
                 }
             }
-            APIConnector.connector().trackMetric("Clicked add a comment (Home screen)")
         } else {
             NSLog("Unprepped segue from eventList \(String(describing: segue.identifier))")
         }
@@ -691,6 +693,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             return
         }
         
+        // Use standard bar coloring for this system controller so the buttons stand out (otherwise "cancel" and "send" blend into the bar title which is the title of the email)
+        Styles.configureTidepoolBarColoring(on: false)
+
         let emailVC = MFMailComposeViewController()
         emailVC.mailComposeDelegate = self
         
@@ -698,9 +703,16 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         emailVC.setSubject("How to set up the Tidepool Uploader")
         let messageText = "Please go to the following link on your computer to learn about setting up the Tidepool Uploader: http://support.tidepool.org/article/6-how-to-install-or-update-the-tidepool-uploader-gen"
         emailVC.setMessageBody(messageText, isHTML: false)
+        if let email = dataController.currentLoggedInUserEmail {
+            emailVC.setToRecipients([email])
+        }
+        
         // Present the view controller modally.
         self.present(emailVC, animated: true, completion: nil)
-    }
+
+        Styles.configureTidepoolBarColoring(on: true)
+        firstTimeNeedUploaderTip.isHidden = true
+}
     
     func mailComposeController(_ controller: MFMailComposeViewController,
                                didFinishWith result: MFMailComposeResult, error: Error?) {
@@ -1097,7 +1109,7 @@ extension EventListViewController: UITableViewDelegate {
         }
         let rowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "delete") {_,indexPath in
             // use dialog to confirm delete with user!
-            APIConnector.connector().trackMetric("Clicked Delete Note")
+            APIConnector.connector().trackMetric("Clicked Delete Comment")
              let alert = UIAlertController(title: trashAlertTitle, message: trashAlertMessage, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: trashAlertCancel, style: .cancel, handler: { Void in
                 DDLogVerbose("Do not trash note")

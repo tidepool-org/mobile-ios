@@ -345,6 +345,7 @@
 		4859FCCC1B9A4DE5000C1269 /* NutshellTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NutshellTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4859FCD01B9A4DE5000C1269 /* NutshellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutshellTests.swift; sourceTree = "<group>"; };
 		4859FCD21B9A4DE5000C1269 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		485DC8861ECF4A2E00338394 /* Tidepool_v1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Tidepool_v1.xcdatamodel; sourceTree = "<group>"; };
 		486894F41E831F89008B0732 /* UrchinConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UrchinConstants.swift; path = Resources/UrchinConstants.swift; sourceTree = "<group>"; };
 		486EAA791C305E38003B4497 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		486EAA7B1C305E39003B4497 /* Nutshell.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Nutshell.entitlements; sourceTree = "<group>"; };
@@ -1551,13 +1552,14 @@
 		4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				485DC8861ECF4A2E00338394 /* Tidepool_v1.xcdatamodel */,
 				48D62CFF1CA457FE00E063A4 /* Nutshell_v6.xcdatamodel */,
 				4899436D1C442837004774BA /* Nutshell_v5.xcdatamodel */,
 				48A150551C18E0A200ED800B /* Nutshell_v4.xcdatamodel */,
 				483475B11BE9CE2E00EE9106 /* Nutshell_v2.xcdatamodel */,
 				4859FCC01B9A4DE4000C1269 /* Nutshell.xcdatamodel */,
 			);
-			currentVersion = 48D62CFF1CA457FE00E063A4 /* Nutshell_v6.xcdatamodel */;
+			currentVersion = 485DC8861ECF4A2E00338394 /* Tidepool_v1.xcdatamodel */;
 			path = Nutshell.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

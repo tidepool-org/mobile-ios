@@ -51,10 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DDLogVerbose("trace")
 
         // Override point for customization after application launch.
-        UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor
-        UINavigationBar.appearance().isTranslucent = false
-        UINavigationBar.appearance().tintColor = UIColor.white
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: Styles.navTitleFont]
+        Styles.configureTidepoolBarColoring(on: true)
         
         // Initialize database by referencing username. This must be done before using the APIConnector!
         let name = NutDataController.sharedInstance.currentUserName

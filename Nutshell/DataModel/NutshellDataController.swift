@@ -95,6 +95,20 @@ class NutDataController: NSObject
         }
     }
     
+    /// Used for filling out an email for the user to send to themselves; from the current user login, or nil.
+    ///
+    /// Read only - returns nil string if no user set.
+    var currentLoggedInUserEmail: String? {
+        get {
+            if let user = self.currentUser {
+                if let email = user.email {
+                    return email
+                }
+            }
+            return nil
+        }
+    }
+
     /// Return current logged in user as a BlipUser object. Alternately, just reference currentUserName, currentUserId, etc.
     var currentLoggedInUser: BlipUser? {
         get {

@@ -198,7 +198,7 @@ class APIConnector {
                 // Create the User object
                 // TODO: Should this call be made in NutshellDataController?
                 let moc = NutDataController.sharedInstance.mocForCurrentUser()
-                if let user = User.fromJSON(json, moc: moc) {
+                if let user = User.fromJSON(json, email: username, moc: moc) {
                     NutDataController.sharedInstance.loginUser(user)
                     APIConnector.connector().trackMetric("Logged In")
                     completion(Result.success(user))
@@ -461,6 +461,7 @@ class APIConnector {
         }
         
         // Fire off the network request
+        //NSLog("sendRequest url: \(url), params: \(parameters ?? [:]), headers: \(apiHeaders ?? [:])")
         return Alamofire.request(url, method: requestType!, parameters: parameters, headers: apiHeaders).validate()
     }
     

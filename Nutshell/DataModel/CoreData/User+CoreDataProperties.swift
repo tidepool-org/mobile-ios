@@ -18,6 +18,7 @@ extension User {
     @NSManaged var token: String?
     @NSManaged var userid: String?
     @NSManaged var username: String?
+    @NSManaged var email: String?
     @NSManaged var accountIsDSA: NSNumber?
 
 }

@@ -12,7 +12,7 @@ import SwiftyJSON
 
 
 class User: NSManagedObject {
-    class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> User? {
+    class func fromJSON(_ json: JSON, email: String? = nil, moc: NSManagedObjectContext) -> User? {
         if let entityDescription = NSEntityDescription.entity(forEntityName: "User", in: moc) {
             let me = User(entity: entityDescription, insertInto: nil)
             
@@ -20,6 +20,7 @@ class User: NSManagedObject {
             me.username = json["username"].string
             me.fullName = json["fullName"].string
             me.token = json["token"].string
+            me.email = email
             
             return me
         }

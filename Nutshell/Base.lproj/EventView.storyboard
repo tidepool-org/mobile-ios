@@ -506,7 +506,7 @@
                                                 <rect key="frame" x="13" y="38" width="294" height="64"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Now, add an event, a meal, or note." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2uq-Ah-EPW" userLabel="firstTimeAddNoteLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="20" y="11.5" width="254" height="41"/>
+                                                        <rect key="frame" x="20" y="12" width="254" height="41"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
@@ -580,7 +580,7 @@ Last step, to get pump data, you need the TIdepool Uploader on your computer.</s
                                                                     <constraint firstAttribute="height" constant="47" id="b24-qD-dFN"/>
                                                                 </constraints>
                                                                 <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
-                                                                <state key="normal" title="Ok"/>
+                                                                <state key="normal" title="OK"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkBackgroundButton"/>
                                                                 </userDefinedRuntimeAttributes>
