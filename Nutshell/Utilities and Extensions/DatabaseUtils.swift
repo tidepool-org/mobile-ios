@@ -77,8 +77,13 @@ class DatabaseUtils {
                 startTidepoolLoad()
                 APIConnector.connector().getReadOnlyUserData(startTime, endDate:endTime, completion: { (result) -> (Void) in
                     if result.isSuccess {
-                        self.updateEventsForTimeRange(startTime, endTime: endTime, moc: NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!) {
-                            success -> Void in
+                        if let moc = NutDataController.sharedInstance.mocForTidepoolEvents() {
+                            self.updateEventsForTimeRange(startTime, endTime: endTime, moc: moc, eventsJSON: result.value!) {
+                                success -> Void in
+                                self.endTidepoolLoad()
+                            }
+                        } else {
+                            NSLog("checkLoadDataForDateRange bailing due to nil MOC")
                             self.endTidepoolLoad()
                         }
                     } else {
