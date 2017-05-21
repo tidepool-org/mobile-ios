@@ -493,6 +493,8 @@ let editAlertSave: String = "Save"
  */
 let trashAlertTitle: String = "Delete Note?"
 let trashAlertMessage: String = "Once you delete this note, it cannot be recovered."
+let trashCommentAlertTitle: String = "Delete Comment?"
+let trashCommentAlertMessage: String = "Once you delete this comment, it cannot be recovered."
 let trashAlertCancel: String = "Cancel"
 let trashAlertOkay: String = "OK"
 

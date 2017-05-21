@@ -102,10 +102,9 @@ open class Styles: NSObject {
     }
 
     class func configureTidepoolBarColoring(on: Bool) {
-        UINavigationBar.appearance().barTintColor = on ? Styles.darkPurpleColor : .white
+        UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor
         UINavigationBar.appearance().isTranslucent = false
-        UINavigationBar.appearance().tintColor = on ? UIColor.white : .black
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: on ? UIColor.white : Styles.darkPurpleColor, NSFontAttributeName: Styles.navTitleFont]
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: Styles.navTitleFont]
     }
 
     //

@@ -32,7 +32,7 @@
                                                 <items>
                                                     <navigationItem title="Add/Edit Note" id="KY8-jf-nzQ">
                                                         <barButtonItem key="leftBarButtonItem" image="xIconSmall" id="vih-8x-uIO" userLabel="cancelButton">
-                                                            <color key="tintColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                             <connections>
                                                                 <action selector="cancelButtonPressed:" destination="stl-aU-t9r" id="lsS-q7-53K"/>
                                                             </connections>

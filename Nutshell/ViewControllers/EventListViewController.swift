@@ -661,10 +661,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                 hideAddNoteTip = false
             }
         } else if self.sortedNotes.count == 1 {
-            if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
+            //if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
                 hideNeedUploaderTip = false
-                oneShotCompleted("NeedUploaderTipHasBeenShown")
-            }
+            //    oneShotCompleted("NeedUploaderTipHasBeenShown")
+            //}
         }
         firstTimeAddNoteTip.isHidden = hideAddNoteTip
         firstTimeNeedUploaderTip.isHidden = hideNeedUploaderTip
@@ -693,9 +693,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             return
         }
         
-        // Use standard bar coloring for this system controller so the buttons stand out (otherwise "cancel" and "send" blend into the bar title which is the title of the email)
-        Styles.configureTidepoolBarColoring(on: false)
-
         let emailVC = MFMailComposeViewController()
         emailVC.mailComposeDelegate = self
         
@@ -710,7 +707,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // Present the view controller modally.
         self.present(emailVC, animated: true, completion: nil)
 
-        Styles.configureTidepoolBarColoring(on: true)
         firstTimeNeedUploaderTip.isHidden = true
 }
     
@@ -1102,9 +1098,9 @@ extension EventListViewController: UITableViewDelegate {
         var noteToDelete = self.noteForIndexPath(indexPath)
         let comments = filteredNotes[indexPath.section].comments
         let row = indexPath.row
-            if row > kNoteRow {
-                // only graph row and add comment button row are not delete-able...
-                if row == addCommentRow(commentCount: comments.count) || row == kGraphRow {
+        if row > kNoteRow {
+            // only graph row and add comment button row are not delete-able...
+            if row == addCommentRow(commentCount: comments.count) || row == kGraphRow {
                 return nil
             }
             noteToDelete = comments[row-kFirstCommentRow]
@@ -1115,8 +1111,16 @@ extension EventListViewController: UITableViewDelegate {
         }
         let rowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "delete") {_,indexPath in
             // use dialog to confirm delete with user!
-            APIConnector.connector().trackMetric("Clicked Delete Comment")
-             let alert = UIAlertController(title: trashAlertTitle, message: trashAlertMessage, preferredStyle: .alert)
+            var metric = "Clicked Delete Note"
+            var title = trashAlertTitle
+            var message = trashAlertMessage
+            if row >= self.kFirstCommentRow {
+                metric = "Clicked Delete Comment"
+                title = trashCommentAlertTitle
+                message = trashCommentAlertMessage
+            }
+            APIConnector.connector().trackMetric(metric)
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: trashAlertCancel, style: .cancel, handler: { Void in
                 DDLogVerbose("Do not trash note")
             }))
