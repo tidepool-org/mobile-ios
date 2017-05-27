@@ -111,7 +111,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func supportButtonHandler(_ sender: AnyObject) {
         APIConnector.connector().trackMetric("Clicked Tidepool Support (Hamburger)")
-        userSelectedExternalLink = URL(string: "http://support.tidepool.org")
+        userSelectedExternalLink = URL(string: TPConstants.kTidepoolSupportURL)
         self.hideSideMenuView()
     }
     

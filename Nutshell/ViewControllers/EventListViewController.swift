@@ -661,10 +661,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                 hideAddNoteTip = false
             }
         } else if self.sortedNotes.count == 1 {
-            //if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
+            if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
                 hideNeedUploaderTip = false
-            //    oneShotCompleted("NeedUploaderTipHasBeenShown")
-            //}
+                oneShotCompleted("NeedUploaderTipHasBeenShown")
+            }
         }
         firstTimeAddNoteTip.isHidden = hideAddNoteTip
         firstTimeNeedUploaderTip.isHidden = hideNeedUploaderTip
@@ -856,7 +856,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     
     @IBAction func howToUploadButtonHandler(_ sender: Any) {
         // TODO: add metric?
-        let url = URL(string: "http://support.tidepool.org/article/11-how-to-use-the-tidepool-uploader")
+        let url = URL(string: TPConstants.kHowToUploadURL)
         if let url = url {
             UIApplication.shared.openURL(url)
         }

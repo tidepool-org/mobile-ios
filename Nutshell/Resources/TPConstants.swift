@@ -21,7 +21,8 @@ class TPConstants {
     // ------------ URLs ------------
 
     static let kHowToUploadURL = "http://support.tidepool.org/article/11-how-to-use-the-tidepool-uploader"
-    
+    static let kTidepoolSupportURL = "http://support.tidepool.org/category/31-blip-notes"
+   
     // ------------ Graph ------------
     static let kGraphViewHeight: CGFloat = 180.0
 }
