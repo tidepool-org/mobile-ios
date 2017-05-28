@@ -84,6 +84,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             sideMenu.bouncingEnabled = false
         }
         
+        // Note: one-time check to show first time healthKit connect tip. This needs to be shown first, before other first time screens, so check for it here. If this is up, the other screens will be deferred...
+        firstTimeHealthKitConnectCheck()
     }
    
     // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
@@ -115,6 +117,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewIsForeground = true
+
         configureSearchUI()
         if let sideMenu = self.sideMenuController()?.sideMenu {
             sideMenu.allowLeftSwipe = true
@@ -131,9 +134,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         appDelegate?.checkConnection()
         APIConnector.connector().trackMetric("Viewed Home Screen (Home Screen)")
-        
-        // one-time check to show first time healthKit connect tip...
-        firstTimeHealthKitConnectCheck()
         
         // in case we loaded data while in the background...
         checkUpdateGraph()
@@ -180,6 +180,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // one-time check for health tip screen!
         if !firstTimeHealthTip.isHidden {
             firstTimeHealthTip.isHidden = true
+            // after hiding the health tip, other tips may be shown!
             checkDisplayFirstTimeScreens()
         }
     }
@@ -650,22 +651,25 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     
     private func checkDisplayFirstTimeScreens() {
         if loadingNotes {
-            // wait until note loading is completed (for firstTimeHealthKitConnectCheck path)
+            // wait until note loading is completed
             NSLog("\(#function) loading notes...")
             return
         }
         var hideAddNoteTip = true
         var hideNeedUploaderTip = true
-        if self.sortedNotes.count == 0 {
-            if firstTimeHealthTip.isHidden {
+        
+        // only show other first time tips if we are not showing the healthkit tip!
+        if firstTimeHealthTip.isHidden {
+            if self.sortedNotes.count == 0 {
                 hideAddNoteTip = false
-            }
-        } else if self.sortedNotes.count == 1 {
-            if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
-                hideNeedUploaderTip = false
-                oneShotCompleted("NeedUploaderTipHasBeenShown")
+            } else if self.sortedNotes.count == 1 {
+                if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
+                    hideNeedUploaderTip = false
+                    oneShotCompleted("NeedUploaderTipHasBeenShown")
+                }
             }
         }
+        
         firstTimeAddNoteTip.isHidden = hideAddNoteTip
         firstTimeNeedUploaderTip.isHidden = hideNeedUploaderTip
     }
