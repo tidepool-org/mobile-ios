@@ -52,6 +52,16 @@
                                             <constraint firstAttribute="height" constant="44" id="F8o-v2-uTz"/>
                                         </constraints>
                                     </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QMM-nG-Ihd" userLabel="closeKeyboardButton">
+                                        <rect key="frame" x="60" y="20" width="245" height="44"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <state key="normal" title="Button">
+                                            <color key="titleColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="closeKeyboardButtonHandler:" destination="stl-aU-t9r" eventType="touchUpInside" id="rbC-Zl-dMG"/>
+                                        </connections>
+                                    </button>
                                     <view alpha="0.5" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nq9-od-T22" userLabel="separatorView" customClass="NutshellUIView" customModule="Nutshell" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="63" width="375" height="1"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -66,11 +76,15 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstItem="QMM-nG-Ihd" firstAttribute="trailing" secondItem="JNp-Oh-n0k" secondAttribute="trailing" constant="-70" id="6OH-eg-D6m"/>
                                     <constraint firstItem="Nq9-od-T22" firstAttribute="leading" secondItem="KM1-gb-8Ee" secondAttribute="leading" id="98a-TN-xav"/>
+                                    <constraint firstItem="QMM-nG-Ihd" firstAttribute="top" secondItem="JNp-Oh-n0k" secondAttribute="top" id="9yA-Kt-dhU"/>
                                     <constraint firstAttribute="trailing" secondItem="JNp-Oh-n0k" secondAttribute="trailing" id="ChH-If-aoQ"/>
                                     <constraint firstAttribute="bottom" secondItem="JNp-Oh-n0k" secondAttribute="bottom" id="MdV-Qk-vdx"/>
                                     <constraint firstAttribute="bottom" secondItem="Nq9-od-T22" secondAttribute="bottom" id="Si4-99-Njy"/>
+                                    <constraint firstItem="QMM-nG-Ihd" firstAttribute="bottom" secondItem="JNp-Oh-n0k" secondAttribute="bottom" id="Y5x-Pp-lmi"/>
                                     <constraint firstAttribute="trailing" secondItem="Nq9-od-T22" secondAttribute="trailing" id="cFz-jA-MHc"/>
+                                    <constraint firstItem="QMM-nG-Ihd" firstAttribute="leading" secondItem="JNp-Oh-n0k" secondAttribute="leading" constant="60" id="jJL-fN-f4V"/>
                                     <constraint firstItem="JNp-Oh-n0k" firstAttribute="leading" secondItem="KM1-gb-8Ee" secondAttribute="leading" id="nVA-ZX-lQu"/>
                                     <constraint firstAttribute="height" constant="64" id="x7F-QD-ik7"/>
                                 </constraints>

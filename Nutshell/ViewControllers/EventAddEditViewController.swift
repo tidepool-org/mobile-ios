@@ -34,7 +34,6 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
 
     // datePicker and helpers for animation
     var datePickerShown: Bool = false
-    var isAnimating: Bool = false
     let datePicker: UIDatePicker = UIDatePicker()
     private var previousDate: Date!
     
@@ -251,7 +250,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
         
         // No alert needed, dismiss the VC
         self.view.endEditing(true)
-        self.closeDatePicker(false)
+        self.closeDatePicker()
         // close the VC
         self.performSegue(withIdentifier: "unwindToCancel", sender: self)
      }
@@ -269,7 +268,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
                 DDLogVerbose("Do not add note and close view controller")
                 
                 self.view.endEditing(true)
-                self.closeDatePicker(false)
+                self.closeDatePicker()
                 // close the VC
                 self.performSegue(withIdentifier: "unwindToCancel", sender: self)
             }))
@@ -290,7 +289,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
                 DDLogVerbose("Discard edits from note")
                 
                 self.view.endEditing(true)
-                self.closeDatePicker(false)
+                self.closeDatePicker()
                 self.performSegue(withIdentifier: "unwindToCancel", sender: self)
             }))
             alert.addAction(UIAlertAction(title: editAlertSave, style: .default, handler: { Void in
@@ -310,23 +309,21 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
     func changeDatePressed(_ sender: UIView!) {
         APIConnector.connector().trackMetric("Clicked Change Date")
         if (!datePicker.isHidden) {
-            closeDatePicker(false)
+            closeDatePicker()
         } else {
             openDatePicker()
         }
     }
     
     // Closes the date picker with an animation
-    //      if hashtagsAfter, will toggleHashtags following completion
-    func closeDatePicker(_ hashtagsAfter: Bool) {
-        if (!datePicker.isHidden && !isAnimating) {
-            isAnimating = true
+    func closeDatePicker() {
+        if (!datePicker.isHidden) {
             // Fade out the date picker with an animation
             UIView.animate(withDuration: datePickerFadeTime, animations: {
                 self.datePicker.alpha = 0.0
             })
             // Move all affected UI elements with animation
-            UIView.animateKeyframes(withDuration: animationTime, delay: 0.0, options: [], animations: { () -> Void in
+            UIView.animate(withDuration: animationTime, animations: { () -> Void in
                 
                 // UI element location (and some sizing)
                 self.separatorOne.frame.origin.y = self.timedateLabel.frame.maxY + labelInset
@@ -341,23 +338,18 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
             }, completion: { (completed: Bool) -> Void in
                 // On completion, hide datePicker completely
                 self.datePicker.isHidden = true
-                self.isAnimating = false
                 // change the changeDateLabel back to 'change'
                 self.changeDateLabel.text = changeDateText
                 self.changeDateLabel.sizeToFit()
                 self.changeDateLabel.frame.origin.x = self.sceneContainerView.frame.width - (labelInset + self.changeDateLabel.frame.width)
-                if (hashtagsAfter) {
-                    self.toggleHashtags()
-                }
             })
         }
     }
     
     // Opens the date picker with an animation
     func openDatePicker() {
-        if (datePicker.isHidden && !isAnimating) {
-            isAnimating = true
-            UIView.animateKeyframes(withDuration: animationTime, delay: 0.0, options: [], animations: { () -> Void in
+        if (datePicker.isHidden) {
+            UIView.animate(withDuration: animationTime, animations: { () -> Void in
                 
                 // UI element location (and some sizing)
                 self.separatorOne.frame.origin.y = self.datePicker.frame.maxY + labelInset / 2
@@ -376,13 +368,10 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
                 })
                 // Set datePicker to show
                 self.datePicker.isHidden = false
-                self.isAnimating = false
-                if (completed) {
-                    // change the changeDateLabel to prompt done/close action
-                    self.changeDateLabel.text = doneDateText
-                    self.changeDateLabel.sizeToFit()
-                    self.changeDateLabel.frame.origin.x = self.sceneContainerView.frame.width - (labelInset + self.changeDateLabel.frame.width)
-                }
+                // change the changeDateLabel to prompt done/close action
+                self.changeDateLabel.text = doneDateText
+                self.changeDateLabel.sizeToFit()
+                self.changeDateLabel.frame.origin.x = self.sceneContainerView.frame.width - (labelInset + self.changeDateLabel.frame.width)
             })
         }
     }
@@ -398,9 +387,8 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
     
     // Animations for resizing the hashtags view to be condensed
     func closeHashtagsPartially() {
-        if (!hashtagsScrollView.hashtagsCollapsed && !isAnimating) {
-            isAnimating = true
-            UIView.animateKeyframes(withDuration: animationTime, delay: 0.0, options: [], animations: { () -> Void in
+        if (!hashtagsScrollView.hashtagsCollapsed) {
+            UIView.animate(withDuration: animationTime, animations: { () -> Void in
                 
                 // size hashtags view to condensed size
                 self.hashtagsScrollView.linearHashtagsView()
@@ -427,29 +415,16 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
                 }
                 
             }, completion: { (completed: Bool) -> Void in
-                self.isAnimating = false
-                if (completed) {
-                    let separatorToBottom: CGFloat = self.sceneContainerView.frame.height - self.separatorTwo.frame.maxY
-                    if (separatorToBottom < 300) {
-                        // For small view, change the button to be 'done'
-                        self.changeDateLabel.text = doneDateText
-                        self.changeDateLabel.font = smallBoldFont
-                        self.changeDateLabel.sizeToFit()
-                        self.changeDateLabel.frame.origin.x = self.sceneContainerView.frame.width - (labelInset + self.changeDateLabel.frame.width)
-                    }
-                    
-                    // hashtags now collapsed
-                    self.hashtagsScrollView.hashtagsCollapsed = true
-                }
+                // hashtags now collapsed
+                self.hashtagsScrollView.hashtagsCollapsed = true
             })
         }
     }
     
     // Open hashtagsView completely to full view
     func openHashtagsCompletely() {
-        if (hashtagsScrollView.hashtagsCollapsed && !isAnimating) {
-            isAnimating = true
-            UIView.animateKeyframes(withDuration: animationTime, delay: 0.0, options: [], animations: { () -> Void in
+        if (hashtagsScrollView.hashtagsCollapsed) {
+            UIView.animate(withDuration: animationTime, animations: { () -> Void in
                 
                 // hashtagsView has expanded size
                 self.hashtagsScrollView.pagedHashtagsView()
@@ -462,19 +437,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
                 self.messageBox.frame.origin.y = self.separatorTwo.frame.maxY + labelInset
                 
             }, completion: { (completed: Bool) -> Void in
-                self.isAnimating = false
-                if (completed) {
-                    if (self.changeDateLabel.text == doneDateText) {
-                        // Label says 'done', change back to 'change'
-                        self.changeDateLabel.text = changeDateText
-                        self.changeDateLabel.font = smallRegularFont
-                        self.changeDateLabel.sizeToFit()
-                        self.changeDateLabel.frame.origin.x = self.sceneContainerView.frame.width - (labelInset + self.changeDateLabel.frame.width)
-                    }
-                    
-                    // hashtagsView no longer collapsed
-                    self.hashtagsScrollView.hashtagsCollapsed = false
-                }
+                self.hashtagsScrollView.hashtagsCollapsed = false
             })
         }
     }
@@ -522,7 +485,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
             
             // End editing and close the datePicker
             self.view.endEditing(true)
-            self.closeDatePicker(false)
+            self.closeDatePicker()
             
             // close the VC
             self.performSegue(withIdentifier: "unwindToDoneEditNote", sender: self)
@@ -544,7 +507,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
             
             // End editing and close the datePicker
             self.view.endEditing(true)
-            self.closeDatePicker(false)
+            self.closeDatePicker()
             
             // close the VC, passing along new note...
             self.newNote = note
@@ -610,6 +573,14 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
             textViewDidChange(messageBox)
         }
     }
+
+    //
+    // MARK: - Keyboard handling
+    //
+    
+    @IBAction func closeKeyboardButtonHandler(_ sender: Any) {
+        view.endEditing(true)
+    }
     
     // Handle touches in the view
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -620,10 +591,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
             let viewFrame = self.sceneContainerView.convert(hashtagsScrollView.frame, from: hashtagsScrollView.superview)
             
             if !viewFrame.contains(touchLocation) {
-                // if outside hashtagsView, endEditing, close keyboard, animate, etc.
-                if (!isAnimating) {
-                    view.endEditing(true)
-                }
+                view.endEditing(true)
             }
         }
         super.touchesBegan(touches, with: event)
@@ -635,7 +603,8 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
         keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         if (!datePicker.isHidden) {
             // datePicker shown, close it, then condense the hashtags
-            self.closeDatePicker(true)
+            self.closeDatePicker()
+            self.closeHashtagsPartially()
         } else {
             // condense the hashtags
             self.closeHashtagsPartially()
