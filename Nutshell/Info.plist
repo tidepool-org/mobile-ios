@@ -19,19 +19,19 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.8.8.1</string>
+	<string>0.8.8.2</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Nutshell uses the camera when you want to associate an existing photo with a meal.</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Nutshell reads exercise and Dexcom glucose data from HealthKit so you can view that data in Tidepool apps and other apps that connect to your Tidepool account.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Nutshell writes glucose data to HealthKit so you can view data you've uploaded to Tidepool using other apps on your iPhone.</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Nutshell copies photos from your Photos application when you want to associate an existing photo with a meal.</string>
-    <key>NSCameraUsageDescription</key>
-    <string>Nutshell uses the camera when you want to associate an existing photo with a meal.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Nutshell copies photos from your Photos application when you want to associate an existing photo with a meal.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>LaBelleAurore.ttf</string>

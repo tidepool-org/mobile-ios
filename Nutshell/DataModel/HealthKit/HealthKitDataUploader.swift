@@ -332,7 +332,8 @@ class HealthKitDataUploader {
                     self.stopReadingSamples(completion: completion, error: error)
                 }
             }
-        } catch let error as NSError! {
+        } catch {
+            let error = NSError(domain: "HealthKitManager", code: -1, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
             DDLogError("stop reading samples - error creating post body for start of batch upload: \(error)")
             self.stopReadingSamples(completion: completion, error: error)
         }
@@ -442,7 +443,8 @@ class HealthKitDataUploader {
                     self.stopReadingSamples(completion: completion, error: error)
                 }
             }
-        } catch let error as NSError! {
+        } catch {
+            let error = NSError(domain: "HealthKitManager", code: -1, userInfo: [NSLocalizedDescriptionKey: error.localizedDescription])
             DDLogError("stop reading samples - error creating post body for start of batch upload: \(error)")
             self.stopReadingSamples(completion: completion, error: error)
         }
