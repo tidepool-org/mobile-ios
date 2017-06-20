@@ -674,11 +674,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         firstTimeNeedUploaderTip.isHidden = hideNeedUploaderTip
     }
     
-    private func oneShotIncompleteCheck(_ oneShotId: String) -> Bool {
+    fileprivate func oneShotIncompleteCheck(_ oneShotId: String) -> Bool {
         return !UserDefaults.standard.bool(forKey: oneShotId)
     }
 
-    private func oneShotCompleted(_ oneShotId: String) {
+    fileprivate func oneShotCompleted(_ oneShotId: String) {
         UserDefaults.standard.set(true, forKey: oneShotId)
     }
     
@@ -1047,7 +1047,26 @@ extension EventListViewController: UITableViewDelegate {
         filteredNotes[noteSection].opened = openNote
         
         tableView.beginUpdates()
-        self.configureEdit(indexPath, note: note, editButton: noteCell.editButton, largeHitAreaButton: noteCell.editButtonLargeHitArea, hide: !openNote)
+        
+        // one time tool tip check on first note! 
+        if noteSection == 0  {
+            if openNote {
+                if noteCell.firstTimeTipShowing() {
+                    oneShotCompleted("TapToViewDataHasBeenShown")
+                    noteCell.configureFirstTimeTip(nil)
+                }
+                if oneShotIncompleteCheck("TapToCloseNoteHasBeenShown") {
+                    noteCell.configureFirstTimeTip("Tap to close note")
+                }
+            } else if noteCell.firstTimeTipShowing() {
+                oneShotCompleted("TapToCloseNoteHasBeenShown")
+                noteCell.configureFirstTimeTip(nil)
+            }
+        }
+        if !noteCell.firstTimeTipShowing() {
+            self.configureEdit(indexPath, note: note, editButton: noteCell.editButton, largeHitAreaButton: noteCell.editButtonLargeHitArea, hide: !openNote)
+        }
+        
         if openNote {
             // always add rows for the graph and for the "add comment" button - not actually at row 2 if there are comments!
             tableView.insertRows(at: [IndexPath(row: kGraphRow, section: noteSection), IndexPath(row: kDefaultAddCommentRow, section: noteSection)], with: .automatic)
@@ -1180,7 +1199,21 @@ extension EventListViewController: UITableViewDataSource {
             let cellId = "noteListCell"
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! NoteListTableViewCell
             cell.configureCell(note, group: group)
-            if noteOpened {
+
+            // one time tool tip check on first note!
+            if indexPath.section == 0 {
+                if noteOpened {
+                    if oneShotIncompleteCheck("TapToCloseNoteHasBeenShown") {
+                        cell.configureFirstTimeTip("Tap to close note")
+                    }
+                } else {
+                    if oneShotIncompleteCheck("TapToViewDataHasBeenShown") {
+                        cell.configureFirstTimeTip("Tap to view data")
+                    }
+                }
+            }
+
+            if noteOpened && !cell.firstTimeTipShowing() {
                 configureEdit(indexPath, note: note, editButton: cell.editButton, largeHitAreaButton: cell.editButtonLargeHitArea)
             }
             return cell

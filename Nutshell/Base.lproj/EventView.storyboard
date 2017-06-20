@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="MlM-Oh-SBV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="MlM-Oh-SBV">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -69,7 +69,7 @@
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JwL-dD-CDl" userLabel="searchPlaceholder" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="50" y="0.0" width="53.5" height="50"/>
+                                                <rect key="frame" x="50" y="0.0" width="52" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -111,7 +111,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kqd-t1-lUR" userLabel="dateLabelSpacerView" customClass="TPIntrinsicSizeUIView" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="height">
@@ -120,7 +120,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ogm-kb-e7S" userLabel="userLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="7" width="280" height="18"/>
+                                                            <rect key="frame" x="20" y="7" width="150" height="18"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -128,8 +128,20 @@
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="groupedEventCellDate"/>
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Tap to close note" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iFh-lj-BYv" userLabel="firstTimeTipLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="180" y="7" width="120" height="18"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="120" id="V6W-Mc-1St"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
+                                                            <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="groupedEventToolTip"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="752" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iPM-Jk-ybw" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="61.5" width="82.5" height="14"/>
+                                                            <rect key="frame" x="20" y="58" width="103" height="17.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -176,6 +188,8 @@
                                                         <constraint firstItem="oza-ZB-EKM" firstAttribute="top" secondItem="iPM-Jk-ybw" secondAttribute="bottom" constant="7" id="Aly-pK-Twc"/>
                                                         <constraint firstAttribute="trailing" secondItem="oza-ZB-EKM" secondAttribute="trailing" constant="20" id="C0f-n9-FRx"/>
                                                         <constraint firstItem="2iF-Hl-EhA" firstAttribute="centerY" secondItem="ogm-kb-e7S" secondAttribute="centerY" id="F3C-gX-IQy"/>
+                                                        <constraint firstItem="iFh-lj-BYv" firstAttribute="leading" secondItem="ogm-kb-e7S" secondAttribute="trailing" constant="10" id="FMq-7c-CBR"/>
+                                                        <constraint firstAttribute="trailing" secondItem="iFh-lj-BYv" secondAttribute="trailing" constant="20" id="HYg-SP-YNp"/>
                                                         <constraint firstItem="2iF-Hl-EhA" firstAttribute="top" secondItem="Vjk-zO-K8S" secondAttribute="top" constant="2.5" id="Lmd-yl-rho"/>
                                                         <constraint firstAttribute="trailing" secondItem="Kqd-t1-lUR" secondAttribute="trailing" id="Qp3-s1-HCm"/>
                                                         <constraint firstItem="Kqd-t1-lUR" firstAttribute="top" secondItem="Vjk-zO-K8S" secondAttribute="top" id="UNT-d1-iZ5"/>
@@ -184,9 +198,10 @@
                                                         <constraint firstItem="oza-ZB-EKM" firstAttribute="leading" secondItem="iPM-Jk-ybw" secondAttribute="leading" id="gv2-Iu-U4p"/>
                                                         <constraint firstAttribute="bottom" secondItem="oza-ZB-EKM" secondAttribute="bottom" constant="7" id="jo7-qN-teu"/>
                                                         <constraint firstItem="NmN-1p-56X" firstAttribute="centerX" secondItem="2iF-Hl-EhA" secondAttribute="centerX" id="p5M-1c-X91"/>
+                                                        <constraint firstItem="iFh-lj-BYv" firstAttribute="centerY" secondItem="ogm-kb-e7S" secondAttribute="centerY" id="rYR-bT-DSY"/>
                                                         <constraint firstAttribute="trailing" secondItem="2iF-Hl-EhA" secondAttribute="trailing" constant="20" id="uJ2-cz-fhX"/>
                                                         <constraint firstItem="NmN-1p-56X" firstAttribute="centerY" secondItem="2iF-Hl-EhA" secondAttribute="centerY" id="uVq-ZU-6Zz"/>
-                                                        <constraint firstAttribute="trailing" secondItem="ogm-kb-e7S" secondAttribute="trailing" constant="20" id="zqU-cZ-ziS"/>
+                                                        <constraint firstAttribute="trailing" secondItem="ogm-kb-e7S" secondAttribute="trailing" priority="750" constant="20" id="zqU-cZ-ziS"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <connections>
@@ -194,6 +209,8 @@
                                                     <outlet property="dateLabelSpacerView" destination="Kqd-t1-lUR" id="7tv-bT-Jpu"/>
                                                     <outlet property="editButton" destination="2iF-Hl-EhA" id="tLn-xD-VnO"/>
                                                     <outlet property="editButtonLargeHitArea" destination="NmN-1p-56X" id="f20-ut-3Qu"/>
+                                                    <outlet property="firstTimeTipLabel" destination="iFh-lj-BYv" id="Pnb-1r-4NT"/>
+                                                    <outlet property="firstTimeTipWidth" destination="V6W-Mc-1St" id="Py3-zM-bgE"/>
                                                     <outlet property="noteLabel" destination="oza-ZB-EKM" id="9Nk-fz-thb"/>
                                                     <outlet property="userLabel" destination="ogm-kb-e7S" id="W7o-lY-vgr"/>
                                                 </connections>
@@ -352,7 +369,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oY4-t1-amu" userLabel="userLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="7" width="62.5" height="45.5"/>
+                                                            <rect key="frame" x="20" y="7" width="64.5" height="45.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -361,7 +378,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0X6-au-gcs" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="92.5" y="23" width="82.5" height="14"/>
+                                                            <rect key="frame" x="94.5" y="21.5" width="103" height="17.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -499,7 +516,7 @@
                                                 <rect key="frame" x="13" y="38" width="294" height="64"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Now, add an event, a meal, or note." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2uq-Ah-EPW" userLabel="firstTimeAddNoteLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="20" y="12" width="254" height="41"/>
+                                                        <rect key="frame" x="20" y="11.5" width="254" height="41"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
@@ -762,7 +779,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wry-fe-dMx" userLabel="dateLabelSpacerView" customClass="TPIntrinsicSizeUIView" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="42.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="39"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="height">
@@ -779,8 +796,20 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="groupedEventCellDate"/>
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Tap to close note" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ejU-6B-aj4" userLabel="firstTimeTipLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                            <rect key="frame" x="180" y="7" width="120" height="18"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="120" id="Grb-TQ-kSt"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
+                                                            <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="usage" value="groupedEventToolTip"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="752" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xa8-xT-Ys1" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="49.5" width="82.5" height="14"/>
+                                                            <rect key="frame" x="20" y="46" width="103" height="17.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -823,6 +852,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                     <constraints>
                                                         <constraint firstAttribute="trailing" secondItem="edd-RJ-jbi" secondAttribute="trailing" constant="20" id="00M-93-oay"/>
                                                         <constraint firstItem="31H-Rg-tAb" firstAttribute="top" secondItem="2v9-bN-gEr" secondAttribute="top" constant="2.5" id="4cM-X5-sir"/>
+                                                        <constraint firstItem="ejU-6B-aj4" firstAttribute="centerY" secondItem="edd-RJ-jbi" secondAttribute="centerY" id="6x6-dz-t58"/>
                                                         <constraint firstAttribute="bottom" secondItem="DKK-iw-WaO" secondAttribute="bottom" constant="7" id="8gi-n1-Meb"/>
                                                         <constraint firstAttribute="trailing" secondItem="31H-Rg-tAb" secondAttribute="trailing" constant="20" id="9sJ-w7-ehp"/>
                                                         <constraint firstItem="DKK-iw-WaO" firstAttribute="top" secondItem="xa8-xT-Ys1" secondAttribute="bottom" constant="7" id="B2y-xM-YiC"/>
@@ -836,6 +866,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                         <constraint firstItem="wry-fe-dMx" firstAttribute="leading" secondItem="2v9-bN-gEr" secondAttribute="leading" id="c5I-5u-PpB"/>
                                                         <constraint firstItem="xa8-xT-Ys1" firstAttribute="top" secondItem="wry-fe-dMx" secondAttribute="bottom" constant="7" id="cQf-Gw-4mK"/>
                                                         <constraint firstItem="edd-RJ-jbi" firstAttribute="top" secondItem="2v9-bN-gEr" secondAttribute="top" constant="7" id="jhC-TT-LLf"/>
+                                                        <constraint firstAttribute="trailing" secondItem="ejU-6B-aj4" secondAttribute="trailing" constant="20" id="lLs-Ba-nJ5"/>
                                                         <constraint firstAttribute="trailing" secondItem="wry-fe-dMx" secondAttribute="trailing" id="vic-wf-MWZ"/>
                                                         <constraint firstItem="Vny-eQ-Lh0" firstAttribute="centerY" secondItem="31H-Rg-tAb" secondAttribute="centerY" id="zx1-lc-GGW"/>
                                                     </constraints>
@@ -845,6 +876,8 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                     <outlet property="dateLabelSpacerView" destination="wry-fe-dMx" id="VyT-qi-h9m"/>
                                                     <outlet property="editButton" destination="31H-Rg-tAb" id="Ghz-Dp-I8o"/>
                                                     <outlet property="editButtonLargeHitArea" destination="Vny-eQ-Lh0" id="e7H-FB-dUE"/>
+                                                    <outlet property="firstTimeTipLabel" destination="ejU-6B-aj4" id="mkl-Zb-GzI"/>
+                                                    <outlet property="firstTimeTipWidth" destination="Grb-TQ-kSt" id="2KF-Hu-4Xh"/>
                                                     <outlet property="noteLabel" destination="DKK-iw-WaO" id="Orf-iG-7tr"/>
                                                     <outlet property="userLabel" destination="edd-RJ-jbi" id="h8Y-sM-SN3"/>
                                                 </connections>
@@ -966,7 +999,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34S-pq-Xwd" userLabel="userLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="7" width="62.5" height="15.5"/>
+                                                            <rect key="frame" x="20" y="7" width="64.5" height="15.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -975,7 +1008,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Bm-JW-9pW" userLabel="dateLabel" customClass="NutshellUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="92.5" y="8" width="82.5" height="14"/>
+                                                            <rect key="frame" x="94.5" y="6.5" width="103" height="17.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1058,14 +1091,14 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardAppearance="alert"/>
                                                         </textView>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gjm-bk-lTD" userLabel="saveButtonLargeHitArea" customClass="TPUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="253" y="-6.5" width="60" height="60.5"/>
+                                                            <rect key="frame" x="255" y="-6.5" width="60" height="60.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="60" id="365-4A-TNm"/>
                                                                 <constraint firstAttribute="height" constant="60" id="A9U-aR-0bL"/>
                                                             </constraints>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hjb-HN-EnG" userLabel="saveButton" customClass="NutshellSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="266" y="9.5" width="34" height="30"/>
+                                                            <rect key="frame" x="270" y="9.5" width="30" height="30"/>
                                                             <state key="normal" title="Save"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="editButton"/>

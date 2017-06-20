@@ -28,6 +28,9 @@ class NoteListTableViewCell: UITableViewCell {
     @IBOutlet weak var editButton: NutshellSimpleUIButton!
     @IBOutlet weak var editButtonLargeHitArea: TPUIButton!
     
+    @IBOutlet weak var firstTimeTipLabel: NutshellUILabel!
+    @IBOutlet weak var firstTimeTipWidth: NSLayoutConstraint!
+    private let activeTipWidth: CGFloat = 120.0
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -63,6 +66,22 @@ class NoteListTableViewCell: UITableViewCell {
         userLabel.isHidden = open ? false : true
     }
     
+    /// Pass nil to turn off tip, otherwise message to display
+    func configureFirstTimeTip(_ tip: String?) {
+        if let tip = tip {
+            firstTimeTipLabel.isHidden = false
+            firstTimeTipWidth.constant = activeTipWidth
+            firstTimeTipLabel.text = tip
+        } else {
+            firstTimeTipLabel.isHidden = true
+            firstTimeTipWidth.constant = 0.0
+        }
+    }
+    
+    func firstTimeTipShowing() -> Bool {
+        return firstTimeTipWidth.constant > 0
+    }
+    
     func configureCell(_ note: BlipNote, group: BlipUser) {
         self.note = note
         self.updateNoteFontStyling()
@@ -72,6 +91,9 @@ class NoteListTableViewCell: UITableViewCell {
         userLabel.isHighlighted = false
         editButton.isHidden = true
         editButtonLargeHitArea.isHidden = true
+        // hide and set tip label to zero width so it doesn't limit user label
+        firstTimeTipLabel.isHidden = true
+        firstTimeTipWidth.constant = 0.0
         
         if note.userid == note.groupid {
             // If note was created by current viewed user, don't configure a title, but note is editable

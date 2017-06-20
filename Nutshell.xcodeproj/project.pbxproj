@@ -516,11 +516,11 @@
 		48276A151E9D57CF004CADB1 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				48EC39D11ED113C30025A909 /* EventAddEdit.storyboard */,
 				4859FCC41B9A4DE4000C1269 /* LaunchScreen.storyboard */,
 				485922991B9A61510056E605 /* Login.storyboard */,
 				484365D71CA1118A0046A2C5 /* Menu.storyboard */,
 				4859FCBC1B9A4DE4000C1269 /* EventView.storyboard */,
+				48EC39D11ED113C30025A909 /* EventAddEdit.storyboard */,
 				48276A191E9D589F004CADB1 /* SwitchProfile.storyboard */,
 			);
 			name = Storyboards;

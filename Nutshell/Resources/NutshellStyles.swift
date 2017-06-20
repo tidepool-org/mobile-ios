@@ -70,6 +70,7 @@ open class Styles: NSObject {
         "commentDateText": (smallRegularFont, altLightGreyColor),
         // grouped event list table scene
         "groupedEventCellDate": (smallRegularFont, altDarkGreyColor),
+        "groupedEventToolTip": (smallRegularFont, warmGreyColor),
         // event detail view scene
         // event detail graph area
         // add/edit event scenes
