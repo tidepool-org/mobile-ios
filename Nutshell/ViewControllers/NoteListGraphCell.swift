@@ -187,10 +187,23 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
         syncGraph()
     }
     
-    func pinchZoomEnded() {}
-    func dataPointTapped(_ dataPoint: GraphDataType, tapLocationInView: CGPoint) {}
-    func willDisplayGraphCell(_ cell: Int) {}
-    func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {}
+    func pinchZoomEnded() {
+        APIConnector.connector().trackMetric("Data viz zoom")
+    }
+    
+    func dataPointTapped(_ dataPoint: GraphDataType, tapLocationInView: CGPoint) {
+        //NSLog("dataPoint tapped")
+    }
+    
+    func willDisplayGraphCell(_ cell: Int) {
+        if TidepoolGraphLayout.cellNotInMainView(cell) {
+            APIConnector.connector().trackMetric("Data viz panned")
+        }
+    }
+
+    func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {
+        //NSLog("unhandledTapAtLocation \(tapLocationInView)")
+    }
     
 }
 

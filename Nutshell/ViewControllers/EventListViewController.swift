@@ -100,7 +100,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         eventListSceneContainer.layoutIfNeeded()
 
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSFontAttributeName: smallRegularFont, NSForegroundColorAttributeName: blackishColor])
-        self.refreshControl.addTarget(self, action: #selector(EventListViewController.refresh), for: UIControlEvents.valueChanged)
+        self.refreshControl.addTarget(self, action: #selector(EventListViewController.refreshControlHandler), for: UIControlEvents.valueChanged)
         self.refreshControl.setNeedsLayout()
         self.tableView.addSubview(refreshControl)
         self.tableView.rowHeight = UITableViewAutomaticDimension
@@ -482,6 +482,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
     
+    func refreshControlHandler() {
+        APIConnector.connector().trackMetric("Swiped down to refresh")
+        refresh()
+    }
+    
     func refresh() {
         DDLogVerbose("trace)")
         
@@ -583,6 +588,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         if let commentEditVC = segue.source as? EditCommentViewController {
             if let comment = commentEditVC.commentToEdit, let commentEdits = commentEditVC.newComment {
                 APIConnector.connector().updateNote(self, editedNote: commentEdits, originalNote: comment)
+                APIConnector.connector().trackMetric("Clicked save edited comment")
                 // will be called back on at updateComplete on successful update!
                 // TODO: also handle unsuccessful updates?
             }
@@ -594,6 +600,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         if let commentEditVC = segue.source as? EditCommentViewController {
             if let newNote = commentEditVC.newComment {
                 APIConnector.connector().doPostWithNote(self, note: newNote)
+                APIConnector.connector().trackMetric("Clicked post comment")
                 // will be called back at addComments
             }
         }
@@ -696,7 +703,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             self.present(alertController, animated: true, completion: nil)
             return
         }
-        
+
+        APIConnector.connector().trackMetric("Clicked email a link")
+
         let emailVC = MFMailComposeViewController()
         emailVC.mailComposeDelegate = self
         
@@ -737,7 +746,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
 
     @IBAction func firstTimeNeedUploaderOkButtonHandler(_ sender: Any) {
-        // TODO: metric?
+        APIConnector.connector().trackMetric("Clicked first time need uploader")
         firstTimeNeedUploaderTip.isHidden = true
     }
     
@@ -859,7 +868,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     @IBAction func howToUploadButtonHandler(_ sender: Any) {
-        // TODO: add metric?
+        APIConnector.connector().trackMetric("Clicked how to upload button")
         let url = URL(string: TPConstants.kHowToUploadURL)
         if let url = url {
             UIApplication.shared.openURL(url)
@@ -1078,6 +1087,7 @@ extension EventListViewController: UITableViewDelegate {
                 }
                 tableView.insertRows(at: addedRows, with: .automatic)
             }
+            APIConnector.connector().trackMetric("Opened data viz")
         } else {
             var commentRows: [IndexPath] = []
             // include +2 for graph row and "add comment" row...
@@ -1087,6 +1097,7 @@ extension EventListViewController: UITableViewDelegate {
                 commentRows.append(IndexPath(row: i+1, section: noteSection))
             }
             tableView.deleteRows(at: commentRows, with: .automatic)
+            APIConnector.connector().trackMetric("Closed data viz")
         }
         tableView.endUpdates()
         
@@ -1134,11 +1145,11 @@ extension EventListViewController: UITableViewDelegate {
         }
         let rowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "delete") {_,indexPath in
             // use dialog to confirm delete with user!
-            var metric = "Clicked Delete Note"
+            var metric = "Swiped left to delete note"
             var title = trashAlertTitle
             var message = trashAlertMessage
             if row >= self.kFirstCommentRow {
-                metric = "Clicked Delete Comment"
+                metric = "Swiped left to delete comment"
                 title = trashCommentAlertTitle
                 message = trashCommentAlertMessage
             }

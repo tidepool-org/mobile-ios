@@ -23,13 +23,14 @@ class TidepoolGraphLayout: GraphLayout {
     var displayGridLines = true
     /// Notes to display.
     var notesToDisplay: [BlipNote] = []
-
+    static let kGraphTileCount = 3
+    
     init (viewSize: CGSize, mainEventTime: Date, tzOffsetSecs: Int) {
 
         self.mainEventTime = mainEventTime
         let startPixelsPerHour = 80
         // TODO: figure number of tiles based on view size, in order to get 24 hours. 3 tiles gets about 28 hours on a portrait iPad (768/80 = 9.6 hours x 3 = 28.8 hours), where screen size is one tile wide - see tilesInView below.
-        let numberOfTiles = 3
+        let numberOfTiles = TidepoolGraphLayout.kGraphTileCount
         let cellTI = TimeInterval(viewSize.width * 3600.0/CGFloat(startPixelsPerHour))
         let graphTI = cellTI * TimeInterval(numberOfTiles)
         let startTime = mainEventTime.addingTimeInterval(-graphTI/2.0)
@@ -37,7 +38,12 @@ class TidepoolGraphLayout: GraphLayout {
 
         self.yAxisValuesWithLines = displayGridLines ? [70, 180] : []
         self.yAxisValuesWithLabels = [70, 180, 300]
-}
+    }
+    
+    /// Helper function to determine if user must have scrolled to this cell (i.e., not the main view cell, which is the middle cell in the collection).
+    static func cellNotInMainView(_ cell: Int) -> Bool {
+        return cell != (TidepoolGraphLayout.kGraphTileCount/2)
+    }
 
     //
     // MARK: - Overrides for graph customization

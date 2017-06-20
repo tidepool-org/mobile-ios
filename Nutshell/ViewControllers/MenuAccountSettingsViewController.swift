@@ -132,12 +132,20 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func enableHealthData(_ sender: AnyObject) {
         if let enableSwitch = sender as? UISwitch {
-            if enableSwitch.isOn {
-                enableHealthKitInterfaceForCurrentUser()
-            } else {
-                NutDataController.sharedInstance.disableHealthKitInterface()
+            if enableSwitch == healthKitSwitch {
+                if enableSwitch.isOn {
+                    // Note: this enable function is asynchronous, so interface enable won't be true for a while
+                    // TODO: rewrite to pass along completion routine?
+                    enableHealthKitInterfaceForCurrentUser()
+                    APIConnector.connector().trackMetric("Connect to health on")
+                    // Note: because of above, avoid calling healthKitInterfaceEnabledForCurrentUser immediately...
+                    configureHKInterfaceForState(true)
+                } else {
+                    NutDataController.sharedInstance.disableHealthKitInterface()
+                    APIConnector.connector().trackMetric("Connect to health off")
+                    configureHKInterfaceForState(false)
+                }
             }
-            configureHKInterface()
         }
     }
 
@@ -162,11 +170,14 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         configureHKInterface()
     }
 
-    fileprivate func configureHKInterface() {
-        // Late binding here because profile fetch occurs after login complete!
-        usernameLabel.text = NutDataController.sharedInstance.userFullName
+    private func configureHKInterface() {
         let hkCurrentEnable = appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
         healthKitSwitch.isOn = hkCurrentEnable
+        configureHKInterfaceForState(hkCurrentEnable)
+    }
+    
+    // Note: this is used by the switch logic itself since the underlying interface enable lags asychronously behind the UI switch...
+    private func configureHKInterfaceForState(_ hkCurrentEnable: Bool) {
         if hkCurrentEnable {
             self.configureHealthStatusLines()
             // make sure timer is turned on to prevent a stale interface...
@@ -181,7 +192,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         healthStatusContainerView.isHidden = hideHealthKitUI || !hkCurrentEnable
     }
     
-    fileprivate func enableHealthKitInterfaceForCurrentUser() {
+    private func enableHealthKitInterfaceForCurrentUser() {
         if appHealthKitConfiguration.healthKitInterfaceConfiguredForOtherUser() {
             // use dialog to confirm delete with user!
             let curHKUserName = appHealthKitConfiguration.healthKitUserTidepoolUsername() ?? "Unknown"
