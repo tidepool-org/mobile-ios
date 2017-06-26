@@ -15,7 +15,7 @@ class BloodKetone: CommonData {
         if let entityDescription = NSEntityDescription.entity(forEntityName: "BloodKetone", in: moc) {
             let me = BloodKetone(entity: entityDescription, insertInto: nil)
             
-            me.value = NutUtils.decimalFromJSON(json["value"].string)
+            me.value = TidepoolMobileUtils.decimalFromJSON(json["value"].string)
             
             return me
         }

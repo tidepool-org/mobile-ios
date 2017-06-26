@@ -15,9 +15,9 @@ class Food: CommonData {
         if let entityDescription = NSEntityDescription.entity(forEntityName: "Food", in: moc) {
             let me = Food(entity: entityDescription, insertInto: nil) 
             
-            me.carbs = NutUtils.decimalFromJSON(json["carbs"].string)
-            me.protein = NutUtils.decimalFromJSON(json["protein"].string)
-            me.fat = NutUtils.decimalFromJSON(json["fat"].string)
+            me.carbs = TidepoolMobileUtils.decimalFromJSON(json["carbs"].string)
+            me.protein = TidepoolMobileUtils.decimalFromJSON(json["protein"].string)
+            me.fat = TidepoolMobileUtils.decimalFromJSON(json["fat"].string)
             me.location = json["location"].string
             me.name = json["name"].string
             

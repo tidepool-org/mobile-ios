@@ -15,7 +15,7 @@ class Calibration: DeviceMetadata {
         if let entityDescription = NSEntityDescription.entity(forEntityName: "Calibration", in: moc) {
             let me = Calibration(entity: entityDescription, insertInto: nil)
             
-            me.value = NutUtils.decimalFromJSON(json["value"].string)
+            me.value = TidepoolMobileUtils.decimalFromJSON(json["value"].string)
             
             return me
         }

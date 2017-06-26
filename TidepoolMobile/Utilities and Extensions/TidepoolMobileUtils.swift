@@ -17,7 +17,7 @@ import UIKit
 import CoreData
 import Photos
 
-class NutUtils {
+class TidepoolMobileUtils {
 
     class func onIPad() -> Bool {
         return UIDevice.current.userInterfaceIdiom == .pad
@@ -99,7 +99,7 @@ class NutUtils {
 
     /// Call setFormatterTimezone to set time zone before calling standardUIDayString or standardUIDateString
     class func setFormatterTimezone(_ timezoneOffsetSecs: Int) {
-        let df = NutUtils.dateFormatter
+        let df = TidepoolMobileUtils.dateFormatter
         df.timeZone = TimeZone(secondsFromGMT:timezoneOffsetSecs)
     }
     
@@ -115,7 +115,7 @@ class NutUtils {
     /// Returns strings like "Mar 17, 2016", "Today", "Yesterday"
     /// Note: call setFormatterTimezone before this!
     class func standardUIDayString(_ date: Date) -> String {
-        let df = NutUtils.dateFormatter
+        let df = TidepoolMobileUtils.dateFormatter
         df.dateFormat = "MMM d, yyyy"
         var dayString = df.string(from: date)
         // If this year, remove year.
@@ -137,8 +137,8 @@ class NutUtils {
     /// Returns strings like "Yesterday at 9:17 am"
     /// Note: call setFormatterTimezone before this!
     class func standardUIDateString(_ date: Date) -> String {
-        let df = NutUtils.dateFormatter
-        let dayString = NutUtils.standardUIDayString(date)
+        let df = TidepoolMobileUtils.dateFormatter
+        let dayString = TidepoolMobileUtils.standardUIDayString(date)
         // Figure the hour/minute part...
         df.dateFormat = "h:mm a"
         var hourString = df.string(from: date)

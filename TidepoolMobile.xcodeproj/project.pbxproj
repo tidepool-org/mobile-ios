@@ -166,7 +166,7 @@
 		486F5E2B1BA0DC6700BA2A57 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
 		486F5E3A1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */; };
 		486F5E3B1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */; };
-		486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
+		486F5E781BA3891600BA2A57 /* TidepoolMobileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* TidepoolMobileUtils.swift */; };
 		4872118D1E8D818300BAD5CE /* SwitchProfileTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4872118C1E8D818300BAD5CE /* SwitchProfileTableViewController.swift */; };
 		4872118F1E8DC33200BAD5CE /* ProfileListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */; };
 		4874E7931EBA966D00A3EBFA /* EditCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4874E7921EBA966D00A3EBFA /* EditCommentViewController.swift */; };
@@ -227,7 +227,7 @@
 		48E5C2111EB2D17100D5923A /* TPUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E5C2101EB2D17100D5923A /* TPUIButton.swift */; };
 		48EC25781EA9526A00607F85 /* NoteListAddCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC25771EA9526A00607F85 /* NoteListAddCommentCell.swift */; };
 		48EC32301BA7BDD700A75103 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
-		48EC32321BA7BDDE00A75103 /* NutUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* NutUtils.swift */; };
+		48EC32321BA7BDDE00A75103 /* TidepoolMobileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* TidepoolMobileUtils.swift */; };
 		48EC39D31ED113C30025A909 /* EventAddEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48EC39D11ED113C30025A909 /* EventAddEdit.storyboard */; };
 		48ECF6CE1E96FE18007EE5D3 /* jump-jump-jump-jump.gif in Resources */ = {isa = PBXBuildFile; fileRef = 48ECF6CD1E96FE18007EE5D3 /* jump-jump-jump-jump.gif */; };
 		48ED0D341BADAF8B009D0D6F /* GraphUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */; };
@@ -362,7 +362,7 @@
 		486F5E291BA0DC6700BA2A57 /* NutEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutEvent.swift; path = DataModel/NutEvent.swift; sourceTree = "<group>"; };
 		486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIDateFormatterExtension.swift; path = "Utilities and Extensions/UIDateFormatterExtension.swift"; sourceTree = "<group>"; };
 		486F5E751BA35CD800BA2A57 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		486F5E771BA3891600BA2A57 /* NutUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutUtils.swift; path = "Utilities and Extensions/NutUtils.swift"; sourceTree = "<group>"; };
+		486F5E771BA3891600BA2A57 /* TidepoolMobileUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolMobileUtils.swift; path = "Utilities and Extensions/TidepoolMobileUtils.swift"; sourceTree = "<group>"; };
 		4872118C1E8D818300BAD5CE /* SwitchProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwitchProfileTableViewController.swift; path = ViewControllers/SwitchProfileTableViewController.swift; sourceTree = "<group>"; };
 		4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileListTableViewCell.swift; path = ViewControllers/ProfileListTableViewCell.swift; sourceTree = "<group>"; };
 		4874E7921EBA966D00A3EBFA /* EditCommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditCommentViewController.swift; path = ViewControllers/EditCommentViewController.swift; sourceTree = "<group>"; };
@@ -731,7 +731,7 @@
 				48B127B01BC4466E00061483 /* DatabaseUtils.swift */,
 				48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */,
 				486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */,
-				486F5E771BA3891600BA2A57 /* NutUtils.swift */,
+				486F5E771BA3891600BA2A57 /* TidepoolMobileUtils.swift */,
 				4806E33B1E99621D0024A497 /* UIViewExtension.swift */,
 			);
 			name = Extensions;
@@ -1118,7 +1118,7 @@
 				4872118D1E8D818300BAD5CE /* SwitchProfileTableViewController.swift in Sources */,
 				488E44E31E831CC100A17AD7 /* HashtagsView.swift in Sources */,
 				485420271BC44D290020CFE1 /* Meal.swift in Sources */,
-				486F5E781BA3891600BA2A57 /* NutUtils.swift in Sources */,
+				486F5E781BA3891600BA2A57 /* TidepoolMobileUtils.swift in Sources */,
 				0334CA731BA8DDFC00013096 /* Status.swift in Sources */,
 				48C491591C38B1AF00F34630 /* TidepoolGraphLayout.swift in Sources */,
 				48103E961C1DE4CC0055C27A /* ENSideMenu.swift in Sources */,
@@ -1243,7 +1243,7 @@
 				0334CA261BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */,
 				0334CA861BA8DDFC00013096 /* UrineKetone.swift in Sources */,
 				0334CA591BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,
-				48EC32321BA7BDDE00A75103 /* NutUtils.swift in Sources */,
+				48EC32321BA7BDDE00A75103 /* TidepoolMobileUtils.swift in Sources */,
 				48867CFA1E81A4BF00C4E79D /* BlipPatient.swift in Sources */,
 				485420261BC44D290020CFE1 /* Meal+CoreDataProperties.swift in Sources */,
 				0334CA381BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift in Sources */,

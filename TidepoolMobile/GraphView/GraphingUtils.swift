@@ -321,8 +321,8 @@ open class GraphingUtils {
                 var midnight = false
                 if timeStr == "12 a" || timeStr == "00" {
                     midnight = true
-                    //NutUtils.setFormatterTimezone(layout.timezoneOffsetSecs)
-                    //timeStr = NutUtils.standardUIDayString(curDate)
+                    //TidepoolMobileUtils.setFormatterTimezone(layout.timezoneOffsetSecs)
+                    //timeStr = TidepoolMobileUtils.standardUIDayString(curDate)
                 }
                 
                 // draw marker

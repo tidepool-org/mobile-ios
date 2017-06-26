@@ -19,7 +19,7 @@ class Note: CommonData {
             me.text = json["text"].string
             me.creatorId = json["creatorId"].string
             me.reference = json["reference"].string
-            me.displayTime = NutUtils.dateFromJSON(json["displayTime"].string)
+            me.displayTime = TidepoolMobileUtils.dateFromJSON(json["displayTime"].string)
             
             return me
         }

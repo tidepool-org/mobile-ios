@@ -15,8 +15,8 @@ class TimeChange: DeviceMetadata {
         if let entityDescription = NSEntityDescription.entity(forEntityName: "TimeChange", in: moc) {
             let me = TimeChange(entity: entityDescription, insertInto: nil)
             
-            me.changeFrom = NutUtils.dateFromJSON(json["changeFrom"].string)
-            me.changeTo = NutUtils.dateFromJSON(json["changeTo"].string)
+            me.changeFrom = TidepoolMobileUtils.dateFromJSON(json["changeFrom"].string)
+            me.changeTo = TidepoolMobileUtils.dateFromJSON(json["changeTo"].string)
             me.changeAgent = json["changeAgent"].string
             me.changeTimezone = json["changeTimezone"].string
             me.changeReasons = json["changeReasons"].string

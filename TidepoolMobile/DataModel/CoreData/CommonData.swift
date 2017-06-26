@@ -50,7 +50,7 @@ class CommonData: NSManagedObject {
                 newObject.type = type as NSString?
                 
                 if let timeString = json["time"].string {
-                    if let time = NutUtils.dateFromJSON(timeString) {
+                    if let time = TidepoolMobileUtils.dateFromJSON(timeString) {
                         newObject.time = time
                     } else {
                         print("skipped record of type \(type) with unknown time format: \(timeString)")
@@ -61,17 +61,17 @@ class CommonData: NSManagedObject {
                     return nil
                 }
 
-                newObject.time = NutUtils.dateFromJSON(json["time"].string)
+                newObject.time = TidepoolMobileUtils.dateFromJSON(json["time"].string)
                 
                 
                 newObject.deviceId = json["deviceId"].string
                 newObject.uploadId = json["uploadId"].string
                 newObject.previous = json["previous"].string
                 newObject.timezoneOffset = json["timezoneOffset"].number
-                newObject.deviceTime = NutUtils.dateFromJSON(json["deviceTime"].string)
+                newObject.deviceTime = TidepoolMobileUtils.dateFromJSON(json["deviceTime"].string)
                 newObject.units = json["units"].string
-                newObject.createdTime = NutUtils.dateFromJSON(json["createdTime"].string)
-                newObject.modifiedTime = NutUtils.dateFromJSON(json["modifiedTime"].string)
+                newObject.createdTime = TidepoolMobileUtils.dateFromJSON(json["createdTime"].string)
+                newObject.modifiedTime = TidepoolMobileUtils.dateFromJSON(json["modifiedTime"].string)
                 newObject.payload = json["payload"].string
                 newObject.annotations = json["annotations"].string
             }

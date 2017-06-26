@@ -49,7 +49,7 @@ class NoteListCommentCell: UITableViewCell {
 
         self.updateNoteFontStyling()
 
-        dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
+        dateLabel.text = TidepoolMobileUtils.standardUIDateString(note.timestamp)
         self.userLabel.text = note.user?.fullName ?? ""
     }
     

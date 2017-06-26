@@ -384,11 +384,11 @@ class APIConnector {
         var parameters: Dictionary = ["type": objectTypes]
         if let startDate = startDate {
             // NOTE: start date is excluded (i.e., dates > start date)
-            parameters.updateValue(NutUtils.dateToJSON(startDate), forKey: "startDate")
+            parameters.updateValue(TidepoolMobileUtils.dateToJSON(startDate), forKey: "startDate")
         }
         if let endDate = endDate {
             // NOTE: end date is included (i.e., dates <= end date)
-            parameters.updateValue(NutUtils.dateToJSON(endDate), forKey: "endDate")
+            parameters.updateValue(TidepoolMobileUtils.dateToJSON(endDate), forKey: "endDate")
         }
         sendRequest(.get, endpoint: endpoint, parameters: parameters as [String : AnyObject]?).responseJSON { response in
             UIApplication.shared.isNetworkActivityIndicatorVisible = false

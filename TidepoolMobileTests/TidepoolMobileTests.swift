@@ -113,8 +113,8 @@ class TidepoolMobileTests: XCTestCase {
             print("Login for fetch user data result: \(result)")
             
             // Look at events in July 2015...
-            let startDate = NutUtils.dateFromJSON("2015-07-01T00:00:00.000Z")!
-            let endDate = NutUtils.dateFromJSON("2015-07-31T23:59:59.000Z")!
+            let startDate = TidepoolMobileUtils.dateFromJSON("2015-07-01T00:00:00.000Z")!
+            let endDate = TidepoolMobileUtils.dateFromJSON("2015-07-31T23:59:59.000Z")!
             
             APIConnector.connector().getReadOnlyUserData(startDate, endDate: endDate) { (result:Alamofire.Result<JSON>) -> (Void) in
                 NSLog("FetchUserData result: \(result)")
@@ -147,8 +147,8 @@ class TidepoolMobileTests: XCTestCase {
             print("Login for fetch user data result: \(result)")
             
             // Look at events in July 2015...
-            let startDate = NutUtils.dateFromJSON("2015-07-01T00:00:00.000Z")!
-            let endDate = NutUtils.dateFromJSON("2015-07-31T23:59:59.000Z")!
+            let startDate = TidepoolMobileUtils.dateFromJSON("2015-07-01T00:00:00.000Z")!
+            let endDate = TidepoolMobileUtils.dateFromJSON("2015-07-31T23:59:59.000Z")!
             
             APIConnector.connector().getReadOnlyUserData(startDate, endDate: endDate) { (result:Alamofire.Result<JSON>) -> (Void) in
                 NSLog("FetchUserData2 result: \(result)")

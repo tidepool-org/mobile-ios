@@ -85,7 +85,7 @@ class NoteListTableViewCell: UITableViewCell {
     func configureCell(_ note: BlipNote, group: BlipUser) {
         self.note = note
         self.updateNoteFontStyling()
-        dateLabel.text = NutUtils.standardUIDateString(note.timestamp)
+        dateLabel.text = TidepoolMobileUtils.standardUIDateString(note.timestamp)
         noteLabel.isHighlighted = false
         dateLabel.isHighlighted = false
         userLabel.isHighlighted = false

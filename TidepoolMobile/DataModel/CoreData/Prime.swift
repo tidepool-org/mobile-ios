@@ -16,7 +16,7 @@ class Prime: DeviceMetadata {
             let me = Prime(entity: entityDescription, insertInto: nil) 
             
             me.primeTarget = json["primeTarget"].string
-            me.volume = NutUtils.decimalFromJSON(json["volume"].string)
+            me.volume = TidepoolMobileUtils.decimalFromJSON(json["volume"].string)
 
             return me
         }

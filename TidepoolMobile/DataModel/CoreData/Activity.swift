@@ -18,10 +18,10 @@ class Activity: CommonData {
             
             me.subType = json["subType"].string
             me.duration = json["duration"].number
-            me.intensityMet = NutUtils.decimalFromJSON(json["intensityMet"].string)
-            me.intensityBorg = NutUtils.decimalFromJSON(json["intensityBorg"].string)
-            me.intensityHr = NutUtils.decimalFromJSON(json["intensityHr"].string)
-            me.intensityWatts = NutUtils.decimalFromJSON(json["intensityWatts"].string)
+            me.intensityMet = TidepoolMobileUtils.decimalFromJSON(json["intensityMet"].string)
+            me.intensityBorg = TidepoolMobileUtils.decimalFromJSON(json["intensityBorg"].string)
+            me.intensityHr = TidepoolMobileUtils.decimalFromJSON(json["intensityHr"].string)
+            me.intensityWatts = TidepoolMobileUtils.decimalFromJSON(json["intensityWatts"].string)
             me.location = json["location"].string
             
             return me
