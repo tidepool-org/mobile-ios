@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Styles.configureTidepoolBarColoring(on: true)
         
         // Initialize database by referencing username. This must be done before using the APIConnector!
-        let name = NutDataController.sharedInstance.currentUserName
+        let name = TidepoolMobileDataController.sharedInstance.currentUserName
         if !name.isEmpty {
             NSLog("Initializing TidepoolMobileDataController, found and set user \(name)")
         }
@@ -153,7 +153,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // make sure HK interface is configured...
         // TODO: this can kick off a lot of activity! Review...
         // Note: configureHealthKitInterface is somewhat background-aware...
-        NutDataController.sharedInstance.configureHealthKitInterface()
+        TidepoolMobileDataController.sharedInstance.configureHealthKitInterface()
         // then call it...
         HealthKitDataPusher.sharedInstance.backgroundFetch { (fetchResult) -> Void in
             completionHandler(fetchResult)
@@ -243,7 +243,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSLog("AppDelegate: attempting to refresh token...")
             api.refreshToken() { succeeded -> (Void) in
                 if succeeded {
-                    let dataController = NutDataController.sharedInstance
+                    let dataController = TidepoolMobileDataController.sharedInstance
                     dataController.checkRestoreCurrentViewedUser {
                         dataController.configureHealthKitInterface()
                         self.setupUIForLoginSuccess()
@@ -261,7 +261,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        NutDataController.sharedInstance.appWillTerminate()
+        TidepoolMobileDataController.sharedInstance.appWillTerminate()
         NSLog("TidepoolMobile applicationWillTerminate")
     }
 

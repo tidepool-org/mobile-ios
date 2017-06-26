@@ -181,11 +181,11 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         if (result.isSuccess) {
             if let user=result.value {
                 NSLog("Login success: \(user)")
-                APIConnector.connector().fetchProfile(NutDataController.sharedInstance.currentUserId!) { (result:Alamofire.Result<JSON>) -> (Void) in
+                APIConnector.connector().fetchProfile(TidepoolMobileDataController.sharedInstance.currentUserId!) { (result:Alamofire.Result<JSON>) -> (Void) in
                         NSLog("Profile fetch result: \(result)")
                     if (result.isSuccess) {
                         if let json = result.value {
-                            NutDataController.sharedInstance.processLoginProfileFetch(json)
+                            TidepoolMobileDataController.sharedInstance.processLoginProfileFetch(json)
                         }
                         let appDelegate = UIApplication.shared.delegate as! AppDelegate
                         appDelegate.setupUIForLoginSuccess()

@@ -70,7 +70,7 @@ class NutEvent {
     }
     
     class func createMealEvent(_ title: String, notes: String, location: String, photo: String, photo2: String, photo3: String, time: Date, timeZoneOffset: Int) -> EventItem? {
-        let moc = NutDataController.sharedInstance.mocForNutEvents()!
+        let moc = TidepoolMobileDataController.sharedInstance.mocForNutEvents()!
         if let entityDescription = NSEntityDescription.entity(forEntityName: "Meal", in: moc) {
             let me = NSManagedObject(entity: entityDescription, insertInto: nil) as! Meal
             me.title = title
@@ -87,7 +87,7 @@ class NutEvent {
             me.timezoneOffset = NSNumber(value: timeZoneOffset/60)
             // TODO: Determine policy for local id creation!
             me.id = UUID().uuidString as NSString?
-            me.userid = NutDataController.sharedInstance.currentUserId // critical!
+            me.userid = TidepoolMobileDataController.sharedInstance.currentUserId // critical!
             moc.insert(me)
             if DatabaseUtils.databaseSave(moc) {
                 return me

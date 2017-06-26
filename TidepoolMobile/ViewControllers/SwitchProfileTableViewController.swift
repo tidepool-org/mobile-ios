@@ -20,7 +20,7 @@ class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPI
         super.viewDidLoad()
 
         // For now, fetch profile users each time
-        if let mainUser = NutDataController.sharedInstance.currentLoggedInUser {
+        if let mainUser = TidepoolMobileDataController.sharedInstance.currentLoggedInUser {
             tableUsers = [mainUser]
         }
         
@@ -44,7 +44,7 @@ class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPI
                         user.processProfileJSON(json)
                         profileUsers.append(user)
                         // add any other users...
-                        if user.userid != NutDataController.sharedInstance.currentUserId! {
+                        if user.userid != TidepoolMobileDataController.sharedInstance.currentUserId! {
                             self.tableUsers.append(user)
                         }
                         if profileUsers.count == userIds.count {
@@ -88,7 +88,7 @@ class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPI
             } else {
                 cell.nameLabel?.text = user.fullName ?? ""
             }
-            if user.userid == NutDataController.sharedInstance.currentViewedUser!.userid {
+            if user.userid == TidepoolMobileDataController.sharedInstance.currentViewedUser!.userid {
                 cell.accessoryType = .checkmark
             } else {
                 cell.accessoryType = .none

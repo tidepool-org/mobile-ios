@@ -67,7 +67,7 @@ class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
     }
     
     fileprivate func processWorkoutEvents(_ workouts: [HKSample]) {
-        let moc = NutDataController.sharedInstance.mocForNutEvents()!
+        let moc = TidepoolMobileDataController.sharedInstance.mocForNutEvents()!
         if let entityDescription = NSEntityDescription.entity(forEntityName: "Workout", in: moc) {
             for event in workouts {
                 if let workout = event as? HKWorkout {
@@ -106,7 +106,7 @@ class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
                     we.time = workout.startDate
                     we.type = "workout"
                     we.id = event.uuid.uuidString as NSString?
-                    we.userid = NutDataController.sharedInstance.currentUserId
+                    we.userid = TidepoolMobileDataController.sharedInstance.currentUserId
                     let now = Date()
                     we.createdTime = now
                     we.modifiedTime = now
@@ -145,7 +145,7 @@ class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
     }
     
     fileprivate func processDeleteWorkoutEvents(_ workouts: [HKDeletedObject]) {
-        let moc = NutDataController.sharedInstance.mocForNutEvents()!
+        let moc = TidepoolMobileDataController.sharedInstance.mocForNutEvents()!
         for workout in workouts {
             NSLog("Processing deleted workout sample with UUID: \(workout.uuid)");
             let id = workout.uuid.uuidString

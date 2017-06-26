@@ -30,7 +30,7 @@ class TidepoolMobileTests: XCTestCase {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
         // Initialize database by referencing username. This must be done before using the APIConnector!
-        let _ = NutDataController.sharedInstance.currentUserName
+        let _ = TidepoolMobileDataController.sharedInstance.currentUserName
         _ = APIConnector.connector().configure()
         APIConnector.connector().switchToServer(server)
     }
@@ -85,11 +85,11 @@ class TidepoolMobileTests: XCTestCase {
         self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
             print("Login for profile result: \(result)")
 
-             APIConnector.connector().fetchProfile(NutDataController.sharedInstance.currentUserId!) { (result:Alamofire.Result<JSON>) -> (Void) in
+             APIConnector.connector().fetchProfile(TidepoolMobileDataController.sharedInstance.currentUserId!) { (result:Alamofire.Result<JSON>) -> (Void) in
                 NSLog("Profile fetch result: \(result)")
                 if (result.isSuccess) {
                     if let json = result.value {
-                        NutDataController.sharedInstance.processLoginProfileFetch(json)
+                        TidepoolMobileDataController.sharedInstance.processLoginProfileFetch(json)
                     }
                     expectation.fulfill()
                 } else {
@@ -121,7 +121,7 @@ class TidepoolMobileTests: XCTestCase {
                 if (result.isSuccess) {
                     if let json = result.value {
                         if result.isSuccess {
-                            DatabaseUtils.sharedInstance.updateEvents(NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json)
+                            DatabaseUtils.sharedInstance.updateEvents(TidepoolMobileDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json)
                         } else {
                             NSLog("No user data events!")
                         }
@@ -155,7 +155,7 @@ class TidepoolMobileTests: XCTestCase {
                 if (result.isSuccess) {
                     if let json = result.value {
                         if result.isSuccess {
-                            _ = DatabaseUtils.sharedInstance.updateEventsForTimeRange(startDate, endTime: endDate, moc:NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json) {
+                            _ = DatabaseUtils.sharedInstance.updateEventsForTimeRange(startDate, endTime: endDate, moc:TidepoolMobileDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json) {
                                 (success) -> (Void) in
                                 expectation.fulfill()
                             }

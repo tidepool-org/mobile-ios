@@ -30,10 +30,10 @@ import CocoaLumberjack
 /// The local data store is allocated when the application starts, if not already allocated, and never deleted. Meal and Workout events in this store are tagged with the service userId string; queries against this database for these events always include the userid as a match criteria.
 ///
 /// The Tidepool data store is only allocated at login, and is deleted at logout. It is named so it won't be backed up to iCloud if the user has application backup to cloud configured.
-class NutDataController: NSObject
+class TidepoolMobileDataController: NSObject
 {
     /// Supports a singleton controller for the application.
-    static let sharedInstance = NutDataController()
+    static let sharedInstance = TidepoolMobileDataController()
     
     // MARK: - Constants
     

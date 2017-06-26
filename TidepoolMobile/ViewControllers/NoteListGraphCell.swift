@@ -69,7 +69,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     func configureGraphContainer() {
         var lowBGBounds: Int?
         var highBGBounds: Int?
-        let dataController = NutDataController.sharedInstance
+        let dataController = TidepoolMobileDataController.sharedInstance
         if let bgLowBounds = dataController.currentViewedUser?.bgTargetLow, let bgHighBounds = dataController.currentViewedUser?.bgTargetHigh {
             lowBGBounds = Int(bgLowBounds)
             highBGBounds = Int(bgHighBounds)

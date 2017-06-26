@@ -45,7 +45,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         } else{
             versionString.text = "v" + UIApplication.appVersion() + " on " + curService
         }
-        loginAccount.text = NutDataController.sharedInstance.currentUserName
+        loginAccount.text = TidepoolMobileDataController.sharedInstance.currentUserName
         
         //healthKitSwitch.tintColor = Styles.brightBlueColor
         //healthKitSwitch.thumbTintColor = Styles.whiteColor
@@ -78,7 +78,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         userSelectedLogout = false
         userSelectedExternalLink = nil
 
-        usernameLabel.text = NutDataController.sharedInstance.userFullName
+        usernameLabel.text = TidepoolMobileDataController.sharedInstance.userFullName
         configureHKInterface()
 
         // configure custom buttons
@@ -141,7 +141,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
                     // Note: because of above, avoid calling healthKitInterfaceEnabledForCurrentUser immediately...
                     configureHKInterfaceForState(true)
                 } else {
-                    NutDataController.sharedInstance.disableHealthKitInterface()
+                    TidepoolMobileDataController.sharedInstance.disableHealthKitInterface()
                     APIConnector.connector().trackMetric("Connect to health off")
                     configureHKInterfaceForState(false)
                 }
@@ -205,11 +205,11 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
                 return
             }))
             alert.addAction(UIAlertAction(title: "Change Account", style: .default, handler: { Void in
-                NutDataController.sharedInstance.enableHealthKitInterface()
+                TidepoolMobileDataController.sharedInstance.enableHealthKitInterface()
             }))
             self.present(alert, animated: true, completion: nil)
         } else {
-            NutDataController.sharedInstance.enableHealthKitInterface()
+            TidepoolMobileDataController.sharedInstance.enableHealthKitInterface()
         }
     }
     

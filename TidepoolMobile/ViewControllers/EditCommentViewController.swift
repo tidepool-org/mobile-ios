@@ -37,7 +37,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     fileprivate var currentCommentEditCell: NoteListEditCommentCell?
 
     // Misc
-    let dataController = NutDataController.sharedInstance
+    let dataController = TidepoolMobileDataController.sharedInstance
 
     deinit {
         NotificationCenter.default.removeObserver(self)

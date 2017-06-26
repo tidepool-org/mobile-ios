@@ -197,21 +197,21 @@ class APIConnector {
                 
                 // Create the User object
                 // TODO: Should this call be made in TidepoolMobileDataController?
-                let moc = NutDataController.sharedInstance.mocForCurrentUser()
+                let moc = TidepoolMobileDataController.sharedInstance.mocForCurrentUser()
                 if let user = User.fromJSON(json, email: username, moc: moc) {
-                    NutDataController.sharedInstance.loginUser(user)
+                    TidepoolMobileDataController.sharedInstance.loginUser(user)
                     APIConnector.connector().trackMetric("Logged In")
                     completion(Result.success(user))
                 } else {
                     APIConnector.connector().trackMetric("Log In Failed")
-                    NutDataController.sharedInstance.logoutUser()
+                    TidepoolMobileDataController.sharedInstance.logoutUser()
                     completion(Result.failure(NSError(domain: self.kTidepoolMobileErrorDomain,
                         code: -1,
                         userInfo: ["description":"Could not create user from JSON", "result":response.result.value!])))
                 }
             } else {
                 APIConnector.connector().trackMetric("Log In Failed")
-                NutDataController.sharedInstance.logoutUser()
+                TidepoolMobileDataController.sharedInstance.logoutUser()
                 completion(Result.failure(response.result.error!))
             }
         }
@@ -256,7 +256,7 @@ class APIConnector {
 //    func getAllViewableUsers(_ completion: @escaping (Result<JSON>) -> (Void)) {
 //        // Set our endpoint for the user profile
 //        // format is like: https://api.tidepool.org/access/groups/f934a287c4
-//        let endpoint = "access/groups/" + NutDataController.sharedInstance.currentUserId!
+//        let endpoint = "access/groups/" + TidepoolMobileDataController.sharedInstance.currentUserId!
 //        UIApplication.shared.isNetworkActivityIndicatorVisible = true
 //        sendRequest(.get, endpoint: endpoint).responseJSON { response in
 //            UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -318,7 +318,7 @@ class APIConnector {
         APIConnector.connector().trackMetric("Logged Out", flushBuffer: true)
         self.lastNetworkError = nil
         self.sessionToken = nil
-        NutDataController.sharedInstance.logoutUser()
+        TidepoolMobileDataController.sharedInstance.logoutUser()
         completion()
     }
     
@@ -326,7 +326,7 @@ class APIConnector {
         
         let endpoint = "/auth/login"
         
-        if self.sessionToken == nil || NutDataController.sharedInstance.currentUserId == nil {
+        if self.sessionToken == nil || TidepoolMobileDataController.sharedInstance.currentUserId == nil {
             // We don't have a session token to refresh.
             completion(false)
             return
@@ -356,7 +356,7 @@ class APIConnector {
      */
     func getUserData(_ completion: @escaping (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user data
-        let userId = NutDataController.sharedInstance.currentViewedUser!.userid
+        let userId = TidepoolMobileDataController.sharedInstance.currentViewedUser!.userid
         let endpoint = "data/" + userId
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -376,7 +376,7 @@ class APIConnector {
         // Set our endpoint for the user data
         // TODO: centralize define of read-only events!
         // request format is like: https://api.tidepool.org/data/f934a287c4?endDate=2015-11-17T08%3A00%3A00%2E000Z&startDate=2015-11-16T12%3A00%3A00%2E000Z&type=smbg%2Cbolus%2Ccbg%2Cwizard%2Cbasal
-        let userId = NutDataController.sharedInstance.currentViewedUser!.userid
+        let userId = TidepoolMobileDataController.sharedInstance.currentViewedUser!.userid
         let endpoint = "data/" + userId
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         NSLog("getReadOnlyUserData request start")
@@ -480,7 +480,7 @@ class APIConnector {
     
     func getAllViewableUsers(_ fetchWatcher: UsersFetchAPIWatcher) {
         
-        let urlExtension = "/access/groups/" + NutDataController.sharedInstance.currentUserId!
+        let urlExtension = "/access/groups/" + TidepoolMobileDataController.sharedInstance.currentUserId!
         
         let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
         
@@ -887,7 +887,7 @@ class APIConnector {
             return
         }
         
-        guard let currentUserId = NutDataController.sharedInstance.currentUserId else {
+        guard let currentUserId = TidepoolMobileDataController.sharedInstance.currentUserId else {
             error = NSError(domain: "APIConnect-doUpload", code: -2, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, no user is logged in"])
             return
         }

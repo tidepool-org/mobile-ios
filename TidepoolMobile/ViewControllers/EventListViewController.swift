@@ -55,7 +55,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     var loadingNotes = false
     
     // misc
-    let dataController = NutDataController.sharedInstance
+    let dataController = TidepoolMobileDataController.sharedInstance
 
     deinit {
         NotificationCenter.default.removeObserver(self)

@@ -77,7 +77,7 @@ class DatabaseUtils {
                 startTidepoolLoad()
                 APIConnector.connector().getReadOnlyUserData(startTime, endDate:endTime, completion: { (result) -> (Void) in
                     if result.isSuccess {
-                        if let moc = NutDataController.sharedInstance.mocForTidepoolEvents() {
+                        if let moc = TidepoolMobileDataController.sharedInstance.mocForTidepoolEvents() {
                             self.updateEventsForTimeRange(startTime, endTime: endTime, moc: moc, eventsJSON: result.value!) {
                                 success -> Void in
                                 self.endTidepoolLoad()
@@ -238,7 +238,7 @@ class DatabaseUtils {
     
     // Note: This call has the side effect of fetching data from the service which may result in a future notification of database changes; if this class is in the process of fetching tidepool events, isLoadingTidepoolEvents will be true.
     func getTidepoolEvents(_ afterTime: Date, thruTime: Date, objectTypes: [String]? = nil, skipCheckLoad: Bool = false) throws -> [NSManagedObject] {
-        let moc = NutDataController.sharedInstance.mocForTidepoolEvents()!
+        let moc = TidepoolMobileDataController.sharedInstance.mocForTidepoolEvents()!
 
         // load on-demand: if data has not been loaded, a notification will come later!
         if !skipCheckLoad {
@@ -261,7 +261,7 @@ class DatabaseUtils {
     }
 
     func getNutEvent(_ id: String) throws -> [EventItem] {
-        let moc = NutDataController.sharedInstance.mocForNutEvents()!
+        let moc = TidepoolMobileDataController.sharedInstance.mocForNutEvents()!
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "EventItem")
         request.predicate = NSPredicate(format: "id == %@", id)
         return try moc.fetch(request) as! [EventItem]
@@ -286,8 +286,8 @@ class DatabaseUtils {
     // TODO: This will need to be reworked to sync data from the service when the service supports meal and workout events.
     func getAllNutEvents() throws -> [EventItem] {
         
-        let moc = NutDataController.sharedInstance.mocForNutEvents()!
-        let userId = NutDataController.sharedInstance.currentUserId!
+        let moc = TidepoolMobileDataController.sharedInstance.mocForNutEvents()!
+        let userId = TidepoolMobileDataController.sharedInstance.currentUserId!
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "EventItem")
         // Return all nut events in the requested range for the current user!
         // TODO: remove nil option before shipping!
@@ -297,8 +297,8 @@ class DatabaseUtils {
     }
 
     private func nutEventRequest(_ nutType: String, fromTime: Date, toTime: Date) -> (request: NSFetchRequest<NSFetchRequestResult>, moc: NSManagedObjectContext) {
-        let moc = NutDataController.sharedInstance.mocForNutEvents()!
-        let userId = NutDataController.sharedInstance.currentUserId!
+        let moc = TidepoolMobileDataController.sharedInstance.mocForNutEvents()!
+        let userId = TidepoolMobileDataController.sharedInstance.currentUserId!
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: nutType)
         // Return only objects in the requested range for the current user!
         // TODO: remove nil option before shipping!

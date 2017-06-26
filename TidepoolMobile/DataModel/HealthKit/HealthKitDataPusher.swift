@@ -191,7 +191,7 @@ class HealthKitDataPusher: NSObject {
         // first load up data from Tidepool service for this timeframe
         APIConnector.connector().getReadOnlyUserData(startTime, endDate: currentTime, objectTypes: "smbg", completion: { (result) -> (Void) in
                 if result.isSuccess {
-                    DatabaseUtils.sharedInstance.updateEventsForTimeRange(startTime, endTime: currentTime, objectTypes: ["smbg"], moc: NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!) { (success) -> (Void) in
+                    DatabaseUtils.sharedInstance.updateEventsForTimeRange(startTime, endTime: currentTime, objectTypes: ["smbg"], moc: TidepoolMobileDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: result.value!) { (success) -> (Void) in
                         
                         DDLogVerbose("Completed updateEventsForTimeRange, success = \(success) for \(startTime) to \(currentTime)")
                         
