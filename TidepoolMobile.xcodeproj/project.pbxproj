@@ -95,6 +95,7 @@
 		0334CAA91BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */; };
 		0334CAAB1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
 		0334CAAC1BA8E22E00013096 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
+		44FEA4373EF916C512BCB4A9 /* Pods_TidepoolMobileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E01F39B16D04096A03DBC5 /* Pods_TidepoolMobileTests.framework */; };
 		4806E33A1E995A350024A497 /* TPMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4806E3391E995A350024A497 /* TPMenuButton.swift */; };
 		4806E33C1E99621D0024A497 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4806E33B1E99621D0024A497 /* UIViewExtension.swift */; };
 		48103E961C1DE4CC0055C27A /* ENSideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E941C1DE4CC0055C27A /* ENSideMenu.swift */; };
@@ -235,6 +236,7 @@
 		48FB1E4E1C17C38600C89F8E /* NutshellDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */; };
 		54CE4788EE12555DB927C2E3 /* Pods_Nutshell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71627230DDF0C03F73CA817F /* Pods_Nutshell.framework */; };
 		7BD350EBD22869AA496C9405 /* Pods_NutshellTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7522442303E8F83231E1B3B2 /* Pods_NutshellTests.framework */; };
+		BE3F2E443CAA11C1A7EC19BD /* Pods_TidepoolMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 051696D064798F77DCBEE20E /* Pods_TidepoolMobile.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -293,7 +295,10 @@
 		0334CA101BA8DDFC00013096 /* Wizard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wizard.swift; sourceTree = "<group>"; };
 		0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bolus+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		0334CAA71BA8E22E00013096 /* Bolus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bolus.swift; sourceTree = "<group>"; };
+		051696D064798F77DCBEE20E /* Pods_TidepoolMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TidepoolMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		063572F169F60C9A48179678 /* Pods-Nutshell.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.release.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.release.xcconfig"; sourceTree = "<group>"; };
+		1B3B50F29FA991E2FE17110B /* Pods-TidepoolMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TidepoolMobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile.debug.xcconfig"; sourceTree = "<group>"; };
+		3E5B254729EE396329C5A0AE /* Pods-TidepoolMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TidepoolMobileTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		4806E3391E995A350024A497 /* TPMenuButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TPMenuButton.swift; path = ViewControllers/TPMenuButton.swift; sourceTree = "<group>"; };
 		4806E33B1E99621D0024A497 /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIViewExtension.swift; path = "Utilities and Extensions/UIViewExtension.swift"; sourceTree = "<group>"; };
 		48103E941C1DE4CC0055C27A /* ENSideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ENSideMenu.swift; path = "Third Party/ENSideMenu/ENSideMenu.swift"; sourceTree = "<group>"; };
@@ -341,7 +346,7 @@
 		4859FCC21B9A4DE4000C1269 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4859FCC51B9A4DE4000C1269 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4859FCC71B9A4DE4000C1269 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4859FCCC1B9A4DE5000C1269 /* NutshellTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NutshellTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4859FCCC1B9A4DE5000C1269 /* TidepoolMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TidepoolMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4859FCD01B9A4DE5000C1269 /* NutshellTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutshellTests.swift; sourceTree = "<group>"; };
 		4859FCD21B9A4DE5000C1269 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		485DC8861ECF4A2E00338394 /* Tidepool_v1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Tidepool_v1.xcdatamodel; sourceTree = "<group>"; };
@@ -412,11 +417,14 @@
 		48EDC2C51BD6B403003049D9 /* EventAddEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventAddEditViewController.swift; path = ViewControllers/EventAddEditViewController.swift; sourceTree = "<group>"; };
 		48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		48FB1E4C1C17C38500C89F8E /* NutshellDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutshellDataController.swift; path = DataModel/NutshellDataController.swift; sourceTree = "<group>"; };
+		63E01F39B16D04096A03DBC5 /* Pods_TidepoolMobileTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TidepoolMobileTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		71627230DDF0C03F73CA817F /* Pods_Nutshell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Nutshell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7522442303E8F83231E1B3B2 /* Pods_NutshellTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NutshellTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D211F0C6BBA742F1DD37BE8 /* Pods-NutshellTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NutshellTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests.release.xcconfig"; sourceTree = "<group>"; };
 		A293DE222348F348DC0730D6 /* Pods-Nutshell.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Nutshell.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell.debug.xcconfig"; sourceTree = "<group>"; };
+		D7B9837493D626BBADB1C0A3 /* Pods-TidepoolMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TidepoolMobileTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		F93088C441543869CF6AD7D7 /* Pods-NutshellTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NutshellTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FB31F88D7ADAE8ADCC179FDC /* Pods-TidepoolMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TidepoolMobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -427,6 +435,7 @@
 				486EAA7A1C305E38003B4497 /* HealthKit.framework in Frameworks */,
 				0334C8941BA7814700013096 /* CoreData.framework in Frameworks */,
 				54CE4788EE12555DB927C2E3 /* Pods_Nutshell.framework in Frameworks */,
+				BE3F2E443CAA11C1A7EC19BD /* Pods_TidepoolMobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,6 +444,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7BD350EBD22869AA496C9405 /* Pods_NutshellTests.framework in Frameworks */,
+				44FEA4373EF916C512BCB4A9 /* Pods_TidepoolMobileTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,6 +519,8 @@
 				0334C8931BA7814700013096 /* CoreData.framework */,
 				71627230DDF0C03F73CA817F /* Pods_Nutshell.framework */,
 				7522442303E8F83231E1B3B2 /* Pods_NutshellTests.framework */,
+				051696D064798F77DCBEE20E /* Pods_TidepoolMobile.framework */,
+				63E01F39B16D04096A03DBC5 /* Pods_TidepoolMobileTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -605,7 +617,7 @@
 			isa = PBXGroup;
 			children = (
 				4859FCB51B9A4DE4000C1269 /* Nutshell.app */,
-				4859FCCC1B9A4DE5000C1269 /* NutshellTests.xctest */,
+				4859FCCC1B9A4DE5000C1269 /* TidepoolMobileTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -808,6 +820,10 @@
 				063572F169F60C9A48179678 /* Pods-Nutshell.release.xcconfig */,
 				F93088C441543869CF6AD7D7 /* Pods-NutshellTests.debug.xcconfig */,
 				8D211F0C6BBA742F1DD37BE8 /* Pods-NutshellTests.release.xcconfig */,
+				1B3B50F29FA991E2FE17110B /* Pods-TidepoolMobile.debug.xcconfig */,
+				FB31F88D7ADAE8ADCC179FDC /* Pods-TidepoolMobile.release.xcconfig */,
+				3E5B254729EE396329C5A0AE /* Pods-TidepoolMobileTests.debug.xcconfig */,
+				D7B9837493D626BBADB1C0A3 /* Pods-TidepoolMobileTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -815,9 +831,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4859FCB41B9A4DE4000C1269 /* Nutshell */ = {
+		4859FCB41B9A4DE4000C1269 /* TidepoolMobile */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4859FCE01B9A4DE5000C1269 /* Build configuration list for PBXNativeTarget "Nutshell" */;
+			buildConfigurationList = 4859FCE01B9A4DE5000C1269 /* Build configuration list for PBXNativeTarget "TidepoolMobile" */;
 			buildPhases = (
 				8D29B92685CED5FC17AC117B /* [CP] Check Pods Manifest.lock */,
 				4859FCB11B9A4DE4000C1269 /* Sources */,
@@ -832,14 +848,14 @@
 			);
 			dependencies = (
 			);
-			name = Nutshell;
+			name = TidepoolMobile;
 			productName = Nutshell;
 			productReference = 4859FCB51B9A4DE4000C1269 /* Nutshell.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4859FCCB1B9A4DE5000C1269 /* NutshellTests */ = {
+		4859FCCB1B9A4DE5000C1269 /* TidepoolMobileTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4859FCE31B9A4DE5000C1269 /* Build configuration list for PBXNativeTarget "NutshellTests" */;
+			buildConfigurationList = 4859FCE31B9A4DE5000C1269 /* Build configuration list for PBXNativeTarget "TidepoolMobileTests" */;
 			buildPhases = (
 				EA39DC8E43BB352ED10B1485 /* [CP] Check Pods Manifest.lock */,
 				4859FCC81B9A4DE5000C1269 /* Sources */,
@@ -853,9 +869,9 @@
 			dependencies = (
 				4859FCCE1B9A4DE5000C1269 /* PBXTargetDependency */,
 			);
-			name = NutshellTests;
+			name = TidepoolMobileTests;
 			productName = NutshellTests;
-			productReference = 4859FCCC1B9A4DE5000C1269 /* NutshellTests.xctest */;
+			productReference = 4859FCCC1B9A4DE5000C1269 /* TidepoolMobileTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -889,7 +905,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 4859FCB01B9A4DE4000C1269 /* Build configuration list for PBXProject "Nutshell" */;
+			buildConfigurationList = 4859FCB01B9A4DE4000C1269 /* Build configuration list for PBXProject "TidepoolMobile" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -902,8 +918,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4859FCB41B9A4DE4000C1269 /* Nutshell */,
-				4859FCCB1B9A4DE5000C1269 /* NutshellTests */,
+				4859FCB41B9A4DE4000C1269 /* TidepoolMobile */,
+				4859FCCB1B9A4DE5000C1269 /* TidepoolMobileTests */,
 			);
 		};
 /* End PBXProject section */
@@ -980,7 +996,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8D29B92685CED5FC17AC117B /* [CP] Check Pods Manifest.lock */ = {
@@ -1010,7 +1026,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DA97F439745BB4E48E8FCA3A /* [CP] Embed Pods Frameworks */ = {
@@ -1025,7 +1041,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Nutshell/Pods-Nutshell-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EA39DC8E43BB352ED10B1485 /* [CP] Check Pods Manifest.lock */ = {
@@ -1055,7 +1071,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NutshellTests/Pods-NutshellTests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1288,7 +1304,7 @@
 /* Begin PBXTargetDependency section */
 		4859FCCE1B9A4DE5000C1269 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 4859FCB41B9A4DE4000C1269 /* Nutshell */;
+			target = 4859FCB41B9A4DE4000C1269 /* TidepoolMobile */;
 			targetProxy = 4859FCCD1B9A4DE5000C1269 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1395,6 +1411,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1436,6 +1453,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1445,7 +1463,7 @@
 		};
 		4859FCE11B9A4DE5000C1269 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A293DE222348F348DC0730D6 /* Pods-Nutshell.debug.xcconfig */;
+			baseConfigurationReference = 1B3B50F29FA991E2FE17110B /* Pods-TidepoolMobile.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1459,7 +1477,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"  \"-D\" \"DEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Nutshell;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Nutshell/Nutshell-Bridging-Header.h";
@@ -1470,7 +1488,7 @@
 		};
 		4859FCE21B9A4DE5000C1269 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 063572F169F60C9A48179678 /* Pods-Nutshell.release.xcconfig */;
+			baseConfigurationReference = FB31F88D7ADAE8ADCC179FDC /* Pods-TidepoolMobile.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1484,7 +1502,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"  \"-D\" \"RELEASE\"";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Nutshell;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Nutshell/Nutshell-Bridging-Header.h";
@@ -1494,7 +1512,7 @@
 		};
 		4859FCE41B9A4DE5000C1269 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F93088C441543869CF6AD7D7 /* Pods-NutshellTests.debug.xcconfig */;
+			baseConfigurationReference = 3E5B254729EE396329C5A0AE /* Pods-TidepoolMobileTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1510,7 +1528,7 @@
 		};
 		4859FCE51B9A4DE5000C1269 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8D211F0C6BBA742F1DD37BE8 /* Pods-NutshellTests.release.xcconfig */;
+			baseConfigurationReference = D7B9837493D626BBADB1C0A3 /* Pods-TidepoolMobileTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1527,7 +1545,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4859FCB01B9A4DE4000C1269 /* Build configuration list for PBXProject "Nutshell" */ = {
+		4859FCB01B9A4DE4000C1269 /* Build configuration list for PBXProject "TidepoolMobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4859FCDE1B9A4DE5000C1269 /* Debug */,
@@ -1536,7 +1554,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4859FCE01B9A4DE5000C1269 /* Build configuration list for PBXNativeTarget "Nutshell" */ = {
+		4859FCE01B9A4DE5000C1269 /* Build configuration list for PBXNativeTarget "TidepoolMobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4859FCE11B9A4DE5000C1269 /* Debug */,
@@ -1545,7 +1563,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4859FCE31B9A4DE5000C1269 /* Build configuration list for PBXNativeTarget "NutshellTests" */ = {
+		4859FCE31B9A4DE5000C1269 /* Build configuration list for PBXNativeTarget "TidepoolMobileTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4859FCE41B9A4DE5000C1269 /* Debug */,

@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double Pods_NutshellVersionNumber;
-FOUNDATION_EXPORT const unsigned char Pods_NutshellVersionString[];
+FOUNDATION_EXPORT double Pods_TidepoolMobileTestsVersionNumber;
+FOUNDATION_EXPORT const unsigned char Pods_TidepoolMobileTestsVersionString[];
 

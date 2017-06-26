@@ -1,6 +1,0 @@
-framework module Pods_NutshellTests {
-  umbrella header "Pods-NutshellTests-umbrella.h"
-
-  export *
-  module * { export * }
-}
