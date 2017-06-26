@@ -1,6 +1,6 @@
 //
 //  TPIntrinsicSizeUIView.swift
-//  Nutshell
+//  TidepoolMobile
 //
 //  Created by Larry Kenyon on 4/27/17.
 //  Copyright © 2017 Tidepool. All rights reserved.

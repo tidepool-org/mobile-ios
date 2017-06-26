@@ -1,6 +1,6 @@
 //
 //  NutMeal.swift
-//  Nutshell
+//  TidepoolMobile
 //
 //  Created by Larry Kenyon on 9/21/15.
 //  Copyright © 2015 Tidepool. All rights reserved.

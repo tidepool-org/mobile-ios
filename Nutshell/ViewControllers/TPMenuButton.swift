@@ -1,6 +1,6 @@
 //
 //  TPMenuButton.swift
-//  Nutshell
+//  TidepoolMobile
 //
 //  Created by Larry Kenyon on 4/8/17.
 //  Copyright © 2017 Tidepool. All rights reserved.

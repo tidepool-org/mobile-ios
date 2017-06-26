@@ -68,9 +68,9 @@ class HealthKitDataPusher: NSObject {
     /// Called by background fetch code in app delegate, and will kick off a sync if enough time has elapsed and currently HealthKit user is logged in.
     func backgroundFetch(_ completion: @escaping (UIBackgroundFetchResult) -> Void) {
         downloadNewItemsForHealthKit() { (itemsDownloaded) -> Void in
-            var msg = "Nutshell added \(itemsDownloaded) blood glucose readings from Tidepool to the Health app."
+            var msg = "TidepoolMobile added \(itemsDownloaded) blood glucose readings from Tidepool to the Health app."
             if itemsDownloaded == 1 {
-                msg = "Nutshell added a blood glucose reading from Tidepool to the Health app."
+                msg = "TidepoolMobile added a blood glucose reading from Tidepool to the Health app."
             }
             DDLogVerbose(msg)
             if AppDelegate.testMode {

@@ -1,6 +1,6 @@
 //
 //  DatabaseUtils.swift
-//  Nutshell
+//  TidepoolMobile
 //
 //  Created by Brian King on 9/16/15.
 //  Copyright © 2015 Tidepool. All rights reserved.

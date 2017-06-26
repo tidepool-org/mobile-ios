@@ -123,7 +123,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // if device is locked, bail now because we can't read HealthKit data
         if deviceIsLocked {
             if AppDelegate.testMode {
-                self.localNotifyMessage("Nutshell skipping background fetch: device is locked!")
+                self.localNotifyMessage("TidepoolMobile skipping background fetch: device is locked!")
             }
             completionHandler(.failed)
             return
@@ -135,7 +135,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSLog("No token available, user will need to log in!")
             // Use local notifications to test background activity...
             if AppDelegate.testMode {
-                self.localNotifyMessage("Nutshell was unable to download items from Tidepool: log in required!")
+                self.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: log in required!")
             }
             completionHandler(.failed)
             return
@@ -145,7 +145,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             NSLog("No network available!")
             // Use local notifications to test background activity...
             if AppDelegate.testMode {
-                self.localNotifyMessage("Nutshell was unable to download items from Tidepool: no network available!")
+                self.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: no network available!")
             }
             completionHandler(.failed)
             return
@@ -169,19 +169,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func applicationWillResignActive(_ application: UIApplication) {
-        NSLog("Nutshell applicationWillResignActive")
+        NSLog("TidepoolMobile applicationWillResignActive")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        NSLog("Nutshell applicationDidEnterBackground")
+        NSLog("TidepoolMobile applicationDidEnterBackground")
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        NSLog("Nutshell applicationWillEnterForeground")
+        NSLog("TidepoolMobile applicationWillEnterForeground")
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         if !freshLaunch {
             checkConnection()
@@ -189,7 +189,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func checkConnection() {
-        NSLog("Nutshell checkConnection")
+        NSLog("TidepoolMobile checkConnection")
         let api = APIConnector.connector()
         var doCheck = refreshTokenNextActive
         if let lastError = api.lastNetworkError {
@@ -219,7 +219,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // When app is launched, either go to login, or if we have a valid token, go to main UI after optionally refreshing the token. 
         // Note: We attempt token refresh each time the app is launched; it might make more sense to do it periodically when app is brought to foreground, or just let the service control token timeout.
-        NSLog("Nutshell applicationDidBecomeActive")
+        NSLog("TidepoolMobile applicationDidBecomeActive")
         if freshLaunch {
             freshLaunch = false
             let api = APIConnector.connector()
@@ -262,7 +262,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         NutDataController.sharedInstance.appWillTerminate()
-        NSLog("Nutshell applicationWillTerminate")
+        NSLog("TidepoolMobile applicationWillTerminate")
     }
 
 

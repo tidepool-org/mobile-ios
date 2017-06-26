@@ -1,6 +1,6 @@
 //
 //  ContinuousGlucose+CoreDataProperties.swift
-//  Nutshell
+//  TidepoolMobile
 //
 //  Created by Larry Kenyon on 9/17/15.
 //  Copyright © 2015 Tidepool. All rights reserved.

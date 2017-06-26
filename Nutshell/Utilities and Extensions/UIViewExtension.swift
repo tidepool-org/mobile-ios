@@ -1,6 +1,6 @@
 //
 //  UIViewExtension.swift
-//  Nutshell
+//  TidepoolMobile
 //
 //  Copyright © 2017 Tidepool. All rights reserved.
 //

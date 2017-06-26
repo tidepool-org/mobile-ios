@@ -1,6 +1,6 @@
 //
 //  MenuAccountSettingsViewController.swift
-//  Nutshell
+//  TidepoolMobile
 //
 //  Created by Larry Kenyon on 9/14/15.
 //  Copyright © 2015 Tidepool. All rights reserved.

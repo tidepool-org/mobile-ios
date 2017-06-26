@@ -1,6 +1,6 @@
 //
 //  SwitchProfileTableViewController.swift
-//  Nutshell
+//  TidepoolMobile
 //
 //  Created by Larry Kenyon on 3/30/17.
 //  Copyright © 2017 Tidepool. All rights reserved.

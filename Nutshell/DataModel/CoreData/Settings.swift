@@ -1,6 +1,6 @@
 //
 //  Settings.swift
-//  Nutshell
+//  TidepoolMobile
 //
 //  Created by Brian King on 9/15/15.
 //  Copyright © 2015 Tidepool. All rights reserved.

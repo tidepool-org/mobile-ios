@@ -58,7 +58,7 @@ class APIConnector {
     fileprivate let kSessionIdHeader = "x-tidepool-session-token"
 
     // Error domain and codes
-    fileprivate let kNutshellErrorDomain = "NutshellErrorDomain"
+    fileprivate let kNutshellErrorDomain = "TidepoolMobileErrorDomain"
     fileprivate let kNoSessionTokenErrorCode = -1
     
     // Session token, acquired on login and saved in NSUserDefaults
