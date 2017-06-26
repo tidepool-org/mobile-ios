@@ -17,12 +17,11 @@ import UIKit
 
 class TidepoolGraphView: GraphContainerView {
  
-    var eventItem: NutEventItem
     fileprivate var tidepoolLayout: TidepoolGraphLayout!
 
-    init(frame: CGRect, delegate: GraphContainerViewDelegate, eventItem: NutEventItem) {
-        self.eventItem = eventItem
-        let layout = TidepoolGraphLayout(viewSize: frame.size, mainEventTime: eventItem.time, tzOffsetSecs: eventItem.tzOffsetSecs)
+    init(frame: CGRect, delegate: GraphContainerViewDelegate?, mainEventTime: Date, tzOffsetSecs: Int, lowBGBounds: Int? = nil, highBGBounds: Int? = nil) {
+        let layout = TidepoolGraphLayout(viewSize: frame.size, mainEventTime: mainEventTime, tzOffsetSecs: tzOffsetSecs)
+        layout.setLowAndHighBGBounds(low: lowBGBounds, high: highBGBounds)
         super.init(frame: frame, delegate: delegate, layout: layout)
         tidepoolLayout = layout
     }
@@ -36,6 +35,31 @@ class TidepoolGraphView: GraphContainerView {
         //NSLog("TidepoolGraphView reloading data")
         tidepoolLayout.invalidateCaches()
         super.loadGraphData()
+    }
+   
+    // Note: when data is not displayed, it will also not be loaded. Display true is the default, so this is generally only called when data layer suppression is desired (typically to show other overlays)
+    func displayGraphData(_ display: Bool) {
+        if display != tidepoolLayout.showDataLayers {
+            tidepoolLayout.showDataLayers = display
+            loadGraphData()
+        } else {
+            NSLog("\(#function) display: already in state \(display)")
+        }
+    }
+    
+    // This can be called to randomly show/hide gridlines
+    func displayGridLines(_ display: Bool) {
+        if display != tidepoolLayout.displayGridLines {
+            tidepoolLayout.displayGridLines = display
+            tidepoolLayout.configureGraph()
+            configureBackground()
+        } else {
+            NSLog("\(#function) display: already in state \(display)")
+        }
+    }
+    
+    func configureNotesToDisplay(_ notes: [BlipNote]) {
+        tidepoolLayout.notesToDisplay = notes
     }
     
     func dataFound() -> Bool {

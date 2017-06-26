@@ -28,14 +28,18 @@ class BaseUITableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+        if cellBackgroundView != nil {
+            cellBackgroundView.selected = selected
+        }
     }
 
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         super.setHighlighted(highlighted, animated:animated)
         
         if cellBackgroundView != nil {
-            cellBackgroundView.setHighlighted(highlighted)
+            cellBackgroundView.highlighted = highlighted
         }
     }
+
 
 }

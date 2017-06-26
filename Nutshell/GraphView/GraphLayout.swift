@@ -33,6 +33,7 @@ class GraphLayout {
     ///
     var graphCellsInCollection: Int
     var graphCellFocusInCollection: Int
+    var showDataLayers = true // allow suppression of data layers to just show axes and background. Note: no data will load if viewing is suppressed!
 
     /// Use this init to create a graph that starts at a point in time.
     init(viewSize: CGSize, startTime: Date, timeIntervalPerTile: TimeInterval, numberOfTiles: Int, tilesInView: CGFloat, tzOffsetSecs: Int) {
@@ -106,9 +107,10 @@ class GraphLayout {
     }
 
     //
-    // Header and background configuration
+    // Header, footer, and background configuration
     //
     var headerHeight: CGFloat = 32.0
+    var footerHeight: CGFloat = 0.0
     var backgroundColor: UIColor = UIColor.gray
 
     //

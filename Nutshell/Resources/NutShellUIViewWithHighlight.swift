@@ -25,6 +25,14 @@ class NutShellUIViewWithHighlight: UIView {
         }
     }
     
+    @IBInspectable var selectedBackground: String = "" {
+        didSet {
+            if let backColor = Styles.usageToBackgroundColor[selectedBackground] {
+                updateSelectedBackColor(backColor)
+            }
+        }
+    }
+
     @IBInspectable var highlightedBackground: String = "" {
         didSet {
             if let backColor = Styles.usageToBackgroundColor[highlightedBackground] {
@@ -35,6 +43,7 @@ class NutShellUIViewWithHighlight: UIView {
     
     fileprivate var normalBackColor: UIColor?
     fileprivate var highliteBackColor: UIColor?
+    fileprivate var selectedBackColor: UIColor?
     fileprivate func updateNormalBackColor(_ color: UIColor) {
         normalBackColor = color
         //self.backgroundColor = color
@@ -42,18 +51,40 @@ class NutShellUIViewWithHighlight: UIView {
     fileprivate func updateHighliteBackColor(_ color: UIColor) {
         highliteBackColor = color
     }
-    
-    func setHighlighted(_ highlighted: Bool) {
-        
-        // Configure the view for the highlighted state
-        if (highlighted) {
-            if let highliteBackColor = highliteBackColor {
-                self.backgroundColor = highliteBackColor
+    fileprivate func updateSelectedBackColor(_ color: UIColor) {
+        selectedBackColor = color
+    }
+
+    var highlighted: Bool = false {
+        didSet {
+            // Configure the view for the highlighted state
+            if (highlighted) {
+                if let highliteBackColor = highliteBackColor {
+                    self.backgroundColor = highliteBackColor
+                }
+            } else if selected && selectedBackColor != nil {
+                self.backgroundColor = selectedBackColor!
+            } else {
+                if let normalBackColor = normalBackColor {
+                    self.backgroundColor = normalBackColor
+                }
             }
-        } else {
-            if let normalBackColor = normalBackColor {
+        }
+    }
+    
+    var selected: Bool = false {
+        didSet {
+            // Configure the view for the selected state, letting highlight take precedence
+            if highlighted {
+                return
+            }
+            if selected && selectedBackColor != nil {
+                self.backgroundColor = selectedBackColor!
+                return
+            } else if let normalBackColor = normalBackColor {
                 self.backgroundColor = normalBackColor
             }
         }
     }
+
 }

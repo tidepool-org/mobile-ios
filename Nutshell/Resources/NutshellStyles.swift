@@ -45,59 +45,46 @@ open class Styles: NSObject {
         // menu and account settings
         "rowSeparator": dimmedDarkGreyColor,
         "darkBackgroundButton": darkPurpleColor,
+        // list scene
+        "editButton" : UIColor.clear,
         // add/edit event scenes
-        "addEditViewSaveButton": brightBlueColor,
+        "loginButton": brightBlueColor,
     ]
 
     // This table is used for mapping usage to font and font color for UI elements including fonts (UITextField, UILabel, UIButton). An entry may appear here as well as in the basic color mapping table above to set both font attributes as well as background coloring.
     static var usageToFontWithColor = [
         // general usage
         "brightBackgroundButton": (largeRegularFont, whiteColor),
-        "darkBackgroundButton": (largeRegularFont, whiteColor),
+        "loginButton": (largeSemiboldFont, whiteColor),
         // login & signup scenes
-        "userDataEntry": (mediumRegularFont, darkPurpleColor),
-        "dataEntryErrorFeedback": (smallSemiboldFont, redErrorColor),
-        "brightLinkText": (mediumRegularFont, brightBlueColor),
+        "userDataEntry": (largeRegularFont, blackColor),
+        "dataEntryErrorFeedback": (mediumSemiboldFont, redErrorColor),
+        "forgotPasswordText": (mediumRegularFont, warmGreyColor),
         "networkDisconnectText" : (largeRegularFont, whiteColor),
         // event list table scene
-        "eventListCellTitle": (mediumSemiboldFont, altDarkGreyColor),
-        "eventListCellLocation": (smallSemiboldFont, altDarkGreyColor),
-        "eventListCellRepeatCount": (mediumSemiboldFont, altDarkGreyColor),
+        "profileCellNameText": (mediumSmallRegularFont, darkPurpleColor),
         "searchPlaceholder": (mediumLightFont, blackColor),
-        "searchText": (largeRegularFont, blackColor),
+        "editButton" : (smallRegularFont, brightBlueColor),
+        "addCommentText" : (mediumSmallSemiboldFont,mediumLightGreyColor),
+        "commentUserText": (smallSemiboldFont, darkGreyColor),
+        "commentDateText": (smallRegularFont, altLightGreyColor),
         // grouped event list table scene
-        "groupedEventHeaderTitle": (mediumSemiboldFont, whiteColor),
-        "groupedEventHeaderLocation": (smallSemiboldFont, whiteColor),
-        "groupedEventHeaderButton": (mediumVerySmallSemiboldFont, whiteColor),
-        "groupedEventCellTitle": (mediumSmallSemiboldFont, darkGreyColor),
         "groupedEventCellDate": (smallRegularFont, altDarkGreyColor),
+        "groupedEventToolTip": (smallRegularFont, warmGreyColor),
         // event detail view scene
-        "detailHeaderTitle": (mediumLargeBoldFont, whiteColor),
-        "detailHeaderNotes": (mediumRegularFont, whiteColor),
-        "detailHeaderDate": (smallRegularFont, whiteColor),
-        "detailHeaderLocation": (smallBoldFont, whiteColor),
-        "detailViewButtonText": (mediumSmallBoldFont, whiteColor),
-        "advisoryText": (mediumSemiboldFont, darkGreyColor),
-        "advisorySubtext": (mediumRegularFont, lightDarkGreyColor),
-        "greenLink": (mediumRegularFont, lightGreenColor),
         // event detail graph area
-        "currentGraphDate" : (smallRegularFont, lightDarkGreyColor),
         // add/edit event scenes
-        "addEditViewTitle": (mediumLargeBoldFont, whiteColor),
-        "addEditViewNotes": (mediumRegularFont, whiteColor),
-        "addEditViewHint": (smallRegularFont, whiteColor),
-        "addEditViewDate": (smallRegularFont, whiteColor),
-        "addEditViewLocation": (smallRegularFont, whiteColor),
-        "addEditViewSaveButton": (mediumBoldFont, whiteColor),
         // account configuration scene
-        "sidebarSettingUserName": (mediumLargeBoldFont, blackColor),
-        "sidebarSettingItem": (mediumRegularFont, darkGreyColor),
-        "sidebarSettingItemSmall": (mediumSmallRegularFont, darkGreyColor),
+        "sidebarSettingUserName": (mediumSmallSemiboldFont, brightBlueColor),
+        "sidebarSettingItemSmall": (verySmallRegularFont, altDarkGreyColor),
         "sidebarLogoutButton": (mediumSemiboldFont, darkGreyColor),
-        "sidebarOtherLinks": (mediumVerySmallSemiboldFont, darkGreyColor),
-        "sidebarSettingHKEnable": (mediumLargeBoldFont, darkGreyColor),
-        "sidebarSettingHKMainStatus": (mediumSmallSemiboldFont, darkGreyColor),
-        "sidebarSettingHKMinorStatus": (mediumSmallRegularFont, darkGreyColor),
+        "sidebarOtherLinks": (mediumSmallRegularFont, mediumLightGreyColor),
+        "sidebarSettingHKEnable": (mediumSmallRegularFont, darkPurpleColor),
+        "sidebarSettingHKMainStatus": (verySmallSemiboldFont, mediumLightGreyColor),
+        "sidebarSettingHKMinorStatus": (verySmallRegularFont, mediumLightGreyColor),
+        // first time tips
+        "firstTimeTipText": (mediumSmallSemiboldFont, whiteColor),
+        "darkBackgroundButton": (mediumVerySmallSemiboldFont, whiteColor),
     ]
 
     class func backgroundImageofSize(_ size: CGSize, style: String) -> UIImage? {
@@ -115,6 +102,12 @@ open class Styles: NSObject {
         }
     }
 
+    class func configureTidepoolBarColoring(on: Bool) {
+        UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor
+        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: Styles.navTitleFont]
+    }
+
     //
     // MARK: - Fonts
     //
@@ -123,24 +116,25 @@ open class Styles: NSObject {
     
     fileprivate struct FontCache {
         static let verySmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 10.0)!
-        static let smallRegularFont: UIFont = UIFont(name: "OpenSans", size: 12.0)!
+        static let smallRegularFont: UIFont = UIFont(name: "OpenSans", size: 12.5)!
         static let mediumRegularFont: UIFont = UIFont(name: "OpenSans", size: 17.0)!
         static let mediumSmallRegularFont: UIFont = UIFont(name: "OpenSans", size: 15.0)!
-        static let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 20.0)!
+        static let largeRegularFont: UIFont = UIFont(name: "OpenSans", size: 19.0)!
         
-        static let smallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 12.0)!
+        static let smallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 12.5)!
         static let mediumSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 17.0)!
+        static let largeSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 19.0)!
         static let mediumSmallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 15.0)!
         static let mediumVerySmallSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 14.0)!
         static let veryLargeSemiboldFont: UIFont = UIFont(name: "OpenSans-Semibold", size: 25.5)!
         
-        static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.0)!
-        static let mediumSmallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 14.0)!
+        static let smallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 12.5)!
+        static let mediumSmallBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 15.0)!
         static let mediumBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 16.0)!
         static let mediumLargeBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 17.5)!
-        static let navTitleBoldFont: UIFont = UIFont(name: "OpenSans-Bold", size: 20.0)!
+        static let navTitleFont: UIFont = UIFont(name: "OpenSans", size: 17.5)!
         
-        static let smallLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 12.0)!
+        static let smallLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 12.5)!
         static let mediumLightFont: UIFont = UIFont(name: "OpenSans-Light", size: 17.0)!
         
         // Fonts for special graph view
@@ -159,6 +153,7 @@ open class Styles: NSObject {
 
     open class var smallSemiboldFont: UIFont { return FontCache.smallSemiboldFont }
     open class var mediumSemiboldFont: UIFont { return FontCache.mediumSemiboldFont }
+    open class var largeSemiboldFont: UIFont { return FontCache.largeSemiboldFont }
     open class var mediumSmallSemiboldFont: UIFont { return FontCache.mediumSmallSemiboldFont }
     open class var mediumVerySmallSemiboldFont: UIFont { return FontCache.mediumVerySmallSemiboldFont }
     open class var veryLargeSemiboldFont: UIFont { return FontCache.veryLargeSemiboldFont }
@@ -167,7 +162,7 @@ open class Styles: NSObject {
     open class var mediumSmallBoldFont: UIFont { return FontCache.mediumSmallBoldFont }
     open class var mediumBoldFont: UIFont { return FontCache.mediumBoldFont }
     open class var mediumLargeBoldFont: UIFont { return FontCache.mediumLargeBoldFont }
-    open class var navTitleBoldFont: UIFont { return FontCache.navTitleBoldFont }
+    open class var navTitleFont: UIFont { return FontCache.navTitleFont }
 
     open class var smallLightFont: UIFont { return FontCache.smallLightFont }
     open class var mediumLightFont: UIFont { return FontCache.mediumLightFont }
@@ -187,37 +182,41 @@ open class Styles: NSObject {
     
     fileprivate struct ColorCache {
         static let darkPurpleColor: UIColor = UIColor(hex: 0x281946)
-        static let brightBlueColor: UIColor = UIColor(hex: 0x627cff) 
-        static let lightGreyColor: UIColor = UIColor(hex: 0xeaeff0) 
-        static let veryLightGreyColor: UIColor = UIColor(hex: 0xf2f3f5) 
+        static let darkPurple75Color: UIColor = UIColor(hex: 0x281946, opacity: 0.75)
+        static let lightGreyColor: UIColor = UIColor(hex: 0xeaeff0)
+        static let altLightGreyColor: UIColor = UIColor(hex: 0xc9c9c9)
+        static let alt2LightGreyColor: UIColor = UIColor(hex: 0xe2e3e4)
+        static let veryLightGreyColor: UIColor = UIColor(hex: 0xF7F7F8)
         static let redErrorColor: UIColor = UIColor(hex: 0xff354e)
         static let pinkColor: UIColor = UIColor(hex: 0xf58fc7, opacity: 0.75)
         static let purpleColor: UIColor = UIColor(hex: 0xb29ac9)
         static let darkGreyColor: UIColor = UIColor(hex: 0x4a4a4a)
-        static let lightDarkGreyColor: UIColor = UIColor(hex: 0x5c5c5c) 
+        static let lightDarkGreyColor: UIColor = UIColor(hex: 0x5c5c5c)//
         static let altDarkGreyColor: UIColor = UIColor(hex: 0x4d4e4c) 
-        static let mediumLightGreyColor: UIColor = UIColor(hex: 0xd0d3d4)
-        static let mediumGreyColor: UIColor = UIColor(hex: 0xb8b8b8) 
-        static let whiteColor: UIColor = UIColor(hex: 0xffffff) 
+        static let alt2DarkGreyColor: UIColor = UIColor(hex: 0x58595b)//
+        static let dimmedDarkGreyColor: UIColor = UIColor(hex: 0x9da2a7
+            , opacity: 0.5)
+        static let warmGreyColor: UIColor = UIColor(hex: 0x9b9b9b)
+        static let mediumLightGreyColor: UIColor = UIColor(hex: 0x7e7e7e)
+        static let whiteColor: UIColor = UIColor(hex: 0xffffff)
         static let dimmedWhiteColor: UIColor = UIColor(hex: 0xffffff, opacity: 0.30)
         static let blackColor: UIColor = UIColor(hex: 0x000000)
+        static let blackishColor: UIColor = UIColor(hex: 0x3c3c3c)
         static let peachColor: UIColor = UIColor(hex: 0xf88d79)
-        static let peachDeleteColor: UIColor = UIColor(hex: 0xf66f56)
         static let greenColor: UIColor = UIColor(hex: 0x98ca63)
-        static let lightGreenColor: UIColor = UIColor(hex: 0x4cd964) 
-        static let lightBlueColor: UIColor = UIColor(hex: 0xc5e5f1) 
+        static let lightBlueColor: UIColor = UIColor(hex: 0xc5e5f1)
         static let blueColor: UIColor = UIColor(hex: 0x7aceef) 
         static let mediumBlueColor: UIColor = UIColor(hex: 0x6db7d4) 
-        static let goldColor: UIColor = UIColor(hex: 0xffd382) 
-        static let lineColor: UIColor = UIColor(hex: 0x281946) 
-        static let goldStarColor: UIColor = UIColor(hex: 0xf8ad04) 
-        static let greyStarColor: UIColor = UIColor(hex: 0xd0d3d4) 
-        static let dimmedDarkGreyColor: UIColor = UIColor(hex: 0x979797, opacity: 0.5)
+        static let brightBlueColor: UIColor = UIColor(hex: 0x627cff)
+        static let goldColor: UIColor = UIColor(hex: 0xffd382)
     }
 
     open class var darkPurpleColor: UIColor { return ColorCache.darkPurpleColor }
+    open class var darkPurple75Color: UIColor { return ColorCache.darkPurple75Color }
     open class var brightBlueColor: UIColor { return ColorCache.brightBlueColor }
     open class var lightGreyColor: UIColor { return ColorCache.lightGreyColor }
+    open class var altLightGreyColor: UIColor { return ColorCache.altLightGreyColor }
+    open class var alt2LightGreyColor: UIColor { return ColorCache.alt2LightGreyColor }
     open class var veryLightGreyColor: UIColor { return ColorCache.veryLightGreyColor }
 
     //
@@ -229,27 +228,21 @@ open class Styles: NSObject {
     open class var darkGreyColor: UIColor { return ColorCache.darkGreyColor }
     open class var lightDarkGreyColor: UIColor { return ColorCache.lightDarkGreyColor }
     open class var altDarkGreyColor: UIColor { return ColorCache.altDarkGreyColor }
+    open class var alt2DarkGreyColor: UIColor { return ColorCache.alt2DarkGreyColor }
+    open class var warmGreyColor: UIColor { return ColorCache.warmGreyColor }
     open class var mediumLightGreyColor: UIColor { return ColorCache.mediumLightGreyColor }
-    open class var mediumGreyColor: UIColor { return ColorCache.mediumGreyColor }
     open class var whiteColor: UIColor { return ColorCache.whiteColor }
     open class var dimmedWhiteColor: UIColor { return ColorCache.dimmedWhiteColor }
     open class var blackColor: UIColor { return ColorCache.blackColor }
+    open class var blackishColor: UIColor { return ColorCache.blackishColor }
     open class var peachColor: UIColor { return ColorCache.peachColor }
-    open class var peachDeleteColor: UIColor { return ColorCache.peachDeleteColor }
     open class var purpleColor: UIColor { return ColorCache.purpleColor }
     open class var greenColor: UIColor { return ColorCache.greenColor }
-    open class var lightGreenColor: UIColor { return ColorCache.lightGreenColor }
 
     //
     // MARK: - Graph Colors
     //
     
-    // background, left side/right side
-    // public class var lightGreyColor: UIColor { return lightGreyColor }
-    // public class var veryLightGreyColor: UIColor { return veryLightGreyColor }
-    
-    // axis text
-    // public class var darkGreyColor: UIColor { return darkGreyColor }
     
     // insulin bar
     open class var lightBlueColor: UIColor { return ColorCache.lightBlueColor }
@@ -257,24 +250,13 @@ open class Styles: NSObject {
     // Open Sans Semibold 10:   custom graph insulin amount text
     open class var mediumBlueColor: UIColor { return ColorCache.mediumBlueColor }
     
-    
-    // blood glucose data
-    // public class var peachColor: UIColor { return peachColor }
-    // public class var purpleColor: UIColor { return purpleColor }
-    // public class var greenColor: UIColor { return greenColor }
-    
-    // event carb amount circle and vertical line
+    // event carb amount circle
     open class var goldColor: UIColor { return ColorCache.goldColor }
-    open class var lineColor: UIColor { return ColorCache.lineColor }
     
     //
     // MARK: - Misc Colors
     //
     
-    // Icon:    favorite star colors
-    open class var goldStarColor: UIColor { return ColorCache.goldStarColor }
-    open class var greyStarColor: UIColor { return ColorCache.greyStarColor }
-
     // View:    table row line separator
     open class var dimmedDarkGreyColor: UIColor { return ColorCache.dimmedDarkGreyColor }
 

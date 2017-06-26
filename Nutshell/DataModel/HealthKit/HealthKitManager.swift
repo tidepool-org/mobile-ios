@@ -15,30 +15,6 @@
 
 import HealthKit
 import CocoaLumberjack
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
-
 
 class HealthKitManager {
     
@@ -78,7 +54,7 @@ class HealthKitManager {
         
         defer {
             if authorizationError != nil {
-                DDLogInfo("authorization error: \(authorizationError)")
+                DDLogInfo("authorization error: \(String(describing: authorizationError))")
                 
                 completion(authorizationSuccess, authorizationError)
             }
@@ -129,7 +105,7 @@ class HealthKitManager {
                 authorizationSuccess = success
                 authorizationError = error as NSError?
                 
-                DDLogInfo("authorization success: \(authorizationSuccess), error: \(authorizationError)")
+                DDLogInfo("authorization success: \(authorizationSuccess), error: \(String(describing: authorizationError))")
                 
                 completion(authorizationSuccess, authorizationError)
             }
@@ -158,7 +134,7 @@ class HealthKitManager {
             DDLogVerbose("Observation query called")
             
             if error != nil {
-                DDLogError("HealthKit observation error \(error)")
+                DDLogError("HealthKit observation error \(String(describing: error))")
             }
 
             observationHandler(error as NSError?)
@@ -204,8 +180,8 @@ class HealthKitManager {
                     self.workoutsObservationSuccessful = true
                     self.readWorkoutSamples(resultsHandler)
                 } else {
-                    DDLogError("HealthKit observation error \(error), \((error as! NSError).userInfo)")
-                    resultsHandler?(nil, nil, (error as! NSError))
+                    DDLogError("HealthKit observation error \(String(describing: error))")
+                    resultsHandler?(nil, nil, error as NSError?)
                 }
                 
                 observerQueryCompletion()
@@ -250,7 +226,7 @@ class HealthKitManager {
                         self.bloodGlucoseBackgroundDeliveryEnabled = true
                         DDLogError("Enabled background delivery of health data")
                     } else {
-                        DDLogError("Error enabling background delivery of health data \(error), \(error!._userInfo)")
+                        DDLogError("Error enabling background delivery of health data \(String(describing: error))")
                     }
             }
         }
@@ -271,7 +247,7 @@ class HealthKitManager {
                     self.bloodGlucoseBackgroundDeliveryEnabled = false
                     DDLogError("Disabled background delivery of health data")
                 } else {
-                    DDLogError("Error disabling background delivery of health data \(error), \(error!._userInfo)")
+                    DDLogError("Error disabling background delivery of health data \(String(describing: error)), \(String(describing: error!._userInfo))")
                 }
             }
         }
@@ -294,7 +270,7 @@ class HealthKitManager {
                         self.workoutsBackgroundDeliveryEnabled = true
                         DDLogError("Enabled background delivery of health data")
                     } else {
-                        DDLogError("Error enabling background delivery of health data \(error), \(error!._userInfo)")
+                        DDLogError("Error enabling background delivery of health data \(String(describing: error))")
                     }
             }
         }
@@ -315,7 +291,7 @@ class HealthKitManager {
                     self.workoutsBackgroundDeliveryEnabled = false
                     DDLogError("Disabled background delivery of health data")
                 } else {
-                    DDLogError("Error disabling background delivery of health data \(error), \((error as! NSError).userInfo)")
+                    DDLogError("Error disabling background delivery of health data \(String(describing: error)), \((error! as NSError).userInfo)")
                 }
             }
         }
@@ -344,10 +320,10 @@ class HealthKitManager {
                 (query, newSamples, deletedSamples, newAnchor, error) -> Void in
 
                 if error != nil {
-                    DDLogError("Error reading samples: \(error)")
+                    DDLogError("Error reading samples: \(String(describing: error))")
                 }
                 
-                resultsHandler((error as? NSError), newSamples) {
+                resultsHandler((error as NSError?), newSamples) {
                     (error: NSError?) in
                     
                     if error == nil && newAnchor != nil {
@@ -377,7 +353,7 @@ class HealthKitManager {
             (query, newSamples, error) -> Void in
             
             if error != nil {
-                DDLogError("Error reading samples: \(error)")
+                DDLogError("Error reading samples: \(String(describing: error))")
             }
             
             resultsHandler(error as NSError?, newSamples) {
@@ -428,7 +404,7 @@ class HealthKitManager {
             
             if error == nil && samples != nil {
                 // Get startDate of oldest sample
-                if samples?.count > 0 {
+                if samples!.count > 0 {
                     startDate = samples![0].startDate
                 }
 
@@ -436,15 +412,15 @@ class HealthKitManager {
                 let endDateSampleQuery = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: 1, sortDescriptors: [endDateSortDescriptor]) {
                     (query: HKSampleQuery, samples: [HKSample]?, error: Error?) -> Void in
 
-                    if error == nil && samples?.count > 0 {
+                    if error == nil && samples != nil && samples!.count > 0 {
                         endDate = samples![0].endDate
                     }
                     
-                    completion((error as? NSError), startDate, endDate)
+                    completion((error as NSError?), startDate, endDate)
                 }
                 self.healthStore?.execute(endDateSampleQuery)
             } else {
-                completion((error as? NSError), startDate, endDate)
+                completion((error as NSError?), startDate, endDate)
             }
         }
         healthStore?.execute(startDateSampleQuery)
@@ -473,7 +449,7 @@ class HealthKitManager {
                 
                 (query, newSamples, deletedSamples, newAnchor, error) -> Void in
                 
-                resultsHandler(newSamples, deletedSamples, (error as? NSError))
+                resultsHandler(newSamples, deletedSamples, (error as NSError?))
                 
                 if error == nil && newAnchor != nil {
                     let queryAnchorData = NSKeyedArchiver.archivedData(withRootObject: newAnchor!)

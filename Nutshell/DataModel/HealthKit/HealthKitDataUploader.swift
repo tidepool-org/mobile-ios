@@ -142,6 +142,7 @@ class HealthKitDataUploader {
     
     var uploadHandler: ((_ postBody: Data, _ completion: @escaping (_ error: NSError?, _ duplicateSampleCount: Int) -> (Void)) -> (Void)) = {(postBody, completion) in }
 
+    // Unused...
     func authorizeAndStartUploading(currentUserId: String)
     {
         DDLogVerbose("trace")
@@ -155,7 +156,7 @@ class HealthKitDataUploader {
                     DDLogInfo("Authorization did not have an error (though we don't know whether permission was given), start uploading if possible")
                     self.startUploading(currentUserId: currentUserId)
                 } else {
-                    DDLogError("Error authorizing health data, success: \(success), \(error))")
+                    DDLogError("Error authorizing health data, success: \(success), \(String(describing: error)))")
                 }
         }
     }
@@ -328,7 +329,7 @@ class HealthKitDataUploader {
 
                     self.uploadSamplesForBatch(samples: samples, completion: completion)
                 } else {
-                    DDLogError("stop reading samples - error starting batch upload of samples: \(error)")
+                    DDLogError("stop reading samples - error starting batch upload of samples: \(String(describing: error))")
                     self.stopReadingSamples(completion: completion, error: error)
                 }
             }
@@ -439,7 +440,7 @@ class HealthKitDataUploader {
                         self.readMore(completion: completion)
                     }
                 } else {
-                    DDLogError("stop reading samples - error uploading samples: \(error)")
+                    DDLogError("stop reading samples - error uploading samples: \(String(describing: error))")
                     self.stopReadingSamples(completion: completion, error: error)
                 }
             }
@@ -534,7 +535,7 @@ class HealthKitDataUploader {
                 if error == nil {
                     self.readMore(completion: completion)
                 } else {
-                    DDLogInfo("stop reading most recent samples due to error: \(error)")
+                    DDLogInfo("stop reading most recent samples due to error: \(String(describing: error))")
                     self.stopReadingMostRecentSamples()
                 }
             } else if self.isReadingSamplesFromAnchor {
@@ -543,7 +544,7 @@ class HealthKitDataUploader {
                     self.stopReadingSamplesFromAnchor(completion: completion, error: nil)
                     self.transitionToPhase(.currentSamples)
                 } else {
-                    DDLogInfo("stop reading samples from anchor due to error: \(error)")
+                    DDLogInfo("stop reading samples from anchor due to error: \(String(describing: error))")
                     self.stopReadingSamplesFromAnchor(completion: completion, error: nil)
                 }
             }
@@ -694,7 +695,7 @@ class HealthKitDataUploader {
             self.totalUploadCountBloodGlucoseSamplesWithoutDuplicates += (sampleCount - duplicateSampleCount)
             self.totalUploadCountHistoricalBloodGlucoseSamples += sampleCount
             self.totalUploadCountHistoricalBloodGlucoseSamplesWithoutDuplicates += (sampleCount - duplicateSampleCount)
-            self.lastUploadTimeBloodGlucoseSamples = DateFormatter().dateFromISOString(self.currentBatchUploadDict["time"] as! String)
+            self.lastUploadTimeBloodGlucoseSamples = DateFormatter().dateFromISOString(self.currentBatchUploadDict["time"] as! String)!
             if self.lastUploadSampleTimeBloodGlucoseSamples.compare(lastUploadSampleTimeBloodGlucoseSamples) == .orderedAscending {
                 self.lastUploadSampleTimeBloodGlucoseSamples = lastUploadSampleTimeBloodGlucoseSamples
             }
@@ -709,7 +710,7 @@ class HealthKitDataUploader {
             self.totalUploadCountBloodGlucoseSamplesWithoutDuplicates += (sampleCount - duplicateSampleCount)
             self.totalUploadCountCurrentBloodGlucoseSamples += sampleCount
             self.totalUploadCountCurrentBloodGlucoseSamplesWithoutDuplicates += (sampleCount - duplicateSampleCount)
-            self.lastUploadTimeBloodGlucoseSamples = DateFormatter().dateFromISOString(self.currentBatchUploadDict["time"] as! String)
+            self.lastUploadTimeBloodGlucoseSamples = DateFormatter().dateFromISOString(self.currentBatchUploadDict["time"] as! String)!
             if self.lastUploadSampleTimeBloodGlucoseSamples.compare(lastUploadSampleTimeBloodGlucoseSamples) == .orderedAscending {
                 self.lastUploadSampleTimeBloodGlucoseSamples = lastUploadSampleTimeBloodGlucoseSamples
             }

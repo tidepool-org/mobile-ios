@@ -31,7 +31,7 @@ class GraphContainerView: UIView {
     var graphCollectionView: UICollectionView?
     var graphUtils: GraphingUtils?
     
-    init(frame: CGRect, delegate: GraphContainerViewDelegate, layout: GraphLayout) {
+    init(frame: CGRect, delegate: GraphContainerViewDelegate?, layout: GraphLayout) {
         self.delegate = delegate
         self.layout = layout
         super.init(frame: frame)
@@ -207,22 +207,25 @@ class GraphContainerView: UIView {
         return graphUtils.imageOfFixedGraphBackground()
     }
     
-
+    func configureBackground() {
+        // first put in the fixed background
+        if let fixedBackgroundImageView = fixedBackgroundImageView {
+            fixedBackgroundImageView.removeFromSuperview()
+        }
+        
+        // Get time-invariant background view generation
+        let graphUtils = layout.graphUtilsForGraphView()
+        fixedBackgroundImageView = UIImageView(image: graphUtils.imageOfFixedGraphBackground())
+        
+        self.insertSubview(fixedBackgroundImageView!, at: 0)
+    }
+    
     fileprivate let collectCellReuseID = "graphViewCell"
     func configureGraph(_ edgeOffset: CGFloat = 0.0) {
         if graphCollectionView == nil {
             layout.configureGraph()
-
-            // first put in the fixed background
-            if let fixedBackgroundImageView = fixedBackgroundImageView {
-                fixedBackgroundImageView.removeFromSuperview()
-            }
             
-            // Get time-invariant background view generation
-            let graphUtils = layout.graphUtilsForGraphView()
-            fixedBackgroundImageView = UIImageView(image: graphUtils.imageOfFixedGraphBackground())
-            
-            self.addSubview(fixedBackgroundImageView!)
+            configureBackground()
             
             let collectLayout = UICollectionViewFlowLayout()
             self.cellSize = layout.cellViewSize

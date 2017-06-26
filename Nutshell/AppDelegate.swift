@@ -17,6 +17,7 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 import HealthKit
+import Bugsee
 
 var fileLogger: DDFileLogger!
 
@@ -31,7 +32,6 @@ let appHealthKitConfiguration = NutshellHealthKitConfiguration()
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    static var healthKitUIEnabled = true
     // one shot, true until we go to foreground...
     fileprivate var freshLaunch = true
     // one shot, UI should put up dialog letting user know we are in test mode!
@@ -39,20 +39,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        let logger = BugseeLogger.sharedInstance() as? DDLogger
+        DDLog.add(logger)
+
+        // Only enable Bugsee for TestFlight betas and debug builds, not for iTunes App Store releases (at least for now)
+        let isRunningTestFlightBeta = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+        if isRunningTestFlightBeta {
+            Bugsee.launch(token:"d3170420-a6f0-4db3-970c-c4c571e5d31a")
+        }
+
         DDLogVerbose("trace")
 
-        // Default HealthKit UI enable UI to on unless iPad
-        // TODO: remove, for v0.8.6.0 release only!
-        AppDelegate.healthKitUIEnabled = HKHealthStore.isHealthDataAvailable()
-        
         // Override point for customization after application launch.
-        UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor
-        UINavigationBar.appearance().isTranslucent = false
-        UINavigationBar.appearance().tintColor = UIColor.white
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: Styles.navTitleBoldFont]
+        Styles.configureTidepoolBarColoring(on: true)
         
         // Initialize database by referencing username. This must be done before using the APIConnector!
-        let name = NutDataController.controller().currentUserName
+        let name = NutDataController.sharedInstance.currentUserName
         if !name.isEmpty {
             NSLog("Initializing NutshellDataController, found and set user \(name)")
         }
@@ -151,7 +153,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // make sure HK interface is configured...
         // TODO: this can kick off a lot of activity! Review...
         // Note: configureHealthKitInterface is somewhat background-aware...
-        NutDataController.controller().configureHealthKitInterface()
+        NutDataController.sharedInstance.configureHealthKitInterface()
         // then call it...
         HealthKitDataPusher.sharedInstance.backgroundFetch { (fetchResult) -> Void in
             completionHandler(fetchResult)
@@ -229,19 +231,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 return
             }
             
-            if !api.isConnectedToNetwork() {
-                // Set to refresh next time we come to foreground...
-                NSLog("Offline, set to refresh token next time app enters foreground")
-                self.refreshTokenNextActive = true
-                self.setupUIForLoginSuccess()
-                return
-            }
+            // TODO: only needed if we want to start working offline, but we will need to cache notes to make this usable...
+//            if !api.isConnectedToNetwork() {
+//                // Set to refresh next time we come to foreground...
+//                NSLog("Offline, set to refresh token next time app enters foreground")
+//                self.refreshTokenNextActive = true
+//                self.setupUIForLoginSuccess()
+//                return
+//            }
             
             NSLog("AppDelegate: attempting to refresh token...")
             api.refreshToken() { succeeded -> (Void) in
                 if succeeded {
-                    NutDataController.controller().configureHealthKitInterface()
-                    self.setupUIForLoginSuccess()
+                    let dataController = NutDataController.sharedInstance
+                    dataController.checkRestoreCurrentViewedUser {
+                        dataController.configureHealthKitInterface()
+                        self.setupUIForLoginSuccess()
+                    }
                 } else {
                     NSLog("Refresh token failed, need to log in normally")
                     api.logout() {
@@ -255,7 +261,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        NutDataController.controller().appWillTerminate()
+        NutDataController.sharedInstance.appWillTerminate()
         NSLog("Nutshell applicationWillTerminate")
     }
 

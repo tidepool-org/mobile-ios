@@ -30,7 +30,7 @@ class SelfMonitoringGlucose: CommonData {
                     return nil
                 }
             } else {
-                print("smbg record with no units field, assuming mmol/L - value: \(me.value)")
+                print("smbg record with no units field, assuming mmol/L - value: \(String(describing: me.value))")
             }
             
             return me

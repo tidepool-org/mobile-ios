@@ -6,11 +6,18 @@
 //  Copyright © 2015 Tidepool. All rights reserved.
 //
 
+// TODO: replace this 3rd party menu mechanism with a simple menu view, and a constrain animation to slide it in and out...
+
 import UIKit
 import CocoaLumberjack
 
 class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
+    var userSelectedSwitchProfile = false
+    var userSelectedLogout = false
+    var userSelectedLoggedInUser = false
+    var userSelectedExternalLink: URL? = nil
+    
     @IBOutlet weak var loginAccount: UILabel!
     @IBOutlet weak var versionString: NutshellUILabel!
     @IBOutlet weak var usernameLabel: NutshellUILabel!
@@ -34,21 +41,15 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         let curService = APIConnector.connector().currentService!
         if curService == "Production" {
-            versionString.text = "V" + UIApplication.appVersion()
+            versionString.text = "v" + UIApplication.appVersion()
         } else{
-            versionString.text = "V" + UIApplication.appVersion() + " on " + curService
+            versionString.text = "v" + UIApplication.appVersion() + " on " + curService
         }
-        loginAccount.text = NutDataController.controller().currentUserName
-        //let attributes = [NSUnderlineStyleAttributeName: NSUnderlineStyle.StyleSingle.rawValue]
- 
-        let str = "Privacy and Terms of Use"
-        let paragraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-        paragraphStyle.alignment = .center
-        let attributedString = NSMutableAttributedString(string:str, attributes:[NSFontAttributeName: Styles.mediumVerySmallSemiboldFont, NSForegroundColorAttributeName: Styles.blackColor, NSParagraphStyleAttributeName: paragraphStyle])
-        attributedString.addAttribute(NSLinkAttributeName, value: URL(string: "http://developer.tidepool.io/privacy-policy/")!, range: NSRange(location: 0, length: 7))
-        attributedString.addAttribute(NSLinkAttributeName, value: URL(string: "http://developer.tidepool.io/terms-of-use/")!, range: NSRange(location: attributedString.length - 12, length: 12))
-        privacyTextField.attributedText = attributedString
-        privacyTextField.delegate = self
+        loginAccount.text = NutDataController.sharedInstance.currentUserName
+        
+        //healthKitSwitch.tintColor = Styles.brightBlueColor
+        //healthKitSwitch.thumbTintColor = Styles.whiteColor
+        healthKitSwitch.onTintColor = Styles.brightBlueColor
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitDataUploader.Notifications.Updated), object: nil)
@@ -65,12 +66,25 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         // Dispose of any resources that can be recreated.
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        NSLog("MenuVC viewWillAppear")
+        super.viewWillAppear(animated)
+    }
+    
     func menuWillOpen() {
-        // Late binding here because profile fetch occurs after login complete!
         // Treat this like viewWillAppear...
-        usernameLabel.text = NutDataController.controller().userFullName
-        
+        userSelectedLoggedInUser = false
+        userSelectedSwitchProfile = false
+        userSelectedLogout = false
+        userSelectedExternalLink = nil
+
+        usernameLabel.text = NutDataController.sharedInstance.userFullName
         configureHKInterface()
+
+        // configure custom buttons
+        sidebarView.setNeedsLayout()
+        sidebarView.layoutIfNeeded()
+        sidebarView.checkAdjustSubviewSizing()
     }
     
     //
@@ -85,18 +99,31 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     // MARK: - Button/switch handling
     //
     
-    @IBAction func supportButtonHandler(_ sender: AnyObject) {
-        APIConnector.connector().trackMetric("Clicked Tidepool Support (Hamburger)")
-        let email = "support@tidepool.org"
-        let url = URL(string: "mailto:\(email)")
-        UIApplication.shared.openURL(url!)
+    @IBAction func selectLoggedInUserButton(_ sender: Any) {
+        userSelectedLoggedInUser = true
+        self.hideSideMenuView()
     }
     
+    @IBAction func switchProfileTapped(_ sender: AnyObject) {
+        userSelectedSwitchProfile = true
+        self.hideSideMenuView()
+    }
+    
+    @IBAction func supportButtonHandler(_ sender: AnyObject) {
+        APIConnector.connector().trackMetric("Clicked Tidepool Support (Hamburger)")
+        userSelectedExternalLink = URL(string: TPConstants.kTidepoolSupportURL)
+        self.hideSideMenuView()
+    }
+    
+    @IBAction func privacyButtonTapped(_ sender: Any) {
+        APIConnector.connector().trackMetric("Clicked Privacy and Terms (Hamburger)")
+        userSelectedExternalLink = URL(string: "http://tidepool.org/legal/")
+        self.hideSideMenuView()
+    }
     
     @IBAction func logOutTapped(_ sender: AnyObject) {
-        APIConnector.connector().trackMetric("Clicked Log Out (Hamburger)")
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.logout()
+        userSelectedLogout = true
+        self.hideSideMenuView()
     }
     
     //
@@ -105,12 +132,20 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func enableHealthData(_ sender: AnyObject) {
         if let enableSwitch = sender as? UISwitch {
-            if enableSwitch.isOn {
-                enableHealthKitInterfaceForCurrentUser()
-            } else {
-                NutDataController.controller().disableHealthKitInterface()
+            if enableSwitch == healthKitSwitch {
+                if enableSwitch.isOn {
+                    // Note: this enable function is asynchronous, so interface enable won't be true for a while
+                    // TODO: rewrite to pass along completion routine?
+                    enableHealthKitInterfaceForCurrentUser()
+                    APIConnector.connector().trackMetric("Connect to health on")
+                    // Note: because of above, avoid calling healthKitInterfaceEnabledForCurrentUser immediately...
+                    configureHKInterfaceForState(true)
+                } else {
+                    NutDataController.sharedInstance.disableHealthKitInterface()
+                    APIConnector.connector().trackMetric("Connect to health off")
+                    configureHKInterfaceForState(false)
+                }
             }
-            configureHKInterface()
         }
     }
 
@@ -126,7 +161,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     }
 
     func nextHKTimeRefresh() {
-        DDLogInfo("nextHKTimeRefresh")
+        //DDLogInfo("nextHKTimeRefresh")
         configureHKInterface()
     }
     
@@ -135,11 +170,14 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         configureHKInterface()
     }
 
-    fileprivate func configureHKInterface() {
-        // Late binding here because profile fetch occurs after login complete!
-        usernameLabel.text = NutDataController.controller().userFullName
+    private func configureHKInterface() {
         let hkCurrentEnable = appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
         healthKitSwitch.isOn = hkCurrentEnable
+        configureHKInterfaceForState(hkCurrentEnable)
+    }
+    
+    // Note: this is used by the switch logic itself since the underlying interface enable lags asychronously behind the UI switch...
+    private func configureHKInterfaceForState(_ hkCurrentEnable: Bool) {
         if hkCurrentEnable {
             self.configureHealthStatusLines()
             // make sure timer is turned on to prevent a stale interface...
@@ -148,23 +186,13 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
             stopHKTimeRefreshTimer()
         }
         
-        var hideHealthKitUI = false
-        // Note: Right now this is hard-wired true
-        if !AppDelegate.healthKitUIEnabled {
-            hideHealthKitUI = true
-        }
-        // The isDSAUser variable only becomes valid after user profile fetch, so if it is not set, assume true. Otherwise use it as main control of whether we show the HealthKit UI.
-        if let isDSAUser = NutDataController.controller().isDSAUser {
-            if !isDSAUser {
-                hideHealthKitUI = true
-            }
-        }
+        let hideHealthKitUI = !appHealthKitConfiguration.shouldShowHealthKitUI()
         healthKitSwitch.isHidden = hideHealthKitUI
         healthKitLabel.isHidden = hideHealthKitUI
         healthStatusContainerView.isHidden = hideHealthKitUI || !hkCurrentEnable
     }
     
-    fileprivate func enableHealthKitInterfaceForCurrentUser() {
+    private func enableHealthKitInterfaceForCurrentUser() {
         if appHealthKitConfiguration.healthKitInterfaceConfiguredForOtherUser() {
             // use dialog to confirm delete with user!
             let curHKUserName = appHealthKitConfiguration.healthKitUserTidepoolUsername() ?? "Unknown"
@@ -177,11 +205,11 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
                 return
             }))
             alert.addAction(UIAlertAction(title: "Change Account", style: .default, handler: { Void in
-                NutDataController.controller().enableHealthKitInterface()
+                NutDataController.sharedInstance.enableHealthKitInterface()
             }))
             self.present(alert, animated: true, completion: nil)
         } else {
-            NutDataController.controller().enableHealthKitInterface()
+            NutDataController.sharedInstance.enableHealthKitInterface()
         }
     }
     
@@ -227,18 +255,5 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    //
-    // MARK: - UITextView delegate
-    //
-    
-    // Intercept links in order to track metrics...
-    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange) -> Bool {
-        if URL.absoluteString.contains("privacy-policy") {
-            APIConnector.connector().trackMetric("Clicked privacy (Hamburger)")
-        } else {
-            APIConnector.connector().trackMetric("Clicked Terms of Use (Hamburger)")
-        }
-        return true
-    }
     
 }

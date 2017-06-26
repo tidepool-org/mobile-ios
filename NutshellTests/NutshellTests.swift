@@ -30,7 +30,7 @@ class NutshellTests: XCTestCase {
         super.setUp()
         // Put setup code here. This method is called before the invocation of each test method in the class.
         // Initialize database by referencing username. This must be done before using the APIConnector!
-        let _ = NutDataController.controller().currentUserName
+        let _ = NutDataController.sharedInstance.currentUserName
         _ = APIConnector.connector().configure()
         APIConnector.connector().switchToServer(server)
     }
@@ -85,11 +85,11 @@ class NutshellTests: XCTestCase {
         self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
             print("Login for profile result: \(result)")
 
-             APIConnector.connector().fetchProfile() { (result:Alamofire.Result<JSON>) -> (Void) in
+             APIConnector.connector().fetchProfile(NutDataController.sharedInstance.currentUserId!) { (result:Alamofire.Result<JSON>) -> (Void) in
                 NSLog("Profile fetch result: \(result)")
                 if (result.isSuccess) {
                     if let json = result.value {
-                        NutDataController.controller().processProfileFetch(json)
+                        NutDataController.sharedInstance.processLoginProfileFetch(json)
                     }
                     expectation.fulfill()
                 } else {
@@ -121,7 +121,7 @@ class NutshellTests: XCTestCase {
                 if (result.isSuccess) {
                     if let json = result.value {
                         if result.isSuccess {
-                            DatabaseUtils.updateEvents(NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: json)
+                            DatabaseUtils.sharedInstance.updateEvents(NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json)
                         } else {
                             NSLog("No user data events!")
                         }
@@ -155,12 +155,14 @@ class NutshellTests: XCTestCase {
                 if (result.isSuccess) {
                     if let json = result.value {
                         if result.isSuccess {
-                            _ = DatabaseUtils.updateEventsForTimeRange(startDate, endTime: endDate, moc:NutDataController.controller().mocForTidepoolEvents()!, eventsJSON: json)
+                            _ = DatabaseUtils.sharedInstance.updateEventsForTimeRange(startDate, endTime: endDate, moc:NutDataController.sharedInstance.mocForTidepoolEvents()!, eventsJSON: json) {
+                                (success) -> (Void) in
+                                expectation.fulfill()
+                            }
                         } else {
-                            NSLog("No user data events!")
+                            XCTFail("updateEventsForTimeRange failed!")
                         }
                     }
-                    expectation.fulfill()
                 } else {
                     var errorCode = ""
                     if let error = result.error {

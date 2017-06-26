@@ -15,9 +15,9 @@
 
 import UIKit
 
-// This intermediate class is used to enable UITextField views in storyboards to have fonts and backgrounds determined by NutshellStyles data.
+// This intermediate class is used to enable UIButton views in storyboards to have fonts and backgrounds determined by NutshellStyles data.
 
-@IBDesignable class NutshellSimpleUIButton: UIButton {
+@IBDesignable class NutshellSimpleUIButton: TPUIButton {
     
     @IBInspectable var usage: String = "" {
         didSet {

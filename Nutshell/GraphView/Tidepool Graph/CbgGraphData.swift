@@ -79,23 +79,23 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
         let centerY: CGFloat = layout.yTopOfGlucose + layout.yPixelsGlucose - floor(value * pixelsPerValue)
         
         let circleColor = value < layout.lowBoundary ? layout.lowColor : value < layout.highBoundary ? layout.targetColor : layout.highColor
-        let circleRect = CGRect(x: centerX-circleRadius, y: centerY-circleRadius, width: circleRadius*2, height: circleRadius*2)
-        let smallCircleRect = circleRect.insetBy(dx: 1.0, dy: 1.0)
+        let circleRect = CGRect(x: centerX-circleRadius, y: centerY-circleRadius, width: circleRadius*1.5, height: circleRadius*1.5)
+        //let smallCircleRect = circleRect.insetBy(dx: 1.0, dy: 1.0)
         
-        if !lastCircleDrawn.intersects(circleRect) {
+//        if !lastCircleDrawn.intersects(circleRect) {
             let smallCirclePath = UIBezierPath(ovalIn: circleRect)
             circleColor.setFill()
             smallCirclePath.fill()
             // Draw border so circle stands out from other objects like meal lines
-            layout.backgroundColor.setStroke()
-            smallCirclePath.lineWidth = 1.5
-            smallCirclePath.stroke()
-        } else {
-            // Don't draw border when circles intersect as it creates a distracting pattern
-            let smallCirclePath = UIBezierPath(ovalIn: smallCircleRect)
-            circleColor.setFill()
-            smallCirclePath.fill()
-        }
+            //layout.backgroundColor.setStroke()
+            //smallCirclePath.lineWidth = 1.5
+            //smallCirclePath.stroke()
+//        } else {
+//            // Don't draw border when circles intersect as it creates a distracting pattern
+//            let smallCirclePath = UIBezierPath(ovalIn: circleRect)
+//            circleColor.setFill()
+//            smallCirclePath.fill()
+//        }
         
         lastCircleDrawn = circleRect
     }

@@ -16,6 +16,7 @@
 
 import UIKit
 import CoreData
+import Alamofire
 import SwiftyJSON
 import HealthKit
 import CocoaLumberjack
@@ -31,7 +32,9 @@ import CocoaLumberjack
 /// The Tidepool data store is only allocated at login, and is deleted at logout. It is named so it won't be backed up to iCloud if the user has application backup to cloud configured.
 class NutDataController: NSObject
 {
-
+    /// Supports a singleton controller for the application.
+    static let sharedInstance = NutDataController()
+    
     // MARK: - Constants
     
     fileprivate let kLocalObjectsStoreFilename = "SingleViewCoreData.sqlite"
@@ -39,16 +42,6 @@ class NutDataController: NSObject
     fileprivate let kTidepoolObjectsStoreFilename = "TidepoolObjects.sqlite.nosync"
     fileprivate let kTestFilePrefix = "Test-"
     
-
-    static var _controller: NutDataController?
-    /// Supports a singleton controller for the application.
-    class func controller() -> NutDataController {
-        if _controller == nil {
-            _controller = NutDataController()
-        }
-        return _controller!
-    }
-
     /// Coordinator/store for current userId, token, etc. Should always be available.
     func mocForCurrentUser() -> NSManagedObjectContext {
         return self.mocForLocalObjects!
@@ -85,7 +78,7 @@ class NutDataController: NSObject
             return _currentUserId
         }
     }
-    
+        
     /// Used mainly for display, this is the login name for the currently logged in user, or nil.
     ///
     /// Read only - returns nil string if no user set.
@@ -102,6 +95,73 @@ class NutDataController: NSObject
         }
     }
     
+    /// Used for filling out an email for the user to send to themselves; from the current user login, or nil.
+    ///
+    /// Read only - returns nil string if no user set.
+    var currentLoggedInUserEmail: String? {
+        get {
+            if let user = self.currentUser {
+                if let email = user.email {
+                    return email
+                }
+            }
+            return nil
+        }
+    }
+
+    /// Return current logged in user as a BlipUser object. Alternately, just reference currentUserName, currentUserId, etc.
+    var currentLoggedInUser: BlipUser? {
+        get {
+            if _currentLoggedInUser == nil {
+                if let user = self.currentUser {
+                    _currentLoggedInUser = BlipUser(user: user)
+                }
+            }
+            return _currentLoggedInUser
+        }
+    }
+    fileprivate var _currentLoggedInUser: BlipUser?
+    
+    /// This determines the set of tidepool data and the notes we are viewing. Defaults to the current logged in user. Cannot set to nil! Setting will delete any cached tidepool data, and reconfigure the healthkit interface!
+    var currentViewedUser: BlipUser? {
+        get {
+            if _currentViewedUser == nil {
+                if let user = self.currentLoggedInUser {
+                    NSLog("Current viewable user is \(String(describing: _currentViewedUser?.fullName))")
+                    _currentViewedUser = user
+                    loadUserSettings()
+                }
+            }
+            return _currentViewedUser
+        }
+        set(newUser) {
+            _currentViewedUser = newUser
+            NSLog("Current viewable user changed to \(String(describing: _currentViewedUser!.fullName))")
+            self.deleteAnyTidepoolData()
+            self.saveCurrentViewedUserId()
+            configureHealthKitInterface()
+            loadUserSettings()
+        }
+    }
+    fileprivate var _currentViewedUser: BlipUser?
+
+    fileprivate func loadUserSettings() {
+        
+        if let settingsUser = _currentViewedUser {
+            // only fetch if we haven't yet...
+            if settingsUser.bgTargetLow == nil && settingsUser.bgTargetHigh == nil {
+                APIConnector.connector().fetchUserSettings(settingsUser.userid) { (result:Alamofire.Result<JSON>) -> (Void) in
+                    NSLog("Settings fetch result: \(result)")
+                    if (result.isSuccess) {
+                        if let json = result.value {
+                            settingsUser.processSettingsJSON(json)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /// Call this at login/logout, token refresh(?), and upon enabling or disabling the HealthKit interface.
     func configureHealthKitInterface() {
         appHealthKitConfiguration.configureHealthKitInterface(currentUserId, isDSAUser: isDSAUser)
@@ -115,21 +175,30 @@ class NutDataController: NSObject
         self.deleteAnyTidepoolData()
         self.currentUser = newUser
         _currentUserId = newUser.userid
+        _currentLoggedInUser = nil
+        _currentViewedUser = nil
         configureHealthKitInterface()
     }
 
     /// Call this after logging out of the service to deconfigure the data model and clear the persisted user. Only the Meal and Workout events should remain persisted after this.
     func logoutUser() {
         self.deleteAnyTidepoolData()
+        self.deleteSavedCurrentViewedUserId()
         self.currentUser = nil
         _currentUserId = nil
+        _currentLoggedInUser = nil
+        _currentViewedUser = nil
         configureHealthKitInterface()
     }
 
-    func processProfileFetch(_ json: JSON) {
+    func processLoginProfileFetch(_ json: JSON) {
         if let user = self.currentUser {
             user.processProfileJSON(json)
             _ = DatabaseUtils.databaseSave(user.managedObjectContext!)
+            _currentLoggedInUser = nil  // update currentLoggedInUser too...
+            _currentViewedUser = nil  // and current viewable user as well
+            // reconfigure after profile fetch because we know isDSAUser now!
+            configureHealthKitInterface()
         }
     }
     
@@ -149,7 +218,7 @@ class NutDataController: NSObject
     var isDSAUser: Bool? {
         get {
             var result: Bool?
-            if let isDSA = currentUser?.accountIsDSA {
+            if let isDSA = currentLoggedInUser?.isDSAUser {
                 result = Bool(isDSA)
             }
             return result
@@ -157,14 +226,57 @@ class NutDataController: NSObject
     }
 
     //
+    // MARK: - Save/restore/delete current profile id
+    //
+    let kSavedCurrentViewerIdKey = "CurrentViewerIdKey"
+    func saveCurrentViewedUserId() {
+        if let user = self.currentViewedUser {
+            let id = user.userid
+            let defaults = UserDefaults.standard
+            defaults.setValue(id, forKey: kSavedCurrentViewerIdKey)
+            defaults.synchronize()
+        }
+    }
+    
+    func deleteSavedCurrentViewedUserId() {
+        let defaults = UserDefaults.standard
+        defaults.removeObject(forKey: kSavedCurrentViewerIdKey)
+        defaults.synchronize()
+    }
+    
+    func checkRestoreCurrentViewedUser(_ completion: @escaping (Void) -> (Void)) {
+        let defaults = UserDefaults.standard
+        if let userId = defaults.string(forKey: kSavedCurrentViewerIdKey) {
+            if let loggedInUserId = currentLoggedInUser?.userid {
+                if userId != loggedInUserId {
+                    APIConnector.connector().fetchProfile(userId) { (result:Alamofire.Result<JSON>) -> (Void) in
+                        NSLog("Profile fetch result: \(result)")
+                        if (result.isSuccess) {
+                            if let json = result.value {
+                                let user = BlipUser(userid: userId)
+                                user.processProfileJSON(json)
+                                self.currentViewedUser = user
+                            }
+                        }
+                        completion()
+                    }
+                    return
+                }
+            }
+        }
+        completion()
+    }
+    
+    //
     // MARK: - HealthKit user info
     //
 
-    /// Enables HealthKit for current user
+    /// Enables HealthKit for current viewable user
     ///
     /// Note: This sets the current tidepool user as the HealthKit user!
     func enableHealthKitInterface() {
-        appHealthKitConfiguration.enableHealthKitInterface(currentUserName, userid: currentUserId, isDSAUser: isDSAUser, needsGlucoseReads: true, needsGlucoseWrites: true, needsWorkoutReads: true)
+        // TODO: turn of workout data load for now...
+        appHealthKitConfiguration.enableHealthKitInterface(currentUserName, userid: currentUserId, isDSAUser: isDSAUser, needsGlucoseReads: true, needsGlucoseWrites: false, needsWorkoutReads: false)
     }
     
     /// Disables HealthKit for current user
@@ -203,9 +315,11 @@ class NutDataController: NSObject
             if newUser != _currentUser {
                 self.updateUser(_currentUser, newUser: newUser)
                 _currentUser = newUser
+                _currentLoggedInUser = nil
+                _currentViewedUser = nil
                 if newUser != nil {
                     _currentUserId = newUser!.userid
-                    NSLog("Set currentUser, name: \(newUser!.username), id: \(newUser!.userid)")
+                    NSLog("Set currentUser, name: \(String(describing: newUser!.username)), id: \(String(describing: newUser!.userid))")
                 } else {
                     NSLog("Cleared currentUser!")
                     _currentUserId = nil
@@ -239,7 +353,20 @@ class NutDataController: NSObject
     fileprivate var pscForLocalObjects: NSPersistentStoreCoordinator? {
         get {
             if _pscForLocalObjects == nil {
-                _pscForLocalObjects = createPSC(kLocalObjectsStoreFilename)
+                do {
+                    try _pscForLocalObjects = createPSC(kLocalObjectsStoreFilename)
+                } catch {
+                    // May have a corrupted database, delete it here so user doesn't have to delete the app in order to recover. Worst case for local data is forcing the user to have to login again.
+                    do {
+                        DDLogError("CRASHED OPENING LOCAL OBJECTS DB: DELETING AND RETRYING")
+                        deleteLocalObjectData()
+                        try _pscForLocalObjects = createPSC(kLocalObjectsStoreFilename)
+                    } catch {
+                        DDLogError("CRASHED SECOND TIME OPENING LOCAL OBJECTS DB!")
+                        // give up after second time...
+                        _pscForLocalObjects = nil
+                    }
+                }
             }
             return _pscForLocalObjects
         }
@@ -249,7 +376,20 @@ class NutDataController: NSObject
     fileprivate var pscForTidepoolObjects: NSPersistentStoreCoordinator? {
         get {
             if _pscForTidepoolObjects == nil {
-                _pscForTidepoolObjects = createPSC(kTidepoolObjectsStoreFilename)
+                do {
+                    try _pscForTidepoolObjects = createPSC(kTidepoolObjectsStoreFilename)
+                } catch {
+                    // May have a corrupted database, delete it here so user doesn't have to delete the app in order to recover. Worst case is cached tidepool data will need to be refetched!
+                    do {
+                        DDLogError("CRASHED OPENING TIDEPOOL OBJECTS DB: DELETING AND RETRYING")
+                        deleteAnyTidepoolData()
+                        try _pscForTidepoolObjects = createPSC(kTidepoolObjectsStoreFilename)
+                    } catch {
+                        // give up after second time...
+                        DDLogError("CRASHED SECOND TIME OPENING TIDEPOOL OBJECTS DB!")
+                       _pscForTidepoolObjects = nil
+                    }
+                }
             }
             return _pscForTidepoolObjects
         }
@@ -264,11 +404,10 @@ class NutDataController: NSObject
         }
     }
     
-    fileprivate func createPSC(_ storeBaseFileName: String) -> NSPersistentStoreCoordinator {
+    fileprivate func createPSC(_ storeBaseFileName: String) throws -> NSPersistentStoreCoordinator  {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
         var url = applicationDocumentsDirectory
         url = url.appendingPathComponent(filenameAdjustedForTest(storeBaseFileName))
-        let failureReason = "There was an error creating or loading the application's saved data."
         let pscOptions = [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true]
         do {
             NSLog("Store url is \(url)")
@@ -276,16 +415,7 @@ class NutDataController: NSObject
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: pscOptions)
         } catch {
             // Report any error we got.
-            var dict = [String: AnyObject]()
-            dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data" as AnyObject?
-            dict[NSLocalizedFailureReasonErrorKey] = failureReason as AnyObject?
-            
-            dict[NSUnderlyingErrorKey] = error as NSError
-            let wrappedError = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
-            // TODO: Replace this with code to handle the error appropriately -> probably delete the store and retry?
-            // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            NSLog("Unresolved error \(wrappedError), \(wrappedError.userInfo)")
-            abort()
+            throw(error)
         }
         return coordinator
     }
@@ -373,7 +503,7 @@ class NutDataController: NSObject
                     }
                 }
             } catch let error as NSError {
-                print("Failed to remove existing user: \(currentUser.userid) error: \(error)")
+                NSLog("Failed to remove existing user: \(currentUser.userid!)) error: \(error)")
             }
         }
         
@@ -390,17 +520,31 @@ class NutDataController: NSObject
     }
 
     /// Resets the tidepool object database by deleting the underlying file!
+    fileprivate func deleteLocalObjectData() {
+        // Delete the underlying file
+        // First nil out locals so a new psc and moc will be created on demand
+        _pscForLocalObjects = nil
+        _mocForLocalObjects = nil
+        deleteDatabase(kLocalObjectsStoreFilename)
+    }
+
+    /// Resets the tidepool object database by deleting the underlying file!
     fileprivate func deleteAnyTidepoolData() {
         // Delete the underlying file
+        // First nil out locals so a new psc and moc will be created on demand
+        _pscForTidepoolObjects = nil
+        _mocForTidepoolObjects = nil
+        DatabaseUtils.sharedInstance.resetTidepoolEventLoader() // reset cache as well!
+        deleteDatabase(kTidepoolObjectsStoreFilename)
+    }
+    
+    fileprivate func deleteDatabase(_ docsDirDBName: String) {
+        // Delete the underlying file
         var url = self.applicationDocumentsDirectory
-        url = url.appendingPathComponent(filenameAdjustedForTest(kTidepoolObjectsStoreFilename))
+        url = url.appendingPathComponent(filenameAdjustedForTest(docsDirDBName))
         var error: NSError?
         let fileExists = (url as NSURL).checkResourceIsReachableAndReturnError(&error)
         if (fileExists) {
-            // First nil out locals so a new psc and moc will be created on demand
-            _pscForTidepoolObjects = nil
-            _mocForTidepoolObjects = nil
-            DatabaseUtils.resetTidepoolEventLoader() // reset cache as well!
             let fm = FileManager.default
             do {
                 try fm.removeItem(at: url)
@@ -410,7 +554,6 @@ class NutDataController: NSObject
             }
         }
     }
-    
 
 
 }

@@ -26,8 +26,8 @@ class WorkoutGraphDataType: GraphDataType {
         self.isMainEvent = isMain
         self.duration = duration
         // id needed if user taps on this item...
-        if let eventId = event.id as? String {
-            self.id = eventId
+        if let eventId = event.id {
+            self.id = eventId as String
         } else {
             // historically may be nil...
             self.id = nil
@@ -68,7 +68,7 @@ class WorkoutGraphDataLayer: GraphDataLayer {
         let earlyStartTime = startTime.addingTimeInterval(-maxWorkoutDuration)
         let lateEndTime = endTime.addingTimeInterval(timeExtensionForDataFetch)
         do {
-            let events = try DatabaseUtils.getWorkoutEvents(earlyStartTime, toTime: lateEndTime)
+            let events = try DatabaseUtils.sharedInstance.getWorkoutEvents(earlyStartTime, toTime: lateEndTime)
             for workoutEvent in events {
                 if let eventTime = workoutEvent.time {
                     let deltaTime = eventTime.timeIntervalSince(startTime)

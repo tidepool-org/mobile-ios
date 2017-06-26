@@ -19,30 +19,6 @@ import SwiftyJSON
 import CocoaLumberjack
 import MessageUI
 import HealthKit
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
-}
-
-// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
-// Consider refactoring the code to use the non-optional operators.
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l > r
-  default:
-    return rhs < lhs
-  }
-}
-
 
 /// Presents the UI to capture email and password for login and calls APIConnector to login. Show errors to the user. Backdoor UI for development setting of the service.
 class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDelegate {
@@ -58,8 +34,10 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var loginIndicator: UIActivityIndicatorView!
     @IBOutlet weak var errorFeedbackLabel: NutshellUILabel!
-    @IBOutlet weak var forgotPasswordLabel: NutshellUILabel!
     
+    @IBOutlet weak var versionLabel: UILabel!
+    
+    @IBOutlet weak var signUpButton: UIButton!
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -72,19 +50,28 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        configureVersion()
+
+        self.signUpButton.setTitleColor(Styles.lightDarkGreyColor, for: .highlighted)
+        self.loginIndicator.color = UIColor.black
+        passwordTextField.keyboardAppearance = UIKeyboardAppearance.dark
+        emailTextField.keyboardAppearance = UIKeyboardAppearance.dark
+        
+        let borderColor = Styles.alt2LightGreyColor
+        
+        passwordTextField.layer.borderColor = borderColor.cgColor
+        passwordTextField.layer.borderWidth = 1.0
+        //passwordTextField.layer.cornerRadius = 2.0
+
+        emailTextField.layer.borderColor = borderColor.cgColor
+        emailTextField.layer.borderWidth = 1.0
+        //emailTextField.layer.cornerRadius = 2.0
 
         let notificationCenter = NotificationCenter.default
 
         notificationCenter.addObserver(self, selector: #selector(LoginViewController.textFieldDidChange), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
         updateButtonStates()
-        
-        // forgot password text needs an underline...
-        if let forgotText = forgotPasswordLabel.text {
-            let forgotStr = NSAttributedString(string: forgotText, attributes:[NSFontAttributeName: forgotPasswordLabel.font, NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue])
-            forgotPasswordLabel.attributedText = forgotStr
-        }
-        // TODO: hide for now until implemented!
-        forgotPasswordLabel.isHidden = true
         
         notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -104,26 +91,16 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         }
     }
     
-    func reachabilityChanged(_ note: Notification) {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            // try token refresh if we are now connected...
-            // TODO: change message to "attempting token refresh"?
-            let api = APIConnector.connector()
-            if api.isConnectedToNetwork() && api.sessionToken != nil {
-                NSLog("Login: attempting to refresh token...")
-                api.refreshToken() { succeeded -> (Void) in
-                    if succeeded {
-                        appDelegate.setupUIForLoginSuccess()
-                    } else {
-                        NSLog("Refresh token failed, need to log in normally")
-                        api.logout() {
-                            self.configureForReachability()
-                        }
-                    }
-                }
-                return
-            }
+    private func configureVersion() {
+        let curService = APIConnector.connector().currentService!
+        if curService == "Production" {
+            versionLabel.text = "v" + UIApplication.appVersion()
+        } else{
+            versionLabel.text = "v" + UIApplication.appVersion() + " on " + curService
         }
+    }
+    
+    func reachabilityChanged(_ note: Notification) {
         configureForReachability()
     }
 
@@ -138,6 +115,22 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         // Dispose of any resources that can be recreated.
     }
 
+    // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
+    private var subviewsInitialized = false
+    override func viewDidLayoutSubviews() {
+        let frame = self.logInScene.frame
+        NSLog("viewDidLayoutSubviews: \(frame)")
+        
+        if (subviewsInitialized) {
+            return
+        }
+        subviewsInitialized = true
+        logInScene.setNeedsLayout()
+        logInScene.layoutIfNeeded()
+        // For the login button ;-)
+        logInScene.checkAdjustSubviewSizing()
+    }
+    
     //
     // MARK: - Button and text field handlers
     //
@@ -160,6 +153,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     
     @IBAction func login_button_tapped(_ sender: AnyObject) {
         updateButtonStates()
+        tapOutsideFieldHandler(self)
         loginIndicator.startAnimating()
         
         APIConnector.connector().login(emailTextField.text!,
@@ -168,22 +162,36 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
                 self.processLoginResult(result)
         }
     }
+
+    @IBAction func signUpButtonTapped(_ sender: Any) {
+        if let url = URL(string: "http://tidepool.org/signup") {
+            UIApplication.shared.openURL(url)
+        }
+    }
+    
+    @IBAction func forgotPasswordTapped(_ sender: Any) {
+        if let url = URL(string: "https://app.tidepool.org/request-password-reset") {
+            UIApplication.shared.openURL(url)
+        }
+    }
+
     
     fileprivate func processLoginResult(_ result: Alamofire.Result<User>) {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         self.loginIndicator.stopAnimating()
         if (result.isSuccess) {
             if let user=result.value {
                 NSLog("Login success: \(user)")
-                APIConnector.connector().fetchProfile() { (result:Alamofire.Result<JSON>) -> (Void) in
+                APIConnector.connector().fetchProfile(NutDataController.sharedInstance.currentUserId!) { (result:Alamofire.Result<JSON>) -> (Void) in
                         NSLog("Profile fetch result: \(result)")
                     if (result.isSuccess) {
                         if let json = result.value {
-                            NutDataController.controller().processProfileFetch(json)
+                            NutDataController.sharedInstance.processLoginProfileFetch(json)
                         }
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        appDelegate.setupUIForLoginSuccess()
+                        //self.performSegue(withIdentifier: "showEventListSegue", sender: self)
                     }
                 }
-                appDelegate.setupUIForLoginSuccess()
             } else {
                 // This should not happen- we should not succeed without a user!
                 NSLog("Fatal error: No user returned!")
@@ -192,7 +200,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
             NSLog("login failed! Error: " + result.error.debugDescription)
             var errorText = NSLocalizedString("loginErrUserOrPassword", comment: "Wrong email or password!")
             if let error = result.error {
-                NSLog("NSError: \(error)")
+                NSLog("Error: \(error)")
                 if (error as NSError).code == -1009 {
                     errorText = NSLocalizedString("loginErrOffline", comment: "The Internet connection appears to be offline!")
                 }
@@ -226,15 +234,18 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     // MARK: - View handling for keyboard
     //
 
+    @IBOutlet weak var loginViewCenterYConstraint: NSLayoutConstraint!
     fileprivate var viewAdjustAnimationTime: Float = 0.25
-    fileprivate func adjustLogInView(_ centerOffset: CGFloat) {
-        
-        for c in logInScene.constraints {
-            if c.firstAttribute == NSLayoutAttribute.centerY {
-                c.constant = -centerOffset
-                break
-            }
+    fileprivate var originalOffsetConstant: CGFloat? = nil
+    fileprivate func adjustLogInView(_ extraSpaceNeeded: CGFloat? = nil) {
+        if originalOffsetConstant == nil {
+            originalOffsetConstant = loginViewCenterYConstraint.constant
         }
+        var newOffsetConstant = originalOffsetConstant!
+        if let extraSpace = extraSpaceNeeded {
+            newOffsetConstant -= extraSpace
+        }
+        loginViewCenterYConstraint.constant = newOffsetConstant
         UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
             self.logInScene.layoutIfNeeded()
         }) 
@@ -246,7 +257,8 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! Float
         let loginViewDistanceToBottom = logInScene.frame.height - logInEntryContainer.frame.origin.y - logInEntryContainer.frame.size.height
-        let additionalKeyboardRoom = keyboardFrame.height - loginViewDistanceToBottom
+        // allow 4 pixels for margin...
+        let additionalKeyboardRoom = keyboardFrame.height - loginViewDistanceToBottom + 4.0
         if (additionalKeyboardRoom > 0) {
             self.adjustLogInView(additionalKeyboardRoom)
         }
@@ -255,7 +267,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     // UIKeyboardWillHideNotification
     func keyboardWillHide(_ notification: Notification) {
         // reposition login view if needed
-        self.adjustLogInView(0.0)
+        self.adjustLogInView()
     }
 
     // MARK: - Debug Config
@@ -303,6 +315,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
             actionSheet.addAction(UIAlertAction(title: server.0, style: .default, handler: { Void in
                 let serverName = server.0
                 api.switchToServer(serverName)
+                self.configureVersion()
             }))
         }
         actionSheet.addAction(UIAlertAction(title: "Count HealthKit Blood Glucose Samples", style: .default, handler: {
@@ -365,7 +378,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
 
     func handleCountBloodGlucoseSamples() {
         HealthKitManager.sharedInstance.countBloodGlucoseSamples {
-            (error: NSError?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) in
+            (error: Error?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) in
             
             var alert: UIAlertController?
             let title = "HealthKit Blood Glucose Sample Count"
@@ -373,7 +386,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
             if error == nil {
                 message = "There are \(totalSamplesCount) blood glucose samples and \(totalDexcomSamplesCount) Dexcom samples in HealthKit"
             } else if HealthKitManager.sharedInstance.authorizationRequestedForBloodGlucoseSamples() {
-                message = "Error counting samples: \(error)"
+                message = "Error counting samples: \(String(describing: error))"
             } else {
                 message = "Unable to count sample. Maybe you haven't connected to Health yet. Please login and connect to Health and try again."
             }
@@ -389,14 +402,14 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     func handleFindDateRangeBloodGlucoseSamples() {
         let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
         HealthKitManager.sharedInstance.findSampleDateRange(sampleType: sampleType) {
-            (error: NSError?, startDate: Date?, endDate: Date?) in
+            (error: Error?, startDate: Date?, endDate: Date?) in
             
             var alert: UIAlertController?
             let title = "Date range for blood glucose samples"
             var message = ""
             if error == nil && startDate != nil && endDate != nil {
                 let days = startDate!.differenceInDays(endDate!) + 1
-                message = "Start date: \(startDate), end date: \(endDate). Total days: \(days)"
+                message = "Start date: \(startDate!), end date: \(endDate!). Total days: \(days)"
             } else {
                 message = "Unable to find date range for blood glucose samples, maybe you haven't connected to Health yet, please login and connect to Health and try again. Or maybe there are no samples in HealthKit."
             }
@@ -443,7 +456,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: nil, limit: HKObjectQueryNoLimit, sortDescriptors: nil) {
             (query, samples, error) -> Void in
             
-            if error == nil && samples?.count > 0 {
+            if error == nil && samples != nil && samples!.count > 0 {
                 // Write header row
                 let rows = NSMutableString()
                 rows.append("sequence,sourceBundleId,UUID,date,value,units\n")

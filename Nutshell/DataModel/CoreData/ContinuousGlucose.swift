@@ -29,7 +29,7 @@ class ContinuousGlucose: CommonData {
                     return nil
                 }
             } else {
-                print("cbg record with no units field, assuming mmol/L - value: \(me.value)")
+                print("cbg record with no units field, assuming mmol/L - value: \(String(describing: me.value))")
             }
             
             me.isig = json["isig"].string
