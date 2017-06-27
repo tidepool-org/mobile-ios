@@ -14,10 +14,10 @@ def available_pods
   pod 'FLAnimatedImage', '~> 1.0'
  end
 
-target 'Nutshell' do
+target 'TidepoolMobile' do
   available_pods
 end
 
-target 'NutshellTests' do
+target 'TidepoolMobileTests' do
   available_pods
 end

@@ -1,0 +1,6 @@
+framework module Pods_TidepoolMobileTests {
+  umbrella header "Pods-TidepoolMobileTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
