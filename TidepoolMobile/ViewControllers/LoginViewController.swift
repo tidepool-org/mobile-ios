@@ -436,7 +436,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         }
         
         if MFMailComposeViewController.canSendMail() {
-            let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
+            let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as! String
             let composeVC = MFMailComposeViewController()
             composeVC.mailComposeDelegate = self
             composeVC.setSubject("Logs for \(appName)")
