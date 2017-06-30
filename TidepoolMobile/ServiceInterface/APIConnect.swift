@@ -125,7 +125,7 @@ class APIConnector {
         if let reachability = reachability {
             return reachability.isReachable
         } else {
-            NSLog("Error: reachability object not configured!")
+            DDLogError("Reachability object not configured!")
             return true
         }
     }
@@ -143,7 +143,7 @@ class APIConnector {
     func configure() -> APIConnector {
         HealthKitDataUploader.sharedInstance.uploadHandler = self.doUpload
         self.baseUrl = URL(string: kServers[currentService!]!)!
-        NSLog("Using service: \(String(describing: self.baseUrl))")
+        DDLogInfo("Using service: \(String(describing: self.baseUrl))")
         self.sessionToken = UserDefaults.standard.string(forKey: kSessionTokenDefaultKey)
         if let reachability = reachability {
             reachability.stopNotifier()
@@ -153,7 +153,7 @@ class APIConnector {
         do {
            try reachability?.startNotifier()
         } catch {
-            NSLog("Error: Unable to start notifier!")
+            DDLogError("Unable to start notifier!")
         }
         return self
     }
@@ -167,12 +167,12 @@ class APIConnector {
             currentService = serverName
             // refresh connector since there is a new service...
             _ = configure()
-            NSLog("Switched to \(serverName) server")
+            DDLogInfo("Switched to \(serverName) server")
         }
     }
     
     /// Logs in the user and obtains the session token for the session (stored internally)
-    func login(_ username: String, password: String, completion: @escaping (Result<User>) -> (Void)) {
+    func login(_ username: String, password: String, completion: @escaping (Result<User>, Int?) -> (Void)) {
         // Clear in case it was set while logged out...
         self.lastNetworkError = nil
         // Set our endpoint for login
@@ -201,18 +201,19 @@ class APIConnector {
                 if let user = User.fromJSON(json, email: username, moc: moc) {
                     TidepoolMobileDataController.sharedInstance.loginUser(user)
                     APIConnector.connector().trackMetric("Logged In")
-                    completion(Result.success(user))
+                    completion(Result.success(user), nil)
                 } else {
                     APIConnector.connector().trackMetric("Log In Failed")
                     TidepoolMobileDataController.sharedInstance.logoutUser()
                     completion(Result.failure(NSError(domain: self.kTidepoolMobileErrorDomain,
                         code: -1,
-                        userInfo: ["description":"Could not create user from JSON", "result":response.result.value!])))
+                        userInfo: ["description":"Could not create user from JSON", "result":response.result.value!])), -1)
                 }
             } else {
                 APIConnector.connector().trackMetric("Log In Failed")
                 TidepoolMobileDataController.sharedInstance.logoutUser()
-                completion(Result.failure(response.result.error!))
+                let statusCode = response.response?.statusCode
+                completion(Result.failure(response.result.error!), statusCode)
             }
         }
     }
@@ -281,7 +282,7 @@ class APIConnector {
 
         metricsCache.append(metric)
         if !serviceAvailable() || (metricSendInProgress && !flushBuffer) {
-            //NSLog("Offline: trackMetric stashed: \(metric)")
+            //DDLogInfo("Offline: trackMetric stashed: \(metric)")
             return
         }
         
@@ -294,19 +295,19 @@ class APIConnector {
             if let theResponse = response.response {
                 let statusCode = theResponse.statusCode
                 if statusCode == 200 {
-                    NSLog("Tracked metric: \(nextMetric)")
+                    DDLogInfo("Tracked metric: \(nextMetric)")
                     if !self.metricsCache.isEmpty {
                         self.trackMetric(self.metricsCache.removeFirst(), flushBuffer: flushBuffer)
                     }
                 } else {
-                    NSLog("Failed status code: \(statusCode) for tracking metric: \(metric)")
+                    DDLogError("Failed status code: \(statusCode) for tracking metric: \(metric)")
                     self.lastNetworkError = statusCode
                     if let error = response.result.error {
-                        NSLog("NSError: \(error)")
+                        DDLogError("NSError: \(error)")
                     }
                 }
             } else {
-                NSLog("Invalid response for tracking metric: \(response.result.error!)")
+                DDLogError("Invalid response for tracking metric: \(response.result.error!)")
             }
         }
     }
@@ -337,11 +338,11 @@ class APIConnector {
         self.sendRequest(.get, endpoint:endpoint).responseJSON { response in
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if ( response.result.isSuccess ) {
-                NSLog("Session token updated")
+                DDLogInfo("Session token updated")
                 self.sessionToken = response.response!.allHeaderFields[self.kSessionIdHeader] as! String?
                 completion(true)
             } else {
-                NSLog("Session token update failed: \(response.result)")
+                DDLogError("Session token update failed: \(response.result)")
                 if let error = response.result.error {
                     print("NSError: \(error)")
                     // TODO: handle network offline!
@@ -379,7 +380,7 @@ class APIConnector {
         let userId = TidepoolMobileDataController.sharedInstance.currentViewedUser!.userid
         let endpoint = "data/" + userId
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        NSLog("getReadOnlyUserData request start")
+        DDLogInfo("getReadOnlyUserData request start")
         // TODO: If there is no data returned, I get a failure case with status code 200, and error FAILURE: Error Domain=NSCocoaErrorDomain Code=3840 "Invalid value around character 0." UserInfo={NSDebugDescription=Invalid value around character 0.} ] Maybe an Alamofire issue?
         var parameters: Dictionary = ["type": objectTypes]
         if let startDate = startDate {
@@ -392,13 +393,13 @@ class APIConnector {
         }
         sendRequest(.get, endpoint: endpoint, parameters: parameters as [String : AnyObject]?).responseJSON { response in
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            NSLog("getReadOnlyUserData request complete")
+            DDLogInfo("getReadOnlyUserData request complete")
             if (response.result.isSuccess) {
                 let json = JSON(response.result.value!)
                 var validResult = true
                 if let status = json["status"].number {
                     let statusCode = Int(status)
-                    NSLog("getReadOnlyUserData includes status field: \(statusCode)")
+                    DDLogInfo("getReadOnlyUserData includes status field: \(statusCode)")
                     // TODO: determine if any status is indicative of failure here! Note that if call was successful, there will be no status field in the json result. The only verified error response is 403 which happens when we pass an invalid token.
                     if statusCode == 401 || statusCode == 403 {
                         validResult = false
@@ -417,12 +418,12 @@ class APIConnector {
                 if let theResponse = response.response {
                     let statusCode = theResponse.statusCode
                     if statusCode != 200 {
-                        NSLog("Failure status code: \(statusCode) for getReadOnlyUserData")
+                        DDLogError("Failure status code: \(statusCode) for getReadOnlyUserData")
                         APIConnector.connector().trackMetric("Tidepool Data Fetch Failure - Code " + String(statusCode))
                     }
                     // Otherwise, just indicates no data were found...
                 } else {
-                    NSLog("Invalid response for getReadOnlyUserData metric")
+                    DDLogError("Invalid response for getReadOnlyUserData metric")
                 }
                 completion(Result.failure(response.result.error!))
             }
@@ -461,7 +462,7 @@ class APIConnector {
         }
         
         // Fire off the network request
-        //NSLog("sendRequest url: \(url), params: \(parameters ?? [:]), headers: \(apiHeaders ?? [:])")
+        //DDLogInfo("sendRequest url: \(url), params: \(parameters ?? [:]), headers: \(apiHeaders ?? [:])")
         return Alamofire.request(url, method: requestType!, parameters: parameters, headers: apiHeaders).validate()
     }
     
@@ -549,7 +550,7 @@ class APIConnector {
                     
                     let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
                     
-                    //NSLog("notes: \(JSON(data!))")
+                    //DDLogInfo("notes: \(JSON(data!))")
                     let messages: NSArray = jsonResult.value(forKey: "messages") as! NSArray
                     
                     let dateFormatter = DateFormatter()
@@ -642,7 +643,7 @@ class APIConnector {
                     
                     let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
                     
-                    NSLog("notes: \(jsonResult)")
+                    DDLogInfo("notes: \(jsonResult)")
                     let messages: NSArray = jsonResult.value(forKey: "messages") as! NSArray
                     let dateFormatter = DateFormatter()
                     

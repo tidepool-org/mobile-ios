@@ -118,8 +118,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
     private var subviewsInitialized = false
     override func viewDidLayoutSubviews() {
-        let frame = self.logInScene.frame
-        NSLog("viewDidLayoutSubviews: \(frame)")
+        //DDLogInfo("viewDidLayoutSubviews: \(self.logInScene.frame)")
         
         if (subviewsInitialized) {
             return
@@ -157,9 +156,9 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         loginIndicator.startAnimating()
         
         APIConnector.connector().login(emailTextField.text!,
-            password: passwordTextField.text!) { (result:Alamofire.Result<User>) -> (Void) in
-                //NSLog("Login result: \(result)")
-                self.processLoginResult(result)
+                                       password: passwordTextField.text!) { (result:Alamofire.Result<User>, statusCode: Int?) -> (Void) in
+                //DDLogInfo("Login result: \(result)")
+                                        self.processLoginResult(result, statusCode: statusCode)
         }
     }
 
@@ -176,13 +175,13 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     }
 
     
-    fileprivate func processLoginResult(_ result: Alamofire.Result<User>) {
+    fileprivate func processLoginResult(_ result: Alamofire.Result<User>, statusCode: Int?) {
         self.loginIndicator.stopAnimating()
         if (result.isSuccess) {
             if let user=result.value {
-                NSLog("Login success: \(user)")
+                DDLogInfo("Login success: \(user)")
                 APIConnector.connector().fetchProfile(TidepoolMobileDataController.sharedInstance.currentUserId!) { (result:Alamofire.Result<JSON>) -> (Void) in
-                        NSLog("Profile fetch result: \(result)")
+                        DDLogInfo("Profile fetch result: \(result)")
                     if (result.isSuccess) {
                         if let json = result.value {
                             TidepoolMobileDataController.sharedInstance.processLoginProfileFetch(json)
@@ -194,17 +193,15 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
                 }
             } else {
                 // This should not happen- we should not succeed without a user!
-                NSLog("Fatal error: No user returned!")
+                DDLogError("Fatal error: No user returned!")
             }
         } else {
-            NSLog("login failed! Error: " + result.error.debugDescription)
-            var errorText = NSLocalizedString("loginErrUserOrPassword", comment: "Wrong email or password!")
-            if let error = result.error {
-                NSLog("Error: \(error)")
-                if (error as NSError).code == -1009 {
-                    errorText = NSLocalizedString("loginErrOffline", comment: "The Internet connection appears to be offline!")
+            DDLogError("login failed! Error: " + result.error.debugDescription)
+            var errorText = unknownError
+            if let statusCode = statusCode {
+                if statusCode == 401 {
+                    errorText = NSLocalizedString("loginErrUserOrPassword", comment: "Wrong email or password!")
                 }
-                // TODO: handle network offline!
             }
             self.errorFeedbackLabel.text = errorText
             self.errorFeedbackLabel.isHidden = false
