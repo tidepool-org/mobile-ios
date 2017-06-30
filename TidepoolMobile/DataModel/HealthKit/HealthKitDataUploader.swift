@@ -282,13 +282,13 @@ class HealthKitDataUploader {
         let sourceBundleIdentifier = source.bundleIdentifier
         let deviceModel = deviceModelForSourceBundleIdentifier(sourceBundleIdentifier)
         let deviceId = "\(deviceModel)_\(UIDevice.current.identifierForVendor!.uuidString)"
-        let now = Date()
         let timeZoneOffset = NSCalendar.current.timeZone.secondsFromGMT() / 60
         let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         let appBuild = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as! String
         let appBundleIdentifier = Bundle.main.bundleIdentifier!
-        let version = "\(appBundleIdentifier):\(appVersion):\(appBuild)"
+        let version = "\(appBundleIdentifier):\(appVersion)-\(appBuild)"
         let dateFormatter = DateFormatter()
+        let now = Date()
         let time = DateFormatter().isoStringFromDate(now)
         let guid = UUID().uuidString
         let uploadIdSuffix = "\(deviceId)_\(time)_\(guid)"
