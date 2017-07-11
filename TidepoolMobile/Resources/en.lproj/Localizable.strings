@@ -16,47 +16,6 @@
 /* NSLocalizedString("saveButtonTitle", comment:"Save") */
 
 
-/*
-    Discard alert text: for edit and add item
- */
-
-"deletePhotoAlertTitle" = "Are you sure?";
-"deletePhotoAlertMessage" = "If you delete this photo, your photo will be lost.";
-
-"deleteWorkoutAlertTitle" = "Are you sure?";
-"deleteWorkoutAlertMessage" = "If you delete this workout, it will be gone forever.";
-
-"deleteMealAlertTitle" = "Are you sure?";
-"deleteMealAlertMessage" = "If you delete this meal, it will be gone forever.";
-
-"deleteAlertCancel" = "Cancel";
-"deleteAlertOkay" = "Delete";
-
-
-"discardEditsAlertTitle" = "Discard changes?";
-"discardMealEditsAlertMessage" = "If you press discard, your changes to this meal will be lost.";
-"discardWorkoutEditsAlertMessage" = "If you press discard, your changes to this workout will be lost.";
-
-"discardAlertCancel" = "Cancel";
-"discardAlertOkay" = "Discard";
-
-"photoSlotsFullTitle" = "No empty photo slot";
-"photoSlotsFullMessage" = "Three photos are supported. Please discard one before adding a new photo.";
-"notifyAlertOkay" = "OK";
-
-/*
-    Event detail view controller
- */
-
-"successButtonTitle" = "Success!";
-"nutCrackedButtonTitle" = "Success?";
-
-/*
-    Add/edit event view controller
- */
-
-"saveButtonTitle" = "Save";
-"saveAndEatButtonTitle" = "Save and eat!";
 
 /*
     Login view controller

@@ -17,6 +17,8 @@ import HealthKit
 import CocoaLumberjack
 import CoreData
 
+// Note: Code for future processing of local workout events from HealthKit
+
 class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
 {
     
@@ -67,7 +69,7 @@ class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
     }
     
     fileprivate func processWorkoutEvents(_ workouts: [HKSample]) {
-        let moc = TidepoolMobileDataController.sharedInstance.mocForNutEvents()!
+        let moc = TidepoolMobileDataController.sharedInstance.mocForLocalEvents()!
         if let entityDescription = NSEntityDescription.entity(forEntityName: "Workout", in: moc) {
             for event in workouts {
                 if let workout = event as? HKWorkout {
@@ -145,7 +147,7 @@ class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
     }
     
     fileprivate func processDeleteWorkoutEvents(_ workouts: [HKDeletedObject]) {
-        let moc = TidepoolMobileDataController.sharedInstance.mocForNutEvents()!
+        let moc = TidepoolMobileDataController.sharedInstance.mocForLocalEvents()!
         for workout in workouts {
             NSLog("Processing deleted workout sample with UUID: \(workout.uuid)");
             let id = workout.uuid.uuidString

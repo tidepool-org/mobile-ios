@@ -11,8 +11,5 @@ import CoreData
 
 
 class EventItem: CommonData {
-    // override for eventItems that have location too!
-    func nutEventIdString() -> String {
-        return title ?? ""
-    }
+
 }

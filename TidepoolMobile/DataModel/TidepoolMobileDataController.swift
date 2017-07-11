@@ -47,10 +47,10 @@ class TidepoolMobileDataController: NSObject
         return self.mocForLocalObjects!
     }
 
-    /// Coordinator/store for editable data: Meal, Workout items.
+    /// Coordinator/store for editable data: Hashtags, User.
     ///
     /// This is only available if there is a current user logged in!
-    func mocForNutEvents() -> NSManagedObjectContext? {
+    func mocForLocalEvents() -> NSManagedObjectContext? {
         if currentUserId != nil {
             return self.mocForLocalObjects
         }
@@ -275,7 +275,7 @@ class TidepoolMobileDataController: NSObject
     ///
     /// Note: This sets the current tidepool user as the HealthKit user!
     func enableHealthKitInterface() {
-        // TODO: turn of workout data load for now...
+        // Note: change if workout data is needed!
         appHealthKitConfiguration.enableHealthKitInterface(currentUserName, userid: currentUserId, isDSAUser: isDSAUser, needsGlucoseReads: true, needsGlucoseWrites: false, needsWorkoutReads: false)
     }
     

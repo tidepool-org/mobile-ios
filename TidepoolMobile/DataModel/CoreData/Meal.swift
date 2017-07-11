@@ -12,12 +12,4 @@ import CoreData
 
 class Meal: EventItem {
 
-    // override for eventItems that have location too!
-    override func nutEventIdString() -> String {
-        if let title = title,  let location = location {
-            return "M" + title + location
-        }
-        return super.nutEventIdString()
-    }
-
 }

@@ -6,8 +6,6 @@
 //  Copyright © 2015 Tidepool. All rights reserved.
 //
 
-// TODO: replace this 3rd party menu mechanism with a simple menu view, and a constrain animation to slide it in and out...
-
 import UIKit
 import CocoaLumberjack
 

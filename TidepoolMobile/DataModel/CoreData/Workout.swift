@@ -14,13 +14,6 @@ import HealthKit
 class Workout: EventItem {
 
 // Insert code here to add functionality to your managed object subclass
-    // override for eventItems that have location too!
-    override func nutEventIdString() -> String {
-        if let title = title {
-            return "W" + title
-        }
-        return super.nutEventIdString()
-    }
 
     // Convert Open mHealth enum to display string
     class func userStringForHKWorkoutActivityTypeEnumString(_ typeEnumString: String) -> String {

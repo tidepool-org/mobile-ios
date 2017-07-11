@@ -79,7 +79,6 @@ class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPI
             tableView.dequeueReusableCell(withIdentifier: "profileTableCellLoggedInUser", for: indexPath) as! ProfileListLoggedInUserTableViewCell :
             tableView.dequeueReusableCell(withIdentifier: "profileTableCell", for: indexPath) as! ProfileListTableViewCell
         
-        // TODO: support for other users in profile...
         if indexPath.row < tableUsers.count {
             let user = tableUsers[indexPath.row]
             if indexPath.row == 0 {

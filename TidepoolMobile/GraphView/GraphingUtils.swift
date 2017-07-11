@@ -204,7 +204,7 @@ open class GraphingUtils {
             let rightAxisPixelsPerValue = layout.yAxisPixels/layout.yAxisRightRange
             let valueAdjustedForBase = CGFloat(label) - layout.yAxisRightBase
             let yOffset = round(layout.yAxisBase - (valueAdjustedForBase * rightAxisPixelsPerValue))
-            // TODO: 4.0 is to leave a little gap between the line and the label...
+            // Note: 4.0 is to leave a little gap between the line and the label...
             drawLabelRightOfPoint(String(label), leftCenter: CGPoint(x: viewSize.width - layout.yAxisLineRightMargin - maxRightLabelWidth, y: yOffset), font: layout.axesLabelTextFont, color: layout.axesRightLabelTextColor)
         }
     }

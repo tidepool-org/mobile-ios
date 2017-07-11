@@ -68,7 +68,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         
         // Note: these notifications may fire when this VC is in the background!
         // Add a notification for when the database changes
-        let moc = dataController.mocForNutEvents()
+        let moc = dataController.mocForLocalEvents()
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.databaseChanged(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: moc)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChangeNotifyHandler(_:)), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
@@ -262,7 +262,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         sortedNotes.sort(by: {$0.note.timestamp.timeIntervalSinceNow > $1.note.timestamp.timeIntervalSinceNow})
         updateFilteredAndReload()
         tableView.reloadData()
-    }
+     }
 
     func indexPathForNoteId(_ noteId: String) -> IndexPath? {
         for i in 0..<filteredNotes.count {
@@ -489,15 +489,15 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     
     func refresh() {
         DDLogVerbose("trace)")
-        
+
         if (!loadingNotes) {
-            sortedNotes = []
-            filteredNotes = []
-            filterString = ""
+        sortedNotes = []
+        filteredNotes = []
+        filterString = ""
             loadNotes()
         }
     }
-    
+
     //
     // MARK: - Navigation
     //

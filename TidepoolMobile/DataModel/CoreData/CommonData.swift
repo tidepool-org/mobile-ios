@@ -11,7 +11,7 @@ import CoreData
 import SwiftyJSON
 
 class CommonData: NSManagedObject {
-    // TODO: add code to download "meal" and "workout" items from service once they are supported and we upload them
+
     class func fromJSON(_ json: JSON, moc: NSManagedObjectContext) -> CommonData? {
         // The type of object we create is based on the "type" field
         var newObject: CommonData? = nil

@@ -278,7 +278,7 @@ class APIConnector {
     func trackMetric(_ metric: String, flushBuffer: Bool = false) {
         // Set our endpoint for the event tracking
         // Format: https://api.tidepool.org/metrics/thisuser/urchin%20-%20Remember%20Me%20Used?source=urchin&sourceVersion=1.1
-        // Format: https://api.tidepool.org/metrics/thisuser/nutshell-Viewed%20Hamburger%20Menu?source=nutshell&sourceVersion=0%2E8%2E1
+        // Format: https://api.tidepool.org/metrics/thisuser/tidepool-Viewed%20Hamburger%20Menu?source=tidepool&sourceVersion=0%2E8%2E1
 
         metricsCache.append(metric)
         if !serviceAvailable() || (metricSendInProgress && !flushBuffer) {

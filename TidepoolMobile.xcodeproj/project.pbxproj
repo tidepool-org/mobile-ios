@@ -101,7 +101,6 @@
 		48103E961C1DE4CC0055C27A /* ENSideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E941C1DE4CC0055C27A /* ENSideMenu.swift */; };
 		48103E971C1DE4CC0055C27A /* ENSideMenuNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E951C1DE4CC0055C27A /* ENSideMenuNavigationController.swift */; };
 		48103E991C1DE7BC0055C27A /* EventViewNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E981C1DE7BC0055C27A /* EventViewNavController.swift */; };
-		4814FEBE1BB0D7DD00F66379 /* NutMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */; };
 		4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
 		4820ED6A1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
 		4820ED6B1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
@@ -163,7 +162,6 @@
 		486F5E111BA08DE900BA2A57 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E101BA08DE900BA2A57 /* LoginViewController.swift */; };
 		486F5E241BA0DC1000BA2A57 /* APIConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E231BA0DC1000BA2A57 /* APIConnect.swift */; };
 		486F5E251BA0DC1000BA2A57 /* APIConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E231BA0DC1000BA2A57 /* APIConnect.swift */; };
-		486F5E2B1BA0DC6700BA2A57 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
 		486F5E3A1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */; };
 		486F5E3B1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */; };
 		486F5E781BA3891600BA2A57 /* TidepoolMobileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* TidepoolMobileUtils.swift */; };
@@ -186,17 +184,12 @@
 		489299691CB42917001F24D6 /* HealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489299671CB4290D001F24D6 /* HealthKitConfiguration.swift */; };
 		4892996B1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */; };
 		4892996C1CB43099001F24D6 /* TidepoolMobileHealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */; };
-		489F3C501BB0AE1D00C95FDC /* NutMeal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */; };
 		489FDE501E833AF2000C4AC5 /* UrchinConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486894F41E831F89008B0732 /* UrchinConstants.swift */; };
 		489FDE531E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489FDE511E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift */; };
 		489FDE541E833D47000C4AC5 /* Hashtag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489FDE521E833D47000C4AC5 /* Hashtag.swift */; };
 		48A150561C18E0A900ED800B /* Nutshell.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */; };
 		48A7925E1C4C0B39008D2244 /* Transitions between scenes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 48A7925D1C4C0B39008D2244 /* Transitions between scenes.txt */; };
 		48A839031C596A1D00FAFE1B /* GraphCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A839021C596A1D00FAFE1B /* GraphCollectionCell.swift */; };
-		48B127941BC4445500061483 /* NutEventItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127931BC4445500061483 /* NutEventItem.swift */; };
-		48B127951BC4445800061483 /* NutEventItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127931BC4445500061483 /* NutEventItem.swift */; };
-		48B127971BC4447100061483 /* NutWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127961BC4447100061483 /* NutWorkout.swift */; };
-		48B127981BC4447100061483 /* NutWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127961BC4447100061483 /* NutWorkout.swift */; };
 		48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48BA05B01E53911500212486 /* GraphCursorLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BA05AF1E53911500212486 /* GraphCursorLayer.swift */; };
@@ -208,12 +201,10 @@
 		48C491571C38804700F34630 /* GraphingUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491561C38804700F34630 /* GraphingUtils.swift */; };
 		48C491591C38B1AF00F34630 /* TidepoolGraphLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491581C38B1AF00F34630 /* TidepoolGraphLayout.swift */; };
 		48C491611C3B2D1A00F34630 /* CbgGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491601C3B2D1A00F34630 /* CbgGraphData.swift */; };
-		48C491651C3B2DEE00F34630 /* MealGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491631C3B2DEE00F34630 /* MealGraphData.swift */; };
 		48C491661C3B2DEE00F34630 /* SmbgGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491641C3B2DEE00F34630 /* SmbgGraphData.swift */; };
 		48C491681C3B47A000F34630 /* BasalGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491671C3B47A000F34630 /* BasalGraphData.swift */; };
 		48C4916A1C3B59B400F34630 /* BoluslGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C491691C3B59B400F34630 /* BoluslGraphData.swift */; };
 		48C4916C1C3B771200F34630 /* WizardGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C4916B1C3B771200F34630 /* WizardGraphData.swift */; };
-		48C4916E1C3B816700F34630 /* WorkoutGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C4916D1C3B816700F34630 /* WorkoutGraphData.swift */; };
 		48D056921BDFDD16009D1591 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48D056951BDFDD16009D1591 /* Localizable.strings */; };
 		48D056931BDFDD16009D1591 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 48D056951BDFDD16009D1591 /* Localizable.strings */; };
 		48DA110D1CE3C77200B99C35 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DA110C1CE3C77100B99C35 /* NSDateExtension.swift */; };
@@ -226,7 +217,6 @@
 		48E4A4471BF015CE001A7B35 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4451BF015CE001A7B35 /* Reachability.swift */; };
 		48E5C2111EB2D17100D5923A /* TPUIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E5C2101EB2D17100D5923A /* TPUIButton.swift */; };
 		48EC25781EA9526A00607F85 /* NoteListAddCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EC25771EA9526A00607F85 /* NoteListAddCommentCell.swift */; };
-		48EC32301BA7BDD700A75103 /* NutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E291BA0DC6700BA2A57 /* NutEvent.swift */; };
 		48EC32321BA7BDDE00A75103 /* TidepoolMobileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* TidepoolMobileUtils.swift */; };
 		48EC39D31ED113C30025A909 /* EventAddEdit.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48EC39D11ED113C30025A909 /* EventAddEdit.storyboard */; };
 		48ECF6CE1E96FE18007EE5D3 /* jump-jump-jump-jump.gif in Resources */ = {isa = PBXBuildFile; fileRef = 48ECF6CD1E96FE18007EE5D3 /* jump-jump-jump-jump.gif */; };
@@ -359,7 +349,6 @@
 		486F5E081B9FB1C600BA2A57 /* TidepoolMobileStyles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = TidepoolMobileStyles.swift; path = Resources/TidepoolMobileStyles.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		486F5E101BA08DE900BA2A57 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginViewController.swift; path = ViewControllers/LoginViewController.swift; sourceTree = "<group>"; };
 		486F5E231BA0DC1000BA2A57 /* APIConnect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIConnect.swift; path = ServiceInterface/APIConnect.swift; sourceTree = "<group>"; };
-		486F5E291BA0DC6700BA2A57 /* NutEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutEvent.swift; path = DataModel/NutEvent.swift; sourceTree = "<group>"; };
 		486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIDateFormatterExtension.swift; path = "Utilities and Extensions/UIDateFormatterExtension.swift"; sourceTree = "<group>"; };
 		486F5E751BA35CD800BA2A57 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		486F5E771BA3891600BA2A57 /* TidepoolMobileUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolMobileUtils.swift; path = "Utilities and Extensions/TidepoolMobileUtils.swift"; sourceTree = "<group>"; };
@@ -378,14 +367,11 @@
 		489299671CB4290D001F24D6 /* HealthKitConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitConfiguration.swift; path = DataModel/HealthKit/HealthKitConfiguration.swift; sourceTree = "<group>"; };
 		4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolMobileHealthKitConfiguration.swift; path = DataModel/TidepoolMobileHealthKitConfiguration.swift; sourceTree = "<group>"; };
 		4899436D1C442837004774BA /* Nutshell_v5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v5.xcdatamodel; sourceTree = "<group>"; };
-		489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutMeal.swift; path = DataModel/NutMeal.swift; sourceTree = "<group>"; };
 		489FDE511E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Hashtag +CoreDataProperties.swift"; sourceTree = "<group>"; };
 		489FDE521E833D47000C4AC5 /* Hashtag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hashtag.swift; sourceTree = "<group>"; };
 		48A150551C18E0A200ED800B /* Nutshell_v4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v4.xcdatamodel; sourceTree = "<group>"; };
 		48A7925D1C4C0B39008D2244 /* Transitions between scenes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Transitions between scenes.txt"; path = "Manual Test Cases/Transitions between scenes.txt"; sourceTree = "<group>"; };
 		48A839021C596A1D00FAFE1B /* GraphCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCollectionCell.swift; path = GraphView/GraphCollectionCell.swift; sourceTree = "<group>"; };
-		48B127931BC4445500061483 /* NutEventItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutEventItem.swift; path = DataModel/NutEventItem.swift; sourceTree = "<group>"; };
-		48B127961BC4447100061483 /* NutWorkout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NutWorkout.swift; path = DataModel/NutWorkout.swift; sourceTree = "<group>"; };
 		48B127B01BC4466E00061483 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseUtils.swift; path = "Utilities and Extensions/DatabaseUtils.swift"; sourceTree = "<group>"; };
 		48BA05AF1E53911500212486 /* GraphCursorLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCursorLayer.swift; path = GraphView/GraphCursorLayer.swift; sourceTree = "<group>"; };
 		48BA1EA41C18865100C1B71C /* Data Model.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Data Model.txt"; path = "Manual Test Cases/Data Model.txt"; sourceTree = "<group>"; };
@@ -397,12 +383,10 @@
 		48C491561C38804700F34630 /* GraphingUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphingUtils.swift; path = GraphView/GraphingUtils.swift; sourceTree = "<group>"; };
 		48C491581C38B1AF00F34630 /* TidepoolGraphLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolGraphLayout.swift; path = GraphView/TidepoolGraphLayout.swift; sourceTree = "<group>"; };
 		48C491601C3B2D1A00F34630 /* CbgGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CbgGraphData.swift; path = "GraphView/Tidepool Graph/CbgGraphData.swift"; sourceTree = "<group>"; };
-		48C491631C3B2DEE00F34630 /* MealGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MealGraphData.swift; path = "GraphView/Tidepool Graph/MealGraphData.swift"; sourceTree = "<group>"; };
 		48C491641C3B2DEE00F34630 /* SmbgGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SmbgGraphData.swift; path = "GraphView/Tidepool Graph/SmbgGraphData.swift"; sourceTree = "<group>"; };
 		48C491671C3B47A000F34630 /* BasalGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasalGraphData.swift; path = "GraphView/Tidepool Graph/BasalGraphData.swift"; sourceTree = "<group>"; };
 		48C491691C3B59B400F34630 /* BoluslGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BoluslGraphData.swift; path = "GraphView/Tidepool Graph/BoluslGraphData.swift"; sourceTree = "<group>"; };
 		48C4916B1C3B771200F34630 /* WizardGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WizardGraphData.swift; path = "GraphView/Tidepool Graph/WizardGraphData.swift"; sourceTree = "<group>"; };
-		48C4916D1C3B816700F34630 /* WorkoutGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WorkoutGraphData.swift; path = "GraphView/Tidepool Graph/WorkoutGraphData.swift"; sourceTree = "<group>"; };
 		48D056961BDFDD20009D1591 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48D62CFF1CA457FE00E063A4 /* Nutshell_v6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v6.xcdatamodel; sourceTree = "<group>"; };
 		48DA110C1CE3C77100B99C35 /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDateExtension.swift; path = "Utilities and Extensions/NSDateExtension.swift"; sourceTree = "<group>"; };
@@ -714,10 +698,6 @@
 				48867CF01E80A98C00C4E79D /* BlipPatient.swift */,
 				482ECC841C94BBA5002A015D /* HealthKit */,
 				0334C9E51BA8DDFC00013096 /* CoreData */,
-				486F5E291BA0DC6700BA2A57 /* NutEvent.swift */,
-				48B127931BC4445500061483 /* NutEventItem.swift */,
-				489F3C4F1BB0AE1D00C95FDC /* NutMeal.swift */,
-				48B127961BC4447100061483 /* NutWorkout.swift */,
 				48FB1E4C1C17C38500C89F8E /* TidepoolMobileDataController.swift */,
 				4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */,
 			);
@@ -791,8 +771,6 @@
 			children = (
 				482BB3611E8D5FCA008CD02A /* NoteGraphData.swift */,
 				487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */,
-				48C4916D1C3B816700F34630 /* WorkoutGraphData.swift */,
-				48C491631C3B2DEE00F34630 /* MealGraphData.swift */,
 				48C4916B1C3B771200F34630 /* WizardGraphData.swift */,
 				48C491691C3B59B400F34630 /* BoluslGraphData.swift */,
 				48C491671C3B47A000F34630 /* BasalGraphData.swift */,
@@ -1112,7 +1090,6 @@
 				482971F91EB2655C00E171DF /* TPIntrinsicSizeUIView.swift in Sources */,
 				0334CA431BA8DDFC00013096 /* Food+CoreDataProperties.swift in Sources */,
 				0334CA8B1BA8DDFC00013096 /* User.swift in Sources */,
-				48B127971BC4447100061483 /* NutWorkout.swift in Sources */,
 				486F5E3A1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
 				0334CA2E1BA8DDFC00013096 /* Calibration.swift in Sources */,
 				4872118D1E8D818300BAD5CE /* SwitchProfileTableViewController.swift in Sources */,
@@ -1134,7 +1111,6 @@
 				48ED0D341BADAF8B009D0D6F /* GraphUIView.swift in Sources */,
 				482BB3621E8D5FCA008CD02A /* NoteGraphData.swift in Sources */,
 				0334CA761BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift in Sources */,
-				489F3C501BB0AE1D00C95FDC /* NutMeal.swift in Sources */,
 				488E44E21E831CC100A17AD7 /* HashtagsScrollView.swift in Sources */,
 				4859FCB91B9A4DE4000C1269 /* AppDelegate.swift in Sources */,
 				0334CA8E1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift in Sources */,
@@ -1147,7 +1123,6 @@
 				0334CA4F1BA8DDFC00013096 /* GrabBag.swift in Sources */,
 				48C491661C3B2DEE00F34630 /* SmbgGraphData.swift in Sources */,
 				482ECC831C94BB9D002A015D /* HealthKitManager.swift in Sources */,
-				48B127941BC4445500061483 /* NutEventItem.swift in Sources */,
 				0334CA521BA8DDFC00013096 /* Note+CoreDataProperties.swift in Sources */,
 				0334CA401BA8DDFC00013096 /* DeviceMetadata.swift in Sources */,
 				489FDE531E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift in Sources */,
@@ -1157,7 +1132,6 @@
 				48867CF71E81A4AD00C4E79D /* BlipUser.swift in Sources */,
 				4837CC6B1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift in Sources */,
 				4841BB6E1EC6326E007FBCEB /* TPConstants.swift in Sources */,
-				486F5E2B1BA0DC6700BA2A57 /* NutEvent.swift in Sources */,
 				0334CA161BA8DDFC00013096 /* Activity.swift in Sources */,
 				483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */,
 				4892996B1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift in Sources */,
@@ -1188,7 +1162,6 @@
 				486F5E241BA0DC1000BA2A57 /* APIConnect.swift in Sources */,
 				48103E971C1DE4CC0055C27A /* ENSideMenuNavigationController.swift in Sources */,
 				485420291BC44D290020CFE1 /* EventItem+CoreDataProperties.swift in Sources */,
-				48C491651C3B2DEE00F34630 /* MealGraphData.swift in Sources */,
 				48501BF01C1FC5EC00A7ADA8 /* EventListViewController.swift in Sources */,
 				48C491611C3B2D1A00F34630 /* CbgGraphData.swift in Sources */,
 				4874E7931EBA966D00A3EBFA /* EditCommentViewController.swift in Sources */,
@@ -1210,7 +1183,6 @@
 				48867CFC1E81E32500C4E79D /* NoteListTableViewCell.swift in Sources */,
 				48EC25781EA9526A00607F85 /* NoteListAddCommentCell.swift in Sources */,
 				482ECC861C94BC47002A015D /* LogFormatter.swift in Sources */,
-				48C4916E1C3B816700F34630 /* WorkoutGraphData.swift in Sources */,
 				48C491531C38750900F34630 /* TidepoolGraphView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1227,7 +1199,6 @@
 				0334CA1A1BA8DDFC00013096 /* Alarm+CoreDataProperties.swift in Sources */,
 				0334CA141BA8DDFC00013096 /* Activity+CoreDataProperties.swift in Sources */,
 				485420221BC44D290020CFE1 /* Workout+CoreDataProperties.swift in Sources */,
-				4814FEBE1BB0D7DD00F66379 /* NutMeal.swift in Sources */,
 				486F5E251BA0DC1000BA2A57 /* APIConnect.swift in Sources */,
 				0334CA3B1BA8DDFC00013096 /* ContinuousGlucose.swift in Sources */,
 				0334CA441BA8DDFC00013096 /* Food+CoreDataProperties.swift in Sources */,
@@ -1239,7 +1210,6 @@
 				489299691CB42917001F24D6 /* HealthKitConfiguration.swift in Sources */,
 				4854202A1BC44D290020CFE1 /* EventItem+CoreDataProperties.swift in Sources */,
 				0334CA7D1BA8DDFC00013096 /* Upload+CoreDataProperties.swift in Sources */,
-				48B127951BC4445800061483 /* NutEventItem.swift in Sources */,
 				0334CA261BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */,
 				0334CA861BA8DDFC00013096 /* UrineKetone.swift in Sources */,
 				0334CA591BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,
@@ -1253,7 +1223,6 @@
 				0334CA1D1BA8DDFC00013096 /* Alarm.swift in Sources */,
 				0334CA201BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */,
 				0334CA471BA8DDFC00013096 /* Food.swift in Sources */,
-				48B127981BC4447100061483 /* NutWorkout.swift in Sources */,
 				4859FCD11B9A4DE5000C1269 /* TidepoolMobileTests.swift in Sources */,
 				0334CA801BA8DDFC00013096 /* Upload.swift in Sources */,
 				486F5E3B1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
@@ -1271,7 +1240,6 @@
 				0334CA711BA8DDFC00013096 /* Status+CoreDataProperties.swift in Sources */,
 				0334CA921BA8DDFC00013096 /* Wizard.swift in Sources */,
 				48DF9B9B1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */,
-				48EC32301BA7BDD700A75103 /* NutEvent.swift in Sources */,
 				48DDD30A1BA76D11007365FE /* TidepoolMobileStyles.swift in Sources */,
 				0334CA3E1BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift in Sources */,
 				0334CA771BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift in Sources */,
