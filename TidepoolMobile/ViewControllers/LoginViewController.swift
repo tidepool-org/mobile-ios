@@ -197,7 +197,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
             }
         } else {
             DDLogError("login failed! Error: " + result.error.debugDescription)
-            var errorText = unknownError
+            var errorText = "Check your Internet connection!"
             if let statusCode = statusCode {
                 if statusCode == 401 {
                     errorText = NSLocalizedString("loginErrUserOrPassword", comment: "Wrong email or password!")
