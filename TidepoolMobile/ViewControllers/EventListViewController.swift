@@ -250,18 +250,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // change the world!
         dataController.currentViewedUser = newUser
         self.title = newUser.fullName ?? ""
-        sortedNotes = []
-        filteredNotes = []
-        filterString = ""
-        tableView.reloadData()
-        refresh()
+        refreshTable()
     }
     
     // Sort notes chronologically
     func sortNotesAndReload() {
         sortedNotes.sort(by: {$0.note.timestamp.timeIntervalSinceNow > $1.note.timestamp.timeIntervalSinceNow})
         updateFilteredAndReload()
-        tableView.reloadData()
      }
 
     func indexPathForNoteId(_ noteId: String) -> IndexPath? {
@@ -335,6 +330,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         for note in notes {
             self.sortedNotes.append(NoteInEventListTable(note: note, opened: false, comments: []))
         }
+        // Note: Important to reload table as backing array has changed!
         sortNotesAndReload()
     }
     
@@ -484,18 +480,21 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     
     func refreshControlHandler() {
         APIConnector.connector().trackMetric("Swiped down to refresh")
-        refresh()
+        refreshTable()
     }
     
-    func refresh() {
+    func refreshTable() {
         DDLogVerbose("trace)")
+        clearTable()
+        loadNotes()
+    }
 
-        if (!loadingNotes) {
+    func clearTable() {
         sortedNotes = []
         filteredNotes = []
         filterString = ""
-            loadNotes()
-        }
+        // Note: important to reload here after clearing out sortedNotes!
+        tableView.reloadData()
     }
 
     //
