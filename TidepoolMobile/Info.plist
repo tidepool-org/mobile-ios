@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.9.1</string>
+	<string>1.9.2</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -26,8 +26,6 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>Nutshell uses the camera when you want to associate an existing photo with a meal.</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Tidepool reads Dexcom glucose data from HealthKit so you can view that data in Tidepool apps and other apps that connect to your Tidepool account.</string>
 	<key>NSHealthUpdateUsageDescription</key>
