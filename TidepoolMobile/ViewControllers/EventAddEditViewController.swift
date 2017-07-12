@@ -480,9 +480,6 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
             self.editedNote.messagetext = self.messageBox.text
             self.editedNote.timestamp = self.datePicker.date
             
-            // Identify hashtags
-            saveNewHashTags(self.editedNote)
-            
             // End editing and close the datePicker
             self.view.endEditing(true)
             self.closeDatePicker()
@@ -502,9 +499,6 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
             self.note.timestamp = self.datePicker.date
             self.note.userid = self.note.user!.userid
             
-            // Identify hashtags
-            saveNewHashTags(self.note)
-            
             // End editing and close the datePicker
             self.view.endEditing(true)
             self.closeDatePicker()
@@ -512,38 +506,6 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
             // close the VC, passing along new note...
             self.newNote = note
             self.performSegue(withIdentifier: "unwindToDoneAddNote", sender: self)
-        }
-    }
-    
-    private func saveNewHashTags(_ note: BlipNote) {
-        // Identify hashtags
-        let separators = CharacterSet(charactersIn: " \n\t")
-        let words = note.messagetext.components(separatedBy: separators)
-        
-        for word in words {
-            if (word.hasPrefix("#")) {
-                // hashtag found!
-                // algorithm to determine length of hashtag without symbols or punctuation (common practice)
-                var charsInHashtag: Int = 0
-                let symbols = CharacterSet.symbols
-                let punctuation = CharacterSet.punctuationCharacters
-                for char in word.unicodeScalars {
-                    if (char == "#" && charsInHashtag == 0) {
-                        charsInHashtag += 1
-                        continue
-                    }
-                    if (!punctuation.contains(UnicodeScalar(char.value)!) && !symbols.contains(UnicodeScalar(char.value)!)) {
-                        charsInHashtag += 1
-                    } else {
-                        break
-                    }
-                }
-                
-                let newword = (word as NSString).substring(to: charsInHashtag)
-                
-                // Save the hashtag in CoreData
-                self.hashtagsScrollView.hashtagsView.handleHashtagCoreData(newword)
-            }
         }
     }
     

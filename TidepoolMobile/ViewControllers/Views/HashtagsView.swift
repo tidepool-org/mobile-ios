@@ -20,9 +20,6 @@ import CocoaLumberjack
 
 class HashtagsView: UIView {
     
-    // Hashtags from CoreData
-    var hashtags = [NSManagedObject]()
-    
     // Vertical hashtag arrangement, and linear hashtag arrangement
     var verticalHashtagButtons: [[UIButton]] = []
     var hashtagButtons: [UIButton] = []
@@ -33,149 +30,8 @@ class HashtagsView: UIView {
     
     // Called to set up the view
     func configureHashtagsView() {
-        // Fetch the hashtags from core data, arrange them
-        self.fetchHashtags()
         self.configureHashtagButtons()
-        
         self.isUserInteractionEnabled = true
-    }
-    
-    // Save a hashtag in CoreDate
-    func handleHashtagCoreData(_ text: String) {
-        
-        // Get the mangagedContext
-        let managedContext = TidepoolMobileDataController.sharedInstance.mocForLocalEvents()!
-        
-        // Open a new fetch request for a Hashtag
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"Hashtag")
-        
-        // Execute the fetch from CoreData
-        do { let results =
-            try managedContext.fetch(fetchRequest) as? [NSManagedObject]
-            // keep track of whether or not the hashtag in question was fount
-            var found = false
-            
-            for result in results! {
-                // Check each result
-                if (result.value(forKey: "text") as! String == text) {
-                    // Fount it!
-                    found = true
-                    
-                    // Increment the number of times the hashtag has been used
-                    let usages = (result.value(forKey: "usages") as! Int) + 1
-                    result.setValue(usages, forKey: "usages")
-                    
-                    // Attempt to save the hashtag
-                    var errorTwo: NSError?
-                    do {
-                        try managedContext.save()
-                    } catch let error as NSError {
-                        errorTwo = error
-                        DDLogError("Couldn't increase number of usages for hashtag \(text): \(String(describing: errorTwo)), \(String(describing: errorTwo?.userInfo))")
-                    }
-                    
-                    break
-                }
-            }
-            
-            // If the hashtag was never found
-            if (!found) {
-                // Store a new hashtag!
-                
-                // Initialize the new entity
-                let entity =  NSEntityDescription.entity(forEntityName: "Hashtag",
-                    in:
-                    managedContext)
-                
-                // Let it be a hashtag in the managedContext
-                let hashtag = NSManagedObject(entity: entity!,
-                    insertInto:managedContext)
-                
-                // Set the text and number of times it has been used (1)
-                hashtag.setValue(text, forKey: "text")
-                hashtag.setValue(1, forKey: "usages")
-                
-                // Save the hashtag
-                var errorTwo: NSError?
-                do {
-                    try managedContext.save()
-                } catch let error as NSError {
-                    errorTwo = error
-                    DDLogError("Could not save new hashtag \(text): \(String(describing: errorTwo)), \(String(describing: errorTwo?.userInfo))")
-                }
-            }
-        } catch let error as NSError {
-            DDLogError("Could not fetch hashtags to handle hashtag \(text): \(error), \(error.userInfo)")
-        }
-    }
-    
-    // Get the hashtags for use!
-    func fetchHashtags() {
-        
-        // Get the managedContext
-        let managedContext = TidepoolMobileDataController.sharedInstance.mocForLocalEvents()!
-        
-        // Open a new fetch request
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName:"Hashtag")
-        
-        // Sort based upon usages
-        let sortDescriptor = NSSortDescriptor(key: "usages", ascending: false)
-        fetchRequest.sortDescriptors = [sortDescriptor]
-        
-        do {
-            // Execute the fetch
-            let results =
-            try managedContext.fetch(fetchRequest) as? [NSManagedObject]
-            // Let hashtags be the results
-            self.hashtags = results!
-        } catch let error as NSError {
-            DDLogError("Could not fetch hashtags: \(error), \(error.userInfo)")
-        }
-        
-        // If it didn't find any hashtags (first time using app)
-        // Get and set the default set
-        if (self.hashtags.count == 0) {
-            self.getAndSetDefaultHashtags()
-        }
-    }
-    
-    // Only called if there are no hashtags saved in CoreData
-    func getAndSetDefaultHashtags() {
-        // For now, the defaults are predefined here
-        // Eventually, fetch from the Tidepool platform
-        let defaults = ["#exercise", "#meal", "#sitechange", "#sensorchange", "#juicebox", "#devicesetting"]
-        
-        // Get the managedContext
-        let managedContext = TidepoolMobileDataController.sharedInstance.mocForLocalEvents()!
-        
-        // For each default hashtag...
-        for text in defaults {
-            
-            // Create an entity for use
-            let entity =  NSEntityDescription.entity(forEntityName: "Hashtag",
-                in:
-                managedContext)
-            
-            // Let that entity be a hashtag NSManagedObject
-            let hashtag = NSManagedObject(entity: entity!,
-                insertInto:managedContext)
-            
-            // Set the text and usages (1)
-            hashtag.setValue(text, forKey: "text")
-            hashtag.setValue(1, forKey: "usages")
-            
-            // Save the hashtag in CoreData
-            var error: NSError?
-            do {
-                try managedContext.save()
-            } catch let error1 as NSError {
-                error = error1
-                DDLogError("Could not save default hashtag \(text): \(String(describing: error)), \(String(describing: error?.userInfo))")
-            }
-            
-            // Append the hashtag to the list of hashtags
-            hashtags.append(hashtag)
-        }
     }
     
     // Create and configure the hashtag buttons
@@ -192,12 +48,11 @@ class HashtagsView: UIView {
         
         // Keep track of the current row that is being worked on
         var buttonRow: [UIButton] = []
-        
+        let hashCount = HashTagManager.sharedInstance.sortedHashTags.count
+
         // Infinite loop!!!
         while (true) {
-            
-            // jk
-            if (index >= hashtags.count) {
+            if (index >= hashCount) {
                 // Break if there are no more hashtags
                 break
             }
@@ -296,7 +151,6 @@ class HashtagsView: UIView {
                 
                 col += 1
             }
-            
             row += 1
         }
     }
@@ -322,8 +176,7 @@ class HashtagsView: UIView {
     // Returns the button that was created
     func configureHashtagButton(_ index: Int) -> UIButton {
         let hashtagButton = UIButton(frame: CGRect.zero)
-        let hashtag = hashtags[index]
-        let hashtagText = hashtag.value(forKey: "text") as! String
+        let hashtagText =  HashTagManager.sharedInstance.sortedHashTags[index].tag
         hashtagButton.setAttributedTitle(NSAttributedString(string: hashtagText,
             attributes:[NSForegroundColorAttributeName: blackishColor, NSFontAttributeName: mediumRegularFont]), for: UIControlState())
         hashtagButton.frame.size.height = hashtagHeight

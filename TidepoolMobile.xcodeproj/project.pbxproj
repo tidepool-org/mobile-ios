@@ -192,6 +192,8 @@
 		48A839031C596A1D00FAFE1B /* GraphCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A839021C596A1D00FAFE1B /* GraphCollectionCell.swift */; };
 		48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
+		48B9D21C1F15809500ECB5CB /* HashTagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B9D21B1F15809500ECB5CB /* HashTagManager.swift */; };
+		48B9D21D1F1580A600ECB5CB /* HashTagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B9D21B1F15809500ECB5CB /* HashTagManager.swift */; };
 		48BA05B01E53911500212486 /* GraphCursorLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BA05AF1E53911500212486 /* GraphCursorLayer.swift */; };
 		48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */; };
 		48C423AD1BDB19810023D75E /* TidepoolMobileUIViewWithHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AC1BDB19810023D75E /* TidepoolMobileUIViewWithHighlight.swift */; };
@@ -373,6 +375,7 @@
 		48A7925D1C4C0B39008D2244 /* Transitions between scenes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Transitions between scenes.txt"; path = "Manual Test Cases/Transitions between scenes.txt"; sourceTree = "<group>"; };
 		48A839021C596A1D00FAFE1B /* GraphCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCollectionCell.swift; path = GraphView/GraphCollectionCell.swift; sourceTree = "<group>"; };
 		48B127B01BC4466E00061483 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseUtils.swift; path = "Utilities and Extensions/DatabaseUtils.swift"; sourceTree = "<group>"; };
+		48B9D21B1F15809500ECB5CB /* HashTagManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HashTagManager.swift; path = DataModel/HashTagManager.swift; sourceTree = "<group>"; };
 		48BA05AF1E53911500212486 /* GraphCursorLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCursorLayer.swift; path = GraphView/GraphCursorLayer.swift; sourceTree = "<group>"; };
 		48BA1EA41C18865100C1B71C /* Data Model.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Data Model.txt"; path = "Manual Test Cases/Data Model.txt"; sourceTree = "<group>"; };
 		48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
@@ -700,6 +703,7 @@
 				0334C9E51BA8DDFC00013096 /* CoreData */,
 				48FB1E4C1C17C38500C89F8E /* TidepoolMobileDataController.swift */,
 				4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */,
+				48B9D21B1F15809500ECB5CB /* HashTagManager.swift */,
 			);
 			name = DataModel;
 			sourceTree = "<group>";
@@ -1139,6 +1143,7 @@
 				0334CA1C1BA8DDFC00013096 /* Alarm.swift in Sources */,
 				48BA05B01E53911500212486 /* GraphCursorLayer.swift in Sources */,
 				0334CA911BA8DDFC00013096 /* Wizard.swift in Sources */,
+				48B9D21C1F15809500ECB5CB /* HashTagManager.swift in Sources */,
 				48C491551C38798E00F34630 /* GraphLayout.swift in Sources */,
 				482BB3601E8C942E008CD02A /* TidepoolMobileUISwitch.swift in Sources */,
 				489299681CB4290D001F24D6 /* HealthKitConfiguration.swift in Sources */,
@@ -1195,6 +1200,7 @@
 				0334CA171BA8DDFC00013096 /* Activity.swift in Sources */,
 				0334CA5F1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift in Sources */,
 				0334CA651BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift in Sources */,
+				48B9D21D1F1580A600ECB5CB /* HashTagManager.swift in Sources */,
 				484365CA1C9DB3970046A2C5 /* HealthKitDataPusher.swift in Sources */,
 				0334CA1A1BA8DDFC00013096 /* Alarm+CoreDataProperties.swift in Sources */,
 				0334CA141BA8DDFC00013096 /* Activity+CoreDataProperties.swift in Sources */,

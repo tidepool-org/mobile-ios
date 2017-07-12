@@ -46,7 +46,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         var comments: [BlipNote] = []
     }
 
-
     // All notes, kept sorted chronologically. Second tuple is non-nil count of comments if note is "open".
     fileprivate var sortedNotes: [NoteInEventListTable] = []
     fileprivate var filteredNotes: [NoteInEventListTable] = []
@@ -250,12 +249,14 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // change the world!
         dataController.currentViewedUser = newUser
         self.title = newUser.fullName ?? ""
+        HashTagManager.sharedInstance.resetTags()
         refreshTable()
     }
     
     // Sort notes chronologically
     func sortNotesAndReload() {
         sortedNotes.sort(by: {$0.note.timestamp.timeIntervalSinceNow > $1.note.timestamp.timeIntervalSinceNow})
+        
         updateFilteredAndReload()
      }
 
@@ -330,6 +331,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         for note in notes {
             self.sortedNotes.append(NoteInEventListTable(note: note, opened: false, comments: []))
         }
+        // When notes are loaded, generate hashtag cache... could delay until needed (in add note).
+        HashTagManager.sharedInstance.reloadTagsFromNotes(notes)
         // Note: Important to reload table as backing array has changed!
         sortNotesAndReload()
     }
@@ -399,6 +402,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             }
          } else {
             // added a note...
+            // keep hashtags up-to-date
+            HashTagManager.sharedInstance.updateTagsForNote(oldNote: nil, newNote: note)
             self.sortedNotes.insert(NoteInEventListTable(note: note, opened: false, comments: []), at: 0)
             // sort the notes, reload notes table
             sortNotesAndReload()
@@ -408,6 +413,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func deleteComplete(_ deletedNote: BlipNote) {
         NSLog("NoteAPIWatcher.deleteComplete")
         if deletedNote.parentmessage == nil {
+            // keep hashtags up-to-date
+            HashTagManager.sharedInstance.updateTagsForNote(oldNote: deletedNote, newNote: nil)
             if let deletedNotePath = self.indexPathForNoteId(deletedNote.id) {
                 self.sortedNotes.remove(at: deletedNotePath.section)
                 sortNotesAndReload()
@@ -434,6 +441,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func updateComplete(_ originalNote: BlipNote, editedNote: BlipNote) {
         NSLog("NoteAPIWatcher.updateComplete")
         NSLog("Updating note \(originalNote.id) with text \(editedNote.messagetext)")
+        if originalNote.parentmessage == nil {
+            // keep hashtags up-to-date
+            HashTagManager.sharedInstance.updateTagsForNote(oldNote: originalNote, newNote: editedNote)
+        }
         originalNote.messagetext = editedNote.messagetext
         let timeChanged = originalNote.timestamp != editedNote.timestamp
         originalNote.timestamp = editedNote.timestamp
