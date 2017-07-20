@@ -150,7 +150,7 @@
 		4859FCC11B9A4DE4000C1269 /* Nutshell.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */; };
 		4859FCC31B9A4DE4000C1269 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4859FCC21B9A4DE4000C1269 /* Assets.xcassets */; };
 		4859FCC61B9A4DE4000C1269 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4859FCC41B9A4DE4000C1269 /* LaunchScreen.storyboard */; };
-		4859FCD11B9A4DE5000C1269 /* TidepoolMobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCD01B9A4DE5000C1269 /* TidepoolMobileTests.swift */; };
+		4859FCD11B9A4DE5000C1269 /* apiConnectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCD01B9A4DE5000C1269 /* apiConnectTests.swift */; };
 		486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */; };
 		486894F51E831F89008B0732 /* UrchinConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486894F41E831F89008B0732 /* UrchinConstants.swift */; };
 		486894F61E83288C008B0732 /* EventAddEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EDC2C51BD6B403003049D9 /* EventAddEditViewController.swift */; };
@@ -194,6 +194,9 @@
 		48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B9D21C1F15809500ECB5CB /* HashTagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B9D21B1F15809500ECB5CB /* HashTagManager.swift */; };
 		48B9D21D1F1580A600ECB5CB /* HashTagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B9D21B1F15809500ECB5CB /* HashTagManager.swift */; };
+		48B9D2221F16A2FA00ECB5CB /* dateFormatterExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B9D21F1F16A2FA00ECB5CB /* dateFormatterExtensionTests.swift */; };
+		48B9D2231F16A2FA00ECB5CB /* hashtagBolderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B9D2201F16A2FA00ECB5CB /* hashtagBolderTests.swift */; };
+		48B9D2241F16A36100ECB5CB /* HashtagBolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488E44DE1E831CC100A17AD7 /* HashtagBolder.swift */; };
 		48BA05B01E53911500212486 /* GraphCursorLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48BA05AF1E53911500212486 /* GraphCursorLayer.swift */; };
 		48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */; };
 		48C423AD1BDB19810023D75E /* TidepoolMobileUIViewWithHighlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48C423AC1BDB19810023D75E /* TidepoolMobileUIViewWithHighlight.swift */; };
@@ -339,7 +342,7 @@
 		4859FCC51B9A4DE4000C1269 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4859FCC71B9A4DE4000C1269 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4859FCCC1B9A4DE5000C1269 /* TidepoolMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TidepoolMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4859FCD01B9A4DE5000C1269 /* TidepoolMobileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TidepoolMobileTests.swift; sourceTree = "<group>"; };
+		4859FCD01B9A4DE5000C1269 /* apiConnectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = apiConnectTests.swift; sourceTree = "<group>"; };
 		4859FCD21B9A4DE5000C1269 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		485DC8861ECF4A2E00338394 /* Tidepool_v1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Tidepool_v1.xcdatamodel; sourceTree = "<group>"; };
 		486894F41E831F89008B0732 /* UrchinConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UrchinConstants.swift; path = Resources/UrchinConstants.swift; sourceTree = "<group>"; };
@@ -376,6 +379,8 @@
 		48A839021C596A1D00FAFE1B /* GraphCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCollectionCell.swift; path = GraphView/GraphCollectionCell.swift; sourceTree = "<group>"; };
 		48B127B01BC4466E00061483 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseUtils.swift; path = "Utilities and Extensions/DatabaseUtils.swift"; sourceTree = "<group>"; };
 		48B9D21B1F15809500ECB5CB /* HashTagManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HashTagManager.swift; path = DataModel/HashTagManager.swift; sourceTree = "<group>"; };
+		48B9D21F1F16A2FA00ECB5CB /* dateFormatterExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = dateFormatterExtensionTests.swift; sourceTree = "<group>"; };
+		48B9D2201F16A2FA00ECB5CB /* hashtagBolderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hashtagBolderTests.swift; sourceTree = "<group>"; };
 		48BA05AF1E53911500212486 /* GraphCursorLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCursorLayer.swift; path = GraphView/GraphCursorLayer.swift; sourceTree = "<group>"; };
 		48BA1EA41C18865100C1B71C /* Data Model.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = "Data Model.txt"; path = "Manual Test Cases/Data Model.txt"; sourceTree = "<group>"; };
 		48C423AA1BDB18D50023D75E /* BaseUITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewCell.swift; path = ViewControllers/BaseUITableViewCell.swift; sourceTree = "<group>"; };
@@ -632,8 +637,10 @@
 		4859FCCF1B9A4DE5000C1269 /* TidepoolMobileTests */ = {
 			isa = PBXGroup;
 			children = (
+				4859FCD01B9A4DE5000C1269 /* apiConnectTests.swift */,
+				48B9D21F1F16A2FA00ECB5CB /* dateFormatterExtensionTests.swift */,
+				48B9D2201F16A2FA00ECB5CB /* hashtagBolderTests.swift */,
 				48BA1EA31C1885DE00C1B71C /* Manual Test Cases */,
-				4859FCD01B9A4DE5000C1269 /* TidepoolMobileTests.swift */,
 				4859FCD21B9A4DE5000C1269 /* Info.plist */,
 			);
 			path = TidepoolMobileTests;
@@ -1217,10 +1224,12 @@
 				4854202A1BC44D290020CFE1 /* EventItem+CoreDataProperties.swift in Sources */,
 				0334CA7D1BA8DDFC00013096 /* Upload+CoreDataProperties.swift in Sources */,
 				0334CA261BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */,
+				48B9D2231F16A2FA00ECB5CB /* hashtagBolderTests.swift in Sources */,
 				0334CA861BA8DDFC00013096 /* UrineKetone.swift in Sources */,
 				0334CA591BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,
 				48EC32321BA7BDDE00A75103 /* TidepoolMobileUtils.swift in Sources */,
 				48867CFA1E81A4BF00C4E79D /* BlipPatient.swift in Sources */,
+				48B9D2221F16A2FA00ECB5CB /* dateFormatterExtensionTests.swift in Sources */,
 				485420261BC44D290020CFE1 /* Meal+CoreDataProperties.swift in Sources */,
 				0334CA381BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift in Sources */,
 				48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */,
@@ -1229,7 +1238,7 @@
 				0334CA1D1BA8DDFC00013096 /* Alarm.swift in Sources */,
 				0334CA201BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */,
 				0334CA471BA8DDFC00013096 /* Food.swift in Sources */,
-				4859FCD11B9A4DE5000C1269 /* TidepoolMobileTests.swift in Sources */,
+				4859FCD11B9A4DE5000C1269 /* apiConnectTests.swift in Sources */,
 				0334CA801BA8DDFC00013096 /* Upload.swift in Sources */,
 				486F5E3B1BA0E53600BA2A57 /* UIDateFormatterExtension.swift in Sources */,
 				0334CA5C1BA8DDFC00013096 /* Prime.swift in Sources */,
@@ -1257,6 +1266,7 @@
 				0334CA2C1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */,
 				0334CA8F1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift in Sources */,
 				0334CA891BA8DDFC00013096 /* User+CoreDataProperties.swift in Sources */,
+				48B9D2241F16A36100ECB5CB /* HashtagBolder.swift in Sources */,
 				48FB1E4E1C17C38600C89F8E /* TidepoolMobileDataController.swift in Sources */,
 				4854202C1BC44D290020CFE1 /* EventItem.swift in Sources */,
 				0334CA321BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,

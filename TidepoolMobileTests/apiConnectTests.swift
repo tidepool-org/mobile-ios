@@ -18,13 +18,18 @@ import XCTest
 import Alamofire
 import SwiftyJSON
 
-class TidepoolMobileTests: XCTestCase {
+class APIConnectTests: XCTestCase, NoteAPIWatcher, UsersFetchAPIWatcher  {
 
+    
+    // TODO: add tests for update and delete note, and no note return
+    // TODO: use login if already logged in!
+    
+    
     // Initial API connection and note used throughout testing
     var userid: String = ""
-    var email: String = "testaccount+duffliteA@tidepool.org"
-    var pass: String = "testaccount+duffliteA"
-    var server: String = "Production"
+    var email: String = "ethan+urchintests@tidepool.org"
+    var pass: String = "urchintests"
+    var server: String = "Development"
 
     override func setUp() {
         super.setUp()
@@ -39,24 +44,77 @@ class TidepoolMobileTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
+
     
-    func login(_ username: String, password: String, remember: Bool, completion: @escaping (Result<User>) -> (Void)) {
+    //
+    // MARK: - NoteAPIWatcher delegate
+    //
+    func loadingNotes(_ loading: Bool) {}
+    func endRefresh() {}
+    
+    
+    private var addNotesExpectation: XCTestExpectation?
+    func addNotes(_ notes: [BlipNote]) {
+        if let addNotesExpectation = addNotesExpectation {
+            if notes.count > 0 {
+                addNotesExpectation.fulfill()
+            } else {
+                XCTFail("No notes!")
+            }
+        }
+    }
+    
+    func addComments(_ notes: [BlipNote], messageId: String) {}
+    
+    private var postCompleteExpectation: XCTestExpectation?
+    func postComplete(_ note: BlipNote) {
+        if let postCompleteExpectation = postCompleteExpectation {
+            postCompleteExpectation.fulfill()
+        }
+    }
+    
+    func deleteComplete(_ note: BlipNote) {}
+    func updateComplete(_ originalNote: BlipNote, editedNote: BlipNote) {}
+    
+    //
+    // MARK: - UsersFetchAPIWatcher delegate
+    //
+
+    private var viewableUsersExpectation: XCTestExpectation?
+    func viewableUsers(_ userIds: [String]) {
+        if let viewableUsersExpectation = viewableUsersExpectation {
+            if userIds.count > 0 {
+                viewableUsersExpectation.fulfill()
+            } else {
+                XCTFail("No viewable users!")
+            }
+        }
+    }
+    
+    //
+    // MARK: - Helper functions
+    //
+    
+    func login(_ username: String, password: String, completion: @escaping (Result<User>) -> (Void)) {
         APIConnector.connector().login(email,
-            password: pass) { (result:(Alamofire.Result<User>)) -> (Void) in
+            password: pass) { (result:Alamofire.Result<User>, statusCode: Int?) -> (Void) in
                 print("Login result: \(result)")
                 completion(result)
         }
     }
     
-    func test01LoginOut() {
+    //
+    // MARK: - Tests
+    //
+    
+    func test01LoginSuccess() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         let expectation = self.expectation(description: "Login successful")
         if email == "test username goes here!" {
             XCTFail("Fatal error: please edit TidepoolMobileTests.swift and add a test account!")
         }
-        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
-                print("Login result: \(result)")
+        self.login(email, password: pass) { (result:(Alamofire.Result<User>)) -> (Void) in
                 if ( result.isSuccess ) {
                     if let user=result.value {
                         NSLog("login success: \(user)")
@@ -82,7 +140,7 @@ class TidepoolMobileTests: XCTestCase {
     func test02FetchUserProfile() {
         let expectation = self.expectation(description: "User profile fetch successful")
         
-        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
+        self.login(email, password: pass) { (result:(Alamofire.Result<User>)) -> (Void) in
             print("Login for profile result: \(result)")
 
              APIConnector.connector().fetchProfile(TidepoolMobileDataController.sharedInstance.currentUserId!) { (result:Alamofire.Result<JSON>) -> (Void) in
@@ -107,9 +165,9 @@ class TidepoolMobileTests: XCTestCase {
     }
 
     func test03FetchUserData() {
+        // Note: tests updateEvents, which is not currently used!
         let expectation = self.expectation(description: "User profile fetch successful")
-        
-        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
+        self.login(email, password: pass) { (result:(Alamofire.Result<User>)) -> (Void) in
             print("Login for fetch user data result: \(result)")
             
             // Look at events in July 2015...
@@ -141,11 +199,11 @@ class TidepoolMobileTests: XCTestCase {
     }
     
     func test04FetchUserData2() {
+        // Note: tests updateEventsForTimeRange!
         let expectation = self.expectation(description: "User profile fetch successful")
         
-        self.login(email, password: pass, remember: false) { (result:(Alamofire.Result<User>)) -> (Void) in
+        self.login(email, password: pass) { (result:(Alamofire.Result<User>)) -> (Void) in
             print("Login for fetch user data result: \(result)")
-            
             // Look at events in July 2015...
             let startDate = TidepoolMobileUtils.dateFromJSON("2015-07-01T00:00:00.000Z")!
             let endDate = TidepoolMobileUtils.dateFromJSON("2015-07-31T23:59:59.000Z")!
@@ -172,6 +230,52 @@ class TidepoolMobileTests: XCTestCase {
                 }
             }
         }
+        // Wait 5.0 seconds until expectation has been fulfilled. If not, fail.
+        waitForExpectations(timeout: 5.0, handler: nil)
+    }
+
+    func test05GetViewableUsers() {
+        
+        // First, perform login request and verify that login was successful.
+        test01LoginSuccess()
+        
+        // Expectation to be fulfilled once request returns with correct response, fulfilled in viewableUsers callback.
+        viewableUsersExpectation = self.expectation(description: "Viewable users request")
+        APIConnector.connector().getAllViewableUsers(self)
+        
+        // Wait 5.0 seconds until expectation has been fulfilled. If not, fail.
+        waitForExpectations(timeout: 5.0, handler: nil)
+    }
+    
+    func test06PostANote() {
+        
+        // First, perform login request and verify that login was successful.
+        test01LoginSuccess()
+        
+        // Expectation to be fulfilled once request returns with correct response, fulfilled in addNotes callback.
+        postCompleteExpectation = self.expectation(description: "Post note request")
+        let userId = TidepoolMobileDataController.sharedInstance.currentUserId!
+        let note = BlipNote()
+        note.userid = userId
+        note.groupid = userId
+        note.timestamp = Date()
+        note.messagetext = "New note added from test."
+        APIConnector.connector().doPostWithNote(self, note: note)
+        
+        // Wait 5.0 seconds until expectation has been fulfilled. If not, fail.
+        waitForExpectations(timeout: 5.0, handler: nil)
+    }
+
+    func test07GetAllNotes() {
+        
+        // First, perform login request and verify that login was successful.
+        test01LoginSuccess()
+        
+        // Expectation to be fulfilled once request returns with correct response, fulfilled in addNotes callback.
+        addNotesExpectation = self.expectation(description: "Get notes request")
+        let userId = TidepoolMobileDataController.sharedInstance.currentUserId!
+        APIConnector.connector().getNotesForUserInDateRange(self, userid: userId, start: nil, end: nil)
+        
         // Wait 5.0 seconds until expectation has been fulfilled. If not, fail.
         waitForExpectations(timeout: 5.0, handler: nil)
     }

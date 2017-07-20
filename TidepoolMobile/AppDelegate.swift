@@ -42,12 +42,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let logger = BugseeLogger.sharedInstance() as? DDLogger
         DDLog.add(logger)
 
+        /* Disable for final store build in case there are any timing differences...
         // Only enable Bugsee for TestFlight betas and debug builds, not for iTunes App Store releases (at least for now)
         let isRunningTestFlightBeta = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
         if isRunningTestFlightBeta {
             Bugsee.launch(token:"d3170420-a6f0-4db3-970c-c4c571e5d31a")
         }
-
+         */
         DDLogVerbose("trace")
 
         // Override point for customization after application launch.

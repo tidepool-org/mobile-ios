@@ -167,6 +167,7 @@ class DatabaseUtils {
         }
     }
     
+    // Note: currently only called by test software
     func updateEvents(_ moc: NSManagedObjectContext, eventsJSON: JSON) {
         // We get back an array of JSON objects. Iterate through the array and insert the objects into the database, removing any existing objects we may have.
         
