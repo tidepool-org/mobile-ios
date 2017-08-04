@@ -173,13 +173,16 @@ class APIConnector {
     
     /// Logs in the user and obtains the session token for the session (stored internally)
     func login(_ username: String, password: String, completion: @escaping (Result<User>, Int?) -> (Void)) {
+        // Similar to email inputs in HTML5, trim the email (username) string of whitespace
+        let trimmedUsername = username.trimmingCharacters(in: .whitespacesAndNewlines)
+        
         // Clear in case it was set while logged out...
         self.lastNetworkError = nil
         // Set our endpoint for login
         let endpoint = "auth/login"
         
         // Create the authorization string (user:pass base-64 encoded)
-        let base64LoginString = NSString(format: "%@:%@", username, password)
+        let base64LoginString = NSString(format: "%@:%@", trimmedUsername, password)
             .data(using: String.Encoding.utf8.rawValue)?
             .base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
         
@@ -198,7 +201,7 @@ class APIConnector {
                 // Create the User object
                 // TODO: Should this call be made in TidepoolMobileDataController?
                 let moc = TidepoolMobileDataController.sharedInstance.mocForCurrentUser()
-                if let user = User.fromJSON(json, email: username, moc: moc) {
+                if let user = User.fromJSON(json, email: trimmedUsername, moc: moc) {
                     TidepoolMobileDataController.sharedInstance.loginUser(user)
                     APIConnector.connector().trackMetric("Logged In")
                     completion(Result.success(user), nil)
