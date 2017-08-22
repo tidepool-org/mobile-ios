@@ -24,6 +24,11 @@ typedef enum : NSUInteger {
     BugseeSeverityBlocker = 5
 } BugseeSeverityLevel;
 
+typedef enum : NSUInteger {
+    BugseeFrameRateLow = 1,
+    BugseeFrameRateHigh = 2
+} BugseeFrameRate;
+
 /**
  *  BugseeStyleBasedOnStatusBarStyle setup style by current status bar style
  *  BugseeStyleDark when you have UIStatusBarStyleLightContent and BugseeStyleDefault when you have UIStatusBarStyleDefault
@@ -38,6 +43,7 @@ extern NSString *const _Nonnull BugseeShakeToReportKey,
                 *const _Nonnull BugseeScreenshotToReportKey,
                 *const _Nonnull BugseeCrashReportKey,
                 *const _Nonnull BugseeKillDetectionKey,
+                *const _Nonnull BugseeFrameRateKey,
                 *const _Nonnull BugseeMaxFrameRateKey,
                 *const _Nonnull BugseeMinFrameRateKey,
                 *const _Nonnull BugseeMonitorNetworkKey,
@@ -45,6 +51,9 @@ extern NSString *const _Nonnull BugseeShakeToReportKey,
                 *const _Nonnull BugseeVideoEnabledKey,
                 *const _Nonnull BugseeStyleKey,
                 *const _Nonnull BugseeEnableMachExceptionsKey,
+                *const _Nonnull BugseeReportPrioritySelectorKey,
+                *const _Nonnull BugseeDefaultCrashPriorityKey,
+                *const _Nonnull BugseeDefaultBugPriorityKey,
                 *const _Nonnull BugseeCaptureLogsKey
 ;
 

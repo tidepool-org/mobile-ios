@@ -31,6 +31,7 @@ typedef enum : NSUInteger {
 @interface BugseeLogger : NSObject 
 
 + (instancetype) sharedInstance;
++(void) install;
 
 @property (nonatomic, strong) id logFormatter;
 @property (copy) BugseeRCTLogFunction reactNativeLogger;

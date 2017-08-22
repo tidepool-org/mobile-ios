@@ -39,6 +39,13 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
  */
 -(nonnull NSArray<BugseeAttachment* >*) bugseeAttachmentsForReport:(nonnull BugseeReport *)report;
 
+/**
+ *  Use this delegate to hanle new feedback messages in your app.
+ *
+ *  @param messages  text messages in array
+ */
+-(void) bugsee:(nonnull Bugsee *)bugsee didReceiveNewFeedback:(nonnull NSArray<NSString *> *)messages;
+
 @end
 
 @interface Bugsee : NSObject
@@ -107,6 +114,11 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
 + (void) logEx:(nonnull NSDictionary*)entry;
 
 /**
+ *  Show feedback controller for contacting the user
+ */
++ (void) showFeedbackController;
+
+/**
  *  Use this method to filter network events and their properties.
  *
  *  Always call removeNetworkEventFilter method if you deallocate
@@ -115,6 +127,9 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
  *  @param filterBlock pass BugseeNetworkEvent into this block
  */
 + (void) setNetworkEventFilter:(nonnull BugseeNetworkEventFilterBlock)filterBlock;
+
++ (void) setDefaultFeedbackGreeting:(nonnull NSString *)greeting;
+
 /**
  *  Remove exists filter that was setup with setNetworkEventFilter: method
  */
@@ -128,7 +143,7 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
  *  @param email string with email
  *  @return YES on success, NO on falure
  */
-+ (BOOL) setEmail:(nonnull NSString *)email NS_SWIFT_NAME(setEmail(_:));;
++ (BOOL) setEmail:(nonnull NSString *)email NS_SWIFT_NAME(setEmail(_:));
 
 /**
  *  Get reporter's email
@@ -145,6 +160,38 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
 + (BOOL) clearEmail;
 
 /**
+ *  Set user attribute by ket
+ *
+ *  @param key string with unique key to set
+ *  @param value object to set (may be string, number of boolean)
+ *  @return YES on success, NO on falure
+ */
++ (BOOL) setAttribute:(NSString*_Nonnull)key withValue:(id _Nonnull )value NS_SWIFT_NAME(setAttribute(_:value:));
+
+/**
+ *  Get specific user attribute by key
+ *
+ *  @param key string with unique key to get
+ *  @return object or nil on failure
+ */
++ (id _Nullable ) getAttribute:(NSString*_Nonnull)key NS_SWIFT_NAME(getAttribute(_:));
+
+/**
+ *  Clear specific user attribute by key
+ *
+ *  @param key string with unique key to clear
+ *  @return NSString* with email on success, or nil on failure
+ */
++ (BOOL) clearAttribute:(NSString*_Nonnull)key NS_SWIFT_NAME(clearAttribute(_:));
+
+/**
+ *  Clear all user attributes
+ *
+ *  @return YES on success, NO on falure
+ */
++ (BOOL) clearAllAttributes NS_SWIFT_NAME(clearAllAttribute());
+
+/**
  *  Hides your view on video same thing you can get from Bugsee+UIView category
  *  view.bugseeProtectedView
  *
@@ -154,6 +201,32 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
 + (void) setView:(nonnull UIView *)view asHidden:(BOOL) isHidden NS_SWIFT_NAME(setView(_:asHidden:));
 + (BOOL) isViewHidden:(nonnull UIView *) view NS_SWIFT_NAME(isViewHidden(_:));
 
+
++ (void) setDefaultCrashPriority:(BugseeSeverityLevel) level;
++ (void) setDefaultBugPriority:(BugseeSeverityLevel) level;
+
+/**
+ *  Hides your keyboard, actualy we make it automaticaly for private fields.
+ *
+ *  @param isHidden YES to hide keyboard, by default is NO
+ */
++ (void) hideKeyboard:(BOOL) isHidden;
+
+/**
+ *  Crash simulators.
+ */
++ (void) testExceptionCrash;
++ (void) testSignalCrash;
+
+/**
+ *  Log managed excetpions.
+ *  @param name     
+ *  @param reason
+ *  @param frames   Arrays of strings, string for each frame
+ *  @param type     "xamarin", "unity", "cordova"
+ *  @param handled  bool value
+ */
++ (void) logException:(nonnull NSString *)name reason:(nonnull NSString*)reason frames:(nonnull NSArray*)frames type:(nonnull NSString*)type handled:(BOOL)handled NS_SWIFT_NAME(logException(name:reason:frames:type:handled:));
 
 @end
 
