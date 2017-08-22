@@ -32,8 +32,9 @@ let appHealthKitConfiguration = TidepoolMobileHealthKitConfiguration()
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    // one shot, true until we go to foreground...
-    fileprivate var freshLaunch = true
+    fileprivate var didBecomeActiveAtLeastOnce = false
+    fileprivate var needSetUpForLogin = false
+    fileprivate var needSetUpForLoginSuccess = false
     // one shot, UI should put up dialog letting user know we are in test mode!
     static var testModeNotification = false
     
@@ -58,7 +59,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         // Set up the API connection
-        _ = APIConnector.connector().configure()
+        let api = APIConnector.connector().configure()
+        if api.sessionToken == nil {
+            NSLog("No token available, clear any data in case user did not log out normally")
+            api.logout() {
+                if self.didBecomeActiveAtLeastOnce {
+                    self.setupUIForLogin()
+                } else {
+                    self.needSetUpForLogin = true
+                }
+            }
+        } else {
+            NSLog("AppDelegate: attempting to refresh token...")
+            api.refreshToken() { succeeded -> (Void) in
+                if succeeded {
+                    let dataController = TidepoolMobileDataController.sharedInstance
+                    dataController.checkRestoreCurrentViewedUser {
+                        dataController.configureHealthKitInterface()
+                        if self.didBecomeActiveAtLeastOnce {
+                            self.setupUIForLoginSuccess()
+                        } else {
+                            self.needSetUpForLoginSuccess = true
+                        }
+                    }
+                } else {
+                    NSLog("Refresh token failed, need to log in normally")
+                    api.logout() {
+                        if self.didBecomeActiveAtLeastOnce {
+                            self.setupUIForLogin()
+                        } else {
+                            self.needSetUpForLogin = true
+                        }
+                    }
+                }
+            }
+        }
         
         NSLog("did finish launching")
         return true
@@ -183,7 +218,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillEnterForeground(_ application: UIApplication) {
         NSLog("TidepoolMobile applicationWillEnterForeground")
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-        if !freshLaunch {
+        if didBecomeActiveAtLeastOnce {
             HealthKitDataUploader.sharedInstance.ensureUploadSession(background: false)
             checkConnection()
         }
@@ -222,21 +257,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Note: We attempt token refresh each time the app is launched; it might make more sense to do it periodically when app is brought to foreground, or just let the service control token timeout.
         NSLog("TidepoolMobile applicationDidBecomeActive")
         
-        if freshLaunch {
-            freshLaunch = false
+        if !didBecomeActiveAtLeastOnce {
+            didBecomeActiveAtLeastOnce = true
 
+            if needSetUpForLoginSuccess {
+                self.setupUIForLoginSuccess()
+            } else if needSetUpForLogin {
+                self.setupUIForLogin()
+            }
+    
             // First time we're made active after launch, switch upload sessions to be foreground
             HealthKitDataUploader.sharedInstance.ensureUploadSession(background: false)
-            
-            let api = APIConnector.connector()
-            if api.sessionToken == nil {
-                NSLog("No token available, clear any data in case user did not log out normally")
-                api.logout() {
-                    self.setupUIForLogin()
-                }
-                return
-            }
-            
+    
             // TODO: only needed if we want to start working offline, but we will need to cache notes to make this usable...
 //            if !api.isConnectedToNetwork() {
 //                // Set to refresh next time we come to foreground...
@@ -245,22 +277,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                self.setupUIForLoginSuccess()
 //                return
 //            }
-            
-            NSLog("AppDelegate: attempting to refresh token...")
-            api.refreshToken() { succeeded -> (Void) in
-                if succeeded {
-                    let dataController = TidepoolMobileDataController.sharedInstance
-                    dataController.checkRestoreCurrentViewedUser {
-                        dataController.configureHealthKitInterface()
-                        self.setupUIForLoginSuccess()
-                    }
-                } else {
-                    NSLog("Refresh token failed, need to log in normally")
-                    api.logout() {
-                        self.setupUIForLogin()
-                    }
-                }
-            }
         }
     }
 

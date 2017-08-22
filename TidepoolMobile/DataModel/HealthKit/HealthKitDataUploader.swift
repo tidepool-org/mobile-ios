@@ -213,8 +213,7 @@ class HealthKitDataUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegat
                 self.uploadSession!.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) -> Void in
                     DispatchQueue.main.async {
                         if uploadTasks.count == 0 {
-                            let sampleCount = UserDefaults.standard.integer(forKey: "bloodGlucoseCurrentSamplesToUploadCount")
-                            self.updateStats(sampleCount: sampleCount)
+                            self.updateStats()
                             self.readMore()
                         } else {
                             DDLogInfo("Resuming task: \(uploadTasks[0].taskIdentifier)")
@@ -545,10 +544,10 @@ class HealthKitDataUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegat
         for sample in sortedSamples {
             let sourceRevision = sample.sourceRevision
             let source = sourceRevision.source
-            if source.name.lowercased().range(of: "dexcom") == nil {
-                DDLogInfo("Ignoring non-Dexcom glucose data")
-                continue
-            }
+//            if source.name.lowercased().range(of: "dexcom") == nil { // TODO: my - 0 - don't check in like this
+//                DDLogInfo("Ignoring non-Dexcom glucose data")
+//                continue
+//            }
             
             filteredSamples.append(sample)
             if sample.startDate.compare(latestSampleTime) == .orderedDescending {
@@ -747,12 +746,18 @@ class HealthKitDataUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegat
         }
     }
 
-    fileprivate func updateStats(sampleCount: Int) {
+    fileprivate func updateStats() {
         DDLogVerbose("trace")
+
+        guard currentBatchUploadDict.count > 0 else {
+            DDLogVerbose("No need to update stats, no batch upload available")
+            return
+        }
+        
+        let sampleCount = UserDefaults.standard.integer(forKey: "bloodGlucoseCurrentSamplesToUploadCount")
+        totalUploadCountBloodGlucoseSamples += sampleCount
         
         DDLogInfo("Successfully uploaded \(sampleCount) samples.\n")
-
-        totalUploadCountBloodGlucoseSamples += sampleCount
 
         lastUploadTimeBloodGlucoseSamples = DateFormatter().dateFromISOString(currentBatchUploadDict["time"] as! String)!
         
