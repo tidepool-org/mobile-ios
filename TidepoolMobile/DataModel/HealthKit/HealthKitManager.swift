@@ -88,7 +88,6 @@ class HealthKitManager {
         
         if (isHealthDataAvailable) {
             healthStore!.requestAuthorization(toShare: writeTypes, read: readTypes) { (success, error) -> Void in
-                
                 if success {
                     if (shouldAuthorizeBloodGlucoseSampleReads) {
                         UserDefaults.standard.set(true, forKey: "authorizationRequestedForBloodGlucoseSamples");
@@ -297,7 +296,7 @@ class HealthKitManager {
         }
     }
     
-    func readBloodGlucoseSamplesFromAnchor(_ resultsHandler: @escaping ((NSError?, [HKSample]?, _ completion: @escaping (NSError?) -> (Void)) -> Void))
+    func readBloodGlucoseSamplesFromAnchor(limit: Int, resultsHandler: @escaping ((NSError?, [HKSample]?, HKQueryAnchor?) -> Void))
     {
         DDLogVerbose("trace")
         
@@ -316,27 +315,19 @@ class HealthKitManager {
         let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
             predicate: nil, // TODO: my - We should probably use a LIKE predicate with wildcard to have the query filter Dexcom samples rather than filtering results as we receive them
             anchor: queryAnchor,
-            limit: 288) { // Limit to 288 samples (about one day of samples at 5 minute intervals)
+            limit: limit) {
                 (query, newSamples, deletedSamples, newAnchor, error) -> Void in
 
                 if error != nil {
                     DDLogError("Error reading samples: \(String(describing: error))")
                 }
                 
-                resultsHandler((error as NSError?), newSamples) {
-                    (error: NSError?) in
-                    
-                    if error == nil && newAnchor != nil {
-                        let queryAnchorData = NSKeyedArchiver.archivedData(withRootObject: newAnchor!)
-                        UserDefaults.standard.set(queryAnchorData, forKey: "bloodGlucoseQueryAnchor")
-                        UserDefaults.standard.synchronize()
-                    }
-                }
+                resultsHandler((error as NSError?), newSamples, newAnchor)
         }
         healthStore?.execute(sampleQuery)
     }
     
-    func readBloodGlucoseSamples(startDate: Date, endDate: Date, limit: Int, resultsHandler: @escaping (((NSError?, [HKSample]?, _ completion: @escaping (NSError?) -> (Void)) -> Void)))
+    func readBloodGlucoseSamples(startDate: Date, endDate: Date, limit: Int, resultsHandler: @escaping (((NSError?, [HKSample]?, HKQueryAnchor?) -> Void)))
     {
         DDLogInfo("readBloodGlucoseSamples startDate: \(startDate), endDate: \(endDate), limit: \(limit)")
         
@@ -356,10 +347,7 @@ class HealthKitManager {
                 DDLogError("Error reading samples: \(String(describing: error))")
             }
             
-            resultsHandler(error as NSError?, newSamples) {
-                (error: NSError?) in
-                // Nothing to do
-            }
+            resultsHandler(error as NSError?, newSamples, nil)
         }
         healthStore?.execute(sampleQuery)
     }

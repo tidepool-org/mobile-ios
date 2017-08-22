@@ -38,7 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static var testModeNotification = false
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
         let logger = BugseeLogger.sharedInstance() as? DDLogger
         DDLog.add(logger)
 
@@ -177,12 +176,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSLog("TidepoolMobile applicationDidEnterBackground")
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        
+        HealthKitDataUploader.sharedInstance.ensureUploadSession(background: true)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         NSLog("TidepoolMobile applicationWillEnterForeground")
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         if !freshLaunch {
+            HealthKitDataUploader.sharedInstance.ensureUploadSession(background: false)
             checkConnection()
         }
     }
@@ -214,13 +216,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     fileprivate var refreshTokenNextActive: Bool = false
-
+    
     func applicationDidBecomeActive(_ application: UIApplication) {
-        // When app is launched, either go to login, or if we have a valid token, go to main UI after optionally refreshing the token. 
+        // When app is launched, either go to login, or if we have a valid token, go to main UI after optionally refreshing the token.
         // Note: We attempt token refresh each time the app is launched; it might make more sense to do it periodically when app is brought to foreground, or just let the service control token timeout.
         NSLog("TidepoolMobile applicationDidBecomeActive")
+        
         if freshLaunch {
             freshLaunch = false
+
+            // First time we're made active after launch, switch upload sessions to be foreground
+            HealthKitDataUploader.sharedInstance.ensureUploadSession(background: false)
+            
             let api = APIConnector.connector()
             if api.sessionToken == nil {
                 NSLog("No token available, clear any data in case user did not log out normally")
@@ -264,6 +271,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSLog("TidepoolMobile applicationWillTerminate")
     }
 
-
+    func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
+        if AppDelegate.testMode {
+            self.localNotifyMessage("TidepoolMobile is handling events for background url session: \(identifier)")
+        }
+        HealthKitDataUploader.sharedInstance.handleEventsForBackgroundURLSession(with: identifier, completionHandler: completionHandler)
+    }
 }
 

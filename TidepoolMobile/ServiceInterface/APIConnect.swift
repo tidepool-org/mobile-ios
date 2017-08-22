@@ -141,7 +141,7 @@ class APIConnector {
     
     /// Creator of APIConnector must call this function after init!
     func configure() -> APIConnector {
-        HealthKitDataUploader.sharedInstance.uploadHandler = self.doUpload
+        HealthKitDataUploader.sharedInstance.uploadHandler = self.blipUploadBloodGlocuseData
         self.baseUrl = URL(string: kServers[currentService!]!)!
         DDLogInfo("Using service: \(String(describing: self.baseUrl))")
         self.sessionToken = UserDefaults.standard.string(forKey: kSessionTokenDefaultKey)
@@ -869,67 +869,6 @@ class APIConnector {
         return true
     }
 
-    //
-    // MARK: - Blood glucose sample upload
-    //
-    
-    func doUpload(_ body: Data, completion: @escaping (_ error: NSError?, _ duplicateSampleCount: Int) -> (Void)) -> (Void) {
-        DDLogVerbose("trace")
-        
-        var error: NSError?
-        
-        defer {
-            if error != nil {
-                DDLogError("Upload failed: \(String(describing: error)), \(String(describing: error?.userInfo))")
-                
-                completion(error, 0)
-            }
-        }
-        
-        guard self.isConnectedToNetwork() else {
-            error = NSError(domain: "APIConnect-doUpload", code: -1, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, not connected to network"])
-            return
-        }
-        
-        guard let currentUserId = TidepoolMobileDataController.sharedInstance.currentUserId else {
-            error = NSError(domain: "APIConnect-doUpload", code: -2, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, no user is logged in"])
-            return
-        }
-
-        let urlExtension = "/data/" + currentUserId
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
-        let preRequest = { () -> Void in }
-        
-        let handleRequestCompletion = { (response: URLResponse!, data: Data!, requestError: NSError!) -> Void in
-            // TODO: Per this Trello card (https://trello.com/c/ixKq9mHM/102-ios-bg-uploader-when-updating-uploader-to-new-upload-service-api-consider-that-the-duplicate-item-indices-may-be-going-away), this dup item indices response may be going away in future version of upload service, so we may need to revisit this when we move to the upload service API.
-            var error = requestError
-            var duplicateSampleCount = 0
-            if error == nil {
-                if let httpResponse = response as? HTTPURLResponse {
-                    if data != nil {
-                        let statusCode = httpResponse.statusCode
-                        let duplicateItemIndices: NSArray? = (try? JSONSerialization.jsonObject(with: data!, options: [])) as? NSArray
-                        duplicateSampleCount = duplicateItemIndices?.count ?? 0
-                        
-                        if statusCode >= 400 && statusCode < 600 {
-                            let dataString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)! as String
-                            error = NSError(domain: "APIConnect-doUpload", code: -2, userInfo: [NSLocalizedDescriptionKey:"Upload failed with status code: \(statusCode), error message: \(dataString)"])
-                        }
-                    }
-                }
-            }
-            
-            if error != nil {
-                DDLogError("Upload failed: \(String(describing: error)), \(String(describing: error?.userInfo))")
-            }
-            
-            completion(error, duplicateSampleCount)
-        }
-
-        blipRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, subdomainRootOverride: "uploads", completion: handleRequestCompletion as (URLResponse?, Data?, NSError?) -> Void)
-    }
-
-
     func blipRequest(_ method: String, urlExtension: String, headerDict: [String: String], body: Data?, preRequest: () -> Void, subdomainRootOverride: String = "api", completion: @escaping (_ response: URLResponse?, _ data: Data?, _ error: NSError?) -> Void) {
         
         if (self.isConnectedToNetwork()) {
@@ -960,4 +899,45 @@ class APIConnector {
         }
     }
     
+    func blipUploadBloodGlocuseData(batchMetadataPostBodyURL: URL, batchSamplesPostBodyURL: URL) throws {
+        DDLogVerbose("trace")
+        
+        var error: NSError?
+        
+        defer {
+            if error != nil {
+                DDLogError("Upload failed: \(String(describing: error)), \(String(describing: error?.userInfo))")
+            }
+        }
+        
+        guard self.isConnectedToNetwork() else {
+            error = NSError(domain: "APIConnect-blipUploadBloodGlocuseData", code: -1, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, not connected to network"])
+            throw error!
+        }
+        
+        guard let currentUserId = TidepoolMobileDataController.sharedInstance.currentUserId else {
+            error = NSError(domain: "APIConnect-blipUploadBloodGlocuseData", code: -2, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, no user is logged in"])
+            throw error!
+        }
+        
+        guard sessionToken != nil else {
+            error = NSError(domain: "APIConnect-blipUploadBloodGlocuseData", code: -3, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, session token exists"])
+            throw error!
+        }
+        
+        let urlExtension = "/data/" + currentUserId
+        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
+        let baseURL = kServers[currentService!]!
+        let baseUrlWithSubdomainRootOverride = baseURL.replacingOccurrences(of: "api", with: "uploads")
+        var urlString = baseUrlWithSubdomainRootOverride + urlExtension
+        urlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+        let url = URL(string: urlString)
+        let request = NSMutableURLRequest(url: url!)
+        request.httpMethod = "POST"
+        for (field, value) in headerDict {
+            request.setValue(value, forHTTPHeaderField: field)
+        }
+
+        try HealthKitDataUploader.sharedInstance.startUploadSession(with: request as URLRequest, batchMetadataPostBodyURL: batchMetadataPostBodyURL, batchSamplesPostRequest: request as URLRequest, batchSamplesPostBodyURL: batchSamplesPostBodyURL)
+    }
  }
