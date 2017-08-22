@@ -544,10 +544,10 @@ class HealthKitDataUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegat
         for sample in sortedSamples {
             let sourceRevision = sample.sourceRevision
             let source = sourceRevision.source
-//            if source.name.lowercased().range(of: "dexcom") == nil { // TODO: my - 0 - don't check in like this
-//                DDLogInfo("Ignoring non-Dexcom glucose data")
-//                continue
-//            }
+            if source.name.lowercased().range(of: "dexcom") == nil {
+                DDLogInfo("Ignoring non-Dexcom glucose data")
+                continue
+            }
             
             filteredSamples.append(sample)
             if sample.startDate.compare(latestSampleTime) == .orderedDescending {
