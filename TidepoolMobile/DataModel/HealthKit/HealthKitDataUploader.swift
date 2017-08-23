@@ -493,10 +493,11 @@ class HealthKitDataUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegat
         }
 
         let postBody = try JSONSerialization.data(withJSONObject: samplesToUploadDictArray, options: JSONSerialization.WritingOptions.prettyPrinted)
-        if defaultDebugLevel != DDLogLevel.off {
-            let postBodyString = NSString(data: postBody, encoding: String.Encoding.utf8.rawValue)! as String
-            DDLogVerbose("Samples to upload: \(postBodyString)")
-        }
+        // Probably don't want to keep this logging in, so, don't check in. Too noisy in the logs
+        // if defaultDebugLevel != DDLogLevel.off {
+        //    let postBodyString = NSString(data: postBody, encoding: String.Encoding.utf8.rawValue)! as String
+        //    DDLogVerbose("Samples to upload: \(postBodyString)")
+        //}
         
         return try savePostBodyForUpload(body: postBody, identifier: "uploadBatchSamples.data")
     }
