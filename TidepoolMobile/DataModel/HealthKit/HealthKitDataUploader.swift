@@ -674,8 +674,7 @@ class HealthKitDataUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegat
         // the historical data upload phase.
         updateHistoricalSamplesDateRangeAsync()
         
-        let limit = 288 // 1 day of samples if 5 minute intervals
-        HealthKitManager.sharedInstance.readBloodGlucoseSamplesFromAnchor(limit: limit, resultsHandler: self.bloodGlucoseResultsHandler)
+        HealthKitManager.sharedInstance.readBloodGlucoseSamplesFromAnchor(limit: 1000, resultsHandler: self.bloodGlucoseResultsHandler)
     }
     
     fileprivate func startReadingMostRecentSamples() {
@@ -707,8 +706,7 @@ class HealthKitDataUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegat
         // we enter the historical samples phase
         updateHistoricalSamplesDateRangeAsync()
 
-        let limit = 288 // 1 day of samples if 5 minute intervals
-        HealthKitManager.sharedInstance.readBloodGlucoseSamples(startDate: bloodGlucoseUploadRecentStartDate, endDate: bloodGlucoseUploadRecentEndDate, limit: limit, resultsHandler: self.bloodGlucoseResultsHandler)
+        HealthKitManager.sharedInstance.readBloodGlucoseSamples(startDate: bloodGlucoseUploadRecentStartDate, endDate: bloodGlucoseUploadRecentEndDate, limit: 1000, resultsHandler: self.bloodGlucoseResultsHandler)
     }
     
     fileprivate func transitionToPhase(_ phase: Phases) {
