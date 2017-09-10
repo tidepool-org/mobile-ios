@@ -38,7 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // one shot, UI should put up dialog letting user know we are in test mode!
     static var testModeNotification = false
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
+    {
         let logger = BugseeLogger.sharedInstance() as? DDLogger
         DDLog.add(logger)
 
@@ -153,43 +154,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         NSLog("performFetchWithCompletionHandler")
         
-        // if device is locked, bail now because we can't read HealthKit data
-        if deviceIsLocked {
-            if AppDelegate.testMode {
-                self.localNotifyMessage("TidepoolMobile skipping background fetch: device is locked!")
+        if HealthKitBloodGlucosePusher.sharedInstance.enabled {
+            // if device is locked, bail now because we can't read HealthKit data
+            if deviceIsLocked {
+                if AppDelegate.testMode  {
+                    self.localNotifyMessage("TidepoolMobile skipping background fetch: device is locked!")
+                }
+                completionHandler(.failed)
+                return
             }
-            completionHandler(.failed)
-            return
-        }
-        
-        // next make sure we are logged in and have connectivity
-        let api = APIConnector.connector()
-        if api.sessionToken == nil {
-            NSLog("No token available, user will need to log in!")
-            // Use local notifications to test background activity...
-            if AppDelegate.testMode {
-                self.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: log in required!")
+            
+            // next make sure we are logged in and have connectivity
+            let api = APIConnector.connector()
+            if api.sessionToken == nil {
+                NSLog("No token available, user will need to log in!")
+                // Use local notifications to test background activity...
+                if AppDelegate.testMode {
+                    self.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: log in required!")
+                }
+                completionHandler(.failed)
+                return
             }
-            completionHandler(.failed)
-            return
-        }
-        
-        if !api.isConnectedToNetwork() {
-            NSLog("No network available!")
-            // Use local notifications to test background activity...
-            if AppDelegate.testMode {
-                self.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: no network available!")
+            
+            if !api.isConnectedToNetwork() {
+                NSLog("No network available!")
+                // Use local notifications to test background activity...
+                if AppDelegate.testMode {
+                    self.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: no network available!")
+                }
+                completionHandler(.failed)
+                return
             }
-            completionHandler(.failed)
-            return
-        }
-        // make sure HK interface is configured...
-        // Note: this can kick off a lot of activity!
-        // Note: configureHealthKitInterface is somewhat background-aware...
-        TidepoolMobileDataController.sharedInstance.configureHealthKitInterface()
-        // then call it...
-        HealthKitDataPusher.sharedInstance.backgroundFetch { (fetchResult) -> Void in
-            completionHandler(fetchResult)
+            
+            DispatchQueue.main.async {
+                // make sure HK interface is configured...
+                // Note: this can kick off a lot of activity!
+                // Note: configureHealthKitInterface is somewhat background-aware...
+                TidepoolMobileDataController.sharedInstance.configureHealthKitInterface()
+                // then call it...
+                HealthKitBloodGlucosePusher.sharedInstance.backgroundFetch { (fetchResult) -> Void in
+                    completionHandler(fetchResult)
+                }
+            }
+        } else {
+            completionHandler(.noData)
         }
     }
 
@@ -212,14 +220,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         
-        HealthKitDataUploader.sharedInstance.ensureUploadSession(background: true)
+        HealthKitBloodGlucoseUploadManager.sharedInstance.ensureUploadSession(background: true)
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         NSLog("TidepoolMobile applicationWillEnterForeground")
-        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
         if didBecomeActiveAtLeastOnce {
-            HealthKitDataUploader.sharedInstance.ensureUploadSession(background: false)
             checkConnection()
         }
     }
@@ -266,9 +272,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.setupUIForLogin()
             }
     
-            // First time we're made active after launch, switch upload sessions to be foreground
-            HealthKitDataUploader.sharedInstance.ensureUploadSession(background: false)
-    
             // TODO: only needed if we want to start working offline, but we will need to cache notes to make this usable...
 //            if !api.isConnectedToNetwork() {
 //                // Set to refresh next time we come to foreground...
@@ -278,6 +281,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                return
 //            }
         }
+        
+        HealthKitBloodGlucoseUploadManager.sharedInstance.ensureUploadSession(background: false)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -287,11 +292,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSLog("TidepoolMobile applicationWillTerminate")
     }
 
-    func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
+    func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void)
+    {
+        NSLog("TidepoolMobile handleEventsForBackgroundURLSession")
+        
         if AppDelegate.testMode {
-            self.localNotifyMessage("TidepoolMobile is handling events for background url session: \(identifier)")
+            self.localNotifyMessage("TidepoolMobile is handling events for a background url session: \(identifier)")
         }
-        HealthKitDataUploader.sharedInstance.handleEventsForBackgroundURLSession(with: identifier, completionHandler: completionHandler)
+         HealthKitBloodGlucoseUploadManager.sharedInstance.handleEventsForBackgroundURLSession(with: identifier, completionHandler: completionHandler)
     }
 }
-

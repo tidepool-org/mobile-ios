@@ -28,9 +28,9 @@ import CocoaLumberjack
 /// The latest Tidepool data is downloaded to the store cache (refreshing all Tidepool data for the last week). This has the added feature of keeping that cache up to date on a daily basis, so the user can refer to their recent data if they have no connectivity (except during the sync of course).
 ///
 /// HealthKit data is first fetched to compare to the Tidepool data, and data already in HealthKit is not pushed. If the user has only enabled write to HealthKit but not read,
-class HealthKitDataPusher: NSObject {
+class HealthKitBloodGlucosePusher: NSObject {
 
-    static let sharedInstance = HealthKitDataPusher()
+    static let sharedInstance = HealthKitBloodGlucosePusher()
 
     fileprivate override init() {
         DDLogVerbose("")
@@ -62,23 +62,30 @@ class HealthKitDataPusher: NSObject {
             return _lastPushToHK
         }
     }
+    
+    fileprivate(set) var enabled = false
+
     fileprivate var _lastPushToHK: Date?
     fileprivate let kLastPushOfDataToHKKey = "kLastPushOfDataToHKKey"
    
     /// Called by background fetch code in app delegate, and will kick off a sync if enough time has elapsed and currently HealthKit user is logged in.
     func backgroundFetch(_ completion: @escaping (UIBackgroundFetchResult) -> Void) {
-        downloadNewItemsForHealthKit() { (itemsDownloaded) -> Void in
-            var msg = "TidepoolMobile added \(itemsDownloaded) blood glucose readings from Tidepool to the Health app."
-            if itemsDownloaded == 1 {
-                msg = "TidepoolMobile added a blood glucose reading from Tidepool to the Health app."
+        if self.enabled {
+            downloadNewItemsForHealthKit() { (itemsDownloaded) -> Void in
+                var msg = "TidepoolMobile added \(itemsDownloaded) blood glucose readings from Tidepool to the Health app."
+                if itemsDownloaded == 1 {
+                    msg = "TidepoolMobile added a blood glucose reading from Tidepool to the Health app."
+                }
+                DDLogVerbose(msg)
+                if AppDelegate.testMode {
+                    let debugMsg = UILocalNotification()
+                    debugMsg.alertBody = msg
+                    UIApplication.shared.presentLocalNotificationNow(debugMsg)
+                }
+                completion(itemsDownloaded == 0 ? .noData : .newData)
             }
-            DDLogVerbose(msg)
-            if AppDelegate.testMode {
-                let debugMsg = UILocalNotification()
-                debugMsg.alertBody = msg
-                UIApplication.shared.presentLocalNotificationNow(debugMsg)
-            }
-            completion(itemsDownloaded == 0 ? .noData : .newData)
+        } else{
+            completion(.noData)
         }
     }
 
@@ -120,6 +127,8 @@ class HealthKitDataPusher: NSObject {
             itemsLastPushedCount = 0
             self.itemsToPush = [HKQuantitySample]()
         }
+        
+        self.enabled = enable
     }
     
     //

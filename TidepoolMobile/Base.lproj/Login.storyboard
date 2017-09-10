@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="4G7-DP-gat">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="4G7-DP-gat">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -74,7 +74,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iHd-Hc-UkR" userLabel="LoginContainerView" customClass="UIControl">
-                                        <rect key="frame" x="0.0" y="177" width="320" height="253.5"/>
+                                        <rect key="frame" x="0.0" y="176.5" width="320" height="253.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loginLogo" translatesAutoresizingMaskIntoConstraints="NO" id="kJo-Zi-pFB" userLabel="LogoView">
                                                 <rect key="frame" x="29.5" y="0.0" width="262" height="28.5"/>
@@ -84,7 +84,7 @@
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wrong email or password!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bJV-Wt-zLG" userLabel="errorFeedbackLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="38" y="36" width="244.5" height="23.5"/>
+                                                <rect key="frame" x="38" y="45" width="244.5" height="14.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -193,7 +193,7 @@
                                                 <rect key="frame" x="26" y="63.5" width="268.5" height="190"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are not currently connected to a network!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nYu-JU-kh6" userLabel="offlineMessage" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="25" y="69" width="218.5" height="52"/>
+                                                        <rect key="frame" x="25" y="74.5" width="218.5" height="41"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -244,10 +244,10 @@
                                         </connections>
                                     </view>
                                     <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x8Q-os-z1s" userLabel="ActivityContainer">
-                                        <rect key="frame" x="0.0" y="430.5" width="320" height="71.5"/>
+                                        <rect key="frame" x="0.0" y="430" width="320" height="72"/>
                                         <subviews>
                                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="75w-tb-LSw">
-                                                <rect key="frame" x="141.5" y="16.5" width="37" height="37"/>
+                                                <rect key="frame" x="141.5" y="17.5" width="37" height="37"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="37" id="XNE-ik-8GV"/>
                                                     <constraint firstAttribute="width" constant="37" id="cqz-tT-OCn"/>
@@ -277,7 +277,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Made possible by" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t0E-Qp-ol9" userLabel="madePossibleByLabel">
-                                <rect key="frame" x="40" y="503.5" width="142" height="23.5"/>
+                                <rect key="frame" x="40" y="503" width="142" height="23.5"/>
                                 <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="17"/>
                                 <color key="textColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -291,7 +291,7 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="software version" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5xp-AB-RVE" userLabel="versionLabel">
-                                <rect key="frame" x="95" y="531" width="131.5" height="23.5"/>
+                                <rect key="frame" x="94.5" y="531" width="131.5" height="23.5"/>
                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
                                 <color key="textColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>

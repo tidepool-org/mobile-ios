@@ -141,7 +141,7 @@ class APIConnector {
     
     /// Creator of APIConnector must call this function after init!
     func configure() -> APIConnector {
-        HealthKitDataUploader.sharedInstance.uploadHandler = self.blipUploadBloodGlocuseData
+        HealthKitBloodGlucoseUploadManager.sharedInstance.makeBloodGlucoseDataUploadRequestHandler = self.blipMakeBloodGlucoseDataUploadRequest
         self.baseUrl = URL(string: kServers[currentService!]!)!
         DDLogInfo("Using service: \(String(describing: self.baseUrl))")
         self.sessionToken = UserDefaults.standard.string(forKey: kSessionTokenDefaultKey)
@@ -899,7 +899,7 @@ class APIConnector {
         }
     }
     
-    func blipUploadBloodGlocuseData(batchMetadataPostBodyURL: URL, batchSamplesPostBodyURL: URL) throws {
+    func blipMakeBloodGlucoseDataUploadRequest() throws -> URLRequest {
         DDLogVerbose("trace")
         
         var error: NSError?
@@ -911,17 +911,17 @@ class APIConnector {
         }
         
         guard self.isConnectedToNetwork() else {
-            error = NSError(domain: "APIConnect-blipUploadBloodGlocuseData", code: -1, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, not connected to network"])
+            error = NSError(domain: "APIConnect-blipMakeBloodGlucoseDataUploadRequest", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, not connected to network"])
             throw error!
         }
         
         guard let currentUserId = TidepoolMobileDataController.sharedInstance.currentUserId else {
-            error = NSError(domain: "APIConnect-blipUploadBloodGlocuseData", code: -2, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, no user is logged in"])
+            error = NSError(domain: "APIConnect-blipMakeBloodGlucoseDataUploadRequest", code: -2, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, no user is logged in"])
             throw error!
         }
         
         guard sessionToken != nil else {
-            error = NSError(domain: "APIConnect-blipUploadBloodGlocuseData", code: -3, userInfo: [NSLocalizedDescriptionKey:"Unable to upload, session token exists"])
+            error = NSError(domain: "APIConnect-blipMakeBloodGlucoseDataUploadRequest", code: -3, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, session token exists"])
             throw error!
         }
         
@@ -938,6 +938,6 @@ class APIConnector {
             request.setValue(value, forHTTPHeaderField: field)
         }
 
-        try HealthKitDataUploader.sharedInstance.startUploadSession(with: request as URLRequest, batchMetadataPostBodyURL: batchMetadataPostBodyURL, batchSamplesPostRequest: request as URLRequest, batchSamplesPostBodyURL: batchSamplesPostBodyURL)
+        return request as URLRequest
     }
  }

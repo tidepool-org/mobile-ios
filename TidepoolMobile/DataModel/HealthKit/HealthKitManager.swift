@@ -54,14 +54,14 @@ class HealthKitManager {
         
         defer {
             if authorizationError != nil {
-                DDLogInfo("authorization error: \(String(describing: authorizationError))")
+                DDLogError("authorization error: \(String(describing: authorizationError))")
                 
                 completion(authorizationSuccess, authorizationError)
             }
         }
         
         guard isHealthDataAvailable else {
-            authorizationError = NSError(domain: "HealthKitManager", code: -1, userInfo: [NSLocalizedDescriptionKey:"HealthKit is not available on this device"])
+            authorizationError = NSError(domain: "HealthKitManager", code: -1, userInfo: [NSLocalizedDescriptionKey: "HealthKit is not available on this device"])
             return
         }
         

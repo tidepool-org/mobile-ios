@@ -12,11 +12,6 @@ import CocoaLumberjack
 class HealthKitConfiguration
 {    
     // MARK: Access, availability, authorization
-    
-//    static let sharedInstance = HealthKitConfiguration()
-//    private init() {
-//        DDLogVerbose("trace")
-//    }
 
     fileprivate var currentUserId: String?
     fileprivate var isDSAUser: Bool?
@@ -67,13 +62,17 @@ class HealthKitConfiguration
     func turnOnInterface() {
         DDLogVerbose("trace")
 
-        HealthKitDataUploader.sharedInstance.startUploading(currentUserId: currentUserId)
+        if self.currentUserId != nil {
+            HealthKitBloodGlucoseUploadManager.sharedInstance.startUploading(currentUserId: self.currentUserId!)
+        } else {
+            DDLogInfo("No logged in user, unable to start uploading")
+        }
     }
 
     func turnOffInterface() {
         DDLogVerbose("trace")
 
-        HealthKitDataUploader.sharedInstance.stopUploading()
+        HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading()
     }
 
     //
@@ -106,8 +105,8 @@ class HealthKitConfiguration
             defaults.set(true, forKey:self.kHealthKitInterfaceEnabledKey)
             if !self.healthKitInterfaceEnabledForCurrentUser() {
                 if self.healthKitInterfaceConfiguredForOtherUser() {
-                    // switching healthkit users! reset anchors!
-                    HealthKitDataUploader.sharedInstance.resetHealthKitUploaderForNewUser()
+                    // Switching healthkit users, reset HealthKitBloodGlucoseUploadManager
+                    HealthKitBloodGlucoseUploadManager.sharedInstance.resetForOtherUser()
                 }
                 defaults.setValue(currentUserId!, forKey: kHealthKitInterfaceUserIdKey)
                 // may be nil...

@@ -1,0 +1,242 @@
+/*
+* Copyright (c) 2016, Tidepool Project
+*
+* This program is free software; you can redistribute it and/or modify it under
+* the terms of the associated License, which is identical to the BSD 2-Clause
+* License as published by the Open Source Initiative at opensource.org.
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+* FOR A PARTICULAR PURPOSE. See the License for more details.
+*
+* You should have received a copy of the License along with this program; if
+* not, you can obtain one from Tidepool Project at tidepool.org.
+*/
+
+import HealthKit
+import CocoaLumberjack
+import CryptoSwift
+
+class HealthKitBloodGlucoseUploadManager:
+        NSObject,
+        URLSessionDelegate,
+        URLSessionTaskDelegate,
+        HealthKitBloodGlucoseUploaderDelegate,
+        HealthKitBloodGlucoseUploadReaderDelegate
+{
+    static let sharedInstance = HealthKitBloodGlucoseUploadManager()
+    fileprivate override init() {
+        DDLogVerbose("trace")
+        
+        self.phase = HealthKitBloodGlucoseUploadPhase(currentUserId: "")
+        self.stats = HealthKitBloodGlucoseUploadStats(phase: phase)
+        self.reader = HealthKitBloodGlucoseUploadReader(phase: phase)
+        self.uploader = HealthKitBloodGlucoseUploader()
+        
+        super.init()
+
+        self.uploader.delegate = self
+        self.reader.delegate = self
+    }
+    
+    func resetForOtherUser() {
+        self.phase.resetForOtherUser()
+        self.stats.resetForOtherUser()
+        self.reader.resetForOtherUser()
+    }
+    
+    fileprivate(set) var isUploading = false
+    fileprivate(set) var phase: HealthKitBloodGlucoseUploadPhase
+    fileprivate(set) var stats: HealthKitBloodGlucoseUploadStats
+    
+    var makeBloodGlucoseDataUploadRequestHandler: (() throws -> URLRequest) = {
+        throw NSError(domain: "HealthKitBloodGlucoseUploadManager", code: -2, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, no user is logged in"])
+    }
+    
+    func startUploading(currentUserId: String) {
+        DDLogVerbose("trace")
+
+        guard HealthKitManager.sharedInstance.isHealthDataAvailable else {
+            DDLogError("Health data not available, unable to upload")
+            return
+        }
+        
+        self.isUploading = true
+        self.phase.currentUserId = currentUserId
+        
+        HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples()
+        HealthKitManager.sharedInstance.startObservingBloodGlucoseSamples(self.bloodGlucoseObservationHandler)
+
+        if !self.uploader.hasPendingUploadTasks() {
+            DDLogInfo("Start reading samples again after starting upload")
+            self.reader.startReading()
+        } else {
+            DDLogInfo("Don't start reading samples again after starting upload, we still have pending upload tasks")
+        }
+
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: nil))
+    }
+    
+    func stopUploading() {
+        DDLogVerbose("trace")
+        
+        guard self.isUploading else {
+            DDLogInfo("Not currently uploading, ignoring")
+            return
+        }
+
+        self.reader.stopReading()
+        self.uploader.cancelTasks()
+        
+        HealthKitManager.sharedInstance.disableBackgroundDeliveryWorkoutSamples()
+        HealthKitManager.sharedInstance.stopObservingBloodGlucoseSamples()
+        
+        self.isUploading = false
+        self.phase.currentUserId = ""
+
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: nil))
+    }
+    
+    // MARK: Upload session coordination (with UIApplicationDelegate)
+
+    func ensureUploadSession(background: Bool) {
+        DDLogVerbose("trace")
+        
+        self.uploader.ensureUploadSession(background: background)        
+    }
+    
+    func handleEventsForBackgroundURLSession(with identifier: String, completionHandler: @escaping () -> Void) {
+        DDLogVerbose("trace")
+
+        self.uploader.handleEventsForBackgroundURLSession(with: identifier, completionHandler: completionHandler)
+    }
+    
+    // MARK: Private
+
+    // NOTE: This is a query observer handler called from HealthKit, not on main thread
+    fileprivate func bloodGlucoseObservationHandler(_ error: NSError?) {
+        DDLogVerbose("trace")
+
+        DispatchQueue.main.async {
+            DDLogInfo("bloodGlucoseObservationHandler on main thread")
+
+            guard self.isUploading else {
+                DDLogInfo("Not currently uploading, ignoring")
+                return
+            }
+            
+            guard error == nil else {
+                return
+            }
+            
+            if !self.uploader.hasPendingUploadTasks() {
+                DDLogInfo("Start reading samples again after observing new samples")
+                self.reader.startReading()
+            } else {
+                DDLogInfo("Don't start reading samples again after observing new samples, we still have pending upload tasks")
+                
+                if let lastAttemptToReadWithPendingUploadTasks = UserDefaults.standard.object(forKey: "lastAttemptToReadWithPendingUploadTasks") as? Date {
+
+                    let timeAgoInMinutes = round(abs(Date().timeIntervalSince(lastAttemptToReadWithPendingUploadTasks))) * 60
+                    if timeAgoInMinutes > 10 {
+                        DDLogInfo("It's been more than 10 minutes since last atttempt to read, with pending upload tasks. Maybe there aren't any pending upload tasks? Just cancel any pending tasks (also resets pending state, so next time we can start reading again)")
+                        self.uploader.cancelTasks()
+                    }
+                }
+                
+                UserDefaults.standard.set(Date(), forKey: "lastAttemptToReadWithPendingUploadTasks")
+            }
+            
+            self.lastObservationTime = Date()
+        }
+    }
+    
+    // NOTE: This is called from a URLSession delegate, not on main thread
+    func bloodGlucoseUploader(uploader: HealthKitBloodGlucoseUploader, didCompleteUploadWithError error: Error?) {
+        DDLogVerbose("trace")
+        
+        DispatchQueue.main.async {
+            DDLogInfo("didCompleteUploadWithError on main thread")
+
+            if let error = error {
+                DDLogError("Upload session failed: \(String(describing: error)), stop reading")
+                self.reader.stopReading()
+            } else {
+                DDLogError("Upload session succeeded!")
+                self.stats.updateForSuccessfulUpload(lastSuccessfulUploadTime: Date())
+                self.reader.readMore()
+            }
+        }
+    }
+    
+    func bloodGlucoseUploaderDidCreateSession(uploader: HealthKitBloodGlucoseUploader) {
+        DDLogVerbose("trace")
+
+        if self.isUploading {
+            if !self.uploader.hasPendingUploadTasks() {
+                DDLogInfo("Start reading samples again after ensuring upload session")
+                self.reader.startReading()
+            } else {
+                DDLogInfo("Don't start reading samples again after ensuring upload session, we still have pending upload tasks")
+            }
+        }
+    }
+    
+    // NOTE: This is a query results handler called from HealthKit, not on main thread
+    func bloodGlucoseReader(reader: HealthKitBloodGlucoseUploadReader, didReadDataForUpload uploadData: HealthKitBloodGlucoseUploadData?, error: Error?)
+    {
+        DDLogVerbose("trace")
+        
+        if error != nil {
+            DispatchQueue.main.async {
+                DDLogInfo("readerResultsHandler on main thread")
+                
+                DDLogError("stop reading most recent samples, error: \(String(describing: error))")
+                self.reader.stopReading()
+            }
+        } else {
+            if let uploadData = uploadData {
+                self.handleResults(uploadData: uploadData)
+            } else {
+                self.handleNoResults()
+            }
+        }
+    }
+
+    // NOTE: This is a query results handler called from HealthKit, not on main thread
+    fileprivate func handleResults(uploadData: HealthKitBloodGlucoseUploadData) {
+        DDLogVerbose("trace")
+
+        do {
+            let request = try self.makeBloodGlucoseDataUploadRequestHandler()
+            DDLogInfo("Start next upload for \(uploadData.samples.count) samples")
+            self.stats.updateForUploadAttempt(sampleCount: uploadData.samples.count, uploadAttemptTime: Date(), latestSampleTime: uploadData.latestSampleTime)
+            try self.uploader.startUploadSessionTasks(with: request, data: uploadData)
+        } catch let error as NSError {
+            DDLogError("Failed to prepare upload, error: \(String(describing: error))")
+            self.reader.stopReading()
+        }
+    }
+
+    // NOTE: This is a query results handler called from HealthKit, not on main thread
+    fileprivate func handleNoResults() {
+        DDLogVerbose("trace")
+
+        DispatchQueue.main.async {
+            DDLogInfo("handleNoResults on main thread")
+            
+            if self.phase.currentPhase == .mostRecent {
+                self.reader.readMore()
+            } else {
+                self.reader.stopReading()
+                if self.phase.currentPhase == .historical {
+                    self.phase.transitionToPhase(.current)
+                }
+            }
+        }
+    }
+
+    fileprivate var reader: HealthKitBloodGlucoseUploadReader
+    fileprivate var uploader: HealthKitBloodGlucoseUploader
+    fileprivate var lastObservationTime = Date.distantPast
+}

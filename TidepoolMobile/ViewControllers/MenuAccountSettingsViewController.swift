@@ -50,7 +50,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         healthKitSwitch.onTintColor = Styles.brightBlueColor
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitDataUploader.Notifications.Updated), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.Updated), object: nil)
     }
 
     deinit {
@@ -220,30 +220,26 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     let healthKitUploadStatusDexcomDataDelayed3Hours: String = "Dexcom data from Health is delayed 3 hours"
 
     fileprivate func configureHealthStatusLines() {
-        let hkDataUploader = HealthKitDataUploader.sharedInstance
-        var phase = hkDataUploader.uploadPhaseBloodGlucoseSamples
+        let uploadManager = HealthKitBloodGlucoseUploadManager.sharedInstance
+        let phase = uploadManager.phase
+        let stats = uploadManager.stats
         
-        // if we haven't actually uploaded a first historical sample, act like we're still doing most recent samples...
-        if phase == .historicalSamples && hkDataUploader.totalDaysHistoricalBloodGlucoseSamples == 0 {
-            phase = .mostRecentSamples
-        }
-
-        switch phase {
-        case .mostRecentSamples:
+        switch phase.currentPhase {
+        case .mostRecent:
             healthStatusLine1.text = healthKitUploadStatusMostRecentSamples
             healthStatusLine2.text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
             healthStatusLine3.text = ""
-        case .historicalSamples:
+        case .historical:
             healthStatusLine1.text = healthKitUploadStatusUploadingCompleteHistory
             var healthKitUploadStatusDaysUploadedText = ""
-            if hkDataUploader.totalDaysHistoricalBloodGlucoseSamples > 0 {
-                healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, hkDataUploader.currentDayHistoricalBloodGlucoseSamples, hkDataUploader.totalDaysHistoricalBloodGlucoseSamples)
+            if phase.totalDaysHistorical > 0 {
+                healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, phase.totalDaysHistorical)
             }
             healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
             healthStatusLine3.text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
-        case .currentSamples:
-            if hkDataUploader.totalUploadCountBloodGlucoseSamples > 0 {
-                let lastUploadTimeAgoInWords = hkDataUploader.lastUploadTimeBloodGlucoseSamples.timeAgoInWords(Date())
+        case .current:
+            if uploadManager.stats.hasSuccessfullyUploaded {
+                let lastUploadTimeAgoInWords = stats.lastSuccessfulUploadTime.timeAgoInWords(Date())
                 healthStatusLine1.text = String(format: healthKitUploadStatusLastUploadTime, lastUploadTimeAgoInWords)
             } else {
                 healthStatusLine1.text = healthKitUploadStatusNoDataAvailableToUpload

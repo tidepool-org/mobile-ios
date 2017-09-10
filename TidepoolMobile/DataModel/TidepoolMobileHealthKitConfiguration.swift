@@ -27,14 +27,14 @@ class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
         super.turnOnInterface()
         // TODO: turn off workout data for now...
         //monitorForWorkoutData(true)
-        //HealthKitDataPusher.sharedInstance.enablePushToHealthKit(true)
+        //HealthKitBloodGlucosePusher.sharedInstance.enablePushToHealthKit(true)
     }
 
     override func turnOffInterface() {
         super.turnOffInterface()
         // TODO: turn off workout data for now...
         //monitorForWorkoutData(false)
-        //HealthKitDataPusher.sharedInstance.enablePushToHealthKit(false)
+        //HealthKitBloodGlucosePusher.sharedInstance.enablePushToHealthKit(false)
     }
 
     //
