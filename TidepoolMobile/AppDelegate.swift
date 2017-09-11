@@ -297,7 +297,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         NSLog("TidepoolMobile handleEventsForBackgroundURLSession")
         
         if AppDelegate.testMode {
-            self.localNotifyMessage("TidepoolMobile is handling events for a background url session: \(identifier)")
+            self.localNotifyMessage("Handle events for background session: \(identifier)")
         }
          HealthKitBloodGlucoseUploadManager.sharedInstance.handleEventsForBackgroundURLSession(with: identifier, completionHandler: completionHandler)
     }

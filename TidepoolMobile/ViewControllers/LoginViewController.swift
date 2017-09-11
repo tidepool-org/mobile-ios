@@ -323,13 +323,21 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
 //            Void in
 //            self.handleFindDateRangeBloodGlucoseSamples()
 //        }))
-        actionSheet.addAction(UIAlertAction(title: "Enable notifications of uploads", style: .default, handler: {
+        actionSheet.addAction(UIAlertAction(title: "Enable background upload notification", style: .default, handler: {
             Void in
-            self.handleEnableNotificationsForUploads()
+            self.handleEnableNotificationsForUploads(enable: true)
         }))
-        actionSheet.addAction(UIAlertAction(title: "Treat all blood glucose source types as Dexcom", style: .default, handler: {
+        actionSheet.addAction(UIAlertAction(title: "Disable background upload notification", style: .default, handler: {
             Void in
-            self.handleTreatAllBloodGlucoseSourceTypesAsDexcom()
+            self.handleEnableNotificationsForUploads(enable: false)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Treat all sources as Dexcom", style: .default, handler: {
+            Void in
+            self.handleTreatAllBloodGlucoseSourceTypesAsDexcom(treatAllAsDexcom: true)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Don't treat all sources as Dexcom", style: .default, handler: {
+            Void in
+            self.handleTreatAllBloodGlucoseSourceTypesAsDexcom(treatAllAsDexcom: true)
         }))
         actionSheet.addAction(UIAlertAction(title: "Email export of HealthKit blood glucose data", style: .default, handler: {
             Void in
@@ -456,14 +464,14 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         }
     }
     
-    func handleEnableNotificationsForUploads() {
-        AppDelegate.testMode = true
+    func handleEnableNotificationsForUploads(enable: Bool) {
+        AppDelegate.testMode = enable
         let notifySettings = UIUserNotificationSettings(types: .alert, categories: nil)
         UIApplication.shared.registerUserNotificationSettings(notifySettings)
     }
     
-    func handleTreatAllBloodGlucoseSourceTypesAsDexcom() {
-        UserDefaults.standard.set(true, forKey: "TreatAllBloodGlucoseSourceTypesAsDexcom");
+    func handleTreatAllBloodGlucoseSourceTypesAsDexcom(treatAllAsDexcom: Bool) {
+        UserDefaults.standard.set(treatAllAsDexcom, forKey: "TreatAllBloodGlucoseSourceTypesAsDexcom");
         UserDefaults.standard.synchronize()
     }
 

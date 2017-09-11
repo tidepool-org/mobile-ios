@@ -57,7 +57,13 @@ class HealthKitBloodGlucoseUploadPhase: NSObject {
     func transitionToPhase(_ newPhase: Phases) {
         DDLogVerbose("trace")
         
-        DDLogInfo("transitioning to phase: \(newPhase) from phase: \(self.currentPhase)")
+        let message = "Transitioning to phase: \(newPhase) from phase: \(self.currentPhase)"
+        DDLogInfo(message)
+        if AppDelegate.testMode {
+            let localNotificationMessage = UILocalNotification()
+            localNotificationMessage.alertBody = message
+            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+        }
         
         self.currentPhase = newPhase
         

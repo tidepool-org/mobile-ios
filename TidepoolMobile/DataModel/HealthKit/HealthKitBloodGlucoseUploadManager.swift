@@ -38,11 +38,11 @@ class HealthKitBloodGlucoseUploadManager:
         self.uploader.delegate = self
         self.reader.delegate = self
         
-        // Check uploader version, if it's changed, then we should reupload everything again. Increasing uploader version
+        // Check uploader version. If it's changed, then we should reupload everything again. Changing uploader version
         // shouldn't be done lightly, since reuploading lots of data on app upgrade is not ideal. It can be used, though,
         // to fix up 'stats' related to the upload status of the user's store of data, and also to fill gaps if there were
         // samples that were missed during read/upload with past uploader due to bugs.
-        let latestUploaderVersion = 5
+        let latestUploaderVersion = 6
         let lastExecutedUploaderVersion = UserDefaults.standard.integer(forKey: "lastExecutedUploaderVersion")
         var resetPersistentData = false
         if latestUploaderVersion != lastExecutedUploaderVersion {
@@ -146,17 +146,42 @@ class HealthKitBloodGlucoseUploadManager:
             }
             
             if !self.uploader.hasPendingUploadTasks() {
-                DDLogInfo("Start reading samples again after observing new samples")
-                self.reader.startReading()
+                var message = ""
+                if !self.reader.isReading {
+                    message = "Observed new samples written to HealthKit, read samples from current position and prepare upload"
+
+                    self.reader.startReading()
+                } else {
+                    message = "Observed new samples written to HealthKit, already reading samples"
+                }
+                DDLogInfo(message)
+                if AppDelegate.testMode {
+                    let localNotificationMessage = UILocalNotification()
+                    localNotificationMessage.alertBody = message
+                    UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+                }
             } else {
-                DDLogInfo("Don't start reading samples again after observing new samples, we still have pending upload tasks")
-                
                 if let lastAttemptToReadWithPendingUploadTasks = UserDefaults.standard.object(forKey: "lastAttemptToReadWithPendingUploadTasks") as? Date {
 
                     let timeAgoInMinutes = round(abs(Date().timeIntervalSince(lastAttemptToReadWithPendingUploadTasks))) * 60
                     if timeAgoInMinutes > 10 {
-                        DDLogInfo("It's been more than 10 minutes since last atttempt to read, with pending upload tasks. Maybe there aren't any pending upload tasks? Just cancel any pending tasks (also resets pending state, so next time we can start reading again)")
+                        let message = "Observed new samples written to HealthKit, with pending upload tasks. It's been more than 10 minutes since last atttempt to read, with pending upload tasks. Maybe there aren't any pending upload tasks? Just cancel any pending tasks and reset pending state, so next time we can start reading/uploading samples again"
+                        DDLogInfo(message)
+                        if AppDelegate.testMode {
+                            let localNotificationMessage = UILocalNotification()
+                            localNotificationMessage.alertBody = message
+                            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+                        }
+                        
                         self.uploader.cancelTasks()
+                    }
+                } else {
+                    let message = "Observed new samples written to HealthKit, with pending upload tasks. Don't read samples since we have pending upload tasks."
+                    DDLogInfo(message)
+                    if AppDelegate.testMode {
+                        let localNotificationMessage = UILocalNotification()
+                        localNotificationMessage.alertBody = message
+                        UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
                     }
                 }
                 
@@ -175,7 +200,14 @@ class HealthKitBloodGlucoseUploadManager:
             DDLogInfo("didCompleteUploadWithError on main thread")
 
             if let error = error {
-                DDLogError("Upload session failed: \(String(describing: error)), stop reading")
+                let message = "Upload batch failed, stop reading, error: \(String(describing: error))"
+                DDLogError(message)                
+                if AppDelegate.testMode {
+                    let localNotificationMessage = UILocalNotification()
+                    localNotificationMessage.alertBody = message
+                    UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+                }
+
                 self.reader.stopReading()
             } else {
                 DDLogError("Upload session succeeded!")
@@ -225,7 +257,15 @@ class HealthKitBloodGlucoseUploadManager:
 
         do {
             let request = try self.makeBloodGlucoseDataUploadRequestHandler()
-            DDLogInfo("Start next upload for \(uploadData.samples.count) samples")
+
+            let message = "Start next upload for \(uploadData.samples.count) samples"
+            DDLogInfo(message)
+            if AppDelegate.testMode {
+                let localNotificationMessage = UILocalNotification()
+                localNotificationMessage.alertBody = message
+                UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+            }
+
             self.stats.updateForUploadAttempt(sampleCount: uploadData.samples.count, uploadAttemptTime: Date(), latestSampleTime: uploadData.latestSampleTime)
             try self.uploader.startUploadSessionTasks(with: request, data: uploadData)
         } catch let error as NSError {

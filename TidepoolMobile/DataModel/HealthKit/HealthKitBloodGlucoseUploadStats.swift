@@ -88,8 +88,7 @@ class HealthKitBloodGlucoseUploadStats: NSObject {
         self.lastSuccessfulUploadTime = lastSuccessfulUploadTime
         
         let message = "Successfully uploaded \(self.lastUploadAttemptSampleCount) samples. Current phase: \(self.phase.currentPhase). Upload time: \(lastSuccessfulUploadTime)"
-        DDLogInfo(message)
-        
+        DDLogInfo(message)        
         if AppDelegate.testMode {
             let localNotificationMessage = UILocalNotification()
             localNotificationMessage.alertBody = message
