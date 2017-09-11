@@ -92,6 +92,11 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
         let batchMetadataPostBodyURL = try self.createPostBodyFileForBatchMetadataUpload(data: data)
         let batchSamplesPostBodyURL = try createBodyFileForBatchSamplesUpload(data: data)
         
+        // Store this for later. We'll create the batch samples task once the metadata task finishes
+        UserDefaults.standard.set(request.url, forKey: self.task2RequestUrlKey)
+        UserDefaults.standard.set(request.allHTTPHeaderFields, forKey: self.task2RequestAllHTTPHeaderFieldsKey)
+        UserDefaults.standard.set(batchSamplesPostBodyURL, forKey: self.task2PostDataUrlKey)
+        
         DispatchQueue.main.async {
             DDLogInfo("startUploadSessionTasks on main thread")
             
@@ -102,24 +107,11 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
 
             self.setPendingUploadsState(task1IsPending: true, task2IsPending: true)
             
-            // Create task1
+            // Create task 1 of 2
             let task1 = uploadSession.uploadTask(with: request, fromFile: batchMetadataPostBodyURL)
             task1.taskDescription = self.task1IdentifierKey
             DDLogInfo("Created metadata upload task (1 of 2): \(task1.taskIdentifier)")
             task1.resume()
-
-            // Create task2
-            let task2 = uploadSession.uploadTask(with: request, fromFile: batchSamplesPostBodyURL)
-            task2.taskDescription = "task2"
-            task2.taskDescription = self.task2IdentifierKey
-            DDLogInfo("Created samples upload task (2 of 2): \(task2.taskIdentifier)")
-            task2.resume()
-            
-            // Suspend task2 until task1 completes. 
-            // NOTE: It has to be resumed first, though, then suspended, else it's "lost" in the session and 
-            // can't be iterated via getTasksWithCompletionHandler
-            task2.suspend()
-
         }
     }
     
@@ -148,21 +140,9 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
         
         if let uploadSession = self.uploadSession {
             uploadSession.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) -> Void in
-                var task1: URLSessionUploadTask?
-                var task2: URLSessionUploadTask?
                 for uploadTask in uploadTasks {
-                    if uploadTask.taskDescription == self.task1IdentifierKey {
-                        task1 = uploadTask
-                    } else if uploadTask.taskDescription == self.task2IdentifierKey {
-                        task2 = uploadTask
-                    } else {
-                        DDLogError("Found upload task that we weren't tracking: \(uploadTask.taskIdentifier), this is unexpected")
-                    }
+                    DDLogInfo("Resuming \(String(describing: uploadTask.taskDescription)) task: \(uploadTask.taskIdentifier)")
                     uploadTask.resume()
-                }
-                // If the first task has not completed yet, suspend second task
-                if task1 != nil && task1?.state != .completed {
-                    task2?.suspend()
                 }
             }
         } else {
@@ -197,37 +177,33 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
             self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
             self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: httpError)
         } else if task.taskDescription == self.task1IdentifierKey {
-            setPendingUploadsState(task1IsPending: false, task2IsPending: true)
-            session.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) -> Void in
-                var task2Found = false
-                for uploadTask in uploadTasks {
-                    DDLogInfo("Upload task exists: \(uploadTask.taskIdentifier), with state: \(uploadTask.state.rawValue)")
-                    if uploadTask.taskDescription == self.task2IdentifierKey {
-                        task2Found = true
-                        DDLogInfo("Resuming task 2")
-                        uploadTask.resume()
-                    }
+            // Create task 2 of 2
+            if let task2RequestAllHTTPHeaderFields = UserDefaults.standard.dictionary(forKey: self.task2RequestAllHTTPHeaderFieldsKey),
+               let task2RequestUrl = UserDefaults.standard.url(forKey: self.task2RequestUrlKey),
+               let batchSamplesPostBodyURL = UserDefaults.standard.url(forKey: self.task2PostDataUrlKey)
+            {
+                setPendingUploadsState(task1IsPending: false, task2IsPending: true)
+
+                let batchSamplesRequest = NSMutableURLRequest(url: task2RequestUrl)
+                batchSamplesRequest.httpMethod = "POST"
+                for (field, value) in task2RequestAllHTTPHeaderFields {
+                    batchSamplesRequest.setValue(value as? String, forHTTPHeaderField: field)
                 }
-                if !task2Found {
-                    self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
-                    let message = "Task 2 was not found to resume, this is unexpected"
-                    let error = NSError(domain: "HealthKitBloodGlucoseUploader", code: -2, userInfo: [NSLocalizedDescriptionKey: message])
-                    DDLogInfo(message)
-                    self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: error)
-                }
+                let task2 = session.uploadTask(with: batchSamplesRequest as URLRequest, fromFile: batchSamplesPostBodyURL)
+                task2.taskDescription = "task2"
+                task2.taskDescription = self.task2IdentifierKey
+                DDLogInfo("Created samples upload task (2 of 2): \(task2.taskIdentifier)")
+                task2.resume()
+            } else {
+                let message = "Failed to find stored POST body URL or stored request for samples upload"
+                let settingsError = NSError(domain: "HealthKitBloodGlucoseUploader", code: -2, userInfo: [NSLocalizedDescriptionKey: message])
+                DDLogError(message)
+                self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
+                self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: settingsError)
             }
         } else if task.taskDescription == self.task2IdentifierKey {
-            if !UserDefaults.standard.bool(forKey: "task1IsPending") {
-                self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
-                DDLogInfo("Both upload tasks have completed")
-                self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: nil)
-            } else {
-                self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
-                let message = "Task 2 completed, but task 1 appeared to be pending, this is unexpected."
-                DDLogInfo(message)
-                let error = NSError(domain: "HealthKitBloodGlucoseUploader", code: -3, userInfo: [NSLocalizedDescriptionKey: message])
-                self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: error)
-            }
+            self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
+            self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: nil)
         }
     }
     
@@ -361,6 +337,9 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
     fileprivate let backgroundUploadSessionIdentifier = "uploadBloodGlucoseSessionId"
     fileprivate let task1IdentifierKey = "task1Identifier"
     fileprivate let task2IdentifierKey = "task2Identifier"
+    fileprivate let task2RequestUrlKey = "task2RequestUrl"
+    fileprivate let task2RequestAllHTTPHeaderFieldsKey = "task2RequestAllHTTPHeaderFields"
+    fileprivate let task2PostDataUrlKey = "task2PostUrl"
 
     fileprivate var uploadSession: URLSession?
     fileprivate var uploadSessionIsBackground = false
