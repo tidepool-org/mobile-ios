@@ -151,6 +151,8 @@ class HealthKitBloodGlucoseUploadManager:
                     message = "Observed new samples written to HealthKit, read samples from current position and prepare upload"
 
                     self.reader.startReading()
+                    
+                    UserDefaults.standard.set(Date(), forKey: "lastAttemptToRead")
                 } else {
                     message = "Observed new samples written to HealthKit, already reading samples"
                 }
@@ -161,11 +163,10 @@ class HealthKitBloodGlucoseUploadManager:
                     UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
                 }
             } else {
-                if let lastAttemptToReadWithPendingUploadTasks = UserDefaults.standard.object(forKey: "lastAttemptToReadWithPendingUploadTasks") as? Date {
-
-                    let timeAgoInMinutes = round(abs(Date().timeIntervalSince(lastAttemptToReadWithPendingUploadTasks))) * 60
-                    if timeAgoInMinutes > 10 {
-                        let message = "Observed new samples written to HealthKit, with pending upload tasks. It's been more than 10 minutes since last atttempt to read, with pending upload tasks. Maybe there aren't any pending upload tasks? Just cancel any pending tasks and reset pending state, so next time we can start reading/uploading samples again"
+                if let lastAttemptToRead = UserDefaults.standard.object(forKey: "lastAttemptToRead") as? Date {
+                    let timeAgoInMinutes = round(abs(Date().timeIntervalSince(lastAttemptToRead))) * 60
+                    if timeAgoInMinutes > 20 {
+                        let message = "Observed new samples written to HealthKit, with pending upload tasks. It's been more than 20 minutes since last atttempt to read. Maybe there aren't any pending upload tasks? Just cancel any pending tasks and reset pending state, so next time we can start reading/uploading samples again"
                         DDLogInfo(message)
                         if AppDelegate.testMode {
                             let localNotificationMessage = UILocalNotification()
@@ -184,8 +185,6 @@ class HealthKitBloodGlucoseUploadManager:
                         UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
                     }
                 }
-                
-                UserDefaults.standard.set(Date(), forKey: "lastAttemptToReadWithPendingUploadTasks")
             }
             
             self.lastObservationTime = Date()
