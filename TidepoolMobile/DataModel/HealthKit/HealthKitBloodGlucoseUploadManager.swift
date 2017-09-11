@@ -144,7 +144,7 @@ class HealthKitBloodGlucoseUploadManager:
             guard error == nil else {
                 return
             }
-            
+                        
             if !self.uploader.hasPendingUploadTasks() {
                 var message = ""
                 if !self.reader.isReading {
@@ -153,6 +153,7 @@ class HealthKitBloodGlucoseUploadManager:
                     self.reader.startReading()
                     
                     UserDefaults.standard.set(Date(), forKey: "lastAttemptToRead")
+                    UserDefaults.standard.synchronize()
                 } else {
                     message = "Observed new samples written to HealthKit, already reading samples"
                 }
@@ -163,19 +164,18 @@ class HealthKitBloodGlucoseUploadManager:
                     UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
                 }
             } else {
-                if let lastAttemptToRead = UserDefaults.standard.object(forKey: "lastAttemptToRead") as? Date {
-                    let timeAgoInMinutes = round(abs(Date().timeIntervalSince(lastAttemptToRead))) * 60
-                    if timeAgoInMinutes > 20 {
-                        let message = "Observed new samples written to HealthKit, with pending upload tasks. It's been more than 20 minutes since last atttempt to read. Maybe there aren't any pending upload tasks? Just cancel any pending tasks and reset pending state, so next time we can start reading/uploading samples again"
-                        DDLogInfo(message)
-                        if AppDelegate.testMode {
-                            let localNotificationMessage = UILocalNotification()
-                            localNotificationMessage.alertBody = message
-                            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                        }
-                        
-                        self.uploader.cancelTasks()
+                let lastAttemptToRead = UserDefaults.standard.object(forKey: "lastAttemptToRead") as? Date ?? Date()
+                let timeAgoInMinutes = round(abs(Date().timeIntervalSince(lastAttemptToRead))) / 60
+                if timeAgoInMinutes > 20 {
+                    let message = "Observed new samples written to HealthKit, with pending upload tasks. It's been more than 20 minutes. Just cancel any pending tasks and reset pending state, so next time we can start reading/uploading samples again"
+                    DDLogInfo(message)
+                    if AppDelegate.testMode {
+                        let localNotificationMessage = UILocalNotification()
+                        localNotificationMessage.alertBody = message
+                        UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
                     }
+                    
+                    self.uploader.cancelTasks()
                 } else {
                     let message = "Observed new samples written to HealthKit, with pending upload tasks. Don't read samples since we have pending upload tasks."
                     DDLogInfo(message)
@@ -186,8 +186,6 @@ class HealthKitBloodGlucoseUploadManager:
                     }
                 }
             }
-            
-            self.lastObservationTime = Date()
         }
     }
     
@@ -293,5 +291,4 @@ class HealthKitBloodGlucoseUploadManager:
 
     fileprivate var reader: HealthKitBloodGlucoseUploadReader
     fileprivate var uploader: HealthKitBloodGlucoseUploader
-    fileprivate var lastObservationTime = Date.distantPast
 }
