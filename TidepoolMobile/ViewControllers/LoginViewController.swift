@@ -299,10 +299,10 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
             }
         }
         
-        showServerActionSheet()
+        showDebugMenuActionSheet()
     }
     
-    func showServerActionSheet() {
+    func showDebugMenuActionSheet() {
         for i in 0 ..< corners.count {
             cornersBool[i] = false
         }
@@ -315,13 +315,21 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
                 self.configureVersion()
             }))
         }
-        actionSheet.addAction(UIAlertAction(title: "Count HealthKit Blood Glucose Samples", style: .default, handler: {
+//        actionSheet.addAction(UIAlertAction(title: "Count HealthKit Blood Glucose Samples", style: .default, handler: {
+//            Void in
+//            self.handleCountBloodGlucoseSamples()
+//        }))
+//        actionSheet.addAction(UIAlertAction(title: "Find date range for blood glucose samples", style: .default, handler: {
+//            Void in
+//            self.handleFindDateRangeBloodGlucoseSamples()
+//        }))
+        actionSheet.addAction(UIAlertAction(title: "Enable notifications of uploads", style: .default, handler: {
             Void in
-            self.handleCountBloodGlucoseSamples()
+            self.handleEnableNotificationsForUploads()
         }))
-        actionSheet.addAction(UIAlertAction(title: "Find date range for blood glucose samples", style: .default, handler: {
+        actionSheet.addAction(UIAlertAction(title: "Treat all blood glucose source types as Dexcom", style: .default, handler: {
             Void in
-            self.handleFindDateRangeBloodGlucoseSamples()
+            self.handleTreatAllBloodGlucoseSourceTypesAsDexcom()
         }))
         actionSheet.addAction(UIAlertAction(title: "Email export of HealthKit blood glucose data", style: .default, handler: {
             Void in
@@ -448,6 +456,17 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         }
     }
     
+    func handleEnableNotificationsForUploads() {
+        AppDelegate.testMode = true
+        let notifySettings = UIUserNotificationSettings(types: .alert, categories: nil)
+        UIApplication.shared.registerUserNotificationSettings(notifySettings)
+    }
+    
+    func handleTreatAllBloodGlucoseSourceTypesAsDexcom() {
+        UserDefaults.standard.set(true, forKey: "TreatAllBloodGlucoseSourceTypesAsDexcom");
+        UserDefaults.standard.synchronize()
+    }
+
     func handleEmailExportOfBloodGlucoseData() {
         let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
         let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: nil, limit: HKObjectQueryNoLimit, sortDescriptors: nil) {

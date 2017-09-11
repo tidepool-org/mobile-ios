@@ -48,7 +48,8 @@ class HealthKitBloodGlucoseUploadData: NSObject {
         for sample in sortedSamples {
             let sourceRevision = sample.sourceRevision
             let source = sourceRevision.source
-            if source.name.lowercased().range(of: "dexcom") == nil {
+            let treatAllBloodGlucoseSourceTypesAsDexcom = UserDefaults.standard.bool(forKey: "TreatAllBloodGlucoseSourceTypesAsDexcom")
+            if source.name.lowercased().range(of: "dexcom") == nil && !treatAllBloodGlucoseSourceTypesAsDexcom {
                 DDLogInfo("Ignoring non-Dexcom glucose data")
                 continue
             }

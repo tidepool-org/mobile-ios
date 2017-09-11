@@ -364,7 +364,8 @@ class HealthKitManager {
                     let sourceRevision = sample.sourceRevision
                     let source = sourceRevision.source
                     totalSamplesCount += 1
-                    if source.name.lowercased().range(of: "dexcom") != nil {
+                    let treatAllBloodGlucoseSourceTypesAsDexcom = UserDefaults.standard.bool(forKey: "TreatAllBloodGlucoseSourceTypesAsDexcom")
+                    if source.name.lowercased().range(of: "dexcom") != nil || !treatAllBloodGlucoseSourceTypesAsDexcom {
                         totalDexcomSamplesCount += 1
                     }
                 }
