@@ -41,7 +41,7 @@ class HealthKitBloodGlucoseUploadStats: NSObject {
     
     fileprivate(set) var currentDayHistorical = 0
     
-    func resetForOtherUser() {
+    func resetPersistentState() {
         DDLogVerbose("trace")
         
         UserDefaults.standard.removeObject(forKey: "totalUploadCountBloodGlucoseSamples")

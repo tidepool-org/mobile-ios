@@ -37,7 +37,7 @@ class HealthKitBloodGlucoseUploadReader: NSObject {
 
     fileprivate(set) var isReading = false
         
-    func resetForOtherUser() {
+    func resetPersistentState() {
         DDLogVerbose("trace")
         
         UserDefaults.standard.removeObject(forKey: "bloodGlucoseQueryAnchor")

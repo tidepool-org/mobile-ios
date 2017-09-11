@@ -37,12 +37,28 @@ class HealthKitBloodGlucoseUploadManager:
 
         self.uploader.delegate = self
         self.reader.delegate = self
+        
+        // Check uploader version, if it's changed, then we should reupload everything again. Increasing uploader version
+        // shouldn't be done lightly, since reuploading lots of data on app upgrade is not ideal. It can be used, though,
+        // to fix up 'stats' related to the upload status of the user's store of data, and also to fill gaps if there were
+        // samples that were missed during read/upload with past uploader due to bugs.
+        let latestUploaderVersion = 5
+        let lastExecutedUploaderVersion = UserDefaults.standard.integer(forKey: "lastExecutedUploaderVersion")
+        var resetPersistentData = false
+        if latestUploaderVersion != lastExecutedUploaderVersion {
+            DDLogInfo("Migrating uploader to \(latestUploaderVersion)")
+            UserDefaults.standard.set(latestUploaderVersion, forKey: "lastExecutedUploaderVersion")
+            resetPersistentData = true
+        }
+        if resetPersistentData {
+            self.resetPersistentState()
+        }
     }
     
-    func resetForOtherUser() {
-        self.phase.resetForOtherUser()
-        self.stats.resetForOtherUser()
-        self.reader.resetForOtherUser()
+    func resetPersistentState() {
+        self.phase.resetPersistentState()
+        self.stats.resetPersistentState()
+        self.reader.resetPersistentState()
     }
     
     fileprivate(set) var isUploading = false

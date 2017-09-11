@@ -40,7 +40,7 @@ class HealthKitBloodGlucoseUploadPhase: NSObject {
     fileprivate(set) var startDateHistoricalBloodGlucoseSamples = Date.distantPast
     fileprivate(set) var endDateHistoricalBloodGlucoseSamples = Date.distantPast
     
-    func resetForOtherUser() {
+    func resetPersistentState() {
         DDLogVerbose("trace")
         
         UserDefaults.standard.removeObject(forKey: "uploadPhaseBloodGlucoseSamples")
