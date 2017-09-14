@@ -73,7 +73,12 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChangeNotifyHandler(_:)), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
         // graph data changes
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
+        // need to update when day changes
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.calendarDayDidChange(notification:)), name: NSNotification.Name.NSCalendarDayChanged, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterForeground(_:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterBackground(_:)), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
 
+        
         if let sideMenu = self.sideMenuController()?.sideMenu {
             sideMenu.delegate = self
             menuButton.target = self
@@ -87,6 +92,24 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         firstTimeHealthKitConnectCheck()
     }
    
+    private var appIsForeground: Bool = true
+    private var viewIsForeground: Bool = false
+    private var calendarDayChanged = false
+
+    // Because many notes have times written as "Today at 2:00 pm" for example, they may be out of date when a day changes. Also, this will refresh UI the first time the user opens the app in the day.
+    func calendarDayDidChange(notification : NSNotification)
+    {
+        calendarDayChanged = true
+        checkNewDayReload()
+    }
+    
+    private func checkNewDayReload() {
+        if calendarDayChanged && viewIsForeground && appIsForeground {
+            calendarDayChanged = false
+            tableView.reloadData()
+        }
+    }
+    
     // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
     private var subviewsInitialized = false
     override func viewDidLayoutSubviews() {
@@ -112,7 +135,18 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // Dispose of any resources that can be recreated.
     }
 
-    fileprivate var viewIsForeground: Bool = false
+    func appDidEnterForeground(_ notification: Notification) {
+        NSLog("EventListViewController:appDidEnterForeground")
+        appIsForeground = true
+        
+        checkRefresh()
+    }
+    
+    func appDidEnterBackground(_ notification: Notification) {
+        NSLog("EventListViewController:appDidEnterBackground")
+        appIsForeground = false
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         viewIsForeground = true
@@ -129,6 +163,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             loadNotes()
         }
         
+        checkRefresh()
+    }
+    
+    // shared refresh code, coming from another view, or from the background
+    private func checkRefresh() {
         // periodically check for authentication issues in case we need to force a new login
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         appDelegate?.checkConnection()
@@ -136,6 +175,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         
         // in case we loaded data while in the background...
         checkUpdateGraph()
+        
+        // in case a new day has passed...
+        checkNewDayReload()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
