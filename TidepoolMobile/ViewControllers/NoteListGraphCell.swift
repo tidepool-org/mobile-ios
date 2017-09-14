@@ -30,6 +30,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     @IBOutlet weak var noDataLabel: UILabel!
     @IBOutlet weak var howToUploadButton: UIButton!
     @IBOutlet weak var dataIsComingLabel: UILabel!
+    @IBOutlet var noDataViewsCollection: [UIView]!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -63,7 +64,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
             graphContainerView = nil;
         }
         showLoadAnimation(false)
-        noDataView.isHidden = true
+        hideNoDataViews(true)
     }
     
     func configureGraphContainer() {
@@ -124,6 +125,15 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
         }
     }
     
+    func hideNoDataViews(_ hide: Bool) {
+        for view in noDataViewsCollection {
+            view.isHidden = hide
+        }
+        if !hide {
+            configureNoData()
+        }
+    }
+    
     func syncGraph() {
         if let graphContainerView = graphContainerView {
             let dataStillLoading = DatabaseUtils.sharedInstance.isLoadingTidepoolEvents()
@@ -146,7 +156,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
             }
             
             showLoadAnimation(!hideLoadingView)
-            noDataView.isHidden = hideNoDataView
+            hideNoDataViews(hideNoDataView)
         }
     }
     

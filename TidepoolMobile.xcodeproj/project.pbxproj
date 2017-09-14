@@ -1509,7 +1509,7 @@
 				CODE_SIGN_ENTITLEMENTS = TidepoolMobile/TidepoolMobile.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 75U4X84TEG;
 				INFOPLIST_FILE = TidepoolMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1534,7 +1534,7 @@
 				CODE_SIGN_ENTITLEMENTS = TidepoolMobile/TidepoolMobile.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Tidepool Project (75U4X84TEG)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 75U4X84TEG;
 				INFOPLIST_FILE = TidepoolMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
