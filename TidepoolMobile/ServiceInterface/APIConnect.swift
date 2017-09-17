@@ -326,13 +326,13 @@ class APIConnector {
         completion()
     }
     
-    func refreshToken(_ completion: @escaping (_ succeeded: Bool) -> (Void)) {
+    func refreshToken(_ completion: @escaping (_ succeeded: Bool, _ responseStatusCode: Int) -> (Void)) {
         
         let endpoint = "/auth/login"
         
         if self.sessionToken == nil || TidepoolMobileDataController.sharedInstance.currentUserId == nil {
             // We don't have a session token to refresh.
-            completion(false)
+            completion(false, 0)
             return
         }
         
@@ -343,14 +343,20 @@ class APIConnector {
             if ( response.result.isSuccess ) {
                 DDLogInfo("Session token updated")
                 self.sessionToken = response.response!.allHeaderFields[self.kSessionIdHeader] as! String?
-                completion(true)
+                completion(true, response.response?.statusCode ?? 0)
             } else {
-                DDLogError("Session token update failed: \(response.result)")
                 if let error = response.result.error {
-                    print("NSError: \(error)")
+                    let message = "Refresh token failed, error: \(error)"
+                    DDLogError(message)
+                    if AppDelegate.testMode  {
+                        let localNotificationMessage = UILocalNotification()
+                        localNotificationMessage.alertBody = message
+                        UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+                    }
+                    
                     // TODO: handle network offline!
                 }
-                completion(false)
+                completion(false, response.response?.statusCode ?? 0)
             }
         }
     }

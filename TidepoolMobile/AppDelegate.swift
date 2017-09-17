@@ -50,6 +50,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         DDLogVerbose("trace")
 
+        if AppDelegate.testMode  {
+            let localNotificationMessage = UILocalNotification()
+            localNotificationMessage.alertBody = "Application didFinishLaunchingWithOptions"
+            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+        }
+
         // Override point for customization after application launch.
         Styles.configureTidepoolBarColoring(on: true)
         
@@ -71,9 +77,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         } else {
-            NSLog("AppDelegate: attempting to refresh token...")
-            api.refreshToken() { succeeded -> (Void) in
+            var message = "AppDelegate attempting to refresh token"
+            DDLogInfo(message)
+            if AppDelegate.testMode  {
+                self.localNotifyMessage(message)
+            }
+            
+            api.refreshToken() { (succeeded, responseStatusCode) in
                 if succeeded {
+                    message = "Refresh token succeeded, statusCode: \(responseStatusCode)"
+                    DDLogInfo(message)
+                    if AppDelegate.testMode  {
+                        self.localNotifyMessage(message)
+                    }
+
                     let dataController = TidepoolMobileDataController.sharedInstance
                     dataController.checkRestoreCurrentViewedUser {
                         dataController.configureHealthKitInterface()
@@ -84,12 +101,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         }
                     }
                 } else {
-                    NSLog("Refresh token failed, need to log in normally")
-                    api.logout() {
-                        if self.didBecomeActiveAtLeastOnce {
-                            self.setupUIForLogin()
-                        } else {
-                            self.needSetUpForLogin = true
+                    // Only logout if refresh token failed and either app is active or response code is non-zero. If we're not active 
+                    // and have no response status code, then don't logout, it was probably an intermittent client side failure (likely due
+                    // to background context networking issues?)
+                    //
+                    // NOTE: Our model for refreshToken and http error handling in APIConnect should be improved. We should be able
+                    // to handle a 401 on any of the API calls, and redirect to login as appropriate, not just via refreshToken. The
+                    // refreshToken should just be convenience to extend token while app is being used, not as the mechanism to determine
+                    // whether to show login
+                    let shouldLogout = UIApplication.shared.applicationState == .active || responseStatusCode > 0
+                    if shouldLogout {
+                        message = "Refresh token failed, need to log in normally, statusCode: \(responseStatusCode)"
+                        DDLogInfo(message)
+                        if AppDelegate.testMode  {
+                            self.localNotifyMessage(message)
+                        }
+                        api.logout() {
+                            if self.didBecomeActiveAtLeastOnce {
+                                self.setupUIForLogin()
+                            } else {
+                                self.needSetUpForLogin = true
+                            }
+                        }
+                    } else {
+                        message = "Refresh token failed, no status code"
+                        DDLogError(message)
+                        if AppDelegate.testMode  {
+                            self.localNotifyMessage(message)
                         }
                     }
                 }
@@ -225,13 +263,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         NSLog("TidepoolMobile applicationWillEnterForeground")
-        if didBecomeActiveAtLeastOnce {
-            checkConnection()
-        }
+        checkConnection()
     }
     
     func checkConnection() {
-        NSLog("TidepoolMobile checkConnection")
+        DDLogVerbose("trace")
+        
         let api = APIConnector.connector()
         var doCheck = refreshTokenNextActive
         if let lastError = api.lastNetworkError {
@@ -245,9 +282,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 refreshTokenNextActive = false
                 api.lastNetworkError = nil
                 NSLog("AppDelegate: attempting to refresh token in checkConnection")
-                api.refreshToken() { succeeded -> (Void) in
+                api.refreshToken() { (succeeded, responseStatusCode) in
                     if !succeeded {
-                        NSLog("Refresh token failed, force login at this point...")
+                        DDLogInfo("Refresh token failed, need to log in normally, statusCode: \(responseStatusCode)")
                         api.logout() {
                             self.setupUIForLogin()
                         }
