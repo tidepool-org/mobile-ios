@@ -31,28 +31,27 @@ class HealthKitBloodGlucoseUploadStats: NSObject {
     }
 
     fileprivate(set) var hasSuccessfullyUploaded = false
-    fileprivate(set) var lastSuccessfulUploadTime = Date.distantPast
     
     fileprivate(set) var lastUploadAttemptTime = Date.distantPast
     fileprivate(set) var lastUploadAttemptSampleCount = 0
 
-    fileprivate(set) var lastSuccessfulUploadLatestSampleTimeHistoricalPhase = Date.distantPast
-    fileprivate(set) var lastUploadAttemptLatestSampleTimeHistoricalPhase = Date.distantPast
-    
+    fileprivate(set) var lastSuccessfulUploadTime = Date.distantPast
+
     fileprivate(set) var currentDayHistorical = 0
     
     func resetPersistentState() {
         DDLogVerbose("trace")
         
-        UserDefaults.standard.removeObject(forKey: "totalUploadCountBloodGlucoseSamples")
-        UserDefaults.standard.removeObject(forKey: "lastUploadTimeBloodGlucoseSamples")
+        UserDefaults.standard.removeObject(forKey: self.totalUploadCountBloodGlucoseSamplesKey)
+        UserDefaults.standard.removeObject(forKey: self.lastSuccessfulUploadTimeKey)
         
-        UserDefaults.standard.removeObject(forKey: "lastUploadAttemptTime")
-        UserDefaults.standard.removeObject(forKey: "lastUploadAttemptSampleCount")
-        UserDefaults.standard.removeObject(forKey: "lastUploadAttemptLatestSampleTimeHistoricalPhase")
+        UserDefaults.standard.removeObject(forKey: self.lastUploadAttemptTimeKey)
+        UserDefaults.standard.removeObject(forKey: self.lastUploadAttemptSampleCountKey)
+        UserDefaults.standard.removeObject(forKey: self.lastUploadAttemptLatestSampleTimeHistoricalPhaseKey)
         
-        UserDefaults.standard.removeObject(forKey: "lastUploadSampleTimeBloodGlucoseSamples")
-        UserDefaults.standard.removeObject(forKey: "currentDayHistoricalBloodGlucoseSamples")
+        UserDefaults.standard.removeObject(forKey: self.lastSuccessfulUploadLatestSampleTimeHistoricalPhaseKey)
+        UserDefaults.standard.removeObject(forKey: self.currentDayHistoricalBloodGlucoseSamplesKey)
+        
         UserDefaults.standard.synchronize()
         
         self.load()
@@ -68,11 +67,11 @@ class HealthKitBloodGlucoseUploadStats: NSObject {
         
         if self.phase.currentPhase == .historical {
             self.lastUploadAttemptLatestSampleTimeHistoricalPhase = latestSampleTime
-            UserDefaults.standard.set(self.lastUploadAttemptLatestSampleTimeHistoricalPhase, forKey: "lastUploadAttemptLatestSampleTime")
+            UserDefaults.standard.set(self.lastUploadAttemptLatestSampleTimeHistoricalPhase, forKey: self.lastUploadAttemptLatestSampleTimeHistoricalPhaseKey)
         }
         
-        UserDefaults.standard.set(self.lastUploadAttemptTime, forKey: "lastUploadAttemptTime")
-        UserDefaults.standard.set(self.lastUploadAttemptSampleCount, forKey: "lastUploadAttemptSampleCount")
+        UserDefaults.standard.set(self.lastUploadAttemptTime, forKey: self.lastUploadAttemptTimeKey)
+        UserDefaults.standard.set(self.lastUploadAttemptSampleCount, forKey: self.lastUploadAttemptSampleCountKey)
         UserDefaults.standard.synchronize()
         
         DispatchQueue.main.async {
@@ -99,16 +98,17 @@ class HealthKitBloodGlucoseUploadStats: NSObject {
             if self.lastSuccessfulUploadLatestSampleTimeHistoricalPhase.compare(self.lastUploadAttemptLatestSampleTimeHistoricalPhase) == .orderedAscending {
                 self.lastSuccessfulUploadLatestSampleTimeHistoricalPhase = self.lastUploadAttemptLatestSampleTimeHistoricalPhase
             }
+            UserDefaults.standard.set(self.lastSuccessfulUploadLatestSampleTimeHistoricalPhase, forKey: self.lastSuccessfulUploadLatestSampleTimeHistoricalPhaseKey)
+
             if self.phase.totalDaysHistorical > 0 {
                 self.currentDayHistorical = self.phase.startDateHistoricalBloodGlucoseSamples.differenceInDays(self.lastSuccessfulUploadLatestSampleTimeHistoricalPhase) + 1
                 DDLogInfo("Uploaded \(self.currentDayHistorical) of \(self.phase.totalDaysHistorical) days of historical data");
             }
-            UserDefaults.standard.set(self.lastSuccessfulUploadLatestSampleTimeHistoricalPhase, forKey: "lastUploadSampleTimeBloodGlucoseSamples")
-            UserDefaults.standard.set(self.currentDayHistorical, forKey: "currentDayHistoricalBloodGlucoseSamples")
+            UserDefaults.standard.set(self.currentDayHistorical, forKey: self.currentDayHistoricalBloodGlucoseSamplesKey)
         }
         
-        UserDefaults.standard.set(self.lastSuccessfulUploadTime, forKey: "lastUploadTimeBloodGlucoseSamples")
-        UserDefaults.standard.set(self.totalUploadCountBloodGlucoseSamples, forKey: "totalUploadCountBloodGlucoseSamples")
+        UserDefaults.standard.set(self.lastSuccessfulUploadTime, forKey: self.lastSuccessfulUploadTimeKey)
+        UserDefaults.standard.set(self.totalUploadCountBloodGlucoseSamples, forKey: self.totalUploadCountBloodGlucoseSamplesKey)
         UserDefaults.standard.synchronize()
         
         DispatchQueue.main.async {
@@ -121,25 +121,25 @@ class HealthKitBloodGlucoseUploadStats: NSObject {
     fileprivate func load(_ resetUser: Bool = false) {
         DDLogVerbose("trace")
         
-        let statsExist = UserDefaults.standard.object(forKey: "totalUploadCountBloodGlucoseSamples") != nil
+        let statsExist = UserDefaults.standard.object(forKey: self.totalUploadCountBloodGlucoseSamplesKey) != nil
         if statsExist {
-            let lastSuccessfulUploadTime = UserDefaults.standard.object(forKey: "lastUploadTimeBloodGlucoseSamples") as? Date
+            let lastSuccessfulUploadTime = UserDefaults.standard.object(forKey: self.lastSuccessfulUploadTimeKey) as? Date
             self.lastSuccessfulUploadTime = lastSuccessfulUploadTime ?? Date.distantPast
-            
-            let lastSuccessfulUploadLatestSampleTimeHistoricalPhase = UserDefaults.standard.object(forKey: "lastUploadSampleTimeBloodGlucoseSamples") as? Date
+
+            let lastSuccessfulUploadLatestSampleTimeHistoricalPhase = UserDefaults.standard.object(forKey: self.lastSuccessfulUploadLatestSampleTimeHistoricalPhaseKey) as? Date
             self.lastSuccessfulUploadLatestSampleTimeHistoricalPhase = lastSuccessfulUploadLatestSampleTimeHistoricalPhase ?? Date.distantPast
 
-            self.totalUploadCountBloodGlucoseSamples = UserDefaults.standard.integer(forKey: "totalUploadCountBloodGlucoseSamples")
+            self.totalUploadCountBloodGlucoseSamples = UserDefaults.standard.integer(forKey: self.totalUploadCountBloodGlucoseSamplesKey)
             
-            let lastUploadAttemptTime = UserDefaults.standard.object(forKey: "lastUploadAttemptTime") as? Date
+            let lastUploadAttemptTime = UserDefaults.standard.object(forKey: self.lastUploadAttemptTimeKey) as? Date
             self.lastUploadAttemptTime = lastUploadAttemptTime ?? Date.distantPast
             
-            let lastUploadAttemptLatestSampleTime = UserDefaults.standard.object(forKey: "lastUploadAttemptLatestSampleTime") as? Date
+            let lastUploadAttemptLatestSampleTime = UserDefaults.standard.object(forKey: self.lastUploadAttemptLatestSampleTimeHistoricalPhaseKey) as? Date
             self.lastUploadAttemptLatestSampleTimeHistoricalPhase = lastUploadAttemptLatestSampleTime ?? Date.distantPast
             
-            self.lastUploadAttemptSampleCount = UserDefaults.standard.integer(forKey: "lastUploadAttemptSampleCount")
+            self.lastUploadAttemptSampleCount = UserDefaults.standard.integer(forKey: self.lastUploadAttemptSampleCountKey)
 
-            self.currentDayHistorical = UserDefaults.standard.integer(forKey: "currentDayHistoricalBloodGlucoseSamples")
+            self.currentDayHistorical = UserDefaults.standard.integer(forKey: self.currentDayHistoricalBloodGlucoseSamplesKey)
         } else {
             self.lastSuccessfulUploadTime = Date.distantPast
             self.lastSuccessfulUploadLatestSampleTimeHistoricalPhase = Date.distantPast
@@ -156,4 +156,15 @@ class HealthKitBloodGlucoseUploadStats: NSObject {
     }
     
     fileprivate var totalUploadCountBloodGlucoseSamples = 0    
+    fileprivate var lastUploadAttemptLatestSampleTimeHistoricalPhase = Date.distantPast
+    fileprivate var lastSuccessfulUploadLatestSampleTimeHistoricalPhase = Date.distantPast
+
+    // NOTE: Preserving inconsistent key strings her for backward compatibility
+    fileprivate let lastUploadAttemptSampleCountKey = "lastUploadAttemptSampleCount"
+    fileprivate let lastUploadAttemptTimeKey = "lastUploadAttemptTime"
+    fileprivate let lastSuccessfulUploadTimeKey = "lastUploadTimeBloodGlucoseSamples"
+    fileprivate let lastSuccessfulUploadLatestSampleTimeHistoricalPhaseKey = "lastUploadSampleTimeBloodGlucoseSamples"
+    fileprivate let lastUploadAttemptLatestSampleTimeHistoricalPhaseKey = "lastUploadAttemptLatestSampleTime"
+    fileprivate let totalUploadCountBloodGlucoseSamplesKey = "totalUploadCountBloodGlucoseSamples"
+    fileprivate let currentDayHistoricalBloodGlucoseSamplesKey = "currentDayHistoricalBloodGlucoseSamples"
 }
