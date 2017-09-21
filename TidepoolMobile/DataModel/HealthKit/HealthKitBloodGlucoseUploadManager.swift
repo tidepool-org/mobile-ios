@@ -91,6 +91,7 @@ class HealthKitBloodGlucoseUploadManager:
         }
 
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: nil))
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.TurnOnUploader), object: nil))
     }
     
     func stopUploading() {
@@ -111,6 +112,7 @@ class HealthKitBloodGlucoseUploadManager:
         self.phase.currentUserId = ""
 
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: nil))
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.TurnOffUploader), object: nil))
     }
     
     // MARK: Upload session coordination (with UIApplicationDelegate)
@@ -240,7 +242,7 @@ class HealthKitBloodGlucoseUploadManager:
                 self.reader.stopReading()
             }
         } else {
-            if let uploadData = uploadData {
+            if let uploadData = uploadData, uploadData.samples.count > 0 {
                 self.handleResults(uploadData: uploadData)
             } else {
                 self.handleNoResults()
@@ -263,7 +265,7 @@ class HealthKitBloodGlucoseUploadManager:
                 UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
             }
 
-            self.stats.updateForUploadAttempt(sampleCount: uploadData.samples.count, uploadAttemptTime: Date(), latestSampleTime: uploadData.latestSampleTime)
+            self.stats.updateForUploadAttempt(sampleCount: uploadData.samples.count, uploadAttemptTime: Date(), earliestSampleTime: uploadData.earliestSampleTime, latestSampleTime: uploadData.latestSampleTime)
             try self.uploader.startUploadSessionTasks(with: request, data: uploadData)
         } catch let error as NSError {
             DDLogError("Failed to prepare upload, error: \(String(describing: error))")

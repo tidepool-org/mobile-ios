@@ -29,6 +29,7 @@ class HealthKitBloodGlucoseUploadData: NSObject {
     }
 
     fileprivate(set) var samples = [HKSample]()
+    fileprivate(set) var earliestSampleTime = Date.distantFuture
     fileprivate(set) var latestSampleTime = Date.distantPast
     fileprivate(set) var batchMetadata = [String: AnyObject]()
     
@@ -44,6 +45,7 @@ class HealthKitBloodGlucoseUploadData: NSObject {
         
         // Filter out non-Dexcom data and compute latest sample time for batch
         var filteredSamples = [HKSample]()
+        var earliestSampleTime = Date.distantFuture
         var latestSampleTime = Date.distantPast
         for sample in sortedSamples {
             let sourceRevision = sample.sourceRevision
@@ -55,12 +57,18 @@ class HealthKitBloodGlucoseUploadData: NSObject {
             }
             
             filteredSamples.append(sample)
+            
+            if sample.startDate.compare(earliestSampleTime) == .orderedAscending {
+                earliestSampleTime = sample.startDate
+            }
+            
             if sample.startDate.compare(latestSampleTime) == .orderedDescending {
                 latestSampleTime = sample.startDate
             }
         }
         
         self.samples = filteredSamples
+        self.earliestSampleTime = earliestSampleTime
         self.latestSampleTime = latestSampleTime
     }
     

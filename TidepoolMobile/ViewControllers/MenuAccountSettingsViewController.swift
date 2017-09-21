@@ -51,6 +51,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.Updated), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploadSuccessfulNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.UploadSuccessful), object: nil)
     }
 
     deinit {
@@ -161,6 +162,14 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     func nextHKTimeRefresh() {
         //DDLogInfo("nextHKTimeRefresh")
         configureHKInterface()
+    }
+
+    internal func handleUploadSuccessfulNotification(_ notification: Notification) {
+        DDLogInfo("handleUploadSuccessfulNotification: \(notification.name)")
+
+        let earliestSampleTime = HealthKitBloodGlucoseUploadManager.sharedInstance.stats.lastSuccessfulUploadEarliestSampleTimeForCurrentPhase
+        let latestSampleTime = HealthKitBloodGlucoseUploadManager.sharedInstance.stats.lastSuccessfulUploadLatestSampleTimeForCurrentPhase
+        DDLogInfo("Successfully uploaded samples. Earliest sample date: \(earliestSampleTime), Latest sample date: \(latestSampleTime)")
     }
     
     internal func handleUploaderNotification(_ notification: Notification) {

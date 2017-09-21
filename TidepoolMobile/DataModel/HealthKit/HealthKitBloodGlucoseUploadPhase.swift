@@ -72,6 +72,7 @@ class HealthKitBloodGlucoseUploadPhase: NSObject {
         
         DispatchQueue.main.async {
             NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: nil))
+            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.PhaseTransition), object: nil))
         }
     }
     
