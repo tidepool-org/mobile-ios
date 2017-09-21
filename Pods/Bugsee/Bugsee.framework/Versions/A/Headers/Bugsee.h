@@ -38,7 +38,7 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
  *  @return pass array of attachments here.
  */
 -(nonnull NSArray<BugseeAttachment* >*) bugseeAttachmentsForReport:(nonnull BugseeReport *)report;
-
+-(void) bugseeAttachmentsForReport:(nonnull BugseeReport *)report completionHandler:(nonnull BugseeAttachmentsDecisionBlock)decisionBlock;
 /**
  *  Use this delegate to hanle new feedback messages in your app.
  *
@@ -127,6 +127,14 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
  *  @param filterBlock pass BugseeNetworkEvent into this block
  */
 + (void) setNetworkEventFilter:(nonnull BugseeNetworkEventFilterBlock)filterBlock;
+
+/**
+ *  Use this method to send info about your network event with bugsee report
+ *
+ *  @param event BugseeNetworkEvent 
+ *  @see BugseeNetworkEvent
+ */
++ (void) registerNetworkEvent:(nonnull BugseeNetworkEvent *)event;
 
 + (void) setDefaultFeedbackGreeting:(nonnull NSString *)greeting;
 

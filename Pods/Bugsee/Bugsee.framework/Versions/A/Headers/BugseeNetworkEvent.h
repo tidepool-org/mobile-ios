@@ -12,8 +12,31 @@
 // in bugseeFilterNetworkEvent:completionHandler: delegate
 // see documentation page to learn more https://docs.bugsee.com/sdk/ios/privacy/
 
+typedef enum : NSUInteger {
+    BugseeNetwork,
+    BugseeWebSocket
+} BugseeNetworkType;
+
 @interface BugseeNetworkEvent : NSObject
 
++ (instancetype _Nonnull )eventWithID:(NSString *_Nonnull)ID
+                 HTTPmethod:(NSString *_Nullable) method
+                       type:(BugseeNetworkType) networkType
+            bugseeEventType:(NSString *_Nullable) eventType
+                        url:(NSString *_Nullable) urlStr
+              redirectedUrl:(NSString *_Nullable) redirectedUrl
+                       body:(NSData *_Nullable)body
+                      error:(NSDictionary*_Nullable)error
+                    headers:(NSDictionary*_Nullable)headers
+               noBodyReason:(NSString*_Nullable)noBodyReason
+                   dataSize:(int64_t)dataSize
+               responseCode:(NSInteger)responseCode;
+
+@property (nonatomic, strong) NSString * _Nullable ID;
+/**
+ *  BugseeNetwork, BugseeWebSocket
+ */
+@property (nonatomic, assign) BugseeNetworkType type;
 /**
  *  Network event URL
  */
@@ -38,9 +61,13 @@
  */
 @property (nonatomic, strong, nonnull) NSString * method;
 @property (nonatomic, strong, nullable) NSString * noBodyReason;
+@property (nonatomic, assign) int64_t dataSize;
 
 /**
- *  Can be one of BugseeNetworkEventBegin, BugseeNetworkEventComplete, BugseeNetworkEventCancel or BugseeNetworkEventError
+ *  Can be one of 
+ *  BugseeNetworkEventBegin, BugseeNetworkEventComplete, BugseeNetworkEventCancel or BugseeNetworkEventError
+ *  or WebSocket event with types
+ *  BugseeWebSocketEventOpen, BugseeWebSocketEventSend, BugseeWebSocketEventMessage, BugseeWebSocketEventClose, BugseeWebSocketEventError;
  *  @see BugseeConstants
  */
 @property (nonatomic, strong, nonnull) NSString * bugseeNetworkEventType;
@@ -50,6 +77,8 @@
  *  Can't be modified
  */
 @property (nonatomic, assign) NSInteger responseCode;
+@property (nonatomic, assign) BOOL override;
+@property (nonatomic, assign) NSTimeInterval timestamp;
 
 
 @property (nonatomic, assign, readonly) BOOL urlChanged;

@@ -244,7 +244,7 @@ class TidepoolMobileDataController: NSObject
         defaults.synchronize()
     }
     
-    func checkRestoreCurrentViewedUser(_ completion: @escaping (Void) -> (Void)) {
+    func checkRestoreCurrentViewedUser(_ completion: @escaping () -> (Void)) {
         let defaults = UserDefaults.standard
         if let userId = defaults.string(forKey: kSavedCurrentViewerIdKey) {
             if let loggedInUserId = currentLoggedInUser?.userid {

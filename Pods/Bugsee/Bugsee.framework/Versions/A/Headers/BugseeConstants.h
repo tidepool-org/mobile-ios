@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "BugseeAttachment.h"
 
 #define BugseeTrue @(YES)
 #define BugseeFalse @(NO)
 
 @class BugseeNetworkEvent;
 typedef void (^BugseeNetworkFilterDecisionBlock)(BugseeNetworkEvent * _Nullable event );
-
+typedef void (^BugseeAttachmentsDecisionBlock)(NSArray<BugseeAttachment*>* _Nullable attachments);
 typedef void (^BugseeNetworkEventFilterBlock)(BugseeNetworkEvent * _Nonnull event, BugseeNetworkFilterDecisionBlock _Nonnull decisionBlock);
 
 typedef enum : NSUInteger {
@@ -47,6 +48,7 @@ extern NSString *const _Nonnull BugseeShakeToReportKey,
                 *const _Nonnull BugseeMaxFrameRateKey,
                 *const _Nonnull BugseeMinFrameRateKey,
                 *const _Nonnull BugseeMonitorNetworkKey,
+                *const _Nonnull BugseeMonitorWebSocketKey,
                 *const _Nonnull BugseeStatusBarInfoKey,
                 *const _Nonnull BugseeVideoEnabledKey,
                 *const _Nonnull BugseeStyleKey,
@@ -84,6 +86,12 @@ extern NSString * const _Nonnull BugseeNetworkEventBegin;
 extern NSString * const _Nonnull BugseeNetworkEventComplete;
 extern NSString * const _Nonnull BugseeNetworkEventCancel;
 extern NSString * const _Nonnull BugseeNetworkEventError;
+
+extern NSString * const _Nonnull BugseeWebSocketEventOpen;
+extern NSString * const _Nonnull BugseeWebSocketEventSend;
+extern NSString * const _Nonnull BugseeWebSocketEventMessage;
+extern NSString * const _Nonnull BugseeWebSocketEventClose;
+extern NSString * const _Nonnull BugseeWebSocketEventError;
 
 extern NSString * const _Nonnull BugseeReportTypeBug;
 extern NSString * const _Nonnull BugseeReportTypeCrash;
