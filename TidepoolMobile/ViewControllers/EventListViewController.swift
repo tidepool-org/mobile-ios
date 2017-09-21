@@ -77,6 +77,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.calendarDayDidChange(notification:)), name: NSNotification.Name.NSCalendarDayChanged, object: nil)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterForeground(_:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterBackground(_:)), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleUploadSuccessfulNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.UploadSuccessful), object: nil)
 
         
         if let sideMenu = self.sideMenuController()?.sideMenu {
@@ -94,20 +95,31 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
    
     private var appIsForeground: Bool = true
     private var viewIsForeground: Bool = false
-    private var calendarDayChanged = false
+    private var updateDisplayPending = false
 
-    // Because many notes have times written as "Today at 2:00 pm" for example, they may be out of date when a day changes. Also, this will refresh UI the first time the user opens the app in the day.
-    func calendarDayDidChange(notification : NSNotification)
-    {
-        calendarDayChanged = true
-        checkNewDayReload()
+    private func eventListShowing() -> Bool {
+        return appIsForeground && viewIsForeground
     }
     
-    private func checkNewDayReload() {
-        if calendarDayChanged && viewIsForeground && appIsForeground {
-            calendarDayChanged = false
-            tableView.reloadData()
+    // Because many notes have times written as "Today at 2:00 pm" for example, they may be out of date when a day changes. Also, this will refresh UI the first time the user opens the app in the day.
+    internal func calendarDayDidChange(notification : NSNotification)
+    {
+        updateDisplayPending = true
+        checkRefresh()
+    }
+    
+    private func checkRefresh() {
+        if !eventListShowing() {
+            // wait until app is foreground and this vc is showing
+            return
         }
+        if updateDisplayPending {
+            updateDisplayPending = false
+            graphNeedsUpdate = false // reload will also update graphs
+            tableView.reloadData()
+            return
+        }
+        checkUpdateGraph()
     }
     
     // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
@@ -138,7 +150,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func appDidEnterForeground(_ notification: Notification) {
         NSLog("EventListViewController:appDidEnterForeground")
         appIsForeground = true
-        
         checkRefresh()
     }
     
@@ -162,22 +173,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             eventListNeedsUpdate = false
             loadNotes()
         }
-        
-        checkRefresh()
-    }
-    
-    // shared refresh code, coming from another view, or from the background
-    private func checkRefresh() {
+
         // periodically check for authentication issues in case we need to force a new login
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         appDelegate?.checkConnection()
         APIConnector.connector().trackMetric("Viewed Home Screen (Home Screen)")
-        
-        // in case we loaded data while in the background...
-        checkUpdateGraph()
-        
-        // in case a new day has passed...
-        checkNewDayReload()
+
+        checkRefresh()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -682,9 +684,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     fileprivate var eventListNeedsUpdate: Bool  = false
     func databaseChanged(_ note: Notification) {
         NSLog("EventList: Database Change Notification")
-        if viewIsForeground {
-            // Note: this crashed on logout, we're still foreground, and moc is being saved...
-            // This will be needed if notes go into a database but unused right now...
+        if eventListShowing() {
+            // TODO: This will be needed if notes go into a database but unused right now...
             //loadNotes()
         } else {
             // Note: this event can be triggered by update of hashtags in database, resulting in a refresh just as we are saving edits to a note. We update the note, but then get the refresh which overwrites it, and then the update goes out, and we miss the new edits until a later refresh.
@@ -826,15 +827,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     func textFieldDidChangeNotifyHandler(_ note: Notification) {
-        if !viewIsForeground {
+        if !eventListShowing() {
             // not for us...
             return
         }
         if let textField = note.object as? UITextField {
             if textField == searchTextField {
-                if viewIsForeground {
-                    updateFilteredAndReload()
-                }
+                updateFilteredAndReload()
             }
         }
     }
@@ -908,15 +907,19 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // MARK: - Graph support
     //
 
+    internal func handleUploadSuccessfulNotification(_ note: Notification) {
+        DDLogInfo("inval cache and update graphs on successful upload")
+        // TODO: make this more specific; for now, since uploads happen at most every 5 minutes, just do a graph update
+        // reset cache fetch timeout so data will be refetched
+        DatabaseUtils.sharedInstance.resetTidepoolEventLoader()
+        graphDataChanged(note)
+    }
+
     fileprivate var graphNeedsUpdate: Bool  = false
     func graphDataChanged(_ note: Notification) {
+        DDLogInfo("\(#function)")
         graphNeedsUpdate = true
-        if viewIsForeground {
-            NSLog("EventListVC: graphDataChanged, reloading")
-            checkUpdateGraph()
-        } else {
-            NSLog("EventListVC: graphDataChanged, in background")
-        }
+        checkRefresh()
     }
     
     @IBAction func howToUploadButtonHandler(_ sender: Any) {
