@@ -35,6 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     fileprivate var didBecomeActiveAtLeastOnce = false
     fileprivate var needSetUpForLogin = false
     fileprivate var needSetUpForLoginSuccess = false
+    fileprivate var needRefreshTokenOnDidBecomeActive = false
     // one shot, UI should put up dialog letting user know we are in test mode!
     static var testModeNotification = false
     
@@ -62,13 +63,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Initialize database by referencing username. This must be done before using the APIConnector!
         let name = TidepoolMobileDataController.sharedInstance.currentUserName
         if !name.isEmpty {
-            NSLog("Initializing TidepoolMobileDataController, found and set user \(name)")
+            DDLogInfo("Initializing TidepoolMobileDataController, found and set user \(name)")
         }
 
         // Set up the API connection
         let api = APIConnector.connector().configure()
         if api.sessionToken == nil {
-            NSLog("No token available, clear any data in case user did not log out normally")
+            DDLogInfo("No token available, clear any data in case user did not log out normally")
             api.logout() {
                 if self.didBecomeActiveAtLeastOnce {
                     self.setupUIForLogin()
@@ -102,15 +103,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             }
                         }
                     } else {
-                        // Only logout if refresh token failed and either app is active or response code is non-zero. If we're not active
-                        // and have no response status code, then don't logout, it was probably an intermittent client side failure (likely due
-                        // to background context networking issues?)
-                        //
-                        // NOTE: Our model for refreshToken and http error handling in APIConnect should be improved. We should be able
-                        // to handle a 401 on any of the API calls, and redirect to login as appropriate, not just via refreshToken. The
-                        // refreshToken should just be convenience to extend token while app is being used, not as the mechanism to determine
-                        // whether to show login
-                        let shouldLogout = UIApplication.shared.applicationState != .background || responseStatusCode > 0
+                        let shouldLogout = responseStatusCode > 0 // Only logout if error is from server, not client side
                         if shouldLogout {
                             message = "Refresh token failed, need to log in normally, statusCode: \(responseStatusCode)"
                             DDLogInfo(message)
@@ -130,13 +123,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             if AppDelegate.testMode  {
                                 self.localNotifyMessage(message)
                             }
+
+                            if self.didBecomeActiveAtLeastOnce {
+                                api.logout() {
+                                    self.setupUIForLogin()
+                                }
+                            } else {
+                                message = "Try to use current user and token if refresh token failed in background due to client side error"
+                                DDLogError(message)
+                                if AppDelegate.testMode  {
+                                    self.localNotifyMessage(message)
+                                }
+                                let dataController = TidepoolMobileDataController.sharedInstance
+                                dataController.checkRestoreCurrentViewedUser {
+                                    dataController.configureHealthKitInterface()
+                                }
+
+                                self.needRefreshTokenOnDidBecomeActive = true
+                            }
                         }
                     }
                 }
-            }            
+            } else {
+                self.needRefreshTokenOnDidBecomeActive = true
+            }
         }
         
-        NSLog("did finish launching")
+        DDLogInfo("did finish launching")
         return true
         
         // Note: for non-background launches, this will continue in applicationDidBecomeActive...
@@ -181,18 +194,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     fileprivate var deviceIsLocked = false
     func applicationProtectedDataDidBecomeAvailable(_ application: UIApplication) {
-        DDLogVerbose("Device unlocked!")
+        DDLogInfo("Device unlocked!")
         deviceIsLocked = false
     }
     
     func applicationProtectedDataWillBecomeUnavailable(_ application: UIApplication) {
-        DDLogVerbose("Device locked!")
+        DDLogInfo("Device locked!")
         deviceIsLocked = true
     }
     
     // Support for background fetch
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        NSLog("performFetchWithCompletionHandler")
+        DDLogInfo("trace")
         
         if HealthKitBloodGlucosePusher.sharedInstance.enabled {
             // if device is locked, bail now because we can't read HealthKit data
@@ -207,7 +220,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // next make sure we are logged in and have connectivity
             let api = APIConnector.connector()
             if api.sessionToken == nil {
-                NSLog("No token available, user will need to log in!")
+                DDLogInfo("No token available, user will need to log in!")
                 // Use local notifications to test background activity...
                 if AppDelegate.testMode {
                     self.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: log in required!")
@@ -217,7 +230,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
             if !api.isConnectedToNetwork() {
-                NSLog("No network available!")
+                DDLogInfo("No network available!")
                 // Use local notifications to test background activity...
                 if AppDelegate.testMode {
                     self.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: no network available!")
@@ -242,7 +255,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     fileprivate func localNotifyMessage(_ msg: String) {
-        NSLog("localNotifyMessage: \(msg)")
+        DDLogInfo("localNotifyMessage: \(msg)")
         let debugMsg = UILocalNotification()
         debugMsg.alertBody = msg
         UIApplication.shared.presentLocalNotificationNow(debugMsg)
@@ -250,13 +263,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func applicationWillResignActive(_ application: UIApplication) {
-        NSLog("TidepoolMobile applicationWillResignActive")
+        DDLogInfo("trace")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        NSLog("TidepoolMobile applicationDidEnterBackground")
+        DDLogInfo("trace")
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         
@@ -264,7 +277,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        NSLog("TidepoolMobile applicationWillEnterForeground")
+        DDLogInfo("applicationWillEnterForeground")
         
         if !self.needSetUpForLogin && !self.needSetUpForLoginSuccess {
             checkConnection()
@@ -278,7 +291,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var doCheck = refreshTokenNextActive
         if let lastError = api.lastNetworkError {
             if lastError == 401 || lastError == 403 {
-                NSLog("AppDelegate: last network error is \(lastError)")
+                DDLogError("AppDelegate: last network error is \(lastError)")
                 doCheck = true
             }
         }
@@ -286,7 +299,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
              if api.isConnectedToNetwork() {
                 refreshTokenNextActive = false
                 api.lastNetworkError = nil
-                NSLog("AppDelegate: attempting to refresh token in checkConnection")
+                DDLogInfo("AppDelegate: attempting to refresh token in checkConnection")
                 api.refreshToken() { (succeeded, responseStatusCode) in
                     if !succeeded {
                         DDLogInfo("Refresh token failed, need to log in normally, statusCode: \(responseStatusCode)")
@@ -301,26 +314,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     fileprivate var refreshTokenNextActive: Bool = false
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        // When app is launched, either go to login, or if we have a valid token, go to main UI after optionally refreshing the token.
-        // Note: We attempt token refresh each time the app is launched; it might make more sense to do it periodically when app is brought to foreground, or just let the service control token timeout.
-        NSLog("TidepoolMobile applicationDidBecomeActive")
+        DDLogInfo("trace")
         
-        if !didBecomeActiveAtLeastOnce {
-            didBecomeActiveAtLeastOnce = true
-            // TODO: only needed if we want to start working offline, but we will need to cache notes to make this usable...
-//            if !api.isConnectedToNetwork() {
-//                // Set to refresh next time we come to foreground...
-//                NSLog("Offline, set to refresh token next time app enters foreground")
-//                self.refreshTokenNextActive = true
-//                self.setupUIForLoginSuccess()
-//                return
-//            }
-        }
+        self.didBecomeActiveAtLeastOnce = true
         
-        if needSetUpForLoginSuccess {
+        if self.needSetUpForLoginSuccess {
+            self.needSetUpForLoginSuccess = false
             self.setupUIForLoginSuccess()
-        } else if needSetUpForLogin {
+        } else if self.needSetUpForLogin {
+            self.needSetUpForLogin = false
             self.setupUIForLogin()
+        } else if self.needRefreshTokenOnDidBecomeActive  {
+            self.needRefreshTokenOnDidBecomeActive = false
+
+            let api = APIConnector.connector()
+            if api.isConnectedToNetwork() {
+                var message = "AppDelegate attempting to refresh token"
+                DDLogInfo(message)
+                
+                api.refreshToken() { (succeeded, responseStatusCode) in
+                    if succeeded {
+                        message = "Refresh token succeeded, statusCode: \(responseStatusCode)"
+                        DDLogInfo(message)
+                        
+                        let dataController = TidepoolMobileDataController.sharedInstance
+                        dataController.checkRestoreCurrentViewedUser {
+                            dataController.configureHealthKitInterface()
+                            self.setupUIForLoginSuccess()
+                        }
+                    } else {
+                        message = "Refresh token failed, need to log in normally, statusCode: \(responseStatusCode)"
+                        DDLogInfo(message)
+                        api.logout() {
+                            self.setupUIForLogin()
+                        }
+                    }
+                }
+            }
         }
         
         HealthKitBloodGlucoseUploadManager.sharedInstance.ensureUploadSession(background: false)
@@ -329,13 +359,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
+        DDLogInfo("trace")
+
         TidepoolMobileDataController.sharedInstance.appWillTerminate()
-        NSLog("TidepoolMobile applicationWillTerminate")
     }
 
     func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void)
     {
-        NSLog("TidepoolMobile handleEventsForBackgroundURLSession")
+        DDLogInfo("trace")
         
         if AppDelegate.testMode {
             self.localNotifyMessage("Handle events for background session: \(identifier)")
