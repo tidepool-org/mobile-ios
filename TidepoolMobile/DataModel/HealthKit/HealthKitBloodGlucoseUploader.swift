@@ -39,7 +39,7 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
     }
     
     func ensureUploadSession(background: Bool) {
-        DDLogVerbose("trace")
+        DDLogVerbose("ensureUploadSession, background: \(background)")
         
         if self.uploadSession == nil {
             self.uploadSessionIsBackground = background
