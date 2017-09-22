@@ -87,7 +87,7 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
     // NOTE: This is called from a query results handler, not on main thread
     func startUploadSessionTasks(with request: URLRequest, data: HealthKitBloodGlucoseUploadData) throws {
         DDLogVerbose("trace")
-        
+
         // Prepare POST files for upload. Fine to do this on background thread
         let batchMetadataPostBodyURL = try self.createPostBodyFileForBatchMetadataUpload(data: data)
         let batchSamplesPostBodyURL = try createBodyFileForBatchSamplesUpload(data: data)
@@ -101,7 +101,10 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
             DDLogInfo("startUploadSessionTasks on main thread")
             
             guard let uploadSession = self.uploadSession else {
-                DDLogError("Unable to upload, session does not exist, it was probably invalidated, will try again next time we are notified of new samples, or after delay")
+                let message = "Unable to start upload tasks, session does not exist, it was probably invalidated"
+                let error = NSError(domain: "HealthKitBloodGlucoseUploader", code: -1, userInfo: [NSLocalizedDescriptionKey: message])
+                DDLogError(message)
+                self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: error)
                 return
             }
 
@@ -174,7 +177,7 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
             if !(200 ... 299 ~= response.statusCode) {
                 let message = "HTTP error on upload: \(response.statusCode)"
                 DDLogError(message)
-                httpError = NSError(domain: "HealthKitBloodGlucoseUploader", code: -1, userInfo: [NSLocalizedDescriptionKey: message])
+                httpError = NSError(domain: "HealthKitBloodGlucoseUploader", code: -2, userInfo: [NSLocalizedDescriptionKey: message])
             }
         }
         
@@ -204,7 +207,7 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
                 task2.resume()
             } else {
                 let message = "Failed to find stored POST body URL or stored request for samples upload"
-                let settingsError = NSError(domain: "HealthKitBloodGlucoseUploader", code: -2, userInfo: [NSLocalizedDescriptionKey: message])
+                let settingsError = NSError(domain: "HealthKitBloodGlucoseUploader", code: -3, userInfo: [NSLocalizedDescriptionKey: message])
                 DDLogError(message)
                 self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
                 self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: settingsError)
