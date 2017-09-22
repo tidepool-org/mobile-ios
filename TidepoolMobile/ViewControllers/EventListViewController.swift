@@ -104,6 +104,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // Because many notes have times written as "Today at 2:00 pm" for example, they may be out of date when a day changes. Also, this will refresh UI the first time the user opens the app in the day.
     internal func calendarDayDidChange(notification : NSNotification)
     {
+        DDLogInfo("\(#function)")
         updateDisplayPending = true
         checkRefresh()
     }
