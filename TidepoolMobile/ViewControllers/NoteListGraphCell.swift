@@ -126,9 +126,14 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     }
     
     func hideNoDataViews(_ hide: Bool) {
-        for view in noDataViewsCollection {
-            view.isHidden = hide
-        }
+//        for view in noDataViewsCollection {
+//            view.isHidden = hide
+//        }
+        
+        noDataLabel.isHidden = hide
+        howToUploadButton.isHidden = hide
+        dataIsComingLabel.isHidden = hide
+        
         if !hide {
             configureNoData()
         }
