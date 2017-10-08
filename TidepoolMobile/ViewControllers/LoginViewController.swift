@@ -231,18 +231,10 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
     // MARK: - View handling for keyboard
     //
 
-    @IBOutlet weak var loginViewCenterYConstraint: NSLayoutConstraint!
+    @IBOutlet weak var keyboardPlaceholdHeightConstraint: NSLayoutConstraint!
     fileprivate var viewAdjustAnimationTime: Float = 0.25
-    fileprivate var originalOffsetConstant: CGFloat? = nil
-    fileprivate func adjustLogInView(_ extraSpaceNeeded: CGFloat? = nil) {
-        if originalOffsetConstant == nil {
-            originalOffsetConstant = loginViewCenterYConstraint.constant
-        }
-        var newOffsetConstant = originalOffsetConstant!
-        if let extraSpace = extraSpaceNeeded {
-            newOffsetConstant -= extraSpace
-        }
-        loginViewCenterYConstraint.constant = newOffsetConstant
+    fileprivate func adjustLogInView(_ keyboardHeight: CGFloat) {
+        keyboardPlaceholdHeightConstraint.constant = keyboardHeight
         UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
             self.logInScene.layoutIfNeeded()
         }) 
@@ -253,18 +245,14 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         // make space for the keyboard if needed
         let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! Float
-        let loginViewDistanceToBottom = logInScene.frame.height - logInEntryContainer.frame.origin.y - logInEntryContainer.frame.size.height
-        // allow 4 pixels for margin...
-        let additionalKeyboardRoom = keyboardFrame.height - loginViewDistanceToBottom + 4.0
-        if (additionalKeyboardRoom > 0) {
-            self.adjustLogInView(additionalKeyboardRoom)
-        }
+        NSLog("keyboardWillShow, kbd height: \(keyboardFrame.height)")
+        adjustLogInView(keyboardFrame.height)
     }
     
     // UIKeyboardWillHideNotification
     func keyboardWillHide(_ notification: Notification) {
         // reposition login view if needed
-        self.adjustLogInView()
+        self.adjustLogInView(0.0)
     }
 
     // MARK: - Debug Config
