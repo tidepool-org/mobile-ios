@@ -302,7 +302,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     func sortNotesAndReload() {
         sortedNotes.sort(by: {$0.note.timestamp.timeIntervalSinceNow > $1.note.timestamp.timeIntervalSinceNow})
         
-        updateFilteredAndReload()
+        updateFilteredAndReload(forceResort: true)
      }
 
     func indexPathForNoteId(_ noteId: String) -> IndexPath? {
@@ -865,13 +865,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         searchPlaceholderLabel.isHidden = searchOn
     }
 
-    fileprivate func updateFilteredAndReload() {
+    fileprivate func updateFilteredAndReload(forceResort: Bool = false) {
         if !searchMode() {
             filteredNotes = sortedNotes
             filterString = ""
         } else if let searchText = searchTextField.text {
             if !searchText.isEmpty {
-                if searchText.localizedCaseInsensitiveContains(filterString) {
+                if !forceResort && searchText.localizedCaseInsensitiveContains(filterString) {
                     // if the search is just getting longer, no need to check already filtered out items
                     filteredNotes = filteredNotes.filter() {
                         $0.note.containsSearchString(searchText)
