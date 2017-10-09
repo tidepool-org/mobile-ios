@@ -92,7 +92,7 @@
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wrong email or password!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bJV-Wt-zLG" userLabel="errorFeedbackLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="38" y="45" width="244.5" height="14.5"/>
+                                                <rect key="frame" x="38" y="36" width="244.5" height="23.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -134,7 +134,7 @@
                                                         </connections>
                                                     </textField>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NjG-Wi-o84" userLabel="forgotPasswordButton" customClass="TidepoolMobileSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="109.5" width="139" height="32"/>
+                                                        <rect key="frame" x="0.0" y="109.5" width="140" height="36"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
                                                         <state key="normal" title="Forgot password?">
                                                             <color key="titleColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="calibratedRGB"/>
@@ -201,7 +201,7 @@
                                                 <rect key="frame" x="26" y="63.5" width="268.5" height="190"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are not currently connected to a network!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nYu-JU-kh6" userLabel="offlineMessage" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="25" y="74.5" width="218.5" height="41"/>
+                                                        <rect key="frame" x="25" y="69" width="218.5" height="52"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -285,7 +285,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Made possible by" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t0E-Qp-ol9" userLabel="madePossibleByLabel">
-                                <rect key="frame" x="43.5" y="505" width="135" height="20"/>
+                                <rect key="frame" x="43.5" y="505.5" width="135" height="20"/>
                                 <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="17"/>
                                 <color key="textColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -299,7 +299,7 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="software version" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5xp-AB-RVE" userLabel="versionLabel">
-                                <rect key="frame" x="98" y="531" width="125" height="23.5"/>
+                                <rect key="frame" x="97.5" y="531" width="125" height="23.5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="23.5" id="ab1-HI-cdu"/>
                                 </constraints>

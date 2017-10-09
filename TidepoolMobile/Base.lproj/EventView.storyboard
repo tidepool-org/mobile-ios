@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="MlM-Oh-SBV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MlM-Oh-SBV">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -29,10 +30,6 @@
         <scene sceneID="M9T-no-DFw">
             <objects>
                 <viewController storyboardIdentifier="eventListVC" title="Event List Controller" id="oVB-ry-Lwj" customClass="EventListViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="2ih-Oi-tIS"/>
-                        <viewControllerLayoutGuide type="bottom" id="Pl9-hd-HdO"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="vp9-lf-HJa" userLabel="view">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -49,7 +46,7 @@
                                                     <constraint firstAttribute="height" constant="1" id="tPZ-nc-Xd7"/>
                                                 </constraints>
                                             </imageView>
-                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UK3-u0-owx" userLabel="searchButton">
+                                            <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UK3-u0-owx" userLabel="searchButton">
                                                 <rect key="frame" x="14" y="14.5" width="22" height="22"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="750" constant="21" id="Bjj-9W-avF"/>
@@ -70,7 +67,7 @@
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JwL-dD-CDl" userLabel="searchPlaceholder" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="50" y="0.0" width="53.5" height="50"/>
+                                                <rect key="frame" x="50" y="0.0" width="52" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -83,7 +80,6 @@
                                         <constraints>
                                             <constraint firstItem="G3r-qM-suN" firstAttribute="centerY" secondItem="W4V-dI-wa3" secondAttribute="centerY" id="0B5-Sw-Ey5"/>
                                             <constraint firstItem="53q-aG-llv" firstAttribute="leading" secondItem="W4V-dI-wa3" secondAttribute="leading" id="1R6-Oo-hXU"/>
-                                            <constraint firstItem="UK3-u0-owx" firstAttribute="height" relation="lessThanOrEqual" secondItem="W4V-dI-wa3" secondAttribute="height" id="9zp-RD-Gpy"/>
                                             <constraint firstItem="G3r-qM-suN" firstAttribute="leading" secondItem="UK3-u0-owx" secondAttribute="trailing" constant="14" id="K1r-9e-VWh"/>
                                             <constraint firstAttribute="trailing" secondItem="G3r-qM-suN" secondAttribute="trailing" constant="8" id="KUv-xo-ZOV"/>
                                             <constraint firstItem="G3r-qM-suN" firstAttribute="height" secondItem="W4V-dI-wa3" secondAttribute="height" id="Rnx-6H-zzk"/>
@@ -112,7 +108,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kqd-t1-lUR" userLabel="dateLabelSpacerView" customClass="TPIntrinsicSizeUIView" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="54"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="height">
@@ -121,7 +117,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ogm-kb-e7S" userLabel="userLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="7" width="150" height="15.5"/>
+                                                            <rect key="frame" x="20" y="7" width="150" height="17.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -130,7 +126,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Tap to close note" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iFh-lj-BYv" userLabel="firstTimeTipLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="180" y="7" width="120" height="15.5"/>
+                                                            <rect key="frame" x="180" y="7" width="120" height="17.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="120" id="V6W-Mc-1St"/>
                                                             </constraints>
@@ -142,7 +138,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="752" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iPM-Jk-ybw" userLabel="dateLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="66.5" width="81" height="12"/>
+                                                            <rect key="frame" x="20" y="61" width="103" height="17.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -152,14 +148,14 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NmN-1p-56X" userLabel="editButtonLargeHitArea" customClass="TPUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="-15.5" width="60" height="61"/>
+                                                            <rect key="frame" x="255" y="-14" width="60" height="60"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="60" id="EET-tp-zut"/>
                                                                 <constraint firstAttribute="width" constant="60" id="iKg-xp-dle"/>
                                                             </constraints>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2iF-Hl-EhA" userLabel="editButton" customClass="TidepoolMobileSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="270" y="2.5" width="30" height="24.5"/>
+                                                            <rect key="frame" x="270" y="2.5" width="30" height="26.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <state key="normal" title="Edit"/>
                                                             <userDefinedRuntimeAttributes>
@@ -330,7 +326,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Comment" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zj3-QQ-6d1" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="49" y="7" width="98" height="32"/>
+                                                            <rect key="frame" x="49" y="7" width="104" height="32"/>
                                                             <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
                                                             <color key="textColor" red="0.48627450980392156" green="0.48627450980392156" blue="0.48627450980392156" alpha="1" colorSpace="calibratedRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -360,7 +356,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oY4-t1-amu" userLabel="userLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="7" width="65.5" height="48.5"/>
+                                                            <rect key="frame" x="20" y="7" width="64.5" height="48.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -369,7 +365,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0X6-au-gcs" userLabel="dateLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="95.5" y="26" width="81" height="12"/>
+                                                            <rect key="frame" x="94.5" y="23" width="103" height="17.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -378,7 +374,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2eJ-Wn-2aL" userLabel="editButtonLargeHitArea" customClass="TPUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="1" width="60" height="60.5"/>
+                                                            <rect key="frame" x="255" y="1" width="60" height="60"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="60" id="KFK-uS-YxW"/>
                                                                 <constraint firstAttribute="width" constant="60" id="XYd-nf-Tpz"/>
@@ -458,7 +454,7 @@
                                                         </constraints>
                                                     </imageView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect Health to get your CGM data to start flowing in." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B4A-qb-qHW" userLabel="firstTimeHealthLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="90" y="24.5" width="184" height="52.5"/>
+                                                        <rect key="frame" x="90" y="20.5" width="184" height="61.5"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
@@ -507,7 +503,7 @@
                                                 <rect key="frame" x="13" y="38" width="294" height="64"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Now, add an event, a meal, or note." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2uq-Ah-EPW" userLabel="firstTimeAddNoteLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="20" y="23.5" width="254" height="17.5"/>
+                                                        <rect key="frame" x="20" y="11.5" width="254" height="41"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
@@ -547,7 +543,7 @@
                                                 <rect key="frame" x="0.0" y="304" width="320" height="200"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zbf-U4-kna" userLabel="firstTimeNeedUploaderLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="55" y="17" width="210" height="87.5"/>
+                                                        <rect key="frame" x="55" y="17" width="210" height="102.5"/>
                                                         <string key="text">Woohoo!
 
 Last step: to get pump data, you need the Tidepool Uploader on your computer.</string>
@@ -590,9 +586,6 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                                 </connections>
                                                             </button>
                                                         </subviews>
-                                                        <constraints>
-                                                            <constraint firstItem="6QL-Rq-YCV" firstAttribute="width" secondItem="n2w-Kf-WHE" secondAttribute="width" id="LMH-VM-tjO"/>
-                                                        </constraints>
                                                     </stackView>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -642,7 +635,6 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                     <constraint firstAttribute="trailing" secondItem="p1Z-R3-s10" secondAttribute="trailing" id="IBo-Xv-iRX"/>
                                     <constraint firstItem="Dyq-A2-0VW" firstAttribute="top" secondItem="p1Z-R3-s10" secondAttribute="top" id="M34-CU-YXj"/>
                                     <constraint firstItem="Dyq-A2-0VW" firstAttribute="trailing" secondItem="p1Z-R3-s10" secondAttribute="trailing" id="Tyy-RN-39E"/>
-                                    <constraint firstItem="Dyq-A2-0VW" firstAttribute="bottom" secondItem="p1Z-R3-s10" secondAttribute="bottom" id="aSp-IP-xRH"/>
                                     <constraint firstItem="W4V-dI-wa3" firstAttribute="leading" secondItem="Yu7-Gk-FTH" secondAttribute="leading" id="dpW-Dk-QGU"/>
                                     <constraint firstItem="W3p-JG-ig2" firstAttribute="leading" secondItem="p1Z-R3-s10" secondAttribute="leading" id="em9-xA-Ah8"/>
                                     <constraint firstItem="IgM-HA-v6s" firstAttribute="bottom" secondItem="p1Z-R3-s10" secondAttribute="bottom" id="n58-Mk-c48"/>
@@ -655,11 +647,13 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="Yu7-Gk-FTH" secondAttribute="trailing" id="6Cx-ow-G4u"/>
-                            <constraint firstItem="Pl9-hd-HdO" firstAttribute="top" secondItem="Yu7-Gk-FTH" secondAttribute="bottom" id="JQL-gW-UcI"/>
-                            <constraint firstItem="Yu7-Gk-FTH" firstAttribute="leading" secondItem="vp9-lf-HJa" secondAttribute="leading" id="L7F-kx-ZGJ"/>
-                            <constraint firstItem="Yu7-Gk-FTH" firstAttribute="top" secondItem="2ih-Oi-tIS" secondAttribute="bottom" id="dE9-TR-dFF"/>
+                            <constraint firstItem="Dyq-A2-0VW" firstAttribute="bottom" secondItem="Wei-4t-aqX" secondAttribute="bottom" id="4S6-XN-v7h"/>
+                            <constraint firstItem="Wei-4t-aqX" firstAttribute="trailing" secondItem="Yu7-Gk-FTH" secondAttribute="trailing" id="6Cx-ow-G4u"/>
+                            <constraint firstAttribute="bottom" secondItem="Yu7-Gk-FTH" secondAttribute="bottom" id="JQL-gW-UcI"/>
+                            <constraint firstItem="Yu7-Gk-FTH" firstAttribute="leading" secondItem="Wei-4t-aqX" secondAttribute="leading" id="L7F-kx-ZGJ"/>
+                            <constraint firstItem="Yu7-Gk-FTH" firstAttribute="top" secondItem="Wei-4t-aqX" secondAttribute="top" id="dE9-TR-dFF"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="Wei-4t-aqX"/>
                     </view>
                     <navigationItem key="navigationItem" title="Note List" id="h4z-iC-Yiv">
                         <barButtonItem key="leftBarButtonItem" image="menu-button" id="71N-mf-LhE" userLabel="menuButton">
@@ -747,10 +741,6 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
         <scene sceneID="94g-fR-7ed">
             <objects>
                 <viewController title="Add-Edit Comment Scene" id="jHd-me-gvT" customClass="EditCommentViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Tr3-82-VdC"/>
-                        <viewControllerLayoutGuide type="bottom" id="uOd-Md-B59"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="D1F-YL-XjO">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -770,7 +760,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wry-fe-dMx" userLabel="dateLabelSpacerView" customClass="TPIntrinsicSizeUIView" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="42.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="39"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="height">
@@ -800,7 +790,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="752" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xa8-xT-Ys1" userLabel="dateLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="49.5" width="82.5" height="14"/>
+                                                            <rect key="frame" x="20" y="46" width="103" height="17.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -993,7 +983,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34S-pq-Xwd" userLabel="userLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="7" width="62.5" height="15.5"/>
+                                                            <rect key="frame" x="20" y="7" width="64.5" height="15.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1002,7 +992,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Bm-JW-9pW" userLabel="dateLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="92.5" y="8.5" width="82.5" height="14"/>
+                                                            <rect key="frame" x="94.5" y="6.5" width="103" height="17.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1011,7 +1001,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yNh-CL-w7U" userLabel="editButtonLargeHitArea" customClass="TPUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="-15.5" width="60" height="60.5"/>
+                                                            <rect key="frame" x="255" y="-15.5" width="60" height="60"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="60" id="drh-aq-jrU"/>
                                                                 <constraint firstAttribute="height" constant="60" id="mPg-fI-UcQ"/>
@@ -1085,14 +1075,14 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardAppearance="alert"/>
                                                         </textView>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gjm-bk-lTD" userLabel="saveButtonLargeHitArea" customClass="TPUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="253" y="-6.5" width="60" height="60.5"/>
+                                                            <rect key="frame" x="255" y="-6.5" width="60" height="60.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="60" id="365-4A-TNm"/>
                                                                 <constraint firstAttribute="height" constant="60" id="A9U-aR-0bL"/>
                                                             </constraints>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hjb-HN-EnG" userLabel="saveButton" customClass="TidepoolMobileSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="266" y="9.5" width="34" height="30"/>
+                                                            <rect key="frame" x="270" y="9.5" width="30" height="30"/>
                                                             <state key="normal" title="Save"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="editButton"/>
@@ -1154,11 +1144,12 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="rAB-Jy-8U8" firstAttribute="top" secondItem="Tr3-82-VdC" secondAttribute="bottom" id="4aI-Ni-N5G"/>
-                            <constraint firstAttribute="trailing" secondItem="rAB-Jy-8U8" secondAttribute="trailing" id="7Nv-Gd-Vx9"/>
-                            <constraint firstItem="uOd-Md-B59" firstAttribute="top" secondItem="rAB-Jy-8U8" secondAttribute="bottom" id="AyS-74-d3s"/>
-                            <constraint firstItem="rAB-Jy-8U8" firstAttribute="leading" secondItem="D1F-YL-XjO" secondAttribute="leading" id="KcA-Fy-AaY"/>
+                            <constraint firstItem="rAB-Jy-8U8" firstAttribute="top" secondItem="tXO-He-06j" secondAttribute="top" id="4aI-Ni-N5G"/>
+                            <constraint firstItem="tXO-He-06j" firstAttribute="trailing" secondItem="rAB-Jy-8U8" secondAttribute="trailing" id="7Nv-Gd-Vx9"/>
+                            <constraint firstItem="tXO-He-06j" firstAttribute="bottom" secondItem="rAB-Jy-8U8" secondAttribute="bottom" id="AyS-74-d3s"/>
+                            <constraint firstItem="rAB-Jy-8U8" firstAttribute="leading" secondItem="tXO-He-06j" secondAttribute="leading" id="KcA-Fy-AaY"/>
                         </constraints>
+                        <viewLayoutGuide key="safeArea" id="tXO-He-06j"/>
                     </view>
                     <navigationItem key="navigationItem" title="Add Comment" id="213-bT-2cG">
                         <barButtonItem key="leftBarButtonItem" image="backArrow" id="BeY-Km-7zf">
