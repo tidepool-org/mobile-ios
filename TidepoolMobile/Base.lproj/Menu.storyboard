@@ -105,6 +105,16 @@
                                                             <action selector="enableHealthData:" destination="jOa-f6-dl3" eventType="valueChanged" id="fFy-Am-V5h"/>
                                                         </connections>
                                                     </switch>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" fixedFrame="YES" text="Allow Tidepool Mobile to read diabetes-related data from Apple Health" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y7a-Ke-na1" userLabel="healthExplanation" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="16" y="35.5" width="223" height="28"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMinorStatus"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6Yq-ge-9W3" userLabel="healthStatusContainerView">
                                                         <rect key="frame" x="16" y="36.5" width="223" height="42.5"/>
                                                         <subviews>
@@ -418,6 +428,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="255" height="568"/>
                     <connections>
+                        <outlet property="healthExplanation" destination="Y7a-Ke-na1" id="SxB-BD-8eE"/>
                         <outlet property="healthKitLabel" destination="M2n-bT-OD5" id="pNF-Z4-sE2"/>
                         <outlet property="healthKitSwitch" destination="9g5-rw-efz" id="toA-sJ-BKW"/>
                         <outlet property="healthStatusContainerView" destination="6Yq-ge-9W3" id="vxl-OS-wxW"/>

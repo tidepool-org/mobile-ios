@@ -23,6 +23,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var healthKitSwitch: UISwitch!
     @IBOutlet weak var healthKitLabel: TidepoolMobileUILabel!
     @IBOutlet weak var healthStatusContainerView: UIStackView!
+    @IBOutlet weak var healthExplanation: UILabel!
     @IBOutlet weak var healthStatusLine1: UILabel!
     @IBOutlet weak var healthStatusLine2: UILabel!
     @IBOutlet weak var healthStatusLine3: UILabel!
@@ -197,6 +198,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         healthKitSwitch.isHidden = hideHealthKitUI
         healthKitLabel.isHidden = hideHealthKitUI
         healthStatusContainerView.isHidden = hideHealthKitUI || !hkCurrentEnable
+        healthExplanation.isHidden = hideHealthKitUI || hkCurrentEnable
     }
     
     private func enableHealthKitInterfaceForCurrentUser() {
