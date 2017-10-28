@@ -83,6 +83,7 @@ class APIConnector {
     let kServers = [
         "Production" :   "https://api.tidepool.org",
         "Staging" :      "https://stg-api.tidepool.org",
+        "Integration" :  "https://int-api.tidepool.org",
         "Development" :  "https://dev-api.tidepool.org",
     ]
     fileprivate let kDefaultServerName = "Production"
