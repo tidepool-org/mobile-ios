@@ -296,9 +296,8 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         }
         let api = APIConnector.connector()
         let actionSheet = UIAlertController(title: "Settings" + " (" + api.currentService! + ")", message: "", preferredStyle: .actionSheet)
-        for server in api.kServers {
-            actionSheet.addAction(UIAlertAction(title: server.0, style: .default, handler: { Void in
-                let serverName = server.0
+        for serverName in api.kSortedServerNames {
+            actionSheet.addAction(UIAlertAction(title: serverName, style: .default, handler: { Void in
                 api.switchToServer(serverName)
                 self.configureVersion()
             }))
