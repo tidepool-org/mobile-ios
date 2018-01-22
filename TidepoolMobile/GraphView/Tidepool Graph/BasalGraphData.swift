@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CocoaLumberjack
 
 class BasalGraphDataType: GraphDataType {
     
@@ -70,7 +71,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
         if let event = event as? Basal {
             let eventTime = event.time!
             let graphTimeOffset = eventTime.timeIntervalSince(layout.graphStartTime as Date)
-            //NSLog("Adding Basal event: \(event)")
+            //DDLogInfo("Adding Basal event: \(event)")
             var value = event.value
             if value == nil {
                 if let deliveryType = event.deliveryType {
@@ -94,18 +95,18 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
                         }
                     } else {
                         // Note: a zero duration event may follow a suspended bolus, and might even have the same time stamp as another basal event with a different rate value! In general, durations should be very long.
-                        NSLog("ignoring Basal event with zero duration")
+                        DDLogInfo("ignoring Basal event with zero duration")
                     }
                 } else {
                     // Note: sometimes suspend events have a nil duration - put in a zero valued record!
                     if event.deliveryType == "suspend" {
                         dataArray.append(BasalGraphDataType(value: 0.0, timeOffset: graphTimeOffset, suppressed: nil))
                     } else {
-                        NSLog("ignoring non-suspend Basal event with nil duration")
+                        DDLogInfo("ignoring non-suspend Basal event with nil duration")
                     }
                 }
             } else {
-                NSLog("ignoring Basal event with nil value")
+                DDLogInfo("ignoring Basal event with nil value")
             }
         }
     }
@@ -119,7 +120,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
             if layout.maxBasal < kBasalMinScaleValue {
                 layout.maxBasal = kBasalMinScaleValue
             }
-            //NSLog("Prefetched \(dataArray.count) basal items for graph")
+            //DDLogInfo("Prefetched \(dataArray.count) basal items for graph")
         }
         
         dataArray = []
@@ -134,7 +135,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
                 }
             }
         }
-        //NSLog("Copied \(dataArray.count) basal items from graph cache for slice at offset \(dataLayerOffset/3600) hours")
+        //DDLogInfo("Copied \(dataArray.count) basal items from graph cache for slice at offset \(dataLayerOffset/3600) hours")
 
     }
 
@@ -159,7 +160,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
             let itemValue = basalPoint.value
             let itemSuppressed = basalPoint.suppressed
 
-            //NSLog("time: \(itemTime) val: \(itemValue) sup: \(itemSuppressed)")
+            //DDLogInfo("time: \(itemTime) val: \(itemValue) sup: \(itemSuppressed)")
             
             if itemTime < 0 {
                 startValue = itemValue
@@ -205,7 +206,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
         let rectLeft = floor(CGFloat(startTimeOffset) * viewPixelsPerSec)
         let rectRight = ceil(CGFloat(endTimeOffset) * viewPixelsPerSec)
         let rectWidth = rectRight-rectLeft
-        //NSLog("  len: \(rectWidth) bas: \(value), sup: \(suppressed)")
+        //DDLogInfo("  len: \(rectWidth) bas: \(value), sup: \(suppressed)")
         let rectHeight = floor(pixelsPerValue * value)
         let basalRect = CGRect(x: rectLeft, y: layout.yBottomOfBasal - rectHeight, width: rectWidth, height: rectHeight)
         let basalValueRectPath = UIBezierPath(rect: basalRect)
@@ -219,26 +220,26 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
                 // start a new line path
                 suppressedLine = UIBezierPath()
                 suppressedLine!.move(to: suppressedStart)
-                //NSLog("suppressed move to \(suppressedStart)")
+                //DDLogInfo("suppressed move to \(suppressedStart)")
             } else {
                 // continue an existing suppressed line path by adding connecting line if it's at a different y
                 let currentEnd = suppressedLine!.currentPoint
                 if abs(currentEnd.y - suppressedStart.y) > 1.0 {
                     suppressedLine!.addLine(to: suppressedStart)
-                    //NSLog("suppressed line to \(suppressedStart)")
+                    //DDLogInfo("suppressed line to \(suppressedStart)")
                 }
                 suppressedStart.y = currentEnd.y
             }
             // add current line segment
             suppressedLine!.addLine(to: suppressedEnd)
-            //NSLog("suppressed line to \(suppressedEnd)")
+            //DDLogInfo("suppressed line to \(suppressedEnd)")
             if finish {
                 drawSuppressedLine()
-                //NSLog("suppressed line draw at finish!")
+                //DDLogInfo("suppressed line draw at finish!")
             }
         } else if suppressedLine != nil {
             drawSuppressedLine()
-            //NSLog("suppressed line draw!")
+            //DDLogInfo("suppressed line draw!")
         }
     }
 }

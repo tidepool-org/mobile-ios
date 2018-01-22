@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import SwiftyJSON
+import CocoaLumberjack
 
 
 class User: NSManagedObject {
@@ -28,11 +29,11 @@ class User: NSManagedObject {
     }
     
     func processProfileJSON(_ json: JSON) {
-        NSLog("profile json: \(json)")
+        DDLogInfo("profile json: \(json)")
         fullName = json["fullName"].string
         if fullName != nil {
             self.managedObjectContext?.refresh(self, mergeChanges: true)
-            NSLog("Added full name from profile: \(fullName!))")
+            DDLogInfo("Added full name from profile: \(fullName!))")
         }
         let patient = json["patient"]
         let isDSA = patient != JSON.null

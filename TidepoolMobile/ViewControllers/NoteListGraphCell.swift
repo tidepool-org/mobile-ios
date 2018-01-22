@@ -38,12 +38,12 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
-        NSLog("setSelected \(selected) for \(String(describing: note?.messagetext))!")
+        DDLogInfo("setSelected \(selected) for \(String(describing: note?.messagetext))!")
         super.setSelected(selected, animated: animated)
     }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        NSLog("setHighlighted \(highlighted) for \(String(describing: note?.messagetext))!")
+        DDLogInfo("setHighlighted \(highlighted) for \(String(describing: note?.messagetext))!")
         super.setHighlighted(highlighted, animated:animated)
     }
     
@@ -59,7 +59,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     private var graphContainerView: TidepoolGraphView?
     func removeGraphView() {
         if (graphContainerView != nil) {
-            NSLog("Removing current graph view from cell: \(self)")
+            DDLogInfo("Removing current graph view from cell: \(self)")
             graphContainerView?.removeFromSuperview();
             graphContainerView = nil;
         }
@@ -76,13 +76,13 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
             highBGBounds = Int(bgHighBounds)
         }
         
-        NSLog("NoteListGraphCell: configureGraphContainer")
+        DDLogInfo("NoteListGraphCell: configureGraphContainer")
         removeGraphView()
         if let note = note {
             // TODO: assume all notes created in current timezone?
             let tzOffset = NSCalendar.current.timeZone.secondsFromGMT()
             var graphFrame = self.bounds
-            NSLog("Configuring graph for note id: \(note.id), frame: \(graphFrame)")
+            DDLogInfo("Configuring graph for note id: \(note.id), frame: \(graphFrame)")
             graphFrame.size.height = kGraphHeight
             graphContainerView = TidepoolGraphView.init(frame: graphFrame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: tzOffset, lowBGBounds: lowBGBounds, highBGBounds: highBGBounds)
             if let graphContainerView = graphContainerView {
@@ -142,16 +142,16 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
             var hideNoDataView = true
             if graphContainerView.dataFound() {
                 // ensure loading and no data shown are off
-                NSLog("\(#function) data found, show graph and grid")
+                DDLogInfo("\(#function) data found, show graph and grid")
                 //graphContainerView.displayGridLines(true)
             } else if dataStillLoading {
                 // show loading animation...
-                NSLog("\(#function) data still loading, show loading animation")
+                DDLogInfo("\(#function) data still loading, show loading animation")
                 //graphContainerView.displayGridLines(false)
                 hideLoadingView = false
             } else {
                 // show no data found view...
-                NSLog("\(#function) no data found!")
+                DDLogInfo("\(#function) no data found!")
                 //graphContainerView.displayGridLines(false)
                 hideNoDataView = false
             }
@@ -165,7 +165,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     func showLoadAnimation(_ show: Bool) {
         if loadingAnimationView.isHidden != !show {
             if show {
-                NSLog("show loading animation")
+                DDLogInfo("show loading animation")
                 if animatedLoadingImage == nil {
                     animatedLoadingImage = FLAnimatedImageView(frame: imageContainer.bounds)
                     imageContainer.insertSubview(animatedLoadingImage!, at: 0)
@@ -181,7 +181,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
                 animatedLoadingImage?.startAnimating()
                 
             } else {
-                NSLog("hide loading animation")
+                DDLogInfo("hide loading animation")
                 animatedLoadingImage?.stopAnimating()
                 animatedLoadingImage?.removeFromSuperview();
                 animatedLoadingImage = nil
@@ -203,7 +203,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     }
     
     func dataPointTapped(_ dataPoint: GraphDataType, tapLocationInView: CGPoint) {
-        //NSLog("dataPoint tapped")
+        //DDLogInfo("dataPoint tapped")
     }
     
     func willDisplayGraphCell(_ cell: Int) {
@@ -213,7 +213,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     }
 
     func unhandledTapAtLocation(_ tapLocationInView: CGPoint, graphTimeOffset: TimeInterval) {
-        //NSLog("unhandledTapAtLocation \(tapLocationInView)")
+        //DDLogInfo("unhandledTapAtLocation \(tapLocationInView)")
     }
     
 }

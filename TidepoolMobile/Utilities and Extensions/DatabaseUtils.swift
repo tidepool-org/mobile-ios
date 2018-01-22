@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import SwiftyJSON
+import CocoaLumberjack
 
 public let NewBlockRangeLoadedNotification = "NewBlockRangeLoadedNotification"
 
@@ -21,11 +22,11 @@ class DatabaseUtils {
         // Save the database
         do {
             try moc.save()
-            NSLog("DatabaseUtils: Database saved!")
+            DDLogInfo("DatabaseUtils: Database saved!")
             return true
         } catch let error as NSError {
             // TO DO: error message!
-            NSLog("Failed to save MOC: \(error)")
+            DDLogInfo("Failed to save MOC: \(error)")
             return false
         }
     }
@@ -44,13 +45,13 @@ class DatabaseUtils {
         let refSeconds = Int(date.timeIntervalSinceReferenceDate)
         let kBucketSeconds = 60*60*20 // 20 hour chunks
         let result = refSeconds/kBucketSeconds
-        //NSLog("Date: \(date), bucket number: \(result)")
+        //DDLogInfo("Date: \(date), bucket number: \(result)")
         return result
     }
 
     private func bucketNumberToDate(_ bucket: Int) -> Date {
         let date = Date(timeIntervalSinceReferenceDate: TimeInterval(bucket*60*60*20))
-        //NSLog("Bucket number: \(bucket), date: \(date)")
+        //DDLogInfo("Bucket number: \(bucket), date: \(date)")
         return date
     }
 
@@ -63,11 +64,11 @@ class DatabaseUtils {
             if let lastFetchDate = serverBlocks[bucket] {
                 if now.timeIntervalSince(lastFetchDate) < 60 {
                     // don't check more often than every minute...
-                    NSLog("\(#function): skip load of bucket \(bucket)")
+                    DDLogInfo("\(#function): skip load of bucket \(bucket)")
                     continue
                 }
             }
-            NSLog("\(#function): fetch server data for bucket \(bucket)")
+            DDLogInfo("\(#function): fetch server data for bucket \(bucket)")
             // kick off a fetch if we are online...
             if APIConnector.connector().serviceAvailable() {
                 // TODO: if fetch fails, should we wait less time before retrying? 
@@ -83,23 +84,23 @@ class DatabaseUtils {
                                 self.endTidepoolLoad()
                             }
                         } else {
-                            NSLog("checkLoadDataForDateRange bailing due to nil MOC")
+                            DDLogInfo("checkLoadDataForDateRange bailing due to nil MOC")
                             self.endTidepoolLoad()
                         }
                     } else {
-                        NSLog("Failed to fetch events in range \(startTime) to \(endTime)")
+                        DDLogInfo("Failed to fetch events in range \(startTime) to \(endTime)")
                         self.endTidepoolLoad()
                     }
                 })
             } else {
-                NSLog("skipping: serviceAvailable is false")
+                DDLogInfo("skipping: serviceAvailable is false")
             }
         }
     }
     
     func updateEventsForTimeRange(_ startTime: Date, endTime: Date, objectTypes: [String] = ["smbg","bolus","cbg","wizard","basal"], moc: NSManagedObjectContext, eventsJSON: JSON, completion: @escaping ((Bool) -> Void)) {
-        NSLog("\(#function) from \(startTime) to \(endTime) for types \(objectTypes)")
-        //NSLog("Events from \(startTime) to \(endTime): \(eventsJSON)")
+        DDLogInfo("\(#function) from \(startTime) to \(endTime) for types \(objectTypes)")
+        //DDLogInfo("Events from \(startTime) to \(endTime): \(eventsJSON)")
         DispatchQueue.global(qos: .background).async {
     
             var deleteEventCounter = 0
@@ -116,53 +117,53 @@ class DatabaseUtils {
                 let events = try bgMOC.fetch(request) as! [NSManagedObject]
                 for obj: NSManagedObject in events {
                     //                if let tObj = obj as? CommonData {
-                    //                    NSLog("deleting event id: \(tObj.id) with time: \(tObj.time)")
+                    //                    DDLogInfo("deleting event id: \(tObj.id) with time: \(tObj.time)")
                     //                }
                     bgMOC.delete(obj)
                     deleteEventCounter += 1
                 }
             } catch let error as NSError {
-                NSLog("Error in \(#function) deleting objects: \(error)")
+                DDLogError("Error in \(#function) deleting objects: \(error)")
             }
-            //NSLog("\(#function) deleted \(deleteEventCounter) items")
+            //DDLogInfo("\(#function) deleted \(deleteEventCounter) items")
             
             var insertEventCounter = 0
             for (_, subJson) in eventsJSON {
-                //NSLog("updateEvents next subJson: \(subJson)")
+                //DDLogInfo("updateEvents next subJson: \(subJson)")
                 if let obj = CommonData.fromJSON(subJson, moc: bgMOC) {
                     // add objects
                     if let _=obj.id {
                         insertEventCounter += 1
                         bgMOC.insert(obj)
-                        //NSLog("inserting event id: \(obj.id) with time: \(obj.time)")
+                        //DDLogInfo("inserting event id: \(obj.id) with time: \(obj.time)")
                     } else {
-                        NSLog("updateEvents: no ID found for object: \(obj), not inserting!")
+                        DDLogInfo("updateEvents: no ID found for object: \(obj), not inserting!")
                     }
                 }
             }
-            //NSLog("\(#function) updated \(insertEventCounter) items")
+            //DDLogInfo("\(#function) updated \(insertEventCounter) items")
             if deleteEventCounter != 0 && insertEventCounter != deleteEventCounter {
-                NSLog("NOTE: deletes were non-zero and did not match inserts!!!")
+                DDLogInfo("NOTE: deletes were non-zero and did not match inserts!!!")
             }
             
             // Save the database
             do {
                 try bgMOC.save()
-                //NSLog("\(#function) \(startTime) to \(endTime): Database saved!")
+                //DDLogInfo("\(#function) \(startTime) to \(endTime): Database saved!")
                 DispatchQueue.main.async {
                     // NOTE: completion will decrement the loading count (in non-test case), then notification will be sent. Client will get the notification, and check whether loading is still in progess or not... 
                     completion(true)
                     self.notifyOnDataLoad()
                 }
             } catch let error as NSError {
-                NSLog("Failed to save MOC: \(error)")
+                DDLogError("Failed to save MOC: \(error)")
                 DispatchQueue.main.async {
                     completion(false)
                 }
             }
             
             if insertEventCounter != 0 || deleteEventCounter != 0 {
-                NSLog("final items added: \(insertEventCounter), deleted: \(deleteEventCounter), net: \(insertEventCounter-deleteEventCounter)")
+                DDLogInfo("final items added: \(insertEventCounter), deleted: \(deleteEventCounter), net: \(insertEventCounter-deleteEventCounter)")
             }
         }
     }
@@ -174,7 +175,7 @@ class DatabaseUtils {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CommonData")
         var eventCounter = 0
         for (_, subJson) in eventsJSON {
-            //NSLog("updateEvents next subJson: \(subJson)")
+            //DDLogInfo("updateEvents next subJson: \(subJson)")
             if let obj = CommonData.fromJSON(subJson, moc: moc) {
                 // Remove existing object with the same ID
                 if let id=obj.id {
@@ -188,21 +189,21 @@ class DatabaseUtils {
                         }
                         moc.insert(obj)
                     } catch let error as NSError {
-                        NSLog("updateEvents: Failed to replace existing event with ID \(id) error: \(error)")
+                        DDLogError("updateEvents: Failed to replace existing event with ID \(id) error: \(error)")
                     }
                 } else {
-                    NSLog("updateEvents: no ID found for object: \(obj), not inserting!")
+                    DDLogInfo("updateEvents: no ID found for object: \(obj), not inserting!")
                 }
             }
         }
-        NSLog("updateEvents updated \(eventCounter) items")
+        DDLogInfo("updateEvents updated \(eventCounter) items")
         // Save the database
         do {
             try moc.save()
-            NSLog("updateEvents: Database saved!")
+            DDLogInfo("updateEvents: Database saved!")
             notifyOnDataLoad()
         } catch let error as NSError {
-            NSLog("Failed to save MOC: \(error)")
+            DDLogError("Failed to save MOC: \(error)")
         }
     }
     
@@ -217,7 +218,7 @@ class DatabaseUtils {
     
     private func startTidepoolLoad() {
         if loadingCount == 0 {
-            NSLog("loading Tidepool Events started")
+            DDLogInfo("loading Tidepool Events started")
         }
         loadingCount += 1
     }
@@ -227,9 +228,9 @@ class DatabaseUtils {
         if loadingCount <= 0 {
             if loadingCount < 0 {
                 loadingCount = 0
-                NSLog("ERROR: loading count negative!")
+                DDLogInfo("ERROR: loading count negative!")
             }
-            NSLog("loading Tidepool Events complete")
+            DDLogInfo("loading Tidepool Events complete")
         }
     }
     

@@ -149,13 +149,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
 
     func appDidEnterForeground(_ notification: Notification) {
-        NSLog("EventListViewController:appDidEnterForeground")
+        DDLogInfo("EventListViewController:appDidEnterForeground")
         appIsForeground = true
         checkRefresh()
     }
     
     func appDidEnterBackground(_ notification: Notification) {
-        NSLog("EventListViewController:appDidEnterBackground")
+        DDLogInfo("EventListViewController:appDidEnterBackground")
         appIsForeground = false
     }
 
@@ -188,7 +188,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         searchTextField.resignFirstResponder()
         viewIsForeground = false
         if let sideMenu = self.sideMenuController()?.sideMenu {
-            //NSLog("swipe disabled")
+            //DDLogInfo("swipe disabled")
             sideMenu.allowLeftSwipe = false
             sideMenu.allowRightSwipe = false
             sideMenu.allowPanGesture = false
@@ -219,7 +219,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     func sideMenuWillOpen() {
-        NSLog("EventList sideMenuWillOpen")
+        DDLogInfo("EventList sideMenuWillOpen")
         configureForMenuOpen(true)
         // one-time check for health tip screen!
         if !firstTimeHealthTip.isHidden {
@@ -230,26 +230,26 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     func sideMenuWillClose() {
-        NSLog("EventList sideMenuWillClose")
+        DDLogInfo("EventList sideMenuWillClose")
         configureForMenuOpen(false)
     }
     
     func sideMenuShouldOpenSideMenu() -> Bool {
-        NSLog("EventList sideMenuShouldOpenSideMenu")
+        DDLogInfo("EventList sideMenuShouldOpenSideMenu")
         return true
     }
     
     func sideMenuDidClose() {
-        NSLog("EventList sideMenuDidClose")
+        DDLogInfo("EventList sideMenuDidClose")
         configureForMenuOpen(false)
         if let sideMenuController = self.sideMenuController()?.sideMenu?.menuViewController as? MenuAccountSettingsViewController {
             if sideMenuController.userSelectedLoggedInUser {
                 if let loggedInUser = dataController.currentLoggedInUser {
                     if loggedInUser.userid != dataController.currentViewedUser?.userid {
-                        NSLog("Switching to logged in user, id: \(String(describing: loggedInUser.fullName))")
+                        DDLogInfo("Switching to logged in user, id: \(String(describing: loggedInUser.fullName))")
                         switchProfile(loggedInUser)
                     } else {
-                        NSLog("Ignore select of logged in user, already selected!")
+                        DDLogInfo("Ignore select of logged in user, already selected!")
                     }
                 }
             } else if sideMenuController.userSelectedSwitchProfile {
@@ -267,7 +267,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     func sideMenuDidOpen() {
-        NSLog("EventList sideMenuDidOpen")
+        DDLogInfo("EventList sideMenuDidOpen")
         configureForMenuOpen(true)
         APIConnector.connector().trackMetric("Viewed Hamburger Menu (Hamburger)")
     }
@@ -330,7 +330,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         if noteIndex < self.filteredNotes.count {
             return filteredNotes[noteIndex].note
         } else {
-            NSLog("\(#function): index \(noteIndex) out of range of note count \(self.filteredNotes.count)!!!")
+            DDLogInfo("\(#function): index \(noteIndex) out of range of note count \(self.filteredNotes.count)!!!")
             return nil
         }
     }
@@ -343,9 +343,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             if commentIndex < comments.count {
                 return comments[commentIndex]
             }
-            NSLog("\(#function): index \(noteIndex) out of range of comment count \(comments.count)!!!")
+            DDLogInfo("\(#function): index \(noteIndex) out of range of comment count \(comments.count)!!!")
         } else {
-            NSLog("\(#function): index \(noteIndex) out of range of note count \(self.filteredNotes.count)!!!")
+            DDLogInfo("\(#function): index \(noteIndex) out of range of note count \(self.filteredNotes.count)!!!")
         }
         return nil
     }
@@ -355,7 +355,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     //
     
     func loadingNotes(_ loading: Bool) {
-        NSLog("NoteAPIWatcher.loadingNotes: \(loading)")
+        DDLogInfo("NoteAPIWatcher.loadingNotes: \(loading)")
         loadingNotes = loading
         if loadingNotes {
             return
@@ -366,12 +366,12 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     func endRefresh() {
-        NSLog("NoteAPIWatcher.endRefresh")
+        DDLogInfo("NoteAPIWatcher.endRefresh")
         refreshControl.endRefreshing()
     }
     
     func addNotes(_ notes: [BlipNote]) {
-        NSLog("NoteAPIWatcher.addNotes")
+        DDLogInfo("NoteAPIWatcher.addNotes")
         self.sortedNotes = []
         for note in notes {
             self.sortedNotes.append(NoteInEventListTable(note: note, opened: false, comments: []))
@@ -383,7 +383,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     func addComments(_ notes: [BlipNote], messageId: String) {
-        NSLog("NoteAPIWatcher.addComments, count: \(notes.count)")
+        DDLogInfo("NoteAPIWatcher.addComments, count: \(notes.count)")
         if let notePath = self.indexPathForNoteId(messageId) {
             if let sortedNotePath = sortedNotesIndexPathForNoteId(messageId) {
                 var comments: [BlipNote] = []
@@ -430,7 +430,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
   
     func postComplete(_ note: BlipNote) {
-        NSLog("NoteAPIWatcher.postComplete")
+        DDLogInfo("NoteAPIWatcher.postComplete")
         if note.parentmessage != nil {
             // added a comment, insert and update!
             let notePath = self.indexPathForNoteId(note.parentmessage!)
@@ -456,7 +456,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     func deleteComplete(_ deletedNote: BlipNote) {
-        NSLog("NoteAPIWatcher.deleteComplete")
+        DDLogInfo("NoteAPIWatcher.deleteComplete")
         if deletedNote.parentmessage == nil {
             // keep hashtags up-to-date
             HashTagManager.sharedInstance.updateTagsForNote(oldNote: deletedNote, newNote: nil)
@@ -484,8 +484,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     func updateComplete(_ originalNote: BlipNote, editedNote: BlipNote) {
-        NSLog("NoteAPIWatcher.updateComplete")
-        NSLog("Updating note \(originalNote.id) with text \(editedNote.messagetext)")
+        DDLogInfo("NoteAPIWatcher.updateComplete")
+        DDLogInfo("Updating note \(originalNote.id) with text \(editedNote.messagetext)")
         if originalNote.parentmessage == nil {
             // keep hashtags up-to-date
             HashTagManager.sharedInstance.updateTagsForNote(oldNote: originalNote, newNote: editedNote)
@@ -604,27 +604,27 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                 }
             }
         } else {
-            NSLog("Unprepped segue from eventList \(String(describing: segue.identifier))")
+            DDLogInfo("Unprepped segue from eventList \(String(describing: segue.identifier))")
         }
     }
     
     @IBAction func doneEditNote(_ segue: UIStoryboardSegue) {
-        NSLog("unwind segue to eventListVC doneEditNote!")
+        DDLogInfo("unwind segue to eventListVC doneEditNote!")
         if let eventEditVC = segue.source as? EventAddEditViewController {
             if let originalNote = eventEditVC.note, let editedNote = eventEditVC.editedNote {
                 APIConnector.connector().updateNote(self, editedNote: editedNote, originalNote: originalNote)
                 // will be called back on at updateComplete on successful update!
                 // TODO: also handle unsuccessful updates?
             } else {
-                NSLog("No note to update!")
+                DDLogInfo("No note to update!")
             }
         } else {
-            NSLog("Unknown segue source!")
+            DDLogInfo("Unknown segue source!")
         }
     }
     
     @IBAction func doneAddNote(_ segue: UIStoryboardSegue) {
-        NSLog("unwind segue to eventListVC doneAddNote!")
+        DDLogInfo("unwind segue to eventListVC doneAddNote!")
         if let eventAddVC = segue.source as? EventAddEditViewController {
             if let newNote = eventAddVC.newNote {
                 APIConnector.connector().doPostWithNote(self, note: newNote)
@@ -634,7 +634,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                 // add was cancelled... need to ensure graph is correctly configured.
             }
         } else {
-            NSLog("Unknown segue source!")
+            DDLogInfo("Unknown segue source!")
         }
     }
 
@@ -663,28 +663,28 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     
     // Multiple VC's on the navigation stack return all the way back to this initial VC via this segue, when nut events go away due to deletion, for test purposes, etc.
     @IBAction func home(_ segue: UIStoryboardSegue) {
-        NSLog("unwind segue to eventList home!")
+        DDLogInfo("unwind segue to eventList home!")
         if let switchProfileVC = segue.source as? SwitchProfileTableViewController {
             if let newViewedUser = switchProfileVC.newViewedUser {
                 if newViewedUser.userid != dataController.currentViewedUser?.userid {
-                    NSLog("Switch to user \(String(describing: newViewedUser.fullName))")
+                    DDLogInfo("Switch to user \(String(describing: newViewedUser.fullName))")
                     switchProfile(newViewedUser)
                 }
             } else {
-                NSLog("User did not change!")
+                DDLogInfo("User did not change!")
             }
         } else {
-            NSLog("Unknown segue source!")
+            DDLogInfo("Unknown segue source!")
         }
     }
 
     @IBAction func cancel(_ segue: UIStoryboardSegue) {
-        NSLog("unwind segue to eventList cancel")
+        DDLogInfo("unwind segue to eventList cancel")
     }
 
     fileprivate var eventListNeedsUpdate: Bool  = false
     func databaseChanged(_ note: Notification) {
-        NSLog("EventList: Database Change Notification")
+        DDLogInfo("EventList: Database Change Notification")
         if eventListShowing() {
             // TODO: This will be needed if notes go into a database but unused right now...
             //loadNotes()
@@ -713,7 +713,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     private func checkDisplayFirstTimeScreens() {
         if loadingNotes {
             // wait until note loading is completed
-            NSLog("\(#function) loading notes...")
+            DDLogInfo("\(#function) loading notes...")
             return
         }
         var hideAddNoteTip = true
@@ -751,7 +751,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         #endif
 
         if !MFMailComposeViewController.canSendMail() || onSimulator {
-            NSLog("Mail services are not available")
+            DDLogInfo("Mail services are not available")
             let alertController = UIAlertController(title: "Error", message: "You must set up a mail service account in order to email a log!", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
@@ -783,16 +783,16 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         switch result
         {
         case .cancelled:
-            NSLog("Mail cancelled")
+            DDLogInfo("Mail cancelled")
         case .saved:
-            NSLog("Mail saved")
+            DDLogInfo("Mail saved")
         case .sent:
-            NSLog("Mail sent")
+            DDLogInfo("Mail sent")
         case .failed:
             if let error = error {
-                NSLog("Mail sent failure: \(error.localizedDescription)")
+                DDLogError("Mail sent failure: \(error.localizedDescription)")
             } else {
-                NSLog("Mail sent failure!")
+                DDLogInfo("Mail sent failure!")
             }
         }
         // Dismiss the mail compose view controller.
@@ -894,7 +894,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     
     /// Works with graphDataChanged to ensure graph is up-to-date after notification of database changes whether this VC is in the foreground or background.
     fileprivate func checkUpdateGraph() {
-        NSLog("\(#function)")
+        DDLogInfo("\(#function)")
         if graphNeedsUpdate {
             graphNeedsUpdate = false
             for cell in tableView.visibleCells {
@@ -941,7 +941,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     private var startScrollY: CGFloat = 0.0
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         startScrollY = scrollView.contentOffset.y
-        NSLog("scrollViewWillBeginDragging: start offset is \(startScrollY)")
+        DDLogInfo("scrollViewWillBeginDragging: start offset is \(startScrollY)")
     }
     
     private var lastScrollY: CGFloat = 0.0
@@ -952,10 +952,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         if deltaY < 0 {
             yIncreasing = false
         }
-        //NSLog("scrollViewDidScroll: offset is \(yOffset), delta y: \(deltaY), increasing: \(yIncreasing), isTracking: \(scrollView.isTracking)")
+        //DDLogInfo("scrollViewDidScroll: offset is \(yOffset), delta y: \(deltaY), increasing: \(yIncreasing), isTracking: \(scrollView.isTracking)")
         lastScrollY = yOffset
         if yOffset <= kSearchHeight {
-            NSLog("yOffset within search height!")
+            DDLogInfo("yOffset within search height!")
         } else if scrollView.isTracking {
             if searchOpen && yIncreasing && deltaY > 5.0 {
                 openSearchView(false)
@@ -967,7 +967,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let y = targetContentOffset.pointee.y
-        NSLog("scrollViewWillEndDragging: y is \(y)")
+        DDLogInfo("scrollViewWillEndDragging: y is \(y)")
         if y <= kSearchHeight {
             if y <= kSearchHeight/2 {
                 openSearchView(true)
@@ -1009,7 +1009,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     func editPressed(_ sender: TidepoolMobileSimpleUIButton!) {
-        NSLog("cell with tag \(sender.tag) was pressed!")
+        DDLogInfo("cell with tag \(sender.tag) was pressed!")
         
         if APIConnector.connector().alertIfNetworkIsUnreachable() {
             return
@@ -1025,13 +1025,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                 self.noteToEdit = comment
                 self.currentCommentEditIndexPath = indexPath
                 performSegue(withIdentifier: "segueToEditComment", sender: self)
-                NSLog("Segue to edit comment!")
+                DDLogInfo("Segue to edit comment!")
             }
         }
     }
 
     func howToUploadPressed(_ sender: UIButton!) {
-        NSLog("howToUploadPressed was pressed!")
+        DDLogInfo("howToUploadPressed was pressed!")
         if let url = URL(string: TPConstants.kHowToUploadURL) {
             UIApplication.shared.openURL(url)
         }
@@ -1098,10 +1098,10 @@ extension EventListViewController: UITableViewDelegate {
                 if !APIConnector.connector().alertIfNetworkIsUnreachable() {
                     self.currentCommentEditIndexPath = indexPath
                     performSegue(withIdentifier: "segueToEditComment", sender: self)
-                    NSLog("Segue to add comment!")
+                    DDLogInfo("Segue to add comment!")
                 }
             } else {
-                NSLog("tapped on graph or other comments... close any edit")
+                DDLogInfo("tapped on graph or other comments... close any edit")
             }
             return
         }
@@ -1196,7 +1196,7 @@ extension EventListViewController: UITableViewDelegate {
             noteToDelete = comments[row-kFirstCommentRow]
         }
         if noteToDelete == nil {
-            NSLog("Error: note not found at \(#function)!")
+            DDLogInfo("Error: note not found at \(#function)!")
             return nil
         }
         let rowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "delete") {_,indexPath in

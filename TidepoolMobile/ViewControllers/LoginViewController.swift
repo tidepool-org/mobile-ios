@@ -245,7 +245,7 @@ class LoginViewController: BaseUIViewController, MFMailComposeViewControllerDele
         // make space for the keyboard if needed
         let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! Float
-        NSLog("keyboardWillShow, kbd height: \(keyboardFrame.height)")
+        DDLogInfo("keyboardWillShow, kbd height: \(keyboardFrame.height)")
         adjustLogInView(keyboardFrame.height)
     }
     

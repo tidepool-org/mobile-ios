@@ -269,7 +269,7 @@ open class GraphingUtils {
                 labelAttrStr.draw(in: labelRect)
                 lastLabelDrawn = lastLabelDrawn.union(labelRect)
             } else {
-                //NSLog("skipping x axis label")
+                //DDLogInfo("skipping x axis label")
             }
         }
         
@@ -291,7 +291,7 @@ open class GraphingUtils {
                     // draw marker
                     let markerLength: CGFloat = 8.0
                     let markerStart = CGPoint(x: viewXOffset, y: layout.headerHeight - markerLength)
-                    //NSLog("time marker \(timeStr) at x offset: \(markerStart.x)")
+                    //DDLogInfo("time marker \(timeStr) at x offset: \(markerStart.x)")
                     
                     drawHourMarker(markerStart, length: markerLength)
                     // draw hour label

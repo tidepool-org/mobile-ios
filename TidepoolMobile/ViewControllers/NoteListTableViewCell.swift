@@ -38,14 +38,14 @@ class NoteListTableViewCell: UITableViewCell {
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
-        NSLog("setSelected \(selected) for \(String(describing: note?.messagetext))!")
+        DDLogInfo("setSelected \(selected) for \(String(describing: note?.messagetext))!")
         
         super.setSelected(selected, animated: animated)
         //self.updateNoteFontStyling()
     }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        NSLog("setHighlighted \(highlighted) for \(String(describing: note?.messagetext))!")
+        DDLogInfo("setHighlighted \(highlighted) for \(String(describing: note?.messagetext))!")
         super.setHighlighted(highlighted, animated:animated)
         
         // Configure the view for the highlighted state

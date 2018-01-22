@@ -115,7 +115,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
     private var subviewsInitialized = false
     override func viewDidLayoutSubviews() {
         let frame = self.sceneContainerView.frame
-        NSLog("viewDidLayoutSubviews: \(frame)")
+        DDLogInfo("viewDidLayoutSubviews: \(frame)")
         
         if (subviewsInitialized) {
             return

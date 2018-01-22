@@ -22,7 +22,7 @@ class GraphCollectionCell: UICollectionViewCell {
     fileprivate var graphView: GraphUIView?
     
     func updateViewSize() {
-        //NSLog("GraphCollectionCell \(cellIndex) updateViewSize frame \(self.frame.size)")
+        //DDLogInfo("GraphCollectionCell \(cellIndex) updateViewSize frame \(self.frame.size)")
         if let graphView = graphView {
             graphView.updateViewSize(self.frame.size)
         }
@@ -41,7 +41,7 @@ class GraphCollectionCell: UICollectionViewCell {
     
     func configureCell(_ startTime: Date, timeInterval: TimeInterval, cellIndex: Int) {
 
-        //NSLog("GraphCollectionCell \(cellIndex) configure startTime \(startTime), timeInterval \(timeInterval), frame \(self.frame.size)")
+        //DDLogInfo("GraphCollectionCell \(cellIndex) configure startTime \(startTime), timeInterval \(timeInterval), frame \(self.frame.size)")
 
         graphView?.removeFromSuperview()
         graphView = GraphUIView.init(frame: self.bounds, startTime: startTime, layout: layout!, tileIndex: cellIndex)

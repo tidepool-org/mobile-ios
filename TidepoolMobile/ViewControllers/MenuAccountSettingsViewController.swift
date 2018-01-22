@@ -67,7 +67,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     }
 
     override func viewWillAppear(_ animated: Bool) {
-        NSLog("MenuVC viewWillAppear")
+        DDLogInfo("MenuVC viewWillAppear")
         super.viewWillAppear(animated)
     }
     

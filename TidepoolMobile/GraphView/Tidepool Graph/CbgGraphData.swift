@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CocoaLumberjack
 
 /// Continuous Blood Glucose readings vary between sub-100 to over 340 (we clip them there).
 /// CbgGraphDataType is a single-value type, so no additional data is needed.
@@ -48,12 +49,12 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
     
     override func loadEvent(_ event: CommonData, timeOffset: TimeInterval) {
         if let cbgEvent = event as? ContinuousGlucose {
-            //NSLog("Adding Cbg event: \(event)")
+            //DDLogInfo("Adding Cbg event: \(event)")
             if let value = cbgEvent.value {
                 let convertedValue = round(CGFloat(value) * kGlucoseConversionToMgDl)
                 dataArray.append(CbgGraphDataType(value: convertedValue, timeOffset: timeOffset))
             } else {
-                NSLog("ignoring Cbg event with nil value")
+                DDLogInfo("ignoring Cbg event with nil value")
             }
         }
     }

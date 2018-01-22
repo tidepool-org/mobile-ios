@@ -127,7 +127,7 @@ class TidepoolMobileDataController: NSObject
         get {
             if _currentViewedUser == nil {
                 if let user = self.currentLoggedInUser {
-                    NSLog("Current viewable user is \(String(describing: _currentViewedUser?.fullName))")
+                    DDLogInfo("Current viewable user is \(String(describing: _currentViewedUser?.fullName))")
                     _currentViewedUser = user
                     loadUserSettings()
                 }
@@ -136,7 +136,7 @@ class TidepoolMobileDataController: NSObject
         }
         set(newUser) {
             _currentViewedUser = newUser
-            NSLog("Current viewable user changed to \(String(describing: _currentViewedUser!.fullName))")
+            DDLogInfo("Current viewable user changed to \(String(describing: _currentViewedUser!.fullName))")
             self.deleteAnyTidepoolData()
             self.saveCurrentViewedUserId()
             configureHealthKitInterface()
@@ -151,7 +151,7 @@ class TidepoolMobileDataController: NSObject
             // only fetch if we haven't yet...
             if settingsUser.bgTargetLow == nil && settingsUser.bgTargetHigh == nil {
                 APIConnector.connector().fetchUserSettings(settingsUser.userid) { (result:Alamofire.Result<JSON>) -> (Void) in
-                    NSLog("Settings fetch result: \(result)")
+                    DDLogInfo("Settings fetch result: \(result)")
                     if (result.isSuccess) {
                         if let json = result.value {
                             settingsUser.processSettingsJSON(json)
@@ -250,7 +250,7 @@ class TidepoolMobileDataController: NSObject
             if let loggedInUserId = currentLoggedInUser?.userid {
                 if userId != loggedInUserId {
                     APIConnector.connector().fetchProfile(userId) { (result:Alamofire.Result<JSON>) -> (Void) in
-                        NSLog("Profile fetch result: \(result)")
+                        DDLogInfo("Profile fetch result: \(result)")
                         if (result.isSuccess) {
                             if let json = result.value {
                                 let user = BlipUser(userid: userId)
@@ -296,7 +296,7 @@ class TidepoolMobileDataController: NSObject
         self.runningUnitTests = false
         if let _ = NSClassFromString("XCTest") {
             self.runningUnitTests = true
-            NSLog("Detected running unit tests!")
+            DDLogInfo("Detected running unit tests!")
         }
     }
 
@@ -319,9 +319,9 @@ class TidepoolMobileDataController: NSObject
                 _currentViewedUser = nil
                 if newUser != nil {
                     _currentUserId = newUser!.userid
-                    NSLog("Set currentUser, name: \(String(describing: newUser!.username)), id: \(String(describing: newUser!.userid))")
+                    DDLogInfo("Set currentUser, name: \(String(describing: newUser!.username)), id: \(String(describing: newUser!.userid))")
                 } else {
-                    NSLog("Cleared currentUser!")
+                    DDLogInfo("Cleared currentUser!")
                     _currentUserId = nil
                 }
             }
@@ -410,7 +410,7 @@ class TidepoolMobileDataController: NSObject
         url = url.appendingPathComponent(filenameAdjustedForTest(storeBaseFileName))
         let pscOptions = [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true]
         do {
-            NSLog("Store url is \(url)")
+            DDLogInfo("Store url is \(url)")
             // TODO: use NSInMemoryStoreType for test databases!
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: pscOptions)
         } catch {
@@ -464,7 +464,7 @@ class TidepoolMobileDataController: NSObject
                 // Replace this implementation with code to handle the error appropriately.
                 // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nserror = error as NSError
-                NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
+                DDLogError("Unresolved error \(nserror), \(nserror.userInfo)")
                 abort()
             }
         }
@@ -503,7 +503,7 @@ class TidepoolMobileDataController: NSObject
                     }
                 }
             } catch let error as NSError {
-                NSLog("Failed to remove existing user: \(currentUser.userid!)) error: \(error)")
+                DDLogError("Failed to remove existing user: \(currentUser.userid!)) error: \(error)")
             }
         }
         
@@ -548,9 +548,9 @@ class TidepoolMobileDataController: NSObject
             let fm = FileManager.default
             do {
                 try fm.removeItem(at: url)
-                NSLog("Deleted database at \(url)")
+                DDLogInfo("Deleted database at \(url)")
             } catch let error as NSError {
-                NSLog("Failed to delete \(url), error: \(error)")
+                DDLogError("Failed to delete \(url), error: \(error)")
             }
         }
     }

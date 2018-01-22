@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CocoaLumberjack
 
 class TidepoolGraphDataLayer: GraphDataLayer {
 
@@ -61,7 +62,7 @@ class TidepoolGraphDataLayer: GraphDataLayer {
     
     func loadComplete() {
         let itemsLoaded = dataArray.count
-        //NSLog("loaded \(itemsLoaded) \(typeString()) events")
+        //DDLogInfo("loaded \(itemsLoaded) \(typeString()) events")
         if itemsLoaded > 0 {
             layout.dataDetected = true
         }
@@ -84,7 +85,7 @@ class TidepoolGraphDataLayer: GraphDataLayer {
                 }
             }
         } catch let error as NSError {
-            NSLog("Error: \(error)")
+            DDLogError("Error: \(error)")
         }
         
         loadComplete()

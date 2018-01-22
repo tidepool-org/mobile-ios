@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CocoaLumberjack
 
 /// Provides an ordered array of GraphDataLayer objects.
 class TidepoolGraphLayout: GraphLayout {
@@ -88,7 +89,7 @@ class TidepoolGraphLayout: GraphLayout {
 
     func setLowAndHighBGBounds(low: Int?, high: Int?) {
         if let low = low, let high = high {
-            NSLog("\(#function), low: \(low), high: \(high)")
+            DDLogInfo("\(#function), low: \(low), high: \(high)")
             highBoundary = CGFloat(high)
             lowBoundary = CGFloat(low)
             self.yAxisValuesWithLines = displayGridLines ? [low, high] : []

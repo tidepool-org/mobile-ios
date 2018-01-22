@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CocoaLumberjack
 
 /// Provides an ordered array of GraphDataLayer objects.
 class GraphLayout {
@@ -92,7 +93,7 @@ class GraphLayout {
         }
         if curXAxisLabelTickTiming != result {
             curXAxisLabelTickTiming = result
-            NSLog("New x-axis tick time interval = \(result)")
+            DDLogInfo("New x-axis tick time interval = \(result)")
         }
     }
     

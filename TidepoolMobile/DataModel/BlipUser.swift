@@ -44,7 +44,7 @@ class BlipUser {
     }
 
     func processProfileJSON(_ json: JSON) {
-        NSLog("profile json: \(json)")
+        DDLogInfo("profile json: \(json)")
         fullName = json["fullName"].string
         let patient = json["patient"]
         if patient != JSON.null {
@@ -97,10 +97,10 @@ class BlipUser {
      }
     */
     func processSettingsJSON(_ json: JSON) {
-        NSLog("settings json: \(json)")
+        DDLogInfo("settings json: \(json)")
         self.bgTargetLow = json["bgTarget"]["low"].number
         self.bgTargetHigh = json["bgTarget"]["high"].number
-        NSLog("Low: \(String(describing: bgTargetLow)), High: \(String(describing: bgTargetHigh))")
+        DDLogInfo("Low: \(String(describing: bgTargetLow)), High: \(String(describing: bgTargetHigh))")
     }
 
 }

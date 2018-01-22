@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CocoaLumberjack
 
 class TidepoolGraphView: GraphContainerView {
  
@@ -32,7 +33,7 @@ class TidepoolGraphView: GraphContainerView {
 
     override func loadGraphData() {
         // TODO: make sure we don't call this when unnecessary!
-        //NSLog("TidepoolGraphView reloading data")
+        //DDLogInfo("TidepoolGraphView reloading data")
         tidepoolLayout.invalidateCaches()
         super.loadGraphData()
     }
@@ -43,7 +44,7 @@ class TidepoolGraphView: GraphContainerView {
             tidepoolLayout.showDataLayers = display
             loadGraphData()
         } else {
-            NSLog("\(#function) display: already in state \(display)")
+            DDLogInfo("\(#function) display: already in state \(display)")
         }
     }
     
@@ -54,7 +55,7 @@ class TidepoolGraphView: GraphContainerView {
             tidepoolLayout.configureGraph()
             configureBackground()
         } else {
-            NSLog("\(#function) display: already in state \(display)")
+            DDLogInfo("\(#function) display: already in state \(display)")
         }
     }
     

@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CocoaLumberjack
 
 class GraphUIView: UIView {
 
@@ -59,15 +60,15 @@ class GraphUIView: UIView {
     }
     
     override func layoutSubviews() {
-        //NSLog("GraphUIView layoutSubviews size: \(self.bounds.size)")
+        //DDLogInfo("GraphUIView layoutSubviews size: \(self.bounds.size)")
     }
     
     func updateViewSize(_ newSize: CGSize) {
         // Quick way to update when data haven't changed...
         let currentSize = self.bounds.size
-        NSLog("GraphUIView bounds: \(currentSize), size: \(viewSize), new size \(newSize)")
+        DDLogInfo("GraphUIView bounds: \(currentSize), size: \(viewSize), new size \(newSize)")
         if self.viewSize == newSize {
-            //NSLog("updateViewSize skipped!")
+            //DDLogInfo("updateViewSize skipped!")
             return
         }
         self.viewSize = newSize
@@ -133,7 +134,7 @@ class GraphUIView: UIView {
 
         // if not showing the data layers, exit before load
         if !layout.showDataLayers {
-            NSLog("data layers suppressed")
+            DDLogInfo("data layers suppressed")
             return
         }
 

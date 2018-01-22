@@ -101,7 +101,7 @@ class HealthKitBloodGlucosePusher: NSObject {
         if enable {
             UIApplication.shared.setMinimumBackgroundFetchInterval(
                 kTimeIntervalForBackgroundFetch)
-            NSLog("Background fetch interval is \(kTimeIntervalForBackgroundFetch)")
+            DDLogInfo("Background fetch interval is \(kTimeIntervalForBackgroundFetch)")
 
             // Use local notifications to test background activity...
             if AppDelegate.testMode {
@@ -239,7 +239,7 @@ class HealthKitBloodGlucosePusher: NSObject {
                 }
             }
         } catch let error as NSError {
-            NSLog("loadItemsForHealthKit error: \(error)")
+            DDLogError("loadItemsForHealthKit error: \(error)")
         }
         
         if !itemsToPush.isEmpty {

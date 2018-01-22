@@ -60,7 +60,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     // delay manual layout until we know actual size of container view (at viewDidLoad it will be the current storyboard size)
     private var subviewsInitialized = false
     override func viewDidLayoutSubviews() {
-        //NSLog("\(#function)")
+        //DDLogInfo("\(#function)")
         if (subviewsInitialized) {
             return
         }
@@ -76,7 +76,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //NSLog("\(#function)")
+        //DDLogInfo("\(#function)")
         self.currentCommentEditCell?.addCommentTextView.becomeFirstResponder()
     }
     
@@ -110,7 +110,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     
     // Capture keyboard sizing and appropriate scroll animation timing. Fine tune table sizing for current keyboard sizing, and place edit row at bottom of table view, just above the keyboard.
     func keyboardWillShow(_ notification: Notification) {
-        //NSLog("EditCommentViewController \(#function)")
+        //DDLogInfo("EditCommentViewController \(#function)")
         viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
         EditCommentViewController.keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         self.configureTableSize() // first time, ensure table is correctly sized to leave room for keyboard
@@ -137,7 +137,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         if commentIndex < comments.count {
             return comments[commentIndex]
         }
-        NSLog("\(#function): index \(indexPath) out of range of comment count \(comments.count)!!!")
+        DDLogInfo("\(#function): index \(indexPath) out of range of comment count \(comments.count)!!!")
         return nil
     }
     
@@ -157,7 +157,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     
     /// Works with graphDataChanged to ensure graph is up-to-date after notification of database changes whether this VC is in the foreground or background.
     fileprivate func checkUpdateGraph() {
-        //NSLog("\(#function)")
+        //DDLogInfo("\(#function)")
         if graphNeedsUpdate {
             graphNeedsUpdate = false
             for cell in tableView.visibleCells {
@@ -172,7 +172,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     }
     
     func savePressed(_ sender: TidepoolMobileSimpleUIButton!) {
-        //NSLog("cell with tag \(sender.tag) was pressed!")
+        //DDLogInfo("cell with tag \(sender.tag) was pressed!")
         if APIConnector.connector().alertIfNetworkIsUnreachable() {
             return
         }
@@ -216,10 +216,10 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     func graphDataChanged(_ note: Notification) {
         graphNeedsUpdate = true
         if viewIsForeground {
-            NSLog("EditCommentVC: graphDataChanged, reloading")
+            DDLogInfo("EditCommentVC: graphDataChanged, reloading")
             checkUpdateGraph()
         } else {
-            NSLog("EditCommentVC: graphDataChanged, in background")
+            DDLogInfo("EditCommentVC: graphDataChanged, in background")
         }
     }
     
@@ -230,9 +230,9 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     
     // UITextViewDelegate methods
     func textViewDidChange(_ textView: UITextView) {
-        //NSLog("current content offset: \(tableView.contentOffset.y)")
+        //DDLogInfo("current content offset: \(tableView.contentOffset.y)")
         if let editCell = self.currentCommentEditCell {
-            //NSLog("note changed to \(textView.text)")
+            //DDLogInfo("note changed to \(textView.text)")
             var originalText = ""
             if let comment = self.commentToEdit {
                 originalText = comment.messagetext

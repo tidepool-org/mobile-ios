@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CocoaLumberjack
 
 class SmbgGraphDataType: GraphDataType {
     
@@ -46,12 +47,12 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
     
     override func loadEvent(_ event: CommonData, timeOffset: TimeInterval) {
         if let smbgEvent = event as? SelfMonitoringGlucose {
-            //NSLog("Adding smbg event: \(event)")
+            //DDLogInfo("Adding smbg event: \(event)")
             if let value = smbgEvent.value {
                 let convertedValue = round(CGFloat(value) * kGlucoseConversionToMgDl)
                 dataArray.append(CbgGraphDataType(value: convertedValue, timeOffset: timeOffset))
             } else {
-                NSLog("ignoring smbg event with nil value")
+                DDLogInfo("ignoring smbg event with nil value")
             }
         }
     }

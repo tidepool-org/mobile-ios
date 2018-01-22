@@ -49,14 +49,14 @@ class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
                     (newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, error: NSError?) in
                     
                     if (newSamples != nil) {
-                        NSLog("********* PROCESSING \(newSamples!.count) new workout samples ********* ")
+                        DDLogInfo("********* PROCESSING \(newSamples!.count) new workout samples ********* ")
                         DispatchQueue.main.async {
                             self.processWorkoutEvents(newSamples!)
                         }
                     }
                     
                     if (deletedSamples != nil) {
-                        NSLog("********* PROCESSING \(deletedSamples!.count) deleted workout samples ********* ")
+                        DDLogInfo("********* PROCESSING \(deletedSamples!.count) deleted workout samples ********* ")
                         DispatchQueue.main.async {
                             self.processDeleteWorkoutEvents(deletedSamples!)
                         }
@@ -73,13 +73,13 @@ class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
         if let entityDescription = NSEntityDescription.entity(forEntityName: "Workout", in: moc) {
             for event in workouts {
                 if let workout = event as? HKWorkout {
-                    NSLog("*** processing workout id: \(event.uuid.uuidString)")
+                    DDLogInfo("*** processing workout id: \(event.uuid.uuidString)")
                     if let metadata = workout.metadata {
-                        NSLog(" metadata: \(metadata)")
+                        DDLogInfo(" metadata: \(metadata)")
                     }
                     if let wkoutEvents = workout.workoutEvents {
                         if !wkoutEvents.isEmpty {
-                            NSLog(" workout events: \(wkoutEvents)")
+                            DDLogInfo(" workout events: \(wkoutEvents)")
                         }
                     }
                     let we = NSManagedObject(entity: entityDescription, insertInto: nil) as! Workout
@@ -126,19 +126,19 @@ class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
                                 if workout.duration == we.duration &&
                                     workout.title == we.title &&
                                     workout.notes == we.notes {
-                                    NSLog("Deleting existing workout of same time and duration: \(workout)")
+                                    DDLogInfo("Deleting existing workout of same time and duration: \(workout)")
                                     moc.delete(workout)
                                 }
                             }
                         } catch {
-                            NSLog("Workout dupe query failed!")
+                            DDLogError("Workout dupe query failed!")
                         }
                     }
                     
                     moc.insert(we)
-                    NSLog("added workout: \(we)")
+                    DDLogInfo("added workout: \(we)")
                 } else {
-                    NSLog("ERROR: \(#function): Expected HKWorkout!")
+                    DDLogError("ERROR: \(#function): Expected HKWorkout!")
                 }
             }
         }
@@ -149,7 +149,7 @@ class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
     fileprivate func processDeleteWorkoutEvents(_ workouts: [HKDeletedObject]) {
         let moc = TidepoolMobileDataController.sharedInstance.mocForLocalEvents()!
         for workout in workouts {
-            NSLog("Processing deleted workout sample with UUID: \(workout.uuid)");
+            DDLogInfo("Processing deleted workout sample with UUID: \(workout.uuid)");
             let id = workout.uuid.uuidString
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Workout")
             // Note: look for any workout with this id, regardless of current user - we should only see it for one user, but multiple user operation is not yet completely defined.
@@ -157,12 +157,12 @@ class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
             do {
                 let existingWorkouts = try moc.fetch(request) as! [Workout]
                 for workout: Workout in existingWorkouts {
-                    NSLog("Deleting workout: \(workout)")
+                    DDLogInfo("Deleting workout: \(workout)")
                     moc.delete(workout)
                 }
                 _ = DatabaseUtils.databaseSave(moc)
             } catch {
-                NSLog("Existing workout query failed!")
+                DDLogError("Existing workout query failed!")
             }
         }
     }

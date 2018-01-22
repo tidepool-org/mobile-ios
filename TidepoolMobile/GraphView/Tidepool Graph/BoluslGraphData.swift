@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CocoaLumberjack
 
 class BolusGraphDataType: GraphDataType {
     
@@ -124,7 +125,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
     
     override func loadEvent(_ event: CommonData, timeOffset: TimeInterval) {
         if let event = event as? Bolus {
-            //NSLog("Adding Bolus event: \(event)")
+            //DDLogInfo("Adding Bolus event: \(event)")
             if event.value != nil {
                 let eventTime = event.time!
                 let graphTimeOffset = eventTime.timeIntervalSince(layout.graphStartTime as Date)
@@ -135,7 +136,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                     layout.maxBolus = maxValue
                 }
             } else {
-                NSLog("ignoring Bolus event with nil value")
+                DDLogInfo("ignoring Bolus event with nil value")
             }
         }
     }
@@ -149,7 +150,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             if layout.maxBolus < kBolusMinScaleValue {
                 layout.maxBolus = kBolusMinScaleValue
             }
-            //NSLog("Prefetched \(dataArray.count) bolus items for graph")
+            //DDLogInfo("Prefetched \(dataArray.count) bolus items for graph")
         }
         
         dataArray = []
@@ -167,7 +168,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                 }
             }
         }
-        //NSLog("Copied \(dataArray.count) bolus items from graph cache for slice at offset \(dataLayerOffset/3600) hours")
+        //DDLogInfo("Copied \(dataArray.count) bolus items from graph cache for slice at offset \(dataLayerOffset/3600) hours")
         
     }
 
@@ -192,7 +193,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             let centerX = xOffset
             var bolusValue = bolus.value
             if bolusValue > layout.maxBolus && bolusValue > kBolusMinScaleValue {
-                NSLog("ERR: max bolus exceeded!")
+                DDLogInfo("ERR: max bolus exceeded!")
                 bolusValue = layout.maxBolus
             }
             
@@ -217,7 +218,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             // See if there is a corresponding wizard datapoint
             let wizardPoint = getWizardForBolusId(bolus.id)
             if let wizardPoint = wizardPoint {
-                //NSLog("found wizard with carb \(wizardPoint.value) for bolus of value \(bolusValue)")
+                //DDLogInfo("found wizard with carb \(wizardPoint.value) for bolus of value \(bolusValue)")
                 if let recommended = wizardPoint.recommendedNet {
                     if recommended.floatValue != Float(bolusValue) {
                         override = true
@@ -248,7 +249,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                     originalValue = expectedNormal
                     wizardHasOriginal = false
                 } else {
-                    NSLog("UNEXPECTED DATA - expectedNormal \(expectedNormal) not > bolus \(bolusValue)")
+                    DDLogInfo("UNEXPECTED DATA - expectedNormal \(expectedNormal) not > bolus \(bolusValue)")
                 }
             }
 
@@ -261,7 +262,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                         interrupted = true
                         extendedOriginal = expectedExtended
                     } else {
-                        NSLog("UNEXPECTED DATA - expectedExtended \(expectedExtended) not > extended \(extendedValue)")
+                        DDLogInfo("UNEXPECTED DATA - expectedExtended \(expectedExtended) not > extended \(extendedValue)")
                     }
                 }
                 if !wizardHasOriginal {
@@ -323,7 +324,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                     if expectedDuration > duration {
                         originalWidth = floor(CGFloat(expectedDuration) * viewPixelsPerSec)
                     } else {
-                        NSLog("UNEXPECTED DATA - expectedDuration \(expectedDuration) not > duration \(duration)")
+                        DDLogInfo("UNEXPECTED DATA - expectedDuration \(expectedDuration) not > duration \(duration)")
                     }
                 }
                 var yOrigin = layout.yBottomOfBolus - height
@@ -332,7 +333,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                    yOrigin = yOrigin + kExtensionLineHeight/2.0
                 }
                 drawBolusExtension(bolusValueRect.origin.x + bolusValueRect.width, centerY: yOrigin, width: width, originalWidth: originalWidth)
-                //NSLog("bolus extension duration \(bolus.duration/60) minutes, extended value \(bolus.extendedValue), total value: \(bolus.value)")
+                //DDLogInfo("bolus extension duration \(bolus.duration/60) minutes, extended value \(bolus.extendedValue), total value: \(bolus.value)")
             }
             
             let completeBolusRect = bolusLabelRect.union(bolusValueRect)

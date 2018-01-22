@@ -14,6 +14,7 @@
  */
 
 import Foundation
+import CocoaLumberjack
 
 
 class HashTagManager {
@@ -47,7 +48,7 @@ class HashTagManager {
 
     /// Load tags from current set of notes, adding in defaults as well
     func reloadTagsFromNotes(_ notes: [BlipNote]) {
-        NSLog("\(#function) start")
+        DDLogInfo("\(#function) start")
         hashTagDict = [String: Int]()
         for note in notes {
             updateTagsForText(note.messagetext)
@@ -55,7 +56,7 @@ class HashTagManager {
         // also add default tags into the dictionary of (tag: count) entries.
         addDefaultTags()
         updateSortedHashTags()
-        NSLog("\(#function) end")
+        DDLogInfo("\(#function) end")
     }
     
     private func updateSortedHashTags() {
