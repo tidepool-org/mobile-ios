@@ -250,6 +250,8 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
     // MARK: Private
     
     fileprivate func createPostBodyFileForBatchMetadataUpload(data: HealthKitBloodGlucoseUploadData) throws -> URL {
+        DDLogVerbose("trace")
+        
         let postBody = try JSONSerialization.data(withJSONObject: data.batchMetadata)
         if defaultDebugLevel != DDLogLevel.off {
             let postBodyString = NSString(data: postBody, encoding: String.Encoding.utf8.rawValue)! as String
@@ -336,6 +338,8 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
     }
     
     fileprivate func savePostBodyForUpload(body: Data, identifier: String) throws -> URL {
+        DDLogVerbose("trace")
+        
         let postBodyURL = getUploadURLForIdentifier(with: identifier)
         try body.write(to: postBodyURL, options: .atomic)
         return postBodyURL

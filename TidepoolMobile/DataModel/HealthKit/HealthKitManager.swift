@@ -353,6 +353,8 @@ class HealthKitManager {
     }
     
     func countBloodGlucoseSamples(_ completion: @escaping (_ error: NSError?, _ totalSamplesCount: Int, _ totalDexcomSamplesCount: Int) -> (Void)) {
+        DDLogVerbose("trace")
+        
         let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
         let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: nil, limit: HKObjectQueryNoLimit, sortDescriptors: nil) {
             (query, newSamples, error) -> Void in

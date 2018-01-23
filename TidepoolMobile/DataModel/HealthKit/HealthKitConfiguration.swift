@@ -17,10 +17,14 @@ class HealthKitConfiguration
     fileprivate var isDSAUser: Bool?
     
     func shouldShowHealthKitUI() -> Bool {
+        DDLogVerbose("trace")
+        
+        var result = false
         if let isDSAUser = isDSAUser {
-            return HealthKitManager.sharedInstance.isHealthDataAvailable && isDSAUser
+            result = HealthKitManager.sharedInstance.isHealthDataAvailable && isDSAUser
         }
-        return false
+        DDLogInfo("result: \(result)")
+        return result
     }
     
     /// Call this whenever the current user changes, at login/logout, token refresh(?), and upon enabling or disabling the HealthKit interface.
@@ -28,6 +32,7 @@ class HealthKitConfiguration
         DDLogVerbose("trace")
         
         if !HealthKitManager.sharedInstance.isHealthDataAvailable {
+            DDLogInfo("HKHealthStore data is not available")
             return
         }
 
@@ -38,18 +43,18 @@ class HealthKitConfiguration
         if currentUserId != nil  {
             interfaceEnabled = healthKitInterfaceEnabledForCurrentUser()
             if !interfaceEnabled {
-                DDLogVerbose("disable because not enabled for current user!")
+                DDLogInfo("disable because not enabled for current user!")
             }
         } else {
             interfaceEnabled = false
-            DDLogVerbose("disable because no current user!")
+            DDLogInfo("disable because no current user!")
         }
         
         if interfaceEnabled {
-            DDLogVerbose("enable!")
+            DDLogInfo("enable!")
             self.turnOnInterface()
         } else {
-            DDLogVerbose("disable!")
+            DDLogInfo("disable!")
             self.turnOffInterface()
         }
     }
@@ -63,6 +68,7 @@ class HealthKitConfiguration
         DDLogVerbose("trace")
 
         if self.currentUserId != nil {
+            DDLogInfo("start uploading")
             HealthKitBloodGlucoseUploadManager.sharedInstance.startUploading(currentUserId: self.currentUserId!)
         } else {
             DDLogInfo("No logged in user, unable to start uploading")
@@ -117,6 +123,9 @@ class HealthKitConfiguration
         
         HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSampleReads: needsGlucoseReads, shouldAuthorizeBloodGlucoseSampleWrites: needsGlucoseWrites, shouldAuthorizeWorkoutSamples: needsWorkoutReads) {
             success, error -> Void in
+            
+            DDLogVerbose("trace")
+            
             DispatchQueue.main.async(execute: {
                 if (error == nil) {
                     configureCurrentHealthKitUser()

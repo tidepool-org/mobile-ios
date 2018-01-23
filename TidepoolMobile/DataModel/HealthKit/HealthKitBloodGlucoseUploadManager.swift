@@ -56,6 +56,7 @@ class HealthKitBloodGlucoseUploadManager:
     }
     
     func resetPersistentState() {
+        DDLogVerbose("trace")
         self.phase.resetPersistentState()
         self.stats.resetPersistentState()
         self.reader.resetPersistentState()
@@ -66,7 +67,9 @@ class HealthKitBloodGlucoseUploadManager:
     fileprivate(set) var stats: HealthKitBloodGlucoseUploadStats
     
     var makeBloodGlucoseDataUploadRequestHandler: (() throws -> URLRequest) = {
-        throw NSError(domain: "HealthKitBloodGlucoseUploadManager", code: -2, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, no user is logged in"])
+        DDLogVerbose("trace")
+        
+        throw NSError(domain: "HealthKitBloodGlucoseUploadManager", code: -2, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, no upload request handler is configured"])
     }
     
     func startUploading(currentUserId: String) {
@@ -283,7 +286,7 @@ class HealthKitBloodGlucoseUploadManager:
             if self.phase.currentPhase == .mostRecent {
                 self.reader.readMore()
             } else {
-                self.reader.stopReading()
+                self.reader.stopReading() // TODO: uploader - if we have no results in historical phase but due to filtering out non-Dexcom samples, we shouldn't stop reading, should we? Shouldn't we go ahead and read more, until we get no results due to being caught up, rather than just no results in a batch due to no non-Dexcom data
                 if self.phase.currentPhase == .historical {
                     self.phase.transitionToPhase(.current)
                 }

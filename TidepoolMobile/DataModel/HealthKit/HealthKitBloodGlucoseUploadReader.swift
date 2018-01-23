@@ -108,7 +108,7 @@ class HealthKitBloodGlucoseUploadReader: NSObject {
     fileprivate func startReadingFromAnchor() {
         DDLogVerbose("trace")
         
-         HealthKitManager.sharedInstance.readBloodGlucoseSamplesFromAnchor(limit: 1000, resultsHandler: self.bloodGlucoseReadResultsHandler)
+         HealthKitManager.sharedInstance.readBloodGlucoseSamplesFromAnchor(limit: 2000, resultsHandler: self.bloodGlucoseReadResultsHandler)
     }
     
     fileprivate func startReadingMostRecent() {
@@ -134,7 +134,7 @@ class HealthKitBloodGlucoseUploadReader: NSObject {
             bloodGlucoseUploadRecentStartDateFinal = bloodGlucoseUploadRecentStartDateFinalSetting as! Date
         }
 
-         HealthKitManager.sharedInstance.readBloodGlucoseSamples(startDate: bloodGlucoseUploadRecentStartDate, endDate: bloodGlucoseUploadRecentEndDate, limit: 1000, resultsHandler: self.bloodGlucoseReadResultsHandler)
+         HealthKitManager.sharedInstance.readBloodGlucoseSamples(startDate: bloodGlucoseUploadRecentStartDate, endDate: bloodGlucoseUploadRecentEndDate, limit: 2000, resultsHandler: self.bloodGlucoseReadResultsHandler)
     }
     
     // NOTE: This is a HealthKit results handler, not called on main thread
@@ -154,6 +154,7 @@ class HealthKitBloodGlucoseUploadReader: NSObject {
                 }
             }
             
+            // TODO: uploader - are we persisting new anchor even before we've successfully processed the data for this? What if there is an error processing the data?
             let queryAnchorData = newAnchor != nil ? NSKeyedArchiver.archivedData(withRootObject: newAnchor!) : nil
             UserDefaults.standard.set(queryAnchorData, forKey: "bloodGlucoseQueryAnchorLast")
             UserDefaults.standard.synchronize()
