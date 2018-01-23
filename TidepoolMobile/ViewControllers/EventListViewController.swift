@@ -89,6 +89,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             sideMenu.bouncingEnabled = false
         }
         
+        if let sideMenuController = self.sideMenuController()?.sideMenu?.menuViewController as? MenuAccountSettingsViewController {
+            sideMenuController.eventListViewController = self
+        }
+            
         // Note: one-time check to show first time healthKit connect tip. This needs to be shown first, before other first time screens, so check for it here. If this is up, the other screens will be deferred...
         firstTimeHealthKitConnectCheck()
     }

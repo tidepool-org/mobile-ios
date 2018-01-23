@@ -15,7 +15,8 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     var userSelectedLogout = false
     var userSelectedLoggedInUser = false
     var userSelectedExternalLink: URL? = nil
-    
+    var eventListViewController: EventListViewController? = nil
+
     @IBOutlet weak var loginAccount: UILabel!
     @IBOutlet weak var versionString: TidepoolMobileUILabel!
     @IBOutlet weak var usernameLabel: TidepoolMobileUILabel!
@@ -125,7 +126,12 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         userSelectedLogout = true
         self.hideSideMenuView()
     }
-    
+
+    @IBAction func debugSettingsTapped(_ sender: AnyObject) {
+        self.debugSettings = DebugSettings(presentingViewController: self.eventListViewController)
+        self.debugSettings?.showDebugMenuActionSheet()
+    }
+
     //
     // MARK: - Healthkit Methods
     //
@@ -260,5 +266,5 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    
+    fileprivate var debugSettings: DebugSettings?
 }

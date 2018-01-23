@@ -35,7 +35,7 @@ class App: UIApplication {
         // Set up log level
         defaultDebugLevel = DDLogLevel.verbose
         let loggingEnabledObject = UserDefaults.standard.object(forKey: "LoggingEnabled")
-        if loggingEnabledObject != nil && !(loggingEnabledObject! as AnyObject).boolValue {
+        if loggingEnabledObject == nil || !(loggingEnabledObject! as AnyObject).boolValue {
             defaultDebugLevel = DDLogLevel.off
         }
 

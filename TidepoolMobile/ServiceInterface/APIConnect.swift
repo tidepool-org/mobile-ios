@@ -175,6 +175,9 @@ class APIConnector {
             // refresh connector since there is a new service...
             _ = configure()
             DDLogInfo("Switched to \(serverName) server")
+            
+            let notification = Notification(name: Notification.Name(rawValue: "switchedToNewServer"), object: nil)
+            NotificationCenter.default.post(notification)
         }
     }
     

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -389,6 +389,9 @@
                                                     <constraint firstItem="FRD-xW-MeJ" firstAttribute="centerX" secondItem="mA2-zl-vsY" secondAttribute="centerX" id="5fV-oV-mYm"/>
                                                     <constraint firstItem="FRD-xW-MeJ" firstAttribute="centerY" secondItem="mA2-zl-vsY" secondAttribute="centerY" id="xr3-4N-tJa"/>
                                                 </constraints>
+                                                <connections>
+                                                    <outletCollection property="gestureRecognizers" destination="hG5-d0-AA1" appends="YES" id="v5F-bM-9CA"/>
+                                                </connections>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -444,6 +447,11 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XvS-Cr-aVr" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Abk-OY-d5S" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer numberOfTapsRequired="7" id="hG5-d0-AA1">
+                    <connections>
+                        <action selector="debugSettingsTapped:" destination="jOa-f6-dl3" id="OiK-XO-4bZ"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="439.6875" y="234.50704225352112"/>
         </scene>

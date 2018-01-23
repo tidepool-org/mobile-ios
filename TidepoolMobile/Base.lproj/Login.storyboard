@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="4G7-DP-gat">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="4G7-DP-gat">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -48,7 +48,7 @@
                                         <rect key="frame" x="166.5" y="27" width="128" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XD9-cK-wuz" userLabel="signUpButton">
-                                                <rect key="frame" x="59" y="14" width="59" height="32"/>
+                                                <rect key="frame" x="56" y="12" width="62" height="36"/>
                                                 <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="17"/>
                                                 <state key="normal" title="Sign up">
                                                     <color key="titleColor" red="0.15686274509803921" green="0.098039215686274508" blue="0.27450980392156865" alpha="1" colorSpace="calibratedRGB"/>
@@ -58,7 +58,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e3a-cO-qKk" userLabel="signUp+Button">
-                                                <rect key="frame" x="29" y="20" width="20" height="20"/>
+                                                <rect key="frame" x="26" y="20" width="20" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="gCP-E2-HUj"/>
                                                     <constraint firstAttribute="width" constant="20" id="mIs-6E-4LF"/>
@@ -284,14 +284,28 @@
                                     <constraint firstItem="x8Q-os-z1s" firstAttribute="leading" secondItem="zV2-Yb-tzp" secondAttribute="leading" id="xeZ-Rt-Sm1"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Da0-SK-zSy" userLabel="Debug settings footer" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="494" width="320" height="66"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="66" id="jGZ-Li-Ls3"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="y6N-Ut-m6S" appends="YES" id="q9b-GL-yJz"/>
+                                </connections>
+                            </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Made possible by" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t0E-Qp-ol9" userLabel="madePossibleByLabel">
-                                <rect key="frame" x="43.5" y="505.5" width="135" height="20"/>
+                                <rect key="frame" x="40" y="503" width="142" height="23.5"/>
                                 <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="17"/>
                                 <color key="textColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loginMadePossible" translatesAutoresizingMaskIntoConstraints="NO" id="S1Y-Yg-xcI">
-                                <rect key="frame" x="188" y="502" width="97.5" height="25"/>
+                                <rect key="frame" x="191.5" y="502" width="97.5" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="VT3-fn-3pZ"/>
                                     <constraint firstAttribute="width" constant="97.5" id="ivx-Jb-kIJ"/>
@@ -299,7 +313,7 @@
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="software version" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" enabled="NO" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5xp-AB-RVE" userLabel="versionLabel">
-                                <rect key="frame" x="97.5" y="531" width="125" height="23.5"/>
+                                <rect key="frame" x="94.5" y="531" width="131.5" height="23.5"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="23.5" id="ab1-HI-cdu"/>
                                 </constraints>
@@ -308,21 +322,26 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="5xp-AB-RVE" firstAttribute="centerX" secondItem="lik-Jb-UNr" secondAttribute="centerX" id="4zD-qi-oAI"/>
                             <constraint firstItem="t0E-Qp-ol9" firstAttribute="centerY" secondItem="S1Y-Yg-xcI" secondAttribute="centerY" id="52n-p0-6zj"/>
                             <constraint firstItem="S1Y-Yg-xcI" firstAttribute="top" secondItem="zV2-Yb-tzp" secondAttribute="bottom" priority="750" id="CRN-AN-OXE"/>
                             <constraint firstItem="Hsq-Jf-Ifa" firstAttribute="top" relation="greaterThanOrEqual" secondItem="iHd-Hc-UkR" secondAttribute="bottom" constant="4" id="DJf-DO-mT8"/>
+                            <constraint firstItem="Da0-SK-zSy" firstAttribute="leading" secondItem="lik-Jb-UNr" secondAttribute="leading" id="G1W-gR-yfK"/>
                             <constraint firstItem="t0E-Qp-ol9" firstAttribute="centerX" secondItem="lik-Jb-UNr" secondAttribute="centerX" constant="-49" id="HNx-DY-zeW"/>
                             <constraint firstItem="S1Y-Yg-xcI" firstAttribute="leading" secondItem="t0E-Qp-ol9" secondAttribute="trailing" constant="9.5" id="Pf3-VK-njj"/>
                             <constraint firstItem="zV2-Yb-tzp" firstAttribute="leading" secondItem="lik-Jb-UNr" secondAttribute="leading" id="SRE-9d-gk6"/>
                             <constraint firstItem="zV2-Yb-tzp" firstAttribute="top" secondItem="lik-Jb-UNr" secondAttribute="topMargin" id="UpW-YU-KqM"/>
+                            <constraint firstItem="cJz-jh-nmi" firstAttribute="top" secondItem="Da0-SK-zSy" secondAttribute="bottom" constant="8" symbolic="YES" id="UuZ-cg-w7F"/>
                             <constraint firstItem="cJz-jh-nmi" firstAttribute="top" secondItem="5xp-AB-RVE" secondAttribute="bottom" constant="13.5" id="ZNB-VN-PbV"/>
                             <constraint firstItem="cJz-jh-nmi" firstAttribute="top" secondItem="Hsq-Jf-Ifa" secondAttribute="bottom" id="ZhL-Vk-pq3"/>
+                            <constraint firstAttribute="trailing" secondItem="Da0-SK-zSy" secondAttribute="trailing" id="c61-hb-63H"/>
                             <constraint firstAttribute="trailing" secondItem="Hsq-Jf-Ifa" secondAttribute="trailing" id="kZr-lH-haJ"/>
                             <constraint firstItem="Hsq-Jf-Ifa" firstAttribute="leading" secondItem="lik-Jb-UNr" secondAttribute="leading" id="n9z-9p-QJi"/>
                             <constraint firstItem="5xp-AB-RVE" firstAttribute="top" secondItem="S1Y-Yg-xcI" secondAttribute="bottom" constant="4" id="qNg-jN-gDX"/>
                             <constraint firstAttribute="trailing" secondItem="zV2-Yb-tzp" secondAttribute="trailing" id="vKK-Ec-3pS"/>
+                            <constraint firstItem="Da0-SK-zSy" firstAttribute="width" secondItem="lik-Jb-UNr" secondAttribute="width" id="x7J-Aj-Bh8"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="lightBackground"/>
@@ -346,6 +365,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="H67-J5-4Gu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer numberOfTapsRequired="7" id="y6N-Ut-m6S">
+                    <connections>
+                        <action selector="debugSettingsTapped:" destination="4G7-DP-gat" id="jsN-Qq-JS4"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="595" y="466"/>
         </scene>
