@@ -27,8 +27,9 @@ class App: UIApplication {
         // Set up file logging
         fileLogger = DDFileLogger()
         fileLogger.logFormatter = LogFormatter()
-        fileLogger.rollingFrequency = TimeInterval(60 * 60 * 4);
-        fileLogger.logFileManager.maximumNumberOfLogFiles = 12;
+        fileLogger.rollingFrequency = TimeInterval(60 * 60 * 4); // 4 hours
+        fileLogger.maximumFileSize = 0 // no max file size, just use 4 hour rolling logs
+        fileLogger.logFileManager.maximumNumberOfLogFiles = 7 * 24 / 4;  // 7 days
         // Add file logger
         DDLog.add(fileLogger);
         
