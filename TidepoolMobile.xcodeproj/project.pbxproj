@@ -222,13 +222,13 @@
 		48FB1E4D1C17C38600C89F8E /* TidepoolMobileDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* TidepoolMobileDataController.swift */; };
 		48FB1E4E1C17C38600C89F8E /* TidepoolMobileDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* TidepoolMobileDataController.swift */; };
 		4D02843E1F4F286900A72B74 /* HealthKitBloodGlucosePusher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0284381F4F286900A72B74 /* HealthKitBloodGlucosePusher.swift */; };
-		4D02843F1F4F286900A72B74 /* HealthKitBloodGlucoseUploadPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0284391F4F286900A72B74 /* HealthKitBloodGlucoseUploadPhase.swift */; };
 		4D0284401F4F286900A72B74 /* HealthKitBloodGlucoseUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843A1F4F286900A72B74 /* HealthKitBloodGlucoseUploader.swift */; };
 		4D0284411F4F286900A72B74 /* HealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843B1F4F286900A72B74 /* HealthKitConfiguration.swift */; };
 		4D0284421F4F286900A72B74 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843C1F4F286900A72B74 /* HealthKitManager.swift */; };
 		4D0284431F4F286900A72B74 /* HealthKitNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843D1F4F286900A72B74 /* HealthKitNotifications.swift */; };
 		4D73716C20166F630051E6BF /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D73716B20166F630051E6BF /* DebugSettings.swift */; };
 		4D73716D20166F6B0051E6BF /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D73716B20166F630051E6BF /* DebugSettings.swift */; };
+		4D7775EE201D46CD00F53462 /* HealthKitSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7775ED201D46CD00F53462 /* HealthKitSettings.swift */; };
 		4DFFF72B1F5474940057AC09 /* HealthKitBloodGlucoseUploadReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF72A1F5474940057AC09 /* HealthKitBloodGlucoseUploadReader.swift */; };
 		4DFFF72D1F5477910057AC09 /* HealthKitBloodGlucoseUploadStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF72C1F5477910057AC09 /* HealthKitBloodGlucoseUploadStats.swift */; };
 		4DFFF72F1F5487DD0057AC09 /* HealthKitBloodGlucoseUploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF72E1F5487DD0057AC09 /* HealthKitBloodGlucoseUploadManager.swift */; };
@@ -409,12 +409,12 @@
 		48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		48FB1E4C1C17C38500C89F8E /* TidepoolMobileDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolMobileDataController.swift; path = DataModel/TidepoolMobileDataController.swift; sourceTree = "<group>"; };
 		4D0284381F4F286900A72B74 /* HealthKitBloodGlucosePusher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitBloodGlucosePusher.swift; path = DataModel/HealthKit/HealthKitBloodGlucosePusher.swift; sourceTree = "<group>"; };
-		4D0284391F4F286900A72B74 /* HealthKitBloodGlucoseUploadPhase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitBloodGlucoseUploadPhase.swift; path = DataModel/HealthKit/HealthKitBloodGlucoseUploadPhase.swift; sourceTree = "<group>"; };
 		4D02843A1F4F286900A72B74 /* HealthKitBloodGlucoseUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitBloodGlucoseUploader.swift; path = DataModel/HealthKit/HealthKitBloodGlucoseUploader.swift; sourceTree = "<group>"; };
 		4D02843B1F4F286900A72B74 /* HealthKitConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitConfiguration.swift; path = DataModel/HealthKit/HealthKitConfiguration.swift; sourceTree = "<group>"; };
 		4D02843C1F4F286900A72B74 /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = DataModel/HealthKit/HealthKitManager.swift; sourceTree = "<group>"; };
 		4D02843D1F4F286900A72B74 /* HealthKitNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitNotifications.swift; path = DataModel/HealthKit/HealthKitNotifications.swift; sourceTree = "<group>"; };
 		4D73716B20166F630051E6BF /* DebugSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettings.swift; sourceTree = "<group>"; };
+		4D7775ED201D46CD00F53462 /* HealthKitSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitSettings.swift; path = DataModel/HealthKit/HealthKitSettings.swift; sourceTree = "<group>"; };
 		4DFFF72A1F5474940057AC09 /* HealthKitBloodGlucoseUploadReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitBloodGlucoseUploadReader.swift; path = DataModel/HealthKit/HealthKitBloodGlucoseUploadReader.swift; sourceTree = "<group>"; };
 		4DFFF72C1F5477910057AC09 /* HealthKitBloodGlucoseUploadStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitBloodGlucoseUploadStats.swift; path = DataModel/HealthKit/HealthKitBloodGlucoseUploadStats.swift; sourceTree = "<group>"; };
 		4DFFF72E1F5487DD0057AC09 /* HealthKitBloodGlucoseUploadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitBloodGlucoseUploadManager.swift; path = DataModel/HealthKit/HealthKitBloodGlucoseUploadManager.swift; sourceTree = "<group>"; };
@@ -547,6 +547,7 @@
 				4D02843B1F4F286900A72B74 /* HealthKitConfiguration.swift */,
 				4D02843C1F4F286900A72B74 /* HealthKitManager.swift */,
 				4D02843D1F4F286900A72B74 /* HealthKitNotifications.swift */,
+				4D7775ED201D46CD00F53462 /* HealthKitSettings.swift */,
 			);
 			name = HealthKit;
 			sourceTree = "<group>";
@@ -818,7 +819,6 @@
 			children = (
 				4DFFF7331F54FD430057AC09 /* HealthKitBloodGlucoseUploadData.swift */,
 				4DFFF72E1F5487DD0057AC09 /* HealthKitBloodGlucoseUploadManager.swift */,
-				4D0284391F4F286900A72B74 /* HealthKitBloodGlucoseUploadPhase.swift */,
 				4DFFF72A1F5474940057AC09 /* HealthKitBloodGlucoseUploadReader.swift */,
 				4DFFF72C1F5477910057AC09 /* HealthKitBloodGlucoseUploadStats.swift */,
 				4D02843A1F4F286900A72B74 /* HealthKitBloodGlucoseUploader.swift */,
@@ -1137,6 +1137,7 @@
 				48103E991C1DE7BC0055C27A /* EventViewNavController.swift in Sources */,
 				4D0284411F4F286900A72B74 /* HealthKitConfiguration.swift in Sources */,
 				485420251BC44D290020CFE1 /* Meal+CoreDataProperties.swift in Sources */,
+				4D7775EE201D46CD00F53462 /* HealthKitSettings.swift in Sources */,
 				4859FCC11B9A4DE4000C1269 /* Nutshell.xcdatamodeld in Sources */,
 				4851C6951BA689FC00F8E0EE /* TidepoolMobileUITableView.swift in Sources */,
 				48E5C2111EB2D17100D5923A /* TPUIButton.swift in Sources */,
@@ -1241,7 +1242,6 @@
 				0334CA701BA8DDFC00013096 /* Status+CoreDataProperties.swift in Sources */,
 				48DA110D1CE3C77200B99C35 /* NSDateExtension.swift in Sources */,
 				0334CA7F1BA8DDFC00013096 /* Upload.swift in Sources */,
-				4D02843F1F4F286900A72B74 /* HealthKitBloodGlucoseUploadPhase.swift in Sources */,
 				0334CA5B1BA8DDFC00013096 /* Prime.swift in Sources */,
 				48C423AB1BDB18D50023D75E /* BaseUITableViewCell.swift in Sources */,
 				4851C6921BA6281800F8E0EE /* TidepoolMobileUIView.swift in Sources */,

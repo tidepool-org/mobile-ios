@@ -149,7 +149,7 @@ class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
     fileprivate func processDeleteWorkoutEvents(_ workouts: [HKDeletedObject]) {
         let moc = TidepoolMobileDataController.sharedInstance.mocForLocalEvents()!
         for workout in workouts {
-            DDLogInfo("Processing deleted workout sample with UUID: \(workout.uuid)");
+            DDLogInfo("Processing deleted workout sample with UUID: \(workout.uuid)")
             let id = workout.uuid.uuidString
             let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Workout")
             // Note: look for any workout with this id, regardless of current user - we should only see it for one user, but multiple user operation is not yet completely defined.

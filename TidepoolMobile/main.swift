@@ -39,6 +39,9 @@ class App: UIApplication {
         if loggingEnabledObject == nil || !(loggingEnabledObject! as AnyObject).boolValue {
             defaultDebugLevel = DDLogLevel.off
         }
+#if DEBUG
+        defaultDebugLevel = DDLogLevel.verbose
+#endif
 
         DDLogVerbose("trace")
     }

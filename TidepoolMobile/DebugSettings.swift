@@ -77,7 +77,15 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
         actionSheet.addAction(UIAlertAction(title: "Email logs", style: .default, handler: { Void in
             self.handleEmailLogs()
         }))
-    
+        actionSheet.addAction(UIAlertAction(title: "Write 60 days of non-Dexcom test CBG data to HealthKit", style: .default, handler: {
+            Void in
+            self.handleWriteLotsOfNonDexcomCBGTestDataToHealthKit()
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Write one new non-Dexcom test CBG samples to HealthKit", style: .default, handler: {
+            Void in
+            self.handleWriteNonDexcomCBGTestDataToHealthKit()
+        }))
+
 //        if let popoverController = actionSheet.popoverPresentationController {
 //            popoverController.sourceView = self.presentingViewController.view
 //        }
@@ -91,7 +99,7 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
     }
     
     fileprivate func handleTreatAllBloodGlucoseSourceTypesAsDexcom(treatAllAsDexcom: Bool) {
-        UserDefaults.standard.set(treatAllAsDexcom, forKey: "TreatAllBloodGlucoseSourceTypesAsDexcom");
+        UserDefaults.standard.set(treatAllAsDexcom, forKey: HealthKitSettings.TreatAllBloodGlucoseSourceTypesAsDexcomKey);
         UserDefaults.standard.synchronize()
     }
     
@@ -230,6 +238,54 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true, completion: nil)
+    }
+    
+    fileprivate func handleWriteLotsOfNonDexcomCBGTestDataToHealthKit() {
+        var itemsToPush = [HKQuantitySample]()
+        let calendar = Calendar.current
+        var sampleTime = calendar.date(byAdding: .day, value: -60, to: Date())
+        var bgValue = 50
+        for _ in 1...60 {
+            for j in 1...2 {
+                for _ in 1...144 {
+                    let bgType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)
+                    let bgQuantity = HKQuantity(unit: HKUnit(from: "mg/dL"), doubleValue: Double(bgValue))
+                    let bgSample = HKQuantitySample(type: bgType!, quantity: bgQuantity, start: sampleTime!, end: sampleTime!, metadata: nil)
+                    itemsToPush.append(bgSample)
+                    sampleTime = sampleTime?.addingTimeInterval(60 * 5) // 5 minutes
+                    if j == 1 {
+                        bgValue += 1
+                    } else {
+                        bgValue -= 1
+                    }
+                }
+            }
+        }
+        HealthKitManager.sharedInstance.healthStore!.save(itemsToPush, withCompletion: { (success, error) -> Void in
+            if( error != nil ) {
+                DDLogError("Error pushing \(itemsToPush.count) glucose samples to HealthKit: \(error!.localizedDescription)")
+            } else {
+                DDLogVerbose("\(itemsToPush.count) Blood glucose samples pushed to HealthKit successfully!")
+            }
+        })
+    }
+    
+    fileprivate func handleWriteNonDexcomCBGTestDataToHealthKit() {
+        var itemsToPush = [HKQuantitySample]()
+        let sampleTime = Date()
+        let bgValue = 125
+        let bgType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)
+        let bgQuantity = HKQuantity(unit: HKUnit(from: "mg/dL"), doubleValue: Double(bgValue))
+        let bgSample = HKQuantitySample(type: bgType!, quantity: bgQuantity, start: sampleTime, end: sampleTime, metadata: nil)
+        itemsToPush.append(bgSample)
+        HealthKitManager.sharedInstance.healthStore!.save(itemsToPush, withCompletion: { (success, error) -> Void in
+            if( error != nil ) {
+                DDLogError("Error pushing \(itemsToPush.count) glucose samples to HealthKit: \(error!.localizedDescription)")
+            } else {
+                DDLogVerbose("\(itemsToPush.count) Blood glucose samples pushed to HealthKit successfully!")
+            }
+        })
+
     }
 
     fileprivate func clearLogFiles() {

@@ -272,7 +272,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DDLogVerbose("trace")
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        
+
+        // Only the HealthKitBloodGlucoseUploadReader.Mode.Current uploads should continue in background        
+        var mode = HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks
+        if (HealthKitBloodGlucoseUploadManager.sharedInstance.isUploading[mode]!) {
+            HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(mode: mode, reason: HealthKitBloodGlucoseUploadReader.StoppedReason.background)
+        }
+        mode = HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll
+        if (HealthKitBloodGlucoseUploadManager.sharedInstance.isUploading[mode]!) {
+            HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(mode: mode, reason: HealthKitBloodGlucoseUploadReader.StoppedReason.background)
+        }
+
+        // Switch to background upload session
         HealthKitBloodGlucoseUploadManager.sharedInstance.ensureUploadSession(background: true)
     }
 
@@ -354,6 +365,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         HealthKitBloodGlucoseUploadManager.sharedInstance.ensureUploadSession(background: false)
+        // TODO: uploader UI - Revisit this. Do we want even the non-current mode readers/uploades to resume automatically? Or should that be behind some explicit UI
+        HealthKitBloodGlucoseUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

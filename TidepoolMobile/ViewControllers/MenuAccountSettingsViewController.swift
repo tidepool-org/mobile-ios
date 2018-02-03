@@ -53,7 +53,6 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.Updated), object: nil)
-        notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploadSuccessfulNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.UploadSuccessful), object: nil)
     }
 
     deinit {
@@ -170,14 +169,6 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         //DDLogInfo("nextHKTimeRefresh")
         configureHKInterface()
     }
-
-    internal func handleUploadSuccessfulNotification(_ notification: Notification) {
-        DDLogInfo("handleUploadSuccessfulNotification: \(notification.name)")
-
-        let earliestSampleTime = HealthKitBloodGlucoseUploadManager.sharedInstance.stats.lastSuccessfulUploadEarliestSampleTimeForCurrentPhase
-        let latestSampleTime = HealthKitBloodGlucoseUploadManager.sharedInstance.stats.lastSuccessfulUploadLatestSampleTimeForCurrentPhase
-        DDLogInfo("Successfully uploaded samples. Earliest sample date: \(earliestSampleTime), Latest sample date: \(latestSampleTime)")
-    }
     
     internal func handleUploaderNotification(_ notification: Notification) {
         DDLogInfo("handleUploaderNotification: \(notification.name)")
@@ -238,32 +229,28 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
     fileprivate func configureHealthStatusLines() {
         let uploadManager = HealthKitBloodGlucoseUploadManager.sharedInstance
-        let phase = uploadManager.phase
-        let stats = uploadManager.stats
-        
-        switch phase.currentPhase {
-        case .mostRecent:
-            healthStatusLine1.text = healthKitUploadStatusMostRecentSamples
-            healthStatusLine2.text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
-            healthStatusLine3.text = ""
-        case .historical:
-            healthStatusLine1.text = healthKitUploadStatusUploadingCompleteHistory
-            var healthKitUploadStatusDaysUploadedText = ""
-            if phase.totalDaysHistorical > 0 {
-                healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, phase.totalDaysHistorical)
-            }
-            healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
-            healthStatusLine3.text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
-        case .current:
-            if uploadManager.stats.hasSuccessfullyUploaded {
-                let lastUploadTimeAgoInWords = stats.lastSuccessfulUploadTime.timeAgoInWords(Date())
-                healthStatusLine1.text = String(format: healthKitUploadStatusLastUploadTime, lastUploadTimeAgoInWords)
-            } else {
-                healthStatusLine1.text = healthKitUploadStatusNoDataAvailableToUpload
-            }
-            healthStatusLine2.text = healthKitUploadStatusDexcomDataDelayed3Hours
-            healthStatusLine3.text = ""
+//        case .mostRecent:
+//            healthStatusLine1.text = healthKitUploadStatusMostRecentSamples
+//            healthStatusLine2.text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
+//            healthStatusLine3.text = ""
+//        case .historical:
+//            healthStatusLine1.text = healthKitUploadStatusUploadingCompleteHistory
+//            var healthKitUploadStatusDaysUploadedText = ""
+//            if phase.totalDaysHistorical > 0 {
+//                healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, phase.totalDaysHistorical)
+//            }
+//            healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
+//            healthStatusLine3.text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
+//        case .current:
+        let stats = uploadManager.stats[HealthKitBloodGlucoseUploadReader.Mode.Current]!
+        if stats.hasSuccessfullyUploaded {
+            let lastUploadTimeAgoInWords = stats.lastSuccessfulUploadTime.timeAgoInWords(Date())
+            healthStatusLine1.text = String(format: healthKitUploadStatusLastUploadTime, lastUploadTimeAgoInWords)
+        } else {
+            healthStatusLine1.text = healthKitUploadStatusNoDataAvailableToUpload
         }
+        healthStatusLine2.text = healthKitUploadStatusDexcomDataDelayed3Hours
+        healthStatusLine3.text = ""
     }
     
     fileprivate var debugSettings: DebugSettings?

@@ -17,38 +17,62 @@ import HealthKit
 import CocoaLumberjack
 import CryptoSwift
 
-
+// NOTE: These delegate methods are usually called indirectly from HealthKit or a URLSession delegate, on a background queue, not on main thread
 protocol HealthKitBloodGlucoseUploadReaderDelegate: class {
-    func bloodGlucoseReader(reader: HealthKitBloodGlucoseUploadReader, didReadDataForUpload uploadData: HealthKitBloodGlucoseUploadData?, error: Error?)
+    func bloodGlucoseReader(reader: HealthKitBloodGlucoseUploadReader, didStopReading reason: HealthKitBloodGlucoseUploadReader.StoppedReason)
+    func bloodGlucoseReader(reader: HealthKitBloodGlucoseUploadReader, didReadDataForUpload uploadData: HealthKitBloodGlucoseUploadData, error: Error?)
 }
 
 class HealthKitBloodGlucoseUploadReader: NSObject {
-    fileprivate(set) var phase: HealthKitBloodGlucoseUploadPhase
+    enum Mode: String {
+        case Current = "Current"
+        case HistoricalAll = "HistoricalAll"
+        case HistoricalLastTwoWeeks = "HistoricalLastTwoWeeks"
+    }
     
-    init(phase: HealthKitBloodGlucoseUploadPhase) {
+    enum StoppedReason {
+        case error(error: Error)
+        case background
+        case turnOffInterface
+        case noResultsFromQuery
+    }
+
+    init(mode: Mode) {
         DDLogVerbose("trace")
         
-        self.phase = phase
+        self.mode = mode
 
         super.init()
     }
     
     weak var delegate: HealthKitBloodGlucoseUploadReaderDelegate?
 
+    fileprivate(set) var mode: Mode
     fileprivate(set) var isReading = false
+    var currentUserId: String?
+
+    func isResumable() -> Bool {
+        var isResumable = false
         
+        let anchorData = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryAnchorKey))
+        let anchorLastData = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryAnchorLastKey))
+        if (anchorData != nil && anchorLastData != nil) {
+            isResumable = true
+        }
+        
+        return isResumable
+    }
+    
     func resetPersistentState() {
         DDLogVerbose("trace")
         
-        UserDefaults.standard.removeObject(forKey: "bloodGlucoseQueryAnchor")
-        UserDefaults.standard.removeObject(forKey: "bloodGlucoseQueryAnchorLast")
-        UserDefaults.standard.removeObject(forKey: "bloodGlucoseUploadRecentEndDate")
-        UserDefaults.standard.removeObject(forKey: "bloodGlucoseUploadRecentStartDate")
-        UserDefaults.standard.removeObject(forKey: "bloodGlucoseUploadRecentStartDateFinal")
+        UserDefaults.standard.removeObject(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryAnchorKey))
+        UserDefaults.standard.removeObject(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryAnchorLastKey))
+        UserDefaults.standard.removeObject(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryStartDateKey))
+        UserDefaults.standard.removeObject(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryEndDateKey))
         UserDefaults.standard.synchronize()
     }
 
-    // Start reading at current position of current phase
     func startReading() {
         DDLogVerbose("trace")
         
@@ -58,108 +82,83 @@ class HealthKitBloodGlucoseUploadReader: NSObject {
         }
         
         self.isReading = true
-        
-        self.phase.updateHistoricalSamplesDateRangeFromHealthKitAsync()
-        
-        if self.phase.currentPhase == .mostRecent {
-            self.startReadingMostRecent()
-        } else {
-            self.startReadingFromAnchor()
-        }
+
+        self.readMore()
     }
     
-    func stopReading() {
+    func stopReading(reason: StoppedReason) {
         DDLogVerbose("trace")
-        
+
+        guard self.isReading else {
+            DDLogInfo("Not currently reading, ignoring. Mode: \(self.mode)")
+            return
+        }
+
         self.isReading = false
+        
+        self.delegate?.bloodGlucoseReader(reader: self, didStopReading: reason)
     }
     
-    // Read more, first advancing position, and transitioning phase if needed
     func readMore() {
         DDLogVerbose("trace")
-        
-        if self.phase.currentPhase == .mostRecent {
-            let bloodGlucoseUploadRecentEndDate = UserDefaults.standard.object(forKey: "bloodGlucoseUploadRecentStartDate") as! Date
-            let bloodGlucoseUploadRecentStartDate = bloodGlucoseUploadRecentEndDate.addingTimeInterval(-60 * 60 * 12)
-            let bloodGlucoseUploadRecentStartDateFinal = UserDefaults.standard.object(forKey: "bloodGlucoseUploadRecentStartDateFinal") as! Date
-            if bloodGlucoseUploadRecentEndDate.compare(bloodGlucoseUploadRecentStartDateFinal) == .orderedAscending {
-                DDLogInfo("finished reading most recent samples")
-                self.phase.transitionToPhase(.historical)
-            }
-            else {
-                UserDefaults.standard.set(bloodGlucoseUploadRecentStartDate, forKey: "bloodGlucoseUploadRecentStartDate")
-                UserDefaults.standard.set(bloodGlucoseUploadRecentEndDate, forKey: "bloodGlucoseUploadRecentEndDate")
-                UserDefaults.standard.synchronize()
-            }
-        } else {
-            let newAnchor = UserDefaults.standard.object(forKey: "bloodGlucoseQueryAnchorLast")
-            if newAnchor != nil {
-                UserDefaults.standard.set(newAnchor, forKey: "bloodGlucoseQueryAnchor")
-                UserDefaults.standard.removeObject(forKey: "bloodGlucoseQueryAnchorLast")
-                UserDefaults.standard.synchronize()
-            }
+
+        // Load the anchor
+        var anchor: HKQueryAnchor?
+        let anchorData = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryAnchorKey))
+        if anchorData != nil {
+            anchor = NSKeyedUnarchiver.unarchiveObject(with: anchorData as! Data) as? HKQueryAnchor
         }
-        self.stopReading()
-        self.startReading()
+
+        // Get the start and end dates for the predicate
+        var startDate = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryStartDateKey)) as? Date
+        var endDate = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryEndDateKey)) as? Date
+        if (startDate == nil || endDate == nil) {
+            if (self.mode == HealthKitBloodGlucoseUploadReader.Mode.Current) {
+                endDate = Date.distantFuture
+                startDate = Date()
+            } else if (self.mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks) {
+                endDate = Date()
+                startDate = endDate!.addingTimeInterval(-60 * 60 * 24 * 14) // Two weeks ago
+            } else if (self.mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll) {
+                endDate = Date()
+                startDate = Date.distantPast
+            }
+
+            UserDefaults.standard.set(endDate, forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryEndDateKey))
+            UserDefaults.standard.set(startDate, forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryStartDateKey))
+            UserDefaults.standard.synchronize()
+        }
+        
+        // Set up predicate
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictStartDate, .strictEndDate])
+        
+        // Read samples from anchor
+        HealthKitManager.sharedInstance.readBloodGlucoseSamplesFromAnchor(predicate: predicate, anchor: anchor, limit: 2000, resultsHandler: self.bloodGlucoseReadResultsHandler)
     }
     
     // MARK: Private
-
-    fileprivate func startReadingFromAnchor() {
-        DDLogVerbose("trace")
-        
-         HealthKitManager.sharedInstance.readBloodGlucoseSamplesFromAnchor(limit: 2000, resultsHandler: self.bloodGlucoseReadResultsHandler)
-    }
-    
-    fileprivate func startReadingMostRecent() {
-        DDLogVerbose("trace")
-        
-        let now = Date()
-        let halfDayAgo = now.addingTimeInterval(-60 * 60 * 12)
-        let twoWeeksAgo = now.addingTimeInterval(-60 * 60 * 24 * 14)
-        var bloodGlucoseUploadRecentEndDate = now
-        var bloodGlucoseUploadRecentStartDate = halfDayAgo
-        var bloodGlucoseUploadRecentStartDateFinal = twoWeeksAgo
-        
-        let bloodGlucoseUploadRecentStartDateFinalSetting = UserDefaults.standard.object(forKey: "bloodGlucoseUploadRecentStartDateFinal")
-        if bloodGlucoseUploadRecentStartDateFinalSetting == nil {
-            UserDefaults.standard.set(bloodGlucoseUploadRecentEndDate, forKey: "bloodGlucoseUploadRecentEndDate")
-            UserDefaults.standard.set(bloodGlucoseUploadRecentStartDate, forKey: "bloodGlucoseUploadRecentStartDate")
-            UserDefaults.standard.set(bloodGlucoseUploadRecentStartDateFinal, forKey: "bloodGlucoseUploadRecentStartDateFinal")
-            UserDefaults.standard.synchronize()
-            DDLogInfo("final date for most upload of most recent samples: \(bloodGlucoseUploadRecentStartDateFinal)")
-        } else {
-            bloodGlucoseUploadRecentEndDate = UserDefaults.standard.object(forKey: "bloodGlucoseUploadRecentEndDate") as! Date
-            bloodGlucoseUploadRecentStartDate = UserDefaults.standard.object(forKey: "bloodGlucoseUploadRecentStartDate") as! Date
-            bloodGlucoseUploadRecentStartDateFinal = bloodGlucoseUploadRecentStartDateFinalSetting as! Date
-        }
-
-         HealthKitManager.sharedInstance.readBloodGlucoseSamples(startDate: bloodGlucoseUploadRecentStartDate, endDate: bloodGlucoseUploadRecentEndDate, limit: 2000, resultsHandler: self.bloodGlucoseReadResultsHandler)
-    }
     
     // NOTE: This is a HealthKit results handler, not called on main thread
-    fileprivate func bloodGlucoseReadResultsHandler(_ error: NSError?, newSamples: [HKSample]?, newAnchor: HKQueryAnchor?) {
+    fileprivate func bloodGlucoseReadResultsHandler(_ error: NSError?, newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, newAnchor: HKQueryAnchor?) {
         DDLogVerbose("trace")
         
         guard self.isReading else {
             DDLogInfo("Not currently reading, ignoring")
             return
         }
-
-        var healthKitBloodGlucoseUploadData: HealthKitBloodGlucoseUploadData?
+        
+        guard let currentUserId = self.currentUserId else {
+            DDLogInfo("No logged in user, unable to upload")
+            return
+        }
+        
         if error == nil {
-            if let samples = newSamples {
-                if samples.count > 0 {
-                    healthKitBloodGlucoseUploadData = HealthKitBloodGlucoseUploadData(samples: samples, currentUserId: phase.currentUserId)
-                }
-            }
-            
-            // TODO: uploader - are we persisting new anchor even before we've successfully processed the data for this? What if there is an error processing the data?
             let queryAnchorData = newAnchor != nil ? NSKeyedArchiver.archivedData(withRootObject: newAnchor!) : nil
-            UserDefaults.standard.set(queryAnchorData, forKey: "bloodGlucoseQueryAnchorLast")
+            UserDefaults.standard.set(queryAnchorData, forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryAnchorLastKey))
             UserDefaults.standard.synchronize()
         }
         
+        let healthKitBloodGlucoseUploadData = HealthKitBloodGlucoseUploadData(newSamples: newSamples, deletedSamples: deletedSamples, currentUserId: currentUserId)
         self.delegate?.bloodGlucoseReader(reader: self, didReadDataForUpload: healthKitBloodGlucoseUploadData, error: error)
     }
 }

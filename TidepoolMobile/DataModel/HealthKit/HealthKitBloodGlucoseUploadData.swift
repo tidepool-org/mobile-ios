@@ -18,21 +18,33 @@ import CocoaLumberjack
 import CryptoSwift
 
 class HealthKitBloodGlucoseUploadData: NSObject {
-    init(samples: [HKSample], currentUserId: String) {
+    init(newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, currentUserId: String) {
         DDLogVerbose("trace")
         
         super.init()
         
         self.currentUserId = currentUserId
-        updateSamples(samples: samples)
-        updateBatchMetadata()
+        
+        if let newSamples = newSamples {
+            updateSamples(samples: newSamples)
+            updateBatchMetadata()
+            
+            if newSamples.count > 0 {
+                self.newOrDeletedSamplesWereDelivered = true
+            }
+        }
+        
+        if deletedSamples != nil && deletedSamples!.count > 0 {
+            self.newOrDeletedSamplesWereDelivered = true
+        }
     }
 
-    fileprivate(set) var samples = [HKSample]()
+    fileprivate(set) var filteredSamples = [HKSample]()
     fileprivate(set) var earliestSampleTime = Date.distantFuture
     fileprivate(set) var latestSampleTime = Date.distantPast
     fileprivate(set) var batchMetadata = [String: AnyObject]()
-    
+    fileprivate(set) var newOrDeletedSamplesWereDelivered = false
+
     // MARK: Private
     
     fileprivate func updateSamples(samples: [HKSample]) {
@@ -50,9 +62,9 @@ class HealthKitBloodGlucoseUploadData: NSObject {
         for sample in sortedSamples {
             let sourceRevision = sample.sourceRevision
             let source = sourceRevision.source
-            let treatAllBloodGlucoseSourceTypesAsDexcom = UserDefaults.standard.bool(forKey: "TreatAllBloodGlucoseSourceTypesAsDexcom")
+            let treatAllBloodGlucoseSourceTypesAsDexcom = UserDefaults.standard.bool(forKey: HealthKitSettings.TreatAllBloodGlucoseSourceTypesAsDexcomKey)
             if source.name.lowercased().range(of: "dexcom") == nil && !treatAllBloodGlucoseSourceTypesAsDexcom {
-                DDLogInfo("Ignoring non-Dexcom glucose data")
+                DDLogInfo("Ignoring non-Dexcom glucose data from source: \(source.name)")
                 continue
             }
             
@@ -67,7 +79,7 @@ class HealthKitBloodGlucoseUploadData: NSObject {
             }
         }
         
-        self.samples = filteredSamples
+        self.filteredSamples = filteredSamples
         self.earliestSampleTime = earliestSampleTime
         self.latestSampleTime = latestSampleTime
     }
@@ -75,12 +87,12 @@ class HealthKitBloodGlucoseUploadData: NSObject {
     fileprivate func updateBatchMetadata() {
         DDLogVerbose("trace")
         
-        guard self.samples.count > 0 else {
+        guard self.filteredSamples.count > 0 else {
             DDLogInfo("No samples available for batch")
             return
         }
         
-        let firstSample = self.samples[0]
+        let firstSample = self.filteredSamples[0]
         let sourceRevision = firstSample.sourceRevision
         let source = sourceRevision.source
         let sourceBundleIdentifier = source.bundleIdentifier
@@ -122,13 +134,14 @@ class HealthKitBloodGlucoseUploadData: NSObject {
     fileprivate func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
         var deviceModel = ""
         
+        // TODO: uploader - what about G6? others?
         if sourceBundleIdentifier.lowercased().range(of: "com.dexcom.cgm") != nil {
             deviceModel = "DexG5"
         } else if sourceBundleIdentifier.lowercased().range(of: "com.dexcom.share2") != nil {
             deviceModel = "DexG4"
         } else {
             DDLogError("Unknown Dexcom sourceBundleIdentifier: \(sourceBundleIdentifier)")
-            deviceModel = "DexUnknown"
+            deviceModel = "DexUnknown: \(sourceBundleIdentifier)"
         }
         
         return "HealthKit_\(deviceModel)"

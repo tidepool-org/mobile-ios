@@ -34,15 +34,15 @@ class HealthKitManager {
     }()
     
     func authorizationRequestedForBloodGlucoseSamples() -> Bool {
-        return UserDefaults.standard.bool(forKey: "authorizationRequestedForBloodGlucoseSamples")
+        return UserDefaults.standard.bool(forKey: HealthKitSettings.AuthorizationRequestedForBloodGlucoseSamplesKey)
     }
     
     func authorizationRequestedForBloodGlucoseSampleWrites() -> Bool {
-        return UserDefaults.standard.bool(forKey: "authorizationRequestedForBloodGlucoseSampleWrites")
+        return UserDefaults.standard.bool(forKey: HealthKitSettings.AuthorizationRequestedForBloodGlucoseSampleWritesKey)
     }
     
     func authorizationRequestedForWorkoutSamples() -> Bool {
-        return UserDefaults.standard.bool(forKey: "authorizationRequestedForWorkoutSamples")
+        return UserDefaults.standard.bool(forKey: HealthKitSettings.AuthorizationRequestedForWorkoutSamplesKey)
     }
     
     func authorize(shouldAuthorizeBloodGlucoseSampleReads: Bool, shouldAuthorizeBloodGlucoseSampleWrites: Bool, shouldAuthorizeWorkoutSamples: Bool, completion: @escaping (_ success:Bool, _ error:NSError?) -> Void = {(_, _) in })
@@ -90,13 +90,13 @@ class HealthKitManager {
             healthStore!.requestAuthorization(toShare: writeTypes, read: readTypes) { (success, error) -> Void in
                 if success {
                     if (shouldAuthorizeBloodGlucoseSampleReads) {
-                        UserDefaults.standard.set(true, forKey: "authorizationRequestedForBloodGlucoseSamples");
+                        UserDefaults.standard.set(true, forKey: HealthKitSettings.AuthorizationRequestedForBloodGlucoseSamplesKey)
                     }
                     if (shouldAuthorizeBloodGlucoseSampleWrites) {
-                        UserDefaults.standard.set(true, forKey: "authorizationRequestedForBloodGlucoseSampleWrites");
+                        UserDefaults.standard.set(true, forKey: HealthKitSettings.AuthorizationRequestedForBloodGlucoseSampleWritesKey)
                     }
                     if shouldAuthorizeWorkoutSamples {
-                        UserDefaults.standard.set(true, forKey: "authorizationRequestedForWorkoutSamples");
+                        UserDefaults.standard.set(true, forKey: HealthKitSettings.AuthorizationRequestedForWorkoutSamplesKey)
                     }
                     UserDefaults.standard.synchronize()
                 }
@@ -296,7 +296,7 @@ class HealthKitManager {
         }
     }
     
-    func readBloodGlucoseSamplesFromAnchor(limit: Int, resultsHandler: @escaping ((NSError?, [HKSample]?, HKQueryAnchor?) -> Void))
+    func readBloodGlucoseSamplesFromAnchor(predicate: NSPredicate?, anchor: HKQueryAnchor?, limit: Int, resultsHandler: @escaping ((NSError?, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?) -> Void))
     {
         DDLogVerbose("trace")
         
@@ -305,16 +305,10 @@ class HealthKitManager {
             return
         }
         
-        var queryAnchor: HKQueryAnchor?
-        let queryAnchorData = UserDefaults.standard.object(forKey: "bloodGlucoseQueryAnchor")
-        if queryAnchorData != nil {
-            queryAnchor = NSKeyedUnarchiver.unarchiveObject(with: queryAnchorData as! Data) as? HKQueryAnchor
-        }
-        
         let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
         let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
-            predicate: nil, // TODO: my - We should probably use a LIKE predicate with wildcard to have the query filter Dexcom samples rather than filtering results as we receive them
-            anchor: queryAnchor,
+            predicate: predicate,
+            anchor: anchor,
             limit: limit) {
                 (query, newSamples, deletedSamples, newAnchor, error) -> Void in
 
@@ -322,11 +316,11 @@ class HealthKitManager {
                     DDLogError("Error reading samples: \(String(describing: error))")
                 }
                 
-                resultsHandler((error as NSError?), newSamples, newAnchor)
+                resultsHandler((error as NSError?), newSamples, deletedSamples, newAnchor)
         }
         healthStore?.execute(sampleQuery)
     }
-    
+
     func readBloodGlucoseSamples(startDate: Date, endDate: Date, limit: Int, resultsHandler: @escaping (((NSError?, [HKSample]?, HKQueryAnchor?) -> Void)))
     {
         DDLogInfo("readBloodGlucoseSamples startDate: \(startDate), endDate: \(endDate), limit: \(limit)")
@@ -336,7 +330,7 @@ class HealthKitManager {
             return
         }
         
-        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate, .strictEndDate])
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictStartDate, .strictEndDate])
         let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
         
         let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
@@ -366,7 +360,7 @@ class HealthKitManager {
                     let sourceRevision = sample.sourceRevision
                     let source = sourceRevision.source
                     totalSamplesCount += 1
-                    let treatAllBloodGlucoseSourceTypesAsDexcom = UserDefaults.standard.bool(forKey: "TreatAllBloodGlucoseSourceTypesAsDexcom")
+                    let treatAllBloodGlucoseSourceTypesAsDexcom = UserDefaults.standard.bool(forKey: HealthKitSettings.TreatAllBloodGlucoseSourceTypesAsDexcomKey)
                     if source.name.lowercased().range(of: "dexcom") != nil || !treatAllBloodGlucoseSourceTypesAsDexcom {
                         totalDexcomSamplesCount += 1
                     }
@@ -427,7 +421,7 @@ class HealthKitManager {
         }
         
         var queryAnchor: HKQueryAnchor?
-        let queryAnchorData = UserDefaults.standard.object(forKey: "workoutQueryAnchor")
+        let queryAnchorData = UserDefaults.standard.object(forKey: HealthKitSettings.WorkoutQueryAnchorKey)
         if queryAnchorData != nil {
             queryAnchor = NSKeyedUnarchiver.unarchiveObject(with: queryAnchorData as! Data) as? HKQueryAnchor
         }
@@ -444,7 +438,7 @@ class HealthKitManager {
                 
                 if error == nil && newAnchor != nil {
                     let queryAnchorData = NSKeyedArchiver.archivedData(withRootObject: newAnchor!)
-                    UserDefaults.standard.set(queryAnchorData, forKey: "workoutQueryAnchor")
+                    UserDefaults.standard.set(queryAnchorData, forKey: HealthKitSettings.WorkoutQueryAnchorKey)
                     UserDefaults.standard.synchronize()
                 }
         }

@@ -13,7 +13,7 @@ class HealthKitConfiguration
 {    
     // MARK: Access, availability, authorization
 
-    fileprivate var currentUserId: String?
+    fileprivate(set) var currentUserId: String?
     fileprivate var isDSAUser: Bool?
     
     func shouldShowHealthKitUI() -> Bool {
@@ -68,8 +68,12 @@ class HealthKitConfiguration
         DDLogVerbose("trace")
 
         if self.currentUserId != nil {
-            DDLogInfo("start uploading")
-            HealthKitBloodGlucoseUploadManager.sharedInstance.startUploading(currentUserId: self.currentUserId!)
+            // Always start uploading HealthKitBloodGlucoseUploadReader.Mode.Current samples when interface is turned on
+            HealthKitBloodGlucoseUploadManager.sharedInstance.startUploading(mode: HealthKitBloodGlucoseUploadReader.Mode.Current, currentUserId: self.currentUserId!)
+
+            // Resume uploading other samples too, if resumable
+            // TODO: uploader UI - Revisit this. Do we want even the non-current mode readers/uploads to resume automatically? Or should that be behind some explicit UI
+            HealthKitBloodGlucoseUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: self.currentUserId)
         } else {
             DDLogInfo("No logged in user, unable to start uploading")
         }
@@ -78,17 +82,23 @@ class HealthKitConfiguration
     func turnOffInterface() {
         DDLogVerbose("trace")
 
-        HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading()
+        var mode = HealthKitBloodGlucoseUploadReader.Mode.Current
+        if (HealthKitBloodGlucoseUploadManager.sharedInstance.isUploading[mode]!) {
+            HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(mode: mode, reason: HealthKitBloodGlucoseUploadReader.StoppedReason.turnOffInterface)
+        }
+        mode = HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks
+        if (HealthKitBloodGlucoseUploadManager.sharedInstance.isUploading[mode]!) {
+            HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(mode: mode, reason: HealthKitBloodGlucoseUploadReader.StoppedReason.turnOffInterface)
+        }
+        mode = HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll
+        if (HealthKitBloodGlucoseUploadManager.sharedInstance.isUploading[mode]!) {
+            HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(mode: mode, reason: HealthKitBloodGlucoseUploadReader.StoppedReason.turnOffInterface)            
+        }
     }
 
     //
     // MARK: - Methods needed for config UI
-    //
-    
-    fileprivate let kHealthKitInterfaceEnabledKey = "kHealthKitInterfaceEnabledKey"
-    fileprivate let kHealthKitInterfaceUserIdKey = "kUserIdForHealthKitInterfaceKey"
-    fileprivate let kHealthKitInterfaceUserNameKey = "kUserNameForHealthKitInterfaceKey"
-    
+    //    
     
     /// Enables HealthKit for current user
     ///
@@ -108,15 +118,15 @@ class HealthKitConfiguration
             DDLogVerbose("trace")
 
             let defaults = UserDefaults.standard
-            defaults.set(true, forKey:self.kHealthKitInterfaceEnabledKey)
+            defaults.set(true, forKey: HealthKitSettings.InterfaceEnabledKey)
             if !self.healthKitInterfaceEnabledForCurrentUser() {
                 if self.healthKitInterfaceConfiguredForOtherUser() {
                     // Switching healthkit users, reset HealthKitBloodGlucoseUploadManager
                     HealthKitBloodGlucoseUploadManager.sharedInstance.resetPersistentState()
                 }
-                defaults.setValue(currentUserId!, forKey: kHealthKitInterfaceUserIdKey)
+                defaults.setValue(currentUserId!, forKey: HealthKitSettings.InterfaceUserIdKey)
                 // may be nil...
-                defaults.setValue(username, forKey: kHealthKitInterfaceUserNameKey)
+                defaults.setValue(username, forKey: HealthKitSettings.InterfaceUserNameKey)
             }
             UserDefaults.standard.synchronize()
         }
@@ -143,7 +153,7 @@ class HealthKitConfiguration
     func disableHealthKitInterface() {
         DDLogVerbose("trace")
 
-        UserDefaults.standard.set(false, forKey:kHealthKitInterfaceEnabledKey)
+        UserDefaults.standard.set(false, forKey: HealthKitSettings.InterfaceEnabledKey)
         UserDefaults.standard.synchronize()
         configureHealthKitInterface(self.currentUserId, isDSAUser: self.isDSAUser)
     }
@@ -180,18 +190,18 @@ class HealthKitConfiguration
     ///
     /// Note: separately, we may enable/disable the current interface to HealthKit.
     fileprivate func healthKitInterfaceEnabled() -> Bool {
-        return UserDefaults.standard.bool(forKey: kHealthKitInterfaceEnabledKey)
+        return UserDefaults.standard.bool(forKey: HealthKitSettings.InterfaceEnabledKey)
     }
     
     /// If HealthKit interface is enabled, returns associated Tidepool account id
     func healthKitUserTidepoolId() -> String? {
-        let result = UserDefaults.standard.string(forKey: kHealthKitInterfaceUserIdKey)
+        let result = UserDefaults.standard.string(forKey: HealthKitSettings.InterfaceUserIdKey)
         return result
     }
     
     /// If HealthKit interface is enabled, returns associated Tidepool account id
     func healthKitUserTidepoolUsername() -> String? {
-        let result = UserDefaults.standard.string(forKey: kHealthKitInterfaceUserNameKey)
+        let result = UserDefaults.standard.string(forKey: HealthKitSettings.InterfaceUserNameKey)
         return result
     }
 }

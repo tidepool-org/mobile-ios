@@ -745,6 +745,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
     fileprivate func oneShotCompleted(_ oneShotId: String) {
         UserDefaults.standard.set(true, forKey: oneShotId)
+        UserDefaults.standard.synchronize()
     }
     
     @IBAction func emailALinkButtonHandler(_ sender: Any) {
