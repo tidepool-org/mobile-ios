@@ -66,6 +66,13 @@ def parseDSYM(fullPath):
 
     return images
 
+def deobfuscateDSYM(fullPath, mapsPath):
+    try:
+        out = subprocess.check_output(["/usr/bin/dsymutil", "--symbol-map", mapsPath, fullPath], stderr=None)
+    except subprocess.CalledProcessError as e:
+        return
+    return
+
 def getIcon():
     if not options.from_xcode:
         # No icon extraction when run outside of XCode
@@ -222,6 +229,8 @@ def main():
             if isInUploadedList(images, uploadedImages):
                 print "Already uploaded %s, skipping" % f
                 continue
+            if options.symbol_maps:
+                deobfuscateDSYM(os.path.join(root, f), options.symbol_maps)
             dwarfs.append(os.path.join(root, f))
             uploadedImages.extend(images)
 
@@ -254,6 +263,8 @@ if __name__ == "__main__":
                   help="Use custom API endpoint for uploading", default="https://api.bugsee.com")
     parser.add_option("-f", "--folder", dest="dsym_folder",
                   help="Use custom folder to scan for dSYMs", default=os.environ.get('DWARF_DSYM_FOLDER_PATH'))
+    parser.add_option("-m", "--maps", dest="symbol_maps",
+                  help="Use folder containing symbol maps to deobfuscate dSYM files")
     parser.add_option("-l", "--list", dest="dsym_list", action="store_true", default=False,
                   help="Use dsyms from the command line instead of parsing folder")
     parser.add_option("-x", "--external", dest="from_xcode", action="store_false", default=True,

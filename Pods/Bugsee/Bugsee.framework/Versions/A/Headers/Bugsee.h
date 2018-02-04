@@ -15,6 +15,8 @@
 #import "BugseeAttachment.h"
 #import "BugseeReport.h"
 #import "BugseeNetworkEvent.h"
+#import "BugseeOptions.h"
+#import "BugseeLogEvent.h"
 
 #define BUGSEE_ASSERT(condition, description) \
 if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWithFormat:@"%s (%@:%d)", __PRETTY_FUNCTION__, [[NSString stringWithFormat:@"%s", __FILE__] lastPathComponent], __LINE__]]; }
@@ -26,8 +28,17 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
 /**
  *  Use this delegate to filter network events and their properties.
  *
+ *  Example:
+ *  - (void) bugseeFilterNetworkEvent:(BugseeNetworkEvent *)event completionHandler:(BugseeNetworkFilterDecisionBlock)decisionBlock
+ *  {
+ *      //Do all your stuff
+ *
+ *      //Decision block can receive nil as argument, if you need to remove event.
+ *      decisionBlock(event);
+ *  }
+ *
  *  @param event         network event with properties
- *  @param decisionBlock pass event into this block
+ *  @param decisionBlock pass event into this block, you also can pass nil as argument to remove event
  */
 -(void) bugseeFilterNetworkEvent:(nonnull BugseeNetworkEvent *)event completionHandler:(nonnull BugseeNetworkFilterDecisionBlock)decisionBlock;
 
@@ -38,6 +49,23 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
  *  @return pass array of attachments here.
  */
 -(nonnull NSArray<BugseeAttachment* >*) bugseeAttachmentsForReport:(nonnull BugseeReport *)report;
+
+/**
+ *  This delegate allows you, to attach 3 files less than 1 MB each to a report.
+ *
+ *  Example:
+ *  - (void) bugseeAttachmentsForReport:(nonnull BugseeReport *)report completionHandler:(nonnull BugseeAttachmentsDecisionBlock)decisionBlock
+ *  {
+ *      NSMutableArray<BugseeAttachment*>* attachments = ...
+ *      //Do all your stuff
+ *
+ *      //Decision block can receive nil as argument.
+ *      decisionBlock(attachments);
+ *  }
+ *
+ *  @param report        report about to be sent
+ *  @param decisionBlock pass attachments into this block, you also can pass nil.
+ */
 -(void) bugseeAttachmentsForReport:(nonnull BugseeReport *)report completionHandler:(nonnull BugseeAttachmentsDecisionBlock)decisionBlock;
 /**
  *  Use this delegate to hanle new feedback messages in your app.
@@ -45,6 +73,14 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
  *  @param messages  text messages in array
  */
 -(void) bugsee:(nonnull Bugsee *)bugsee didReceiveNewFeedback:(nonnull NSArray<NSString *> *)messages;
+
+/**
+ *  Use this delegate to filter console logs that will sended with report.
+ *
+ *  @param log BugseeLogEvent object with log message and parameters
+ *  @param decisionBlock pass BugseeLogEvent into this block, you also can pass nil as argument to remove log
+ */
+-(void) bugseeFilterLog:(nonnull BugseeLogEvent *) log completionHandler:(nonnull BugseeLogFilterDecisionBlock)decisionBlock;
 
 @end
 
@@ -55,7 +91,8 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
 
 + (nullable Bugsee *)sharedInstance;
 + (nullable Bugsee *)launchWithToken:(nonnull NSString* )appToken NS_SWIFT_NAME(launch(token:));
-+ (nullable Bugsee *)launchWithToken:(nonnull NSString*)appToken andOptions:(nonnull NSDictionary *) options NS_SWIFT_NAME(launch(token:options:));
++ (nullable Bugsee *)launchWithToken:(nonnull NSString*)appToken andOptions:( NSDictionary * _Nullable) options NS_SWIFT_NAME(launch(token:options:));
++ (nullable Bugsee *)launchWithToken:(nonnull NSString*)appToken options:(BugseeOptions * _Nullable) options NS_SWIFT_NAME(launch(token:options:));
 
 + (void) showReportController;
 + (void) showReportControllerWithSummary:(nonnull NSString *)summ description:(nonnull NSString*)descr severity:(BugseeSeverityLevel)level NS_SWIFT_NAME(showReportController(summary:description:severity:));

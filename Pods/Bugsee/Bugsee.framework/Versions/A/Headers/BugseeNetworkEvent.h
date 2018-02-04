@@ -14,7 +14,8 @@
 
 typedef enum : NSUInteger {
     BugseeNetwork,
-    BugseeWebSocket
+    BugseeWebSocket,
+    BugseeUDPSocket
 } BugseeNetworkType;
 
 @interface BugseeNetworkEvent : NSObject
@@ -34,7 +35,7 @@ typedef enum : NSUInteger {
 
 @property (nonatomic, strong) NSString * _Nullable ID;
 /**
- *  BugseeNetwork, BugseeWebSocket
+ *  BugseeNetwork, BugseeWebSocket, BugseeUDPSocket
  */
 @property (nonatomic, assign) BugseeNetworkType type;
 /**

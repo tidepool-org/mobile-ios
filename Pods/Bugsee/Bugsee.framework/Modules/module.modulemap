@@ -12,6 +12,7 @@ framework module Bugsee {
     link framework "AVFoundation"
     link framework "CoreTelephony"
     link framework "QuartzCore"
+    link framework "CoreImage"
     link framework "CoreGraphics"
 
     link "c++"

@@ -12,11 +12,6 @@
 #define BugseeTrue @(YES)
 #define BugseeFalse @(NO)
 
-@class BugseeNetworkEvent;
-typedef void (^BugseeNetworkFilterDecisionBlock)(BugseeNetworkEvent * _Nullable event );
-typedef void (^BugseeAttachmentsDecisionBlock)(NSArray<BugseeAttachment*>* _Nullable attachments);
-typedef void (^BugseeNetworkEventFilterBlock)(BugseeNetworkEvent * _Nonnull event, BugseeNetworkFilterDecisionBlock _Nonnull decisionBlock);
-
 typedef enum : NSUInteger {
     BugseeSeverityLow = 1,
     BugseeSeverityMedium = 2,
@@ -27,8 +22,23 @@ typedef enum : NSUInteger {
 
 typedef enum : NSUInteger {
     BugseeFrameRateLow = 1,
-    BugseeFrameRateHigh = 2
+    BugseeFrameRateMedium = 2,
+    BugseeFrameRateHigh = 3
 } BugseeFrameRate;
+
+typedef enum : NSUInteger {
+    BugseeStyleLight,
+    BugseeStyleDusk,
+    BugseeStyleBasedOnStatusBar
+} BugseeStyle;
+
+
+@class BugseeNetworkEvent;
+@class BugseeLogEvent;
+typedef void (^BugseeLogFilterDecisionBlock)(BugseeLogEvent * _Nullable event );
+typedef void (^BugseeNetworkFilterDecisionBlock)(BugseeNetworkEvent * _Nullable event );
+typedef void (^BugseeAttachmentsDecisionBlock)(NSArray<BugseeAttachment*>* _Nullable attachments);
+typedef void (^BugseeNetworkEventFilterBlock)(BugseeNetworkEvent * _Nonnull event, BugseeNetworkFilterDecisionBlock _Nonnull decisionBlock);
 
 /**
  *  BugseeStyleBasedOnStatusBarStyle setup style by current status bar style
@@ -51,12 +61,18 @@ extern NSString *const _Nonnull BugseeShakeToReportKey,
                 *const _Nonnull BugseeMonitorWebSocketKey,
                 *const _Nonnull BugseeStatusBarInfoKey,
                 *const _Nonnull BugseeVideoEnabledKey,
+                *const _Nonnull BugseeScreenshotEnabledKey,
                 *const _Nonnull BugseeStyleKey,
                 *const _Nonnull BugseeEnableMachExceptionsKey,
                 *const _Nonnull BugseeReportPrioritySelectorKey,
                 *const _Nonnull BugseeDefaultCrashPriorityKey,
                 *const _Nonnull BugseeDefaultBugPriorityKey,
-                *const _Nonnull BugseeCaptureLogsKey
+                *const _Nonnull BugseeCaptureLogsKey,
+                *const _Nonnull BugseeWifiOnlyUploadKey,
+                *const _Nonnull BugseeMaxDataSizeKey,
+                *const _Nonnull BugseeVideoScaleKey,
+                *const _Nonnull BugseeBuildTargetKey,
+                *const _Nonnull BugseeBuildTypeKey
 ;
 
 /**

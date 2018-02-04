@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (4.6.0)
-  - Bugsee (1.15.2)
+  - Bugsee (1.17.10)
   - CocoaLumberjack/Core (3.0.0)
   - CocoaLumberjack/Default (3.0.0):
     - CocoaLumberjack/Core
@@ -24,13 +24,13 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
-  Bugsee: 3cafd6e12d266e96bc995e2802bea24278d03f0f
+  Bugsee: f8dba8b8da0347f2f152921d55143a07e9063834
   CocoaLumberjack: c823149bccc5519a9447aeb433be7b1212a7d6a5
   CryptoSwift: cd2158be2bf639aabc63ec804707c7137c90157c
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   twitter-text: 66e7b9925534ade86cb3cb2751788073de8f2fec
 
-PODFILE CHECKSUM: 6b0ddf4d254873a84a71ac4a3748e4af1fe70344
+PODFILE CHECKSUM: d95042d59a1e278aad25a954332d0e593fca249a
 
 COCOAPODS: 1.4.0

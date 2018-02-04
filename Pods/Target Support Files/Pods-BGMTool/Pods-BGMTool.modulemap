@@ -1,0 +1,6 @@
+framework module Pods_BGMTool {
+  umbrella header "Pods-BGMTool-umbrella.h"
+
+  export *
+  module * { export * }
+}
