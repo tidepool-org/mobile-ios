@@ -6,7 +6,7 @@ use_frameworks!
 
 def available_pods
   pod 'Bugsee'
-  pod 'Alamofire', '4.3.0'
+  pod 'Alamofire', '4.6.0'
   pod 'SwiftyJSON', '3.1.4'
   pod 'CocoaLumberjack/Swift', '~> 3.0.0'
   pod 'CryptoSwift', '~> 0.7.2'

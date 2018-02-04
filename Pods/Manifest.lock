@@ -1,5 +1,5 @@
 PODS:
-  - Alamofire (4.3.0)
+  - Alamofire (4.6.0)
   - Bugsee (1.15.2)
   - CocoaLumberjack/Core (3.0.0)
   - CocoaLumberjack/Default (3.0.0):
@@ -14,7 +14,7 @@ PODS:
   - twitter-text (1.13.4)
 
 DEPENDENCIES:
-  - Alamofire (= 4.3.0)
+  - Alamofire (= 4.6.0)
   - Bugsee
   - CocoaLumberjack/Swift (~> 3.0.0)
   - CryptoSwift (~> 0.7.2)
@@ -23,7 +23,7 @@ DEPENDENCIES:
   - twitter-text (~> 1.13.4)
 
 SPEC CHECKSUMS:
-  Alamofire: 856a113053a7bc9cbe5d6367a555d773fc5cfef7
+  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
   Bugsee: 3cafd6e12d266e96bc995e2802bea24278d03f0f
   CocoaLumberjack: c823149bccc5519a9447aeb433be7b1212a7d6a5
   CryptoSwift: cd2158be2bf639aabc63ec804707c7137c90157c
@@ -31,6 +31,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
   twitter-text: 66e7b9925534ade86cb3cb2751788073de8f2fec
 
-PODFILE CHECKSUM: dce6860d6523e8a5f6312bbfdfb0b24bc9da9fef
+PODFILE CHECKSUM: 6b0ddf4d254873a84a71ac4a3748e4af1fe70344
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.4.0
