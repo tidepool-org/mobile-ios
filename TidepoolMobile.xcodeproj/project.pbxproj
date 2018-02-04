@@ -104,6 +104,13 @@
 		4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
 		4820ED6A1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
 		4820ED6B1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
+		482398712022628300EBB13C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482398702022628300EBB13C /* AppDelegate.swift */; };
+		482398732022628300EBB13C /* BGApplicationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482398722022628300EBB13C /* BGApplicationViewController.swift */; };
+		482398752022628300EBB13C /* BGDeviceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482398742022628300EBB13C /* BGDeviceViewController.swift */; };
+		482398782022628300EBB13C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 482398762022628300EBB13C /* Main.storyboard */; };
+		4823987A2022628300EBB13C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 482398792022628300EBB13C /* Assets.xcassets */; };
+		4823987D2022628300EBB13C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4823987B2022628300EBB13C /* LaunchScreen.storyboard */; };
+		482398882022650400EBB13C /* ToolSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482398862022650300EBB13C /* ToolSettings.swift */; };
 		48276A1B1E9D589F004CADB1 /* SwitchProfile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 48276A191E9D589F004CADB1 /* SwitchProfile.storyboard */; };
 		482971F91EB2655C00E171DF /* TPIntrinsicSizeUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482971F81EB2655C00E171DF /* TPIntrinsicSizeUIView.swift */; };
 		482BB3601E8C942E008CD02A /* TidepoolMobileUISwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482BB35F1E8C942E008CD02A /* TidepoolMobileUISwitch.swift */; };
@@ -175,7 +182,6 @@
 		488E44E21E831CC100A17AD7 /* HashtagsScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488E44DF1E831CC100A17AD7 /* HashtagsScrollView.swift */; };
 		488E44E31E831CC100A17AD7 /* HashtagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488E44E01E831CC100A17AD7 /* HashtagsView.swift */; };
 		4892996B1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */; };
-		4892996C1CB43099001F24D6 /* TidepoolMobileHealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */; };
 		489FDE501E833AF2000C4AC5 /* UrchinConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486894F41E831F89008B0732 /* UrchinConstants.swift */; };
 		489FDE531E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489FDE511E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift */; };
 		489FDE541E833D47000C4AC5 /* Hashtag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489FDE521E833D47000C4AC5 /* Hashtag.swift */; };
@@ -184,6 +190,92 @@
 		48A839031C596A1D00FAFE1B /* GraphCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A839021C596A1D00FAFE1B /* GraphCollectionCell.swift */; };
 		48B127B11BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
 		48B127B21BC4466E00061483 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
+		48B8C8D92022A5A700437263 /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC851C94BC47002A015D /* LogFormatter.swift */; };
+		48B8C8DA2022A5AE00437263 /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D73716B20166F630051E6BF /* DebugSettings.swift */; };
+		48B8C8DB2022A5B300437263 /* APIConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E231BA0DC1000BA2A57 /* APIConnect.swift */; };
+		48B8C8DC2022A5BA00437263 /* Nutshell.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */; };
+		48B8C8DD2022A5CE00437263 /* BlipUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CF11E80A98C00C4E79D /* BlipUser.swift */; };
+		48B8C8DE2022A5D200437263 /* BlipNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CEF1E80A98C00C4E79D /* BlipNote.swift */; };
+		48B8C8DF2022A5D600437263 /* BlipPatient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CF01E80A98C00C4E79D /* BlipPatient.swift */; };
+		48B8C8E02022A5DE00437263 /* TidepoolMobileDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* TidepoolMobileDataController.swift */; };
+		48B8C8E22022A5F900437263 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DA110C1CE3C77100B99C35 /* NSDateExtension.swift */; };
+		48B8C8E32022A5FD00437263 /* DatabaseUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B127B01BC4466E00061483 /* DatabaseUtils.swift */; };
+		48B8C8E42022A60100437263 /* UIApplicationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DF9B991BA9C3F800A505DD /* UIApplicationExtension.swift */; };
+		48B8C8E52022A60700437263 /* UIDateFormatterExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */; };
+		48B8C8E62022A60B00437263 /* TidepoolMobileUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E771BA3891600BA2A57 /* TidepoolMobileUtils.swift */; };
+		48B8C8E72022A61E00437263 /* UrchinConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486894F41E831F89008B0732 /* UrchinConstants.swift */; };
+		48B8C8E82022A64E00437263 /* TidepoolMobileStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E081B9FB1C600BA2A57 /* TidepoolMobileStyles.swift */; };
+		48B8C8E92022A67700437263 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DEF1B9F874A00BA2A57 /* OpenSans-Bold.ttf */; };
+		48B8C8EA2022A67A00437263 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */; };
+		48B8C8EB2022A67E00437263 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DF01B9F874A00BA2A57 /* OpenSans-Regular.ttf */; };
+		48B8C8EC2022A68100437263 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 486F5DF11B9F874A00BA2A57 /* OpenSans-Semibold.ttf */; };
+		48B8C8F12022ACCA00437263 /* Activity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E61BA8DDFC00013096 /* Activity+CoreDataProperties.swift */; };
+		48B8C8F22022ACCD00437263 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E71BA8DDFC00013096 /* Activity.swift */; };
+		48B8C8F32022ACDE00437263 /* Basal+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EA1BA8DDFC00013096 /* Basal+CoreDataProperties.swift */; };
+		48B8C8F42022ACE200437263 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
+		48B8C8F52022ACEA00437263 /* Bolus+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA61BA8E22E00013096 /* Bolus+CoreDataProperties.swift */; };
+		48B8C8F62022ACED00437263 /* Bolus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CAA71BA8E22E00013096 /* Bolus.swift */; };
+		48B8C8F72022ACF500437263 /* CommonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F11BA8DDFC00013096 /* CommonData.swift */; };
+		48B8C8F82022ACF800437263 /* CommonData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F01BA8DDFC00013096 /* CommonData+CoreDataProperties.swift */; };
+		48B8C8F92022ACFE00437263 /* ContinuousGlucose+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F21BA8DDFC00013096 /* ContinuousGlucose+CoreDataProperties.swift */; };
+		48B8C8FA2022AD0200437263 /* ContinuousGlucose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F31BA8DDFC00013096 /* ContinuousGlucose.swift */; };
+		48B8C8FB2022AD0C00437263 /* EventItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854201F1BC44D290020CFE1 /* EventItem+CoreDataProperties.swift */; };
+		48B8C8FC2022AD0F00437263 /* EventItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 485420201BC44D290020CFE1 /* EventItem.swift */; };
+		48B8C8FD2022AD1C00437263 /* Note+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FB1BA8DDFC00013096 /* Note+CoreDataProperties.swift */; };
+		48B8C8FE2022AD2000437263 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FC1BA8DDFC00013096 /* Note.swift */; };
+		48B8C8FF2022AD2600437263 /* Meal+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854201D1BC44D290020CFE1 /* Meal+CoreDataProperties.swift */; };
+		48B8C9002022AD2A00437263 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854201E1BC44D290020CFE1 /* Meal.swift */; };
+		48B8C9012022AD3200437263 /* SelfMonitoringGlucose+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA011BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift */; };
+		48B8C9022022AD3900437263 /* SelfMonitoringGlucose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA021BA8DDFC00013096 /* SelfMonitoringGlucose.swift */; };
+		48B8C9052022AD4A00437263 /* Upload+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA091BA8DDFC00013096 /* Upload+CoreDataProperties.swift */; };
+		48B8C9062022AD4E00437263 /* Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0A1BA8DDFC00013096 /* Upload.swift */; };
+		48B8C9072022AD5400437263 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0D1BA8DDFC00013096 /* User+CoreDataProperties.swift */; };
+		48B8C9082022AD5800437263 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0E1BA8DDFC00013096 /* User.swift */; };
+		48B8C9092022AD5D00437263 /* Wizard+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0F1BA8DDFC00013096 /* Wizard+CoreDataProperties.swift */; };
+		48B8C90A2022AD6000437263 /* Wizard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA101BA8DDFC00013096 /* Wizard.swift */; };
+		48B8C90B2022AD6300437263 /* Workout+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854201B1BC44D290020CFE1 /* Workout+CoreDataProperties.swift */; };
+		48B8C90C2022AD6800437263 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4854201C1BC44D290020CFE1 /* Workout.swift */; };
+		48B8C90D2022AE5E00437263 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E4A4451BF015CE001A7B35 /* Reachability.swift */; };
+		48B8C90E2022AF6300437263 /* BloodKetone+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EC1BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift */; };
+		48B8C90F2022AF6700437263 /* BloodKetone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9ED1BA8DDFC00013096 /* BloodKetone.swift */; };
+		48B8C9102022AF7B00437263 /* Alarm+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E81BA8DDFC00013096 /* Alarm+CoreDataProperties.swift */; };
+		48B8C9112022AF7B00437263 /* Alarm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9E91BA8DDFC00013096 /* Alarm.swift */; };
+		48B8C9122022AF7B00437263 /* Calibration+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EE1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift */; };
+		48B8C9132022AF7B00437263 /* Calibration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EF1BA8DDFC00013096 /* Calibration.swift */; };
+		48B8C9142022AF7B00437263 /* DeviceMetadata+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F41BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift */; };
+		48B8C9152022AF7B00437263 /* DeviceMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F51BA8DDFC00013096 /* DeviceMetadata.swift */; };
+		48B8C9162022AF7B00437263 /* Food+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F61BA8DDFC00013096 /* Food+CoreDataProperties.swift */; };
+		48B8C9172022AF7B00437263 /* Food.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F71BA8DDFC00013096 /* Food.swift */; };
+		48B8C9182022AF7B00437263 /* GrabBag+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9F91BA8DDFC00013096 /* GrabBag+CoreDataProperties.swift */; };
+		48B8C9192022AF7B00437263 /* GrabBag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FA1BA8DDFC00013096 /* GrabBag.swift */; };
+		48B8C91A2022AF7B00437263 /* Hashtag +CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489FDE511E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift */; };
+		48B8C91B2022AF7B00437263 /* Hashtag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489FDE521E833D47000C4AC5 /* Hashtag.swift */; };
+		48B8C91C2022AF7B00437263 /* Prime+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FD1BA8DDFC00013096 /* Prime+CoreDataProperties.swift */; };
+		48B8C91D2022AF7B00437263 /* Prime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FE1BA8DDFC00013096 /* Prime.swift */; };
+		48B8C91E2022AF7B00437263 /* ReservoirChange+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9FF1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift */; };
+		48B8C91F2022AF7B00437263 /* ReservoirChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA001BA8DDFC00013096 /* ReservoirChange.swift */; };
+		48B8C9202022AF7B00437263 /* Settings+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA031BA8DDFC00013096 /* Settings+CoreDataProperties.swift */; };
+		48B8C9212022AF7B00437263 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA041BA8DDFC00013096 /* Settings.swift */; };
+		48B8C9222022AF7B00437263 /* Status+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA051BA8DDFC00013096 /* Status+CoreDataProperties.swift */; };
+		48B8C9232022AF7B00437263 /* Status.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA061BA8DDFC00013096 /* Status.swift */; };
+		48B8C9242022AF7B00437263 /* TimeChange+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA071BA8DDFC00013096 /* TimeChange+CoreDataProperties.swift */; };
+		48B8C9252022AF7B00437263 /* TimeChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA081BA8DDFC00013096 /* TimeChange.swift */; };
+		48B8C9262022AF7B00437263 /* UrineKetone+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0B1BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift */; };
+		48B8C9272022AF7B00437263 /* UrineKetone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0C1BA8DDFC00013096 /* UrineKetone.swift */; };
+		48B8C9282022B19E00437263 /* TidepoolMobileHealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */; };
+		48B8C9292022B1AB00437263 /* HealthKitNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843D1F4F286900A72B74 /* HealthKitNotifications.swift */; };
+		48B8C92A2022B1AF00437263 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843C1F4F286900A72B74 /* HealthKitManager.swift */; };
+		48B8C92B2022B1B200437263 /* HealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843B1F4F286900A72B74 /* HealthKitConfiguration.swift */; };
+		48B8C92C2022B1B600437263 /* HealthKitBloodGlucosePusher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0284381F4F286900A72B74 /* HealthKitBloodGlucosePusher.swift */; };
+		48B8C92D2022B1C000437263 /* HealthKitBloodGlucoseUploadData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF7331F54FD430057AC09 /* HealthKitBloodGlucoseUploadData.swift */; };
+		48B8C92E2022B1C000437263 /* HealthKitBloodGlucoseUploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF72E1F5487DD0057AC09 /* HealthKitBloodGlucoseUploadManager.swift */; };
+		48B8C92F2022B1C000437263 /* HealthKitBloodGlucoseUploadPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0284391F4F286900A72B74 /* HealthKitBloodGlucoseUploadPhase.swift */; };
+		48B8C9302022B1C100437263 /* HealthKitBloodGlucoseUploadReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF72A1F5474940057AC09 /* HealthKitBloodGlucoseUploadReader.swift */; };
+		48B8C9312022B1C100437263 /* HealthKitBloodGlucoseUploadStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF72C1F5477910057AC09 /* HealthKitBloodGlucoseUploadStats.swift */; };
+		48B8C9322022B1C100437263 /* HealthKitBloodGlucoseUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843A1F4F286900A72B74 /* HealthKitBloodGlucoseUploader.swift */; };
+		48B8C9342023A05E00437263 /* BLEController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B8C9332023A05E00437263 /* BLEController.swift */; };
+		48B8C9362024E47C00437263 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 486EAA791C305E38003B4497 /* HealthKit.framework */; };
+		48B8C938202540EC00437263 /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B8C937202540EC00437263 /* BaseTabBarController.swift */; };
 		48B9D21C1F15809500ECB5CB /* HashTagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B9D21B1F15809500ECB5CB /* HashTagManager.swift */; };
 		48B9D21D1F1580A600ECB5CB /* HashTagManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B9D21B1F15809500ECB5CB /* HashTagManager.swift */; };
 		48B9D2221F16A2FA00ECB5CB /* dateFormatterExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B9D21F1F16A2FA00ECB5CB /* dateFormatterExtensionTests.swift */; };
@@ -235,6 +327,7 @@
 		4DFFF7341F54FD430057AC09 /* HealthKitBloodGlucoseUploadData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF7331F54FD430057AC09 /* HealthKitBloodGlucoseUploadData.swift */; };
 		54CE4788EE12555DB927C2E3 /* Pods_TidepoolMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71627230DDF0C03F73CA817F /* Pods_TidepoolMobile.framework */; };
 		7BD350EBD22869AA496C9405 /* Pods_TidepoolMobileTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7522442303E8F83231E1B3B2 /* Pods_TidepoolMobileTests.framework */; };
+		A2BA3FE6BEB83545B9326B6A /* Pods_BGMTool.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C473314BBBDCB79D9690990B /* Pods_BGMTool.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -305,6 +398,15 @@
 		48103E9C1C1E05660055C27A /* TidepoolMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TidepoolMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/Pods-TidepoolMobile/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		4820ED691C21E8E3008C754A /* GraphDataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataTypes.swift; path = GraphView/GraphDataTypes.swift; sourceTree = "<group>"; };
+		4823986E2022628200EBB13C /* BGMTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BGMTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		482398702022628300EBB13C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		482398722022628300EBB13C /* BGApplicationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BGApplicationViewController.swift; sourceTree = "<group>"; };
+		482398742022628300EBB13C /* BGDeviceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BGDeviceViewController.swift; sourceTree = "<group>"; };
+		482398772022628300EBB13C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		482398792022628300EBB13C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4823987C2022628300EBB13C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		4823987E2022628300EBB13C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		482398862022650300EBB13C /* ToolSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToolSettings.swift; sourceTree = "<group>"; };
 		48276A1A1E9D589F004CADB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SwitchProfile.storyboard; sourceTree = "<group>"; };
 		482971F81EB2655C00E171DF /* TPIntrinsicSizeUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TPIntrinsicSizeUIView.swift; path = ViewControllers/Views/TPIntrinsicSizeUIView.swift; sourceTree = "<group>"; };
 		482BB35F1E8C942E008CD02A /* TidepoolMobileUISwitch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolMobileUISwitch.swift; path = Resources/TidepoolMobileUISwitch.swift; sourceTree = "<group>"; };
@@ -377,6 +479,9 @@
 		48A7925D1C4C0B39008D2244 /* Transitions between scenes.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "Transitions between scenes.txt"; path = "Manual Test Cases/Transitions between scenes.txt"; sourceTree = "<group>"; };
 		48A839021C596A1D00FAFE1B /* GraphCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphCollectionCell.swift; path = GraphView/GraphCollectionCell.swift; sourceTree = "<group>"; };
 		48B127B01BC4466E00061483 /* DatabaseUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DatabaseUtils.swift; path = "Utilities and Extensions/DatabaseUtils.swift"; sourceTree = "<group>"; };
+		48B8C9332023A05E00437263 /* BLEController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEController.swift; sourceTree = "<group>"; };
+		48B8C9352024E47C00437263 /* BGMTool.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BGMTool.entitlements; sourceTree = "<group>"; };
+		48B8C937202540EC00437263 /* BaseTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTabBarController.swift; sourceTree = "<group>"; };
 		48B9D21B1F15809500ECB5CB /* HashTagManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HashTagManager.swift; path = DataModel/HashTagManager.swift; sourceTree = "<group>"; };
 		48B9D21F1F16A2FA00ECB5CB /* dateFormatterExtensionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = dateFormatterExtensionTests.swift; sourceTree = "<group>"; };
 		48B9D2201F16A2FA00ECB5CB /* hashtagBolderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = hashtagBolderTests.swift; sourceTree = "<group>"; };
@@ -423,13 +528,25 @@
 		71627230DDF0C03F73CA817F /* Pods_TidepoolMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TidepoolMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7522442303E8F83231E1B3B2 /* Pods_TidepoolMobileTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TidepoolMobileTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D211F0C6BBA742F1DD37BE8 /* Pods-TidepoolMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TidepoolMobileTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests.release.xcconfig"; sourceTree = "<group>"; };
+		9BC55474ACF8F1711FED07A9 /* Pods-BGMTool.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BGMTool.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BGMTool/Pods-BGMTool.debug.xcconfig"; sourceTree = "<group>"; };
 		A293DE222348F348DC0730D6 /* Pods-TidepoolMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TidepoolMobile.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile.debug.xcconfig"; sourceTree = "<group>"; };
+		C473314BBBDCB79D9690990B /* Pods_BGMTool.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BGMTool.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CD99894F1959AAC3C7FDBE0F /* Pods-BGMTool.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BGMTool.release.xcconfig"; path = "Pods/Target Support Files/Pods-BGMTool/Pods-BGMTool.release.xcconfig"; sourceTree = "<group>"; };
 		D7B9837493D626BBADB1C0A3 /* Pods-TidepoolMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TidepoolMobileTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests.release.xcconfig"; sourceTree = "<group>"; };
 		F93088C441543869CF6AD7D7 /* Pods-TidepoolMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TidepoolMobileTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		FB31F88D7ADAE8ADCC179FDC /* Pods-TidepoolMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TidepoolMobile.release.xcconfig"; path = "Pods/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4823986B2022628200EBB13C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A2BA3FE6BEB83545B9326B6A /* Pods_BGMTool.framework in Frameworks */,
+				48B8C9362024E47C00437263 /* HealthKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4859FCB21B9A4DE4000C1269 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -522,8 +639,27 @@
 				7522442303E8F83231E1B3B2 /* Pods_TidepoolMobileTests.framework */,
 				051696D064798F77DCBEE20E /* Pods_TidepoolMobile.framework */,
 				63E01F39B16D04096A03DBC5 /* Pods_TidepoolMobileTests.framework */,
+				C473314BBBDCB79D9690990B /* Pods_BGMTool.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4823986F2022628300EBB13C /* BGMTool */ = {
+			isa = PBXGroup;
+			children = (
+				48B8C9352024E47C00437263 /* BGMTool.entitlements */,
+				482398862022650300EBB13C /* ToolSettings.swift */,
+				482398702022628300EBB13C /* AppDelegate.swift */,
+				48B8C9332023A05E00437263 /* BLEController.swift */,
+				48B8C937202540EC00437263 /* BaseTabBarController.swift */,
+				482398722022628300EBB13C /* BGApplicationViewController.swift */,
+				482398742022628300EBB13C /* BGDeviceViewController.swift */,
+				482398762022628300EBB13C /* Main.storyboard */,
+				482398792022628300EBB13C /* Assets.xcassets */,
+				4823987B2022628300EBB13C /* LaunchScreen.storyboard */,
+				4823987E2022628300EBB13C /* Info.plist */,
+			);
+			path = BGMTool;
 			sourceTree = "<group>";
 		};
 		48276A151E9D57CF004CADB1 /* Storyboards */ = {
@@ -609,6 +745,7 @@
 				486F5E751BA35CD800BA2A57 /* LICENSE */,
 				4859FCB71B9A4DE4000C1269 /* TidepoolMobile */,
 				4859FCCF1B9A4DE5000C1269 /* TidepoolMobileTests */,
+				4823986F2022628300EBB13C /* BGMTool */,
 				4859FCB61B9A4DE4000C1269 /* Products */,
 				0B896CBEA8D0BFD3140D313E /* Frameworks */,
 				5DDCC4F4B91F286431C02C8A /* Pods */,
@@ -620,6 +757,7 @@
 			children = (
 				4859FCB51B9A4DE4000C1269 /* Nutshell.app */,
 				4859FCCC1B9A4DE5000C1269 /* TidepoolMobileTests.xctest */,
+				4823986E2022628200EBB13C /* BGMTool.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -837,6 +975,8 @@
 				FB31F88D7ADAE8ADCC179FDC /* Pods-TidepoolMobile.release.xcconfig */,
 				3E5B254729EE396329C5A0AE /* Pods-TidepoolMobileTests.debug.xcconfig */,
 				D7B9837493D626BBADB1C0A3 /* Pods-TidepoolMobileTests.release.xcconfig */,
+				9BC55474ACF8F1711FED07A9 /* Pods-BGMTool.debug.xcconfig */,
+				CD99894F1959AAC3C7FDBE0F /* Pods-BGMTool.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -844,6 +984,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		4823986D2022628200EBB13C /* BGMTool */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 482398822022628300EBB13C /* Build configuration list for PBXNativeTarget "BGMTool" */;
+			buildPhases = (
+				B8BD29E38C58E4DEE9EC514B /* [CP] Check Pods Manifest.lock */,
+				4823986A2022628200EBB13C /* Sources */,
+				4823986B2022628200EBB13C /* Frameworks */,
+				4823986C2022628200EBB13C /* Resources */,
+				648AB4E963DDBF699C190EAE /* [CP] Embed Pods Frameworks */,
+				1F86E746CFD6B4B7C85428BC /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BGMTool;
+			productName = BGMTool;
+			productReference = 4823986E2022628200EBB13C /* BGMTool.app */;
+			productType = "com.apple.product-type.application";
+		};
 		4859FCB41B9A4DE4000C1269 /* TidepoolMobile */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4859FCE01B9A4DE5000C1269 /* Build configuration list for PBXNativeTarget "TidepoolMobile" */;
@@ -893,10 +1053,20 @@
 		4859FCAD1B9A4DE4000C1269 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0710;
+				LastSwiftUpdateCheck = 0920;
 				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = Tidepool;
 				TargetAttributes = {
+					4823986D2022628200EBB13C = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = 75U4X84TEG;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.HealthKit = {
+								enabled = 1;
+							};
+						};
+					};
 					4859FCB41B9A4DE4000C1269 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 75U4X84TEG;
@@ -933,11 +1103,26 @@
 			targets = (
 				4859FCB41B9A4DE4000C1269 /* TidepoolMobile */,
 				4859FCCB1B9A4DE5000C1269 /* TidepoolMobileTests */,
+				4823986D2022628200EBB13C /* BGMTool */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4823986C2022628200EBB13C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4823987D2022628300EBB13C /* LaunchScreen.storyboard in Resources */,
+				4823987A2022628300EBB13C /* Assets.xcassets in Resources */,
+				48B8C8E92022A67700437263 /* OpenSans-Bold.ttf in Resources */,
+				48B8C8EA2022A67A00437263 /* OpenSans-Light.ttf in Resources */,
+				48B8C8EB2022A67E00437263 /* OpenSans-Regular.ttf in Resources */,
+				48B8C8EC2022A68100437263 /* OpenSans-Semibold.ttf in Resources */,
+				482398782022628300EBB13C /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4859FCB31B9A4DE4000C1269 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -971,6 +1156,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		1F86E746CFD6B4B7C85428BC /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BGMTool/Pods-BGMTool-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		48FE49E41E8AD871005B103C /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1012,6 +1212,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		648AB4E963DDBF699C190EAE /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BGMTool/Pods-BGMTool-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		8D29B92685CED5FC17AC117B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1024,6 +1239,21 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-TidepoolMobile-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		B8BD29E38C58E4DEE9EC514B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1122,6 +1352,98 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4823986A2022628200EBB13C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48B8C938202540EC00437263 /* BaseTabBarController.swift in Sources */,
+				48B8C9252022AF7B00437263 /* TimeChange.swift in Sources */,
+				48B8C8FA2022AD0200437263 /* ContinuousGlucose.swift in Sources */,
+				48B8C92B2022B1B200437263 /* HealthKitConfiguration.swift in Sources */,
+				48B8C8E62022A60B00437263 /* TidepoolMobileUtils.swift in Sources */,
+				48B8C9282022B19E00437263 /* TidepoolMobileHealthKitConfiguration.swift in Sources */,
+				48B8C9072022AD5400437263 /* User+CoreDataProperties.swift in Sources */,
+				48B8C8E02022A5DE00437263 /* TidepoolMobileDataController.swift in Sources */,
+				48B8C8E72022A61E00437263 /* UrchinConstants.swift in Sources */,
+				48B8C9242022AF7B00437263 /* TimeChange+CoreDataProperties.swift in Sources */,
+				48B8C92F2022B1C000437263 /* HealthKitBloodGlucoseUploadPhase.swift in Sources */,
+				48B8C9062022AD4E00437263 /* Upload.swift in Sources */,
+				48B8C8FE2022AD2000437263 /* Note.swift in Sources */,
+				48B8C8DA2022A5AE00437263 /* DebugSettings.swift in Sources */,
+				48B8C9142022AF7B00437263 /* DeviceMetadata+CoreDataProperties.swift in Sources */,
+				482398752022628300EBB13C /* BGDeviceViewController.swift in Sources */,
+				48B8C8E32022A5FD00437263 /* DatabaseUtils.swift in Sources */,
+				48B8C8FC2022AD0F00437263 /* EventItem.swift in Sources */,
+				482398712022628300EBB13C /* AppDelegate.swift in Sources */,
+				48B8C8DD2022A5CE00437263 /* BlipUser.swift in Sources */,
+				48B8C9172022AF7B00437263 /* Food.swift in Sources */,
+				48B8C9302022B1C100437263 /* HealthKitBloodGlucoseUploadReader.swift in Sources */,
+				48B8C8E22022A5F900437263 /* NSDateExtension.swift in Sources */,
+				48B8C8DE2022A5D200437263 /* BlipNote.swift in Sources */,
+				48B8C9012022AD3200437263 /* SelfMonitoringGlucose+CoreDataProperties.swift in Sources */,
+				482398732022628300EBB13C /* BGApplicationViewController.swift in Sources */,
+				48B8C92A2022B1AF00437263 /* HealthKitManager.swift in Sources */,
+				48B8C9112022AF7B00437263 /* Alarm.swift in Sources */,
+				48B8C91B2022AF7B00437263 /* Hashtag.swift in Sources */,
+				48B8C9222022AF7B00437263 /* Status+CoreDataProperties.swift in Sources */,
+				48B8C9052022AD4A00437263 /* Upload+CoreDataProperties.swift in Sources */,
+				48B8C8F72022ACF500437263 /* CommonData.swift in Sources */,
+				48B8C8FF2022AD2600437263 /* Meal+CoreDataProperties.swift in Sources */,
+				48B8C91F2022AF7B00437263 /* ReservoirChange.swift in Sources */,
+				48B8C8F42022ACE200437263 /* Basal.swift in Sources */,
+				48B8C92C2022B1B600437263 /* HealthKitBloodGlucosePusher.swift in Sources */,
+				48B8C8F52022ACEA00437263 /* Bolus+CoreDataProperties.swift in Sources */,
+				48B8C92E2022B1C000437263 /* HealthKitBloodGlucoseUploadManager.swift in Sources */,
+				482398882022650400EBB13C /* ToolSettings.swift in Sources */,
+				48B8C9182022AF7B00437263 /* GrabBag+CoreDataProperties.swift in Sources */,
+				48B8C91E2022AF7B00437263 /* ReservoirChange+CoreDataProperties.swift in Sources */,
+				48B8C9262022AF7B00437263 /* UrineKetone+CoreDataProperties.swift in Sources */,
+				48B8C9152022AF7B00437263 /* DeviceMetadata.swift in Sources */,
+				48B8C90B2022AD6300437263 /* Workout+CoreDataProperties.swift in Sources */,
+				48B8C9272022AF7B00437263 /* UrineKetone.swift in Sources */,
+				48B8C9122022AF7B00437263 /* Calibration+CoreDataProperties.swift in Sources */,
+				48B8C9232022AF7B00437263 /* Status.swift in Sources */,
+				48B8C8F32022ACDE00437263 /* Basal+CoreDataProperties.swift in Sources */,
+				48B8C9092022AD5D00437263 /* Wizard+CoreDataProperties.swift in Sources */,
+				48B8C9312022B1C100437263 /* HealthKitBloodGlucoseUploadStats.swift in Sources */,
+				48B8C9162022AF7B00437263 /* Food+CoreDataProperties.swift in Sources */,
+				48B8C9022022AD3900437263 /* SelfMonitoringGlucose.swift in Sources */,
+				48B8C91A2022AF7B00437263 /* Hashtag +CoreDataProperties.swift in Sources */,
+				48B8C9212022AF7B00437263 /* Settings.swift in Sources */,
+				48B8C9102022AF7B00437263 /* Alarm+CoreDataProperties.swift in Sources */,
+				48B8C8FB2022AD0C00437263 /* EventItem+CoreDataProperties.swift in Sources */,
+				48B8C8F12022ACCA00437263 /* Activity+CoreDataProperties.swift in Sources */,
+				48B8C91D2022AF7B00437263 /* Prime.swift in Sources */,
+				48B8C8F62022ACED00437263 /* Bolus.swift in Sources */,
+				48B8C90C2022AD6800437263 /* Workout.swift in Sources */,
+				48B8C8E42022A60100437263 /* UIApplicationExtension.swift in Sources */,
+				48B8C8E82022A64E00437263 /* TidepoolMobileStyles.swift in Sources */,
+				48B8C9192022AF7B00437263 /* GrabBag.swift in Sources */,
+				48B8C90D2022AE5E00437263 /* Reachability.swift in Sources */,
+				48B8C8DF2022A5D600437263 /* BlipPatient.swift in Sources */,
+				48B8C9132022AF7B00437263 /* Calibration.swift in Sources */,
+				48B8C90A2022AD6000437263 /* Wizard.swift in Sources */,
+				48B8C90E2022AF6300437263 /* BloodKetone+CoreDataProperties.swift in Sources */,
+				48B8C9002022AD2A00437263 /* Meal.swift in Sources */,
+				48B8C8D92022A5A700437263 /* LogFormatter.swift in Sources */,
+				48B8C9322022B1C100437263 /* HealthKitBloodGlucoseUploader.swift in Sources */,
+				48B8C9082022AD5800437263 /* User.swift in Sources */,
+				48B8C9342023A05E00437263 /* BLEController.swift in Sources */,
+				48B8C90F2022AF6700437263 /* BloodKetone.swift in Sources */,
+				48B8C9202022AF7B00437263 /* Settings+CoreDataProperties.swift in Sources */,
+				48B8C9292022B1AB00437263 /* HealthKitNotifications.swift in Sources */,
+				48B8C91C2022AF7B00437263 /* Prime+CoreDataProperties.swift in Sources */,
+				48B8C8FD2022AD1C00437263 /* Note+CoreDataProperties.swift in Sources */,
+				48B8C8DC2022A5BA00437263 /* Nutshell.xcdatamodeld in Sources */,
+				48B8C8F22022ACCD00437263 /* Activity.swift in Sources */,
+				48B8C92D2022B1C000437263 /* HealthKitBloodGlucoseUploadData.swift in Sources */,
+				48B8C8E52022A60700437263 /* UIDateFormatterExtension.swift in Sources */,
+				48B8C8F92022ACFE00437263 /* ContinuousGlucose+CoreDataProperties.swift in Sources */,
+				48B8C8DB2022A5B300437263 /* APIConnect.swift in Sources */,
+				48B8C8F82022ACF800437263 /* CommonData+CoreDataProperties.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4859FCB11B9A4DE4000C1269 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1336,7 +1658,6 @@
 				485420281BC44D290020CFE1 /* Meal.swift in Sources */,
 				485420241BC44D290020CFE1 /* Workout.swift in Sources */,
 				0334CA291BA8DDFC00013096 /* BloodKetone.swift in Sources */,
-				4892996C1CB43099001F24D6 /* TidepoolMobileHealthKitConfiguration.swift in Sources */,
 				0334CA6E1BA8DDFC00013096 /* Settings.swift in Sources */,
 				48E4A4471BF015CE001A7B35 /* Reachability.swift in Sources */,
 				0334CAA91BA8E22E00013096 /* Bolus+CoreDataProperties.swift in Sources */,
@@ -1354,6 +1675,22 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		482398762022628300EBB13C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				482398772022628300EBB13C /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		4823987B2022628300EBB13C /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4823987C2022628300EBB13C /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		48276A191E9D589F004CADB1 /* SwitchProfile.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1414,6 +1751,58 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4823987F2022628300EBB13C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9BC55474ACF8F1711FED07A9 /* Pods-BGMTool.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = BGMTool/BGMTool.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 75U4X84TEG;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = BGMTool/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.BGMTool;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		482398802022628300EBB13C /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = CD99894F1959AAC3C7FDBE0F /* Pods-BGMTool.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = BGMTool/BGMTool.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 75U4X84TEG;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = BGMTool/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.BGMTool;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		4859FCDE1B9A4DE5000C1269 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1601,6 +1990,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		482398822022628300EBB13C /* Build configuration list for PBXNativeTarget "BGMTool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4823987F2022628300EBB13C /* Debug */,
+				482398802022628300EBB13C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4859FCB01B9A4DE4000C1269 /* Build configuration list for PBXProject "TidepoolMobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

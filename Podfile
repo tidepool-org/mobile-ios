@@ -12,7 +12,7 @@ def available_pods
   pod 'CryptoSwift', '~> 0.7.2'
   pod 'twitter-text', '~> 1.13.4'
   pod 'FLAnimatedImage', '~> 1.0'
- end
+end
 
 target 'TidepoolMobile' do
   available_pods
@@ -20,4 +20,11 @@ end
 
 target 'TidepoolMobileTests' do
   available_pods
+end
+
+target 'BGMTool' do
+    pod 'Alamofire', '4.3.0'
+    pod 'SwiftyJSON', '3.1.4'
+    pod 'CocoaLumberjack/Swift', '~> 3.0.0'
+    pod 'CryptoSwift', '~> 0.7.2'
 end
