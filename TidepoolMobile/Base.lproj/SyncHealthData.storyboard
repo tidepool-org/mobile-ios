@@ -27,10 +27,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="sRq-HR-iBm" userLabel="Health Status Container View">
-                                <rect key="frame" x="0.0" y="30" width="0.0" height="28"/>
+                                <rect key="frame" x="10" y="30" width="355" height="28"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Syncing all Health data" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sPM-kE-q5i" userLabel="healthStatusLine1" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="14"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="355" height="14"/>
                                         <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="10"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
@@ -39,7 +39,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="1 of 200 days" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GL2-bV-RtC" userLabel="healthStatusLine2" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="14" width="0.0" height="14"/>
+                                        <rect key="frame" x="0.0" y="14" width="355" height="14"/>
                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                         <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -50,7 +50,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xdv-UQ-gxv" userLabel="Sync All Button">
-                                <rect key="frame" x="0.0" y="158" width="0.0" height="30"/>
+                                <rect key="frame" x="164" y="158" width="47" height="30"/>
                                 <accessibility key="accessibilityConfiguration" label="Sync All"/>
                                 <state key="normal" title="Sync All"/>
                                 <connections>
@@ -58,7 +58,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lRK-TP-9si" userLabel="Sync Last Two Weeks Button">
-                                <rect key="frame" x="-74.5" y="198" width="149" height="30"/>
+                                <rect key="frame" x="113" y="198" width="149" height="30"/>
                                 <accessibility key="accessibilityConfiguration" label="Sync Last Two Weeks"/>
                                 <state key="normal" title="Sync Last Two Weeks"/>
                                 <connections>
@@ -66,7 +66,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Oj-s5-KQd" userLabel="Stop Button">
-                                <rect key="frame" x="-16" y="238" width="32" height="30"/>
+                                <rect key="frame" x="171.5" y="238" width="32" height="30"/>
                                 <state key="normal" title="Stop"/>
                                 <connections>
                                     <action selector="stopButtonTapped:" destination="nIu-c1-BgG" eventType="touchUpInside" id="K9H-Jw-veO"/>
