@@ -269,7 +269,7 @@
 		48B8C92C2022B1B600437263 /* HealthKitBloodGlucosePusher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0284381F4F286900A72B74 /* HealthKitBloodGlucosePusher.swift */; };
 		48B8C92D2022B1C000437263 /* HealthKitBloodGlucoseUploadData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF7331F54FD430057AC09 /* HealthKitBloodGlucoseUploadData.swift */; };
 		48B8C92E2022B1C000437263 /* HealthKitBloodGlucoseUploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF72E1F5487DD0057AC09 /* HealthKitBloodGlucoseUploadManager.swift */; };
-		48B8C92F2022B1C000437263 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		48B8C92F2022B1C000437263 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		48B8C9302022B1C100437263 /* HealthKitBloodGlucoseUploadReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF72A1F5474940057AC09 /* HealthKitBloodGlucoseUploadReader.swift */; };
 		48B8C9312022B1C100437263 /* HealthKitBloodGlucoseUploadStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF72C1F5477910057AC09 /* HealthKitBloodGlucoseUploadStats.swift */; };
 		48B8C9322022B1C100437263 /* HealthKitBloodGlucoseUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843A1F4F286900A72B74 /* HealthKitBloodGlucoseUploader.swift */; };
@@ -319,6 +319,8 @@
 		4D0284411F4F286900A72B74 /* HealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843B1F4F286900A72B74 /* HealthKitConfiguration.swift */; };
 		4D0284421F4F286900A72B74 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843C1F4F286900A72B74 /* HealthKitManager.swift */; };
 		4D0284431F4F286900A72B74 /* HealthKitNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843D1F4F286900A72B74 /* HealthKitNotifications.swift */; };
+		4D6AD4BB2026D4670077C901 /* SyncHealthDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D6AD4BA2026D4660077C901 /* SyncHealthDataViewController.swift */; };
+		4D6AD4BE2026D4750077C901 /* SyncHealthData.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D6AD4BC2026D4750077C901 /* SyncHealthData.storyboard */; };
 		4D73716C20166F630051E6BF /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D73716B20166F630051E6BF /* DebugSettings.swift */; };
 		4D73716D20166F6B0051E6BF /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D73716B20166F630051E6BF /* DebugSettings.swift */; };
 		4D7775EE201D46CD00F53462 /* HealthKitSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7775ED201D46CD00F53462 /* HealthKitSettings.swift */; };
@@ -519,6 +521,8 @@
 		4D02843B1F4F286900A72B74 /* HealthKitConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitConfiguration.swift; path = DataModel/HealthKit/HealthKitConfiguration.swift; sourceTree = "<group>"; };
 		4D02843C1F4F286900A72B74 /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = DataModel/HealthKit/HealthKitManager.swift; sourceTree = "<group>"; };
 		4D02843D1F4F286900A72B74 /* HealthKitNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitNotifications.swift; path = DataModel/HealthKit/HealthKitNotifications.swift; sourceTree = "<group>"; };
+		4D6AD4BA2026D4660077C901 /* SyncHealthDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SyncHealthDataViewController.swift; path = ViewControllers/SyncHealthDataViewController.swift; sourceTree = "<group>"; };
+		4D6AD4BD2026D4750077C901 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/SyncHealthData.storyboard; sourceTree = "<group>"; };
 		4D73716B20166F630051E6BF /* DebugSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugSettings.swift; sourceTree = "<group>"; };
 		4D7775ED201D46CD00F53462 /* HealthKitSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitSettings.swift; path = DataModel/HealthKit/HealthKitSettings.swift; sourceTree = "<group>"; };
 		4DFFF72A1F5474940057AC09 /* HealthKitBloodGlucoseUploadReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitBloodGlucoseUploadReader.swift; path = DataModel/HealthKit/HealthKitBloodGlucoseUploadReader.swift; sourceTree = "<group>"; };
@@ -666,6 +670,7 @@
 		48276A151E9D57CF004CADB1 /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
+				4D6AD4BC2026D4750077C901 /* SyncHealthData.storyboard */,
 				4859FCC41B9A4DE4000C1269 /* LaunchScreen.storyboard */,
 				485922991B9A61510056E605 /* Login.storyboard */,
 				484365D71CA1118A0046A2C5 /* Menu.storyboard */,
@@ -720,6 +725,7 @@
 				48EDC2C51BD6B403003049D9 /* EventAddEditViewController.swift */,
 				4872118C1E8D818300BAD5CE /* SwitchProfileTableViewController.swift */,
 				4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */,
+				4D6AD4BA2026D4660077C901 /* SyncHealthDataViewController.swift */,
 			);
 			name = EventViewControllers;
 			sourceTree = "<group>";
@@ -1129,6 +1135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4859229B1B9A61510056E605 /* Login.storyboard in Resources */,
+				4D6AD4BE2026D4750077C901 /* SyncHealthData.storyboard in Resources */,
 				484365D91CA1118A0046A2C5 /* Menu.storyboard in Resources */,
 				486F5DFB1B9F874A00BA2A57 /* OpenSans-Semibold.ttf in Resources */,
 				4859FCC61B9A4DE4000C1269 /* LaunchScreen.storyboard in Resources */,
@@ -1380,7 +1387,7 @@
 				48B8C8E02022A5DE00437263 /* TidepoolMobileDataController.swift in Sources */,
 				48B8C8E72022A61E00437263 /* UrchinConstants.swift in Sources */,
 				48B8C9242022AF7B00437263 /* TimeChange+CoreDataProperties.swift in Sources */,
-				48B8C92F2022B1C000437263 /* BuildFile in Sources */,
+				48B8C92F2022B1C000437263 /* (null) in Sources */,
 				48B8C9062022AD4E00437263 /* Upload.swift in Sources */,
 				48B8C8FE2022AD2000437263 /* Note.swift in Sources */,
 				48B8C8DA2022A5AE00437263 /* DebugSettings.swift in Sources */,
@@ -1553,6 +1560,7 @@
 				482BB3601E8C942E008CD02A /* TidepoolMobileUISwitch.swift in Sources */,
 				0334CA2B1BA8DDFC00013096 /* Calibration+CoreDataProperties.swift in Sources */,
 				48C491571C38804700F34630 /* GraphingUtils.swift in Sources */,
+				4D6AD4BB2026D4670077C901 /* SyncHealthDataViewController.swift in Sources */,
 				0334CA251BA8DDFC00013096 /* BloodKetone+CoreDataProperties.swift in Sources */,
 				48DF9B9A1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */,
 				48C491681C3B47A000F34630 /* BasalGraphData.swift in Sources */,
@@ -1760,6 +1768,14 @@
 				48EC39D21ED113C30025A909 /* Base */,
 			);
 			name = EventAddEdit.storyboard;
+			sourceTree = "<group>";
+		};
+		4D6AD4BC2026D4750077C901 /* SyncHealthData.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4D6AD4BD2026D4750077C901 /* Base */,
+			);
+			name = SyncHealthData.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

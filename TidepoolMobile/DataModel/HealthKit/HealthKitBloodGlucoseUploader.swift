@@ -22,6 +22,8 @@ protocol HealthKitBloodGlucoseUploaderDelegate: class {
     func bloodGlucoseUploader(uploader: HealthKitBloodGlucoseUploader, didCompleteUploadWithError error: Error?)
 }
 
+// TODO: uploader - we should avoid using file based POSTs when in foreground (probably faster!? and simpler)
+
 class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {    
     init(mode: HealthKitBloodGlucoseUploadReader.Mode) {
         DDLogVerbose("trace")

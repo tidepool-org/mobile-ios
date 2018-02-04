@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="nIu-c1-BgG">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="OpenSans-Regular.ttf">
+            <string>OpenSans</string>
+        </array>
+        <array key="OpenSans-Semibold.ttf">
+            <string>OpenSans-Semibold</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Sync Health Data-->
+        <scene sceneID="Lcs-lz-AM7">
+            <objects>
+                <viewController id="nIu-c1-BgG" userLabel="Sync Health Data" customClass="SyncHealthDataViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="4la-KJ-0xX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="sRq-HR-iBm" userLabel="Health Status Container View">
+                                <rect key="frame" x="0.0" y="30" width="0.0" height="28"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Syncing all Health data" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sPM-kE-q5i" userLabel="healthStatusLine1" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="14"/>
+                                        <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="10"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMainStatus"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="1 of 200 days" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GL2-bV-RtC" userLabel="healthStatusLine2" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="14" width="0.0" height="14"/>
+                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
+                                        <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMinorStatus"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xdv-UQ-gxv" userLabel="Sync All Button">
+                                <rect key="frame" x="0.0" y="158" width="0.0" height="30"/>
+                                <accessibility key="accessibilityConfiguration" label="Sync All"/>
+                                <state key="normal" title="Sync All"/>
+                                <connections>
+                                    <action selector="syncAllButtonTapped:" destination="nIu-c1-BgG" eventType="touchUpInside" id="hTl-ps-LoJ"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lRK-TP-9si" userLabel="Sync Last Two Weeks Button">
+                                <rect key="frame" x="-74.5" y="198" width="149" height="30"/>
+                                <accessibility key="accessibilityConfiguration" label="Sync Last Two Weeks"/>
+                                <state key="normal" title="Sync Last Two Weeks"/>
+                                <connections>
+                                    <action selector="syncLastTwoWeeksButtonTapped:" destination="nIu-c1-BgG" eventType="touchUpInside" id="k3Y-Ua-sQN"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Oj-s5-KQd" userLabel="Stop Button">
+                                <rect key="frame" x="-16" y="238" width="32" height="30"/>
+                                <state key="normal" title="Stop"/>
+                                <connections>
+                                    <action selector="stopButtonTapped:" destination="nIu-c1-BgG" eventType="touchUpInside" id="K9H-Jw-veO"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Xdv-UQ-gxv" firstAttribute="leading" secondItem="tcy-J6-3pd" secondAttribute="leading" constant="164" id="3de-8R-XyB"/>
+                            <constraint firstItem="5Oj-s5-KQd" firstAttribute="top" secondItem="lRK-TP-9si" secondAttribute="bottom" constant="10" id="5Jt-Co-OZ0"/>
+                            <constraint firstItem="5Oj-s5-KQd" firstAttribute="centerX" secondItem="tcy-J6-3pd" secondAttribute="centerX" id="6BS-1x-jyS"/>
+                            <constraint firstItem="Xdv-UQ-gxv" firstAttribute="top" secondItem="sRq-HR-iBm" secondAttribute="bottom" constant="100" id="FOz-Vh-vvh"/>
+                            <constraint firstItem="Xdv-UQ-gxv" firstAttribute="centerX" secondItem="tcy-J6-3pd" secondAttribute="centerX" id="Jv8-8K-B4H"/>
+                            <constraint firstItem="tcy-J6-3pd" firstAttribute="trailing" secondItem="sRq-HR-iBm" secondAttribute="trailing" constant="10" id="NBS-kW-hGF"/>
+                            <constraint firstItem="lRK-TP-9si" firstAttribute="top" secondItem="Xdv-UQ-gxv" secondAttribute="bottom" constant="10" id="TQV-bY-vKl"/>
+                            <constraint firstItem="sRq-HR-iBm" firstAttribute="leading" secondItem="tcy-J6-3pd" secondAttribute="leading" constant="10" id="VXH-yS-TEw"/>
+                            <constraint firstItem="sRq-HR-iBm" firstAttribute="top" secondItem="tcy-J6-3pd" secondAttribute="top" constant="10" id="lCY-T3-bXo"/>
+                            <constraint firstItem="lRK-TP-9si" firstAttribute="centerX" secondItem="tcy-J6-3pd" secondAttribute="centerX" id="ro5-7x-Ssp"/>
+                            <constraint firstItem="5Oj-s5-KQd" firstAttribute="centerX" secondItem="tcy-J6-3pd" secondAttribute="centerX" id="yNk-Jv-M45"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="tcy-J6-3pd"/>
+                    </view>
+                    <connections>
+                        <outlet property="healthStatusLine1" destination="sPM-kE-q5i" id="0nU-Y2-Bg5"/>
+                        <outlet property="healthStatusLine2" destination="GL2-bV-RtC" id="Mop-bR-Gfn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="U2p-pD-JOp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-369" y="-31"/>
+        </scene>
+    </scenes>
+</document>

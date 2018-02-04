@@ -684,11 +684,12 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                         <segue destination="GZJ-xw-ayi" kind="presentation" identifier="segueToEditNote" id="4s9-0d-05d"/>
                         <segue destination="ORV-s0-j15" kind="presentation" identifier="segueToAddNote" id="dLn-nb-53s"/>
                         <segue destination="jHd-me-gvT" kind="show" identifier="segueToEditComment" id="ajS-Yg-fZf"/>
+                        <segue destination="kaQ-bJ-Ymq" kind="show" identifier="segueToSyncHealthData" id="7BV-LJ-9px"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6ca-ao-v5B" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1543" y="-805"/>
+            <point key="canvasLocation" x="1616" y="-807"/>
         </scene>
         <!--Event View Nav Controller-->
         <scene sceneID="PPE-fc-DuL">
@@ -727,7 +728,15 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                 <viewControllerPlaceholder storyboardName="SwitchProfile" id="dEI-AO-k52" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tAL-q9-vkH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1541" y="-267"/>
+            <point key="canvasLocation" x="1614" y="-267"/>
+        </scene>
+        <!--SyncHealthData-->
+        <scene sceneID="xNr-YG-BBm">
+            <objects>
+                <viewControllerPlaceholder storyboardName="SyncHealthData" id="kaQ-bJ-Ymq" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ghT-K1-NoZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1928" y="-273"/>
         </scene>
         <!--EventAddEdit-->
         <scene sceneID="2xV-NS-06x">
@@ -992,7 +1001,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Bm-JW-9pW" userLabel="dateLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="94.5" y="6" width="103" height="17.5"/>
+                                                            <rect key="frame" x="94.5" y="6.5" width="103" height="17.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

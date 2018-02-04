@@ -259,6 +259,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             } else if sideMenuController.userSelectedSwitchProfile {
                 sideMenuController.userSelectedSwitchProfile = false
                 performSegue(withIdentifier: "segueToSwitchProfile", sender: self)
+            } else if sideMenuController.userSelectedSyncHealthData {
+                sideMenuController.userSelectedSyncHealthData = false
+                performSegue(withIdentifier: "segueToSyncHealthData", sender: self)
             } else if sideMenuController.userSelectedLogout {
                 APIConnector.connector().trackMetric("Clicked Log Out (Hamburger)")
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -593,6 +596,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         } else if segue.identifier == "segueToSwitchProfile" {
             let _ = segue.destination as! SwitchProfileTableViewController
             APIConnector.connector().trackMetric("Clicked switch profile (Home screen)")
+        } else if segue.identifier == "segueToSyncHealthData" {
+            let _ = segue.destination as! SyncHealthDataViewController
+            APIConnector.connector().trackMetric("Clicked sync health data (Home screen)")
         } else if segue.identifier == "segueToEditComment" {
             let addCommentVC = segue.destination as! EditCommentViewController
             if let noteIndex = currentCommentEditIndexPath?.section {
