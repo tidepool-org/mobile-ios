@@ -11,6 +11,7 @@ import CocoaLumberjack
 
 class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
+    var userSelectedSyncHealthData = false
     var userSelectedSwitchProfile = false
     var userSelectedLogout = false
     var userSelectedLoggedInUser = false
@@ -28,7 +29,9 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var healthStatusLine1: UILabel!
     @IBOutlet weak var healthStatusLine2: UILabel!
     @IBOutlet weak var healthStatusLine3: UILabel!
-    
+    @IBOutlet weak var syncHealthDataSeparator: TidepoolMobileUIView!
+    @IBOutlet weak var syncHealthDataContainer: UIView!
+
     @IBOutlet weak var privacyTextField: UITextView!
     var hkTimeRefreshTimer: Timer?
     fileprivate let kHKTimeRefreshInterval: TimeInterval = 30.0
@@ -74,6 +77,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     func menuWillOpen() {
         // Treat this like viewWillAppear...
         userSelectedLoggedInUser = false
+        userSelectedSyncHealthData = false
         userSelectedSwitchProfile = false
         userSelectedLogout = false
         userSelectedExternalLink = nil
@@ -104,6 +108,11 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         self.hideSideMenuView()
     }
     
+    @IBAction func syncHealthDataTapped(_ sender: AnyObject) {
+        userSelectedSyncHealthData = true
+        self.hideSideMenuView()
+    }
+
     @IBAction func switchProfileTapped(_ sender: AnyObject) {
         userSelectedSwitchProfile = true
         self.hideSideMenuView()
@@ -191,7 +200,11 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
             stopHKTimeRefreshTimer()
         }
         
+        // TODO: UI polish - this whole section should be removed from the stacked view if hideHealthKitUI is true, rather than showing empty space!
+        
         let hideHealthKitUI = !appHealthKitConfiguration.shouldShowHealthKitUI()
+        syncHealthDataSeparator.isHidden = hideHealthKitUI
+        syncHealthDataContainer.isHidden = hideHealthKitUI
         healthKitSwitch.isHidden = hideHealthKitUI
         healthKitLabel.isHidden = hideHealthKitUI
         healthStatusContainerView.isHidden = hideHealthKitUI || !hkCurrentEnable

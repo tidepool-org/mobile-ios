@@ -36,7 +36,7 @@
                                 <rect key="frame" x="0.0" y="44" width="255" height="460"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="YmC-Iq-jpn">
-                                        <rect key="frame" x="0.0" y="0.0" width="255" height="302"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="255" height="344"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wmi-HA-2WR" userLabel="usernameSection">
                                                 <rect key="frame" x="0.0" y="0.0" width="255" height="54"/>
@@ -58,7 +58,7 @@
                                                         </constraints>
                                                     </imageView>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Name Here" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8eU-B6-eOM" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="50" y="17" width="119.5" height="20.5"/>
+                                                        <rect key="frame" x="50" y="17" width="123" height="20.5"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
                                                         <color key="textColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -81,11 +81,11 @@
                                                     <constraint firstItem="hvG-Ot-neC" firstAttribute="leading" secondItem="Wmi-HA-2WR" secondAttribute="leading" id="kg9-1U-3vX"/>
                                                 </constraints>
                                             </view>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ls-ZC-LIS" userLabel="healthkitSection">
-                                                <rect key="frame" x="0.0" y="54" width="255" height="80"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ls-ZC-LIS" userLabel="Health Section">
+                                                <rect key="frame" x="0.0" y="54" width="255" height="122"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect to Health" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2n-bT-OD5" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="8" width="126.5" height="20.5"/>
+                                                        <rect key="frame" x="16" y="8" width="136" height="20.5"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
                                                         <color key="textColor" red="0.15686274509803921" green="0.098039215686274508" blue="0.27450980392156865" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -94,7 +94,7 @@
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="9g5-rw-efz" customClass="ScaledSwitch" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="156.875" y="6.875" width="38.916666666666657" height="23.25"/>
+                                                        <rect key="frame" x="160" y="3" width="51" height="31"/>
                                                         <color key="tintColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="scale">
@@ -115,8 +115,8 @@
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMinorStatus"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6Yq-ge-9W3" userLabel="healthStatusContainerView">
-                                                        <rect key="frame" x="16" y="36.5" width="223" height="42.5"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6Yq-ge-9W3" userLabel="Health Status Container View">
+                                                        <rect key="frame" x="16" y="36.5" width="223" height="42"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Uploading complete history of Dexcom data" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gp0-ie-YG8" userLabel="healthStatusLine1" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="223" height="14"/>
@@ -137,7 +137,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="FYI upload pauses when phone is locked" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IYw-eg-MRt" userLabel="healthStatusLine3" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="28" width="223" height="14.5"/>
+                                                                <rect key="frame" x="0.0" y="28" width="223" height="14"/>
                                                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                                 <color key="textColor" red="0.49411764705882355" green="0.49411764705882355" blue="0.49411764705882355" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
@@ -146,9 +146,70 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                         </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="42" id="dFo-ma-rwn"/>
+                                                        </constraints>
                                                     </stackView>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Rq-xO-II6" userLabel="line separator" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="79" width="255" height="1"/>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Irc-lA-p4P" userLabel="Sync Health Data Line Separator" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="78.5" width="255" height="1"/>
+                                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="1" id="0rE-0k-E5u"/>
+                                                        </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </view>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Ak-0F-p1s" userLabel="Sync Health Data Container View">
+                                                        <rect key="frame" x="0.0" y="79.5" width="255" height="42"/>
+                                                        <subviews>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uzo-u6-ezM" userLabel="Sync Health Data Button" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="255" height="42"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
+                                                                <state key="normal">
+                                                                    <color key="titleColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                </state>
+                                                                <state key="highlighted" backgroundImage="menuButtonBackground"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="buttonStyling" value="blueTextMenuButton"/>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="buttonTitle" value="Sync Health data now"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                                <connections>
+                                                                    <action selector="syncHealthDataTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="2ty-yX-w1p"/>
+                                                                </connections>
+                                                            </button>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DxO-RW-Vfw" userLabel="Sync Health Data Right Disclosure View">
+                                                                <rect key="frame" x="215" y="0.0" width="40" height="42"/>
+                                                                <subviews>
+                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rightDisclosureArrow" highlightedImage="rightDisclosureArrow" translatesAutoresizingMaskIntoConstraints="NO" id="KXR-5u-mqs">
+                                                                        <rect key="frame" x="13" y="12.5" width="11" height="17"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="11" id="WiJ-gf-hkf"/>
+                                                                            <constraint firstAttribute="height" constant="17" id="caa-tH-7v1"/>
+                                                                        </constraints>
+                                                                    </imageView>
+                                                                </subviews>
+                                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                                <constraints>
+                                                                    <constraint firstAttribute="width" constant="40" id="0Uc-n8-eiE"/>
+                                                                    <constraint firstItem="KXR-5u-mqs" firstAttribute="centerY" secondItem="DxO-RW-Vfw" secondAttribute="centerY" id="5YV-ZH-piO"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="KXR-5u-mqs" secondAttribute="trailing" constant="16" id="SnH-qF-FAk"/>
+                                                                    <constraint firstAttribute="height" constant="42" id="d61-r6-hsa"/>
+                                                                </constraints>
+                                                            </view>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstItem="Uzo-u6-ezM" firstAttribute="top" secondItem="7Ak-0F-p1s" secondAttribute="top" id="0SJ-cW-VYW"/>
+                                                            <constraint firstAttribute="bottom" secondItem="Uzo-u6-ezM" secondAttribute="bottom" id="4Qj-6T-fi5"/>
+                                                            <constraint firstAttribute="height" constant="42" id="BwP-cw-nNA"/>
+                                                            <constraint firstAttribute="trailing" secondItem="Uzo-u6-ezM" secondAttribute="trailing" id="Omg-zN-hfN"/>
+                                                            <constraint firstAttribute="trailing" secondItem="DxO-RW-Vfw" secondAttribute="trailing" id="Ow7-ii-f5U"/>
+                                                            <constraint firstItem="Uzo-u6-ezM" firstAttribute="leading" secondItem="7Ak-0F-p1s" secondAttribute="leading" id="ddZ-ug-h2e"/>
+                                                            <constraint firstAttribute="bottom" secondItem="DxO-RW-Vfw" secondAttribute="bottom" id="zzV-Py-tvr"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Rq-xO-II6" userLabel="Health Section Line Separator" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="121" width="255" height="1"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="zLG-cE-aHd"/>
@@ -161,21 +222,27 @@
                                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstItem="9Rq-xO-II6" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" id="2Ew-ki-vhM"/>
-                                                    <constraint firstItem="6Yq-ge-9W3" firstAttribute="bottom" secondItem="9Rq-xO-II6" secondAttribute="top" id="2dX-cJ-Fi1"/>
                                                     <constraint firstItem="M2n-bT-OD5" firstAttribute="centerY" secondItem="9g5-rw-efz" secondAttribute="centerY" id="3jW-ih-RHr"/>
+                                                    <constraint firstAttribute="trailing" secondItem="7Ak-0F-p1s" secondAttribute="trailing" id="50q-zP-0X2"/>
+                                                    <constraint firstAttribute="height" constant="122" id="DdW-1D-jHd"/>
+                                                    <constraint firstItem="7Ak-0F-p1s" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" id="DvP-s1-9oX"/>
+                                                    <constraint firstAttribute="trailing" secondItem="7Ak-0F-p1s" secondAttribute="trailing" id="ITw-qF-ZsX"/>
                                                     <constraint firstItem="6Yq-ge-9W3" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" constant="16" id="NTx-xk-Ryg"/>
                                                     <constraint firstItem="9g5-rw-efz" firstAttribute="leading" secondItem="M2n-bT-OD5" secondAttribute="trailing" constant="8" id="RTX-7V-4uf"/>
                                                     <constraint firstAttribute="bottom" secondItem="9Rq-xO-II6" secondAttribute="bottom" id="Tsr-o6-FOR"/>
                                                     <constraint firstItem="6Yq-ge-9W3" firstAttribute="top" secondItem="M2n-bT-OD5" secondAttribute="bottom" constant="8" id="UOc-mh-89v"/>
+                                                    <constraint firstItem="7Ak-0F-p1s" firstAttribute="top" secondItem="Irc-lA-p4P" secondAttribute="bottom" id="X8X-kH-qht"/>
                                                     <constraint firstAttribute="trailing" secondItem="6Yq-ge-9W3" secondAttribute="trailing" constant="16" id="XeX-Pe-74o"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Irc-lA-p4P" secondAttribute="trailing" id="dEd-Fl-ans"/>
                                                     <constraint firstAttribute="trailing" secondItem="9Rq-xO-II6" secondAttribute="trailing" id="hlo-TS-E5p"/>
+                                                    <constraint firstItem="Irc-lA-p4P" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" id="jjV-yq-bmx"/>
                                                     <constraint firstItem="M2n-bT-OD5" firstAttribute="top" secondItem="9Ls-ZC-LIS" secondAttribute="top" constant="8" id="mDP-7c-Ahp"/>
-                                                    <constraint firstAttribute="height" constant="80" id="uak-f0-Uwj"/>
+                                                    <constraint firstItem="Irc-lA-p4P" firstAttribute="top" secondItem="6Yq-ge-9W3" secondAttribute="bottom" id="qpA-hN-tsQ"/>
                                                     <constraint firstItem="M2n-bT-OD5" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" constant="16" id="xCq-Nr-4az"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WpE-yY-uh1" userLabel="switchProfileSection">
-                                                <rect key="frame" x="0.0" y="134" width="255" height="42"/>
+                                                <rect key="frame" x="0.0" y="176" width="255" height="42"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GeI-ZX-uYF" userLabel="switchProfileButton" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="255" height="41"/>
@@ -237,7 +304,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xpv-Zp-SJ9" userLabel="supportSection">
-                                                <rect key="frame" x="0.0" y="176" width="255" height="42"/>
+                                                <rect key="frame" x="0.0" y="218" width="255" height="42"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kci-7b-geJ" userLabel="supportButton" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="255" height="41"/>
@@ -276,7 +343,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w3P-pi-kIM" userLabel="privacySection">
-                                                <rect key="frame" x="0.0" y="218" width="255" height="42"/>
+                                                <rect key="frame" x="0.0" y="260" width="255" height="42"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kNg-yc-pvp" userLabel="privacyButton" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="255" height="41"/>
@@ -315,7 +382,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AkY-6Y-8Cr" userLabel="logoutSection">
-                                                <rect key="frame" x="0.0" y="260" width="255" height="42"/>
+                                                <rect key="frame" x="0.0" y="302" width="255" height="42"/>
                                                 <subviews>
                                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="john@doe.com" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9sA-Dh-xzl" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
                                                         <rect key="frame" x="162.5" y="14" width="72.5" height="14"/>
@@ -440,6 +507,8 @@
                         <outlet property="healthStatusLine3" destination="IYw-eg-MRt" id="Wco-Dv-hDa"/>
                         <outlet property="loginAccount" destination="9sA-Dh-xzl" id="2XT-bE-ria"/>
                         <outlet property="sidebarView" destination="9OQ-uM-nfY" id="Ix6-bv-TsQ"/>
+                        <outlet property="syncHealthDataContainer" destination="7Ak-0F-p1s" id="DAw-kW-FjU"/>
+                        <outlet property="syncHealthDataSeparator" destination="Irc-lA-p4P" id="pVl-E0-RQj"/>
                         <outlet property="usernameLabel" destination="8eU-B6-eOM" id="iCh-s4-6Aa"/>
                         <outlet property="versionString" destination="FRD-xW-MeJ" id="XGz-45-lWe"/>
                         <segue destination="Abk-OY-d5S" kind="unwind" identifier="unwindFromMenu" unwindAction="done:" id="pm8-wF-UwI"/>
