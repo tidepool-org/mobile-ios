@@ -50,7 +50,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xdv-UQ-gxv" userLabel="Sync All Button">
-                                <rect key="frame" x="164" y="158" width="47" height="30"/>
+                                <rect key="frame" x="0.0" y="158" width="375" height="30"/>
                                 <accessibility key="accessibilityConfiguration" label="Sync All"/>
                                 <state key="normal" title="Sync All"/>
                                 <connections>
@@ -75,7 +75,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Xdv-UQ-gxv" firstAttribute="leading" secondItem="tcy-J6-3pd" secondAttribute="leading" constant="164" id="3de-8R-XyB"/>
+                            <constraint firstItem="Xdv-UQ-gxv" firstAttribute="leading" secondItem="tcy-J6-3pd" secondAttribute="leading" id="3de-8R-XyB"/>
                             <constraint firstItem="5Oj-s5-KQd" firstAttribute="top" secondItem="lRK-TP-9si" secondAttribute="bottom" constant="10" id="5Jt-Co-OZ0"/>
                             <constraint firstItem="5Oj-s5-KQd" firstAttribute="centerX" secondItem="tcy-J6-3pd" secondAttribute="centerX" id="6BS-1x-jyS"/>
                             <constraint firstItem="Xdv-UQ-gxv" firstAttribute="top" secondItem="sRq-HR-iBm" secondAttribute="bottom" constant="100" id="FOz-Vh-vvh"/>
