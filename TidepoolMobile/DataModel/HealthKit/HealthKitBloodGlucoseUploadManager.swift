@@ -245,14 +245,9 @@ class HealthKitBloodGlucoseUploadManager:
             if self.isUploading[mode]! && !self.uploaders[mode]!.hasPendingUploadTasks() {
                 var message = ""
                 if !self.readers[mode]!.isReading {
-                    message = "Observed new samples written to HealthKit, read samples from current position and prepare upload"
+                    message = "Observed new samples written to HealthKit, read samples from anchor and prepare upload. Mode: \(mode)"
 
                     self.readers[mode]!.startReading()
-                    
-                    if (self.uploaders[mode]!.isBackgroundUploadSession) {
-                        UserDefaults.standard.set(Date(), forKey: HealthKitSettings.LastAttemptToReadCurrentSamplesInBackgroundKey)
-                        UserDefaults.standard.synchronize()
-                    }
                 } else {
                     message = "Observed new samples written to HealthKit, already reading samples"
                 }
@@ -263,28 +258,15 @@ class HealthKitBloodGlucoseUploadManager:
                     UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
                 }
             } else {
-                 // TODO: uploader - review this 20 minute timeout/cancellation logic
-                let lastAttemptToReadCurrentSamplesInBackground = UserDefaults.standard.object(forKey: HealthKitSettings.LastAttemptToReadCurrentSamplesInBackgroundKey) as? Date ?? Date()
-                let timeAgoInMinutes = round(abs(Date().timeIntervalSince(lastAttemptToReadCurrentSamplesInBackground))) / 60
-                if timeAgoInMinutes > 20 {
-                    let message = "Observed new samples written to HealthKit, with pending upload tasks. It's been more than 20 minutes. Just cancel any pending tasks and reset pending state, so next time we can start reading/uploading samples again"
-                    DDLogInfo(message)
-                    if AppDelegate.testMode {
-                        let localNotificationMessage = UILocalNotification()
-                        localNotificationMessage.alertBody = message
-                        UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                    }
-                    
-                    self.uploaders[mode]!.cancelTasks()
-                } else {
-                    let message = "Observed new samples written to HealthKit, with pending upload tasks. Don't read samples since we have pending upload tasks."
-                    DDLogInfo(message)
-                    if AppDelegate.testMode {
-                        let localNotificationMessage = UILocalNotification()
-                        localNotificationMessage.alertBody = message
-                        UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                    }
+                let message = "Observed new samples written to HealthKit, with pending upload tasks. Cancel pending tasks and reset pending state, so next time we observe new samples we can start reading/uploading samples again"
+                DDLogInfo(message)
+                if AppDelegate.testMode {
+                    let localNotificationMessage = UILocalNotification()
+                    localNotificationMessage.alertBody = message
+                    UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
                 }
+                
+                self.uploaders[mode]!.cancelTasks()
             }
         }
     }
@@ -389,7 +371,9 @@ class HealthKitBloodGlucoseUploadManager:
             if AppDelegate.testMode {
                 let localNotificationMessage = UILocalNotification()
                 localNotificationMessage.alertBody = message
-                UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+                DispatchQueue.main.async {
+                    UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+                }
             }
 
             self.stats[reader.mode]!.updateForUploadAttempt(sampleCount: uploadData.filteredSamples.count, uploadAttemptTime: Date(), earliestSampleTime: uploadData.earliestSampleTime, latestSampleTime: uploadData.latestSampleTime)

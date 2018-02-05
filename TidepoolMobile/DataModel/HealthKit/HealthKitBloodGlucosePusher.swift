@@ -78,9 +78,11 @@ class HealthKitBloodGlucosePusher: NSObject {
                 }
                 DDLogVerbose(msg)
                 if AppDelegate.testMode {
-                    let debugMsg = UILocalNotification()
-                    debugMsg.alertBody = msg
-                    UIApplication.shared.presentLocalNotificationNow(debugMsg)
+                    let localNotificationMessage = UILocalNotification()
+                    localNotificationMessage.alertBody = msg
+                    DispatchQueue.main.async {
+                        UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+                    }
                 }
                 completion(itemsDownloaded == 0 ? .noData : .newData)
             }

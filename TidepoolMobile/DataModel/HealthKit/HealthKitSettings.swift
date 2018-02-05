@@ -30,7 +30,6 @@ class HealthKitSettings {
     // Other
     static let LastExecutedUploaderVersionKey = "LastExecutedUploaderVersionKey"
     static let TreatAllBloodGlucoseSourceTypesAsDexcomKey = "TreatAllBloodGlucoseSourceTypesAsDexcomKey"
-    static let LastAttemptToReadCurrentSamplesInBackgroundKey = "LastAttemptToReadCurrentSamplesInBackgroundKey"
 
     // Uploads (prefix using prefixedKey helper)
     static let HasPendingUploadsKey = "HasPendingUploadsKey"

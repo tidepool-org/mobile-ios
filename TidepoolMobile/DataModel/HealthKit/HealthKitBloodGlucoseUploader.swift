@@ -128,18 +128,22 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
     func cancelTasks() {
         DDLogVerbose("trace")
         
-        self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
-        
         if let uploadSession = self.uploadSession {
             uploadSession.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) -> Void in
                 DDLogInfo("Canceling \(uploadTasks.count) tasks")
-                for uploadTask in uploadTasks {
-                    DDLogInfo("Canceling task: \(uploadTask.taskIdentifier)")
-                    uploadTask.cancel()
+                if uploadTasks.count > 0 {
+                    for uploadTask in uploadTasks {
+                        DDLogInfo("Canceling task: \(uploadTask.taskIdentifier)")
+                        uploadTask.cancel()
+                    }
+                } else {
+                    self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
                 }
             }
         } else {
             DDLogError("No upload session, this is unexpected")
+            
+            self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
         }
     }
     
@@ -176,7 +180,9 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
         if AppDelegate.testMode {
             let localNotificationMessage = UILocalNotification()
             localNotificationMessage.alertBody = message
-            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+            DispatchQueue.main.async {
+                UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+            }
         }
         
         var httpError: NSError?
@@ -232,7 +238,9 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
         if AppDelegate.testMode {
             let localNotificationMessage = UILocalNotification()
             localNotificationMessage.alertBody = message
-            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+            DispatchQueue.main.async {
+                UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+            }
         }
 
         if let uploadSessionHandleEventsCompletionHandler = self.uploadSessionHandleEventsCompletionHandler {

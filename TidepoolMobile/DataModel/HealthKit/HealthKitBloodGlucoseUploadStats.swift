@@ -121,7 +121,9 @@ class HealthKitBloodGlucoseUploadStats: NSObject {
         if AppDelegate.testMode {
             let localNotificationMessage = UILocalNotification()
             localNotificationMessage.alertBody = message
-            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+            DispatchQueue.main.async {
+                UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+            }
         }
         if self.totalDaysHistorical > 0 {
             DDLogInfo("Uploaded \(self.currentDayHistorical) of \(self.totalDaysHistorical) days of historical data")

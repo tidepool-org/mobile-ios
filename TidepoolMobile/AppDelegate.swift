@@ -54,7 +54,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if AppDelegate.testMode  {
             let localNotificationMessage = UILocalNotification()
             localNotificationMessage.alertBody = "Application didFinishLaunchingWithOptions"
-            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+            DispatchQueue.main.async {
+                UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+            }
         }
 
         // Override point for customization after application launch.
@@ -256,9 +258,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     fileprivate func localNotifyMessage(_ msg: String) {
         DDLogInfo("localNotifyMessage: \(msg)")
-        let debugMsg = UILocalNotification()
-        debugMsg.alertBody = msg
-        UIApplication.shared.presentLocalNotificationNow(debugMsg)
+        let localNotificationMessage = UILocalNotification()
+        localNotificationMessage.alertBody = msg
+        DispatchQueue.main.async {
+            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+        }
     }
     
     

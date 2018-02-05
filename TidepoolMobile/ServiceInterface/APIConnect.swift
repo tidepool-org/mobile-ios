@@ -364,7 +364,9 @@ class APIConnector {
                     if AppDelegate.testMode  {
                         let localNotificationMessage = UILocalNotification()
                         localNotificationMessage.alertBody = message
-                        UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+                        DispatchQueue.main.async {
+                            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+                        }
                     }
                     
                     // TODO: handle network offline!
