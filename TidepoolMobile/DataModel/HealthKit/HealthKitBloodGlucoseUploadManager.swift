@@ -393,34 +393,35 @@ class HealthKitBloodGlucoseUploadManager:
     func bloodGlucoseReader(reader: HealthKitBloodGlucoseUploadReader, didReadDataForUpload uploadData: HealthKitBloodGlucoseUploadData, error: Error?)
     {
         DDLogVerbose("trace")
-        
-        if let error = error {
-            DispatchQueue.main.async {
+
+        DispatchQueue.main.async {
+            DDLogInfo("didReadDataForUpload on main thread")
+
+            if let error = error {
                 DDLogError("Stop reading most recent samples. Mode: \(reader.mode). Error: \(String(describing: error))")
                 reader.stopReading(reason: HealthKitBloodGlucoseUploadReader.StoppedReason.error(error: error))
-            }
-        } else {
-            guard self.isUploading[reader.mode]! else {
-                DDLogError("Ignore didReadDataForUpload, not currently uploading. Mode: \(reader.mode)")
-                return
-            }
-
-            if uploadData.filteredSamples.count > 0 {
-                self.handleNewResults(reader: reader, uploadData: uploadData)
-            } else if uploadData.newOrDeletedSamplesWereDelivered {
-                self.promoteLastAnchor(reader: self.readers[reader.mode]!)
-                if self.isUploading[reader.mode]! {
-                    self.readers[reader.mode]!.readMore()
-                } else {
-                    DDLogError("Don't try to read more, not currently uploading. Mode: \(reader.mode)")
-                }
             } else {
-                self.handleNoResults(reader: reader)
+                guard self.isUploading[reader.mode]! else {
+                    DDLogError("Ignore didReadDataForUpload, not currently uploading. Mode: \(reader.mode)")
+                    return
+                }
+                
+                if uploadData.filteredSamples.count > 0 {
+                    self.handleNewResults(reader: reader, uploadData: uploadData)
+                } else if uploadData.newOrDeletedSamplesWereDelivered {
+                    self.promoteLastAnchor(reader: self.readers[reader.mode]!)
+                    if self.isUploading[reader.mode]! {
+                        self.readers[reader.mode]!.readMore()
+                    } else {
+                        DDLogError("Don't try to read more, not currently uploading. Mode: \(reader.mode)")
+                    }
+                } else {
+                    self.handleNoResults(reader: reader)
+                }
             }
         }
     }
 
-    // NOTE: This is a query results handler called from HealthKit, not on main thread
     fileprivate func handleNewResults(reader: HealthKitBloodGlucoseUploadReader, uploadData: HealthKitBloodGlucoseUploadData) {
         DDLogVerbose("trace")
 
@@ -432,9 +433,7 @@ class HealthKitBloodGlucoseUploadManager:
             if AppDelegate.testMode {
                 let localNotificationMessage = UILocalNotification()
                 localNotificationMessage.alertBody = message
-                DispatchQueue.main.async {
-                    UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                }
+                UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
             }
 
             self.stats[reader.mode]!.updateForUploadAttempt(sampleCount: uploadData.filteredSamples.count, uploadAttemptTime: Date(), earliestSampleTime: uploadData.earliestSampleTime, latestSampleTime: uploadData.latestSampleTime)
@@ -445,15 +444,10 @@ class HealthKitBloodGlucoseUploadManager:
         }
     }
 
-    // NOTE: This is a query results handler called from HealthKit, not on main thread
     fileprivate func handleNoResults(reader: HealthKitBloodGlucoseUploadReader) {
         DDLogVerbose("trace")
 
-        DispatchQueue.main.async {
-            DDLogInfo("handleNoResults on main thread")
-
-            reader.stopReading(reason: HealthKitBloodGlucoseUploadReader.StoppedReason.noResultsFromQuery)
-        }
+        reader.stopReading(reason: HealthKitBloodGlucoseUploadReader.StoppedReason.noResultsFromQuery)
     }
     
     fileprivate func promoteLastAnchor(reader: HealthKitBloodGlucoseUploadReader) {
