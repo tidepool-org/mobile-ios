@@ -206,7 +206,15 @@ class HealthKitBloodGlucoseUploadManager:
         DDLogVerbose("trace")
 
         if (currentUserId != nil && !self.isUploading[mode]! && self.isResumable(mode: mode)) {
-            self.startUploading(mode: mode, currentUserId: currentUserId!)
+            if mode == HealthKitBloodGlucoseUploadReader.Mode.Current {
+                // Always ok to resume Current
+                self.startUploading(mode: mode, currentUserId: currentUserId!)
+            } else {
+                // Only resume HistoricalAll and HistoricalTwoWeeks if app is active
+                if UIApplication.shared.applicationState == UIApplicationState.active {
+                    self.startUploading(mode: mode, currentUserId: currentUserId!)
+                }
+            }            
         }
     }
 
