@@ -56,7 +56,7 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
             } else {
                 configuration = URLSessionConfiguration.default
             }
-            configuration?.timeoutIntervalForResource = 60 * 10 // Only allow 10 minutes to complete // TODO: uploader - review this
+            configuration?.timeoutIntervalForResource = 60 * 60 // One hour
             self.uploadSession = URLSession(configuration: configuration!, delegate: self, delegateQueue: nil)
             self.uploadSession!.delegateQueue.maxConcurrentOperationCount = 1
             DDLogVerbose("created upload session, background: \(background)")

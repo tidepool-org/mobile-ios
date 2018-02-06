@@ -51,9 +51,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         DDLogVerbose("trace")
 
+        let applicationState = UIApplication.shared.applicationState
+        let message = "didFinishLaunchingWithOptions, state: \(String(describing: applicationState.rawValue))"
+        DDLogInfo(message)
         if AppDelegate.testMode  {
             let localNotificationMessage = UILocalNotification()
-            localNotificationMessage.alertBody = "Application didFinishLaunchingWithOptions"
+            localNotificationMessage.alertBody = message
             DispatchQueue.main.async {
                 UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
             }
@@ -378,6 +381,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
         DDLogVerbose("trace")
 
+        if AppDelegate.testMode {
+            self.localNotifyMessage("applicationWillTerminate")
+        }
+
         TidepoolMobileDataController.sharedInstance.appWillTerminate()
     }
 
@@ -388,6 +395,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if AppDelegate.testMode {
             self.localNotifyMessage("Handle events for background session: \(identifier)")
         }
-         HealthKitBloodGlucoseUploadManager.sharedInstance.handleEventsForBackgroundURLSession(with: identifier, completionHandler: completionHandler)
+        
+        HealthKitBloodGlucoseUploadManager.sharedInstance.handleEventsForBackgroundURLSession(with: identifier, completionHandler: completionHandler)
     }
 }

@@ -19,6 +19,7 @@ import CryptoSwift
 
 // NOTE: These delegate methods are usually called indirectly from HealthKit or a URLSession delegate, on a background queue, not on main thread
 protocol HealthKitBloodGlucoseUploadReaderDelegate: class {
+    func bloodGlucoseReaderDidStartReading(reader: HealthKitBloodGlucoseUploadReader)
     func bloodGlucoseReader(reader: HealthKitBloodGlucoseUploadReader, didStopReading reason: HealthKitBloodGlucoseUploadReader.StoppedReason)
     func bloodGlucoseReader(reader: HealthKitBloodGlucoseUploadReader, didReadDataForUpload uploadData: HealthKitBloodGlucoseUploadData, error: Error?)
 }
@@ -52,15 +53,7 @@ class HealthKitBloodGlucoseUploadReader: NSObject {
     var currentUserId: String?
 
     func isResumable() -> Bool {
-        var isResumable = false
-        
-        let anchorData = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryAnchorKey))
-        let anchorLastData = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryAnchorLastKey))
-        if (anchorData != nil && anchorLastData != nil) {
-            isResumable = true
-        }
-        
-        return isResumable
+        return UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryAnchorKey)) != nil
     }
     
     func resetPersistentState() {
@@ -82,6 +75,8 @@ class HealthKitBloodGlucoseUploadReader: NSObject {
         }
         
         self.isReading = true
+
+        self.delegate?.bloodGlucoseReaderDidStartReading(reader: self)
 
         self.readMore()
     }
