@@ -18,7 +18,6 @@ import CocoaLumberjack
 import CryptoSwift
 
 protocol HealthKitBloodGlucoseUploaderDelegate: class {
-    func bloodGlucoseUploaderDidCreateSession(uploader: HealthKitBloodGlucoseUploader)
     func bloodGlucoseUploader(uploader: HealthKitBloodGlucoseUploader, didCompleteUploadWithError error: Error?)
 }
 
@@ -31,63 +30,16 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
         self.mode = mode
 
         super.init()
-        
-        // Start off assuming background sessions. When app is made active after launch we'll switch to non-background session
-        self.ensureUploadSession(background: true)
+
+        self.ensureUploadSession(isBackground: false)
+        self.ensureUploadSession(isBackground: true)
     }
 
     fileprivate(set) var mode: HealthKitBloodGlucoseUploadReader.Mode
-    fileprivate(set) var isBackgroundUploadSession = false
     weak var delegate: HealthKitBloodGlucoseUploaderDelegate?
     
     func hasPendingUploadTasks() -> Bool {
         return UserDefaults.standard.bool(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.HasPendingUploadsKey))
-    }
-    
-    func ensureUploadSession(background: Bool) {
-        DDLogVerbose("ensureUploadSession, isBackgroundSession: \(background)")
-        
-        if self.uploadSession == nil {
-            self.isBackgroundUploadSession = background
-            
-            var configuration: URLSessionConfiguration?
-            if background {
-                configuration = URLSessionConfiguration.background(withIdentifier: "\(self.mode)-\(self.backgroundUploadSessionIdentifier)")
-            } else {
-                configuration = URLSessionConfiguration.default
-            }
-            configuration?.timeoutIntervalForResource = 60 * 60 // One hour
-            self.uploadSession = URLSession(configuration: configuration!, delegate: self, delegateQueue: nil)
-            self.uploadSession!.delegateQueue.maxConcurrentOperationCount = 1
-            DDLogVerbose("created upload session, background: \(background)")
-        } else {
-            if background != self.isBackgroundUploadSession {
-                self.isBackgroundUploadSession = background
-                
-                self.resetUploadSession()
-            }
-        }
-        
-        self.delegate?.bloodGlucoseUploaderDidCreateSession(uploader: self)
-    }
-    
-    func resetUploadSession() {
-        DDLogVerbose("trace")
-
-        self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
-
-        if self.uploadSession != nil {
-            DDLogVerbose("Invalidating upload session")
-            self.uploadSession!.invalidateAndCancel()
-            self.uploadSession = nil
-        } else {
-            DispatchQueue.main.async {
-                DDLogInfo("didBecomeInvalidWithError on main thread")
-                
-                // Ensure it again
-                self.ensureUploadSession(background: self.isBackgroundUploadSession)
-            }
-        }
     }
     
     // NOTE: This is called from a query results handler, not on main thread
@@ -107,18 +59,26 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
         DispatchQueue.main.async {
             DDLogInfo("startUploadSessionTasks on main thread")
             
-            guard let uploadSession = self.uploadSession else {
-                let message = "Unable to start upload tasks, session does not exist, it was probably invalidated"
+            // Choose the right session to start tasks with
+            var uploadSession: URLSession?
+            if UIApplication.shared.applicationState == UIApplicationState.background {
+                uploadSession = self.backgroundUploadSession
+            } else {
+                uploadSession = self.foregroundUploadSession
+            }
+            guard uploadSession != nil else {
+                let message = "Unable to start upload tasks, session does not exist, it was probably invalidated. This is unexpected"
                 let error = NSError(domain: "HealthKitBloodGlucoseUploader", code: -1, userInfo: [NSLocalizedDescriptionKey: message])
                 DDLogError(message)
                 self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: error)
                 return
             }
 
+            // Remember that we have pending tasks
             self.setPendingUploadsState(task1IsPending: true, task2IsPending: true)
             
             // Create task 1 of 2
-            let task1 = uploadSession.uploadTask(with: request, fromFile: batchMetadataPostBodyURL)
+            let task1 = uploadSession!.uploadTask(with: request, fromFile: batchMetadataPostBodyURL)
             task1.taskDescription = "\(self.mode) \(self.uploadMetadataTaskDescription)"
             DDLogInfo("Created metadata upload task (1 of 2): \(task1.taskIdentifier)")
             task1.resume()
@@ -128,39 +88,29 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
     func cancelTasks() {
         DDLogVerbose("trace")
         
-        if let uploadSession = self.uploadSession {
-            uploadSession.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) -> Void in
-                DDLogInfo("Canceling \(uploadTasks.count) tasks")
-                if uploadTasks.count > 0 {
-                    for uploadTask in uploadTasks {
-                        DDLogInfo("Canceling task: \(uploadTask.taskIdentifier)")
-                        uploadTask.cancel()
-                    }
-                } else {
-                    self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
-                }
-            }
-        } else {
-            DDLogError("No upload session, this is unexpected")
-            
+        if self.backgroundUploadSession == nil && self.foregroundUploadSession == nil {
             self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
-        }
-    }
-    
-    func handleEventsForBackgroundURLSession(with identifier: String, completionHandler: @escaping () -> Void) {
-        DDLogVerbose("trace")
-
-        self.uploadSessionHandleEventsCompletionHandler = completionHandler
-        
-        if let uploadSession = self.uploadSession {
-            uploadSession.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) -> Void in
-                for uploadTask in uploadTasks {
-                    DDLogInfo("Resuming \(String(describing: uploadTask.taskDescription)) task: \(uploadTask.taskIdentifier)")
-                    uploadTask.resume()
+        } else {
+            var uploadSessions = [URLSession]()
+            if let uploadSession = self.foregroundUploadSession {
+                uploadSessions.append(uploadSession)
+            }
+            if let uploadSession = self.backgroundUploadSession {
+                uploadSessions.append(uploadSession)
+            }
+            for uploadSession in uploadSessions {
+                uploadSession.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) -> Void in
+                    DDLogInfo("Canceling \(uploadTasks.count) tasks")
+                    if uploadTasks.count > 0 {
+                        for uploadTask in uploadTasks {
+                            DDLogInfo("Canceling task: \(uploadTask.taskIdentifier)")
+                            uploadTask.cancel()
+                        }
+                    } else {
+                        self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
+                    }
                 }
             }
-        } else {
-            DDLogError("No upload session, this is unexpected")
         }
     }
     
@@ -230,39 +180,48 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
         }
     }
     
-    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
-        DDLogVerbose("trace")
-
-        let message = ("Did finish handling events for background session: \(session.configuration.identifier!)")
-        DDLogInfo(message)
-        if AppDelegate.testMode {
-            let localNotificationMessage = UILocalNotification()
-            localNotificationMessage.alertBody = message
-            DispatchQueue.main.async {
-                UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-            }
-        }
-
-        if let uploadSessionHandleEventsCompletionHandler = self.uploadSessionHandleEventsCompletionHandler {
-            uploadSessionHandleEventsCompletionHandler()
-        }
-    }
-    
     func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
         DDLogVerbose("trace")
 
-        self.uploadSession = nil
-
         DispatchQueue.main.async {
-            DDLogInfo("didBecomeInvalidWithError on main thread")
-
-            // Ensure it again
-            self.ensureUploadSession(background: self.isBackgroundUploadSession)
+            if session == self.foregroundUploadSession {
+                DDLogInfo("Foreground upload session became invalid. Mode: \(self.mode)")
+                self.foregroundUploadSession = nil
+                self.ensureUploadSession(isBackground: false)
+            } else if session == self.backgroundUploadSession {
+                DDLogInfo("Background upload session became invalid. Mode: \(self.mode)")
+                self.backgroundUploadSession = nil
+                self.ensureUploadSession(isBackground: true)
+            }
         }
     }
     
     // MARK: Private
     
+    fileprivate func ensureUploadSession(isBackground: Bool) {
+        DDLogVerbose("trace")
+        
+        guard (isBackground && self.backgroundUploadSession == nil) || (!isBackground && self.foregroundUploadSession == nil) else {
+            return
+        }
+        
+        var configuration = URLSessionConfiguration.default
+        if isBackground {
+            configuration = URLSessionConfiguration.background(withIdentifier: "\(self.mode)-\(self.backgroundUploadSessionIdentifier)")
+        }
+        configuration.timeoutIntervalForResource = 60 // 60 seconds
+        let uploadSession = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+        uploadSession.delegateQueue.maxConcurrentOperationCount = 1 // So we can serialize the metadata and samples upload POSTs
+
+        if isBackground {            
+            self.backgroundUploadSession = uploadSession
+        } else {
+            self.foregroundUploadSession = uploadSession
+        }
+
+        DDLogInfo("Created upload session. isBackground:\(isBackground) Mode: \(self.mode)")
+    }
+
     fileprivate func createPostBodyFileForBatchMetadataUpload(data: HealthKitBloodGlucoseUploadData) throws -> URL {
         DDLogVerbose("trace")
         
@@ -379,6 +338,6 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
     fileprivate let uploadSamplesRequestAllHTTPHeaderFieldsKey = "uploadSamplesRequestAllHTTPHeaderFields"
     fileprivate let uploadSamplesPostDataUrlKey = "uploadSamplesPostDataUrl"
 
-    fileprivate var uploadSession: URLSession?
-    fileprivate var uploadSessionHandleEventsCompletionHandler: (() -> Void)?
+    fileprivate var foregroundUploadSession: URLSession?
+    fileprivate var backgroundUploadSession: URLSession?
 }

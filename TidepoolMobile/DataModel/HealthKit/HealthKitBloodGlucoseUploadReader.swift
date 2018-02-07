@@ -53,7 +53,8 @@ class HealthKitBloodGlucoseUploadReader: NSObject {
     var currentUserId: String?
 
     func isResumable() -> Bool {
-        return UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryAnchorKey)) != nil
+        return self.mode == HealthKitBloodGlucoseUploadReader.Mode.Current
+            || UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryAnchorKey)) != nil
     }
     
     func resetPersistentState() {

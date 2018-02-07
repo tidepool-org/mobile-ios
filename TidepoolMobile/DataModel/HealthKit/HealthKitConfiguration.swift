@@ -82,18 +82,7 @@ class HealthKitConfiguration
     func turnOffInterface() {
         DDLogVerbose("trace")
 
-        var mode = HealthKitBloodGlucoseUploadReader.Mode.Current
-        if (HealthKitBloodGlucoseUploadManager.sharedInstance.isUploading[mode]!) {
-            HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(mode: mode, reason: HealthKitBloodGlucoseUploadReader.StoppedReason.turnOffInterface)
-        }
-        mode = HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks
-        if (HealthKitBloodGlucoseUploadManager.sharedInstance.isUploading[mode]!) {
-            HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(mode: mode, reason: HealthKitBloodGlucoseUploadReader.StoppedReason.turnOffInterface)
-        }
-        mode = HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll
-        if (HealthKitBloodGlucoseUploadManager.sharedInstance.isUploading[mode]!) {
-            HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(mode: mode, reason: HealthKitBloodGlucoseUploadReader.StoppedReason.turnOffInterface)            
-        }
+        HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(reason: HealthKitBloodGlucoseUploadReader.StoppedReason.turnOffInterface)
     }
 
     //

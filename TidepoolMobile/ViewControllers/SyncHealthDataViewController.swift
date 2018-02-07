@@ -92,12 +92,11 @@ class SyncHealthDataViewController: UIViewController {
     }
     
     func stopUploadingAndReset() {
-        var mode = HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll
-        HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(mode: mode, reason: HealthKitBloodGlucoseUploadReader.StoppedReason.turnOffInterface)
-        HealthKitBloodGlucoseUploadManager.sharedInstance.resetPersistentState(mode: mode)
         
-        mode = HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks
-        HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(mode: mode, reason: HealthKitBloodGlucoseUploadReader.StoppedReason.turnOffInterface)
+        HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(reason: HealthKitBloodGlucoseUploadReader.StoppedReason.turnOffInterface)
+        
+        HealthKitBloodGlucoseUploadManager.sharedInstance.resetPersistentState(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll)
+        HealthKitBloodGlucoseUploadManager.sharedInstance.resetPersistentState(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks)
 
         self.healthStatusLine1.text = ""
         self.healthStatusLine2.text = "Stopped by user"

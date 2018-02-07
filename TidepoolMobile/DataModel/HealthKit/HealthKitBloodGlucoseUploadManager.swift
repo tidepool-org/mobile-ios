@@ -115,38 +115,37 @@ class HealthKitBloodGlucoseUploadManager:
 
         self.isUploading[mode] = true
         self.readers[mode]!.currentUserId = currentUserId
+        self.uploaders[mode]!.cancelTasks() // Cancel any pending tasks (also resets pending state, so we don't get stuck not being able to upload due to early termination or crash wherein the persistent state tracking pending uploads was not reset
 
         if (mode == HealthKitBloodGlucoseUploadReader.Mode.Current) {
             // Observe new samples for Current mode
             HealthKitManager.sharedInstance.enableBackgroundDeliveryBloodGlucoseSamples()
             HealthKitManager.sharedInstance.startObservingBloodGlucoseSamples(self.bloodGlucoseObservationHandler)
         }
+        
+        var isFreshHistoricalUpload = false
+        if mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll || mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks {
+            isFreshHistoricalUpload = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryStartDateKey)) == nil
+        }
 
-        if !self.uploaders[mode]!.hasPendingUploadTasks() {
-            DDLogInfo("Start reading samples after starting upload. Mode: \(mode)")
-            
-            let hasStartDate = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryStartDateKey)) != nil
+        DDLogInfo("Start reading samples after starting upload. Mode: \(mode)")
+        self.readers[mode]!.startReading()
 
-            self.readers[mode]!.startReading()
-
-            if (!hasStartDate) {
-                if (mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll) {
-                    // Asynchronously find the start date
-                    self.stats[mode]!.updateHistoricalSamplesDateRangeFromHealthKitAsync()
-                } else if (mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks) {
-                    // The start/end dates for reading HistoricalLastTwoWeeks data are guaranteed to be written by now, so, read those and update the stats
-                    let startDate = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryStartDateKey)) as? Date
-                    let endDate = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryEndDateKey)) as? Date
-                    if let startDate = startDate,
-                        let endDate = endDate {
-                        self.stats[mode]!.updateHistoricalSamplesDateRange(startDate: startDate, endDate: endDate)
-                    } else {
-                        DDLogError("Unexpected nil startDate or endDate when starting upload. Mode: \(mode)")
-                    }
+        if (isFreshHistoricalUpload) {
+            if (mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll) {
+                // Asynchronously find the start date
+                self.stats[mode]!.updateHistoricalSamplesDateRangeFromHealthKitAsync()
+            } else if (mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks) {
+                // The start/end dates for reading HistoricalLastTwoWeeks data are guaranteed to be written by now, so, read those and update the stats
+                let startDate = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryStartDateKey)) as? Date
+                let endDate = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryEndDateKey)) as? Date
+                if let startDate = startDate,
+                    let endDate = endDate {
+                    self.stats[mode]!.updateHistoricalSamplesDateRange(startDate: startDate, endDate: endDate)
+                } else {
+                    DDLogError("Unexpected nil startDate or endDate when starting upload. Mode: \(mode)")
                 }
             }
-        } else {
-            DDLogInfo("Don't start reading samples after starting upload, we still have pending upload tasks. Mode: \(mode)")
         }
 
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: mode))
@@ -186,6 +185,21 @@ class HealthKitBloodGlucoseUploadManager:
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: mode))
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.TurnOffUploader), object: mode, userInfo: ["reason": reason]))
     }
+    
+    func stopUploading(reason: HealthKitBloodGlucoseUploadReader.StoppedReason) {
+        var mode = HealthKitBloodGlucoseUploadReader.Mode.Current
+        if (self.isUploading[mode]!) {
+            self.stopUploading(mode: mode, reason: reason)
+        }
+        mode = HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks
+        if (self.isUploading[mode]!) {
+            self.stopUploading(mode: mode, reason: reason)
+        }
+        mode = HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll
+        if (self.isUploading[mode]!) {
+            self.stopUploading(mode: mode, reason: reason)
+        }        
+    }
 
     func resumeUploadingIfResumable(currentUserId: String?) {
         DDLogVerbose("trace")
@@ -207,32 +221,15 @@ class HealthKitBloodGlucoseUploadManager:
 
         if (currentUserId != nil && !self.isUploading[mode]! && self.isResumable(mode: mode)) {
             if mode == HealthKitBloodGlucoseUploadReader.Mode.Current {
-                // Always ok to resume Current
+                // Always OK to resume Current
                 self.startUploading(mode: mode, currentUserId: currentUserId!)
             } else {
-                // Only resume HistoricalAll and HistoricalTwoWeeks if app is active
-                if UIApplication.shared.applicationState == UIApplicationState.active {
+                // Only resume HistoricalAll and HistoricalTwoWeeks if app is not in background state
+                if UIApplication.shared.applicationState != UIApplicationState.background {
                     self.startUploading(mode: mode, currentUserId: currentUserId!)
                 }
             }            
         }
-    }
-
-    // MARK: Upload session coordination (with UIApplicationDelegate)
-
-    func ensureUploadSession(background: Bool) {
-        DDLogVerbose("trace")
-        
-        self.uploaders[HealthKitBloodGlucoseUploadReader.Mode.Current]!.ensureUploadSession(background: background)
-        self.uploaders[HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks]!.ensureUploadSession(background: background)
-        self.uploaders[HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll]!.ensureUploadSession(background: background)
-    }
-    
-    func handleEventsForBackgroundURLSession(with identifier: String, completionHandler: @escaping () -> Void) {
-        DDLogVerbose("trace")
-
-        // Only the HealthKitBloodGlucoseUploadReader.Mode.Current uploads are done in background
-        self.uploaders[HealthKitBloodGlucoseUploadReader.Mode.Current]!.handleEventsForBackgroundURLSession(with: identifier, completionHandler: completionHandler)
     }
     
     // MARK: Private
@@ -257,11 +254,11 @@ class HealthKitBloodGlucoseUploadManager:
             if self.isUploading[mode]! && !self.uploaders[mode]!.hasPendingUploadTasks() {
                 var message = ""
                 if !self.readers[mode]!.isReading {
-                    message = "Observed new samples written to HealthKit, read samples from anchor and prepare upload. Mode: \(mode)"
+                    message = "Observation query called, start reading samples from anchor and prepare upload. Mode: \(mode)"
 
                     self.readers[mode]!.startReading()
                 } else {
-                    message = "Observed new samples written to HealthKit, already reading samples"
+                    message = "Observation query called, already reading samples"
                 }
                 DDLogInfo(message)
                 if AppDelegate.testMode {
@@ -270,7 +267,7 @@ class HealthKitBloodGlucoseUploadManager:
                     UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
                 }
             } else {
-                let message = "Observed new samples written to HealthKit, with pending upload tasks. Cancel pending tasks and try reading/uploading again"
+                let message = "Observation query called, with pending upload tasks. Cancel pending tasks. Will then try reading/uploading again"
                 DDLogInfo(message)
                 if AppDelegate.testMode {
                     let localNotificationMessage = UILocalNotification()
@@ -297,6 +294,7 @@ class HealthKitBloodGlucoseUploadManager:
         DispatchQueue.main.async {
             DDLogInfo("didStopReading on main thread")
 
+            // End background task for Current mode, if in background
             if reader.mode == HealthKitBloodGlucoseUploadReader.Mode.Current && UIApplication.shared.applicationState == UIApplicationState.background {
                 self.endCurrentSamplesUploadBackgroundTask()
             }
@@ -367,24 +365,6 @@ class HealthKitBloodGlucoseUploadManager:
                 } else {
                     self.readers[uploader.mode]!.stopReading(reason: HealthKitBloodGlucoseUploadReader.StoppedReason.noResultsFromQuery)
                 }
-            }
-        }
-    }
-    
-    func bloodGlucoseUploaderDidCreateSession(uploader: HealthKitBloodGlucoseUploader) {
-        DDLogVerbose("trace")
-
-        if self.isUploading[uploader.mode]! {
-            guard uploader.mode == HealthKitBloodGlucoseUploadReader.Mode.Current || !uploader.isBackgroundUploadSession else {
-                DDLogInfo("Don't start reading samples again after creating upload session for background session unless mode is HealthKitBloodGlucoseUploadReader.Mode.Current. Mode: \(uploader.mode)")
-                return
-            }
-            
-            if !self.uploaders[uploader.mode]!.hasPendingUploadTasks() {
-                DDLogInfo("Start reading samples again after creating upload session. Mode: \(uploader.mode)")
-                self.readers[uploader.mode]!.startReading()
-            } else {
-                DDLogInfo("Don't start reading samples again after creating upload session, we still have pending upload tasks. Mode: \(uploader.mode)")
             }
         }
     }
@@ -463,7 +443,18 @@ class HealthKitBloodGlucoseUploadManager:
 
     fileprivate func beginCurrentSamplesUploadBackgroundTask() {
         if currentSamplesUploadBackgroundTaskIdentifier == nil {
-            self.currentSamplesUploadBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+            self.currentSamplesUploadBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+                Void in
+                DispatchQueue.main.async {
+                    let message = "Background time expired"
+                    DDLogInfo(message)
+                    if AppDelegate.testMode {
+                        let localNotificationMessage = UILocalNotification()
+                        localNotificationMessage.alertBody = message
+                        UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+                    }
+                }
+            })
             
             DispatchQueue.main.async {
                 let message = "Begin background task. Remaining background time: \(UIApplication.shared.backgroundTimeRemaining)"
