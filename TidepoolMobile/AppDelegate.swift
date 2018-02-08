@@ -283,6 +283,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Only the HealthKitBloodGlucoseUploadReader.Mode.Current uploads should continue in background
         HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(reason: HealthKitBloodGlucoseUploadReader.StoppedReason.background)
         HealthKitBloodGlucoseUploadManager.sharedInstance.resumeUploadingIfResumable(mode: HealthKitBloodGlucoseUploadReader.Mode.Current, currentUserId: appHealthKitConfiguration.currentUserId)
+
+        // Re-enable idle timer (screen locking) when the app enters background. (May have been disabled during sync/upload.)
+        UIApplication.shared.isIdleTimerDisabled = false
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

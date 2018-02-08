@@ -53,6 +53,16 @@ class SyncHealthDataViewController: UIViewController {
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: nil, object: nil)
+
+        // Re-enable idle timer (screen locking) when the controller is gone
+        UIApplication.shared.isIdleTimerDisabled = false
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        // Re-enable idle timer (screen locking) when the controller disappears
+        UIApplication.shared.isIdleTimerDisabled = false        
     }
 
     /// Configure layout for initial or manual sync, instructions or progress views...
@@ -107,7 +117,11 @@ class SyncHealthDataViewController: UIViewController {
     
     func handleStatsUpdatedNotification(_ notification: Notification) {
         let mode = notification.object as! HealthKitBloodGlucoseUploadReader.Mode
-        if mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll || mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks {
+        if mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll
+            || mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks {
+            // Disable idle timer (screen locking) when there is upload progress
+             UIApplication.shared.isIdleTimerDisabled = true
+
             let stats = HealthKitBloodGlucoseUploadManager.sharedInstance.stats[mode]!
             let healthKitUploadStatusDaysUploaded: String = "%d of %d days"
             var healthKitUploadStatusDaysUploadedText = ""
@@ -123,26 +137,33 @@ class SyncHealthDataViewController: UIViewController {
     }
 
     func handleTurnOffUploaderNotification(_ notification: Notification) {
-        let reason = notification.userInfo!["reason"] as! HealthKitBloodGlucoseUploadReader.StoppedReason
+        let mode = notification.object as! HealthKitBloodGlucoseUploadReader.Mode
         
-        switch reason {
-        case .turnOffInterface:
-            self.healthStatusLine1.text = ""
-            self.healthStatusLine2.text = "Stopped by user"
-            break
-        case .noResultsFromQuery:
-            self.healthStatusLine2.text = "Finished"
-            // TODO: review. Probably need an overall state enum...
-            updateProgress(1.0)
-            stopButton.isHidden = true
-            break
-        case .error(let error):
-            self.healthStatusLine2.text = error.localizedDescription
-            break
-        default:
-            
-            break
-        }        
+        if mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll
+            || mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks {
+            // Re-enable idle timer (screen locking) when the upload stopped
+            UIApplication.shared.isIdleTimerDisabled = false
+
+            // Update status
+            let reason = notification.userInfo!["reason"] as! HealthKitBloodGlucoseUploadReader.StoppedReason
+            switch reason {
+            case .turnOffInterface:
+                self.healthStatusLine1.text = ""
+                self.healthStatusLine2.text = "Stopped by user"
+                break
+            case .noResultsFromQuery:
+                self.healthStatusLine2.text = "Finished"
+                // TODO: review. Probably need an overall state enum...
+                updateProgress(1.0)
+                stopButton.isHidden = true
+                break
+            case .error(let error):
+                self.healthStatusLine2.text = error.localizedDescription
+                break
+            default:
+                break
+            }
+        }
     }
 
     func startUploading(mode: HealthKitBloodGlucoseUploadReader.Mode) {
