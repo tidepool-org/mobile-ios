@@ -247,37 +247,41 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    let healthKitUploadStatusMostRecentSamples: String = "Uploading last 14 days of Dexcom data\u{2026}"
-    let healthKitUploadStatusUploadPausesWhenPhoneIsLocked: String = "FYI upload pauses when phone is locked"
-    let healthKitUploadStatusDaysUploaded: String = "%d of %d days"
-    let healthKitUploadStatusUploadingCompleteHistory: String = "Uploading complete history of Dexcom data"
     let healthKitUploadStatusLastUploadTime: String = "Last reading %@"
-    let healthKitUploadStatusNoDataAvailableToUpload: String = "No data available to upload"
+    let healthKitUploadStatusNoDataAvailableToUpload: String = "No data available to upload" // TODO: my - 0 - also for historical?
     let healthKitUploadStatusDexcomDataDelayed3Hours: String = "Dexcom data from Health is delayed 3 hours"
+    let healthKitUploadStatusDaysUploaded: String = "Syncing day %d of %d"
+    let healthKitUploadStatusUploadPausesWhenPhoneIsLocked: String = "Your screen must stay awake and unlocked" // TODO: my - 0 - needs to be bold!?
 
     fileprivate func configureHealthStatusLines() {
+        var healthStatusLine1Text = ""
+        var healthStatusLine2Text = ""
+
         let uploadManager = HealthKitBloodGlucoseUploadManager.sharedInstance
-//        case .mostRecent:
-//            healthStatusLine1.text = healthKitUploadStatusMostRecentSamples
-//            healthStatusLine2.text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
-//            healthStatusLine3.text = ""
-//        case .historical:
-//            healthStatusLine1.text = healthKitUploadStatusUploadingCompleteHistory
-//            var healthKitUploadStatusDaysUploadedText = ""
-//            if phase.totalDaysHistorical > 0 {
-//                healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, phase.totalDaysHistorical)
-//            }
-//            healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
-//            healthStatusLine3.text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
-//        case .current:
-        let stats = uploadManager.stats[HealthKitBloodGlucoseUploadReader.Mode.Current]!
-        if stats.hasSuccessfullyUploaded {
-            let lastUploadTimeAgoInWords = stats.lastSuccessfulUploadTime.timeAgoInWords(Date())
-            healthStatusLine1.text = String(format: healthKitUploadStatusLastUploadTime, lastUploadTimeAgoInWords)
+        let isHistoricalAllActive = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll]!
+        let isHistoricalTwoWeeksActive = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks]!
+        if isHistoricalAllActive || isHistoricalTwoWeeksActive {
+            if isHistoricalAllActive {
+                let stats = uploadManager.stats[HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll]!
+                healthStatusLine1Text = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
+            } else {
+                let stats = uploadManager.stats[HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks]!
+                healthStatusLine1Text = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
+            }
+            healthStatusLine2Text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
         } else {
-            healthStatusLine1.text = healthKitUploadStatusNoDataAvailableToUpload
+            let stats = uploadManager.stats[HealthKitBloodGlucoseUploadReader.Mode.Current]!
+            if stats.hasSuccessfullyUploaded {
+                let lastUploadTimeAgoInWords = stats.lastSuccessfulUploadTime.timeAgoInWords(Date())
+                healthStatusLine1Text = String(format: healthKitUploadStatusLastUploadTime, lastUploadTimeAgoInWords)
+            } else {
+                healthStatusLine1Text = healthKitUploadStatusNoDataAvailableToUpload
+            }
+            healthStatusLine2Text = healthKitUploadStatusDexcomDataDelayed3Hours
         }
-        healthStatusLine2.text = healthKitUploadStatusDexcomDataDelayed3Hours
+
+        healthStatusLine1.text = healthStatusLine1Text
+        healthStatusLine2.text = healthStatusLine2Text
         healthStatusLine3.text = ""
     }
     
