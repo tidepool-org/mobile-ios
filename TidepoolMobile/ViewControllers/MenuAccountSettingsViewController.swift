@@ -26,9 +26,9 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var healthKitLabel: TidepoolMobileUILabel!
     @IBOutlet weak var healthStatusContainerView: UIStackView!
     @IBOutlet weak var healthExplanation: UILabel!
-    @IBOutlet weak var healthStatusLine1: UILabel!
-    @IBOutlet weak var healthStatusLine2: UILabel!
-    @IBOutlet weak var healthStatusLine3: UILabel!
+    @IBOutlet weak var healthStatusLine1: TidepoolMobileUILabel!
+    @IBOutlet weak var healthStatusLine2: TidepoolMobileUILabel!
+    @IBOutlet weak var healthStatusLine3: TidepoolMobileUILabel!
     @IBOutlet weak var syncHealthDataSeparator: TidepoolMobileUIView!
     @IBOutlet weak var syncHealthDataContainer: UIView!
 
@@ -269,6 +269,9 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
                 healthStatusLine1Text = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
             }
             healthStatusLine2Text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
+            
+            healthStatusLine1.usage = "sidebarSettingHKMinorStatus"
+            healthStatusLine2.usage = "sidebarSettingHKMainStatus"
         } else {
             let stats = uploadManager.stats[HealthKitBloodGlucoseUploadReader.Mode.Current]!
             if stats.hasSuccessfullyUploaded {
@@ -278,6 +281,9 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
                 healthStatusLine1Text = healthKitUploadStatusNoDataAvailableToUpload
             }
             healthStatusLine2Text = healthKitUploadStatusDexcomDataDelayed3Hours
+
+            healthStatusLine1.usage = "sidebarSettingHKMainStatus"
+            healthStatusLine2.usage = "sidebarSettingHKMinorStatus"
         }
 
         healthStatusLine1.text = healthStatusLine1Text
