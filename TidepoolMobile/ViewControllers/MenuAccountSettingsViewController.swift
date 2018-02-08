@@ -248,10 +248,10 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     }
     
     let healthKitUploadStatusLastUploadTime: String = "Last reading %@"
-    let healthKitUploadStatusNoDataAvailableToUpload: String = "No data available to upload" // TODO: my - 0 - also for historical?
+    let healthKitUploadStatusNoDataAvailableToUpload: String = "No data available to upload"
     let healthKitUploadStatusDexcomDataDelayed3Hours: String = "Dexcom data from Health is delayed 3 hours"
     let healthKitUploadStatusDaysUploaded: String = "Syncing day %d of %d"
-    let healthKitUploadStatusUploadPausesWhenPhoneIsLocked: String = "Your screen must stay awake and unlocked" // TODO: my - 0 - needs to be bold!?
+    let healthKitUploadStatusUploadPausesWhenPhoneIsLocked: String = "Your screen must stay awake and unlocked"
 
     fileprivate func configureHealthStatusLines() {
         var healthStatusLine1Text = ""

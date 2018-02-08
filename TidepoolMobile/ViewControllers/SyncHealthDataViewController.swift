@@ -58,6 +58,29 @@ class SyncHealthDataViewController: UIViewController {
         UIApplication.shared.isIdleTimerDisabled = false
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Update UI if upload is in progress when view controller is shown
+        let uploadManager = HealthKitBloodGlucoseUploadManager.sharedInstance
+        let isHistoricalAllActive = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll]!
+        let isHistoricalTwoWeeksActive = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks]!
+        if isHistoricalAllActive || isHistoricalTwoWeeksActive {
+            // Disable idle timer (screen locking) when there is upload progress
+            UIApplication.shared.isIdleTimerDisabled = true
+
+            // Configure layout to show progress
+            configureLayout(initialSync: false, initialSetup: false)
+            
+            // Update for current stats
+            if isHistoricalAllActive {
+                updateForStatsUpdate(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll)
+            } else if isHistoricalTwoWeeksActive {
+                updateForStatsUpdate(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks)
+            }
+        }
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
@@ -119,21 +142,8 @@ class SyncHealthDataViewController: UIViewController {
         let mode = notification.object as! HealthKitBloodGlucoseUploadReader.Mode
         if mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll
             || mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks {
-            // Disable idle timer (screen locking) when there is upload progress
-             UIApplication.shared.isIdleTimerDisabled = true
-
-            let stats = HealthKitBloodGlucoseUploadManager.sharedInstance.stats[mode]!
-            let healthKitUploadStatusDaysUploaded: String = "%d of %d days"
-            var healthKitUploadStatusDaysUploadedText = ""
-            var percentUploaded: CGFloat = 0.0
-            if stats.totalDaysHistorical > 0 {
-                percentUploaded = CGFloat((CGFloat)(stats.currentDayHistorical) / (CGFloat)(stats.totalDaysHistorical))
-                healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
-            }
-            healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
-            updateProgress(percentUploaded)
+            updateForStatsUpdate(mode: mode)
         }
-        self.updateHealthStatusLine1(mode: mode)
     }
 
     func handleTurnOffUploaderNotification(_ notification: Notification) {
@@ -190,7 +200,28 @@ class SyncHealthDataViewController: UIViewController {
     @IBOutlet weak var indicatorViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var progressLabel: UILabel!
     
-    // TODO: Hook up progress
+    func updateForStatsUpdate(mode: HealthKitBloodGlucoseUploadReader.Mode) {
+        // Disable idle timer (screen locking) when there is upload progress
+        UIApplication.shared.isIdleTimerDisabled = true
+
+        // Determine percent progress and upload healthStatusLine2 text
+        let stats = HealthKitBloodGlucoseUploadManager.sharedInstance.stats[mode]!
+        var healthKitUploadStatusDaysUploadedText = ""
+        var percentUploaded: CGFloat = 0.0
+        if stats.totalDaysHistorical > 0 {
+            percentUploaded = CGFloat((CGFloat)(stats.currentDayHistorical) / (CGFloat)(stats.totalDaysHistorical))
+            let healthKitUploadStatusDaysUploaded: String = "%d of %d days"
+            healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
+        }
+
+        // Update progress
+        updateProgress(percentUploaded)
+        
+        // Update status lines
+        updateHealthStatusLine1(mode: mode)
+        healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
+    }
+
     // Pass percentDone from 0.0 to 1.0
     func updateProgress(_ percentDone: CGFloat) {
         let progressString = String(Int(percentDone * 100))

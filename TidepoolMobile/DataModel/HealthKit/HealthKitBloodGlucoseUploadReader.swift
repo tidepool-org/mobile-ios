@@ -53,8 +53,18 @@ class HealthKitBloodGlucoseUploadReader: NSObject {
     var currentUserId: String?
 
     func isResumable() -> Bool {
-        return self.mode == HealthKitBloodGlucoseUploadReader.Mode.Current
-            || UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryAnchorKey)) != nil
+        var isResumable = false
+
+        if self.mode == HealthKitBloodGlucoseUploadReader.Mode.Current {
+            isResumable = true
+        } else {
+            if let _ = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryStartDateKey)),
+               let _ = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.BloodGlucoseQueryEndDateKey)) {
+                isResumable = true
+            }
+        }
+
+        return isResumable
     }
     
     func resetPersistentState() {
