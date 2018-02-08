@@ -67,7 +67,7 @@
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JwL-dD-CDl" userLabel="searchPlaceholder" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="50" y="0.0" width="52" height="50"/>
+                                                <rect key="frame" x="50" y="0.0" width="53.5" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -108,7 +108,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kqd-t1-lUR" userLabel="dateLabelSpacerView" customClass="TPIntrinsicSizeUIView" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="51"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="54.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="height">
@@ -138,7 +138,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="752" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iPM-Jk-ybw" userLabel="dateLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="58" width="103" height="17.5"/>
+                                                            <rect key="frame" x="20" y="61.5" width="82.5" height="14"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -356,7 +356,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oY4-t1-amu" userLabel="userLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="7" width="64.5" height="45.5"/>
+                                                            <rect key="frame" x="20" y="7" width="62.5" height="45.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -365,7 +365,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0X6-au-gcs" userLabel="dateLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="94.5" y="21" width="103" height="17.5"/>
+                                                            <rect key="frame" x="92.5" y="23" width="82.5" height="14"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -746,10 +746,10 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
             </objects>
             <point key="canvasLocation" x="2391" y="-705"/>
         </scene>
-        <!--Add-Edit Comment Scene-->
+        <!--Add-Edit Comment-->
         <scene sceneID="94g-fR-7ed">
             <objects>
-                <viewController title="Add-Edit Comment Scene" id="jHd-me-gvT" customClass="EditCommentViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Add-Edit Comment" id="jHd-me-gvT" customClass="EditCommentViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="D1F-YL-XjO">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -769,7 +769,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wry-fe-dMx" userLabel="dateLabelSpacerView" customClass="TPIntrinsicSizeUIView" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="39"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="320" height="42.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="height">
@@ -799,7 +799,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="752" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xa8-xT-Ys1" userLabel="dateLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="46" width="103" height="17.5"/>
+                                                            <rect key="frame" x="20" y="49.5" width="82.5" height="14"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -992,7 +992,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34S-pq-Xwd" userLabel="userLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="20" y="7" width="64.5" height="15.5"/>
+                                                            <rect key="frame" x="20" y="7" width="62.5" height="15.5"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="13"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1001,7 +1001,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="750" text="Oct 12 at 7:39 pm" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Bm-JW-9pW" userLabel="dateLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="94.5" y="6.5" width="103" height="17.5"/>
+                                                            <rect key="frame" x="92.5" y="8.5" width="82.5" height="14"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                             <color key="textColor" red="0.30196078430000001" green="0.30588235289999999" blue="0.29803921570000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1084,14 +1084,14 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardAppearance="alert"/>
                                                         </textView>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gjm-bk-lTD" userLabel="saveButtonLargeHitArea" customClass="TPUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="-6.5" width="60" height="60.5"/>
+                                                            <rect key="frame" x="253" y="-6.5" width="60" height="60.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="60" id="365-4A-TNm"/>
                                                                 <constraint firstAttribute="height" constant="60" id="A9U-aR-0bL"/>
                                                             </constraints>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hjb-HN-EnG" userLabel="saveButton" customClass="TidepoolMobileSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
-                                                            <rect key="frame" x="270" y="9.5" width="30" height="30"/>
+                                                            <rect key="frame" x="266" y="9.5" width="34" height="30"/>
                                                             <state key="normal" title="Save"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="editButton"/>

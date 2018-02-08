@@ -188,6 +188,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         let hkCurrentEnable = appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
         healthKitSwitch.isOn = hkCurrentEnable
         configureHKInterfaceForState(hkCurrentEnable)
+        configureSyncHealthButton(hkCurrentEnable)
     }
     
     // Note: this is used by the switch logic itself since the underlying interface enable lags asychronously behind the UI switch...
@@ -209,6 +210,20 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         healthKitLabel.isHidden = hideHealthKitUI
         healthStatusContainerView.isHidden = hideHealthKitUI || !hkCurrentEnable
         healthExplanation.isHidden = hideHealthKitUI || hkCurrentEnable
+    }
+    
+    let kHealthSectionHeightEnabled: CGFloat = 122.0
+    let kHealthSectionHeightDisabled: CGFloat = 80.0
+    @IBOutlet weak var healthKitUISectionHeight: NSLayoutConstraint!
+    @IBOutlet var syncHealthButtonItems: [UIView]!
+    
+    private func configureSyncHealthButton(_ enabled: Bool) {
+        let hideButton = !enabled
+        for item in syncHealthButtonItems {
+            item.isHidden = hideButton
+        }
+        healthKitUISectionHeight.constant = enabled ? kHealthSectionHeightEnabled : kHealthSectionHeightDisabled
+        sidebarView.layoutIfNeeded()
     }
     
     private func enableHealthKitInterfaceForCurrentUser() {

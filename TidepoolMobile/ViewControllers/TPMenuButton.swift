@@ -136,7 +136,10 @@ import UIKit
     private let titleIndent: CGFloat = 18.0
     private func drawRectShape(_ size: CGSize, textColor: UIColor, backColor: UIColor, textAlign: NSTextAlignment, font: UIFont, cornerRadius: CGFloat) {
         let textIndent: CGFloat = textAlign == .center ? 0.0 : titleIndent
-        let context = UIGraphicsGetCurrentContext()!
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
+        
         let rectangleRect = CGRect(x:0, y:0, width:size.width, height:size.height)
         let rectangleInset = CGRect(x:textIndent, y:0, width:size.width-textIndent, height:size.height)
         let rectanglePath: UIBezierPath = cornerRadius > 0.0 ?

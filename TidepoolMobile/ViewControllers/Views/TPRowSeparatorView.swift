@@ -44,7 +44,9 @@ fileprivate extension UIColor {
 
     private func drawSeparatorView(frame: CGRect) {
         //// General Declarations
-        let context = UIGraphicsGetCurrentContext()!
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
         
         //// Color Declarations
         let gradientColor = UIColor(hex: 0xe4e4e5)
