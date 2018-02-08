@@ -47,19 +47,22 @@ class BGDeviceViewController: UIViewController, PeripheralControllerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         connectSwitch.isOn = bleController.connectState == .peripheral
-        // Keep screen from locking while BG Device is current screen
-        UIApplication.shared.isIdleTimerDisabled = false
+        
+        // Disable idle timer (screen locking) while BG Device is current screen
+        UIApplication.shared.isIdleTimerDisabled = true
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         stopTimer()
-        // Allow screen locking when this controller is gone...
+        
+        // Re-enable idle timer (screen locking) when the controller disappears
         UIApplication.shared.isIdleTimerDisabled = false
+        
         super.viewDidDisappear(animated)
     }
     
     deinit {
-        // Allow screen locking when this controller is gone...
+        // Re-enable idle timer (screen locking) when the controller is gone
         UIApplication.shared.isIdleTimerDisabled = false
     }
 
