@@ -113,7 +113,7 @@ class SyncHealthDataViewController: UIViewController {
             var healthKitUploadStatusDaysUploadedText = ""
             var percentUploaded: CGFloat = 0.0
             if stats.totalDaysHistorical > 0 {
-                percentUploaded = CGFloat(stats.currentDayHistorical/stats.totalDaysHistorical)
+                percentUploaded = CGFloat((CGFloat)(stats.currentDayHistorical) / (CGFloat)(stats.totalDaysHistorical))
                 healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
             }
             healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
