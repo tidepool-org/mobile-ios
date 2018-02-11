@@ -111,7 +111,7 @@ class HealthKitConfiguration
             if !self.healthKitInterfaceEnabledForCurrentUser() {
                 if self.healthKitInterfaceConfiguredForOtherUser() {
                     // Switching healthkit users, reset HealthKitBloodGlucoseUploadManager
-                    HealthKitBloodGlucoseUploadManager.sharedInstance.resetPersistentState()
+                    HealthKitBloodGlucoseUploadManager.sharedInstance.resetPersistentState(switchingHealthKitUsers: true)
                 }
                 defaults.setValue(currentUserId!, forKey: HealthKitSettings.InterfaceUserIdKey)
                 // may be nil...

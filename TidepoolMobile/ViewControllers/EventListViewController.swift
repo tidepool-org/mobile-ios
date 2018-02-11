@@ -78,7 +78,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterForeground(_:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterBackground(_:)), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleUploadSuccessfulNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.UploadSuccessful), object: nil)
-
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleTurnOnUploader(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.TurnOnUploader), object: nil)
         
         if let sideMenu = self.sideMenuController()?.sideMenu {
             sideMenu.delegate = self
@@ -919,6 +919,15 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // MARK: - Graph support
     //
 
+    internal func handleTurnOnUploader(_ note: Notification) {
+        DDLogVerbose("trace")
+        
+        if let _ = self.sideMenuController()?.sideMenu?.isMenuOpen, !HealthKitBloodGlucoseUploadManager.sharedInstance.hasPresentedSyncUI {
+            toggleSideMenu(self)
+            performSegue(withIdentifier: "segueToSyncHealthData", sender: self)
+        }
+    }
+    
     internal func handleUploadSuccessfulNotification(_ note: Notification) {
         DDLogInfo("inval cache and update graphs on successful upload")
         // TODO: make this more specific; for now, since uploads happen at most every 5 minutes, just do a graph update

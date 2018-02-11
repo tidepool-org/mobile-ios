@@ -204,10 +204,10 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         // TODO: UI polish - this whole section should be removed from the stacked view if hideHealthKitUI is true, rather than showing empty space!
         
         let hideHealthKitUI = !appHealthKitConfiguration.shouldShowHealthKitUI()
-        syncHealthDataSeparator.isHidden = hideHealthKitUI
         syncHealthDataContainer.isHidden = hideHealthKitUI
         healthKitSwitch.isHidden = hideHealthKitUI
         healthKitLabel.isHidden = hideHealthKitUI
+        syncHealthDataSeparator.isHidden = hideHealthKitUI || !hkCurrentEnable
         healthStatusContainerView.isHidden = hideHealthKitUI || !hkCurrentEnable
         healthExplanation.isHidden = hideHealthKitUI || hkCurrentEnable
     }

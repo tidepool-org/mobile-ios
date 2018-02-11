@@ -28,6 +28,14 @@ class HealthKitBloodGlucoseUploadManager:
     
     fileprivate(set) var stats: [HealthKitBloodGlucoseUploadReader.Mode: HealthKitBloodGlucoseUploadStats] = [:]
     fileprivate(set) var isUploading: [HealthKitBloodGlucoseUploadReader.Mode: Bool] = [:]
+    var hasPresentedSyncUI: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: HealthKitSettings.HasPresentedSyncUI)
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: HealthKitSettings.HasPresentedSyncUI);
+        }
+    }
 
     fileprivate override init() {
         DDLogVerbose("trace")
@@ -61,10 +69,7 @@ class HealthKitBloodGlucoseUploadManager:
         self.stats[mode] = HealthKitBloodGlucoseUploadStats(mode: mode)
         self.isUploading[mode] = false
 
-        // Check uploader version. If it's changed, then we should reupload everything again. Changing uploader version
-        // shouldn't be done lightly, since reuploading lots of data on app upgrade is not ideal. It can be used, though,
-        // to fix up 'stats' related to the upload status of the user's store of data, and also to fill gaps if there were
-        // samples that were missed during read/upload with past uploader due to bugs, or filtering of .
+        // Reset persistent uploader state if uploader version is upgraded
         let latestUploaderVersion = 7
         let lastExecutedUploaderVersion = UserDefaults.standard.integer(forKey: HealthKitSettings.LastExecutedUploaderVersionKey)
         var resetPersistentData = false
@@ -75,16 +80,21 @@ class HealthKitBloodGlucoseUploadManager:
             resetPersistentData = true
         }
         if resetPersistentData {
-            self.resetPersistentState()
+            self.resetPersistentState(switchingHealthKitUsers: false)
         }
     }
-    
-    func resetPersistentState() {
+
+    func resetPersistentState(switchingHealthKitUsers: Bool) {
         DDLogVerbose("trace")
 
         self.resetPersistentState(mode: HealthKitBloodGlucoseUploadReader.Mode.Current)
         self.resetPersistentState(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks)
         self.resetPersistentState(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll)
+        
+        if switchingHealthKitUsers {
+            UserDefaults.standard.removeObject(forKey: HealthKitSettings.HasPresentedSyncUI)
+            UserDefaults.standard.synchronize()
+        }
     }
     
     func resetPersistentState(mode: HealthKitBloodGlucoseUploadReader.Mode) {

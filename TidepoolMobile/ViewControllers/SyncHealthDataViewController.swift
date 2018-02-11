@@ -40,15 +40,30 @@ class SyncHealthDataViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleStatsUpdatedNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.Updated), object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleTurnOffUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.TurnOffUploader), object: nil)
+
+        // Determine if this is the initial sync
+        let initialSync = !HealthKitBloodGlucoseUploadManager.sharedInstance.hasPresentedSyncUI
+
+        // Remember that we've presented the sync UI before
+        HealthKitBloodGlucoseUploadManager.sharedInstance.hasPresentedSyncUI = true
         
-        // Manual sync, initial setup (sync not in progress)
-        configureLayout(initialSync: false, initialSetup: true)
-        // Manual sync, sync in progress)
-        //configureLayout(initialSync: false, initialSetup: false)
-        // Initial sync, initial setup (sync not in progress)
-        //configureLayout(initialSync: true, initialSetup: true)
-        // Initial sync, sync in progress)
-        //configureLayout(initialSync: true, initialSetup: false)
+        // Determine if this is initial setup, or if a sync is in progress
+        let uploadManager = HealthKitBloodGlucoseUploadManager.sharedInstance
+        let isHistoricalAllSyncInProgress = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll]!
+        let isHistoricalTwoWeeksSyncInProgress = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks]!
+        let isSyncInProgress = isHistoricalAllSyncInProgress || isHistoricalTwoWeeksSyncInProgress
+
+        // Configure UI for initial sync and initial setup
+        configureLayout(initialSync: initialSync, initialSetup: !isSyncInProgress)
+
+        if isSyncInProgress {
+            // Update stats
+            let currentSyncMode = isHistoricalAllSyncInProgress ? HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll : HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks
+            updateForStatsUpdate(mode: currentSyncMode)
+
+            // Disable idle timer
+            UIApplication.shared.isIdleTimerDisabled = true
+        }
     }
     
     deinit {
@@ -57,61 +72,20 @@ class SyncHealthDataViewController: UIViewController {
         // Re-enable idle timer (screen locking) when the controller is gone
         UIApplication.shared.isIdleTimerDisabled = false
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // Update UI if upload is in progress when view controller is shown
-        let uploadManager = HealthKitBloodGlucoseUploadManager.sharedInstance
-        let isHistoricalAllActive = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll]!
-        let isHistoricalTwoWeeksActive = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks]!
-        if isHistoricalAllActive || isHistoricalTwoWeeksActive {
-            // Disable idle timer (screen locking) when there is upload progress
-            UIApplication.shared.isIdleTimerDisabled = true
-
-            // Configure layout to show progress
-            configureLayout(initialSync: false, initialSetup: false)
-            
-            // Update for current stats
-            if isHistoricalAllActive {
-                updateForStatsUpdate(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll)
-            } else if isHistoricalTwoWeeksActive {
-                updateForStatsUpdate(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks)
-            }
-        }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        // Re-enable idle timer (screen locking) when the controller disappears
-        UIApplication.shared.isIdleTimerDisabled = false        
-    }
 
     /// Configure layout for initial or manual sync, instructions or progress views...
     private func configureLayout(initialSync: Bool, initialSetup: Bool) {
-        self.navigationItem.title = initialSync ? "Initial Sync" :
-        "Manual Sync"
-        
-        if initialSync {
-            instructionsContainerView.isHidden = true
-            buttonContainerView.isHidden = true
-            statusContainerView.isHidden = false
+        self.navigationItem.title = initialSync ? "Initial Sync" : "Manual Sync"
+        buttonContainerView.isHidden = false
+        stopButton.isHidden = initialSetup
+        syncLast2WeeksButton.isHidden = !initialSetup
+        syncAllButton.isHidden = !initialSetup
+        instructionsContainerView.isHidden = !initialSetup
+        statusContainerView.isHidden = initialSetup
+        if initialSetup {
+            configureInstructions(initialSync: initialSync)
         } else {
-            // manual sync
-            // always show buttons at bottom; stop if in progress
-            buttonContainerView.isHidden = false
-            stopButton.isHidden = initialSetup
-            syncLast2WeeksButton.isHidden = !initialSetup
-            syncAllButton.isHidden = !initialSetup
-
-            if initialSetup {
-                configureInstructions()
-            } else {
-                updateProgress(0.0)
-            }
-            instructionsContainerView.isHidden = !initialSetup
-            statusContainerView.isHidden = initialSetup
+            updateProgress(0.0)
         }
     }
     
@@ -240,46 +214,54 @@ class SyncHealthDataViewController: UIViewController {
         }
     }
     
-    private func configureInstructions() {
+    private func configureInstructions(initialSync: Bool) {
         let regFont = UIFont(name: "OpenSans", size: 14.0)!
         let semiBoldFont = UIFont(name: "OpenSans-SemiBold", size: 14.0)!
         let textColor = UIColor(white: 61.0 / 255.0, alpha: 1.0)
         let textHighliteColor = UIColor(red: 40.0 / 255.0, green: 25.0 / 255.0, blue: 70.0 / 255.0, alpha: 1.0)
         
-        let attributedString = NSMutableAttributedString(string: "If you’re having trouble seeing your blood glucose data in Tidepool or Tidepool Mobile, you can try a manual sync.\n\nBefore syncing: \n •  Open the Health app\n •  Tap the Sources tab\n •  Tap Dexcom\n •  Make sure ALLOW “DEXCOM” TO  \tWRITE DATA: Blood Glucose is enabled\n\nThen: \n •  Return to the Sources tab\n •  Tap Tidepool\n •  Make sure ALLOW “TIDEPOOL” TO \tREAD DATA: Blood Glucose is enabled\n\nIf you still can’t see your data, try syncing:", attributes: [
-            NSFontAttributeName: regFont,
-            NSForegroundColorAttributeName: textColor,
-            NSKernAttributeName: -0.2
-            ])
-        attributedString.addAttributes([
-            NSFontAttributeName: semiBoldFont,
-            NSForegroundColorAttributeName: textHighliteColor
-            ], range: NSRange(location: 146, length: 6))
-        attributedString.addAttributes([
-            NSFontAttributeName: semiBoldFont,
-            NSForegroundColorAttributeName: textHighliteColor
-            ], range: NSRange(location: 169, length: 7))
-        attributedString.addAttributes([
-            NSFontAttributeName: semiBoldFont,
-            NSForegroundColorAttributeName: textHighliteColor
-            ], range: NSRange(location: 189, length: 6))
-        attributedString.addAttributes([
-            NSFontAttributeName: semiBoldFont,
-            NSForegroundColorAttributeName: textHighliteColor
-            ], range: NSRange(location: 210, length: 45))
-        attributedString.addAttributes([
-            NSFontAttributeName: semiBoldFont,
-            NSForegroundColorAttributeName: textHighliteColor
-            ], range: NSRange(location: 293, length: 7))
-        attributedString.addAttributes([
-            NSFontAttributeName: semiBoldFont,
-            NSForegroundColorAttributeName: textHighliteColor
-            ], range: NSRange(location: 313, length: 8))
-        attributedString.addAttributes([
-            NSFontAttributeName: semiBoldFont,
-            NSForegroundColorAttributeName: textHighliteColor
-            ], range: NSRange(location: 336, length: 45))
-        
-        instructionsText.attributedText = attributedString
+        if initialSync {
+            let attributedString = NSMutableAttributedString(string: "In order to see your Blood Glucose data in Tidepool and Tidepool Mobile, we need to sync your HealthKit data.\n\nWe suggest syncing the past 2 weeks now (roughly 1 min to sync).\n\nYou can also sync all Blood Glucose data immediately (may take more than an hour to sync).", attributes: [
+                NSFontAttributeName: regFont,
+                NSForegroundColorAttributeName: textColor,
+                NSKernAttributeName: -0.2
+                ])
+            instructionsText.attributedText = attributedString
+        } else {
+            let attributedString = NSMutableAttributedString(string: "If you’re having trouble seeing your blood glucose data in Tidepool or Tidepool Mobile, you can try a manual sync.\n\nBefore syncing: \n •  Open the Health app\n •  Tap the Sources tab\n •  Tap Dexcom\n •  Make sure ALLOW “DEXCOM” TO  \tWRITE DATA: Blood Glucose is enabled\n\nThen: \n •  Return to the Sources tab\n •  Tap Tidepool\n •  Make sure ALLOW “TIDEPOOL” TO \tREAD DATA: Blood Glucose is enabled\n\nIf you still can’t see your data, try syncing:", attributes: [
+                NSFontAttributeName: regFont,
+                NSForegroundColorAttributeName: textColor,
+                NSKernAttributeName: -0.2
+                ])
+            attributedString.addAttributes([
+                NSFontAttributeName: semiBoldFont,
+                NSForegroundColorAttributeName: textHighliteColor
+                ], range: NSRange(location: 146, length: 6))
+            attributedString.addAttributes([
+                NSFontAttributeName: semiBoldFont,
+                NSForegroundColorAttributeName: textHighliteColor
+                ], range: NSRange(location: 169, length: 7))
+            attributedString.addAttributes([
+                NSFontAttributeName: semiBoldFont,
+                NSForegroundColorAttributeName: textHighliteColor
+                ], range: NSRange(location: 189, length: 6))
+            attributedString.addAttributes([
+                NSFontAttributeName: semiBoldFont,
+                NSForegroundColorAttributeName: textHighliteColor
+                ], range: NSRange(location: 210, length: 45))
+            attributedString.addAttributes([
+                NSFontAttributeName: semiBoldFont,
+                NSForegroundColorAttributeName: textHighliteColor
+                ], range: NSRange(location: 293, length: 7))
+            attributedString.addAttributes([
+                NSFontAttributeName: semiBoldFont,
+                NSForegroundColorAttributeName: textHighliteColor
+                ], range: NSRange(location: 313, length: 8))
+            attributedString.addAttributes([
+                NSFontAttributeName: semiBoldFont,
+                NSForegroundColorAttributeName: textHighliteColor
+                ], range: NSRange(location: 336, length: 45))
+            instructionsText.attributedText = attributedString
+        }
     }
 }
