@@ -152,25 +152,27 @@ class BGApplicationViewController: UIViewController, CentralControllerDelegate {
         // first sample sets a base...
         if lastPushToHK == nil {
             // back date so first sample is processed!
-            lastPushToHK = bgmStartDate.addingTimeInterval(-kBGSampleSpacingSeconds)
+            lastPushToHK = bgmStartDate.addingTimeInterval(-kBGSampleSpacing)
         }
         // add enough samples to "catch up" to current time (use a little slop to deal with communication timing so 5 minutes minus a second is still one sample)
-        var nextSampleTime = lastPushToHK!.addingTimeInterval(kBGSampleSpacingSeconds + 1)
-        let sampleInterval = Date().timeIntervalSince(lastPushToHK!)
-        let newSamplesCount = Int(sampleInterval/kBGSampleSpacingSeconds)
+        var nextSampleTime = lastPushToHK!
+        // only add samples up to a time in the past to simulate Dexcom app delayed reporting...
+        let sampleEndTime = Date().addingTimeInterval(-kBGSampleDelaySeconds)
+        let sampleInterval = sampleEndTime.timeIntervalSince(nextSampleTime)
+        let newSamplesCount = Int(sampleInterval/kBGSampleSpacing)
         if newSamplesCount <= 0 {
             NSLog("\(#function): No new samples, sample interval = \(sampleInterval)")
             return
         }
 
         NSLog("\(#function): Add \(newSamplesCount) samples starting at time \(nextSampleTime)")
-        // gen up the next samples
+        // gen up the next samples, leaving nextSampleTime the time of the last sample
         var newSamples = [HKQuantitySample]()
         for _ in 0..<newSamplesCount {
+            nextSampleTime = nextSampleTime.addingTimeInterval(kBGSampleSpacing)
             let nextSample = nextItemForHealthKit(nextSampleTime)
             newSamples.append(nextSample)
-            nextSampleTime = nextSampleTime.addingTimeInterval(kBGSampleSpacingSeconds)
-        }
+         }
             
         // push them on to HealthKit
         self.pushItemsToHK(newSamples) {

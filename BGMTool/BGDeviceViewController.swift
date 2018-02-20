@@ -80,7 +80,7 @@ class BGDeviceViewController: UIViewController, PeripheralControllerDelegate {
         // clear message cache in case start date has changed...
         messageToSend = nil
         if nextSendTimer == nil {
-            nextSendTimer = Timer.scheduledTimer(timeInterval: kBGSampleSpacingSeconds, target: self, selector: #selector(BGDeviceViewController.checkNextSend), userInfo: nil, repeats: true)
+            nextSendTimer = Timer.scheduledTimer(timeInterval: kBLESendFrequency, target: self, selector: #selector(BGDeviceViewController.checkNextSend), userInfo: nil, repeats: true)
         }
         
     }
@@ -127,7 +127,8 @@ class BGDeviceViewController: UIViewController, PeripheralControllerDelegate {
         samplesSentCount = 0
         
         if lastDeviceStart == nil {
-            lastDeviceStart = Date()
+            // "back-date" by the sample delay time. E.g., with a three hour sample delay, pretend we started 3 hours ago, so app side will start storing samples when we start sending messages...
+            lastDeviceStart = Date().addingTimeInterval(-kBGSampleDelaySeconds)
             startTimer()
             return
         }

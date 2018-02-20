@@ -17,9 +17,15 @@ let transferServiceUUID = CBUUID(string: TRANSFER_SERVICE_UUID)
 let transferCharacteristicUUID = CBUUID(string: TRANSFER_CHARACTERISTIC_UUID)
 
 // simulate a new BG sample every 5 minutes...
-let kBGSampleSpacingSeconds: TimeInterval = 5.0 * 60.0
+let kBGSampleSpacing: TimeInterval = 5.0 * 60.0
 // for testing, just use 20 seconds!
-//let kBGSampleSpacingSeconds: TimeInterval = 5.0 * 4.0
+//let kBGSampleSpacing: TimeInterval = 5.0 * 4.0
+
+// send a BLE message every minute so app side will store a sample within a minute of its due date
+let kBLESendFrequency: TimeInterval = 1.0 * 60.0
+
+// set this to 3 hours to simulate Dexcom app behavior (3 hour delay before samples appear).
+let kBGSampleDelaySeconds: TimeInterval = 60*60*3
 
 class ToolUserDefaults {
     static let sharedInstance = ToolUserDefaults()
