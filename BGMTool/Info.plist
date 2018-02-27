@@ -26,6 +26,13 @@
     <string>BGMSim may read glucose data to HealthKit to simulate a BGM application.</string>
     <key>NSHealthUpdateUsageDescription</key>
     <string>BGMSim writes glucose data to HealthKit to simulate a BGM application.</string>
+    <key>UIAppFonts</key>
+    <array>
+        <string>OpenSans-Bold.ttf</string>
+        <string>OpenSans-Regular.ttf</string>
+        <string>OpenSans-Semibold.ttf</string>
+        <string>OpenSans-Light.ttf</string>
+    </array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>bluetooth-central</string>

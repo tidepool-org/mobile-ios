@@ -23,6 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        // Setup for download support here...
+        // Initialize database by referencing username. This must be done before using the APIConnector!
+        let _ = TidepoolMobileDataController.sharedInstance.currentUserName
+        // hardwire to server defined above!
+        _ = APIConnector.connector().configure()
+        // But start out logged out!
+        logout()
         return true
     }
 
