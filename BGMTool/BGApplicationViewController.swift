@@ -206,9 +206,11 @@ class BGApplicationViewController: UIViewController, CentralControllerDelegate {
         }
     }
     
-    private func finishPush(itemsPushed: Int, completion: (Int) -> Void) {
+    private func finishPush(itemsPushed: Int, completion: @escaping (Int) -> Void) {
         pushToHKInProgress = false
-        completion(itemsPushed)
+        DispatchQueue.main.async {
+            completion(itemsPushed)
+        }
     }
 
     var lastBgValue: Int = 120

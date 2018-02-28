@@ -12,9 +12,6 @@ import CocoaLumberjack
 
 class BGDownloadViewController: UIViewController {
     
-    var nextSendTimer: Timer?
-    let bleController = BLEController.sharedInstance
-
     @IBOutlet weak var logInScene: UIView!
     
     @IBOutlet weak var loginViewContainer: UIControl!
@@ -33,7 +30,7 @@ class BGDownloadViewController: UIViewController {
     // only one of the following shows...
     @IBOutlet weak var downloadProgressLabel: UILabel!
     @IBOutlet weak var downloadVerifyButtonContainerView: UIView!
-    
+    @IBOutlet weak var daysToDownloadTextField: UITextField!
     
     @IBOutlet weak var startDateLabel: UILabel!
     @IBOutlet weak var endDateLabel: UILabel!
@@ -84,8 +81,8 @@ class BGDownloadViewController: UIViewController {
         emailTextField.layer.borderWidth = 1.0
         //emailTextField.layer.cornerRadius = 2.0
         
-        emailTextField.text = ""
-        passwordTextField.text = ""
+        //emailTextField.text = ""
+        //passwordTextField.text = ""
         
         serviceButton.setTitle(APIConnector.connector().currentService, for: .normal)
 
@@ -103,7 +100,6 @@ class BGDownloadViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        stopTimer()
         
         // Re-enable idle timer (screen locking) when the controller disappears
         UIApplication.shared.isIdleTimerDisabled = false
@@ -115,8 +111,8 @@ class BGDownloadViewController: UIViewController {
         }
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.logout()
-        // wipe password, but keep login email
-        self.passwordTextField.text = ""
+        // uncomment to wipe password, but keep login email
+        //self.passwordTextField.text = ""
 
         super.viewDidDisappear(animated)
     }
@@ -160,6 +156,7 @@ class BGDownloadViewController: UIViewController {
     @IBAction func tapOutsideFieldHandler(_ sender: AnyObject) {
         passwordTextField.resignFirstResponder()
         emailTextField.resignFirstResponder()
+        daysToDownloadTextField.resignFirstResponder()
     }
     
     @IBAction func passwordEnterHandler(_ sender: AnyObject) {
@@ -172,7 +169,7 @@ class BGDownloadViewController: UIViewController {
     @IBAction func emailEnterHandler(_ sender: AnyObject) {
         passwordTextField.becomeFirstResponder()
     }
-
+    
     @IBAction func login_button_tapped(_ sender: AnyObject) {
         updateButtonStates()
         tapOutsideFieldHandler(self)
@@ -205,7 +202,7 @@ class BGDownloadViewController: UIViewController {
             }
             self.errorFeedbackLabel.text = errorText
             self.errorFeedbackLabel.isHidden = false
-            self.passwordTextField.text = ""
+            //self.passwordTextField.text = ""
         }
     }
     
@@ -258,11 +255,37 @@ class BGDownloadViewController: UIViewController {
     private var itemsDownloaded: Int = 0
 
     // download 10 days at a time
-    private let kDownloadBlockTime: TimeInterval = 60*60*24*10
-    // download last 3 years of data
-    private let kTotalDownloadTimeInterval: TimeInterval = 60*60*24*365*3
+    //private let kDownloadBlockTime: TimeInterval = 60*60*24*10
+    private let kDownloadBlockTime: TimeInterval = 60*60*24*1
 
+    // download last 3 years of data
+    private var totalDownloadTimeInterval: TimeInterval = 60*60*24*365*3
+    private let kDefaultTotalDownloadTimeInterval: TimeInterval = 60*60*24*365*3
+    private let kDefaultDownloadDays: Int = 365*3
+    private let kMaxDownloadDays: Int = 365*5
+    private let kMinDownloadDays: Int = 1
+
+    @IBAction func daysToDownloadEnterHandler(_ sender: Any) {
+        daysToDownloadTextField.resignFirstResponder()
+        syncDaysToDownload()
+    }
+
+    private func syncDaysToDownload() {
+        if let daysToDownloadText = daysToDownloadTextField.text {
+            if let daysToDownload = Int(daysToDownloadText) {
+                if daysToDownload >= kMinDownloadDays && daysToDownload <= kMaxDownloadDays {
+                    totalDownloadTimeInterval = TimeInterval(daysToDownload) * 60*60*24
+                    return
+                }
+            }
+        }
+        daysToDownloadTextField.text = String(kDefaultTotalDownloadTimeInterval)
+        totalDownloadTimeInterval = kDefaultTotalDownloadTimeInterval
+    }
+    
     @IBAction func downloadButtonHandler(_ sender: Any) {
+        tapOutsideFieldHandler(self)
+        syncDaysToDownload()
         if !HealthKitBGInterface.sharedInstance.checkInterfaceEnabled() {
             return
         }
@@ -277,6 +300,8 @@ class BGDownloadViewController: UIViewController {
     }
     
     @IBAction func verifyButtonHandler(_ sender: Any) {
+        tapOutsideFieldHandler(self)
+        syncDaysToDownload()
         if !HealthKitBGInterface.sharedInstance.checkInterfaceEnabled() {
             return
         }
@@ -293,7 +318,7 @@ class BGDownloadViewController: UIViewController {
     private func downloadNextBlock() {
         if startDate == nil || startBlockDate == nil {
             self.startDate = Date()
-            self.finishDate = self.startDate!.addingTimeInterval(-kTotalDownloadTimeInterval)
+            self.finishDate = self.startDate!.addingTimeInterval(-totalDownloadTimeInterval)
             self.endBlockDate = self.startDate
         } else {
             // start where we left off
@@ -393,31 +418,6 @@ class BGDownloadViewController: UIViewController {
         self.adjustLogInView(0.0)
     }
 
-    //
-    // MARK: - UI handling
-    //
-
-    func startTimer() {
-        NSLog("\(#function)")
-        // clear message cache in case start date has changed...
-        messageToSend = nil
-        if nextSendTimer == nil {
-            nextSendTimer = Timer.scheduledTimer(timeInterval: kBLESendFrequency, target: self, selector: #selector(BGDeviceViewController.checkNextSend), userInfo: nil, repeats: true)
-        }
-        
-    }
-    
-    func stopTimer() {
-        NSLog("\(#function)")
-        nextSendTimer?.invalidate()
-        nextSendTimer = nil
-    }
-    
-    var messageToSend: Data? = nil
-    @objc func checkNextSend() {
-        NSLog("\(#function)")
-    }
-    
     
 }
 

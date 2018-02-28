@@ -496,209 +496,26 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="A5N-5c-ESU"/>
                                     <constraint firstItem="9sO-M9-IIM" firstAttribute="centerY" secondItem="CZY-RQ-eUY" secondAttribute="centerY" id="hBm-0B-Fsw"/>
                                     <constraint firstItem="9sO-M9-IIM" firstAttribute="centerX" secondItem="CZY-RQ-eUY" secondAttribute="centerX" id="qAQ-km-ejd"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ENG-1P-jWA" userLabel="DownloadDataViewContainer">
-                                <rect key="frame" x="0.0" y="100" width="320" height="359"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zc4-Ji-gbV" userLabel="instructionsContainerView">
-                                        <rect key="frame" x="26" y="0.0" width="268" height="150"/>
-                                        <subviews>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="AMG-aD-yqQ">
-                                                <rect key="frame" x="0.0" y="0.0" width="268" height="150"/>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                <string key="text">To Use:         
-	•  Optionally delete all BG data in Health    
-	•  Select download or verify
-	•  Goes from present to 3 years back       
-	•  Keep view open       
-	•  Switching tools stops download!</string>
-                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                            </textView>
-                                        </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="AMG-aD-yqQ" secondAttribute="trailing" id="Ib6-8d-OMM"/>
-                                            <constraint firstAttribute="height" constant="150" id="KE8-tZ-X6k"/>
-                                            <constraint firstItem="AMG-aD-yqQ" firstAttribute="top" secondItem="zc4-Ji-gbV" secondAttribute="top" id="P6D-TU-Re3"/>
-                                            <constraint firstAttribute="bottom" secondItem="AMG-aD-yqQ" secondAttribute="bottom" id="VCe-CK-SRe"/>
-                                            <constraint firstItem="AMG-aD-yqQ" firstAttribute="leading" secondItem="zc4-Ji-gbV" secondAttribute="leading" id="hN9-vB-m3J"/>
-                                        </constraints>
-                                    </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="njT-HP-FSQ" userLabel="feedbackContainView">
-                                        <rect key="frame" x="26" y="150" width="268" height="129"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5OS-qz-SG7" userLabel="separatorView">
-                                                <rect key="frame" x="14" y="0.0" width="240" height="1"/>
-                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="1" id="Dn4-Zj-bnw"/>
-                                                </constraints>
-                                            </view>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="0vr-cu-lZK">
-                                                <rect key="frame" x="0.0" y="27.5" width="268" height="74.5"/>
-                                                <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="oWt-gT-YcM">
-                                                        <rect key="frame" x="0.0" y="0.0" width="268" height="19.5"/>
-                                                        <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Items downloaded:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CSW-dg-X55">
-                                                                <rect key="frame" x="0.0" y="0.0" width="233.5" height="19.5"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F5W-0r-mzw">
-                                                                <rect key="frame" x="243.5" y="0.0" width="24.5" height="19.5"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                    </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="6gG-WZ-lIM">
-                                                        <rect key="frame" x="0.0" y="27.5" width="268" height="19.5"/>
-                                                        <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="start date:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="234-Rf-KPU">
-                                                                <rect key="frame" x="0.0" y="0.0" width="221.5" height="19.5"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zy0-rI-YJN">
-                                                                <rect key="frame" x="231.5" y="0.0" width="36.5" height="19.5"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                    </stackView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="cpk-ov-guG">
-                                                        <rect key="frame" x="0.0" y="55" width="268" height="19.5"/>
-                                                        <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="end date:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WTN-So-HIv" userLabel="end date:">
-                                                                <rect key="frame" x="0.0" y="0.0" width="218.5" height="19.5"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V3K-6N-ffa">
-                                                                <rect key="frame" x="228.5" y="0.0" width="39.5" height="19.5"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
-                                                                <nil key="textColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                        </subviews>
-                                                    </stackView>
-                                                </subviews>
-                                            </stackView>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="5OS-qz-SG7" secondAttribute="trailing" constant="14" id="EWF-eg-X89"/>
-                                            <constraint firstItem="0vr-cu-lZK" firstAttribute="leading" secondItem="njT-HP-FSQ" secondAttribute="leading" id="I5g-MP-dew"/>
-                                            <constraint firstAttribute="trailing" secondItem="0vr-cu-lZK" secondAttribute="trailing" id="K8H-04-WmQ"/>
-                                            <constraint firstItem="5OS-qz-SG7" firstAttribute="leading" secondItem="njT-HP-FSQ" secondAttribute="leading" constant="14" id="aUC-9p-S5e"/>
-                                            <constraint firstItem="5OS-qz-SG7" firstAttribute="top" secondItem="njT-HP-FSQ" secondAttribute="top" id="cng-Ib-m1x"/>
-                                            <constraint firstItem="0vr-cu-lZK" firstAttribute="centerY" secondItem="njT-HP-FSQ" secondAttribute="centerY" id="hmg-SI-4s4"/>
-                                        </constraints>
-                                    </view>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Download in Progress!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gju-Sj-fuU" userLabel="downloadProgressLabel">
-                                        <rect key="frame" x="26" y="279" width="268" height="80"/>
-                                        <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="18"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PZy-3V-iZ8" userLabel="downloadVerifyButtonContainerView">
-                                        <rect key="frame" x="26" y="279" width="268" height="80"/>
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="4ZQ-Ii-rwp" userLabel="button Stack View">
-                                                <rect key="frame" x="0.0" y="0.0" width="268" height="80"/>
-                                                <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V7S-zl-Ui6" userLabel="downloadButton" customClass="TPMenuButton" customModule="BGMTool" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="17" width="124" height="46"/>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="46" id="YiS-ee-oPr"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="18"/>
-                                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonStyling" value="loginButton"/>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonTitle" value="Download"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                        <connections>
-                                                            <action selector="downloadButtonHandler:" destination="Otx-M1-NKp" eventType="touchUpInside" id="xOR-Ch-2Xr"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JmJ-tW-0fs" userLabel="verifyButton" customClass="TPMenuButton" customModule="BGMTool" customModuleProvider="target">
-                                                        <rect key="frame" x="144" y="17" width="124" height="46"/>
-                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="46" id="Ugz-M9-Gr8"/>
-                                                        </constraints>
-                                                        <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="18"/>
-                                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonStyling" value="loginButton"/>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonTitle" value="Verify"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                        <connections>
-                                                            <action selector="verifyButtonHandler:" destination="Otx-M1-NKp" eventType="touchUpInside" id="uaM-xV-Pn6"/>
-                                                        </connections>
-                                                    </button>
-                                                </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="JmJ-tW-0fs" firstAttribute="width" secondItem="V7S-zl-Ui6" secondAttribute="width" id="RV2-wE-mYR"/>
-                                                </constraints>
-                                            </stackView>
-                                        </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="4ZQ-Ii-rwp" secondAttribute="trailing" id="5Ta-6J-Pve"/>
-                                            <constraint firstAttribute="bottom" secondItem="4ZQ-Ii-rwp" secondAttribute="bottom" id="8Wg-MC-KRM"/>
-                                            <constraint firstItem="4ZQ-Ii-rwp" firstAttribute="leading" secondItem="PZy-3V-iZ8" secondAttribute="leading" id="BD7-32-7DX"/>
-                                            <constraint firstAttribute="height" constant="80" id="S8A-fQ-dHZ"/>
-                                            <constraint firstItem="4ZQ-Ii-rwp" firstAttribute="top" secondItem="PZy-3V-iZ8" secondAttribute="top" id="xcU-pr-Dqj"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="gju-Sj-fuU" firstAttribute="leading" secondItem="PZy-3V-iZ8" secondAttribute="leading" id="Imn-vF-7Wi"/>
-                                    <constraint firstItem="njT-HP-FSQ" firstAttribute="top" secondItem="zc4-Ji-gbV" secondAttribute="bottom" id="LMF-xE-bUU"/>
-                                    <constraint firstItem="njT-HP-FSQ" firstAttribute="leading" secondItem="zc4-Ji-gbV" secondAttribute="leading" id="PKW-h6-jE1"/>
-                                    <constraint firstItem="njT-HP-FSQ" firstAttribute="trailing" secondItem="zc4-Ji-gbV" secondAttribute="trailing" id="Y4n-ns-Xqv"/>
-                                    <constraint firstItem="zc4-Ji-gbV" firstAttribute="top" secondItem="ENG-1P-jWA" secondAttribute="top" id="Zka-H5-b1h"/>
-                                    <constraint firstItem="PZy-3V-iZ8" firstAttribute="top" secondItem="njT-HP-FSQ" secondAttribute="bottom" id="bVU-sN-z4c"/>
-                                    <constraint firstAttribute="bottom" secondItem="PZy-3V-iZ8" secondAttribute="bottom" id="iG8-v9-BzX"/>
-                                    <constraint firstItem="zc4-Ji-gbV" firstAttribute="width" secondItem="ENG-1P-jWA" secondAttribute="width" multiplier="0.8375" id="iX1-fn-eFE"/>
-                                    <constraint firstItem="gju-Sj-fuU" firstAttribute="top" secondItem="PZy-3V-iZ8" secondAttribute="top" id="jLf-br-o2E"/>
-                                    <constraint firstItem="gju-Sj-fuU" firstAttribute="trailing" secondItem="PZy-3V-iZ8" secondAttribute="trailing" id="kRx-wb-aTw"/>
-                                    <constraint firstItem="zc4-Ji-gbV" firstAttribute="centerX" secondItem="ENG-1P-jWA" secondAttribute="centerX" id="ml7-Xh-iKa"/>
-                                    <constraint firstItem="gju-Sj-fuU" firstAttribute="bottom" secondItem="PZy-3V-iZ8" secondAttribute="bottom" id="nis-Rc-BWA"/>
-                                    <constraint firstItem="PZy-3V-iZ8" firstAttribute="leading" secondItem="zc4-Ji-gbV" secondAttribute="leading" id="t8r-ql-fMC"/>
-                                    <constraint firstItem="PZy-3V-iZ8" firstAttribute="trailing" secondItem="zc4-Ji-gbV" secondAttribute="trailing" id="zh2-Uq-aq2"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dpY-xw-s7X" userLabel="LoginViewContainer" customClass="UIControl">
                                 <rect key="frame" x="0.0" y="100" width="320" height="359"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a0Q-lT-9Ss" userLabel="instructionsContainerView">
-                                        <rect key="frame" x="26" y="0.0" width="268.5" height="160.5"/>
+                                        <rect key="frame" x="26" y="0.0" width="268.5" height="151.5"/>
                                         <subviews>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="wGn-m6-uOr">
-                                                <rect key="frame" x="0.0" y="0.0" width="268.5" height="160.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="268.5" height="151.5"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <string key="text">Download/VerifyTidepool CBG Data:         
-	•  Login to Tidepool account  
-	•  Account may differ from Tidepool app  
-	•  Logs out when view disappears </string>
+•  Login to Tidepool account  
+•  Account may differ from Tidepool app  
+•  Logs out when view disappears </string>
                                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
@@ -715,7 +532,7 @@
                                         <rect key="frame" x="0.0" y="159" width="320" height="200"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wrong email or password!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oZ1-KY-EOQ" userLabel="errorFeedbackLabel" customClass="TidepoolMobileUILabel" customModule="BGMTool" customModuleProvider="target">
-                                                <rect key="frame" x="38" y="1.5" width="244.5" height="14.5"/>
+                                                <rect key="frame" x="38" y="-7.5" width="244.5" height="23.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -841,7 +658,7 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="Eqh-mL-ydM" secondAttribute="bottom" id="BG8-49-tak"/>
+                                    <constraint firstAttribute="bottom" secondItem="Eqh-mL-ydM" secondAttribute="bottom" priority="750" id="BG8-49-tak"/>
                                     <constraint firstItem="a0Q-lT-9Ss" firstAttribute="leading" secondItem="idb-Va-3xp" secondAttribute="leading" id="FDr-Fy-N9D"/>
                                     <constraint firstItem="Eqh-mL-ydM" firstAttribute="centerX" secondItem="dpY-xw-s7X" secondAttribute="centerX" id="Lt8-9K-Lhd"/>
                                     <constraint firstItem="a0Q-lT-9Ss" firstAttribute="top" secondItem="dpY-xw-s7X" secondAttribute="top" id="R5t-Im-OXG"/>
@@ -852,6 +669,215 @@
                                 </constraints>
                                 <connections>
                                     <action selector="tapOutsideFieldHandler:" destination="Otx-M1-NKp" eventType="touchUpInside" id="ozt-sx-WcC"/>
+                                </connections>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ENG-1P-jWA" userLabel="DownloadDataViewContainer" customClass="UIControl">
+                                <rect key="frame" x="0.0" y="100" width="320" height="359"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zc4-Ji-gbV" userLabel="instructionsContainerView">
+                                        <rect key="frame" x="26" y="0.0" width="268" height="150"/>
+                                        <subviews>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AMG-aD-yqQ">
+                                                <rect key="frame" x="0.0" y="0.0" width="268" height="150"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                <string key="text">To Use:         
+•  (Optional) delete BG data in Health    
+•  Select download or verify
+•  Goes from present to 3 years back       
+•  Keep view open       
+•  Switching tools stops download!</string>
+                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="AMG-aD-yqQ" secondAttribute="trailing" id="Ib6-8d-OMM"/>
+                                            <constraint firstAttribute="height" constant="150" id="KE8-tZ-X6k"/>
+                                            <constraint firstItem="AMG-aD-yqQ" firstAttribute="top" secondItem="zc4-Ji-gbV" secondAttribute="top" id="P6D-TU-Re3"/>
+                                            <constraint firstAttribute="bottom" secondItem="AMG-aD-yqQ" secondAttribute="bottom" id="VCe-CK-SRe"/>
+                                            <constraint firstItem="AMG-aD-yqQ" firstAttribute="leading" secondItem="zc4-Ji-gbV" secondAttribute="leading" id="hN9-vB-m3J"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="njT-HP-FSQ" userLabel="feedbackContainView">
+                                        <rect key="frame" x="26" y="150" width="268" height="119"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5OS-qz-SG7" userLabel="separatorView">
+                                                <rect key="frame" x="14" y="0.0" width="240" height="1"/>
+                                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="Dn4-Zj-bnw"/>
+                                                </constraints>
+                                            </view>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="0vr-cu-lZK">
+                                                <rect key="frame" x="0.0" y="22.5" width="268" height="74.5"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="oWt-gT-YcM">
+                                                        <rect key="frame" x="0.0" y="0.0" width="268" height="19.5"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Items downloaded:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CSW-dg-X55">
+                                                                <rect key="frame" x="0.0" y="0.0" width="233.5" height="19.5"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F5W-0r-mzw">
+                                                                <rect key="frame" x="243.5" y="0.0" width="24.5" height="19.5"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="6gG-WZ-lIM">
+                                                        <rect key="frame" x="0.0" y="27.5" width="268" height="19.5"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="start date:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="234-Rf-KPU">
+                                                                <rect key="frame" x="0.0" y="0.0" width="221.5" height="19.5"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zy0-rI-YJN">
+                                                                <rect key="frame" x="231.5" y="0.0" width="36.5" height="19.5"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="cpk-ov-guG">
+                                                        <rect key="frame" x="0.0" y="55" width="268" height="19.5"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="end date:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WTN-So-HIv" userLabel="end date:">
+                                                                <rect key="frame" x="0.0" y="0.0" width="218.5" height="19.5"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V3K-6N-ffa">
+                                                                <rect key="frame" x="228.5" y="0.0" width="39.5" height="19.5"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
+                                                                <nil key="textColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                        </subviews>
+                                                    </stackView>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="5OS-qz-SG7" secondAttribute="trailing" constant="14" id="EWF-eg-X89"/>
+                                            <constraint firstItem="0vr-cu-lZK" firstAttribute="leading" secondItem="njT-HP-FSQ" secondAttribute="leading" id="I5g-MP-dew"/>
+                                            <constraint firstAttribute="trailing" secondItem="0vr-cu-lZK" secondAttribute="trailing" id="K8H-04-WmQ"/>
+                                            <constraint firstItem="5OS-qz-SG7" firstAttribute="leading" secondItem="njT-HP-FSQ" secondAttribute="leading" constant="14" id="aUC-9p-S5e"/>
+                                            <constraint firstItem="5OS-qz-SG7" firstAttribute="top" secondItem="njT-HP-FSQ" secondAttribute="top" id="cng-Ib-m1x"/>
+                                            <constraint firstItem="0vr-cu-lZK" firstAttribute="centerY" secondItem="njT-HP-FSQ" secondAttribute="centerY" id="hmg-SI-4s4"/>
+                                        </constraints>
+                                    </view>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Download in Progress!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gju-Sj-fuU" userLabel="downloadProgressLabel">
+                                        <rect key="frame" x="26" y="269" width="268" height="90"/>
+                                        <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="18"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PZy-3V-iZ8" userLabel="downloadVerifyButtonContainerView">
+                                        <rect key="frame" x="26" y="269" width="268" height="90"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="RyA-4s-Wlk" userLabel="days Stack View">
+                                                <rect key="frame" x="0.0" y="0.0" width="268" height="26"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Days to download/verify:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Mh-fh-xRF" userLabel="daysToDownloadLabel">
+                                                        <rect key="frame" x="0.0" y="0.0" width="195.5" height="26"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1000" borderStyle="bezel" textAlignment="right" minimumFontSize="15" translatesAutoresizingMaskIntoConstraints="NO" id="OjV-AW-O6W" userLabel="daysToDownloadTextField">
+                                                        <rect key="frame" x="199.5" y="0.0" width="68.5" height="26"/>
+                                                        <nil key="textColor"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
+                                                        <textInputTraits key="textInputTraits" keyboardType="numberPad" enablesReturnKeyAutomatically="YES"/>
+                                                        <connections>
+                                                            <action selector="daysToDownloadEnterHandler:" destination="Otx-M1-NKp" eventType="editingDidEndOnExit" id="b6L-QT-1Ul"/>
+                                                        </connections>
+                                                    </textField>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="4ZQ-Ii-rwp" userLabel="button Stack View">
+                                                <rect key="frame" x="0.0" y="40" width="268" height="50"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="V7S-zl-Ui6" userLabel="downloadButton" customClass="TPMenuButton" customModule="BGMTool" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="2" width="124" height="46"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="46" id="YiS-ee-oPr"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="18"/>
+                                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonStyling" value="loginButton"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonTitle" value="Download"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="downloadButtonHandler:" destination="Otx-M1-NKp" eventType="touchUpInside" id="xOR-Ch-2Xr"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JmJ-tW-0fs" userLabel="verifyButton" customClass="TPMenuButton" customModule="BGMTool" customModuleProvider="target">
+                                                        <rect key="frame" x="144" y="2" width="124" height="46"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="46" id="Ugz-M9-Gr8"/>
+                                                        </constraints>
+                                                        <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="18"/>
+                                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonStyling" value="loginButton"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="buttonTitle" value="Verify"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                        <connections>
+                                                            <action selector="verifyButtonHandler:" destination="Otx-M1-NKp" eventType="touchUpInside" id="uaM-xV-Pn6"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="AAZ-GP-hdV"/>
+                                                    <constraint firstItem="JmJ-tW-0fs" firstAttribute="width" secondItem="V7S-zl-Ui6" secondAttribute="width" id="RV2-wE-mYR"/>
+                                                </constraints>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="4ZQ-Ii-rwp" secondAttribute="trailing" id="5Ta-6J-Pve"/>
+                                            <constraint firstItem="RyA-4s-Wlk" firstAttribute="leading" secondItem="PZy-3V-iZ8" secondAttribute="leading" id="5a6-nx-m1I"/>
+                                            <constraint firstAttribute="bottom" secondItem="4ZQ-Ii-rwp" secondAttribute="bottom" id="8Wg-MC-KRM"/>
+                                            <constraint firstItem="4ZQ-Ii-rwp" firstAttribute="leading" secondItem="PZy-3V-iZ8" secondAttribute="leading" id="BD7-32-7DX"/>
+                                            <constraint firstAttribute="height" constant="90" id="S8A-fQ-dHZ"/>
+                                            <constraint firstItem="RyA-4s-Wlk" firstAttribute="top" secondItem="PZy-3V-iZ8" secondAttribute="top" id="fKg-st-cVi"/>
+                                            <constraint firstAttribute="trailing" secondItem="RyA-4s-Wlk" secondAttribute="trailing" id="vTk-li-PZc"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="gju-Sj-fuU" firstAttribute="leading" secondItem="PZy-3V-iZ8" secondAttribute="leading" id="Imn-vF-7Wi"/>
+                                    <constraint firstItem="njT-HP-FSQ" firstAttribute="top" secondItem="zc4-Ji-gbV" secondAttribute="bottom" id="LMF-xE-bUU"/>
+                                    <constraint firstItem="njT-HP-FSQ" firstAttribute="leading" secondItem="zc4-Ji-gbV" secondAttribute="leading" id="PKW-h6-jE1"/>
+                                    <constraint firstItem="njT-HP-FSQ" firstAttribute="trailing" secondItem="zc4-Ji-gbV" secondAttribute="trailing" id="Y4n-ns-Xqv"/>
+                                    <constraint firstItem="zc4-Ji-gbV" firstAttribute="top" secondItem="ENG-1P-jWA" secondAttribute="top" id="Zka-H5-b1h"/>
+                                    <constraint firstItem="PZy-3V-iZ8" firstAttribute="top" secondItem="njT-HP-FSQ" secondAttribute="bottom" priority="750" id="bVU-sN-z4c"/>
+                                    <constraint firstAttribute="bottom" secondItem="PZy-3V-iZ8" secondAttribute="bottom" priority="750" id="iG8-v9-BzX"/>
+                                    <constraint firstItem="zc4-Ji-gbV" firstAttribute="width" secondItem="ENG-1P-jWA" secondAttribute="width" multiplier="0.8375" id="iX1-fn-eFE"/>
+                                    <constraint firstItem="gju-Sj-fuU" firstAttribute="top" secondItem="PZy-3V-iZ8" secondAttribute="top" id="jLf-br-o2E"/>
+                                    <constraint firstItem="gju-Sj-fuU" firstAttribute="trailing" secondItem="PZy-3V-iZ8" secondAttribute="trailing" id="kRx-wb-aTw"/>
+                                    <constraint firstItem="zc4-Ji-gbV" firstAttribute="centerX" secondItem="ENG-1P-jWA" secondAttribute="centerX" id="ml7-Xh-iKa"/>
+                                    <constraint firstItem="gju-Sj-fuU" firstAttribute="bottom" secondItem="PZy-3V-iZ8" secondAttribute="bottom" id="nis-Rc-BWA"/>
+                                    <constraint firstItem="PZy-3V-iZ8" firstAttribute="leading" secondItem="zc4-Ji-gbV" secondAttribute="leading" id="t8r-ql-fMC"/>
+                                    <constraint firstItem="PZy-3V-iZ8" firstAttribute="trailing" secondItem="zc4-Ji-gbV" secondAttribute="trailing" id="zh2-Uq-aq2"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="tapOutsideFieldHandler:" destination="Otx-M1-NKp" eventType="touchUpInside" id="sF2-i0-Bh7"/>
                                 </connections>
                             </view>
                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PMA-p5-BYL" userLabel="ActivityContainer">
@@ -884,6 +910,7 @@
                                 </constraints>
                             </view>
                         </subviews>
+                        <color key="backgroundColor" red="0.80784313730000001" green="0.80784313730000001" blue="0.80784313730000001" alpha="1" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="CZY-RQ-eUY" firstAttribute="leading" secondItem="Fav-AY-Vac" secondAttribute="leading" id="1dO-ZU-Lgu"/>
@@ -902,6 +929,7 @@
                             <constraint firstItem="PMA-p5-BYL" firstAttribute="top" secondItem="dpY-xw-s7X" secondAttribute="bottom" id="kuY-P3-tLn"/>
                             <constraint firstAttribute="trailing" secondItem="dpY-xw-s7X" secondAttribute="trailing" id="n2D-Sb-3Pe"/>
                             <constraint firstItem="dpY-xw-s7X" firstAttribute="leading" secondItem="dZV-re-SlM" secondAttribute="leading" id="tKE-3y-z40"/>
+                            <constraint firstItem="dGM-K5-Mhz" firstAttribute="top" relation="greaterThanOrEqual" secondItem="PZy-3V-iZ8" secondAttribute="bottom" constant="60" id="tpI-3c-CAa"/>
                             <constraint firstItem="Fav-AY-Vac" firstAttribute="bottom" secondItem="PMA-p5-BYL" secondAttribute="bottom" id="uP9-aM-VV2"/>
                             <constraint firstItem="dGM-K5-Mhz" firstAttribute="leading" secondItem="dZV-re-SlM" secondAttribute="leading" id="y4F-ya-OEm"/>
                         </constraints>
@@ -912,6 +940,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="BG Downloader" image="second" id="SDi-YN-Vr6"/>
                     <connections>
+                        <outlet property="daysToDownloadTextField" destination="OjV-AW-O6W" id="JEx-Bo-aNM"/>
                         <outlet property="downloadButton" destination="V7S-zl-Ui6" id="uZp-B5-Tad"/>
                         <outlet property="downloadDataViewContainer" destination="ENG-1P-jWA" id="2Kz-bG-ejb"/>
                         <outlet property="downloadProgressLabel" destination="gju-Sj-fuU" id="IAR-Ml-79O"/>

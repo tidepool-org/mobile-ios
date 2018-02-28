@@ -36,7 +36,7 @@ class HealthKitBGInterface: NSObject {
     static let sharedInstance = HealthKitBGInterface()
     
     fileprivate override init() {
-        NSLog("")
+        //NSLog("")
     }
     
     func checkInterfaceEnabled() -> Bool {
@@ -61,15 +61,6 @@ class HealthKitBGInterface: NSObject {
         }
     }
     
-    enum downloadState {
-        case initial
-        case downloading
-        case pushing
-        case complete
-    }
-    
-    var downloadDataState: downloadState = .initial
-    
     // MARK: - Config
     
     fileprivate(set) var enabled = false
@@ -82,14 +73,15 @@ class HealthKitBGInterface: NSObject {
     
     /// Called to start the download
     func syncTidepoolData(from: Date, to: Date, verifyOnly: Bool = false, _ completion: @escaping (Int) -> Void) {
-        downloadDataState = .initial
         if self.enabled {
+            NSLog("")
+            NSLog("Download/verify date range from \(from) to \(to)")
             downloadNewItemsForHealthKit(fromDate: from, toDate: to, verifyOnly: verifyOnly) { (itemsDownloaded) -> Void in
-                var msg = "TidepoolMobile added \(itemsDownloaded) blood glucose readings from Tidepool to the Health app."
-                if itemsDownloaded >= 1 {
-                    msg = "TidepoolMobile added \(itemsDownloaded) blood glucose reading(s) from Tidepool to the Health app."
+                if verifyOnly {
+                    NSLog("BGTool found that \(itemsDownloaded) HK blood glucose reading(s) are missing from Tidepool.")
+                } else {
+                    NSLog("BGTool added \(itemsDownloaded) blood glucose reading(s) from Tidepool to the Health app.")
                 }
-                NSLog(msg)
                 DispatchQueue.main.async {
                     completion(itemsDownloaded)
                 }
@@ -119,7 +111,6 @@ class HealthKitBGInterface: NSObject {
     ///
     /// Completion is called with: -1 on errors, 0 if no data was pushed, or positive count of new items sent to HealthKit.
     fileprivate func downloadNewItemsForHealthKit(fromDate: Date, toDate: Date, verifyOnly: Bool = false, _ completion: @escaping (Int) -> Void) {
-        NSLog("")
         
         if !self.enabled {
             NSLog("ignoring call, HealthKit is not enabled!")
@@ -143,14 +134,13 @@ class HealthKitBGInterface: NSObject {
         syncInProgress = true
         self.currentSyncGeneration += 1
         let syncGen = self.currentSyncGeneration
-        self.downloadDataState = .downloading
         
         // TODO: shortcut by zeroing datebase before starting any syncing, so compares aren't necessary; ideally skip the database entirely, but right now leverage the code to constitute bg sample objects from json.
         // first load up data from Tidepool service for this timeframe
         APIConnector.connector().getReadOnlyUserData(fromDate, endDate: toDate, objectTypes: "cbg") { (result) -> (Void) in
             if result.isSuccess {
                 let json = result.value!
-                NSLog("getReadOnlyUserData success!")
+                //NSLog("getReadOnlyUserData success!")
                 if syncGen == self.currentSyncGeneration {
                     //NSLog("Events from \(fromDate) to \(toDate): \(json)")
                     let itemsToPush = self.processJsonToItemsForHealthKit(json)
@@ -181,9 +171,9 @@ class HealthKitBGInterface: NSObject {
     ///
     /// Kick off an async HealthKit query to get current samples already in HealthKit to compare so we don't push duplicates.
     fileprivate func fetchCurrentHKData(_ syncGen: Int, fromTime: Date, thruTime: Date, itemsToPush: [HKSample], verifyOnly: Bool = false, completion: @escaping (Int) -> Void) {
-        NSLog("")
+        //NSLog("")
         
-        if !itemsToPush.isEmpty {
+        if !itemsToPush.isEmpty || verifyOnly {
             // Before pushing to HK, read what HK already has to avoid pushing duplicates
             readBGSamplesFromHealthKit(fromTime, thruTime: thruTime) { (samples, error) -> Void in
                 DispatchQueue.main.async(execute: { () -> Void in
@@ -201,26 +191,60 @@ class HealthKitBGInterface: NSObject {
                     var itemsAlreadyInHK = [HKSample]()
                     if let samples = samples {
                         itemsAlreadyInHK = samples
-                        NSLog("successfully read \(itemsAlreadyInHK.count) HealthKit items to compare")
+                        //NSLog("successfully read \(itemsAlreadyInHK.count) HealthKit items to compare")
                     }
-                    self.pushNewItemsToHealthKit(syncGen, itemsToPush: itemsToPush, itemsAlreadyInHK: itemsAlreadyInHK, verifyOnly: verifyOnly, completion: completion)
+                    if verifyOnly {
+                        let notInTidepoolCount = self.verifyHKItemsAreInTidepool(itemsInTidepool: itemsToPush, itemsAlreadyInHK: itemsAlreadyInHK)
+                        completion(notInTidepoolCount)
+                        return
+                    } else {
+                        self.pushNewItemsToHealthKit(syncGen, itemsToPush: itemsToPush, itemsAlreadyInHK: itemsAlreadyInHK, completion: completion)
+                    }
                 })
             }
         } else {
             // No items found in Tidepool...
-            self.finishSync(syncGen, itemsSynced: 0, completion: completion)
+            completion(0)
         }
         // The saga completes in the next function...
     }
     
+    /// Returns the count of any items in itemsAlreadyInHK that don't match an item with the same date and value in itemsInTidepool.
+    private func verifyHKItemsAreInTidepool(itemsInTidepool: [HKSample], itemsAlreadyInHK: [HKSample]) -> Int {
+        // Remove samples in itemsToPush that match items in itemsAlreadyInHK
+        NSLog("check \(itemsAlreadyInHK.count) healthkit items for corresponding Tidepool items...")
+        var hkItemsMissingInTidepool: [HKSample] = []
+        
+        // set of Tidepool item dates, use these as id's for now, assume values will match...
+        var tidepoolItemsByDate = Set<Date>()
+        
+        // use date for unique id...
+        for item in itemsInTidepool {
+            tidepoolItemsByDate.insert(item.startDate)
+        }
+        
+        // first add id's of these HealthKit items to our exclusion list
+        for item in itemsAlreadyInHK {
+            var value: Double = -1
+            if let item = item as? HKQuantitySample {
+                let unit = HKUnit(from: "mg/dL")
+                value = item.quantity.doubleValue(for: unit)
+            }
+            //NSLog("verifying HK item at date: \(item.startDate) with value: \(value)")
+            if !tidepoolItemsByDate.contains(item.startDate) {
+                hkItemsMissingInTidepool.append(item)
+                NSLog("MISSING: HK item with no corresponding Tidepool item at: time \(item.startDate) and value: \(value)")
+            }
+        }
+        
+        return hkItemsMissingInTidepool.count
+    }
+
     /// Filter out any duplicates in HealthKit, then push any remaining new samples to HealthKit, completing the process with a call to the original completion routine that kicked it off.
-    private func pushNewItemsToHealthKit(_ syncGen: Int, itemsToPush: [HKSample], itemsAlreadyInHK: [HKSample], verifyOnly: Bool = false, completion: @escaping (Int) -> Void) {
+    private func pushNewItemsToHealthKit(_ syncGen: Int, itemsToPush: [HKSample], itemsAlreadyInHK: [HKSample], completion: @escaping (Int) -> Void) {
         // Remove samples in itemsToPush that match items in itemsAlreadyInHK
         NSLog("check existing healthkit items for matches...")
         var tidepoolItemsInHKCount = 0
-        self.downloadDataState = .pushing
-        // for verify only mode...
-        var hkItemsMissingInTidepool: [HKSample] = []
         
         // set of Tidepool id's successfully pushed
         var tidepoolIdsPushedToHealthKit = Set<String>()
@@ -240,27 +264,11 @@ class HealthKitBGInterface: NSObject {
                         tidepoolItemsInHKCount += 1
                         //NSLog("existing HK item at time \(item.startDate), value: \(value)")
                     } else {
-                        if verifyOnly {
-                            hkItemsMissingInTidepool.append(item)
-                            NSLog("MISSING: HK item with no tidepoolId metadata: time \(item.startDate) and value: \(value)")
-                        } else {
-                            NSLog("ignoring HK item with no tidepoolId metadata: time \(item.startDate) and value: \(value)")
-                        }
+                        NSLog("ignoring HK item with no tidepoolId metadata: time \(item.startDate) and value: \(value)")
                     }
                 } else {
-                    if verifyOnly {
-                        hkItemsMissingInTidepool.append(item)
-                        NSLog("MISSING: HK item with no metaDataDict: time \(item.startDate) and value: \(value)")
-                    } else {
-                        NSLog("ignoring HK item with no metaDataDict: time \(item.startDate) and value: \(value)")
-                    }
+                    NSLog("ignoring HK item with no metaDataDict: time \(item.startDate) and value: \(value)")
                 }
-            }
-            
-            if verifyOnly {
-                // if we are just verifying, hkItemsMissingInTidepool has items in Tidepool that aren't in HK, and we just return the count!
-                completion(hkItemsMissingInTidepool.count)
-                return
             }
             
             // next filter out any items in our push array that match items in the exclusion list
@@ -278,7 +286,6 @@ class HealthKitBGInterface: NSObject {
                 }
             }
         }
-        
 
         // Finally, if there are any new items, push them to HealthKit now...
         if !newItemsToPush.isEmpty {
@@ -306,8 +313,6 @@ class HealthKitBGInterface: NSObject {
     /// Do an async read of current blood glucose samples from HealthKit for a date range, passing along results to the completion method.
     fileprivate func readBGSamplesFromHealthKit(_ fromTime: Date, thruTime: Date, completion: @escaping ([HKSample]?, NSError?) -> Void)
     {
-        NSLog("")
-        
         let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
         let timeRangePredicate = HKQuery.predicateForSamples(withStart: fromTime, end: thruTime, options: HKQueryOptions())
         let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: true)
