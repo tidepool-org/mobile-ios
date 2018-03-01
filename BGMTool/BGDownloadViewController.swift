@@ -197,7 +197,7 @@ class BGDownloadViewController: UIViewController {
             var errorText = "Check your Internet connection!"
             if let statusCode = statusCode {
                 if statusCode == 401 {
-                    errorText = NSLocalizedString("loginErrUserOrPassword", comment: "Wrong email or password!")
+                    errorText = "Wrong email or password!"
                 }
             }
             self.errorFeedbackLabel.text = errorText
@@ -211,7 +211,6 @@ class BGDownloadViewController: UIViewController {
     }
     
     private func configureAsLoggedIn(_ loggedIn: Bool) {
-        NSLog("TODO: support passing false!")
         downloadDataViewContainer.isHidden = !loggedIn
         loginViewContainer.isHidden = loggedIn
         updateDownloadUI()

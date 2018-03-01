@@ -196,8 +196,6 @@ class BGApplicationViewController: UIViewController, CentralControllerDelegate {
                 } else {
                     NSLog("\(itemsToPush) Blood glucose samples pushed to HealthKit successfully!")
                     self.finishPush(itemsPushed: itemsToPush, completion: completion)
-                    self.sampleCount += itemsToPush
-                    self.countOfSamples.text = String(self.sampleCount)
                 }
             })
         } else {
@@ -209,6 +207,10 @@ class BGApplicationViewController: UIViewController, CentralControllerDelegate {
     private func finishPush(itemsPushed: Int, completion: @escaping (Int) -> Void) {
         pushToHKInProgress = false
         DispatchQueue.main.async {
+            if itemsPushed > 0 {
+                self.sampleCount += itemsPushed
+                self.countOfSamples.text = String(self.sampleCount)
+            }
             completion(itemsPushed)
         }
     }

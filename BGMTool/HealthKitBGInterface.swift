@@ -212,7 +212,7 @@ class HealthKitBGInterface: NSObject {
     /// Returns the count of any items in itemsAlreadyInHK that don't match an item with the same date and value in itemsInTidepool.
     private func verifyHKItemsAreInTidepool(itemsInTidepool: [HKSample], itemsAlreadyInHK: [HKSample]) -> Int {
         // Remove samples in itemsToPush that match items in itemsAlreadyInHK
-        NSLog("check \(itemsAlreadyInHK.count) healthkit items for corresponding Tidepool items...")
+        NSLog("verify \(itemsAlreadyInHK.count) healthkit items against \(itemsInTidepool.count) Tidepool items...")
         var hkItemsMissingInTidepool: [HKSample] = []
         
         // set of Tidepool item dates, use these as id's for now, assume values will match...
