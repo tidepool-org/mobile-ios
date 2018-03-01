@@ -182,10 +182,12 @@ class SyncHealthDataViewController: UIViewController {
         let stats = HealthKitBloodGlucoseUploadManager.sharedInstance.stats[mode]!
         var healthKitUploadStatusDaysUploadedText = ""
         var percentUploaded: CGFloat = 0.0
-        if stats.totalDaysHistorical > 0 {
-            percentUploaded = CGFloat((CGFloat)(stats.currentDayHistorical) / (CGFloat)(stats.totalDaysHistorical))
+        if stats.totalDaysHistorical > 0 && stats.hasSuccessfullyUploaded {
+            // adjust for going backwards (e.g., start with current day is 951 out of 952 total)
+            let adjustedCurrentDay = stats.totalDaysHistorical - stats.currentDayHistorical
+            percentUploaded = CGFloat((CGFloat)(adjustedCurrentDay) / (CGFloat)(stats.totalDaysHistorical))
             let healthKitUploadStatusDaysUploaded: String = "%d of %d days"
-            healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
+            healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, adjustedCurrentDay, stats.totalDaysHistorical)
         }
 
         // Update progress

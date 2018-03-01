@@ -49,7 +49,7 @@ public extension DateFormatter {
         
         // Count backwards until the first space (will bold)
         var count = 0
-        for char in Array(dateString.characters.reversed()) {
+        for char in Array(dateString.reversed()) {
             if (char == " ") {
                 break
             } else {
