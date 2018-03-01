@@ -315,25 +315,21 @@ class BGDownloadViewController: UIViewController {
     }
     
     private func downloadNextBlock() {
+        // download oldest to newest so HK will pass them back this way!
         if startDate == nil || startBlockDate == nil {
-            self.startDate = Date()
-            self.finishDate = self.startDate!.addingTimeInterval(-totalDownloadTimeInterval)
-            self.endBlockDate = self.startDate
+            let now = Date()
+            self.startDate = now.addingTimeInterval(-totalDownloadTimeInterval)
+            self.finishDate = now
+            self.startBlockDate = self.startDate
         } else {
             // start where we left off
-            self.endBlockDate = self.startBlockDate
+            self.startBlockDate = self.endBlockDate
         }
         
-        self.startBlockDate = endBlockDate!.addingTimeInterval(-kDownloadBlockTime)
-        let completeCompare = endBlockDate!.compare(finishDate!)
-        if completeCompare != .orderedDescending {
+        self.endBlockDate = startBlockDate!.addingTimeInterval(kDownloadBlockTime)
+        let completeCompare = startBlockDate!.compare(finishDate!)
+        if completeCompare != .orderedAscending {
             downloadCompleted = true
-        } else {
-            let lastBlockCompare = startBlockDate!.compare(finishDate!)
-            // for last block, don't start before the end date...
-            if lastBlockCompare == .orderedAscending {
-                startBlockDate = finishDate!
-            }
         }
     
         updateDownloadUI()
