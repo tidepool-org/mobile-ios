@@ -134,6 +134,13 @@ let trashAlertCancel: String = "Cancel"
 let trashAlertOkay: String = "OK"
 
 /*
+ SyncHealthDataViewController alert text on attempt to stop upload
+ */
+let stopSyncingTitle: String = "Stop Syncing?"
+let stopSyncingCancel: String = "Cancel"
+let stopSyncingOkay: String = "OK"
+
+/*
  Animation times
  fade time should be shorter than animation time
  */

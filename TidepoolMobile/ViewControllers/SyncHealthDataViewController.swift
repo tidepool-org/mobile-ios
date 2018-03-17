@@ -106,9 +106,14 @@ class SyncHealthDataViewController: UIViewController {
     }
     
     @IBAction func stopButtonTapped(_ sender: Any) {
-        self.stopUploadingAndReset()
-        // exit?
-        backArrowButtonTapped(self)
+        let alert = UIAlertController(title: stopSyncingTitle, message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: stopSyncingCancel, style: .cancel, handler: { Void in
+        }))
+        alert.addAction(UIAlertAction(title: stopSyncingOkay, style: .default, handler: { Void in
+            self.stopUploadingAndReset()
+            self.backArrowButtonTapped(self)
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     func handleStatsUpdatedNotification(_ notification: Notification) {
