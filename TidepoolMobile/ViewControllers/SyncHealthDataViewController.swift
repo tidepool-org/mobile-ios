@@ -18,8 +18,6 @@ import CocoaLumberjack
 
 class SyncHealthDataViewController: UIViewController {
     
-    var initialSync = false
-    
     @IBOutlet weak var statusContainerView: UIStackView!
     @IBOutlet weak var healthStatusLine1: TidepoolMobileUILabel!
     @IBOutlet weak var healthStatusLine2: TidepoolMobileUILabel!
@@ -35,16 +33,13 @@ class SyncHealthDataViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.healthStatusLine1.text = ""
-        self.healthStatusLine2.text = ""
 
         NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleStatsUpdatedNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.Updated), object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleTurnOffUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.TurnOffUploader), object: nil)
 
         // Determine if this is the initial sync
-        self.initialSync = !HealthKitBloodGlucoseUploadManager.sharedInstance.hasPresentedSyncUI
+        self.isInitialSync = !HealthKitBloodGlucoseUploadManager.sharedInstance.hasPresentedSyncUI
 
         // Remember that we've presented the sync UI before
         HealthKitBloodGlucoseUploadManager.sharedInstance.hasPresentedSyncUI = true
@@ -56,14 +51,14 @@ class SyncHealthDataViewController: UIViewController {
         let isSyncInProgress = isHistoricalAllSyncInProgress || isHistoricalTwoWeeksSyncInProgress
 
         // Configure UI for initial sync and initial setup
-        configureLayout(initialSync: self.initialSync, initialSetup: !isSyncInProgress)
+        configureLayout(isInitialSync: self.isInitialSync, isInitialSetup: !isSyncInProgress)
 
         if isSyncInProgress {
             // Update stats
             let currentSyncMode = isHistoricalAllSyncInProgress ? HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll : HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks
             updateForStatsUpdate(mode: currentSyncMode)
 
-            // Disable idle timer
+            // Disable idle timer when sync is in progress
             UIApplication.shared.isIdleTimerDisabled = true
         }
     }
@@ -76,16 +71,16 @@ class SyncHealthDataViewController: UIViewController {
     }
 
     /// Configure layout for initial or manual sync, instructions or progress views...
-    private func configureLayout(initialSync: Bool, initialSetup: Bool) {
-        self.navigationItem.title = initialSync ? "Initial Sync" : "Manual Sync"
+    private func configureLayout(isInitialSync: Bool, isInitialSetup: Bool) {
+        self.navigationItem.title = isInitialSync ? "Initial Sync" : "Manual Sync"
         buttonContainerView.isHidden = false
-        stopButton.isHidden = initialSetup
-        syncLast2WeeksButton.isHidden = !initialSetup
-        syncAllButton.isHidden = !initialSetup
-        instructionsContainerView.isHidden = !initialSetup
-        statusContainerView.isHidden = initialSetup
-        if initialSetup {
-            configureInstructions(initialSync: initialSync)
+        stopButton.isHidden = isInitialSetup
+        syncLast2WeeksButton.isHidden = !isInitialSetup
+        syncAllButton.isHidden = !isInitialSetup
+        instructionsContainerView.isHidden = !isInitialSetup
+        statusContainerView.isHidden = isInitialSetup
+        if isInitialSetup {
+            configureInstructions(isInitialSync: isInitialSync)
         } else {
             updateProgress(0.0)
         }
@@ -97,12 +92,12 @@ class SyncHealthDataViewController: UIViewController {
     
     @IBAction func syncAllButtonTapped(_ sender: Any) {
         startUploading(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll)
-        configureLayout(initialSync: self.initialSync, initialSetup: false)
+        configureLayout(isInitialSync: self.isInitialSync, isInitialSetup: false)
     }
     
     @IBAction func syncLastTwoWeeksButtonTapped(_ sender: Any) {
         self.startUploading(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks)
-        configureLayout(initialSync: self.initialSync, initialSetup: false)
+        configureLayout(isInitialSync: self.isInitialSync, isInitialSetup: false)
     }
     
     @IBAction func stopButtonTapped(_ sender: Any) {
@@ -129,23 +124,19 @@ class SyncHealthDataViewController: UIViewController {
         
         if mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll
             || mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks {
-            // Re-enable idle timer (screen locking) when the upload stopped
-            UIApplication.shared.isIdleTimerDisabled = false
-
             // Update status
             let reason = notification.userInfo!["reason"] as! HealthKitBloodGlucoseUploadReader.StoppedReason
             switch reason {
             case .turnOffInterface:
-                self.healthStatusLine1.text = ""
-                self.healthStatusLine2.text = "Stopped by user"
                 break
             case .noResultsFromQuery:
-                self.healthStatusLine2.text = "Finished"
                 updateProgress(1.0)
                 stopButton.isHidden = true
                 break
             case .error(let error):
                 self.healthStatusLine2.text = error.localizedDescription
+                self.syncCompletedStatusText = error.localizedDescription
+                stopButton.isHidden = true
                 break
             default:
                 break
@@ -168,9 +159,6 @@ class SyncHealthDataViewController: UIViewController {
         
         HealthKitBloodGlucoseUploadManager.sharedInstance.resetPersistentState(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll)
         HealthKitBloodGlucoseUploadManager.sharedInstance.resetPersistentState(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks)
-
-        self.healthStatusLine1.text = ""
-        self.healthStatusLine2.text = "Stopped by user"
     }
 
     @IBOutlet weak var progressView: UIView!
@@ -178,25 +166,47 @@ class SyncHealthDataViewController: UIViewController {
     @IBOutlet weak var progressLabel: UILabel!
     
     func updateForStatsUpdate(mode: HealthKitBloodGlucoseUploadReader.Mode) {
-        // Disable idle timer (screen locking) when there is upload progress
-        UIApplication.shared.isIdleTimerDisabled = true
+        let uploadManager = HealthKitBloodGlucoseUploadManager.sharedInstance
+        let isHistoricalAllSyncInProgress = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll]!
+        let isHistoricalTwoWeeksSyncInProgress = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks]!
+        let isSyncInProgress = isHistoricalAllSyncInProgress || isHistoricalTwoWeeksSyncInProgress
+        if isSyncInProgress {
+            // Disable idle timer when sync is in progress
+            UIApplication.shared.isIdleTimerDisabled = true
+            
+            // Determine percent progress and upload healthStatusLine2 text
+            let stats = HealthKitBloodGlucoseUploadManager.sharedInstance.stats[mode]!
+            var healthKitUploadStatusDaysUploadedText = ""
+            var percentUploaded: CGFloat = 0.0
+            if stats.totalDaysHistorical > 0 {
+                percentUploaded = CGFloat((CGFloat)(stats.currentDayHistorical) / (CGFloat)(stats.totalDaysHistorical))
+                let healthKitUploadStatusDaysUploaded: String = "%d of %d days"
+                healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
+            }
+            
+            // In case data has been written to HealthKit in non-sequential order (e.g. multiple sources?), keep tack of final upload percent and status text and use that when sync is complete
+            if percentUploaded > self.syncCompletedPercentUploaded {
+                self.syncCompletedPercentUploaded = percentUploaded
+                self.syncCompletedStatusText = healthKitUploadStatusDaysUploadedText
+            }
+            
+            // Update progress
+            updateProgress(percentUploaded)
+            
+            // Update status lines
+            updateHealthStatusLine1(mode: mode)
+            healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
+        } else {
+            // Re-enable idle timer when there is no sync in progress
+            UIApplication.shared.isIdleTimerDisabled = false
 
-        // Determine percent progress and upload healthStatusLine2 text
-        let stats = HealthKitBloodGlucoseUploadManager.sharedInstance.stats[mode]!
-        var healthKitUploadStatusDaysUploadedText = ""
-        var percentUploaded: CGFloat = 0.0
-        if stats.totalDaysHistorical > 0 {
-            percentUploaded = CGFloat((CGFloat)(stats.currentDayHistorical) / (CGFloat)(stats.totalDaysHistorical))
-            let healthKitUploadStatusDaysUploaded: String = "%d of %d days"
-            healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
+            // Update progress
+            updateProgress(self.syncCompletedPercentUploaded)
+            
+            // Update status lines
+            updateHealthStatusLine1(mode: mode)
+            healthStatusLine2.text = self.syncCompletedStatusText // TODO: my - 0 - what about error?
         }
-
-        // Update progress
-        updateProgress(percentUploaded)
-        
-        // Update status lines
-        updateHealthStatusLine1(mode: mode)
-        healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
     }
 
     // Pass percentDone from 0.0 to 1.0
@@ -210,21 +220,21 @@ class SyncHealthDataViewController: UIViewController {
     
     func updateHealthStatusLine1(mode: HealthKitBloodGlucoseUploadReader.Mode) {
         if mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll {
-            self.healthStatusLine1.text = "Syncing all Healthkit data:"
+            self.healthStatusLine1.text = "Syncing all Health data"
 
         } else if mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks {
-            self.healthStatusLine1.text = "Syncing last two weeks of Healthkit data"
+            self.healthStatusLine1.text = "Syncing last two weeks of Health data"
         }
     }
     
-    private func configureInstructions(initialSync: Bool) {
+    private func configureInstructions(isInitialSync: Bool) {
         let regFont = UIFont(name: "OpenSans", size: 14.0)!
         let semiBoldFont = UIFont(name: "OpenSans-SemiBold", size: 14.0)!
         let textColor = UIColor(white: 61.0 / 255.0, alpha: 1.0)
         let textHighliteColor = UIColor(red: 40.0 / 255.0, green: 25.0 / 255.0, blue: 70.0 / 255.0, alpha: 1.0)
         
-        if initialSync {
-            let attributedString = NSMutableAttributedString(string: "In order to see your Blood Glucose data in Tidepool and Tidepool Mobile, we need to sync your HealthKit data.\n\nWe suggest syncing the past 2 weeks now (roughly 1 min to sync).\n\nYou can also sync all Blood Glucose data immediately (may take more than an hour to sync).", attributes: [
+        if isInitialSync {
+            let attributedString = NSMutableAttributedString(string: "In order to see your Blood Glucose data in Tidepool and Tidepool Mobile, we need to sync your Health data.\n\nWe suggest syncing the past 2 weeks now (roughly 1 min to sync).\n\nYou can also sync all Blood Glucose data immediately (may take more than an hour to sync).", attributes: [
                 NSFontAttributeName: regFont,
                 NSForegroundColorAttributeName: textColor,
                 NSKernAttributeName: -0.2
@@ -267,4 +277,8 @@ class SyncHealthDataViewController: UIViewController {
             instructionsText.attributedText = attributedString
         }
     }
+    
+    fileprivate var isInitialSync = false
+    fileprivate var syncCompletedPercentUploaded: CGFloat = 0.0
+    fileprivate var syncCompletedStatusText = ""
 }
