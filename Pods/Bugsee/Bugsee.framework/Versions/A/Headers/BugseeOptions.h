@@ -160,8 +160,8 @@
  */
 @property (nonatomic, strong) NSString * buildType;
 
-@property (nonatomic, assign) int maxFramerate;
-@property (nonatomic, assign) int minFramerate;
+@property (nonatomic, assign) uint maxFramerate;
+@property (nonatomic, assign) uint minFramerate;
 
 /**
  * Increase or decrease quality of video

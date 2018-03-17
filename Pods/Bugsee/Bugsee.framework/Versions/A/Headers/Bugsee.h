@@ -10,6 +10,7 @@
 #import <TargetConditionals.h>
 #import <UIKit/UIKit.h>
 #import <CoreMotion/CoreMotion.h>
+
 #import "BugseeLogger.h"
 #import "BugseeConstants.h"
 #import "BugseeAttachment.h"
@@ -17,6 +18,7 @@
 #import "BugseeNetworkEvent.h"
 #import "BugseeOptions.h"
 #import "BugseeLogEvent.h"
+#import "BugseeTheme.h"
 
 #define BUGSEE_ASSERT(condition, description) \
 if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWithFormat:@"%s (%@:%d)", __PRETTY_FUNCTION__, [[NSString stringWithFormat:@"%s", __FILE__] lastPathComponent], __LINE__]]; }
@@ -272,6 +274,12 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
  *  @param handled  bool value
  */
 + (void) logException:(nonnull NSString *)name reason:(nonnull NSString*)reason frames:(nonnull NSArray*)frames type:(nonnull NSString*)type handled:(BOOL)handled NS_SWIFT_NAME(logException(name:reason:frames:type:handled:));
+
+/**
+ *  Customize bugsee colors here.
+ *  @return multiply methods for color customization
+ */
++ (nonnull BugseeTheme *) appearance;
 
 @end
 
