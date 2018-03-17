@@ -18,6 +18,8 @@ import CocoaLumberjack
 
 class SyncHealthDataViewController: UIViewController {
     
+    var initialSync = false
+    
     @IBOutlet weak var statusContainerView: UIStackView!
     @IBOutlet weak var healthStatusLine1: TidepoolMobileUILabel!
     @IBOutlet weak var healthStatusLine2: TidepoolMobileUILabel!
@@ -42,7 +44,7 @@ class SyncHealthDataViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleTurnOffUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.TurnOffUploader), object: nil)
 
         // Determine if this is the initial sync
-        let initialSync = !HealthKitBloodGlucoseUploadManager.sharedInstance.hasPresentedSyncUI
+        self.initialSync = !HealthKitBloodGlucoseUploadManager.sharedInstance.hasPresentedSyncUI
 
         // Remember that we've presented the sync UI before
         HealthKitBloodGlucoseUploadManager.sharedInstance.hasPresentedSyncUI = true
@@ -54,7 +56,7 @@ class SyncHealthDataViewController: UIViewController {
         let isSyncInProgress = isHistoricalAllSyncInProgress || isHistoricalTwoWeeksSyncInProgress
 
         // Configure UI for initial sync and initial setup
-        configureLayout(initialSync: initialSync, initialSetup: !isSyncInProgress)
+        configureLayout(initialSync: self.initialSync, initialSetup: !isSyncInProgress)
 
         if isSyncInProgress {
             // Update stats
@@ -90,20 +92,17 @@ class SyncHealthDataViewController: UIViewController {
     }
     
     @IBAction func backArrowButtonTapped(_ sender: Any) {
-        // TODO: any cleanup?
         performSegue(withIdentifier: "unwindSegueToHome", sender: self)
     }
     
     @IBAction func syncAllButtonTapped(_ sender: Any) {
         startUploading(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll)
-        // TODO: other initialization?
-        configureLayout(initialSync: false, initialSetup: false)
+        configureLayout(initialSync: self.initialSync, initialSetup: false)
     }
     
     @IBAction func syncLastTwoWeeksButtonTapped(_ sender: Any) {
         self.startUploading(mode: HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks)
-        // TODO: other initialization?
-        configureLayout(initialSync: false, initialSetup: false)
+        configureLayout(initialSync: self.initialSync, initialSetup: false)
     }
     
     @IBAction func stopButtonTapped(_ sender: Any) {
@@ -137,7 +136,6 @@ class SyncHealthDataViewController: UIViewController {
                 break
             case .noResultsFromQuery:
                 self.healthStatusLine2.text = "Finished"
-                // TODO: review. Probably need an overall state enum...
                 updateProgress(1.0)
                 stopButton.isHidden = true
                 break
