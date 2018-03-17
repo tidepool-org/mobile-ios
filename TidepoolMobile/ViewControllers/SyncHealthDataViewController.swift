@@ -228,7 +228,7 @@ class SyncHealthDataViewController: UIViewController {
                 ])
             instructionsText.attributedText = attributedString
         } else {
-            let attributedString = NSMutableAttributedString(string: "If you’re having trouble seeing your blood glucose data in Tidepool or Tidepool Mobile, you can try a manual sync.\n\nBefore syncing: \n •  Open the Health app\n •  Tap the Sources tab\n •  Tap Dexcom\n •  Make sure ALLOW “DEXCOM” TO  \tWRITE DATA: Blood Glucose is enabled\n\nThen: \n •  Return to the Sources tab\n •  Tap Tidepool\n •  Make sure ALLOW “TIDEPOOL” TO \tREAD DATA: Blood Glucose is enabled\n\nIf you still can’t see your data, try syncing:", attributes: [
+            let attributedString = NSMutableAttributedString(string: "If you’re having trouble seeing your blood glucose data in Tidepool or Tidepool Mobile, you can try a manual sync.\n\nBefore syncing: \n •  Open the Health app\n •  Tap the Sources tab\n •  Tap Dexcom\n •  Make sure ALLOW “DEXCOM” TO WRITE DATA: Blood Glucose is enabled\n\nThen: \n •  Return to the Sources tab\n •  Tap Tidepool\n •  Make sure ALLOW “TIDEPOOL” TO READ DATA: Blood Glucose is enabled\n\nIf you still can’t see your data, try syncing:", attributes: [
                 NSFontAttributeName: regFont,
                 NSForegroundColorAttributeName: textColor,
                 NSKernAttributeName: -0.2
@@ -248,19 +248,19 @@ class SyncHealthDataViewController: UIViewController {
             attributedString.addAttributes([
                 NSFontAttributeName: semiBoldFont,
                 NSForegroundColorAttributeName: textHighliteColor
-                ], range: NSRange(location: 210, length: 45))
+                ], range: NSRange(location: 210, length: 43))
             attributedString.addAttributes([
                 NSFontAttributeName: semiBoldFont,
                 NSForegroundColorAttributeName: textHighliteColor
-                ], range: NSRange(location: 293, length: 7))
+                ], range: NSRange(location: 291, length: 7))
             attributedString.addAttributes([
                 NSFontAttributeName: semiBoldFont,
                 NSForegroundColorAttributeName: textHighliteColor
-                ], range: NSRange(location: 313, length: 8))
+                ], range: NSRange(location: 311, length: 8))
             attributedString.addAttributes([
                 NSFontAttributeName: semiBoldFont,
                 NSForegroundColorAttributeName: textHighliteColor
-                ], range: NSRange(location: 336, length: 45))
+                ], range: NSRange(location: 334, length: 44))
             instructionsText.attributedText = attributedString
         }
     }
