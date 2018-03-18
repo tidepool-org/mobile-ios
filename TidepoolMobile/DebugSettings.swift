@@ -31,34 +31,7 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
                 api.switchToServer(serverName)
             }))
         }
-        //        actionSheet.addAction(UIAlertAction(title: "Count HealthKit Blood Glucose Samples", style: .default, handler: {
-        //            Void in
-        //            self.handleCountBloodGlucoseSamples()
-        //        }))
-        //        actionSheet.addAction(UIAlertAction(title: "Find date range for blood glucose samples", style: .default, handler: {
-        //            Void in
-        //            self.handleFindDateRangeBloodGlucoseSamples()
-        //        }))
-        actionSheet.addAction(UIAlertAction(title: "Enable background upload notification", style: .default, handler: {
-            Void in
-            self.handleEnableNotificationsForUploads(enable: true)
-        }))
-        actionSheet.addAction(UIAlertAction(title: "Disable background upload notification", style: .default, handler: {
-            Void in
-            self.handleEnableNotificationsForUploads(enable: false)
-        }))
-        actionSheet.addAction(UIAlertAction(title: "Treat all sources as Dexcom", style: .default, handler: {
-            Void in
-            self.handleTreatAllBloodGlucoseSourceTypesAsDexcom(treatAllAsDexcom: true)
-        }))
-        actionSheet.addAction(UIAlertAction(title: "Don't treat all sources as Dexcom", style: .default, handler: {
-            Void in
-            self.handleTreatAllBloodGlucoseSourceTypesAsDexcom(treatAllAsDexcom: true)
-        }))
-        actionSheet.addAction(UIAlertAction(title: "Email export of HealthKit blood glucose data", style: .default, handler: {
-            Void in
-            self.handleEmailExportOfBloodGlucoseData()
-        }))
+        
         if defaultDebugLevel == DDLogLevel.off {
             actionSheet.addAction(UIAlertAction(title: "Enable logging", style: .default, handler: { Void in
                 defaultDebugLevel = DDLogLevel.verbose
@@ -74,21 +47,63 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
                 self.clearLogFiles()
             }))
         }
+        
         actionSheet.addAction(UIAlertAction(title: "Email logs", style: .default, handler: { Void in
             self.handleEmailLogs()
         }))
-        actionSheet.addAction(UIAlertAction(title: "Write 60 days of non-Dexcom test CBG data to HealthKit", style: .default, handler: {
-            Void in
-            self.handleWriteLotsOfNonDexcomCBGTestDataToHealthKit()
-        }))
-        actionSheet.addAction(UIAlertAction(title: "Write one new non-Dexcom test CBG samples to HealthKit", style: .default, handler: {
-            Void in
-            self.handleWriteNonDexcomCBGTestDataToHealthKit()
+
+        
+        let isTreatingAllBloodGlucoseSourceTypesAsDexcom = UserDefaults.standard.bool(forKey: HealthKitSettings.TreatAllBloodGlucoseSourceTypesAsDexcomKey)
+        if isTreatingAllBloodGlucoseSourceTypesAsDexcom {
+            actionSheet.addAction(UIAlertAction(title: "Don't treat all sources as Dexcom", style: .default, handler: {
+                Void in
+                self.handleTreatAllBloodGlucoseSourceTypesAsDexcom(treatAllAsDexcom: false)
+            }))
+        } else {
+            actionSheet.addAction(UIAlertAction(title: "Treat all sources as Dexcom", style: .default, handler: {
+                Void in
+                self.handleTreatAllBloodGlucoseSourceTypesAsDexcom(treatAllAsDexcom: true)
+            }))
+        }
+
+        let isBackgroundUploadNotificationEnabled = AppDelegate.testMode
+        if isBackgroundUploadNotificationEnabled {
+            actionSheet.addAction(UIAlertAction(title: "Disable background upload notification", style: .default, handler: {
+                Void in
+                self.handleEnableNotificationsForUploads(enable: false)
+            }))
+        } else {
+            actionSheet.addAction(UIAlertAction(title: "Enable background upload notification", style: .default, handler: {
+                Void in
+                self.handleEnableNotificationsForUploads(enable: true)
+            }))
+        }
+        
+//        actionSheet.addAction(UIAlertAction(title: "Email export of HealthKit blood glucose data", style: .default, handler: {
+//            Void in
+//            self.handleEmailExportOfBloodGlucoseData()
+//        }))
+//
+//        actionSheet.addAction(UIAlertAction(title: "Count HealthKit Blood Glucose Samples", style: .default, handler: {
+//            Void in
+//            self.handleCountBloodGlucoseSamples()
+//        }))
+//        actionSheet.addAction(UIAlertAction(title: "Find date range for blood glucose samples", style: .default, handler: {
+//            Void in
+//            self.handleFindDateRangeBloodGlucoseSamples()
+//        }))
+//        actionSheet.addAction(UIAlertAction(title: "Write 60 days of non-Dexcom test CBG data to HealthKit", style: .default, handler: {
+//            Void in
+//            self.handleWriteLotsOfNonDexcomCBGTestDataToHealthKit()
+//        }))
+//        actionSheet.addAction(UIAlertAction(title: "Write one new non-Dexcom test CBG samples to HealthKit", style: .default, handler: {
+//            Void in
+//            self.handleWriteNonDexcomCBGTestDataToHealthKit()
+//        }))
+
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { Void in
         }))
 
-//        if let popoverController = actionSheet.popoverPresentationController {
-//            popoverController.sourceView = self.presentingViewController.view
-//        }
         self.presentingViewController?.present(actionSheet, animated: true, completion: nil)
     }
     
