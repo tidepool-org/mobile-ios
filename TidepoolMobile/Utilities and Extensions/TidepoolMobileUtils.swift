@@ -15,7 +15,7 @@
 
 import UIKit
 import CoreData
-import Photos
+import CocoaLumberjack
 
 class TidepoolMobileUtils {
 
@@ -97,7 +97,7 @@ class TidepoolMobileUtils {
 
     // NOTE: these date routines are not localized, and do not take into account user preferences for date display.
 
-    /// Call setFormatterTimezone to set time zone before calling standardUIDayString or standardUIDateString
+    /// Call setFormatterTimezone to set time zone before calling standardUIDayString or standardUIDateString if a different timezone from the current one is desired! (Currently not used).
     class func setFormatterTimezone(_ timezoneOffsetSecs: Int) {
         let df = TidepoolMobileUtils.dateFormatter
         df.timeZone = TimeZone(secondsFromGMT:timezoneOffsetSecs)

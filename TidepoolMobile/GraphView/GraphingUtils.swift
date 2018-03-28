@@ -306,7 +306,6 @@ open class GraphingUtils {
         } else {
             let df = DateFormatter()
             df.dateFormat = "h:mm a"
-            df.timeZone = TimeZone(secondsFromGMT: layout.timezoneOffsetSecs)
             var curDate = Date(timeIntervalSinceReferenceDate:nextTickBoundarySecs)
             
             repeat {
@@ -321,8 +320,6 @@ open class GraphingUtils {
                 var midnight = false
                 if timeStr == "12 a" || timeStr == "00" {
                     midnight = true
-                    //TidepoolMobileUtils.setFormatterTimezone(layout.timezoneOffsetSecs)
-                    //timeStr = TidepoolMobileUtils.standardUIDayString(curDate)
                 }
                 
                 // draw marker

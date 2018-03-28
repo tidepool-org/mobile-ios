@@ -73,8 +73,12 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChangeNotifyHandler(_:)), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
         // graph data changes
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
+        
         // need to update when day changes
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.calendarDayDidChange(notification:)), name: NSNotification.Name.NSCalendarDayChanged, object: nil)
+        // also when timezone changes...
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.timezoneDidChange(notification:)), name: NSNotification.Name.NSSystemTimeZoneDidChange, object: nil)
+
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterForeground(_:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterBackground(_:)), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleUploadSuccessfulNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.UploadSuccessful), object: nil)
@@ -108,6 +112,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // Because many notes have times written as "Today at 2:00 pm" for example, they may be out of date when a day changes. Also, this will refresh UI the first time the user opens the app in the day.
     internal func calendarDayDidChange(notification : NSNotification)
     {
+        DDLogInfo("\(#function)")
+        updateDisplayPending = true
+        checkRefresh()
+    }
+    
+    // Same is true when timezone changes!
+    internal func timezoneDidChange(notification : NSNotification) {
         DDLogInfo("\(#function)")
         updateDisplayPending = true
         checkRefresh()
