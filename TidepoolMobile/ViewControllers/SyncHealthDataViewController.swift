@@ -205,7 +205,7 @@ class SyncHealthDataViewController: UIViewController {
             
             // Update status lines
             updateHealthStatusLine1(mode: mode)
-            healthStatusLine2.text = self.syncCompletedStatusText // TODO: my - 0 - what about error?
+            healthStatusLine2.text = self.syncCompletedStatusText
         }
     }
 
