@@ -109,7 +109,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     static var keyboardFrame: CGRect?
     
     // Capture keyboard sizing and appropriate scroll animation timing. Fine tune table sizing for current keyboard sizing, and place edit row at bottom of table view, just above the keyboard.
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         //DDLogInfo("EditCommentViewController \(#function)")
         viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
         EditCommentViewController.keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
@@ -171,7 +171,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         performSegue(withIdentifier: "unwindFromEditComment", sender: self)
     }
     
-    func savePressed(_ sender: TidepoolMobileSimpleUIButton!) {
+    @objc func savePressed(_ sender: TidepoolMobileSimpleUIButton!) {
         //DDLogInfo("cell with tag \(sender.tag) was pressed!")
         if APIConnector.connector().alertIfNetworkIsUnreachable() {
             return
@@ -213,7 +213,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     //
 
     fileprivate var graphNeedsUpdate: Bool  = false
-    func graphDataChanged(_ note: Notification) {
+    @objc func graphDataChanged(_ note: Notification) {
         graphNeedsUpdate = true
         if viewIsForeground {
             DDLogInfo("EditCommentVC: graphDataChanged, reloading")
@@ -273,7 +273,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         return kPreCommentRows + commentCount
     }
 
-    func howToUploadPressed(_ sender: UIButton!) {
+    @objc func howToUploadPressed(_ sender: UIButton!) {
         if let url = URL(string: TPConstants.kHowToUploadURL) {
             UIApplication.shared.openURL(url)
         }

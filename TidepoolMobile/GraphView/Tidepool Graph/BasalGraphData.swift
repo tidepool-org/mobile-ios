@@ -82,12 +82,12 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
             }
             if value != nil {
                 if event.duration != nil {
-                    let duration = CGFloat(event.duration!)
+                    let duration = CGFloat(truncating: event.duration!)
                     if duration > 0 {
-                        let floatValue = CGFloat(value!)
+                        let floatValue = CGFloat(truncating: value!)
                         var suppressed: CGFloat? = nil
                         if event.suppressedRate != nil {
-                            suppressed = CGFloat(event.suppressedRate!)
+                            suppressed = CGFloat(truncating: event.suppressedRate!)
                         }
                         dataArray.append(BasalGraphDataType(value: floatValue, timeOffset: graphTimeOffset, suppressed: suppressed))
                         if floatValue > layout.maxBasal {

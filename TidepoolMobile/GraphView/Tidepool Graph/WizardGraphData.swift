@@ -62,12 +62,12 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
     override func loadEvent(_ event: CommonData, timeOffset: TimeInterval) {
         if let event = event as? Wizard {
             let value = event.carbInput ?? 0.0
-            let floatValue = round(CGFloat(value))
+            let floatValue = round(CGFloat(truncating: value))
             dataArray.append(WizardGraphDataType(value: floatValue, timeOffset: timeOffset, bolusId: event.bolus, recommendedNet: event.recommendedNet))
             
             // Let recommended bolus values figure into the bolus value scaling as well!
             if let recommended = event.recommendedNet {
-                let recommendedValue = CGFloat(recommended)
+                let recommendedValue = CGFloat(truncating: recommended)
                 if recommendedValue > layout.maxBolus {
                     layout.maxBolus = recommendedValue
                 }
@@ -123,7 +123,7 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
             let labelStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
             labelStyle.alignment = .center
             
-            let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: Styles.darkPurpleColor, NSParagraphStyleAttributeName: labelStyle])
+            let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSAttributedStringKey.font: Styles.smallSemiboldFont, NSAttributedStringKey.foregroundColor: Styles.darkPurpleColor, NSAttributedStringKey.paragraphStyle: labelStyle])
             
             let labelTextHeight: CGFloat = ceil(labelAttrStr.boundingRect(with: CGSize(width: labelRect.width, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil).size.height)
             

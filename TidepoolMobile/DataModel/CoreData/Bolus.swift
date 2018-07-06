@@ -27,10 +27,10 @@ class Bolus: CommonData {
             
             var value: Float = 0.0
             if let normal = me.normal {
-                value = value + Float(normal)
+                value = value + Float(truncating: normal)
             }
             if let extended = me.extended {
-                value = value + Float(extended)
+                value = value + Float(truncating: extended)
             }
             me.value = NSNumber(value: value as Float)
             // The following are unused...

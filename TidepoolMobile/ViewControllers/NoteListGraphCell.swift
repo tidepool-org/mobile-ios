@@ -72,8 +72,8 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
         var highBGBounds: Int?
         let dataController = TidepoolMobileDataController.sharedInstance
         if let bgLowBounds = dataController.currentViewedUser?.bgTargetLow, let bgHighBounds = dataController.currentViewedUser?.bgTargetHigh {
-            lowBGBounds = Int(bgLowBounds)
-            highBGBounds = Int(bgHighBounds)
+            lowBGBounds = Int(truncating: bgLowBounds)
+            highBGBounds = Int(truncating: bgHighBounds)
         }
         
         DDLogInfo("NoteListGraphCell: configureGraphContainer")

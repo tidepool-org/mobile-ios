@@ -97,7 +97,7 @@ class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
                     // Default title format: "Run - 4.2 miles"
                     var title: String = Workout.userStringForHKWorkoutActivityTypeEnumString(we.subType!)
                     if let miles = we.distance {
-                        let floatMiles = Float(miles)
+                        let floatMiles = Float(truncating: miles)
                         title = title + " - " + String(format: "%.2f",floatMiles) + " miles"
                     }
                     we.title = title

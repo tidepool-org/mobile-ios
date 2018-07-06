@@ -42,7 +42,7 @@ class hashtagBolderTests: XCTestCase {
         let text = "This is text that does not contain hashtags. No hashtags are present."
         
         // Expected attributed output has no bolded portions.
-        let expected = NSAttributedString(string: text, attributes: [NSFontAttributeName: Styles.mediumSmallRegularFont, NSForegroundColorAttributeName: Styles.blackishColor])
+        let expected = NSAttributedString(string: text, attributes: [NSAttributedStringKey.font: Styles.mediumSmallRegularFont, NSAttributedStringKey.foregroundColor: Styles.blackishColor])
         
         // Assert that the output and the expected string are indeed the same string (by content and attributes, not instance).
         XCTAssertEqual(hashtagBolder.boldHashtags(text as NSString), expected, "Assert that a string containing no hashtags is unbolded.")
@@ -54,13 +54,13 @@ class hashtagBolderTests: XCTestCase {
         let text = "This #is text #that? does #contain! #hashtags. #hashtags are present."
         
         // Expected attributed output that has bolded portions.
-        let expected = NSMutableAttributedString(string: text, attributes: [NSFontAttributeName: Styles.mediumSmallRegularFont, NSForegroundColorAttributeName: Styles.blackishColor])
+        let expected = NSMutableAttributedString(string: text, attributes: [NSAttributedStringKey.font: Styles.mediumSmallRegularFont, NSAttributedStringKey.foregroundColor: Styles.blackishColor])
         // Oh, and bold it.
-        expected.addAttributes([NSFontAttributeName: Styles.mediumSmallBoldFont], range: NSRange(location: 5, length: 3))
-        expected.addAttributes([NSFontAttributeName: Styles.mediumSmallBoldFont], range: NSRange(location: 14, length: 5))
-        expected.addAttributes([NSFontAttributeName: Styles.mediumSmallBoldFont], range: NSRange(location: 26, length: 8))
-        expected.addAttributes([NSFontAttributeName: Styles.mediumSmallBoldFont], range: NSRange(location: 36, length: 9))
-        expected.addAttributes([NSFontAttributeName: Styles.mediumSmallBoldFont], range: NSRange(location: 47, length: 9))
+        expected.addAttributes([NSAttributedStringKey.font: Styles.mediumSmallBoldFont], range: NSRange(location: 5, length: 3))
+        expected.addAttributes([NSAttributedStringKey.font: Styles.mediumSmallBoldFont], range: NSRange(location: 14, length: 5))
+        expected.addAttributes([NSAttributedStringKey.font: Styles.mediumSmallBoldFont], range: NSRange(location: 26, length: 8))
+        expected.addAttributes([NSAttributedStringKey.font: Styles.mediumSmallBoldFont], range: NSRange(location: 36, length: 9))
+        expected.addAttributes([NSAttributedStringKey.font: Styles.mediumSmallBoldFont], range: NSRange(location: 47, length: 9))
         
         // Assert that the output and the expected string are indeed the same string (by content and attributes, not instance).
         XCTAssertEqual(hashtagBolder.boldHashtags(text as NSString), expected, "Assert that a string containing hashtags is properly bolded.")

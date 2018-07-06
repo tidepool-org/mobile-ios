@@ -273,7 +273,7 @@ class GraphContainerView: UIView {
     }
 
     // Maps taps to a particular cell and location within the cell, then calls into the graph data structures to see if an active datapoint was tapped: if so, calls the graph delegate with that point.
-    func tapGestureHandler(_ sender: AnyObject) {
+    @objc func tapGestureHandler(_ sender: AnyObject) {
         //DDLogInfo("recognized tap!")
         if let gesture = sender as? UITapGestureRecognizer {
             if gesture.state == .ended {
@@ -304,7 +304,7 @@ class GraphContainerView: UIView {
         }
     }
     
-    func pinchGestureHandler(_ sender: AnyObject) {
+    @objc func pinchGestureHandler(_ sender: AnyObject) {
         //DDLogInfo("recognized pinch!")
         if let gesture = sender as? UIPinchGestureRecognizer {
             if gesture.state == UIGestureRecognizerState.began {

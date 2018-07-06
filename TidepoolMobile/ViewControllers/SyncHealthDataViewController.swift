@@ -111,7 +111,7 @@ class SyncHealthDataViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    func handleStatsUpdatedNotification(_ notification: Notification) {
+    @objc func handleStatsUpdatedNotification(_ notification: Notification) {
         let mode = notification.object as! HealthKitBloodGlucoseUploadReader.Mode
         if mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll
             || mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks {
@@ -119,7 +119,7 @@ class SyncHealthDataViewController: UIViewController {
         }
     }
 
-    func handleTurnOffUploaderNotification(_ notification: Notification) {
+    @objc func handleTurnOffUploaderNotification(_ notification: Notification) {
         let mode = notification.object as! HealthKitBloodGlucoseUploadReader.Mode
         
         if mode == HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll
@@ -235,44 +235,44 @@ class SyncHealthDataViewController: UIViewController {
         
         if isInitialSync {
             let attributedString = NSMutableAttributedString(string: "In order to see your Blood Glucose data in Tidepool and Tidepool Mobile, we need to sync your Health data.\n\nWe suggest syncing the past 2 weeks now (roughly 1 min to sync).\n\nYou can also sync all Blood Glucose data immediately (may take more than an hour to sync).", attributes: [
-                NSFontAttributeName: regFont,
-                NSForegroundColorAttributeName: textColor,
-                NSKernAttributeName: -0.2
+                NSAttributedStringKey.font: regFont,
+                NSAttributedStringKey.foregroundColor: textColor,
+                NSAttributedStringKey.kern: -0.2
                 ])
             instructionsText.attributedText = attributedString
         } else {
             let attributedString = NSMutableAttributedString(string: "If you’re having trouble seeing your blood glucose data in Tidepool or Tidepool Mobile, you can try a manual sync.\n\nBefore syncing: \n •  Open the Health app\n •  Tap the Sources tab\n •  Tap Dexcom\n •  Make sure ALLOW “DEXCOM” TO WRITE DATA: Blood Glucose is enabled\n\nThen: \n •  Return to the Sources tab\n •  Tap Tidepool\n •  Make sure ALLOW “TIDEPOOL” TO READ DATA: Blood Glucose is enabled\n\nIf you still can’t see your data, try syncing:", attributes: [
-                NSFontAttributeName: regFont,
-                NSForegroundColorAttributeName: textColor,
-                NSKernAttributeName: -0.2
+                NSAttributedStringKey.font: regFont,
+                NSAttributedStringKey.foregroundColor: textColor,
+                NSAttributedStringKey.kern: -0.2
                 ])
             attributedString.addAttributes([
-                NSFontAttributeName: semiBoldFont,
-                NSForegroundColorAttributeName: textHighliteColor
+                NSAttributedStringKey.font: semiBoldFont,
+                NSAttributedStringKey.foregroundColor: textHighliteColor
                 ], range: NSRange(location: 146, length: 6))
             attributedString.addAttributes([
-                NSFontAttributeName: semiBoldFont,
-                NSForegroundColorAttributeName: textHighliteColor
+                NSAttributedStringKey.font: semiBoldFont,
+                NSAttributedStringKey.foregroundColor: textHighliteColor
                 ], range: NSRange(location: 169, length: 7))
             attributedString.addAttributes([
-                NSFontAttributeName: semiBoldFont,
-                NSForegroundColorAttributeName: textHighliteColor
+                NSAttributedStringKey.font: semiBoldFont,
+                NSAttributedStringKey.foregroundColor: textHighliteColor
                 ], range: NSRange(location: 189, length: 6))
             attributedString.addAttributes([
-                NSFontAttributeName: semiBoldFont,
-                NSForegroundColorAttributeName: textHighliteColor
+                NSAttributedStringKey.font: semiBoldFont,
+                NSAttributedStringKey.foregroundColor: textHighliteColor
                 ], range: NSRange(location: 210, length: 43))
             attributedString.addAttributes([
-                NSFontAttributeName: semiBoldFont,
-                NSForegroundColorAttributeName: textHighliteColor
+                NSAttributedStringKey.font: semiBoldFont,
+                NSAttributedStringKey.foregroundColor: textHighliteColor
                 ], range: NSRange(location: 291, length: 7))
             attributedString.addAttributes([
-                NSFontAttributeName: semiBoldFont,
-                NSForegroundColorAttributeName: textHighliteColor
+                NSAttributedStringKey.font: semiBoldFont,
+                NSAttributedStringKey.foregroundColor: textHighliteColor
                 ], range: NSRange(location: 311, length: 8))
             attributedString.addAttributes([
-                NSFontAttributeName: semiBoldFont,
-                NSForegroundColorAttributeName: textHighliteColor
+                NSAttributedStringKey.font: semiBoldFont,
+                NSAttributedStringKey.foregroundColor: textHighliteColor
                 ], range: NSRange(location: 334, length: 44))
             instructionsText.attributedText = attributedString
         }

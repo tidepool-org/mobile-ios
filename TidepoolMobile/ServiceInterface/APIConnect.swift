@@ -422,7 +422,7 @@ class APIConnector {
                 let json = JSON(response.result.value!)
                 var validResult = true
                 if let status = json["status"].number {
-                    let statusCode = Int(status)
+                    let statusCode = Int(truncating: status)
                     DDLogInfo("getReadOnlyUserData includes status field: \(statusCode)")
                     // TODO: determine if any status is indicative of failure here! Note that if call was successful, there will be no status field in the json result. The only verified error response is 403 which happens when we pass an invalid token.
                     if statusCode == 401 || statusCode == 403 {

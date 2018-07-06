@@ -88,11 +88,11 @@ class LoginViewController: BaseUIViewController {
         }
     }
     
-    func reachabilityChanged(_ note: Notification) {
+    @objc func reachabilityChanged(_ note: Notification) {
         configureForReachability()
     }
     
-    func switchedToNewServer(_ note: Notification) {
+    @objc func switchedToNewServer(_ note: Notification) {
         configureVersion()
     }
 
@@ -207,7 +207,7 @@ class LoginViewController: BaseUIViewController {
     
     
     
-    func textFieldDidChange() {
+    @objc func textFieldDidChange() {
         updateButtonStates()
     }
 
@@ -237,7 +237,7 @@ class LoginViewController: BaseUIViewController {
     }
    
     // UIKeyboardWillShowNotification
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         // make space for the keyboard if needed
         let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! Float
@@ -246,7 +246,7 @@ class LoginViewController: BaseUIViewController {
     }
     
     // UIKeyboardWillHideNotification
-    func keyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         // reposition login view if needed
         self.adjustLogInView(0.0)
     }

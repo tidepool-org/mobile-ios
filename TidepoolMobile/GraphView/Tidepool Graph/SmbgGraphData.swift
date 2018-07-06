@@ -49,7 +49,7 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
         if let smbgEvent = event as? SelfMonitoringGlucose {
             //DDLogInfo("Adding smbg event: \(event)")
             if let value = smbgEvent.value {
-                let convertedValue = round(CGFloat(value) * kGlucoseConversionToMgDl)
+                let convertedValue = round(CGFloat(truncating: value) * kGlucoseConversionToMgDl)
                 dataArray.append(CbgGraphDataType(value: convertedValue, timeOffset: timeOffset))
             } else {
                 DDLogInfo("ignoring smbg event with nil value")
@@ -92,7 +92,7 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
         let readingLabelTextContent = String(intValue)
         let readingLabelStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         readingLabelStyle.alignment = .center
-        let readingLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: circleColor, NSParagraphStyleAttributeName: readingLabelStyle]
+        let readingLabelFontAttributes = [NSAttributedStringKey.font: Styles.smallSemiboldFont, NSAttributedStringKey.foregroundColor: circleColor, NSAttributedStringKey.paragraphStyle: readingLabelStyle]
         var readingLabelTextSize = readingLabelTextContent.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: readingLabelFontAttributes, context: nil).size
         readingLabelTextSize = CGSize(width: ceil(readingLabelTextSize.width), height: ceil(readingLabelTextSize.height))
         let readingLabelRect = CGRect(x: centerX-(readingLabelTextSize.width/2), y: centerY+circleRadius, width: readingLabelTextSize.width, height: readingLabelTextSize.height)

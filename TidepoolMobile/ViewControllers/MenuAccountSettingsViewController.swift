@@ -174,12 +174,12 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         hkTimeRefreshTimer = nil
     }
 
-    func nextHKTimeRefresh() {
+    @objc func nextHKTimeRefresh() {
         //DDLogInfo("nextHKTimeRefresh")
         configureHKInterface()
     }
     
-    internal func handleUploaderNotification(_ notification: Notification) {
+    @objc internal func handleUploaderNotification(_ notification: Notification) {
         DDLogInfo("handleUploaderNotification: \(notification.name)")
         configureHKInterface()
     }

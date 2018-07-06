@@ -306,7 +306,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
 
     // Toggle the datepicker open or closed depending on if it is currently showing
     // Called by the changeDateView
-    func changeDatePressed(_ sender: UIView!) {
+    @objc func changeDatePressed(_ sender: UIView!) {
         APIConnector.connector().trackMetric("Clicked Change Date")
         if (!datePicker.isHidden) {
             closeDatePicker()
@@ -443,7 +443,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
     }
     
     // Called when date picker date has changed
-    func datePickerAction(_ sender: UIDatePicker) {
+    @objc func datePickerAction(_ sender: UIDatePicker) {
         let calendar = Calendar.current
         let compCurr = (calendar as NSCalendar).components(([.year, .month, .day, .hour, .minute]), from: datePicker.date)
         let compWas = (calendar as NSCalendar).components(([.year, .month, .day, .hour, .minute]), from: previousDate)
@@ -510,7 +510,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
     }
     
     // Handle hashtagPressed notification from hashtagsView (hashtag button was pressed)
-    func hashtagPressed(_ notification: Notification) {
+    @objc func hashtagPressed(_ notification: Notification) {
         // unwrap the hashtag from userInfo
         
         APIConnector.connector().trackMetric("Clicked Hashtag")
@@ -560,7 +560,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
     }
     
     // UIKeyboardWillShowNotification
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         // Take the keyboardFrame for positioning
         keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         if (!datePicker.isHidden) {
@@ -574,13 +574,13 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
     }
     
     // UIKeyboardDidShowNotification
-    func keyboardDidShow(_ notification: Notification) {
+    @objc func keyboardDidShow(_ notification: Notification) {
         // Take the keyboard frame for positioning
         keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
     }
     
     // UIKeyboardWillHideNotification
-    func keyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         // Open up the hashtagsView all the way!
         self.openHashtagsCompletely()
     }

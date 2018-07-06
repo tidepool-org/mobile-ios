@@ -3,7 +3,7 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the associated License, which is identical to the BSD 2-Clause
- * License as published by the Open Source Initiative at opensource.org.
+ @objc * License as published by the Open Source Initiative at opensource.org.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -96,7 +96,7 @@ import UIKit
     private var stylingEnum: ButtonTypeEnum = .unknownItem
     private var styledToSize: CGSize?
     
-    override func checkAdjustSizing() {
+    @objc override func checkAdjustSizing() {
         if styledToSize == nil || styledToSize! != self.bounds.size {
             updateStyle()
         }
@@ -151,7 +151,7 @@ import UIKit
         let rectangleTextContent = buttonTitle
         let rectangleStyle = NSMutableParagraphStyle()
         rectangleStyle.alignment = textAlign
-        let rectangleFontAttributes = [NSFontAttributeName: font, NSForegroundColorAttributeName: textColor, NSParagraphStyleAttributeName: rectangleStyle]
+        let rectangleFontAttributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: textColor, NSAttributedStringKey.paragraphStyle: rectangleStyle]
         
         let rectangleTextHeight: CGFloat = rectangleTextContent.boundingRect(with: CGSize(width: rectangleInset.width, height: CGFloat.infinity), options: .usesLineFragmentOrigin, attributes: rectangleFontAttributes, context: nil).height
         context.saveGState()

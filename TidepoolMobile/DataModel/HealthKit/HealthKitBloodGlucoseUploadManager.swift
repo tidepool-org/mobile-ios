@@ -454,7 +454,7 @@ class HealthKitBloodGlucoseUploadManager:
     fileprivate func beginCurrentSamplesUploadBackgroundTask() {
         if currentSamplesUploadBackgroundTaskIdentifier == nil {
             self.currentSamplesUploadBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: {
-                Void in
+                () -> Void in
                 DispatchQueue.main.async {
                     let message = "Background time expired"
                     DDLogInfo(message)

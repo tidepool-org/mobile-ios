@@ -51,7 +51,7 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
         if let cbgEvent = event as? ContinuousGlucose {
             //DDLogInfo("Adding Cbg event: \(event)")
             if let value = cbgEvent.value {
-                let convertedValue = round(CGFloat(value) * kGlucoseConversionToMgDl)
+                let convertedValue = round(CGFloat(truncating: value) * kGlucoseConversionToMgDl)
                 dataArray.append(CbgGraphDataType(value: convertedValue, timeOffset: timeOffset))
             } else {
                 DDLogInfo("ignoring Cbg event with nil value")

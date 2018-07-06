@@ -110,7 +110,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     // Because many notes have times written as "Today at 2:00 pm" for example, they may be out of date when a day changes. Also, this will refresh UI the first time the user opens the app in the day.
-    internal func calendarDayDidChange(notification : NSNotification)
+    @objc internal func calendarDayDidChange(notification : NSNotification)
     {
         DDLogInfo("\(#function)")
         updateDisplayPending = true
@@ -118,7 +118,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     // Same is true when timezone changes!
-    internal func timezoneDidChange(notification : NSNotification) {
+    @objc internal func timezoneDidChange(notification : NSNotification) {
         DDLogInfo("\(#function)")
         updateDisplayPending = true
         checkRefresh()
@@ -149,7 +149,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         eventListSceneContainer.setNeedsLayout()
         eventListSceneContainer.layoutIfNeeded()
 
-        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSFontAttributeName: smallRegularFont, NSForegroundColorAttributeName: blackishColor])
+        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSAttributedStringKey.font: smallRegularFont, NSAttributedStringKey.foregroundColor: blackishColor])
         self.refreshControl.addTarget(self, action: #selector(EventListViewController.refreshControlHandler), for: UIControlEvents.valueChanged)
         self.refreshControl.setNeedsLayout()
         self.tableView.addSubview(refreshControl)
@@ -163,13 +163,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // Dispose of any resources that can be recreated.
     }
 
-    func appDidEnterForeground(_ notification: Notification) {
+    @objc func appDidEnterForeground(_ notification: Notification) {
         DDLogInfo("EventListViewController:appDidEnterForeground")
         appIsForeground = true
         checkRefresh()
     }
     
-    func appDidEnterBackground(_ notification: Notification) {
+    @objc func appDidEnterBackground(_ notification: Notification) {
         DDLogInfo("EventListViewController:appDidEnterBackground")
         appIsForeground = false
     }
@@ -552,7 +552,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
     
-    func refreshControlHandler() {
+    @objc func refreshControlHandler() {
         APIConnector.connector().trackMetric("Swiped down to refresh")
         refreshTable()
     }
@@ -704,7 +704,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
 
     fileprivate var eventListNeedsUpdate: Bool  = false
-    func databaseChanged(_ note: Notification) {
+    @objc func databaseChanged(_ note: Notification) {
         DDLogInfo("EventList: Database Change Notification")
         if eventListShowing() {
             // TODO: This will be needed if notes go into a database but unused right now...
@@ -849,7 +849,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         searchTextField.resignFirstResponder()
     }
     
-    func textFieldDidChangeNotifyHandler(_ note: Notification) {
+    @objc func textFieldDidChangeNotifyHandler(_ note: Notification) {
         if !eventListShowing() {
             // not for us...
             return
@@ -930,7 +930,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // MARK: - Graph support
     //
 
-    internal func handleTurnOnUploader(_ note: Notification) {
+    @objc internal func handleTurnOnUploader(_ note: Notification) {
         DDLogVerbose("trace")
         
         if let _ = self.sideMenuController()?.sideMenu?.isMenuOpen, !HealthKitBloodGlucoseUploadManager.sharedInstance.hasPresentedSyncUI {
@@ -939,7 +939,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
     
-    internal func handleUploadSuccessfulNotification(_ note: Notification) {
+    @objc internal func handleUploadSuccessfulNotification(_ note: Notification) {
         DDLogInfo("inval cache and update graphs on successful upload")
         // TODO: make this more specific; for now, since uploads happen at most every 5 minutes, just do a graph update
         // reset cache fetch timeout so data will be refetched
@@ -948,7 +948,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
 
     fileprivate var graphNeedsUpdate: Bool  = false
-    func graphDataChanged(_ note: Notification) {
+    @objc func graphDataChanged(_ note: Notification) {
         DDLogInfo("\(#function)")
         graphNeedsUpdate = true
         checkRefresh()
@@ -1039,7 +1039,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
     
-    func editPressed(_ sender: TidepoolMobileSimpleUIButton!) {
+    @objc func editPressed(_ sender: TidepoolMobileSimpleUIButton!) {
         DDLogInfo("cell with tag \(sender.tag) was pressed!")
         
         if APIConnector.connector().alertIfNetworkIsUnreachable() {
@@ -1061,7 +1061,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
 
-    func howToUploadPressed(_ sender: UIButton!) {
+    @objc func howToUploadPressed(_ sender: UIButton!) {
         DDLogInfo("howToUploadPressed was pressed!")
         if let url = URL(string: TPConstants.kHowToUploadURL) {
             UIApplication.shared.openURL(url)

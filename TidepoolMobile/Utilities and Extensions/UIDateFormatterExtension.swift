@@ -58,8 +58,8 @@ public extension DateFormatter {
         }
         
         // Bold the last (count) characters (the time)
-        let attrStr = NSMutableAttributedString(string: dateString, attributes: [NSForegroundColorAttributeName: noteTextColor, NSFontAttributeName: smallRegularFont])
-        attrStr.addAttribute(NSFontAttributeName, value: smallBoldFont, range: NSRange(location: attrStr.length - count, length: count))
+        let attrStr = NSMutableAttributedString(string: dateString, attributes: [NSAttributedStringKey.foregroundColor: noteTextColor, NSAttributedStringKey.font: smallRegularFont])
+        attrStr.addAttribute(NSAttributedStringKey.font, value: smallBoldFont, range: NSRange(location: attrStr.length - count, length: count))
         
         return attrStr
     }
@@ -76,14 +76,14 @@ public extension DateFormatter {
         }
     }
     
-    func isoStringFromDate(_ date: Date, zone: TimeZone? = nil, dateFormat: String = iso8601dateOne) -> String {
+    func isoStringFromDate(_ date: Date, zone: TimeZone? = nil, dateFormat: String? = nil) -> String {
         self.locale = Locale(identifier: "en_US_POSIX")
         if (zone != nil) {
             self.timeZone = zone
         } else {
             self.timeZone = TimeZone.autoupdatingCurrent
         }
-        self.dateFormat = dateFormat
+        self.dateFormat = dateFormat ?? iso8601dateOne
         return self.string(from: date)
     }
     
