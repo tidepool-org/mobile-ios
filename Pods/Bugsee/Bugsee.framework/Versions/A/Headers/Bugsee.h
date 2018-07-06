@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <TargetConditionals.h>
 #import <UIKit/UIKit.h>
-#import <CoreMotion/CoreMotion.h>
-
 #import "BugseeLogger.h"
 #import "BugseeConstants.h"
 #import "BugseeAttachment.h"
@@ -99,6 +97,8 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
 + (void) showReportController;
 + (void) showReportControllerWithSummary:(nonnull NSString *)summ description:(nonnull NSString*)descr severity:(BugseeSeverityLevel)level NS_SWIFT_NAME(showReportController(summary:description:severity:));
 
++ (nullable NSDictionary *)getLaunchOptions;
+
 /**
  *  Pause bugsee video and loggers
  */
@@ -107,36 +107,21 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
  *  Resume bugsee video and loggers
  */
 + (void) resume;
+/**
+ *  Stop Bugsee.
+ *  After this call you can launchWithToken:andOptions: again
+ *  new token and options will be applied
+ *  @param completion bugsee is stopped completion block, can be nil
+ */
++ (void) stop:(void (^_Nullable)(void))completion;
+
++ (void)relaunchWithDictionaryOptions:(NSDictionary * _Nullable) options NS_SWIFT_NAME(relaunch(options:));
++ (void)relaunchWithOptions:(BugseeOptions * _Nullable) options NS_SWIFT_NAME(relaunch(options:));
 
 + (void) traceKey:(nonnull NSString*)traceKey withValue:(nonnull id)value NS_SWIFT_NAME(trace(key:value:));
 
 + (void) registerEvent:(nonnull NSString*)eventName NS_SWIFT_NAME(event(_:));
 + (void) registerEvent:(nonnull NSString*)eventName withParams:(nonnull NSDictionary*)params NS_SWIFT_NAME(event(_:params:));
-
-/**
- *  Observe all property changes, please don't forget remove observer with stopTracePropertyOfObject:forKey:
- *
- *  @param object object with property
- *  @param key    property name
- */
-+ (void) tracePropertyOfObject:(nonnull NSObject*)object forKey:(nonnull NSString*)key;
-
-/**
- *  Observe all property changes, please don't forget remove observer with stopTracePropertyOfObject:forKey:
- *
- *  @param object object with property
- *  @param key    property name
- *  @param name   the name that will be shown on web interface
- */
-+ (void) tracePropertyOfObject:(nonnull NSObject*)object forKey:(nonnull NSString*)key withName:(nonnull NSString*)name;
-
-/**
- *  Remove observer from object's property
- *
- *  @param object object with property
- *  @param key    property name. Same name will be used in the traces
- */
-+ (void) stopTracePropertyOfObject:(nonnull NSObject*)object forKey:(nonnull NSString*)key;
 
 + (void) uploadWithSummary:(nonnull NSString*)summary description:(nonnull NSString*)descr severity:(BugseeSeverityLevel)severity NS_SWIFT_NAME(upload(summary:description:severity:));
 
@@ -149,8 +134,6 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
 + (void) log:(nonnull NSString*)message level:(BugseeLogLevel)level NS_SWIFT_NAME(log(_:level:));
 
 + (void) log:(nonnull NSString*)message level:(BugseeLogLevel)level timestamp:(int64_t)timestamp NS_SWIFT_NAME(log(_:level:timestamp:));
-
-+ (void) logEx:(nonnull NSDictionary*)entry;
 
 /**
  *  Show feedback controller for contacting the user
@@ -174,6 +157,16 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
  *  @see BugseeNetworkEvent
  */
 + (void) registerNetworkEvent:(nonnull BugseeNetworkEvent *)event;
+
+/**
+ *  Use this method to send info about your network event with bugsee report
+ *
+ *  @param event BugseeNetworkEvent
+ *  @param event event will go trough filter block if YES
+ *  @see BugseeNetworkEvent
+ */
++ (void) registerNetworkEvent:(nonnull BugseeNetworkEvent *)event
+            needsToBeFiltered:(BOOL)needsToBeFiltered;
 
 + (void) setDefaultFeedbackGreeting:(nonnull NSString *)greeting;
 
@@ -260,6 +253,34 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
 + (void) hideKeyboard:(BOOL) isHidden;
 
 /**
+ *  Hides part of the screen under the Rect, maximum is 10 rects
+ *
+ *  @param rect Hidden Rect
+ *  @return YES on success, NO on falure (you add already hidden Rect)
+ */
++ (BOOL) addSecureRect:(CGRect)rect;
+
+/**
+ *  Remove secure rect, if it exist
+ *
+ *  @param rect Hidden Rect
+ *  @return YES on success, NO on falure (Rect does't exist)
+ */
++ (BOOL) removeSecureRect:(CGRect)rect;
+
+/**
+ *  Remove all secure rects, can be added by [Bugsee addSecureRect:]
+ */
++ (void) removeAllSecureRects;
+
+/**
+ *  Get all Rects in array of NSValue
+ *
+ *  @return [arr[idx] CGRectValue] to get CGRect from array.
+ */
++ (NSArray * _Nullable) getAllSecureRects;
+
+/**
  *  Crash simulators.
  */
 + (void) testExceptionCrash;
@@ -267,13 +288,30 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
 
 /**
  *  Log managed excetpions.
- *  @param name     
- *  @param reason
+ *  @param name     Name
+ *  @param reason   Reason
+ *  @param frames   Arrays of strings, string for each frame
+ *  @param type     "xamarin", "unity", "cordova"
+ *  @param handled  bool value
+ *  @param synchronous do it in main thread
+ */
++ (void) logException:(nonnull NSString *)name reason:(nonnull NSString*)reason frames:(nonnull NSArray*)frames type:(nonnull NSString*)type handled:(BOOL)handled synchronous:(BOOL)synchronous;
+
+/**
+ *  Log managed excetpions.
+ *  @param name     Name
+ *  @param reason   Reason
  *  @param frames   Arrays of strings, string for each frame
  *  @param type     "xamarin", "unity", "cordova"
  *  @param handled  bool value
  */
 + (void) logException:(nonnull NSString *)name reason:(nonnull NSString*)reason frames:(nonnull NSArray*)frames type:(nonnull NSString*)type handled:(BOOL)handled NS_SWIFT_NAME(logException(name:reason:frames:type:handled:));
+
+/**
+ *  Log managed excetpions.
+ *  @param exception nonnull exception here
+ */
++ (void) logException:(nonnull NSException *)exception  NS_SWIFT_NAME(logException(exception:));
 
 /**
  *  Customize bugsee colors here.

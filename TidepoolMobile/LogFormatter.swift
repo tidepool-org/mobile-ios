@@ -1,7 +1,6 @@
 import CocoaLumberjack
-import CocoaLumberjack.DDDispatchQueueLogFormatter
 
-class LogFormatter: DDDispatchQueueLogFormatter {
+class LogFormatter: NSObject, DDLogFormatter {
     let df: DateFormatter
     
     override init() {
@@ -12,7 +11,7 @@ class LogFormatter: DDDispatchQueueLogFormatter {
         super.init()
     }
     
-    override func format(message logMessage: DDLogMessage!) -> String {
+    func format(message logMessage: DDLogMessage) -> String? {
         let dateAndTime = df.string(from: logMessage.timestamp)
         
         var logLevel: String
@@ -36,7 +35,10 @@ class LogFormatter: DDDispatchQueueLogFormatter {
         }
         
         if (useLog) {
-            if let filename = logMessage.fileName, let function = logMessage.function, let message = logMessage.message {
+            if let function = logMessage.function {
+                let filename = logMessage.fileName
+                let message = logMessage.message
+                
                 formattedLog = "\(dateAndTime) \(logLevel)/[\(filename):\(logMessage.line) \(function)]: \(message)"
             }
         }

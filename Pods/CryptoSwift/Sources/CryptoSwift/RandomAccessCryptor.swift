@@ -1,5 +1,4 @@
 //
-//  RandomAccessCryptor.swift
 //  CryptoSwift
 //
 //  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
@@ -15,7 +14,9 @@
 //
 
 /// Random access cryptor
-public protocol RandomAccessCryptor: Updatable {
+public protocol Cryptor { }
+
+public protocol RandomAccessCryptor: Cryptor {
     /// Seek to position in file, if block mode allows random access.
     ///
     /// - parameter to: new value of counter

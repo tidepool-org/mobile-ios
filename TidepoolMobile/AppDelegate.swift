@@ -41,8 +41,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
-        let logger = BugseeLogger.sharedInstance() as? DDLogger
-        DDLog.add(logger)
+        if let logger = BugseeLogger.sharedInstance() as? DDLogger {
+            DDLog.add(logger)
+        } else {
+            DDLogError("Bugsee Logger NOT ADDED!")
+        }
 
         // Only enable Bugsee for TestFlight betas and debug builds, not for iTunes App Store releases (at least for now)
         let isRunningTestFlightBeta = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"

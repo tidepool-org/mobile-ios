@@ -30,7 +30,7 @@ class HashtagBolder {
         attributedText.addAttributes([NSFontAttributeName: regularFont, NSForegroundColorAttributeName: color], range: NSRange(location: 0, length: attributedText.length))
         
         let hashTags = TwitterText.hashtags(inText: text as String, checkingURLOverlap: false)
-        for hashtag in hashTags! {
+        for hashtag in hashTags {
             attributedText.addAttributes([NSFontAttributeName: boldFont], range: (hashtag as AnyObject).range)
         }
 

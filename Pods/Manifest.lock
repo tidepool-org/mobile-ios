@@ -1,36 +1,42 @@
 PODS:
-  - Alamofire (4.6.0)
-  - Bugsee (1.17.21)
-  - CocoaLumberjack/Core (3.0.0)
-  - CocoaLumberjack/Default (3.0.0):
-    - CocoaLumberjack/Core
-  - CocoaLumberjack/Extensions (3.0.0):
+  - Alamofire (4.7.2)
+  - Bugsee (1.18.7)
+  - CocoaLumberjack/Default (3.4.2)
+  - CocoaLumberjack/Swift (3.4.2):
     - CocoaLumberjack/Default
-  - CocoaLumberjack/Swift (3.0.0):
-    - CocoaLumberjack/Extensions
-  - CryptoSwift (0.7.2)
+  - CryptoSwift (0.10.0)
   - FLAnimatedImage (1.0.12)
-  - SwiftyJSON (3.1.4)
-  - twitter-text (1.13.4)
+  - SwiftyJSON (4.1.0)
+  - twitter-text (2.0.5)
 
 DEPENDENCIES:
-  - Alamofire (= 4.6.0)
+  - Alamofire (= 4.7.2)
   - Bugsee
-  - CocoaLumberjack/Swift (~> 3.0.0)
-  - CryptoSwift (~> 0.7.2)
-  - FLAnimatedImage (~> 1.0)
-  - SwiftyJSON (= 3.1.4)
-  - twitter-text (~> 1.13.4)
+  - CocoaLumberjack/Swift (~> 3.4.2)
+  - CryptoSwift (~> 0.10.0)
+  - FLAnimatedImage (~> 1.0.12)
+  - SwiftyJSON
+  - twitter-text (~> 2.0.5)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Alamofire
+    - Bugsee
+    - CocoaLumberjack
+    - CryptoSwift
+    - FLAnimatedImage
+    - SwiftyJSON
+    - twitter-text
 
 SPEC CHECKSUMS:
-  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
-  Bugsee: 160379a995b4982eb0f825734f28bc54f83e3d4e
-  CocoaLumberjack: c823149bccc5519a9447aeb433be7b1212a7d6a5
-  CryptoSwift: cd2158be2bf639aabc63ec804707c7137c90157c
+  Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
+  Bugsee: 297cf469a4b0753322c5eb6871f52df0a4b0c07a
+  CocoaLumberjack: db7cc9e464771f12054c22ff6947c5a58d43a0fd
+  CryptoSwift: 6c778d69282bed3b4e975ff97a79d074f20bb011
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
-  twitter-text: 66e7b9925534ade86cb3cb2751788073de8f2fec
+  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
+  twitter-text: 307465760033198827fe48335785de16917d783d
 
-PODFILE CHECKSUM: d95042d59a1e278aad25a954332d0e593fca249a
+PODFILE CHECKSUM: 0833468b86c3599089bce6b9c03de22e244bec29
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.3

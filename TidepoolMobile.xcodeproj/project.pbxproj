@@ -275,7 +275,7 @@
 		48B8C92B2022B1B200437263 /* HealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843B1F4F286900A72B74 /* HealthKitConfiguration.swift */; };
 		48B8C92D2022B1C000437263 /* HealthKitBloodGlucoseUploadData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF7331F54FD430057AC09 /* HealthKitBloodGlucoseUploadData.swift */; };
 		48B8C92E2022B1C000437263 /* HealthKitBloodGlucoseUploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF72E1F5487DD0057AC09 /* HealthKitBloodGlucoseUploadManager.swift */; };
-		48B8C92F2022B1C000437263 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		48B8C92F2022B1C000437263 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		48B8C9302022B1C100437263 /* HealthKitBloodGlucoseUploadReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF72A1F5474940057AC09 /* HealthKitBloodGlucoseUploadReader.swift */; };
 		48B8C9312022B1C100437263 /* HealthKitBloodGlucoseUploadStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFFF72C1F5477910057AC09 /* HealthKitBloodGlucoseUploadStats.swift */; };
 		48B8C9322022B1C100437263 /* HealthKitBloodGlucoseUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D02843A1F4F286900A72B74 /* HealthKitBloodGlucoseUploader.swift */; };
@@ -1010,7 +1010,6 @@
 				4823986B2022628200EBB13C /* Frameworks */,
 				4823986C2022628200EBB13C /* Resources */,
 				648AB4E963DDBF699C190EAE /* [CP] Embed Pods Frameworks */,
-				1F86E746CFD6B4B7C85428BC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1031,7 +1030,6 @@
 				4859FCB31B9A4DE4000C1269 /* Resources */,
 				48FE49E41E8AD871005B103C /* ShellScript */,
 				DA97F439745BB4E48E8FCA3A /* [CP] Embed Pods Frameworks */,
-				606FCE6FE4B3B08459023F47 /* [CP] Copy Pods Resources */,
 				4DCF24411EB5303100D963B8 /* ShellScript */,
 			);
 			buildRules = (
@@ -1052,7 +1050,6 @@
 				4859FCC91B9A4DE5000C1269 /* Frameworks */,
 				4859FCCA1B9A4DE5000C1269 /* Resources */,
 				FE346F8173E80A40070E61C7 /* [CP] Embed Pods Frameworks */,
-				BF7E561E74787058E135BA57 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1071,7 +1068,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = Tidepool;
 				TargetAttributes = {
 					4823986D2022628200EBB13C = {
@@ -1174,21 +1171,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1F86E746CFD6B4B7C85428BC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BGMTool/Pods-BGMTool-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		48FE49E41E8AD871005B103C /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1214,21 +1196,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "SCRIPT_SRC=$(find \"$PROJECT_DIR\" -name 'BugseeAgent' | head -1)\nif [ ! \"${SCRIPT_SRC}\" ]; then\necho \"Error: BugseeAgent script not found.\"\necho \"If you link Bugsee.framework from outside the project folder, please copy the script\"\necho \"into your main project directory or manually update SCRIPT_SRC variable with the right path\"\nexit 1\nfi\n/usr/bin/python \"${SCRIPT_SRC}\" d3170420-a6f0-4db3-970c-c4c571e5d31a";
-		};
-		606FCE6FE4B3B08459023F47 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile-resources.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		648AB4E963DDBF699C190EAE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1288,21 +1255,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		BF7E561E74787058E135BA57 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		DA97F439745BB4E48E8FCA3A /* [CP] Embed Pods Frameworks */ = {
@@ -1398,7 +1350,7 @@
 				48B8C8E72022A61E00437263 /* UrchinConstants.swift in Sources */,
 				488DE48C203CF6B200D1FB54 /* TPMenuButton.swift in Sources */,
 				48B8C9242022AF7B00437263 /* TimeChange+CoreDataProperties.swift in Sources */,
-				48B8C92F2022B1C000437263 /* (null) in Sources */,
+				48B8C92F2022B1C000437263 /* BuildFile in Sources */,
 				488DE48B203CF61E00D1FB54 /* TidepoolMobileUIView.swift in Sources */,
 				48B8C9062022AD4E00437263 /* Upload.swift in Sources */,
 				48B8C8FE2022AD2000437263 /* Note.swift in Sources */,
@@ -1861,12 +1813,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1915,12 +1869,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
