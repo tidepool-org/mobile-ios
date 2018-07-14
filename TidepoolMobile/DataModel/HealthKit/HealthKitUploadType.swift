@@ -31,11 +31,16 @@ class HealthKitUploadType {
     var sampleObservationQuery: HKObserverQuery?
     var sampleBackgroundDeliveryEnabled = false
     var sampleQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)
-
+    
     //
     //  MARK: - Override these methods!
     //
-    
+  
+    // override!
+    internal func hkQuantityTypeIdentifier() -> HKQuantityTypeIdentifier? {
+        return nil
+    }
+
     // override!
     internal func filterSamples(sortedSamples: [HKSample]) -> [HKSample] {
         return sortedSamples
@@ -51,10 +56,6 @@ class HealthKitUploadType {
         return []
     }
     
-    // override!
-    internal func hkQuantityTypeIdentifier() -> HKQuantityTypeIdentifier? {
-        return nil
-    }
     
 }
 

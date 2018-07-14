@@ -22,7 +22,11 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
         super.init("BloodGlucose")
     }
 
-    // MARK: Private
+    // MARK: Overrides!
+    
+    internal override func hkQuantityTypeIdentifier() -> HKQuantityTypeIdentifier {
+        return HKQuantityTypeIdentifier.bloodGlucose
+    }
     
     internal override func filterSamples(sortedSamples: [HKSample]) -> [HKSample] {
         DDLogVerbose("trace")
@@ -68,10 +72,6 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
         }
         
         return "HealthKit_\(deviceModel)"
-    }
-
-    internal override func hkQuantityTypeIdentifier() -> HKQuantityTypeIdentifier {
-        return HKQuantityTypeIdentifier.bloodGlucose
     }
 
 }

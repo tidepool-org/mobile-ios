@@ -25,7 +25,7 @@ protocol HealthKitSampleUploaderDelegate: class {
 
 class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     init(mode: HealthKitUploadReader.Mode, uploadType: HealthKitUploadType) {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(uploadType.typeName), mode: \(mode.rawValue)")
         
         self.mode = mode
         self.typeString = uploadType.typeName
@@ -46,7 +46,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     
     // NOTE: This is called from a query results handler, not on main thread
     func startUploadSessionTasks(with request: URLRequest, data: HealthKitUploadData) throws {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
 
         // Prepare POST files for upload. Fine to do this on background thread
         let batchMetadataPostBodyURL = try self.createPostBodyFileForBatchMetadataUpload(data: data)
@@ -88,7 +88,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     }
     
     func cancelTasks() {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
         
         if self.backgroundUploadSession == nil && self.foregroundUploadSession == nil {
             self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
@@ -119,7 +119,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     // MARK: URLSessionTaskDelegate
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
 
         var message = ""
         if let error = error {
@@ -176,7 +176,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     }
     
     func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
 
         DispatchQueue.main.async {
             if session == self.foregroundUploadSession {
@@ -194,7 +194,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     // MARK: Private
     
     fileprivate func ensureUploadSession(isBackground: Bool) {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
         
         guard (isBackground && self.backgroundUploadSession == nil) || (!isBackground && self.foregroundUploadSession == nil) else {
             return
@@ -218,7 +218,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     }
 
     fileprivate func createPostBodyFileForBatchMetadataUpload(data: HealthKitUploadData) throws -> URL {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
         
         let postBody = try JSONSerialization.data(withJSONObject: data.batchMetadata)
         if defaultDebugLevel != DDLogLevel.off {
@@ -229,7 +229,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     }
     
     fileprivate func createBodyFileForBatchSamplesUpload(data: HealthKitUploadData) throws -> URL {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
 
         // Prepare upload post body
         let dateFormatter = DateFormatter()

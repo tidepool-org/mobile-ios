@@ -71,7 +71,7 @@ class HealthKitUploadReader: NSObject {
     }
     
     func resetPersistentState() {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(uploadType.typeName), mode: \(mode.rawValue)")
         
         UserDefaults.standard.removeObject(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, type: uploadType.typeName, key: HealthKitSettings.UploadQueryAnchorKey))
         UserDefaults.standard.removeObject(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, type: uploadType.typeName, key: HealthKitSettings.UploadQueryAnchorLastKey))
@@ -81,7 +81,7 @@ class HealthKitUploadReader: NSObject {
     }
 
     func startReading() {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(uploadType.typeName), mode: \(mode.rawValue)")
         
         guard !self.isReading else {
             DDLogVerbose("Ignoring request to start reading samples, already reading samples")
@@ -96,7 +96,7 @@ class HealthKitUploadReader: NSObject {
     }
     
     func stopReading(reason: StoppedReason) {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(uploadType.typeName), mode: \(mode.rawValue)")
 
         guard self.isReading else {
             DDLogInfo("Not currently reading, ignoring. Mode: \(self.mode)")
@@ -109,7 +109,7 @@ class HealthKitUploadReader: NSObject {
     }
     
     func readMore() {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(uploadType.typeName), mode: \(mode.rawValue)")
 
         // Load the anchor
         var anchor: HKQueryAnchor?
@@ -149,7 +149,7 @@ class HealthKitUploadReader: NSObject {
     
     // NOTE: This is a HealthKit results handler, not called on main thread
     fileprivate func samplesReadResultsHandler(_ error: NSError?, newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, newAnchor: HKQueryAnchor?) {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(uploadType.typeName), mode: \(mode.rawValue)")
         
         guard self.isReading else {
             DDLogInfo("Not currently reading, ignoring")

@@ -24,8 +24,8 @@ var fileLogger: DDFileLogger!
 /// Set up health kit configuration singleton, specialized version of HealthKitConfiguration
 let appHealthKitConfiguration = TidepoolMobileHealthKitConfiguration(healthKitUploadTypes: [
     HealthKitUploadTypeBloodGlucose(),
-    //HealthKitUploadTypeCarb(),
-    //HealthKitUploadTypeInsulin(),
+    HealthKitUploadTypeCarb(),
+    HealthKitUploadTypeInsulin(),
     ])
 
 /// AppDelegate deals with app startup, restart, termination:

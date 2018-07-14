@@ -20,9 +20,29 @@ import HealthKit
 class HealthKitUploadTypeInsulin: HealthKitUploadType {
     init() {
         super.init("Insulin")
-    }
+     }
 
     internal override func hkQuantityTypeIdentifier() -> HKQuantityTypeIdentifier {
         return HKQuantityTypeIdentifier.insulinDelivery
+    }
+
+    internal override func filterSamples(sortedSamples: [HKSample]) -> [HKSample] {
+        DDLogVerbose("trace")
+        
+        // Filter out non-Dexcom data
+        let filteredSamples = [HKSample]()
+        // TODO: For now, filter everything out, until new platform endpoint is supported!
+        return filteredSamples
+    }
+    
+    // override!
+    internal override func typeSpecificMetadata() -> [(metaKey: String, metadatum: AnyObject)] {
+        DDLogVerbose("trace")
+        let metadata: [(metaKey: String, metadatum: AnyObject)] = []
+        return metadata
+    }
+    
+    internal override func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
+        return ""
     }
 }

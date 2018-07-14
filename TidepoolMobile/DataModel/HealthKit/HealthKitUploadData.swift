@@ -48,7 +48,7 @@ class HealthKitUploadData: NSObject {
     private(set) var newOrDeletedSamplesWereDelivered = false
     
     func updateSamples(samples: [HKSample]) {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(uploadType.typeName)")
         
         // Sort by sample date
         let sortedSamples = samples.sorted(by: {x, y in
@@ -74,7 +74,7 @@ class HealthKitUploadData: NSObject {
     }
 
     func updateBatchMetadata() {
-        DDLogVerbose("trace")
+        DDLogVerbose("type: \(uploadType.typeName)")
 
         guard self.filteredSamples.count > 0 else {
             DDLogInfo("No samples available for batch")
