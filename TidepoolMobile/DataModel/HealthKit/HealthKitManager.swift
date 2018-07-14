@@ -33,8 +33,8 @@ class HealthKitManager {
         return HKHealthStore.isHealthDataAvailable()
     }()
     
-    func authorizationRequestedForBloodGlucoseSamples() -> Bool {
-        return UserDefaults.standard.bool(forKey: HealthKitSettings.AuthorizationRequestedForBloodGlucoseSamplesKey)
+    func authorizationRequestedForUploaderSamples() -> Bool {
+        return UserDefaults.standard.bool(forKey: HealthKitSettings.AuthorizationRequestedForUploaderSamplesKey)
     }
     
     func authorizationRequestedForBloodGlucoseSampleWrites() -> Bool {
@@ -45,7 +45,7 @@ class HealthKitManager {
         return UserDefaults.standard.bool(forKey: HealthKitSettings.AuthorizationRequestedForWorkoutSamplesKey)
     }
     
-    func authorize(shouldAuthorizeBloodGlucoseSampleReads: Bool, shouldAuthorizeBloodGlucoseSampleWrites: Bool, shouldAuthorizeWorkoutSamples: Bool, completion: @escaping (_ success:Bool, _ error:NSError?) -> Void = {(_, _) in })
+    func authorize(shouldAuthorizeUploaderSampleReads: Bool, shouldAuthorizeBloodGlucoseSampleWrites: Bool, shouldAuthorizeWorkoutSamples: Bool, completion: @escaping (_ success:Bool, _ error:NSError?) -> Void = {(_, _) in })
     {
         DDLogVerbose("trace")
         
@@ -67,9 +67,11 @@ class HealthKitManager {
         
         var readTypes: Set<HKSampleType>?
         var writeTypes: Set<HKSampleType>?
-        if (shouldAuthorizeBloodGlucoseSampleReads) {
+        if (shouldAuthorizeUploaderSampleReads) {
             readTypes = Set<HKSampleType>()
-            readTypes!.insert(HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!)
+            for uploadType in appHealthKitConfiguration.healthKitUploadTypes {
+                readTypes!.insert(HKObjectType.quantityType(forIdentifier: uploadType.hkQuantityTypeIdentifier()!)!)
+            }
         }
         if (shouldAuthorizeBloodGlucoseSampleWrites) {
             writeTypes = Set<HKSampleType>()
@@ -89,8 +91,8 @@ class HealthKitManager {
         if (isHealthDataAvailable) {
             healthStore!.requestAuthorization(toShare: writeTypes, read: readTypes) { (success, error) -> Void in
                 if success {
-                    if (shouldAuthorizeBloodGlucoseSampleReads) {
-                        UserDefaults.standard.set(true, forKey: HealthKitSettings.AuthorizationRequestedForBloodGlucoseSamplesKey)
+                    if (shouldAuthorizeUploaderSampleReads) {
+                        UserDefaults.standard.set(true, forKey: HealthKitSettings.AuthorizationRequestedForUploaderSamplesKey)
                     }
                     if (shouldAuthorizeBloodGlucoseSampleWrites) {
                         UserDefaults.standard.set(true, forKey: HealthKitSettings.AuthorizationRequestedForBloodGlucoseSampleWritesKey)
@@ -113,7 +115,7 @@ class HealthKitManager {
     
     // MARK: Observation
     
-    func startObservingBloodGlucoseSamples(_ observationHandler: @escaping (NSError?) -> (Void)) {
+    func startObservingSamplesForType(_ uploadType: HealthKitUploadType, _ observationHandler: @escaping (NSError?) -> (Void)) {
         DDLogVerbose("trace")
 
         guard isHealthDataAvailable else {
@@ -121,13 +123,13 @@ class HealthKitManager {
             return
         }
         
-        if bloodGlucoseObservationQuery != nil {
-            healthStore?.stop(bloodGlucoseObservationQuery!)
-            bloodGlucoseObservationQuery = nil
+        if uploadType.sampleObservationQuery != nil {
+            healthStore?.stop(uploadType.sampleObservationQuery!)
+            uploadType.sampleObservationQuery = nil
         }
         
-        let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
-        bloodGlucoseObservationQuery = HKObserverQuery(sampleType: sampleType, predicate: nil) {
+        let sampleType = HKObjectType.quantityType(forIdentifier: uploadType.hkQuantityTypeIdentifier()!)!
+        uploadType.sampleObservationQuery = HKObserverQuery(sampleType: sampleType, predicate: nil) {
             (query, observerQueryCompletion, error) in
             
             DDLogVerbose("Observation query called")
@@ -141,10 +143,10 @@ class HealthKitManager {
             // Per HealthKit docs: Calling this block tells HealthKit that you have successfully received the background data. If you do not call this block, HealthKit continues to attempt to launch your app using a back off algorithm. If your app fails to respond three times, HealthKit assumes that your app cannot receive data, and stops sending you background updates            
             observerQueryCompletion()
         }
-        healthStore?.execute(bloodGlucoseObservationQuery!)
+        healthStore?.execute(uploadType.sampleObservationQuery!)
     }
     
-    func stopObservingBloodGlucoseSamples() {
+    func stopObservingSamplesForType(_ uploadType: HealthKitUploadType) {
         DDLogVerbose("trace")
 
         guard isHealthDataAvailable else {
@@ -152,9 +154,9 @@ class HealthKitManager {
             return
         }
         
-        if bloodGlucoseObservationQuery != nil {
-            healthStore?.stop(bloodGlucoseObservationQuery!)
-            bloodGlucoseObservationQuery = nil
+        if uploadType.sampleObservationQuery != nil {
+            healthStore?.stop(uploadType.sampleObservationQuery!)
+            uploadType.sampleObservationQuery = nil
         }
     }
     
@@ -208,7 +210,7 @@ class HealthKitManager {
     
     // MARK: Background delivery
     
-    func enableBackgroundDeliveryBloodGlucoseSamples() {
+    func enableBackgroundDeliverySamplesForType(_ uploadType: HealthKitUploadType) {
         DDLogVerbose("trace")
 
         guard isHealthDataAvailable else {
@@ -216,13 +218,13 @@ class HealthKitManager {
             return
         }
         
-        if !bloodGlucoseBackgroundDeliveryEnabled {
+        if !uploadType.sampleBackgroundDeliveryEnabled {
             healthStore?.enableBackgroundDelivery(
-                for: HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!,
+                for: HKObjectType.quantityType(forIdentifier: uploadType.hkQuantityTypeIdentifier()!)!,
                 frequency: HKUpdateFrequency.immediate) {
                     success, error -> Void in
                     if error == nil {
-                        self.bloodGlucoseBackgroundDeliveryEnabled = true
+                        uploadType.sampleBackgroundDeliveryEnabled = true
                         DDLogError("Enabled background delivery of health data")
                     } else {
                         DDLogError("Error enabling background delivery of health data \(String(describing: error))")
@@ -231,7 +233,7 @@ class HealthKitManager {
         }
     }
     
-    func disableBackgroundDeliveryBloodGlucoseSamples() {
+    func disableBackgroundDeliverySamplesForType(_ uploadType: HealthKitUploadType) {
         DDLogVerbose("trace")
 
         guard isHealthDataAvailable else {
@@ -239,11 +241,11 @@ class HealthKitManager {
             return
         }
         
-        if bloodGlucoseBackgroundDeliveryEnabled {
-            healthStore?.disableBackgroundDelivery(for: HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!) {
+        if uploadType.sampleBackgroundDeliveryEnabled {
+            healthStore?.disableBackgroundDelivery(for: HKObjectType.quantityType(forIdentifier: uploadType.hkQuantityTypeIdentifier()!)!) {
                 success, error -> Void in
                 if error == nil {
-                    self.bloodGlucoseBackgroundDeliveryEnabled = false
+                    uploadType.sampleBackgroundDeliveryEnabled = false
                     DDLogError("Disabled background delivery of health data")
                 } else {
                     DDLogError("Error disabling background delivery of health data \(String(describing: error)), \(String(describing: error!._userInfo))")
@@ -296,7 +298,7 @@ class HealthKitManager {
         }
     }
     
-    func readBloodGlucoseSamplesFromAnchor(predicate: NSPredicate?, anchor: HKQueryAnchor?, limit: Int, resultsHandler: @escaping ((NSError?, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?) -> Void))
+    func readSamplesFromAnchorForType(_ uploadType: HealthKitUploadType, predicate: NSPredicate?, anchor: HKQueryAnchor?, limit: Int, resultsHandler: @escaping ((NSError?, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?) -> Void))
     {
         DDLogVerbose("trace")
         
@@ -305,7 +307,7 @@ class HealthKitManager {
             return
         }
         
-        let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
+        let sampleType = HKObjectType.quantityType(forIdentifier: uploadType.hkQuantityTypeIdentifier()!)!
         let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
             predicate: predicate,
             anchor: anchor,
@@ -321,9 +323,9 @@ class HealthKitManager {
         healthStore?.execute(sampleQuery)
     }
 
-    func readBloodGlucoseSamples(startDate: Date, endDate: Date, limit: Int, resultsHandler: @escaping (((NSError?, [HKSample]?, HKQueryAnchor?) -> Void)))
+    func readSamplesForType(_ uploadType: HealthKitUploadType, startDate: Date, endDate: Date, limit: Int, resultsHandler: @escaping (((NSError?, [HKSample]?, HKQueryAnchor?) -> Void)))
     {
-        DDLogInfo("readBloodGlucoseSamples startDate: \(startDate), endDate: \(endDate), limit: \(limit)")
+        DDLogInfo("readSamplesForType uploadType: \(uploadType.typeName) startDate: \(startDate), endDate: \(endDate), limit: \(limit)")
         
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
@@ -333,7 +335,7 @@ class HealthKitManager {
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictStartDate, .strictEndDate])
         let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
         
-        let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
+        let sampleType = HKObjectType.quantityType(forIdentifier: uploadType.hkQuantityTypeIdentifier()!)!
         let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: limit, sortDescriptors: [sortDescriptor]) {
             (query, newSamples, error) -> Void in
             
@@ -346,6 +348,7 @@ class HealthKitManager {
         healthStore?.execute(sampleQuery)
     }
     
+    // Debug function, not currently called!
     func countBloodGlucoseSamples(_ completion: @escaping (_ error: NSError?, _ totalSamplesCount: Int, _ totalDexcomSamplesCount: Int) -> (Void)) {
         DDLogVerbose("trace")
         
@@ -447,12 +450,8 @@ class HealthKitManager {
     
     // MARK: Private
     
-    fileprivate var bloodGlucoseObservationQuery: HKObserverQuery?
-    fileprivate var bloodGlucoseBackgroundDeliveryEnabled = false
-    fileprivate var bloodGlucoseQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)
-
-    fileprivate var workoutsObservationSuccessful = false
-    fileprivate var workoutsObservationQuery: HKObserverQuery?
-    fileprivate var workoutsBackgroundDeliveryEnabled = false
-    fileprivate var workoutsQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)
+    private var workoutsObservationSuccessful = false
+    private var workoutsObservationQuery: HKObserverQuery?
+    private var workoutsBackgroundDeliveryEnabled = false
+    private var workoutsQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)
 }

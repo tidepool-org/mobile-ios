@@ -176,28 +176,28 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
         HKHealthStore().execute(sampleQuery)
     }
 
-    fileprivate func handleCountBloodGlucoseSamples() {
-        HealthKitManager.sharedInstance.countBloodGlucoseSamples {
-            (error: Error?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) in
-            
-            var alert: UIAlertController?
-            let title = "HealthKit Blood Glucose Sample Count"
-            var message = ""
-            if error == nil {
-                message = "There are \(totalSamplesCount) blood glucose samples and \(totalDexcomSamplesCount) Dexcom samples in HealthKit"
-            } else if HealthKitManager.sharedInstance.authorizationRequestedForBloodGlucoseSamples() {
-                message = "Error counting samples: \(String(describing: error))"
-            } else {
-                message = "Unable to count sample. Maybe you haven't connected to Health yet. Please login and connect to Health and try again."
-            }
-            DDLogInfo(message)
-            alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            alert!.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            DispatchQueue.main.async(execute: {
-                self.presentingViewController?.present(alert!, animated: true, completion: nil)
-            })
-        }
-    }
+//    fileprivate func handleCountBloodGlucoseSamples() {
+//        HealthKitManager.sharedInstance.countBloodGlucoseSamples {
+//            (error: Error?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) in
+//
+//            var alert: UIAlertController?
+//            let title = "HealthKit Blood Glucose Sample Count"
+//            var message = ""
+//            if error == nil {
+//                message = "There are \(totalSamplesCount) blood glucose samples and \(totalDexcomSamplesCount) Dexcom samples in HealthKit"
+//            } else if HealthKitManager.sharedInstance.authorizationRequestedForBloodGlucoseSamples() {
+//                message = "Error counting samples: \(String(describing: error))"
+//            } else {
+//                message = "Unable to count sample. Maybe you haven't connected to Health yet. Please login and connect to Health and try again."
+//            }
+//            DDLogInfo(message)
+//            alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+//            alert!.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//            DispatchQueue.main.async(execute: {
+//                self.presentingViewController?.present(alert!, animated: true, completion: nil)
+//            })
+//        }
+//    }
     
     fileprivate func handleFindDateRangeBloodGlucoseSamples() {
         let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!

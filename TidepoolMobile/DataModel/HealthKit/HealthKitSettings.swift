@@ -20,7 +20,7 @@ class HealthKitSettings {
     static let InterfaceUserNameKey = "kUserNameForHealthKitInterfaceKey"
     
     // Authorization
-    static let AuthorizationRequestedForBloodGlucoseSamplesKey = "authorizationRequestedForBloodGlucoseSamples"
+    static let AuthorizationRequestedForUploaderSamplesKey = "authorizationRequestedForUploaderSamples"
     static let AuthorizationRequestedForBloodGlucoseSampleWritesKey = "authorizationRequestedForBloodGlucoseSampleWrites"
     static let AuthorizationRequestedForWorkoutSamplesKey = "authorizationRequestedForWorkoutSamples"
     
@@ -36,11 +36,11 @@ class HealthKitSettings {
     static let HasPendingUploadsKey = "HasPendingUploadsKey"
     static let Task1IsPendingKey = "Task1IsPendingKey"
     
-    // Blood glucose anchor query (prefix using prefixedKey helper)
-    static let BloodGlucoseQueryAnchorKey = "BloodGlucoseQueryAnchorKey"
-    static let BloodGlucoseQueryAnchorLastKey = "BloodGlucoseQueryAnchorLastKey"
-    static let BloodGlucoseQueryStartDateKey = "BloodGlucoseQueryStartDateKey"
-    static let BloodGlucoseQueryEndDateKey = "BloodGlucoseQueryEndDateKey"
+    // HK type anchor query (prefix using prefixedKey helper)
+    static let UploadQueryAnchorKey = "QueryAnchorKey"
+    static let UploadQueryAnchorLastKey = "QueryAnchorLastKey"
+    static let UploadQueryStartDateKey = "QueryStartDateKey"
+    static let UploadQueryEndDateKey = "QueryEndDateKey"
 
     // Stats (prefix using prefixedKey helper)
     static let StatsTotalUploadCountKey = "StatsTotalUploadCountKey"
@@ -51,14 +51,16 @@ class HealthKitSettings {
     static let StatsLastSuccessfulUploadTimeKey = "StatsLastSuccessfulUploadTimeKey"
     static let StatsLastSuccessfulUploadLatestSampleTimeKey = "StatsLastSuccessfulUploadLatestSampleTimeKey"
     static let StatsLastSuccessfulUploadEarliestSampleTimeKey = "StatsLastSuccessfulUploadEarliestSampleTimeKey"
-    static let StatsStartDateHistoricalBloodGlucoseSamplesKey = "StatsStartDateHistoricalBloodGlucoseSamplesKey"
-    static let StatsEndDateHistoricalBloodGlucoseSamplesKey = "StatsEndDateHistoricalBloodGlucoseSamplesKey"
-    static let StatsTotalDaysHistoricalBloodGlucoseSamplesKey = "StatsTotalDaysHistoricalBloodGlucoseSamplesKey"
+    static let StatsStartDateHistoricalSamplesKey = "StatsStartDateHistoricalSamplesKey"
+    static let StatsEndDateHistoricalSamplesKey = "StatsEndDateHistoricalSamplesKey"
+    static let StatsTotalDaysHistoricalSamplesKey = "StatsTotalDaysHistoricalSamplesKey"
     static let StatsCurrentDayHistoricalKey = "StatsCurrentDayHistoricalKey"
     
-    // Helper for HealthKitSettings keys that are prefixed with a mode
-    class func prefixedKey(prefix: String, key: String) -> String {
-        return "\(prefix)-\(key)"
+    // Helper for HealthKitSettings keys that are prefixed with a mode and/or upload type string
+    class func prefixedKey(prefix: String, type: String, key: String) -> String {
+        let result = "\(prefix)-\(type)\(key)"
+        //print("prefixedKey: \(result)")
+        return result
     }
     
 }

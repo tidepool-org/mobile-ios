@@ -1,20 +1,32 @@
-//
-//  HealthKitConfiguration.swift
-//  Urchin
-//
-//  Created by Larry Kenyon on 3/30/16.
-//  Copyright © 2016 Tidepool. All rights reserved.
-//
+/*
+ * Copyright (c) 2018, Tidepool Project
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the associated License, which is identical to the BSD 2-Clause
+ * License as published by the Open Source Initiative at opensource.org.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the License for more details.
+ *
+ * You should have received a copy of the License along with this program; if
+ * not, you can obtain one from Tidepool Project at tidepool.org.
+ */
 
 import HealthKit
 import CocoaLumberjack
 
 class HealthKitConfiguration
-{    
+{
+    init(healthKitUploadTypes: [HealthKitUploadType]) {
+        self.healthKitUploadTypes = healthKitUploadTypes
+    }
+    
     // MARK: Access, availability, authorization
 
-    fileprivate(set) var currentUserId: String?
-    fileprivate var isDSAUser: Bool?
+    private(set) var currentUserId: String?
+    private var isDSAUser: Bool?
+    private(set) var healthKitUploadTypes: [HealthKitUploadType]
     
     func shouldShowHealthKitUI() -> Bool {
         DDLogVerbose("trace")
@@ -68,12 +80,12 @@ class HealthKitConfiguration
         DDLogVerbose("trace")
 
         if self.currentUserId != nil {
-            // Always start uploading HealthKitBloodGlucoseUploadReader.Mode.Current samples when interface is turned on
-            HealthKitBloodGlucoseUploadManager.sharedInstance.startUploading(mode: HealthKitBloodGlucoseUploadReader.Mode.Current, currentUserId: self.currentUserId!)
+            // Always start uploading HealthKitUploadReader.Mode.Current samples when interface is turned on
+            HealthKitUploadManager.sharedInstance.startUploading(mode: HealthKitUploadReader.Mode.Current, currentUserId: self.currentUserId!)
 
             // Resume uploading other samples too, if resumable
             // TODO: uploader UI - Revisit this. Do we want even the non-current mode readers/uploads to resume automatically? Or should that be behind some explicit UI
-            HealthKitBloodGlucoseUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: self.currentUserId)
+            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: self.currentUserId)
         } else {
             DDLogInfo("No logged in user, unable to start uploading")
         }
@@ -82,7 +94,7 @@ class HealthKitConfiguration
     func turnOffInterface() {
         DDLogVerbose("trace")
 
-        HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(reason: HealthKitBloodGlucoseUploadReader.StoppedReason.turnOffInterface)
+        HealthKitUploadManager.sharedInstance.stopUploading(reason: HealthKitUploadReader.StoppedReason.turnOffInterface)
     }
 
     //
@@ -92,7 +104,7 @@ class HealthKitConfiguration
     /// Enables HealthKit for current user
     ///
     /// Note: This sets the current tidepool user as the HealthKit user!
-    func enableHealthKitInterface(_ username: String?, userid: String?, isDSAUser: Bool?, needsGlucoseReads: Bool, needsGlucoseWrites: Bool, needsWorkoutReads: Bool) {
+    func enableHealthKitInterface(_ username: String?, userid: String?, isDSAUser: Bool?, needsUploaderReads: Bool, needsGlucoseWrites: Bool, needsWorkoutReads: Bool) {
         DDLogVerbose("trace")
  
         currentUserId = userid
@@ -110,8 +122,8 @@ class HealthKitConfiguration
             defaults.set(true, forKey: HealthKitSettings.InterfaceEnabledKey)
             if !self.healthKitInterfaceEnabledForCurrentUser() {
                 if self.healthKitInterfaceConfiguredForOtherUser() {
-                    // Switching healthkit users, reset HealthKitBloodGlucoseUploadManager
-                    HealthKitBloodGlucoseUploadManager.sharedInstance.resetPersistentState(switchingHealthKitUsers: true)
+                    // Switching healthkit users, reset HealthKitUploadManager
+                    HealthKitUploadManager.sharedInstance.resetPersistentState(switchingHealthKitUsers: true)
                 }
                 defaults.setValue(currentUserId!, forKey: HealthKitSettings.InterfaceUserIdKey)
                 // may be nil...
@@ -120,7 +132,7 @@ class HealthKitConfiguration
             UserDefaults.standard.synchronize()
         }
         
-        HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSampleReads: needsGlucoseReads, shouldAuthorizeBloodGlucoseSampleWrites: needsGlucoseWrites, shouldAuthorizeWorkoutSamples: needsWorkoutReads) {
+        HealthKitManager.sharedInstance.authorize(shouldAuthorizeUploaderSampleReads: needsUploaderReads, shouldAuthorizeBloodGlucoseSampleWrites: needsGlucoseWrites, shouldAuthorizeWorkoutSamples: needsWorkoutReads) {
             success, error -> Void in
             
             DDLogVerbose("trace")

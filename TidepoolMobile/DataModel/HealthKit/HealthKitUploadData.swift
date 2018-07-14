@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, Tidepool Project
+ * Copyright (c) 2018, Tidepool Project
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the associated License, which is identical to the BSD 2-Clause
@@ -17,10 +17,12 @@ import HealthKit
 import CocoaLumberjack
 import CryptoSwift
 
-class HealthKitBloodGlucoseUploadData: NSObject {
-    init(newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, currentUserId: String) {
+class HealthKitUploadData: NSObject {
+    var uploadType: HealthKitUploadType
+    
+    init(_ uploadType: HealthKitUploadType, newSamples: [HKSample]?, deletedSamples: [HKDeletedObject]?, currentUserId: String) {
         DDLogVerbose("trace")
-        
+        self.uploadType = uploadType
         super.init()
         
         self.currentUserId = currentUserId
@@ -39,15 +41,13 @@ class HealthKitBloodGlucoseUploadData: NSObject {
         }
     }
 
-    fileprivate(set) var filteredSamples = [HKSample]()
-    fileprivate(set) var earliestSampleTime = Date.distantFuture
-    fileprivate(set) var latestSampleTime = Date.distantPast
-    fileprivate(set) var batchMetadata = [String: AnyObject]()
-    fileprivate(set) var newOrDeletedSamplesWereDelivered = false
-
-    // MARK: Private
+    private(set) var filteredSamples = [HKSample]()
+    private(set) var earliestSampleTime = Date.distantFuture
+    private(set) var latestSampleTime = Date.distantPast
+    private(set) var batchMetadata = [String: AnyObject]()
+    private(set) var newOrDeletedSamplesWereDelivered = false
     
-    fileprivate func updateSamples(samples: [HKSample]) {
+    func updateSamples(samples: [HKSample]) {
         DDLogVerbose("trace")
         
         // Sort by sample date
@@ -55,21 +55,11 @@ class HealthKitBloodGlucoseUploadData: NSObject {
             return x.startDate.compare(y.startDate) == .orderedAscending
         })
         
-        // Filter out non-Dexcom data and compute latest sample time for batch
-        var filteredSamples = [HKSample]()
+        self.filteredSamples = uploadType.filterSamples(sortedSamples: sortedSamples)
+        
         var earliestSampleTime = Date.distantFuture
         var latestSampleTime = Date.distantPast
-        for sample in sortedSamples {
-            let sourceRevision = sample.sourceRevision
-            let source = sourceRevision.source
-            let treatAllBloodGlucoseSourceTypesAsDexcom = UserDefaults.standard.bool(forKey: HealthKitSettings.TreatAllBloodGlucoseSourceTypesAsDexcomKey)
-            if source.name.lowercased().range(of: "dexcom") == nil && !treatAllBloodGlucoseSourceTypesAsDexcom {
-                DDLogInfo("Ignoring non-Dexcom glucose data from source: \(source.name)")
-                continue
-            }
-            
-            filteredSamples.append(sample)
-            
+        for sample in self.filteredSamples {
             if sample.startDate.compare(earliestSampleTime) == .orderedAscending {
                 earliestSampleTime = sample.startDate
             }
@@ -79,14 +69,13 @@ class HealthKitBloodGlucoseUploadData: NSObject {
             }
         }
         
-        self.filteredSamples = filteredSamples
         self.earliestSampleTime = earliestSampleTime
         self.latestSampleTime = latestSampleTime
     }
-    
-    fileprivate func updateBatchMetadata() {
+
+    func updateBatchMetadata() {
         DDLogVerbose("trace")
-        
+
         guard self.filteredSamples.count > 0 else {
             DDLogInfo("No samples available for batch")
             return
@@ -96,7 +85,7 @@ class HealthKitBloodGlucoseUploadData: NSObject {
         let sourceRevision = firstSample.sourceRevision
         let source = sourceRevision.source
         let sourceBundleIdentifier = source.bundleIdentifier
-        let deviceModel = deviceModelForSourceBundleIdentifier(sourceBundleIdentifier)
+        let deviceModel = uploadType.deviceModelForSourceBundleIdentifier(sourceBundleIdentifier)
         let deviceId = "\(deviceModel)_\(UIDevice.current.identifierForVendor!.uuidString)"
         let timeZoneOffset = NSCalendar.current.timeZone.secondsFromGMT() / 60
         let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
@@ -122,30 +111,18 @@ class HealthKitBloodGlucoseUploadData: NSObject {
         batchMetadata["version"] = version as AnyObject
         batchMetadata["guid"] = guid as AnyObject
         batchMetadata["byUser"] = self.currentUserId as AnyObject
-        batchMetadata["deviceTags"] = ["cgm"] as AnyObject
-        batchMetadata["deviceManufacturers"] = ["Dexcom"] as AnyObject
         batchMetadata["deviceSerialNumber"] = "" as AnyObject
         batchMetadata["deviceModel"] = deviceModel as AnyObject
         batchMetadata["deviceId"] = deviceId as AnyObject
         
+        // override point! Add additional type-specific metadata, if any...
+        for item in uploadType.typeSpecificMetadata() {
+            batchMetadata[item.metaKey] = item.metadatum
+        }
+        
         self.batchMetadata = batchMetadata
     }
     
-    fileprivate func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
-        var deviceModel = ""
-        
-        // TODO: uploader - what about G6? others?
-        if sourceBundleIdentifier.lowercased().range(of: "com.dexcom.cgm") != nil {
-            deviceModel = "DexG5"
-        } else if sourceBundleIdentifier.lowercased().range(of: "com.dexcom.share2") != nil {
-            deviceModel = "DexG4"
-        } else {
-            DDLogError("Unknown Dexcom sourceBundleIdentifier: \(sourceBundleIdentifier)")
-            deviceModel = "DexUnknown: \(sourceBundleIdentifier)"
-        }
-        
-        return "HealthKit_\(deviceModel)"
-    }
-
-    fileprivate var currentUserId = ""
+    private var currentUserId = ""
 }
+

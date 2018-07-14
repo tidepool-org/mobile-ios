@@ -933,7 +933,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     @objc internal func handleTurnOnUploader(_ note: Notification) {
         DDLogVerbose("trace")
         
-        if let _ = self.sideMenuController()?.sideMenu?.isMenuOpen, !HealthKitBloodGlucoseUploadManager.sharedInstance.hasPresentedSyncUI {
+        if let _ = self.sideMenuController()?.sideMenu?.isMenuOpen, !HealthKitUploadManager.sharedInstance.hasPresentedSyncUI {
             toggleSideMenu(self)
             performSegue(withIdentifier: "segueToSyncHealthData", sender: self)
         }

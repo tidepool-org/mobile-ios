@@ -21,7 +21,10 @@ import CoreData
 
 class TidepoolMobileHealthKitConfiguration: HealthKitConfiguration
 {
-    
+    override init(healthKitUploadTypes: [HealthKitUploadType]) {
+        super.init(healthKitUploadTypes: healthKitUploadTypes)
+    }
+
     // Override to load workout events and sync smbg events from Tidepool service in addition to pushing up Dexcom blood glucose monitoring events
     override func turnOnInterface() {
         super.turnOnInterface()

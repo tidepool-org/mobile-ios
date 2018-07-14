@@ -17,17 +17,18 @@ import HealthKit
 import CocoaLumberjack
 import CryptoSwift
 
-protocol HealthKitBloodGlucoseUploaderDelegate: class {
-    func bloodGlucoseUploader(uploader: HealthKitBloodGlucoseUploader, didCompleteUploadWithError error: Error?)
+protocol HealthKitSampleUploaderDelegate: class {
+    func sampleUploader(uploader: HealthKitUploader, didCompleteUploadWithError error: Error?)
 }
 
 // TODO: uploader - we should avoid using file based POSTs when in foreground (probably faster!? and simpler)
 
-class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {    
-    init(mode: HealthKitBloodGlucoseUploadReader.Mode) {
+class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
+    init(mode: HealthKitUploadReader.Mode, uploadType: HealthKitUploadType) {
         DDLogVerbose("trace")
         
         self.mode = mode
+        self.typeString = uploadType.typeName
 
         super.init()
 
@@ -35,15 +36,16 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
         self.ensureUploadSession(isBackground: true)
     }
 
-    fileprivate(set) var mode: HealthKitBloodGlucoseUploadReader.Mode
-    weak var delegate: HealthKitBloodGlucoseUploaderDelegate?
+    private(set) var mode: HealthKitUploadReader.Mode
+    private(set) var typeString: String
+    weak var delegate: HealthKitSampleUploaderDelegate?
     
     func hasPendingUploadTasks() -> Bool {
-        return UserDefaults.standard.bool(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.HasPendingUploadsKey))
+        return UserDefaults.standard.bool(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, type: typeString, key: HealthKitSettings.HasPendingUploadsKey))
     }
     
     // NOTE: This is called from a query results handler, not on main thread
-    func startUploadSessionTasks(with request: URLRequest, data: HealthKitBloodGlucoseUploadData) throws {
+    func startUploadSessionTasks(with request: URLRequest, data: HealthKitUploadData) throws {
         DDLogVerbose("trace")
 
         // Prepare POST files for upload. Fine to do this on background thread
@@ -51,9 +53,9 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
         let batchSamplesPostBodyURL = try createBodyFileForBatchSamplesUpload(data: data)
         
         // Store this for later. We'll create the batch samples task once the metadata task finishes
-        UserDefaults.standard.set(request.url, forKey: "\(self.mode)-\(self.uploadSamplesRequestUrlKey)")
-        UserDefaults.standard.set(request.allHTTPHeaderFields, forKey: "\(self.mode)-\(self.uploadSamplesRequestAllHTTPHeaderFieldsKey)")
-        UserDefaults.standard.set(batchSamplesPostBodyURL, forKey: "\(self.mode)-\(self.uploadSamplesPostDataUrlKey)")
+        UserDefaults.standard.set(request.url, forKey: prefixedLocalId(self.uploadSamplesRequestUrlKey))
+        UserDefaults.standard.set(request.allHTTPHeaderFields, forKey: prefixedLocalId(self.uploadSamplesRequestAllHTTPHeaderFieldsKey))
+        UserDefaults.standard.set(batchSamplesPostBodyURL, forKey: prefixedLocalId(self.uploadSamplesPostDataUrlKey))
         UserDefaults.standard.synchronize()
         
         DispatchQueue.main.async {
@@ -68,9 +70,9 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
             }
             guard uploadSession != nil else {
                 let message = "Unable to start upload tasks, session does not exist, it was probably invalidated. This is unexpected"
-                let error = NSError(domain: "HealthKitBloodGlucoseUploader", code: -1, userInfo: [NSLocalizedDescriptionKey: message])
+                let error = NSError(domain: "HealthKitUploader", code: -1, userInfo: [NSLocalizedDescriptionKey: message])
                 DDLogError(message)
-                self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: error)
+                self.delegate?.sampleUploader(uploader: self, didCompleteUploadWithError: error)
                 return
             }
 
@@ -79,7 +81,7 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
             
             // Create task 1 of 2
             let task1 = uploadSession!.uploadTask(with: request, fromFile: batchMetadataPostBodyURL)
-            task1.taskDescription = "\(self.mode) \(self.uploadMetadataTaskDescription)"
+            task1.taskDescription = self.prefixedLocalId(self.uploadMetadataTaskDescription)
             DDLogInfo("Created metadata upload task (1 of 2): \(task1.taskIdentifier)")
             task1.resume()
         }
@@ -140,21 +142,21 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
             if !(200 ... 299 ~= response.statusCode) {
                 let message = "HTTP error on upload: \(response.statusCode)"
                 DDLogError(message)
-                httpError = NSError(domain: "HealthKitBloodGlucoseUploader", code: -2, userInfo: [NSLocalizedDescriptionKey: message])
+                httpError = NSError(domain: "HealthKitUploader", code: -2, userInfo: [NSLocalizedDescriptionKey: message])
             }
         }
         
         if let error = error {
             self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
-            self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: error)
+            self.delegate?.sampleUploader(uploader: self, didCompleteUploadWithError: error)
         } else if httpError != nil {
             self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
-            self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: httpError)
-        } else if task.taskDescription == "\(self.mode) \(self.uploadMetadataTaskDescription)" {
+            self.delegate?.sampleUploader(uploader: self, didCompleteUploadWithError: httpError)
+        } else if task.taskDescription == prefixedLocalId(self.uploadMetadataTaskDescription) {
             // Create task 2 of 2
-            if let task2RequestAllHTTPHeaderFields = UserDefaults.standard.dictionary(forKey: "\(self.mode)-\(self.uploadSamplesRequestAllHTTPHeaderFieldsKey)"),
-               let task2RequestUrl = UserDefaults.standard.url(forKey: "\(self.mode)-\(self.uploadSamplesRequestUrlKey)"),
-               let batchSamplesPostBodyURL = UserDefaults.standard.url(forKey: "\(self.mode)-\(self.uploadSamplesPostDataUrlKey)")
+            if let task2RequestAllHTTPHeaderFields = UserDefaults.standard.dictionary(forKey: prefixedLocalId(self.uploadSamplesRequestAllHTTPHeaderFieldsKey)),
+               let task2RequestUrl = UserDefaults.standard.url(forKey: prefixedLocalId(self.uploadSamplesRequestUrlKey)),
+               let batchSamplesPostBodyURL = UserDefaults.standard.url(forKey: prefixedLocalId(self.uploadSamplesPostDataUrlKey))
             {
                 setPendingUploadsState(task1IsPending: false, task2IsPending: true)
 
@@ -164,19 +166,19 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
                     batchSamplesRequest.setValue(value as? String, forHTTPHeaderField: field)
                 }
                 let task2 = session.uploadTask(with: batchSamplesRequest as URLRequest, fromFile: batchSamplesPostBodyURL)
-                task2.taskDescription = "\(self.mode) \(self.uploadSamplesTaskDescription)"
+                task2.taskDescription = prefixedLocalId(self.uploadSamplesTaskDescription)
                 DDLogInfo("Created samples upload task (2 of 2): \(task2.taskIdentifier)")
                 task2.resume()
             } else {
                 let message = "Failed to find stored POST body URL or stored request for samples upload"
-                let settingsError = NSError(domain: "HealthKitBloodGlucoseUploader", code: -3, userInfo: [NSLocalizedDescriptionKey: message])
+                let settingsError = NSError(domain: "HealthKitUploader", code: -3, userInfo: [NSLocalizedDescriptionKey: message])
                 DDLogError(message)
                 self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
-                self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: settingsError)
+                self.delegate?.sampleUploader(uploader: self, didCompleteUploadWithError: settingsError)
             }
-        } else if task.taskDescription == "\(self.mode) \(self.uploadSamplesTaskDescription)" {
+        } else if task.taskDescription == prefixedLocalId(self.uploadSamplesTaskDescription) {
             self.setPendingUploadsState(task1IsPending: false, task2IsPending: false)
-            self.delegate?.bloodGlucoseUploader(uploader: self, didCompleteUploadWithError: nil)
+            self.delegate?.sampleUploader(uploader: self, didCompleteUploadWithError: nil)
         }
     }
     
@@ -207,7 +209,7 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
         
         var configuration = URLSessionConfiguration.default
         if isBackground {
-            configuration = URLSessionConfiguration.background(withIdentifier: "\(self.mode)-\(self.backgroundUploadSessionIdentifier)")
+            configuration = URLSessionConfiguration.background(withIdentifier: prefixedLocalId(self.backgroundUploadSessionIdentifier))
         }
         configuration.timeoutIntervalForResource = 60 // 60 seconds
         let uploadSession = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
@@ -222,7 +224,7 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
         DDLogInfo("Created upload session. isBackground:\(isBackground) Mode: \(self.mode)")
     }
 
-    fileprivate func createPostBodyFileForBatchMetadataUpload(data: HealthKitBloodGlucoseUploadData) throws -> URL {
+    fileprivate func createPostBodyFileForBatchMetadataUpload(data: HealthKitUploadData) throws -> URL {
         DDLogVerbose("trace")
         
         let postBody = try JSONSerialization.data(withJSONObject: data.batchMetadata)
@@ -233,7 +235,7 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
         return try self.savePostBodyForUpload(body: postBody, identifier: "uploadBatchMetadata.data")
     }
     
-    fileprivate func createBodyFileForBatchSamplesUpload(data: HealthKitBloodGlucoseUploadData) throws -> URL {
+    fileprivate func createBodyFileForBatchSamplesUpload(data: HealthKitUploadData) throws -> URL {
         DDLogVerbose("trace")
 
         // Prepare upload post body
@@ -325,12 +327,16 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
     }
     
     fileprivate func setPendingUploadsState(task1IsPending: Bool, task2IsPending: Bool) {
-        UserDefaults.standard.set(task1IsPending, forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.Task1IsPendingKey))
-        UserDefaults.standard.set(task1IsPending || task2IsPending, forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, key: HealthKitSettings.HasPendingUploadsKey))
+        UserDefaults.standard.set(task1IsPending, forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, type: self.typeString, key: HealthKitSettings.Task1IsPendingKey))
+        UserDefaults.standard.set(task1IsPending || task2IsPending, forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, type: self.typeString, key: HealthKitSettings.HasPendingUploadsKey))
         UserDefaults.standard.synchronize()
     }
+
+    fileprivate var foregroundUploadSession: URLSession?
+    fileprivate var backgroundUploadSession: URLSession?
     
-    fileprivate let backgroundUploadSessionIdentifier = "uploadBloodGlucoseSessionId"
+    // use the following with prefixedLocalId to create ids unique to mode and upload type...
+    fileprivate let backgroundUploadSessionIdentifier = "uploadSessionId"
     fileprivate let uploadMetadataTaskDescription = "upload metadata"
     fileprivate let uploadSamplesTaskDescription = "upload samples"
     
@@ -338,6 +344,8 @@ class HealthKitBloodGlucoseUploader: NSObject, URLSessionDelegate, URLSessionTas
     fileprivate let uploadSamplesRequestAllHTTPHeaderFieldsKey = "uploadSamplesRequestAllHTTPHeaderFields"
     fileprivate let uploadSamplesPostDataUrlKey = "uploadSamplesPostDataUrl"
 
-    fileprivate var foregroundUploadSession: URLSession?
-    fileprivate var backgroundUploadSession: URLSession?
+    fileprivate func prefixedLocalId(_ key: String) -> String {
+        return "\(self.mode)-\(self.typeString)\(key)"
+    }
+
 }

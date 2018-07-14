@@ -257,15 +257,17 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         var healthStatusLine1Text = ""
         var healthStatusLine2Text = ""
 
-        let uploadManager = HealthKitBloodGlucoseUploadManager.sharedInstance
-        let isHistoricalAllActive = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll]!
-        let isHistoricalTwoWeeksActive = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks]!
+        let uploadManager = HealthKitUploadManager.sharedInstance
+        let isHistoricalAllActive = uploadManager.isUploadInProgressForMode(HealthKitUploadReader.Mode.HistoricalAll)
+        let isHistoricalTwoWeeksActive = uploadManager.isUploadInProgressForMode(HealthKitUploadReader.Mode.HistoricalLastTwoWeeks)
         if isHistoricalAllActive || isHistoricalTwoWeeksActive {
             if isHistoricalAllActive {
-                let stats = uploadManager.stats[HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll]!
+                // TODO: decide what to do with stats for other upload data!
+                let stats = uploadManager.statsForMode(HealthKitUploadReader.Mode.HistoricalAll)
                 healthStatusLine1Text = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
             } else {
-                let stats = uploadManager.stats[HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks]!
+                // TODO: decide what to do with stats for other upload data!
+                let stats = uploadManager.statsForMode(HealthKitUploadReader.Mode.HistoricalLastTwoWeeks)
                 healthStatusLine1Text = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
             }
             healthStatusLine2Text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
@@ -273,7 +275,8 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
             healthStatusLine1.usage = "sidebarSettingHKMinorStatus"
             healthStatusLine2.usage = "sidebarSettingHKMainStatus"
         } else {
-            let stats = uploadManager.stats[HealthKitBloodGlucoseUploadReader.Mode.Current]!
+            // TODO: decide what to do with stats for other upload data!
+            let stats = uploadManager.statsForMode(HealthKitUploadReader.Mode.Current)
             if stats.hasSuccessfullyUploaded {
                 let lastUploadTimeAgoInWords = stats.lastSuccessfulUploadTime.timeAgoInWords(Date())
                 healthStatusLine1Text = String(format: healthKitUploadStatusLastUploadTime, lastUploadTimeAgoInWords)

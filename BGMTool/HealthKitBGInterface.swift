@@ -45,7 +45,7 @@ class HealthKitBGInterface: NSObject {
         hkManager.authorizationRequestedForBloodGlucoseSamples() && hkManager.authorizationRequestedForBloodGlucoseSampleWrites()
         if !hkCurrentEnable {
             // first time download is attempted, need user authorization
-            HealthKitManager.sharedInstance.authorize(shouldAuthorizeBloodGlucoseSampleReads: true, shouldAuthorizeBloodGlucoseSampleWrites: true, shouldAuthorizeWorkoutSamples: false) {
+            HealthKitManager.sharedInstance.authorize(shouldAuthorizeUploaderReads: true, shouldAuthorizeBloodGlucoseSampleWrites: true, shouldAuthorizeWorkoutSamples: false) {
                 success, error -> Void in
                 
                 if (error == nil) {
