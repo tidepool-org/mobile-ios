@@ -156,13 +156,13 @@ class LoginViewController: BaseUIViewController {
 
     @IBAction func signUpButtonTapped(_ sender: Any) {
         if let url = URL(string: "http://tidepool.org/signup") {
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url)
         }
     }
     
     @IBAction func forgotPasswordTapped(_ sender: Any) {
         if let url = URL(string: "https://app.tidepool.org/request-password-reset") {
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url)
         }
     }
 

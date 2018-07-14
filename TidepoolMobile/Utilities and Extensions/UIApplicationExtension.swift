@@ -15,6 +15,7 @@
 
 import Foundation
 import UIKit
+import CocoaLumberjack
 
 extension UIApplication {
     
@@ -26,6 +27,23 @@ extension UIApplication {
         return Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as! String
     }
     
+    class func localNotifyMessage(_ msg: String) {
+        if !AppDelegate.testMode {
+            return
+        }
+        DDLogInfo("localNotifyMessage: \(msg)")
+        let localNotificationMessage = UILocalNotification()
+        localNotificationMessage.alertBody = msg
+        DispatchQueue.main.async {
+            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
+        }
+    }
+    
+    class func enableLocalNotifyMessages() {
+        let notifySettings = UIUserNotificationSettings(types: .alert, categories: nil)
+        UIApplication.shared.registerUserNotificationSettings(notifySettings)
+    }
+
 //    class func versionBuildServer() -> String {
 //        let version = appVersion(), build = appBuild()
 //        

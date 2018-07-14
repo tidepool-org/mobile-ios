@@ -77,13 +77,7 @@ class HealthKitBloodGlucosePusher: NSObject {
                     msg = "TidepoolMobile added a blood glucose reading from Tidepool to the Health app."
                 }
                 DDLogVerbose(msg)
-                if AppDelegate.testMode {
-                    let localNotificationMessage = UILocalNotification()
-                    localNotificationMessage.alertBody = msg
-                    DispatchQueue.main.async {
-                        UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                    }
-                }
+                UIApplication.localNotifyMessage(msg)
                 completion(itemsDownloaded == 0 ? .noData : .newData)
             }
         } else{
@@ -107,8 +101,7 @@ class HealthKitBloodGlucosePusher: NSObject {
 
             // Use local notifications to test background activity...
             if AppDelegate.testMode {
-                let notifySettings = UIUserNotificationSettings(types: .alert, categories: nil)
-                UIApplication.shared.registerUserNotificationSettings(notifySettings)
+                UIApplication.enableLocalNotifyMessages()
             }
             
             // kick off a download now if we are in the foreground...

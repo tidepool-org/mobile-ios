@@ -224,20 +224,12 @@ class HealthKitUploadManager:
                         message = "Observation query called, already reading samples"
                     }
                     DDLogInfo(message)
-                    if AppDelegate.testMode {
-                        let localNotificationMessage = UILocalNotification()
-                        localNotificationMessage.alertBody = message
-                        UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                    }
+                    UIApplication.localNotifyMessage(message)
                 } else {
                     let message = "Observation query called, with pending upload tasks. Cancel pending tasks. Will then try reading/uploading again"
                     DDLogInfo(message)
-                    if AppDelegate.testMode {
-                        let localNotificationMessage = UILocalNotification()
-                        localNotificationMessage.alertBody = message
-                        UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                    }
-                    
+                    UIApplication.localNotifyMessage(message)
+
                     self.uploaders[mode]!.cancelTasks()
                 }
             }
@@ -288,20 +280,12 @@ class HealthKitUploadManager:
                     if error.domain == NSURLErrorDomain && error.code == NSURLErrorCancelled {
                         let message = "Upload task cancelled. Mode: \(uploader.mode)"
                         DDLogError(message)
-                        if AppDelegate.testMode {
-                            let localNotificationMessage = UILocalNotification()
-                            localNotificationMessage.alertBody = message
-                            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                        }
+                        UIApplication.localNotifyMessage(message)
                         cancelled = true
                     } else {
                         let message = "Upload batch failed, stop reading. Mode: \(uploader.mode). Error: \(String(describing: error))"
                         DDLogError(message)
-                        if AppDelegate.testMode {
-                            let localNotificationMessage = UILocalNotification()
-                            localNotificationMessage.alertBody = message
-                            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                        }
+                        UIApplication.localNotifyMessage(message)
                     }
                 } else {
                     DDLogError("Upload session succeeded! Mode: \(uploader.mode)")
@@ -375,12 +359,8 @@ class HealthKitUploadManager:
                 
                 let message = "Start next upload for \(uploadData.filteredSamples.count) samples. Mode: \(reader.mode)"
                 DDLogInfo(message)
-                if AppDelegate.testMode {
-                    let localNotificationMessage = UILocalNotification()
-                    localNotificationMessage.alertBody = message
-                    UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                }
-                
+                UIApplication.localNotifyMessage(message)
+
                 self.stats[reader.mode]!.updateForUploadAttempt(sampleCount: uploadData.filteredSamples.count, uploadAttemptTime: Date(), earliestSampleTime: uploadData.earliestSampleTime, latestSampleTime: uploadData.latestSampleTime)
                 try self.uploaders[reader.mode]!.startUploadSessionTasks(with: request, data: uploadData)
             } catch let error {
@@ -531,22 +511,14 @@ class HealthKitUploadManager:
                 DispatchQueue.main.async {
                     let message = "Background time expired"
                     DDLogInfo(message)
-                    if AppDelegate.testMode {
-                        let localNotificationMessage = UILocalNotification()
-                        localNotificationMessage.alertBody = message
-                        UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                    }
+                    UIApplication.localNotifyMessage(message)
                 }
             })
             
             DispatchQueue.main.async {
                 let message = "Begin background task. Remaining background time: \(UIApplication.shared.backgroundTimeRemaining)"
                 DDLogInfo(message)
-                if AppDelegate.testMode {
-                    let localNotificationMessage = UILocalNotification()
-                    localNotificationMessage.alertBody = message
-                    UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                }
+                UIApplication.localNotifyMessage(message)
             }
         }
     }
@@ -559,11 +531,7 @@ class HealthKitUploadManager:
             DispatchQueue.main.async {
                 let message = "End background task. Remaining background time: \(UIApplication.shared.backgroundTimeRemaining)"
                 DDLogInfo(message)
-                if AppDelegate.testMode {
-                    let localNotificationMessage = UILocalNotification()
-                    localNotificationMessage.alertBody = message
-                    UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                }
+                UIApplication.localNotifyMessage(message)
             }
         }
     }

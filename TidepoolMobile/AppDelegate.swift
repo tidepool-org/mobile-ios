@@ -61,13 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let applicationState = UIApplication.shared.applicationState
         let message = "didFinishLaunchingWithOptions, state: \(String(describing: applicationState.rawValue))"
         DDLogInfo(message)
-        if AppDelegate.testMode  {
-            let localNotificationMessage = UILocalNotification()
-            localNotificationMessage.alertBody = message
-            DispatchQueue.main.async {
-                UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-            }
-        }
+        UIApplication.localNotifyMessage(message)
 
         // Override point for customization after application launch.
         Styles.configureTidepoolBarColoring(on: true)
@@ -93,16 +87,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if api.isConnectedToNetwork() {
                 var message = "AppDelegate attempting to refresh token"
                 DDLogInfo(message)
-                if AppDelegate.testMode  {
-                    self.localNotifyMessage(message)
-                }
+                UIApplication.localNotifyMessage(message)
                 
                 api.refreshToken() { (succeeded, responseStatusCode) in
                     if succeeded {
                         message = "Refresh token succeeded, statusCode: \(responseStatusCode)"
                         DDLogInfo(message)
                         if AppDelegate.testMode  {
-                            self.localNotifyMessage(message)
+                            UIApplication.localNotifyMessage(message)
                         }
                         
                         let dataController = TidepoolMobileDataController.sharedInstance
@@ -119,9 +111,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         if shouldLogout {
                             message = "Refresh token failed, need to log in normally, statusCode: \(responseStatusCode)"
                             DDLogInfo(message)
-                            if AppDelegate.testMode  {
-                                self.localNotifyMessage(message)
-                            }
+                            UIApplication.localNotifyMessage(message)
                             api.logout() {
                                 if self.didBecomeActiveAtLeastOnce {
                                     self.setupUIForLogin()
@@ -132,9 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         } else {
                             message = "Refresh token failed, no status code"
                             DDLogError(message)
-                            if AppDelegate.testMode  {
-                                self.localNotifyMessage(message)
-                            }
+                            UIApplication.localNotifyMessage(message)
 
                             if self.didBecomeActiveAtLeastOnce {
                                 api.logout() {
@@ -143,9 +131,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             } else {
                                 message = "Try to use current user and token if refresh token failed in background due to client side error"
                                 DDLogError(message)
-                                if AppDelegate.testMode  {
-                                    self.localNotifyMessage(message)
-                                }
+                                UIApplication.localNotifyMessage(message)
+                                
                                 let dataController = TidepoolMobileDataController.sharedInstance
                                 dataController.checkRestoreCurrentViewedUser {
                                     dataController.configureHealthKitInterface()
@@ -222,9 +209,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if HealthKitBloodGlucosePusher.sharedInstance.enabled {
             // if device is locked, bail now because we can't read HealthKit data
             if deviceIsLocked {
-                if AppDelegate.testMode  {
-                    self.localNotifyMessage("TidepoolMobile skipping background fetch: device is locked!")
-                }
+                UIApplication.localNotifyMessage("TidepoolMobile skipping background fetch: device is locked!")
                 completionHandler(.failed)
                 return
             }
@@ -234,9 +219,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if api.sessionToken == nil {
                 DDLogInfo("No token available, user will need to log in!")
                 // Use local notifications to test background activity...
-                if AppDelegate.testMode {
-                    self.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: log in required!")
-                }
+                UIApplication.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: log in required!")
                 completionHandler(.failed)
                 return
             }
@@ -244,9 +227,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if !api.isConnectedToNetwork() {
                 DDLogInfo("No network available!")
                 // Use local notifications to test background activity...
-                if AppDelegate.testMode {
-                    self.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: no network available!")
-                }
+                UIApplication.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: no network available!")
+                
                 completionHandler(.failed)
                 return
             }
@@ -266,16 +248,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    fileprivate func localNotifyMessage(_ msg: String) {
-        DDLogInfo("localNotifyMessage: \(msg)")
-        let localNotificationMessage = UILocalNotification()
-        localNotificationMessage.alertBody = msg
-        DispatchQueue.main.async {
-            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-        }
-    }
-    
-    
     func applicationWillResignActive(_ application: UIApplication) {
         DDLogVerbose("trace")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -381,10 +353,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
         DDLogVerbose("trace")
 
-        if AppDelegate.testMode {
-            self.localNotifyMessage("applicationWillTerminate")
-        }
-
+        UIApplication.localNotifyMessage("applicationWillTerminate")
+        
         TidepoolMobileDataController.sharedInstance.appWillTerminate()
     }
 }

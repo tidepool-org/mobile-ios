@@ -279,7 +279,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                 appDelegate.logout()
                 viewIsForeground = false
             } else if let url = sideMenuController.userSelectedExternalLink {
-                UIApplication.shared.openURL(url)
+                UIApplication.shared.open(url)
             }
         }
     }
@@ -958,7 +958,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         APIConnector.connector().trackMetric("Clicked how to upload button")
         let url = URL(string: TPConstants.kHowToUploadURL)
         if let url = url {
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url)
         }
     }
     
@@ -1064,7 +1064,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     @objc func howToUploadPressed(_ sender: UIButton!) {
         DDLogInfo("howToUploadPressed was pressed!")
         if let url = URL(string: TPConstants.kHowToUploadURL) {
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url)
         }
     }
     

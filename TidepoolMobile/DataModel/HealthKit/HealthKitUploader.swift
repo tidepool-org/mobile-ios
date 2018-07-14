@@ -128,15 +128,8 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
             message = "Upload task completed: \(task.taskDescription!), id: \(task.taskIdentifier)"
         }
         DDLogInfo(message)
+        UIApplication.localNotifyMessage(message)
 
-        if AppDelegate.testMode {
-            let localNotificationMessage = UILocalNotification()
-            localNotificationMessage.alertBody = message
-            DispatchQueue.main.async {
-                UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-            }
-        }
-        
         var httpError: NSError?
         if let response = task.response as? HTTPURLResponse {
             if !(200 ... 299 ~= response.statusCode) {

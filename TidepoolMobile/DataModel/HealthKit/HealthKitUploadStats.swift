@@ -122,13 +122,7 @@ class HealthKitUploadStats: NSObject {
         
         let message = "Successfully uploaded \(self.lastUploadAttemptSampleCount) samples, upload time: \(lastSuccessfulUploadTime), earliest sample date: \(self.lastSuccessfulUploadEarliestSampleTime), latest sample date: \(self.lastSuccessfulUploadLatestSampleTime), mode: \(self.mode). "
         DDLogInfo(message)
-        if AppDelegate.testMode {
-            let localNotificationMessage = UILocalNotification()
-            localNotificationMessage.alertBody = message
-            DispatchQueue.main.async {
-                UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-            }
-        }
+        UIApplication.localNotifyMessage(message)
         if self.totalDaysHistorical > 0 {
             DDLogInfo("Uploaded \(self.currentDayHistorical) of \(self.totalDaysHistorical) days of historical data")
         }

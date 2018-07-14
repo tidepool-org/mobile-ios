@@ -361,14 +361,8 @@ class APIConnector {
                 if let error = response.result.error {
                     let message = "Refresh token failed, error: \(error)"
                     DDLogError(message)
-                    if AppDelegate.testMode  {
-                        let localNotificationMessage = UILocalNotification()
-                        localNotificationMessage.alertBody = message
-                        DispatchQueue.main.async {
-                            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                        }
-                    }
-                    
+                    UIApplication.localNotifyMessage(message)
+
                     // TODO: handle network offline!
                 }
                 completion(false, response.response?.statusCode ?? 0)

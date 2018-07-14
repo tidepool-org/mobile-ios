@@ -109,8 +109,9 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
     
     fileprivate func handleEnableNotificationsForUploads(enable: Bool) {
         AppDelegate.testMode = enable
-        let notifySettings = UIUserNotificationSettings(types: .alert, categories: nil)
-        UIApplication.shared.registerUserNotificationSettings(notifySettings)
+        if enable {
+            UIApplication.enableLocalNotifyMessages()
+        }
     }
     
     fileprivate func handleTreatAllBloodGlucoseSourceTypesAsDexcom(treatAllAsDexcom: Bool) {
