@@ -217,16 +217,16 @@ class HealthKitUploadManager:
                 if self.isUploading[mode]! && !self.uploaders[mode]!.hasPendingUploadTasks() {
                     var message = ""
                     if !self.readers[mode]!.isReading {
-                        message = "Observation query called, start reading samples from anchor and prepare upload. Mode: \(mode)"
+                        message = "Observation query called, start reading \(self.uploadType.typeName) samples from anchor and prepare upload. Mode: \(mode)"
                         
                         self.readers[mode]!.startReading()
                     } else {
-                        message = "Observation query called, already reading samples"
+                        message = "Observation query called, already reading \(self.uploadType.typeName) samples"
                     }
                     DDLogInfo(message)
                     UIApplication.localNotifyMessage(message)
                 } else {
-                    let message = "Observation query called, with pending upload tasks. Cancel pending tasks. Will then try reading/uploading again"
+                    let message = "Observation query called, with pending \(self.uploadType.typeName) upload tasks. Cancel pending tasks. Will then try reading/uploading again"
                     DDLogInfo(message)
                     UIApplication.localNotifyMessage(message)
 
@@ -278,12 +278,12 @@ class HealthKitUploadManager:
                 var completed = false
                 if let error = error as NSError? {
                     if error.domain == NSURLErrorDomain && error.code == NSURLErrorCancelled {
-                        let message = "Upload task cancelled. Mode: \(uploader.mode)"
+                        let message = "Upload task cancelled. Mode: \(uploader.mode), type: \(self.uploadType.typeName)"
                         DDLogError(message)
                         UIApplication.localNotifyMessage(message)
                         cancelled = true
                     } else {
-                        let message = "Upload batch failed, stop reading. Mode: \(uploader.mode). Error: \(String(describing: error))"
+                        let message = "Upload batch failed, stop reading. Mode: \(uploader.mode), type: \(self.uploadType.typeName). Error: \(String(describing: error))"
                         DDLogError(message)
                         UIApplication.localNotifyMessage(message)
                     }
@@ -357,7 +357,7 @@ class HealthKitUploadManager:
             do {
                 let request = try sharedInstance.makeDataUploadRequestHandler()
                 
-                let message = "Start next upload for \(uploadData.filteredSamples.count) samples. Mode: \(reader.mode)"
+                let message = "Start next upload for \(uploadData.filteredSamples.count) samples. Mode: \(reader.mode), type: \(self.uploadType.typeName)"
                 DDLogInfo(message)
                 UIApplication.localNotifyMessage(message)
 

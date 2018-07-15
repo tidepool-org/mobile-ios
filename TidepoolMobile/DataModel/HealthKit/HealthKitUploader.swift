@@ -123,9 +123,9 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
 
         var message = ""
         if let error = error {
-            message = "Upload task failed: \(task.taskDescription!), with error: \(error), id: \(task.taskIdentifier)"
+            message = "Upload task failed: \(task.taskDescription!), with error: \(error), id: \(task.taskIdentifier), type: \(self.typeString)"
         } else {
-            message = "Upload task completed: \(task.taskDescription!), id: \(task.taskIdentifier)"
+            message = "Upload task completed: \(task.taskDescription!), id: \(task.taskIdentifier), type: \(self.typeString)"
         }
         DDLogInfo(message)
         UIApplication.localNotifyMessage(message)

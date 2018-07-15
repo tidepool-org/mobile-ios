@@ -120,7 +120,7 @@ class HealthKitUploadStats: NSObject {
         UserDefaults.standard.set(self.totalUploadCount, forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, type: self.uploadTypeName, key: HealthKitSettings.StatsTotalUploadCountKey))
         UserDefaults.standard.synchronize()
         
-        let message = "Successfully uploaded \(self.lastUploadAttemptSampleCount) samples, upload time: \(lastSuccessfulUploadTime), earliest sample date: \(self.lastSuccessfulUploadEarliestSampleTime), latest sample date: \(self.lastSuccessfulUploadLatestSampleTime), mode: \(self.mode). "
+        let message = "Successfully uploaded \(self.lastUploadAttemptSampleCount) samples, upload time: \(lastSuccessfulUploadTime), earliest sample date: \(self.lastSuccessfulUploadEarliestSampleTime), latest sample date: \(self.lastSuccessfulUploadLatestSampleTime), mode: \(self.mode), type: \(self.uploadTypeName). "
         DDLogInfo(message)
         UIApplication.localNotifyMessage(message)
         if self.totalDaysHistorical > 0 {
