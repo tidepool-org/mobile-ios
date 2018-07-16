@@ -34,24 +34,26 @@ extension UIApplication {
         if !AppDelegate.testMode {
             return
         }
-        if UIApplication.shared.applicationState == .active {
-            DDLogInfo("localNotifyMessage with app in foreground: \(msg)")
-            return
-        }
-        UIApplication.localNotifyCount += 1
-        let content = UNMutableNotificationContent()
-        content.body = msg
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1.0, repeats: false)
-        let identifier = String("Tidepool \(UIApplication.localNotifyCount)")
-        let request = UNNotificationRequest(identifier: identifier,
-                                            content: content, trigger: trigger)
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: { (error) in
-            if let error = error {
-                DDLogInfo("failed: \(error.localizedDescription)")
-            } else {
-                DDLogInfo("sent: \(msg)")
+        DispatchQueue.main.async {
+            if UIApplication.shared.applicationState == .active {
+                DDLogInfo("localNotifyMessage with app in foreground: \(msg)")
+                return
             }
-        })
+            UIApplication.localNotifyCount += 1
+            let content = UNMutableNotificationContent()
+            content.body = msg
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1.0, repeats: false)
+            let identifier = String("Tidepool \(UIApplication.localNotifyCount)")
+            let request = UNNotificationRequest(identifier: identifier,
+                                                content: content, trigger: trigger)
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: { (error) in
+                if let error = error {
+                    DDLogInfo("failed: \(error.localizedDescription)")
+                } else {
+                    DDLogInfo("sent: \(msg)")
+                }
+            })
+        }
     }
     
     class func enableLocalNotifyMessages() {

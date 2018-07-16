@@ -56,6 +56,10 @@ class HealthKitUploadType {
         return []
     }
     
+    // override!
+    internal func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
+        return [[String: AnyObject]]()
+    }
     
 }
 

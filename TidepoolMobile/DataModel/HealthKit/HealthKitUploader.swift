@@ -232,75 +232,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
         DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
 
         // Prepare upload post body
-        let dateFormatter = DateFormatter()
-        var samplesToUploadDictArray = [[String: AnyObject]]()
-        for sample in data.filteredSamples {
-            var sampleToUploadDict = [String: AnyObject]()
-            
-            sampleToUploadDict["uploadId"] = data.batchMetadata["uploadId"]
-            sampleToUploadDict["type"] = "cbg" as AnyObject?
-            sampleToUploadDict["deviceId"] = data.batchMetadata["deviceId"]
-            sampleToUploadDict["guid"] = sample.uuid.uuidString as AnyObject?
-            sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?
-            
-            if let quantitySample = sample as? HKQuantitySample {
-                let units = "mg/dL"
-                sampleToUploadDict["units"] = units as AnyObject?
-                let unit = HKUnit(from: units)
-                let value = quantitySample.quantity.doubleValue(for: unit)
-                sampleToUploadDict["value"] = value as AnyObject?
-                
-                // Add out-of-range annotation if needed
-                var annotationCode: String?
-                var annotationValue: String?
-                var annotationThreshold = 0
-                if (value < 40) {
-                    annotationCode = "bg/out-of-range"
-                    annotationValue = "low"
-                    annotationThreshold = 40
-                } else if (value > 400) {
-                    annotationCode = "bg/out-of-range"
-                    annotationValue = "high"
-                    annotationThreshold = 400
-                }
-                if let annotationCode = annotationCode,
-                       let annotationValue = annotationValue {
-                    let annotations = [
-                        [
-                            "code": annotationCode,
-                            "value": annotationValue,
-                            "threshold": annotationThreshold
-                        ]
-                    ]
-                    sampleToUploadDict["annotations"] = annotations as AnyObject?
-                }
-            }
-            
-            // Add sample metadata payload props
-            if var metadata = sample.metadata {
-                for (key, value) in metadata {
-                    if let dateValue = value as? Date {
-                        if key == "Receiver Display Time" {
-                            metadata[key] = dateFormatter.isoStringFromDate(dateValue, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateNoTimeZone)
-                            
-                        } else {
-                            metadata[key] = dateFormatter.isoStringFromDate(dateValue, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
-                        }
-                    }
-                }
-                
-                // If "Receiver Display Time" exists, use that as deviceTime and remove from metadata payload
-                if let receiverDisplayTime = metadata["Receiver Display Time"] {
-                    sampleToUploadDict["deviceTime"] = receiverDisplayTime as AnyObject?
-                    metadata.removeValue(forKey: "Receiver Display Time")
-                }
-                sampleToUploadDict["payload"] = metadata as AnyObject?
-            }
-            
-            // Add sample
-            samplesToUploadDictArray.append(sampleToUploadDict)
-        }
-
+        let samplesToUploadDictArray = data.uploadType.prepareDataForUpload(data)
         let postBody = try JSONSerialization.data(withJSONObject: samplesToUploadDictArray)
         return try self.savePostBodyForUpload(body: postBody, identifier: "uploadBatchSamples.data")
     }
