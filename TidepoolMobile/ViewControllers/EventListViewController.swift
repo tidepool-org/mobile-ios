@@ -744,10 +744,16 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         if firstTimeHealthTip.isHidden {
             if self.sortedNotes.count == 0 {
                 hideAddNoteTip = false
-            } else if self.sortedNotes.count == 1 {
-                if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
-                    hideNeedUploaderTip = false
-                    oneShotCompleted("NeedUploaderTipHasBeenShown")
+            } else if self.sortedNotes.count == 1 && oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
+                hideNeedUploaderTip = false
+                oneShotCompleted("NeedUploaderTipHasBeenShown")
+            } else {
+                // see if HK is enabled for this user, but user has not been asked to authorize the new items.
+                if appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
+                {
+                    if !HealthKitManager.sharedInstance.authorizationRequestedForUploaderSamples() {
+                        TidepoolMobileDataController.sharedInstance.enableHealthKitInterface()
+                    }
                 }
             }
         }
@@ -930,14 +936,18 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // MARK: - Graph support
     //
 
+    // The first time we get notified that an uploader has been turned on, bring up the manual sync UI.
     @objc internal func handleTurnOnUploader(_ note: Notification) {
         DDLogVerbose("trace")
         
-        if let _ = self.sideMenuController()?.sideMenu?.isMenuOpen, !HealthKitUploadManager.sharedInstance.hasPresentedSyncUI {
+        if let _ = self.sideMenuController()?.sideMenu?.isMenuOpen, !HealthKitUploadManager.sharedInstance.hasPresentedSyncUI, !sequeToSyncHealthHasBeenDone {
+            // Since we'll get notifications for each type of uploader, make this a one-shot in the
+            sequeToSyncHealthHasBeenDone = true
             toggleSideMenu(self)
             performSegue(withIdentifier: "segueToSyncHealthData", sender: self)
         }
     }
+    private var sequeToSyncHealthHasBeenDone = false
     
     @objc internal func handleUploadSuccessfulNotification(_ note: Notification) {
         DDLogInfo("inval cache and update graphs on successful upload")
