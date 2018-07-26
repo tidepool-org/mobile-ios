@@ -176,16 +176,18 @@ class LoginViewController: BaseUIViewController {
         if (result.isSuccess) {
             if let user=result.value {
                 DDLogInfo("Login success: \(user)")
+                self.loginIndicator.startAnimating()
                 APIConnector.connector().fetchProfile(TidepoolMobileDataController.sharedInstance.currentUserId!) { (result:Alamofire.Result<JSON>) -> (Void) in
                         DDLogInfo("Profile fetch result: \(result)")
+                    self.loginIndicator.stopAnimating()
                     if (result.isSuccess) {
                         if let json = result.value {
                             TidepoolMobileDataController.sharedInstance.processLoginProfileFetch(json)
                         }
+                        // if we were able to get a profile, try getting an uploadId
                         let appDelegate = UIApplication.shared.delegate as! AppDelegate
                         appDelegate.setupUIForLoginSuccess()
-                        //self.performSegue(withIdentifier: "showEventListSegue", sender: self)
-                    }
+                     }
                 }
             } else {
                 // This should not happen- we should not succeed without a user!
@@ -204,8 +206,6 @@ class LoginViewController: BaseUIViewController {
             self.passwordTextField.text = ""
         }
     }
-    
-    
     
     @objc func textFieldDidChange() {
         updateButtonStates()

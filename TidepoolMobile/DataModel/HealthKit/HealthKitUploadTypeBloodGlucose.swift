@@ -80,10 +80,10 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
         for sample in data.filteredSamples {
             var sampleToUploadDict = [String: AnyObject]()
             
-            sampleToUploadDict["uploadId"] = data.batchMetadata["uploadId"]
+            //sampleToUploadDict["uploadId"] = data.batchMetadata["uploadId"]
             sampleToUploadDict["type"] = "cbg" as AnyObject?
             sampleToUploadDict["deviceId"] = data.batchMetadata["deviceId"]
-            sampleToUploadDict["guid"] = sample.uuid.uuidString as AnyObject?
+            //sampleToUploadDict["guid"] = sample.uuid.uuidString as AnyObject?
             sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?
             
             if let quantitySample = sample as? HKQuantitySample {
@@ -139,7 +139,6 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
                 }
                 sampleToUploadDict["payload"] = metadata as AnyObject?
             }
-            
             // Add sample
             samplesToUploadDictArray.append(sampleToUploadDict)
         }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="12141" systemVersion="16E195" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17F77" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
     <entity name="Activity" representedClassName="Nutshell.Activity" parentEntity="CommonData" syncable="YES">
         <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="intensityBorg" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
@@ -14,11 +14,14 @@
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Basal" representedClassName="Nutshell.Basal" parentEntity="CommonData" syncable="YES">
-        <attribute name="deliveryType" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="deliveryType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="insulin" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="suppressedRate" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" elementID="percent" syncable="YES"/>
         <attribute name="value" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
+        <fetchIndex name="byDeliveryTypeIndex">
+            <fetchIndexElement property="deliveryType" type="Binary" order="ascending"/>
+        </fetchIndex>
     </entity>
     <entity name="BloodKetone" representedClassName="Nutshell.BloodKetone" parentEntity="CommonData" syncable="YES">
         <attribute name="value" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
@@ -39,18 +42,33 @@
     </entity>
     <entity name="CommonData" representedClassName="Nutshell.CommonData" syncable="YES">
         <attribute name="annotations" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="createdTime" optional="YES" attributeType="Date" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
-        <attribute name="deviceId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="createdTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="deviceId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="deviceTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="id" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="modifiedTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="payload" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="previous" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="time" optional="YES" attributeType="Date" usesScalarValueType="NO" indexed="YES" syncable="YES"/>
+        <attribute name="time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="timezoneOffset" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="type" attributeType="String" syncable="YES"/>
         <attribute name="units" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="uploadId" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="uploadId" optional="YES" attributeType="String" syncable="YES"/>
+        <fetchIndex name="byCreatedTimeIndex">
+            <fetchIndexElement property="createdTime" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byDeviceIdIndex">
+            <fetchIndexElement property="deviceId" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byIdIndex">
+            <fetchIndexElement property="id" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byTimeIndex">
+            <fetchIndexElement property="time" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byUploadIdIndex">
+            <fetchIndexElement property="uploadId" type="Binary" order="ascending"/>
+        </fetchIndex>
     </entity>
     <entity name="ContinuousGlucose" representedClassName="Nutshell.ContinuousGlucose" parentEntity="CommonData" syncable="YES">
         <attribute name="isig" optional="YES" attributeType="String" syncable="YES"/>
@@ -127,13 +145,16 @@
         <attribute name="changeTo" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
     </entity>
     <entity name="Upload" representedClassName="Nutshell.Upload" parentEntity="CommonData" syncable="YES">
-        <attribute name="byUser" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="byUser" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="deviceManufacturersJSON" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="deviceModel" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="deviceSerialNumber" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="deviceTagsJSON" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="timezone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="version" optional="YES" attributeType="String" syncable="YES"/>
+        <fetchIndex name="byByUserIndex">
+            <fetchIndexElement property="byUser" type="Binary" order="ascending"/>
+        </fetchIndex>
     </entity>
     <entity name="UrineKetone" representedClassName="Nutshell.UrineKetone" parentEntity="CommonData" syncable="YES">
         <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
@@ -142,9 +163,13 @@
         <attribute name="accountIsDSA" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fullName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="token" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="userid" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="token" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="uploadId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="userid" attributeType="String" syncable="YES"/>
         <attribute name="username" attributeType="String" syncable="YES"/>
+        <fetchIndex name="byUseridIndex">
+            <fetchIndexElement property="userid" type="Binary" order="ascending"/>
+        </fetchIndex>
     </entity>
     <entity name="Wizard" representedClassName="Nutshell.Wizard" parentEntity="CommonData" syncable="YES">
         <attribute name="bgInput" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
@@ -187,7 +212,7 @@
         <element name="TimeChange" positionX="36" positionY="126" width="128" height="120"/>
         <element name="Upload" positionX="27" positionY="81" width="128" height="150"/>
         <element name="UrineKetone" positionX="45" positionY="144" width="128" height="60"/>
-        <element name="User" positionX="-63" positionY="-18" width="128" height="135"/>
+        <element name="User" positionX="-63" positionY="-18" width="128" height="150"/>
         <element name="Wizard" positionX="36" positionY="90" width="128" height="150"/>
         <element name="Workout" positionX="9" positionY="126" width="128" height="135"/>
     </elements>

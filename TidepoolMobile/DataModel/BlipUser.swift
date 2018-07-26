@@ -25,6 +25,7 @@ class BlipUser {
     var patient: BlipPatient?
     var bgTargetLow: NSNumber?
     var bgTargetHigh: NSNumber?
+    var uploadId: String?
     
     init(userid: String) {
         self.userid = userid

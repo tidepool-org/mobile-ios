@@ -95,6 +95,25 @@ class TidepoolMobileDataController: NSObject
         }
     }
     
+    /// Used for filling out a health data upload request...
+    ///
+    /// Read only - returns nil string if no user or uploadId is available.
+    var currentUploadId: String? {
+        get {
+            if let user = self.currentUser {
+                if let uploadId = user.uploadId {
+                    return uploadId
+                }
+            }
+            return nil
+        }
+        set {
+            if let user = self.currentUser {
+                user.uploadId = newValue
+            }
+        }
+    }
+
     /// Used for filling out an email for the user to send to themselves; from the current user login, or nil.
     ///
     /// Read only - returns nil string if no user set.
@@ -164,7 +183,7 @@ class TidepoolMobileDataController: NSObject
 
     /// Call this at login/logout, token refresh(?), and upon enabling or disabling the HealthKit interface.
     func configureHealthKitInterface() {
-        appHealthKitConfiguration.configureHealthKitInterface(currentUserId, isDSAUser: isDSAUser)
+        appHealthKitConfiguration.configureHealthKitInterface(self.currentUserId, isDSAUser: self.isDSAUser)
     }
     
     /// Call this after logging into a service account to set up the current user and configure the data model for the user.
@@ -177,7 +196,7 @@ class TidepoolMobileDataController: NSObject
         _currentUserId = newUser.userid
         _currentLoggedInUser = nil
         _currentViewedUser = nil
-        configureHealthKitInterface()
+        self.configureHealthKitInterface()
     }
 
     /// Call this after logging out of the service to deconfigure the data model and clear the persisted user. Only the Meal and Workout events should remain persisted after this.

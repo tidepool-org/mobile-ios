@@ -468,8 +468,14 @@ class HealthKitUploadManager:
             return
         }
 
-        for helper in uploadHelpers {
-            helper.startUploading(mode: mode, currentUserId: currentUserId)
+        APIConnector.connector().configureUploadId() {
+            if TidepoolMobileDataController.sharedInstance.currentUploadId != nil {
+                for helper in self.uploadHelpers {
+                    helper.startUploading(mode: mode, currentUserId: currentUserId)
+                }
+            } else {
+                DDLogError("Unable to startUploading - no currentUploadId available!")
+            }
         }
         
     }

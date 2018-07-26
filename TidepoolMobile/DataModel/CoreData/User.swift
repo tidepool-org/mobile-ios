@@ -41,4 +41,5 @@ class User: NSManagedObject {
             accountIsDSA = NSNumber.init(value: isDSA)
         }
     }
+    
 }

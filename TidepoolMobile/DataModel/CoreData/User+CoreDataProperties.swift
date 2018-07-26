@@ -20,5 +20,6 @@ extension User {
     @NSManaged var username: String?
     @NSManaged var email: String?
     @NSManaged var accountIsDSA: NSNumber?
+    @NSManaged var uploadId: String?
 
 }

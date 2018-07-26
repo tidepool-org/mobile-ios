@@ -95,21 +95,21 @@ class HealthKitUploadData: NSObject {
         let dateFormatter = DateFormatter()
         let now = Date()
         let time = DateFormatter().isoStringFromDate(now)
-        let guid = UUID().uuidString
-        let uploadIdSuffix = "\(deviceId)_\(time)_\(guid)"
-        let uploadIdSuffixMd5Hash = uploadIdSuffix.md5()
-        let uploadId = "upid_\(uploadIdSuffixMd5Hash)"
+        //let guid = UUID().uuidString
+        //let uploadIdSuffix = "\(deviceId)_\(time)_\(guid)"
+        //let uploadIdSuffixMd5Hash = uploadIdSuffix.md5()
+        //let uploadId = "upid_\(uploadIdSuffixMd5Hash)"
         
         var batchMetadata = [String: AnyObject]()
         batchMetadata["type"] = "upload" as AnyObject
-        batchMetadata["uploadId"] = uploadId as AnyObject
+        //batchMetadata["uploadId"] = uploadId as AnyObject
         batchMetadata["computerTime"] = dateFormatter.isoStringFromDate(now, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateNoTimeZone) as AnyObject
         batchMetadata["time"] = time as AnyObject
         batchMetadata["timezoneOffset"] = timeZoneOffset as AnyObject
         batchMetadata["timezone"] = TimeZone.autoupdatingCurrent.identifier as AnyObject
         batchMetadata["timeProcessing"] = "none" as AnyObject
         batchMetadata["version"] = version as AnyObject
-        batchMetadata["guid"] = guid as AnyObject
+        //batchMetadata["guid"] = guid as AnyObject
         batchMetadata["byUser"] = self.currentUserId as AnyObject
         batchMetadata["deviceSerialNumber"] = "" as AnyObject
         batchMetadata["deviceModel"] = deviceModel as AnyObject
