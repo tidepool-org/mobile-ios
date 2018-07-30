@@ -50,6 +50,7 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
     }
     
     // override!
+    // TODO: remove? Still useful with new endpoint?
     internal override func typeSpecificMetadata() -> [(metaKey: String, metadatum: AnyObject)] {
         DDLogVerbose("trace")
         var metadata: [(metaKey: String, metadatum: AnyObject)] = []
@@ -67,14 +68,17 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
         } else if sourceBundleIdentifier.lowercased().range(of: "com.dexcom.share2") != nil {
             deviceModel = "DexG4"
         } else {
-            DDLogError("Unknown Dexcom sourceBundleIdentifier: \(sourceBundleIdentifier)")
-            deviceModel = "DexUnknown: \(sourceBundleIdentifier)"
+            DDLogError("Unknown cbg sourceBundleIdentifier: \(sourceBundleIdentifier)")
+            deviceModel = "Unknown: \(sourceBundleIdentifier)"
+            // Note: this will return something like HealthKit_Unknown: com.apple.Health_060EF7B3-9D86-4B93-9EE1-2FC6C618A4AD
+            // TODO: figure out what Link might put here. Also, if we have com.apple.Health, and it is is user entered, this would be a direct user HK entry: what should we put?
         }
         
         return "HealthKit_\(deviceModel)"
     }
 
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
+        DDLogInfo("blood glucose prepareDataForUpload")
         let dateFormatter = DateFormatter()
         var samplesToUploadDictArray = [[String: AnyObject]]()
         for sample in data.filteredSamples {
@@ -92,7 +96,8 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
                 let unit = HKUnit(from: units)
                 let value = quantitySample.quantity.doubleValue(for: unit)
                 sampleToUploadDict["value"] = value as AnyObject?
-                
+                DDLogInfo("blood glucose value: \(String(describing: value))")
+
                 // Add out-of-range annotation if needed
                 var annotationCode: String?
                 var annotationValue: String?
@@ -137,7 +142,18 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
                     sampleToUploadDict["deviceTime"] = receiverDisplayTime as AnyObject?
                     metadata.removeValue(forKey: "Receiver Display Time")
                 }
-                sampleToUploadDict["payload"] = metadata as AnyObject?
+                // If "HKWasUserEntered" exists and is true, change type to "smbg" and remove from metadata
+                if let wasUserEntered = metadata[HKMetadataKeyWasUserEntered] as? Bool {
+                    if wasUserEntered {
+                        sampleToUploadDict["type"] = "smbg" as AnyObject?
+                        metadata.removeValue(forKey: HKMetadataKeyWasUserEntered)
+                    }
+                }
+
+                // Add remaining metadata, if any, as payload struct
+                if !metadata.isEmpty {
+                    sampleToUploadDict["payload"] = metadata as AnyObject?
+                }
             }
             // Add sample
             samplesToUploadDictArray.append(sampleToUploadDict)

@@ -17,6 +17,23 @@ import Foundation
 import CocoaLumberjack
 import HealthKit
 
+//
+// MARK: - LoopKit defines
+//
+
+/// Defines the scheduled basal insulin rate during the time of the basal delivery sample
+let MetadataKeyScheduledBasalRate = "com.loopkit.InsulinKit.MetadataKeyScheduledBasalRate"
+
+/// A crude determination of whether a sample was written by LoopKit, in the case of multiple LoopKit-enabled app versions on the same phone.
+let MetadataKeyHasLoopKitOrigin = "HasLoopKitOrigin"
+
+// only in 11.0, not currently found as enum... TODO!
+let HKInsulinDeliveryReasonBasal: Int = 1
+let HKInsulinDeliveryReasonBolus: Int = 2
+
+//
+// MARK: -
+//
 class HealthKitUploadTypeInsulin: HealthKitUploadType {
     init() {
         super.init("Insulin")
@@ -28,11 +45,8 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
 
     internal override func filterSamples(sortedSamples: [HKSample]) -> [HKSample] {
         DDLogVerbose("trace")
-        
-        // Filter out non-Dexcom data
-        let filteredSamples = [HKSample]()
-        // TODO: For now, filter everything out, until new platform endpoint is supported!
-        return filteredSamples
+        // For insulin, don't filter anything out yet!
+        return sortedSamples
     }
     
     // override!
@@ -43,6 +57,69 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
     }
     
     internal override func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
-        return ""
+        DDLogInfo("Unknown cbg sourceBundleIdentifier: \(sourceBundleIdentifier)")
+        let deviceModel = "Unknown: \(sourceBundleIdentifier)"
+        // Note: this will return something like HealthKit_Unknown: com.apple.Health_060EF7B3-9D86-4B93-9EE1-2FC6C618A4AD
+        // TODO: figure out what Link might put here...
+        return "HealthKit_\(deviceModel)"
     }
+    
+    internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
+        DDLogInfo("insulin prepareDataForUpload")
+        let dateFormatter = DateFormatter()
+        var samplesToUploadDictArray = [[String: AnyObject]]()
+        for sample in data.filteredSamples {
+            if let quantitySample = sample as? HKQuantitySample {
+                
+                var sampleToUploadDict = [String: AnyObject]()
+                let reason = sample.metadata?[HKMetadataKeyInsulinDeliveryReason] as? HKInsulinDeliveryReason.RawValue
+                if reason == nil {
+                    DDLogInfo("Skip insulin entry that has no reason!")
+                    continue
+                }
+                let value = quantitySample.quantity.doubleValue(for: .internationalUnit()) as AnyObject?
+                
+                switch reason {
+                case HKInsulinDeliveryReasonBasal:
+                    sampleToUploadDict["type"] = "basal" as AnyObject?
+                    sampleToUploadDict["rate"] = value
+                    DDLogInfo("insulin basal value = \(String(describing: value))")
+                    sampleToUploadDict["deliveryType"] = "scheduled" as AnyObject?
+                    let duration = sample.endDate.timeIntervalSince(sample.startDate)
+                    if duration <= 0 {
+                        continue
+                    }
+                    sampleToUploadDict["duration"] = Int(duration) as AnyObject
+                    
+                case HKInsulinDeliveryReasonBolus:
+                    sampleToUploadDict["type"] = "bolus" as AnyObject?
+                    sampleToUploadDict["subType"] = "normal" as AnyObject?
+                    sampleToUploadDict["normal"] = value
+                    DDLogInfo("insulin bolus value = \(String(describing: value))")
+
+                default:
+                    DDLogInfo("Unknown key for insulin reason: \(String(describing: reason))")
+                    continue
+                }
+                
+                sampleToUploadDict["deviceId"] = data.batchMetadata["deviceId"]
+                sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?
+                
+                // Add sample metadata payload props
+                // TODO: document this time format adjust!
+                if var metadata = sample.metadata {
+                    for (key, value) in metadata {
+                        if let dateValue = value as? Date {
+                            metadata[key] = dateFormatter.isoStringFromDate(dateValue, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
+                        }
+                    }
+                    sampleToUploadDict["payload"] = metadata as AnyObject?
+                }
+                // Add sample if valid...
+                samplesToUploadDictArray.append(sampleToUploadDict)
+            }
+        }
+        return samplesToUploadDictArray
+    }
+
 }

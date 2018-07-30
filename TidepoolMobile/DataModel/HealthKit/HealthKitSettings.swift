@@ -34,7 +34,6 @@ class HealthKitSettings {
 
     // Uploads (prefix using prefixedKey helper)
     static let HasPendingUploadsKey = "HasPendingUploadsKey"
-    static let Task1IsPendingKey = "Task1IsPendingKey"
     
     // HK type anchor query (prefix using prefixedKey helper)
     static let UploadQueryAnchorKey = "QueryAnchorKey"
