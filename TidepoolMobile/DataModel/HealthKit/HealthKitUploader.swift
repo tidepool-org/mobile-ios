@@ -212,9 +212,15 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
 
         // Prepare upload post body
         let samplesToUploadDictArray = data.uploadType.prepareDataForUpload(data)
+        //Debug code to catch serialization exceptions!
+        //TODO: figure out how to catch NSExceptions in Swift!
+        //for sample in samplesToUploadDictArray {
+        //    print("Next sample to upload: \(sample)")
+        //    let _ = try JSONSerialization.data(withJSONObject: sample)
+        //}
         print("Next samples to upload: \(samplesToUploadDictArray)")
         let postBody = try JSONSerialization.data(withJSONObject: samplesToUploadDictArray)
-        print("Post body for upload: \(postBody)")
+        //print("Post body for upload: \(postBody)")
         return try self.savePostBodyForUpload(body: postBody, identifier: HealthKitSettings.prefixedKey(prefix: "", type: self.typeString, key: "uploadBatchSamples.data"))
     }
     

@@ -132,7 +132,6 @@ class HealthKitUploadManager:
             self.uploaders[mode]!.cancelTasks()
             
             if (mode == HealthKitUploadReader.Mode.Current) {
-                HealthKitManager.sharedInstance.disableBackgroundDeliveryWorkoutSamples()
                 HealthKitManager.sharedInstance.stopObservingSamplesForType(self.uploadType)
             } else {
                 switch reason {

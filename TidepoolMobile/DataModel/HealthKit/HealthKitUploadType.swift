@@ -17,6 +17,15 @@ import Foundation
 import CocoaLumberjack
 import HealthKit
 
+// For parameter checking...
+// Reverse domain string needs to
+// (1) begin with 2 to 63 lower case letters
+// (2) followed by one or more groups of:
+//      period
+//      0 or more lower case letters or numerals or dashes
+//      1 lower case letter or number
+let reverseDomainRegEx = "^[a-z]{2,63}(\\.([a-z0-9]|[a-z0-9][a-z0-9-]{0,61}[a-z0-9]))+$"
+
 class HealthKitUploadType {
     private(set) var typeName: String
     init(_ typeName: String) {
@@ -32,15 +41,35 @@ class HealthKitUploadType {
     var sampleBackgroundDeliveryEnabled = false
     var sampleQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)
     
+    // internal utility functions
+    internal func sampleOrigin(_ sample: HKSample) -> [String: String]? {
+        let sourceBundleName = sample.sourceRevision.source.bundleIdentifier.lowercased()
+        if isValidReverseDomain(sourceBundleName) {
+            let origin = [
+                "name": sample.sourceRevision.source.bundleIdentifier.lowercased()
+            ]
+            return origin
+        } else {
+            DDLogInfo("Invalid reverse domain name: \(sourceBundleName)")
+            return nil
+        }
+    }
+    
+    let reverseDomainTest = NSPredicate(format:"SELF MATCHES %@", reverseDomainRegEx)
+    // Service requirement: Must start with 2-63 lower-case alpha characters, followed by a period, followed by lower-case alpha or 0-9 characters. E.g., failures include "com.Apple" (includes uppercase), "q5awl8wcy6.imapmyrunplus" (has numbers in the first part), etc.
+    internal func isValidReverseDomain(_ testStr:String) -> Bool {
+        return reverseDomainTest.evaluate(with: testStr)
+    }
+
     //
     //  MARK: - Override these methods!
     //
   
     // override!
-    internal func hkQuantityTypeIdentifier() -> HKQuantityTypeIdentifier? {
+    internal func hkSampleType() -> HKSampleType? {
         return nil
     }
-
+    
     // override!
     internal func filterSamples(sortedSamples: [HKSample]) -> [HKSample] {
         return sortedSamples

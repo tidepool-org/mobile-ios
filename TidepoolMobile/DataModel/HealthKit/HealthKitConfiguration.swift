@@ -29,13 +29,13 @@ class HealthKitConfiguration
     private(set) var healthKitUploadTypes: [HealthKitUploadType]
     
     func shouldShowHealthKitUI() -> Bool {
-        DDLogVerbose("trace")
+        //DDLogVerbose("trace")
         
         var result = false
         if let isDSAUser = isDSAUser {
             result = HealthKitManager.sharedInstance.isHealthDataAvailable && isDSAUser
         }
-        DDLogInfo("result: \(result)")
+        //DDLogInfo("result: \(result)")
         return result
     }
     

@@ -70,18 +70,12 @@ class HealthKitManager {
         if (shouldAuthorizeUploaderSampleReads) {
             readTypes = Set<HKSampleType>()
             for uploadType in appHealthKitConfiguration.healthKitUploadTypes {
-                readTypes!.insert(HKObjectType.quantityType(forIdentifier: uploadType.hkQuantityTypeIdentifier()!)!)
+                readTypes!.insert(uploadType.hkSampleType()!)
             }
         }
         if (shouldAuthorizeBloodGlucoseSampleWrites) {
             writeTypes = Set<HKSampleType>()
-            writeTypes!.insert(HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!)
-        }
-        if (shouldAuthorizeWorkoutSamples) {
-            if readTypes == nil {
-                readTypes = Set<HKSampleType>()
-            }
-            readTypes!.insert(HKObjectType.workoutType())
+            writeTypes!.insert(HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!)
         }
         guard readTypes != nil || writeTypes != nil else {
             DDLogVerbose("No health data authorization requested, ignoring")
@@ -96,9 +90,6 @@ class HealthKitManager {
                     }
                     if (shouldAuthorizeBloodGlucoseSampleWrites) {
                         UserDefaults.standard.set(true, forKey: HealthKitSettings.AuthorizationRequestedForBloodGlucoseSampleWritesKey)
-                    }
-                    if shouldAuthorizeWorkoutSamples {
-                        UserDefaults.standard.set(true, forKey: HealthKitSettings.AuthorizationRequestedForWorkoutSamplesKey)
                     }
                     UserDefaults.standard.synchronize()
                 }
@@ -128,7 +119,7 @@ class HealthKitManager {
             uploadType.sampleObservationQuery = nil
         }
         
-        let sampleType = HKObjectType.quantityType(forIdentifier: uploadType.hkQuantityTypeIdentifier()!)!
+        let sampleType = uploadType.hkSampleType()!
         uploadType.sampleObservationQuery = HKObserverQuery(sampleType: sampleType, predicate: nil) {
             (query, observerQueryCompletion, error) in
             
@@ -160,54 +151,6 @@ class HealthKitManager {
         }
     }
     
-    // NOTE: resultsHandler is called on a separate process queue!
-    func startObservingWorkoutSamples(_ resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!) {
-        DDLogVerbose("trace")
-
-        guard isHealthDataAvailable else {
-            DDLogError("Unexpected HealthKitManager call when health data not available")
-            return
-        }
-        
-        if !workoutsObservationSuccessful {
-            if workoutsObservationQuery != nil {
-                healthStore?.stop(workoutsObservationQuery!)
-            }
-            
-            let sampleType = HKObjectType.workoutType()
-            workoutsObservationQuery = HKObserverQuery(sampleType: sampleType, predicate: nil) {
-                [unowned self](query, observerQueryCompletion, error) in
-                if error == nil {
-                    self.workoutsObservationSuccessful = true
-                    self.readWorkoutSamples(resultsHandler)
-                } else {
-                    DDLogError("HealthKit observation error \(String(describing: error))")
-                    resultsHandler?(nil, nil, error as NSError?)
-                }
-                
-                observerQueryCompletion()
-            }
-            healthStore?.execute(workoutsObservationQuery!)
-        }
-    }
-    
-    func stopObservingWorkoutSamples() {
-        DDLogVerbose("trace")
-
-        guard isHealthDataAvailable else {
-            DDLogError("Unexpected HealthKitManager call when health data not available")
-            return
-        }
-        
-        if workoutsObservationSuccessful {
-            if workoutsObservationQuery != nil {
-                healthStore?.stop(workoutsObservationQuery!)
-                workoutsObservationQuery = nil
-            }
-            workoutsObservationSuccessful = false
-        }
-    }
-    
     // MARK: Background delivery
     
     func enableBackgroundDeliverySamplesForType(_ uploadType: HealthKitUploadType) {
@@ -220,7 +163,7 @@ class HealthKitManager {
         
         if !uploadType.sampleBackgroundDeliveryEnabled {
             healthStore?.enableBackgroundDelivery(
-                for: HKObjectType.quantityType(forIdentifier: uploadType.hkQuantityTypeIdentifier()!)!,
+                for: uploadType.hkSampleType()!,
                 frequency: HKUpdateFrequency.immediate) {
                     success, error -> Void in
                     if error == nil {
@@ -242,57 +185,13 @@ class HealthKitManager {
         }
         
         if uploadType.sampleBackgroundDeliveryEnabled {
-            healthStore?.disableBackgroundDelivery(for: HKObjectType.quantityType(forIdentifier: uploadType.hkQuantityTypeIdentifier()!)!) {
+            healthStore?.disableBackgroundDelivery(for: uploadType.hkSampleType()!) {
                 success, error -> Void in
                 if error == nil {
                     uploadType.sampleBackgroundDeliveryEnabled = false
                     DDLogError("Disabled background delivery of health data")
                 } else {
                     DDLogError("Error disabling background delivery of health data \(String(describing: error)), \(String(describing: error!._userInfo))")
-                }
-            }
-        }
-    }
-    
-    func enableBackgroundDeliveryWorkoutSamples() {
-        DDLogVerbose("trace")
-
-        guard isHealthDataAvailable else {
-            DDLogError("Unexpected HealthKitManager call when health data not available")
-            return
-        }
-        
-        if !workoutsBackgroundDeliveryEnabled {
-            healthStore?.enableBackgroundDelivery(
-                for: HKObjectType.workoutType(),
-                frequency: HKUpdateFrequency.immediate) {
-                    success, error -> Void in
-                    if error == nil {
-                        self.workoutsBackgroundDeliveryEnabled = true
-                        DDLogError("Enabled background delivery of health data")
-                    } else {
-                        DDLogError("Error enabling background delivery of health data \(String(describing: error))")
-                    }
-            }
-        }
-    }
-    
-    func disableBackgroundDeliveryWorkoutSamples() {
-        DDLogVerbose("trace")
-
-        guard isHealthDataAvailable else {
-            DDLogError("Unexpected HealthKitManager call when health data not available")
-            return
-        }
-        
-        if workoutsBackgroundDeliveryEnabled {
-            healthStore?.disableBackgroundDelivery(for: HKObjectType.workoutType()) {
-                success, error -> Void in
-                if error == nil {
-                    self.workoutsBackgroundDeliveryEnabled = false
-                    DDLogError("Disabled background delivery of health data")
-                } else {
-                    DDLogError("Error disabling background delivery of health data \(String(describing: error)), \((error! as NSError).userInfo)")
                 }
             }
         }
@@ -307,7 +206,7 @@ class HealthKitManager {
             return
         }
         
-        let sampleType = HKObjectType.quantityType(forIdentifier: uploadType.hkQuantityTypeIdentifier()!)!
+        let sampleType = uploadType.hkSampleType()!
         let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
             predicate: predicate,
             anchor: anchor,
@@ -335,7 +234,7 @@ class HealthKitManager {
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictStartDate, .strictEndDate])
         let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
         
-        let sampleType = HKObjectType.quantityType(forIdentifier: uploadType.hkQuantityTypeIdentifier()!)!
+        let sampleType = uploadType.hkSampleType()!
         let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: limit, sortDescriptors: [sortDescriptor]) {
             (query, newSamples, error) -> Void in
             

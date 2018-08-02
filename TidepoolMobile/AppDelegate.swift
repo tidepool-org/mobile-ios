@@ -26,6 +26,7 @@ let appHealthKitConfiguration = TidepoolMobileHealthKitConfiguration(healthKitUp
     HealthKitUploadTypeBloodGlucose(),
     HealthKitUploadTypeCarb(),
     HealthKitUploadTypeInsulin(),
+    HealthKitUploadTypeWorkout(),
     ])
 
 /// AppDelegate deals with app startup, restart, termination:

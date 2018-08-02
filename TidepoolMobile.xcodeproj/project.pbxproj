@@ -342,6 +342,9 @@
 		48ECF6CE1E96FE18007EE5D3 /* jump-jump-jump-jump.gif in Resources */ = {isa = PBXBuildFile; fileRef = 48ECF6CD1E96FE18007EE5D3 /* jump-jump-jump-jump.gif */; };
 		48ED0D341BADAF8B009D0D6F /* GraphUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */; };
 		48EDC2C91BD99141003049D9 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */; };
+		48EF51FC210FBDAF0046EE6B /* HealthKitUploadTypeWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EF51FB210FBDAE0046EE6B /* HealthKitUploadTypeWorkout.swift */; };
+		48EF51FD210FBDBC0046EE6B /* HealthKitUploadTypeWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EF51FB210FBDAE0046EE6B /* HealthKitUploadTypeWorkout.swift */; };
+		48EF51FE210FBDBD0046EE6B /* HealthKitUploadTypeWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48EF51FB210FBDAE0046EE6B /* HealthKitUploadTypeWorkout.swift */; };
 		48FB1E4D1C17C38600C89F8E /* TidepoolMobileDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* TidepoolMobileDataController.swift */; };
 		48FB1E4E1C17C38600C89F8E /* TidepoolMobileDataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48FB1E4C1C17C38500C89F8E /* TidepoolMobileDataController.swift */; };
 		4D02843E1F4F286900A72B74 /* HealthKitBloodGlucosePusher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0284381F4F286900A72B74 /* HealthKitBloodGlucosePusher.swift */; };
@@ -427,7 +430,6 @@
 		48103E941C1DE4CC0055C27A /* ENSideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ENSideMenu.swift; path = "Third Party/ENSideMenu/ENSideMenu.swift"; sourceTree = "<group>"; };
 		48103E951C1DE4CC0055C27A /* ENSideMenuNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ENSideMenuNavigationController.swift; path = "Third Party/ENSideMenu/ENSideMenuNavigationController.swift"; sourceTree = "<group>"; };
 		48103E981C1DE7BC0055C27A /* EventViewNavController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventViewNavController.swift; path = ViewControllers/EventViewNavController.swift; sourceTree = "<group>"; };
-		48103E9C1C1E05660055C27A /* TidepoolMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TidepoolMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/Pods-TidepoolMobile/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		4820ED691C21E8E3008C754A /* GraphDataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataTypes.swift; path = GraphView/GraphDataTypes.swift; sourceTree = "<group>"; };
 		4823986E2022628200EBB13C /* BGMTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BGMTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -551,6 +553,7 @@
 		48ED0D331BADAF8B009D0D6F /* GraphUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphUIView.swift; path = GraphView/GraphUIView.swift; sourceTree = "<group>"; };
 		48EDC2C51BD6B403003049D9 /* EventAddEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventAddEditViewController.swift; path = ViewControllers/EventAddEditViewController.swift; sourceTree = "<group>"; };
 		48EDC2C81BD9912C003049D9 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Light.ttf"; sourceTree = "<group>"; };
+		48EF51FB210FBDAE0046EE6B /* HealthKitUploadTypeWorkout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitUploadTypeWorkout.swift; path = DataModel/HealthKit/HealthKitUploadTypeWorkout.swift; sourceTree = "<group>"; };
 		48FB1E4C1C17C38500C89F8E /* TidepoolMobileDataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolMobileDataController.swift; path = DataModel/TidepoolMobileDataController.swift; sourceTree = "<group>"; };
 		4D0284381F4F286900A72B74 /* HealthKitBloodGlucosePusher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitBloodGlucosePusher.swift; path = DataModel/HealthKit/HealthKitBloodGlucosePusher.swift; sourceTree = "<group>"; };
 		4D02843A1F4F286900A72B74 /* HealthKitUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitUploader.swift; path = DataModel/HealthKit/HealthKitUploader.swift; sourceTree = "<group>"; };
@@ -944,7 +947,6 @@
 		48AEB7C71C1CE33F00B2A214 /* Third Party */ = {
 			isa = PBXGroup;
 			children = (
-				48103E9C1C1E05660055C27A /* TidepoolMobile-Bridging-Header.h */,
 				48103E941C1DE4CC0055C27A /* ENSideMenu.swift */,
 				48103E951C1DE4CC0055C27A /* ENSideMenuNavigationController.swift */,
 				48E4A4451BF015CE001A7B35 /* Reachability.swift */,
@@ -968,6 +970,7 @@
 				48A805D120FA7FEB00C95153 /* HealthKitUploadTypeBloodGlucose.swift */,
 				48A805D620FA806C00C95153 /* HealthKitUploadTypeInsulin.swift */,
 				48A805D520FA806B00C95153 /* HealthKitUploadTypeCarb.swift */,
+				48EF51FB210FBDAE0046EE6B /* HealthKitUploadTypeWorkout.swift */,
 			);
 			name = HealthKitUploadTypes;
 			sourceTree = "<group>";
@@ -1449,6 +1452,7 @@
 				48B8C90A2022AD6000437263 /* Wizard.swift in Sources */,
 				48B8C90E2022AF6300437263 /* BloodKetone+CoreDataProperties.swift in Sources */,
 				48B8C9002022AD2A00437263 /* Meal.swift in Sources */,
+				48EF51FE210FBDBD0046EE6B /* HealthKitUploadTypeWorkout.swift in Sources */,
 				48B8C8D92022A5A700437263 /* LogFormatter.swift in Sources */,
 				48B8C9322022B1C100437263 /* HealthKitUploader.swift in Sources */,
 				48B8C9082022AD5800437263 /* User.swift in Sources */,
@@ -1544,6 +1548,7 @@
 				0334CA581BA8DDFC00013096 /* Prime+CoreDataProperties.swift in Sources */,
 				4DFFF72B1F5474940057AC09 /* HealthKitUploadReader.swift in Sources */,
 				0334CA4F1BA8DDFC00013096 /* GrabBag.swift in Sources */,
+				48EF51FC210FBDAF0046EE6B /* HealthKitUploadTypeWorkout.swift in Sources */,
 				48C491661C3B2DEE00F34630 /* SmbgGraphData.swift in Sources */,
 				0334CA521BA8DDFC00013096 /* Note+CoreDataProperties.swift in Sources */,
 				0334CA401BA8DDFC00013096 /* DeviceMetadata.swift in Sources */,
@@ -1680,6 +1685,7 @@
 				0334CA711BA8DDFC00013096 /* Status+CoreDataProperties.swift in Sources */,
 				0334CA921BA8DDFC00013096 /* Wizard.swift in Sources */,
 				487577A120EFE78E00CC1E5F /* HealthKitUploadManager.swift in Sources */,
+				48EF51FD210FBDBC0046EE6B /* HealthKitUploadTypeWorkout.swift in Sources */,
 				48DF9B9B1BA9C3F800A505DD /* UIApplicationExtension.swift in Sources */,
 				48DDD30A1BA76D11007365FE /* TidepoolMobileStyles.swift in Sources */,
 				0334CA3E1BA8DDFC00013096 /* DeviceMetadata+CoreDataProperties.swift in Sources */,
@@ -1812,6 +1818,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = BGMTool/BGMTool.entitlements;
@@ -1826,6 +1833,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.BGMTool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "TidepoolMobile/BGMTool-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1840,6 +1849,7 @@
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = BGMTool/BGMTool.entitlements;
@@ -1852,6 +1862,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.BGMTool;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TidepoolMobile/BGMTool-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2022,11 +2033,14 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = TidepoolMobileTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.TidepoolMobileTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TidepoolMobile/TidepoolMobileTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nutshell.app/Nutshell";
@@ -2039,11 +2053,13 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = TidepoolMobileTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.TidepoolMobileTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "TidepoolMobile/TidepoolMobileTests-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nutshell.app/Nutshell";

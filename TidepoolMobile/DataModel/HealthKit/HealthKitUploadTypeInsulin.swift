@@ -39,8 +39,8 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
         super.init("Insulin")
      }
 
-    internal override func hkQuantityTypeIdentifier() -> HKQuantityTypeIdentifier {
-        return HKQuantityTypeIdentifier.insulinDelivery
+    internal override func hkSampleType() -> HKSampleType? {
+        return HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.insulinDelivery)
     }
 
     internal override func filterSamples(sortedSamples: [HKSample]) -> [HKSample] {
@@ -60,7 +60,7 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
         DDLogInfo("Unknown cbg sourceBundleIdentifier: \(sourceBundleIdentifier)")
         let deviceModel = "Unknown: \(sourceBundleIdentifier)"
         // Note: this will return something like HealthKit_Unknown: com.apple.Health_060EF7B3-9D86-4B93-9EE1-2FC6C618A4AD
-        // TODO: figure out what Link might put here...
+        // TODO: figure out what LoopKit might put here...
         return "HealthKit_\(deviceModel)"
     }
     
@@ -84,13 +84,21 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                     sampleToUploadDict["type"] = "basal" as AnyObject?
                     sampleToUploadDict["rate"] = value
                     DDLogInfo("insulin basal value = \(String(describing: value))")
-                    sampleToUploadDict["deliveryType"] = "scheduled" as AnyObject?
-                    let duration = sample.endDate.timeIntervalSince(sample.startDate)
+                    sampleToUploadDict["deliveryType"] = "temp" as AnyObject?
+                    let duration = sample.endDate.timeIntervalSince(sample.startDate)*1000 // convert to milliseconds
                     if duration <= 0 {
                         continue
                     }
                     sampleToUploadDict["duration"] = Int(duration) as AnyObject
-                    
+                    if let scheduledRate = sample.metadata?[MetadataKeyScheduledBasalRate] {
+                        let suppressed = [
+                                "type": "basal",
+                                "deliveryType": "scheduled",
+                                "rate": scheduledRate
+                        ]
+                        sampleToUploadDict["suppressed"] = suppressed as AnyObject?
+                    }
+
                 case HKInsulinDeliveryReasonBolus:
                     sampleToUploadDict["type"] = "bolus" as AnyObject?
                     sampleToUploadDict["subType"] = "normal" as AnyObject?
@@ -105,6 +113,11 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                 sampleToUploadDict["deviceId"] = data.batchMetadata["deviceId"]
                 sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?
                 
+                // add optional application origin
+                if let origin = sampleOrigin(sample) {
+                    sampleToUploadDict["origin"] = origin as AnyObject
+                }
+
                 // Add sample metadata payload props
                 // TODO: document this time format adjust!
                 if var metadata = sample.metadata {
@@ -113,7 +126,14 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                             metadata[key] = dateFormatter.isoStringFromDate(dateValue, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
                         }
                     }
-                    sampleToUploadDict["payload"] = metadata as AnyObject?
+                    // removeHKMetadataKeyInsulinDeliveryReason from metadata as this is already reflected in the basal vs bolus type
+                    metadata.removeValue(forKey: HKMetadataKeyInsulinDeliveryReason)
+                    // remove MetadataKeyScheduledBasalRate if present as this will be in the suppressed block
+                    metadata.removeValue(forKey: MetadataKeyScheduledBasalRate)
+                    // add any remaining metadata values as the payload struct
+                    if !metadata.isEmpty {
+                        sampleToUploadDict["payload"] = metadata as AnyObject?
+                    }
                 }
                 // Add sample if valid...
                 samplesToUploadDictArray.append(sampleToUploadDict)

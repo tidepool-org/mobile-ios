@@ -136,7 +136,7 @@ class HealthKitUploadStats: NSObject {
     func updateHistoricalSamplesDateRangeFromHealthKitAsync() {
         DDLogVerbose("trace")
         
-        let sampleType = HKObjectType.quantityType(forIdentifier: uploadType.hkQuantityTypeIdentifier()!)!
+        let sampleType = uploadType.hkSampleType()!
         HealthKitManager.sharedInstance.findSampleDateRange(sampleType: sampleType) {
             (error: NSError?, startDate: Date?, endDate: Date?) in
             

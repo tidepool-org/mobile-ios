@@ -23,11 +23,10 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
     }
 
     // MARK: Overrides!
-    
-    internal override func hkQuantityTypeIdentifier() -> HKQuantityTypeIdentifier {
-        return HKQuantityTypeIdentifier.bloodGlucose
+    internal override func hkSampleType() -> HKSampleType? {
+        return HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)
     }
-    
+
     internal override func filterSamples(sortedSamples: [HKSample]) -> [HKSample] {
         DDLogVerbose("trace")
         
@@ -71,7 +70,7 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
             DDLogError("Unknown cbg sourceBundleIdentifier: \(sourceBundleIdentifier)")
             deviceModel = "Unknown: \(sourceBundleIdentifier)"
             // Note: this will return something like HealthKit_Unknown: com.apple.Health_060EF7B3-9D86-4B93-9EE1-2FC6C618A4AD
-            // TODO: figure out what Link might put here. Also, if we have com.apple.Health, and it is is user entered, this would be a direct user HK entry: what should we put?
+            // TODO: figure out what LoopKit might put here. Also, if we have com.apple.Health, and it is is user entered, this would be a direct user HK entry: what should we put?
         }
         
         return "HealthKit_\(deviceModel)"
@@ -90,6 +89,11 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
             //sampleToUploadDict["guid"] = sample.uuid.uuidString as AnyObject?
             sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?
             
+            // add optional application origin
+            if let origin = sampleOrigin(sample) {
+                sampleToUploadDict["origin"] = origin as AnyObject
+            }
+
             if let quantitySample = sample as? HKQuantitySample {
                 let units = "mg/dL"
                 sampleToUploadDict["units"] = units as AnyObject?

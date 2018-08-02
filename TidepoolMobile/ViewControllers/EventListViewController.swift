@@ -113,15 +113,19 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     @objc internal func calendarDayDidChange(notification : NSNotification)
     {
         DDLogInfo("\(#function)")
-        updateDisplayPending = true
-        checkRefresh()
+            DispatchQueue.main.async {
+                self.updateDisplayPending = true
+                self.checkRefresh()
+        }
     }
     
     // Same is true when timezone changes!
     @objc internal func timezoneDidChange(notification : NSNotification) {
         DDLogInfo("\(#function)")
-        updateDisplayPending = true
-        checkRefresh()
+        DispatchQueue.main.async {
+            self.updateDisplayPending = true
+            self.checkRefresh()
+        }
     }
     
     private func checkRefresh() {
