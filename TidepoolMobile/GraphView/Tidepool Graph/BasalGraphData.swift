@@ -19,10 +19,12 @@ import CocoaLumberjack
 class BasalGraphDataType: GraphDataType {
     
     var suppressed: CGFloat?
+    var duration: TimeInterval = 0.0
     
-    convenience init(value: CGFloat, timeOffset: TimeInterval, suppressed: CGFloat?) {
-        self.init(value: value, timeOffset: timeOffset)
+    init(value: CGFloat, timeOffset: TimeInterval, duration: TimeInterval, suppressed: CGFloat?) {
         self.suppressed = suppressed
+        self.duration = duration
+        super.init(value: value, timeOffset: timeOffset)
     }
 
     //(timeOffset: NSTimeInterval, value: NSNumber, suppressed: NSNumber?)
@@ -82,14 +84,14 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
             }
             if value != nil {
                 if event.duration != nil {
-                    let duration = CGFloat(truncating: event.duration!)
+                    let duration = TimeInterval(CGFloat(truncating: event.duration!)/1000)
                     if duration > 0 {
                         let floatValue = CGFloat(truncating: value!)
                         var suppressed: CGFloat? = nil
                         if event.suppressedRate != nil {
                             suppressed = CGFloat(truncating: event.suppressedRate!)
                         }
-                        dataArray.append(BasalGraphDataType(value: floatValue, timeOffset: graphTimeOffset, suppressed: suppressed))
+                        dataArray.append(BasalGraphDataType(value: floatValue, timeOffset: graphTimeOffset, duration: duration, suppressed: suppressed))
                         if floatValue > layout.maxBasal {
                             layout.maxBasal = floatValue
                         }
@@ -100,7 +102,7 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
                 } else {
                     // Note: sometimes suspend events have a nil duration - put in a zero valued record!
                     if event.deliveryType == "suspend" {
-                        dataArray.append(BasalGraphDataType(value: 0.0, timeOffset: graphTimeOffset, suppressed: nil))
+                        dataArray.append(BasalGraphDataType(value: 0.0, timeOffset: graphTimeOffset, duration: 0, suppressed: nil))
                     } else {
                         DDLogInfo("ignoring non-suspend Basal event with nil duration")
                     }
@@ -125,14 +127,37 @@ class BasalGraphDataLayer: TidepoolGraphDataLayer {
         
         dataArray = []
         let dataLayerOffset = startTime.timeIntervalSince(layout.graphStartTime as Date)
+        func addItem(_ basalItem: BasalGraphDataType) {
+            dataArray.append(BasalGraphDataType(value: basalItem.value, timeOffset: basalItem.timeOffset - dataLayerOffset, duration: basalItem.duration, suppressed: basalItem.suppressed))
+        }
+        
+        // save end of last Basal as a possible graph item with zero value
+        var previousBasal: BasalGraphDataType?
+        func savePrevious(_ basalItem: BasalGraphDataType) {
+            previousBasal = BasalGraphDataType(value: 0.0, timeOffset: basalItem.timeOffset + basalItem.duration, duration: 0, suppressed: nil)
+        }
+
         let rangeStart = dataLayerOffset - kBasalMaxDuration
         let rangeEnd = dataLayerOffset + timeIntervalForView
         // copy over cached items in the range needed for this tile!
         for item in layout.allBasalData! {
             if let basalItem = item as? BasalGraphDataType {
                 if basalItem.timeOffset >= rangeStart && basalItem.timeOffset <= rangeEnd {
-                    dataArray.append(BasalGraphDataType(value: basalItem.value, timeOffset: basalItem.timeOffset - dataLayerOffset, suppressed: basalItem.suppressed))
+                    if let previousItem = previousBasal {
+                        if previousItem.timeOffset < basalItem.timeOffset {
+                            // the previous basal ended before this one started, so add it in to complete that basal rect!
+                            addItem(previousItem)
+                        }
+                    }
+                    addItem(basalItem)
+                    savePrevious(basalItem)
                 }
+            }
+        }
+        // handle case of last basal in slice with duration ending it before slice end - since no next item within slice will cause it to be emitted
+        if let previousItem = previousBasal {
+            if previousItem.timeOffset < rangeEnd {
+                addItem(previousItem)
             }
         }
         //DDLogInfo("Copied \(dataArray.count) basal items from graph cache for slice at offset \(dataLayerOffset/3600) hours")
