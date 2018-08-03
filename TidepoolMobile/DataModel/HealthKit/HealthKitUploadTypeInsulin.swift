@@ -66,12 +66,12 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
     
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
         DDLogInfo("insulin prepareDataForUpload")
-        let dateFormatter = DateFormatter()
         var samplesToUploadDictArray = [[String: AnyObject]]()
         for sample in data.filteredSamples {
             if let quantitySample = sample as? HKQuantitySample {
                 
                 var sampleToUploadDict = [String: AnyObject]()
+
                 let reason = sample.metadata?[HKMetadataKeyInsulinDeliveryReason] as? HKInsulinDeliveryReason.RawValue
                 if reason == nil {
                     DDLogInfo("Skip insulin entry that has no reason!")
@@ -110,31 +110,19 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                     continue
                 }
                 
-                sampleToUploadDict["deviceId"] = data.batchMetadata["deviceId"]
-                sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?
-                
-                // add optional application origin
-                if let origin = sampleOrigin(sample) {
-                    sampleToUploadDict["origin"] = origin as AnyObject
-                }
+                // Add fields common to all types: guid, deviceId, time, and origin
+                super.addCommonFields(data, sampleToUploadDict: &sampleToUploadDict, sample: sample)
 
                 // Add sample metadata payload props
-                // TODO: document this time format adjust!
                 if var metadata = sample.metadata {
-                    for (key, value) in metadata {
-                        if let dateValue = value as? Date {
-                            metadata[key] = dateFormatter.isoStringFromDate(dateValue, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
-                        }
-                    }
                     // removeHKMetadataKeyInsulinDeliveryReason from metadata as this is already reflected in the basal vs bolus type
-                    metadata.removeValue(forKey: HKMetadataKeyInsulinDeliveryReason)
+                    //metadata.removeValue(forKey: HKMetadataKeyInsulinDeliveryReason)
                     // remove MetadataKeyScheduledBasalRate if present as this will be in the suppressed block
-                    metadata.removeValue(forKey: MetadataKeyScheduledBasalRate)
+                    //metadata.removeValue(forKey: MetadataKeyScheduledBasalRate)
                     // add any remaining metadata values as the payload struct
-                    if !metadata.isEmpty {
-                        sampleToUploadDict["payload"] = metadata as AnyObject?
-                    }
+                    addMetadata(&metadata, sampleToUploadDict: &sampleToUploadDict)
                 }
+                
                 // Add sample if valid...
                 samplesToUploadDictArray.append(sampleToUploadDict)
             }

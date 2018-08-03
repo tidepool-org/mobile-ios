@@ -49,21 +49,12 @@ class HealthKitUploadTypeCarb: HealthKitUploadType {
     
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
         DDLogInfo("carb prepareDataForUpload")
-        let dateFormatter = DateFormatter()
         var samplesToUploadDictArray = [[String: AnyObject]]()
         for sample in data.filteredSamples {
             var sampleToUploadDict = [String: AnyObject]()
-            
-            //sampleToUploadDict["uploadId"] = data.batchMetadata["uploadId"]
             sampleToUploadDict["type"] = "food" as AnyObject?
-            sampleToUploadDict["deviceId"] = data.batchMetadata["deviceId"]
-            //sampleToUploadDict["guid"] = sample.uuid.uuidString as AnyObject?
-            sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?
-            
-            // add optional application origin
-            if let origin = sampleOrigin(sample) {
-                sampleToUploadDict["origin"] = origin as AnyObject
-            }
+            // Add fields common to all types: guid, deviceId, time, and origin
+            super.addCommonFields(data, sampleToUploadDict: &sampleToUploadDict, sample: sample)
 
             if let quantitySample = sample as? HKQuantitySample {
                 let unit = HKUnit(from: "g")
@@ -78,19 +69,15 @@ class HealthKitUploadTypeCarb: HealthKitUploadType {
                 sampleToUploadDict["nutrition"] = nutrition as AnyObject?
                 
                 // Add sample metadata payload props
-                // TODO: document this time format adjust!
                 if var metadata = sample.metadata {
-                    for (key, value) in metadata {
-                        if let dateValue = value as? Date {
-                            metadata[key] = dateFormatter.isoStringFromDate(dateValue, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
-                        }
+                    if let foodType = metadata[HKMetadataKeyFoodType] as? String {
+                        // service has 100 char limit!
+                        sampleToUploadDict["name"] = foodType.prefix(100) as AnyObject
                     }
-                    
-                    // add any remaining metadata values as the payload struct
-                    if !metadata.isEmpty {
-                        sampleToUploadDict["payload"] = metadata as AnyObject?
-                    }
+                    // Add metadata values as the payload struct
+                    addMetadata(&metadata, sampleToUploadDict: &sampleToUploadDict)
                 }
+
                 // Add sample if valid...
                 samplesToUploadDictArray.append(sampleToUploadDict)
             }

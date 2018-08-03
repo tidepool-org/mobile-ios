@@ -89,7 +89,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
                 }
                 let uploadTask = uploadSession!.uploadTask(with: batchSamplesRequest as URLRequest, fromFile: batchSamplesPostBodyURL)
                 uploadTask.taskDescription = self.prefixedLocalId(self.uploadSamplesTaskDescription)
-                DDLogInfo("Created samples upload task (2 of 2): \(uploadTask.taskIdentifier)")
+                DDLogInfo("Created samples upload task: \(uploadTask.taskIdentifier)")
                 uploadTask.resume()
             } else {
                 let message = "Failed to find stored POST body URL or stored request for samples upload"
@@ -214,10 +214,14 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
         let samplesToUploadDictArray = data.uploadType.prepareDataForUpload(data)
         //Debug code to catch serialization exceptions!
         //TODO: figure out how to catch NSExceptions in Swift!
-        //for sample in samplesToUploadDictArray {
-        //    print("Next sample to upload: \(sample)")
-        //    let _ = try JSONSerialization.data(withJSONObject: sample)
-        //}
+//        for sample in samplesToUploadDictArray {
+//            print("Next sample to upload: \(sample)")
+//            if JSONSerialization.isValidJSONObject(sample) {
+//                let _ = try? JSONSerialization.data(withJSONObject: sample)
+//            } else {
+//                print("invalid json failed to serialize!")
+//            }
+//        }
         print("Next samples to upload: \(samplesToUploadDictArray)")
         let postBody = try JSONSerialization.data(withJSONObject: samplesToUploadDictArray)
         //print("Post body for upload: \(postBody)")

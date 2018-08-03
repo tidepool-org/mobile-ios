@@ -29,23 +29,25 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
 
     internal override func filterSamples(sortedSamples: [HKSample]) -> [HKSample] {
         DDLogVerbose("trace")
-        
-        // Filter out non-Dexcom data
-        var filteredSamples = [HKSample]()
-        
-        for sample in sortedSamples {
-            let sourceRevision = sample.sourceRevision
-            let source = sourceRevision.source
-            let treatAllBloodGlucoseSourceTypesAsDexcom = UserDefaults.standard.bool(forKey: HealthKitSettings.TreatAllBloodGlucoseSourceTypesAsDexcomKey)
-            if source.name.lowercased().range(of: "dexcom") == nil && !treatAllBloodGlucoseSourceTypesAsDexcom {
-                DDLogInfo("Ignoring non-Dexcom glucose data from source: \(source.name)")
-                continue
-            }
-            
-            filteredSamples.append(sample)
-        }
-        
-        return filteredSamples
+        // For now, don't filter anything out!
+        return sortedSamples
+
+//        // Filter out non-Dexcom data
+//        var filteredSamples = [HKSample]()
+//
+//        for sample in sortedSamples {
+//            let sourceRevision = sample.sourceRevision
+//            let source = sourceRevision.source
+//            let treatAllBloodGlucoseSourceTypesAsDexcom = UserDefaults.standard.bool(forKey: HealthKitSettings.TreatAllBloodGlucoseSourceTypesAsDexcomKey)
+//            if source.name.lowercased().range(of: "dexcom") == nil && !treatAllBloodGlucoseSourceTypesAsDexcom {
+//                DDLogInfo("Ignoring non-Dexcom glucose data from source: \(source.name)")
+//                continue
+//            }
+//
+//            filteredSamples.append(sample)
+//        }
+//        
+//        return filteredSamples
     }
     
     // override!
@@ -78,21 +80,13 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
 
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
         DDLogInfo("blood glucose prepareDataForUpload")
-        let dateFormatter = DateFormatter()
+        //let dateFormatter = DateFormatter()
         var samplesToUploadDictArray = [[String: AnyObject]]()
         for sample in data.filteredSamples {
             var sampleToUploadDict = [String: AnyObject]()
-            
-            //sampleToUploadDict["uploadId"] = data.batchMetadata["uploadId"]
             sampleToUploadDict["type"] = "cbg" as AnyObject?
-            sampleToUploadDict["deviceId"] = data.batchMetadata["deviceId"]
-            //sampleToUploadDict["guid"] = sample.uuid.uuidString as AnyObject?
-            sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?
-            
-            // add optional application origin
-            if let origin = sampleOrigin(sample) {
-                sampleToUploadDict["origin"] = origin as AnyObject
-            }
+            // Add fields common to all types: guid, deviceId, time, and origin
+            super.addCommonFields(data, sampleToUploadDict: &sampleToUploadDict, sample: sample)
 
             if let quantitySample = sample as? HKQuantitySample {
                 let units = "mg/dL"
@@ -128,36 +122,26 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
                 }
             }
             
-            // Add sample metadata payload props
+            // separate out receiver display time if it exists...
             if var metadata = sample.metadata {
                 for (key, value) in metadata {
                     if let dateValue = value as? Date {
                         if key == "Receiver Display Time" {
-                            metadata[key] = dateFormatter.isoStringFromDate(dateValue, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateNoTimeZone)
-                            
-                        } else {
-                            metadata[key] = dateFormatter.isoStringFromDate(dateValue, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
+                            sampleToUploadDict["deviceTime"] = dateFormatter.isoStringFromDate(dateValue, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateNoTimeZone) as AnyObject?
+                            break
                         }
                     }
                 }
-                
-                // If "Receiver Display Time" exists, use that as deviceTime and remove from metadata payload
-                if let receiverDisplayTime = metadata["Receiver Display Time"] {
-                    sampleToUploadDict["deviceTime"] = receiverDisplayTime as AnyObject?
-                    metadata.removeValue(forKey: "Receiver Display Time")
-                }
+                metadata.removeValue(forKey: "Receiver Display Time")
+
                 // If "HKWasUserEntered" exists and is true, change type to "smbg" and remove from metadata
                 if let wasUserEntered = metadata[HKMetadataKeyWasUserEntered] as? Bool {
                     if wasUserEntered {
                         sampleToUploadDict["type"] = "smbg" as AnyObject?
-                        metadata.removeValue(forKey: HKMetadataKeyWasUserEntered)
                     }
                 }
-
                 // Add remaining metadata, if any, as payload struct
-                if !metadata.isEmpty {
-                    sampleToUploadDict["payload"] = metadata as AnyObject?
-                }
+                addMetadata(&metadata, sampleToUploadDict: &sampleToUploadDict)
             }
             // Add sample
             samplesToUploadDictArray.append(sampleToUploadDict)

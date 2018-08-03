@@ -49,27 +49,20 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
     
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
         DDLogInfo("workout prepareDataForUpload")
-        let dateFormatter = DateFormatter()
         var samplesToUploadDictArray = [[String: AnyObject]]()
         
         for sample in data.filteredSamples {
             if let workout = sample as? HKWorkout {
-                
                 var sampleToUploadDict = [String: AnyObject]()
-                
                 sampleToUploadDict["type"] = "physicalActivity" as AnyObject?
-                sampleToUploadDict["deviceId"] = data.batchMetadata["deviceId"]
-                sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?
+                // Add fields common to all types: guid, deviceId, time, and origin
+                super.addCommonFields(data, sampleToUploadDict: &sampleToUploadDict, sample: sample)
+
                 // Service wants a string if we specify "other", but HK doesn't provide the user a way to enter one...
                 if workout.workoutActivityType != .other {
                     sampleToUploadDict["activityType"] = stringsForHKWorkoutActivityType(workout.workoutActivityType).tidepoolStr as AnyObject
                 }
  
-                // add optional application origin
-                if let origin = sampleOrigin(sample) {
-                    sampleToUploadDict["origin"] = origin as AnyObject
-                }
-
                 let duration = [
                     "units": "seconds",
                     "value": workout.duration
@@ -108,23 +101,10 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
                 }
                 
                 // Add sample metadata payload props
-                // TODO: figure out how to work around the exception when some instances of payload are converted to JSON!
-//                if var metadata = sample.metadata {
-//                    for (key, value) in metadata {
-//                        if let dateValue = value as? Date {
-//                            metadata[key] = dateFormatter.isoStringFromDate(dateValue, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
-//                        }
-//                        if let str = value as? String {
-//                            metadata[key] = str.replacingOccurrences(of: "/", with: "-")
-//                        }
-//                    }
-//
-//                    // add any remaining metadata values as the payload struct
-//                    if !metadata.isEmpty {
-//                        sampleToUploadDict["payload"] = metadata as AnyObject?
-//                    }
-//                }
-                // Add sample if valid...
+                if var metadata = sample.metadata {
+                    addMetadata(&metadata, sampleToUploadDict: &sampleToUploadDict)
+                }
+
                 samplesToUploadDictArray.append(sampleToUploadDict)
             }
             

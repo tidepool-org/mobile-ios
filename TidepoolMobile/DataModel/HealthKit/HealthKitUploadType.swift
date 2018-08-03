@@ -41,13 +41,56 @@ class HealthKitUploadType {
     var sampleBackgroundDeliveryEnabled = false
     var sampleQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)
     
-    // internal utility functions
+    //
+    //  MARK: - Subclass utility functions
+    //
+    internal let dateFormatter = DateFormatter()
+
+    internal func addCommonFields(_ data: HealthKitUploadData, sampleToUploadDict: inout [String: AnyObject], sample: HKSample) {
+        sampleToUploadDict["guid"] = sample.uuid.uuidString as AnyObject?
+        sampleToUploadDict["deviceId"] = data.batchMetadata["deviceId"]
+        //sampleToUploadDict["guid"] = sample.uuid.uuidString as AnyObject?
+        sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?
+        
+        // add optional application origin
+        if let origin = sampleOrigin(sample) {
+            sampleToUploadDict["origin"] = origin as AnyObject
+        }
+    }
+    
+    internal func addMetadata(_ metadata: inout [String: Any], sampleToUploadDict: inout [String: AnyObject]) {
+        
+        if metadata.isEmpty {
+            return
+        }
+        for (key, value) in metadata {
+            // TODO: document this time format adjust!
+            if let dateValue = value as? Date {
+                metadata[key] = dateFormatter.isoStringFromDate(dateValue, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
+            }
+        }
+        
+        // Don't let invalid json crash the app during later serialization!
+        if JSONSerialization.isValidJSONObject(metadata) {
+            // Add metadata values as the payload struct
+            sampleToUploadDict["payload"] = metadata as AnyObject?
+        } else {
+            DDLogError("Invalid metadata failed to serialize: \(String(describing:metadata)), for type: \(typeName), guid: \(sampleToUploadDict["guid"] ?? "no guid" as AnyObject)")
+        }
+
+    }
+    
     internal func sampleOrigin(_ sample: HKSample) -> [String: String]? {
         let sourceBundleName = sample.sourceRevision.source.bundleIdentifier.lowercased()
         if isValidReverseDomain(sourceBundleName) {
-            let origin = [
+            var origin = [
                 "name": sample.sourceRevision.source.bundleIdentifier.lowercased()
             ]
+            if let userEntered = sample.metadata?[HKMetadataKeyWasUserEntered] as? Bool {
+                if userEntered {
+                    origin["type"] = "manual"
+                }
+            }
             return origin
         } else {
             DDLogInfo("Invalid reverse domain name: \(sourceBundleName)")
