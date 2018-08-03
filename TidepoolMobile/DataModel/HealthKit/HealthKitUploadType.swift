@@ -46,10 +46,16 @@ class HealthKitUploadType {
     //
     internal let dateFormatter = DateFormatter()
 
-    internal func addCommonFields(_ data: HealthKitUploadData, sampleToUploadDict: inout [String: AnyObject], sample: HKSample) {
+    internal func addCommonFields(sampleToUploadDict: inout [String: AnyObject], sample: HKSample) {
         sampleToUploadDict["guid"] = sample.uuid.uuidString as AnyObject?
-        sampleToUploadDict["deviceId"] = data.batchMetadata["deviceId"]
-        //sampleToUploadDict["guid"] = sample.uuid.uuidString as AnyObject?
+        
+        let sourceRevision = sample.sourceRevision
+        let source = sourceRevision.source
+        let sourceBundleIdentifier = source.bundleIdentifier
+        let deviceModel = self.deviceModelForSourceBundleIdentifier(sourceBundleIdentifier)
+        let deviceId = "\(deviceModel)_\(UIDevice.current.identifierForVendor!.uuidString)"
+        sampleToUploadDict["deviceId"] = deviceId as AnyObject
+
         sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?
         
         // add optional application origin

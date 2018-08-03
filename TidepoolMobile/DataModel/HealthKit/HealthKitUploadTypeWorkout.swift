@@ -40,7 +40,7 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
     }
     
     internal override func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
-        DDLogInfo("Unknown cbg sourceBundleIdentifier: \(sourceBundleIdentifier)")
+        DDLogInfo("Unknown workout sourceBundleIdentifier: \(sourceBundleIdentifier)")
         let deviceModel = "Unknown: \(sourceBundleIdentifier)"
         // Note: this will return something like HealthKit_Unknown: com.apple.Health_060EF7B3-9D86-4B93-9EE1-2FC6C618A4AD
         // TODO: figure out what workout apps might put here. Also, if we have com.apple.Health, and it is is user entered, this would be a direct user HK entry: what should we put?
@@ -56,7 +56,7 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
                 var sampleToUploadDict = [String: AnyObject]()
                 sampleToUploadDict["type"] = "physicalActivity" as AnyObject?
                 // Add fields common to all types: guid, deviceId, time, and origin
-                super.addCommonFields(data, sampleToUploadDict: &sampleToUploadDict, sample: sample)
+                super.addCommonFields(sampleToUploadDict: &sampleToUploadDict, sample: sample)
 
                 // Service wants a string if we specify "other", but HK doesn't provide the user a way to enter one...
                 if workout.workoutActivityType != .other {

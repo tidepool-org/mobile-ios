@@ -49,6 +49,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
         DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
 
         // Prepare POST files for upload. Fine to do this on background thread
+        // TODO: this could be empty, should short-circuit here?
         let batchSamplesPostBodyURL = try createBodyFileForBatchSamplesUpload(data: data)
         
         // Store this for later. We'll create the batch samples task once the metadata task finishes

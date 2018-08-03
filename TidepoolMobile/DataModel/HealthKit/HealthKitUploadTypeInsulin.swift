@@ -57,7 +57,7 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
     }
     
     internal override func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
-        DDLogInfo("Unknown cbg sourceBundleIdentifier: \(sourceBundleIdentifier)")
+        DDLogInfo("Unknown insulin sourceBundleIdentifier: \(sourceBundleIdentifier)")
         let deviceModel = "Unknown: \(sourceBundleIdentifier)"
         // Note: this will return something like HealthKit_Unknown: com.apple.Health_060EF7B3-9D86-4B93-9EE1-2FC6C618A4AD
         // TODO: figure out what LoopKit might put here...
@@ -111,7 +111,7 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                 }
                 
                 // Add fields common to all types: guid, deviceId, time, and origin
-                super.addCommonFields(data, sampleToUploadDict: &sampleToUploadDict, sample: sample)
+                super.addCommonFields(sampleToUploadDict: &sampleToUploadDict, sample: sample)
 
                 // Add sample metadata payload props
                 if var metadata = sample.metadata {
