@@ -275,7 +275,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
 
     @objc func howToUploadPressed(_ sender: UIButton!) {
         if let url = URL(string: TPConstants.kHowToUploadURL) {
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url)
         }
     }
 
