@@ -74,6 +74,10 @@ class HealthKitUploadType {
             if let dateValue = value as? Date {
                 metadata[key] = dateFormatter.isoStringFromDate(dateValue, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
             }
+            // HKQuantity values won't serialize as json, so convert to string here...
+            if let quantityValue = value as? HKQuantity {
+                metadata[key] = String(describing: quantityValue)
+            }
         }
         
         // Don't let invalid json crash the app during later serialization!

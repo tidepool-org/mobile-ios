@@ -213,18 +213,20 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
 
         // Prepare upload post body
         let samplesToUploadDictArray = data.uploadType.prepareDataForUpload(data)
-        //Debug code to catch serialization exceptions!
-        //TODO: figure out how to catch NSExceptions in Swift!
-//        for sample in samplesToUploadDictArray {
-//            print("Next sample to upload: \(sample)")
-//            if JSONSerialization.isValidJSONObject(sample) {
-//                let _ = try? JSONSerialization.data(withJSONObject: sample)
-//            } else {
-//                print("invalid json failed to serialize!")
-//            }
-//        }
-        print("Next samples to upload: \(samplesToUploadDictArray)")
-        let postBody = try JSONSerialization.data(withJSONObject: samplesToUploadDictArray)
+        var validatedSamples = [[String: AnyObject]]()
+        // Prevent serialization exceptions!
+        for sample in samplesToUploadDictArray {
+            DDLogInfo("Next sample to upload: \(sample)")
+            if JSONSerialization.isValidJSONObject(sample) {
+                validatedSamples.append(sample)
+            } else {
+                DDLogError("Sample cannot be serialized to JSON!")
+                DDLogError("Sample: \(sample)")
+            }
+        }
+        //print("Next samples to upload: \(samplesToUploadDictArray)")
+        // Note: exceptions during serialization are NSException type, and won't get caught by a Swift do/catch, so pre-validate!
+        let postBody = try JSONSerialization.data(withJSONObject: validatedSamples)
         //print("Post body for upload: \(postBody)")
         return try self.savePostBodyForUpload(body: postBody, identifier: HealthKitSettings.prefixedKey(prefix: "", type: self.typeString, key: "uploadBatchSamples.data"))
     }

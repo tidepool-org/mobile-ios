@@ -90,12 +90,13 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                         continue
                     }
                     sampleToUploadDict["duration"] = Int(duration) as AnyObject
-                    if let scheduledRate = sample.metadata?[MetadataKeyScheduledBasalRate] {
-                        let suppressed = [
+                    if let scheduledRate = sample.metadata?[MetadataKeyScheduledBasalRate] as? HKQuantity {
+                        let scheduledRateValue = scheduledRate.doubleValue(for: .internationalUnit())
+                        let suppressed: [String : Any] = [
                                 "type": "basal",
                                 "deliveryType": "scheduled",
-                                "rate": scheduledRate
-                        ]
+                                "rate": scheduledRateValue
+                            ]
                         sampleToUploadDict["suppressed"] = suppressed as AnyObject?
                     }
 
