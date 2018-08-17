@@ -176,6 +176,7 @@ class TidepoolMobileDataController: NSObject
                             settingsUser.processSettingsJSON(json)
                         }
                     }
+                    // ignore settings fetch failure, not all users have settings, and this is just used for graph coloring.
                 }
             }
         }
@@ -269,7 +270,7 @@ class TidepoolMobileDataController: NSObject
             if let loggedInUserId = currentLoggedInUser?.userid {
                 if userId != loggedInUserId {
                     APIConnector.connector().fetchProfile(userId) { (result:Alamofire.Result<JSON>) -> (Void) in
-                        DDLogInfo("Profile fetch result: \(result)")
+                        DDLogInfo("checkRestoreCurrentViewedUser profile fetch result: \(result)")
                         if (result.isSuccess) {
                             if let json = result.value {
                                 let user = BlipUser(userid: userId)
@@ -352,7 +353,7 @@ class TidepoolMobileDataController: NSObject
         get {
             if _managedObjectModel == nil {
                 // The managed object model for the application. This property is not optional. It is a fatal error for the application not to be able to find and load its model.
-                let modelURL = Bundle.main.url(forResource: "Nutshell", withExtension: "momd")!
+                let modelURL = Bundle.main.url(forResource: "TidepoolMobile", withExtension: "momd")!
                 _managedObjectModel = NSManagedObjectModel(contentsOf: modelURL)!
             }
             return _managedObjectModel!
@@ -363,7 +364,7 @@ class TidepoolMobileDataController: NSObject
     }
     
     lazy var applicationDocumentsDirectory: URL = {
-        // The directory the application uses to store the Core Data store file. This code uses a directory named "org.tidepool.Nutshell" in the application's documents Application Support directory.
+        // The directory the application uses to store the Core Data store file. This code uses a directory named "org.tidepool.TidepoolMobile" in the application's documents Application Support directory.
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return urls[urls.count-1]
     }()

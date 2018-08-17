@@ -49,17 +49,7 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
 //        
 //        return filteredSamples
     }
-    
-    // override!
-    // TODO: remove? Still useful with new endpoint?
-    internal override func typeSpecificMetadata() -> [(metaKey: String, metadatum: AnyObject)] {
-        DDLogVerbose("trace")
-        var metadata: [(metaKey: String, metadatum: AnyObject)] = []
-        metadata.append((metaKey: "deviceTags", metadatum: ["cgm"] as AnyObject))
-        metadata.append((metaKey: "deviceManufacturers", metadatum: ["Dexcom"] as AnyObject))
-        return metadata
-    }
-    
+        
     internal override func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
         var deviceModel = ""
         
@@ -124,16 +114,6 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
             
             // separate out receiver display time if it exists...
             if var metadata = sample.metadata {
-                for (key, value) in metadata {
-                    if let dateValue = value as? Date {
-                        if key == "Receiver Display Time" {
-                            sampleToUploadDict["deviceTime"] = dateFormatter.isoStringFromDate(dateValue, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateNoTimeZone) as AnyObject?
-                            break
-                        }
-                    }
-                }
-                metadata.removeValue(forKey: "Receiver Display Time")
-
                 // If "HKWasUserEntered" exists and is true, change type to "smbg" and remove from metadata
                 if let wasUserEntered = metadata[HKMetadataKeyWasUserEntered] as? Bool {
                     if wasUserEntered {

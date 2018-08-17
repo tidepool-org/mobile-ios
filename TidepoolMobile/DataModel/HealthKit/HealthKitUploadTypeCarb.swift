@@ -32,13 +32,6 @@ class HealthKitUploadTypeCarb: HealthKitUploadType {
         return sortedSamples
     }
     
-    // override!
-    internal override func typeSpecificMetadata() -> [(metaKey: String, metadatum: AnyObject)] {
-        DDLogVerbose("trace")
-        let metadata: [(metaKey: String, metadatum: AnyObject)] = []
-        return metadata
-    }
-    
     internal override func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
         DDLogInfo("Unknown carb sourceBundleIdentifier: \(sourceBundleIdentifier)")
         let deviceModel = "Unknown: \(sourceBundleIdentifier)"
@@ -47,6 +40,11 @@ class HealthKitUploadTypeCarb: HealthKitUploadType {
         return "HealthKit_\(deviceModel)"
     }
     
+    // Service validation parameters
+    private let CarbohydrateNetGramsMaximum: Double  = 1000.0
+    private let CarbohydrateNetGramsMinimum: Double  = 0.0
+    private let NameLengthMaximum: Int = 100
+
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
         DDLogInfo("carb prepareDataForUpload")
         var samplesToUploadDictArray = [[String: AnyObject]]()
@@ -60,19 +58,25 @@ class HealthKitUploadTypeCarb: HealthKitUploadType {
                 let unit = HKUnit(from: "g")
                 let value = quantitySample.quantity.doubleValue(for: unit)
                 DDLogInfo("carb value: \(String(describing: value))")
-                var nutrition = [String: AnyObject]()
-                let carbs = [
-                    "net": value,
-                    "units": "grams"
-                    ] as [String : Any]
-                nutrition["carbohydrate"] = carbs as AnyObject?
-                sampleToUploadDict["nutrition"] = nutrition as AnyObject?
+                if value >= CarbohydrateNetGramsMinimum && value <= CarbohydrateNetGramsMaximum {
+                    var nutrition = [String: AnyObject]()
+                    let carbs = [
+                        "net": value,
+                        "units": "grams"
+                        ] as [String : Any]
+                    nutrition["carbohydrate"] = carbs as AnyObject?
+                    sampleToUploadDict["nutrition"] = nutrition as AnyObject?
+                } else {
+                    //TODO: log this some more obvious way?
+                    DDLogError("Carb sample with out-of-range value: \(value)")
+                }
                 
                 // Add sample metadata payload props
                 if var metadata = sample.metadata {
                     if let foodType = metadata[HKMetadataKeyFoodType] as? String {
-                        // service has 100 char limit!
-                        sampleToUploadDict["name"] = foodType.prefix(100) as AnyObject
+                        // service has char length limit!
+                        sampleToUploadDict["name"] = foodType.prefix(NameLengthMaximum) as AnyObject
+                        metadata.removeValue(forKey: HKMetadataKeyFoodType)
                     }
                     // Add metadata values as the payload struct
                     addMetadata(&metadata, sampleToUploadDict: &sampleToUploadDict)

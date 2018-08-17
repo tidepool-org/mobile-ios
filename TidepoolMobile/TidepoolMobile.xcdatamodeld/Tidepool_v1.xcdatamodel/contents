@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17F77" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
-    <entity name="Activity" representedClassName="Nutshell.Activity" parentEntity="CommonData" syncable="YES">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="Activity" representedClassName=".Activity" parentEntity="CommonData" syncable="YES">
         <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="intensityBorg" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="intensityHr" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
@@ -9,11 +9,11 @@
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="subType" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Alarm" representedClassName="Nutshell.Alarm" parentEntity="DeviceMetadata" syncable="YES">
+    <entity name="Alarm" representedClassName=".Alarm" parentEntity="DeviceMetadata" syncable="YES">
         <attribute name="alarmType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Basal" representedClassName="Nutshell.Basal" parentEntity="CommonData" syncable="YES">
+    <entity name="Basal" representedClassName=".Basal" parentEntity="CommonData" syncable="YES">
         <attribute name="deliveryType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="insulin" optional="YES" attributeType="String" syncable="YES"/>
@@ -23,10 +23,10 @@
             <fetchIndexElement property="deliveryType" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
-    <entity name="BloodKetone" representedClassName="Nutshell.BloodKetone" parentEntity="CommonData" syncable="YES">
+    <entity name="BloodKetone" representedClassName=".BloodKetone" parentEntity="CommonData" syncable="YES">
         <attribute name="value" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
     </entity>
-    <entity name="Bolus" representedClassName="Nutshell.Bolus" parentEntity="CommonData" syncable="YES">
+    <entity name="Bolus" representedClassName=".Bolus" parentEntity="CommonData" syncable="YES">
         <attribute name="duration" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="expectedDuration" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="expectedExtended" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
@@ -40,7 +40,7 @@
     <entity name="Calibration" representedClassName="Nutshell.Calibration" parentEntity="DeviceMetadata" syncable="YES">
         <attribute name="value" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
     </entity>
-    <entity name="CommonData" representedClassName="Nutshell.CommonData" syncable="YES">
+    <entity name="CommonData" representedClassName=".CommonData" syncable="YES">
         <attribute name="annotations" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="deviceId" optional="YES" attributeType="String" syncable="YES"/>
@@ -70,57 +70,57 @@
             <fetchIndexElement property="uploadId" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
-    <entity name="ContinuousGlucose" representedClassName="Nutshell.ContinuousGlucose" parentEntity="CommonData" syncable="YES">
+    <entity name="ContinuousGlucose" representedClassName=".ContinuousGlucose" parentEntity="CommonData" syncable="YES">
         <attribute name="isig" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="value" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
     </entity>
-    <entity name="DeviceMetadata" representedClassName="Nutshell.DeviceMetadata" parentEntity="CommonData" syncable="YES"/>
-    <entity name="EventItem" representedClassName="Nutshell.EventItem" parentEntity="CommonData" syncable="YES">
+    <entity name="DeviceMetadata" representedClassName=".DeviceMetadata" parentEntity="CommonData" syncable="YES"/>
+    <entity name="EventItem" representedClassName=".EventItem" parentEntity="CommonData" syncable="YES">
         <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="nutCracked" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="title" attributeType="String" syncable="YES"/>
         <attribute name="userid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Food" representedClassName="Nutshell.Food" parentEntity="CommonData" syncable="YES">
+    <entity name="Food" representedClassName=".Food" parentEntity="CommonData" syncable="YES">
         <attribute name="carbs" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="fat" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="protein" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
     </entity>
-    <entity name="GrabBag" representedClassName="Nutshell.GrabBag" parentEntity="CommonData" syncable="YES">
+    <entity name="GrabBag" representedClassName=".GrabBag" parentEntity="CommonData" syncable="YES">
         <attribute name="subType" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Hashtag" representedClassName="Nutshell.Hashtag" syncable="YES">
+    <entity name="Hashtag" representedClassName=".Hashtag" syncable="YES">
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="usages" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="userid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Meal" representedClassName="Nutshell.Meal" parentEntity="EventItem" syncable="YES">
+    <entity name="Meal" representedClassName=".Meal" parentEntity="EventItem" syncable="YES">
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="photo" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="photo2" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="photo3" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Note" representedClassName="Nutshell.Note" parentEntity="CommonData" syncable="YES">
+    <entity name="Note" representedClassName=".Note" parentEntity="CommonData" syncable="YES">
         <attribute name="creatorId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="displayTime" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="reference" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="shortText" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="text" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Prime" representedClassName="Nutshell.Prime" parentEntity="DeviceMetadata" syncable="YES">
+    <entity name="Prime" representedClassName=".Prime" parentEntity="DeviceMetadata" syncable="YES">
         <attribute name="primeTarget" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="volume" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
     </entity>
-    <entity name="ReservoirChange" representedClassName="Nutshell.ReservoirChange" parentEntity="DeviceMetadata" syncable="YES">
+    <entity name="ReservoirChange" representedClassName=".ReservoirChange" parentEntity="DeviceMetadata" syncable="YES">
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="SelfMonitoringGlucose" representedClassName="Nutshell.SelfMonitoringGlucose" parentEntity="CommonData" syncable="YES">
+    <entity name="SelfMonitoringGlucose" representedClassName=".SelfMonitoringGlucose" parentEntity="CommonData" syncable="YES">
         <attribute name="subType" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="value" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
     </entity>
-    <entity name="Settings" representedClassName="Nutshell.Settings" parentEntity="CommonData" syncable="YES">
+    <entity name="Settings" representedClassName=".Settings" parentEntity="CommonData" syncable="YES">
         <attribute name="activeSchedule" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="basalSchedulesJSON" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="bgTargetJSON" optional="YES" attributeType="String" syncable="YES"/>
@@ -132,19 +132,19 @@
         <attribute name="unitsBG" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="unitsCarb" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Status" representedClassName="Nutshell.Status" parentEntity="DeviceMetadata" syncable="YES">
+    <entity name="Status" representedClassName=".Status" parentEntity="DeviceMetadata" syncable="YES">
         <attribute name="duration" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="reason" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="TimeChange" representedClassName="Nutshell.TimeChange" parentEntity="DeviceMetadata" syncable="YES">
+    <entity name="TimeChange" representedClassName=".TimeChange" parentEntity="DeviceMetadata" syncable="YES">
         <attribute name="changeAgent" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="changeFrom" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="changeReasons" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="changeTimezone" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="changeTo" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
     </entity>
-    <entity name="Upload" representedClassName="Nutshell.Upload" parentEntity="CommonData" syncable="YES">
+    <entity name="Upload" representedClassName=".Upload" parentEntity="CommonData" syncable="YES">
         <attribute name="byUser" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="deviceManufacturersJSON" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="deviceModel" optional="YES" attributeType="String" syncable="YES"/>
@@ -156,10 +156,10 @@
             <fetchIndexElement property="byUser" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
-    <entity name="UrineKetone" representedClassName="Nutshell.UrineKetone" parentEntity="CommonData" syncable="YES">
+    <entity name="UrineKetone" representedClassName=".UrineKetone" parentEntity="CommonData" syncable="YES">
         <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="User" representedClassName="Nutshell.User" syncable="YES">
+    <entity name="User" representedClassName=".User" syncable="YES">
         <attribute name="accountIsDSA" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fullName" optional="YES" attributeType="String" syncable="YES"/>
@@ -171,7 +171,7 @@
             <fetchIndexElement property="userid" type="Binary" order="ascending"/>
         </fetchIndex>
     </entity>
-    <entity name="Wizard" representedClassName="Nutshell.Wizard" parentEntity="CommonData" syncable="YES">
+    <entity name="Wizard" representedClassName=".Wizard" parentEntity="CommonData" syncable="YES">
         <attribute name="bgInput" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="bolus" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="carbInput" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
@@ -180,7 +180,7 @@
         <attribute name="insulinSensitivity" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="recommendedNet" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>
     </entity>
-    <entity name="Workout" representedClassName="Nutshell.Workout" parentEntity="EventItem" syncable="YES">
+    <entity name="Workout" representedClassName=".Workout" parentEntity="EventItem" syncable="YES">
         <attribute name="appleHealthDate" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="calories" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="distance" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="NO" syncable="YES"/>

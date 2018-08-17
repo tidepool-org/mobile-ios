@@ -36,6 +36,7 @@ class HealthKitUploadData: NSObject {
         
         if deletedSamples != nil && deletedSamples!.count > 0 {
             self.newOrDeletedSamplesWereDelivered = true
+            self.deletedSamples = deletedSamples!
         }
     }
 
@@ -43,6 +44,7 @@ class HealthKitUploadData: NSObject {
     private(set) var earliestSampleTime = Date.distantFuture
     private(set) var latestSampleTime = Date.distantPast
     private(set) var newOrDeletedSamplesWereDelivered = false
+    private(set) var deletedSamples = [HKDeletedObject]()
     
     func updateSamples(samples: [HKSample]) {
         DDLogVerbose("type: \(uploadType.typeName)")

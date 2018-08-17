@@ -148,7 +148,7 @@
 		4859229B1B9A61510056E605 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 485922991B9A61510056E605 /* Login.storyboard */; };
 		4859FCB91B9A4DE4000C1269 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */; };
 		4859FCBE1B9A4DE4000C1269 /* EventView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4859FCBC1B9A4DE4000C1269 /* EventView.storyboard */; };
-		4859FCC11B9A4DE4000C1269 /* Nutshell.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */; };
+		4859FCC11B9A4DE4000C1269 /* TidepoolMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCBF1B9A4DE4000C1269 /* TidepoolMobile.xcdatamodeld */; };
 		4859FCC31B9A4DE4000C1269 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4859FCC21B9A4DE4000C1269 /* Assets.xcassets */; };
 		4859FCC61B9A4DE4000C1269 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4859FCC41B9A4DE4000C1269 /* LaunchScreen.storyboard */; };
 		4859FCD11B9A4DE5000C1269 /* apiConnectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCD01B9A4DE5000C1269 /* apiConnectTests.swift */; };
@@ -202,7 +202,7 @@
 		489FDE501E833AF2000C4AC5 /* UrchinConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486894F41E831F89008B0732 /* UrchinConstants.swift */; };
 		489FDE531E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489FDE511E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift */; };
 		489FDE541E833D47000C4AC5 /* Hashtag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489FDE521E833D47000C4AC5 /* Hashtag.swift */; };
-		48A150561C18E0A900ED800B /* Nutshell.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */; };
+		48A150561C18E0A900ED800B /* TidepoolMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCBF1B9A4DE4000C1269 /* TidepoolMobile.xcdatamodeld */; };
 		48A7925E1C4C0B39008D2244 /* Transitions between scenes.txt in Resources */ = {isa = PBXBuildFile; fileRef = 48A7925D1C4C0B39008D2244 /* Transitions between scenes.txt */; };
 		48A805D220FA7FEC00C95153 /* HealthKitUploadTypeBloodGlucose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A805D120FA7FEB00C95153 /* HealthKitUploadTypeBloodGlucose.swift */; };
 		48A805D320FA7FEC00C95153 /* HealthKitUploadTypeBloodGlucose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A805D120FA7FEB00C95153 /* HealthKitUploadTypeBloodGlucose.swift */; };
@@ -219,7 +219,7 @@
 		48B8C8D92022A5A700437263 /* LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 482ECC851C94BC47002A015D /* LogFormatter.swift */; };
 		48B8C8DA2022A5AE00437263 /* DebugSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D73716B20166F630051E6BF /* DebugSettings.swift */; };
 		48B8C8DB2022A5B300437263 /* APIConnect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486F5E231BA0DC1000BA2A57 /* APIConnect.swift */; };
-		48B8C8DC2022A5BA00437263 /* Nutshell.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */; };
+		48B8C8DC2022A5BA00437263 /* TidepoolMobile.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4859FCBF1B9A4DE4000C1269 /* TidepoolMobile.xcdatamodeld */; };
 		48B8C8DD2022A5CE00437263 /* BlipUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CF11E80A98C00C4E79D /* BlipUser.swift */; };
 		48B8C8DE2022A5D200437263 /* BlipNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CEF1E80A98C00C4E79D /* BlipNote.swift */; };
 		48B8C8DF2022A5D600437263 /* BlipPatient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CF01E80A98C00C4E79D /* BlipPatient.swift */; };
@@ -470,7 +470,7 @@
 		4854201F1BC44D290020CFE1 /* EventItem+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EventItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		485420201BC44D290020CFE1 /* EventItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventItem.swift; sourceTree = "<group>"; };
 		4859229A1B9A61510056E605 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Login.storyboard; sourceTree = "<group>"; };
-		4859FCB51B9A4DE4000C1269 /* Nutshell.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Nutshell.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4859FCB51B9A4DE4000C1269 /* TidepoolMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TidepoolMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4859FCBD1B9A4DE4000C1269 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/EventView.storyboard; sourceTree = "<group>"; };
 		4859FCC01B9A4DE4000C1269 /* Nutshell.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell.xcdatamodel; sourceTree = "<group>"; };
@@ -808,7 +808,7 @@
 		4859FCB61B9A4DE4000C1269 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4859FCB51B9A4DE4000C1269 /* Nutshell.app */,
+				4859FCB51B9A4DE4000C1269 /* TidepoolMobile.app */,
 				4859FCCC1B9A4DE5000C1269 /* TidepoolMobileTests.xctest */,
 				4823986E2022628200EBB13C /* BGMTool.app */,
 			);
@@ -824,7 +824,7 @@
 				4D73716B20166F630051E6BF /* DebugSettings.swift */,
 				482ECC851C94BC47002A015D /* LogFormatter.swift */,
 				48DA110F1CE3CBD600B99C35 /* main.swift */,
-				4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */,
+				4859FCBF1B9A4DE4000C1269 /* TidepoolMobile.xcdatamodeld */,
 				486F5E1C1BA0D85900BA2A57 /* Service */,
 				486F5E221BA0DB7400BA2A57 /* DataModel */,
 				48276A151E9D57CF004CADB1 /* Storyboards */,
@@ -1072,7 +1072,7 @@
 			);
 			name = TidepoolMobile;
 			productName = Nutshell;
-			productReference = 4859FCB51B9A4DE4000C1269 /* Nutshell.app */;
+			productReference = 4859FCB51B9A4DE4000C1269 /* TidepoolMobile.app */;
 			productType = "com.apple.product-type.application";
 		};
 		4859FCCB1B9A4DE5000C1269 /* TidepoolMobileTests */ = {
@@ -1463,7 +1463,7 @@
 				48B8C91C2022AF7B00437263 /* Prime+CoreDataProperties.swift in Sources */,
 				48B8C8FD2022AD1C00437263 /* Note+CoreDataProperties.swift in Sources */,
 				48BCCCE220F6D820009E64B2 /* HealthKitUploadType.swift in Sources */,
-				48B8C8DC2022A5BA00437263 /* Nutshell.xcdatamodeld in Sources */,
+				48B8C8DC2022A5BA00437263 /* TidepoolMobile.xcdatamodeld in Sources */,
 				48B8C8F22022ACCD00437263 /* Activity.swift in Sources */,
 				48B8C8E52022A60700437263 /* UIDateFormatterExtension.swift in Sources */,
 				48B8C8F92022ACFE00437263 /* ContinuousGlucose+CoreDataProperties.swift in Sources */,
@@ -1489,7 +1489,7 @@
 				4D0284411F4F286900A72B74 /* HealthKitConfiguration.swift in Sources */,
 				485420251BC44D290020CFE1 /* Meal+CoreDataProperties.swift in Sources */,
 				4D7775EE201D46CD00F53462 /* HealthKitSettings.swift in Sources */,
-				4859FCC11B9A4DE4000C1269 /* Nutshell.xcdatamodeld in Sources */,
+				4859FCC11B9A4DE4000C1269 /* TidepoolMobile.xcdatamodeld in Sources */,
 				4851C6951BA689FC00F8E0EE /* TidepoolMobileUITableView.swift in Sources */,
 				48E5C2111EB2D17100D5923A /* TPUIButton.swift in Sources */,
 				48A805D220FA7FEC00C95153 /* HealthKitUploadTypeBloodGlucose.swift in Sources */,
@@ -1702,7 +1702,7 @@
 				48FB1E4E1C17C38600C89F8E /* TidepoolMobileDataController.swift in Sources */,
 				4854202C1BC44D290020CFE1 /* EventItem.swift in Sources */,
 				0334CA321BA8DDFC00013096 /* CommonData+CoreDataProperties.swift in Sources */,
-				48A150561C18E0A900ED800B /* Nutshell.xcdatamodeld in Sources */,
+				48A150561C18E0A900ED800B /* TidepoolMobile.xcdatamodeld in Sources */,
 				486283AD1BA398A800547BE3 /* AppDelegate.swift in Sources */,
 				4875779D20EFE78200CC1E5F /* HealthKitConfiguration.swift in Sources */,
 				485420281BC44D290020CFE1 /* Meal.swift in Sources */,
@@ -1993,7 +1993,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"  \"-D\" \"DEBUG\"";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
-				PRODUCT_NAME = Nutshell;
+				PRODUCT_NAME = TidepoolMobile;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "TidepoolMobile/TidepoolMobile-Bridging-Header.h";
@@ -2020,7 +2020,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"  \"-D\" \"RELEASE\"";
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
-				PRODUCT_NAME = Nutshell;
+				PRODUCT_NAME = TidepoolMobile;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "TidepoolMobile/TidepoolMobile-Bridging-Header.h";
@@ -2045,7 +2045,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nutshell.app/Nutshell";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TidepoolMobile.app/TidepoolMobile";
 			};
 			name = Debug;
 		};
@@ -2064,7 +2064,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "TidepoolMobile/TidepoolMobileTests-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Nutshell.app/Nutshell";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TidepoolMobile.app/TidepoolMobile";
 			};
 			name = Release;
 		};
@@ -2110,7 +2110,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		4859FCBF1B9A4DE4000C1269 /* Nutshell.xcdatamodeld */ = {
+		4859FCBF1B9A4DE4000C1269 /* TidepoolMobile.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				485DC8861ECF4A2E00338394 /* Tidepool_v1.xcdatamodel */,
@@ -2121,7 +2121,7 @@
 				4859FCC01B9A4DE4000C1269 /* Nutshell.xcdatamodel */,
 			);
 			currentVersion = 485DC8861ECF4A2E00338394 /* Tidepool_v1.xcdatamodel */;
-			path = Nutshell.xcdatamodeld;
+			path = TidepoolMobile.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

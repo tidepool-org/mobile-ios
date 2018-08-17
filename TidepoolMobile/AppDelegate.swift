@@ -262,7 +262,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // Only the HealthKitUploadReader.Mode.Current uploads should continue in background
         HealthKitUploadManager.sharedInstance.stopUploading(reason: HealthKitUploadReader.StoppedReason.background)
-        HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(mode: HealthKitUploadReader.Mode.Current, currentUserId: appHealthKitConfiguration.currentUserId)
+        //HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(mode: HealthKitUploadReader.Mode.Current, currentUserId: appHealthKitConfiguration.currentUserId)
+        //TODO: test this change!
+        HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
 
         // Re-enable idle timer (screen locking) when the app enters background. (May have been disabled during sync/upload.)
         UIApplication.shared.isIdleTimerDisabled = false

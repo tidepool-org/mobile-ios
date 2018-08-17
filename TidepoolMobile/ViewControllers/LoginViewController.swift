@@ -178,7 +178,7 @@ class LoginViewController: BaseUIViewController {
                 DDLogInfo("Login success: \(user)")
                 self.loginIndicator.startAnimating()
                 APIConnector.connector().fetchProfile(TidepoolMobileDataController.sharedInstance.currentUserId!) { (result:Alamofire.Result<JSON>) -> (Void) in
-                        DDLogInfo("Profile fetch result: \(result)")
+                        DDLogInfo("processLoginResult profile fetch result: \(result)")
                     self.loginIndicator.stopAnimating()
                     if (result.isSuccess) {
                         if let json = result.value {
@@ -188,6 +188,9 @@ class LoginViewController: BaseUIViewController {
                         let appDelegate = UIApplication.shared.delegate as! AppDelegate
                         appDelegate.setupUIForLoginSuccess()
                      }
+                    self.errorFeedbackLabel.text = "User not recognized!"
+                    self.errorFeedbackLabel.isHidden = false
+                    self.passwordTextField.text = ""
                 }
             } else {
                 // This should not happen- we should not succeed without a user!

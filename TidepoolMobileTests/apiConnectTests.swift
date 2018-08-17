@@ -14,7 +14,7 @@
 */
 
 import XCTest
-@testable import Nutshell
+@testable import TidepoolMobile
 import Alamofire
 import SwiftyJSON
 

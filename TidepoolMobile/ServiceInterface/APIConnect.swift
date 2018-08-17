@@ -55,7 +55,8 @@ class APIConnector {
     
     fileprivate let kSessionTokenDefaultKey = "SToken"
     fileprivate let kCurrentServiceDefaultKey = "SCurrentService"
-    fileprivate let kSessionIdHeader = "x-tidepool-session-token"
+    fileprivate let kSessionTokenHeaderId = "X-Tidepool-Session-Token"
+    fileprivate let kSessionTokenResponseId = "x-tidepool-session-token"
 
     // Error domain and codes
     fileprivate let kTidepoolMobileErrorDomain = "TidepoolMobileErrorDomain"
@@ -209,7 +210,7 @@ class APIConnector {
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if ( response.result.isSuccess ) {
                 // Look for the auth token
-                self.sessionToken = response.response!.allHeaderFields[self.kSessionIdHeader] as! String?
+                self.sessionToken = response.response!.allHeaderFields[self.kSessionTokenResponseId] as! String?
                 let json = JSON(response.result.value!)
                 
                 // Create the User object
@@ -240,6 +241,7 @@ class APIConnector {
         // format is like: https://api.tidepool.org/metadata/f934a287c4/profile
         let endpoint = "metadata/" + userId + "/profile"
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        DDLogInfo("fetchProfile endpoint: \(endpoint)")
         sendRequest(.get, endpoint: endpoint).responseJSON { response in
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if ( response.result.isSuccess ) {
@@ -258,7 +260,7 @@ class APIConnector {
         let dataCtrl = TidepoolMobileDataController.sharedInstance
         if let user = dataCtrl.currentLoggedInUser, let isDSAUser = dataCtrl.isDSAUser {
             // if we don't have an uploadId, first try fetching one from the server...
-            if isDSAUser && user.uploadId == nil {
+            if isDSAUser && dataCtrl.currentUploadId == nil {
                 self.fetchDataset(user.userid) {
                     (result: String?) -> (Void) in
                     if result != nil && !result!.isEmpty {
@@ -277,7 +279,7 @@ class APIConnector {
                     self.createDataset(user.userid) {
                         (result: String?) -> (Void) in
                         if result != nil && !result!.isEmpty {
-                            DDLogInfo("Dataset fetched existing: \(result!)")
+                            DDLogInfo("New dataset created: \(result!)")
                             dataCtrl.currentUploadId = result!
                         } else {
                             DDLogError("Unable to fetch existing upload dataset or create a new one!")
@@ -324,6 +326,8 @@ class APIConnector {
                     DDLogInfo("Fetch of existing dataset returned nil!")
                 }
                 completion(uploadId)
+                // TEST: force failure...
+                //completion("")
             } else {
                 DDLogInfo("Fetch of existing dataset failed!")
                 // return nil to signal failure
@@ -343,8 +347,9 @@ class APIConnector {
         let endpoint = "v1/users/" + userId + "/data_sets"
 
         let clientDict = ["name": "org.tidepool.mobile", "version": "1.2.3"]
+        let deduplicatorDict = ["name": "org.tidepool.continuous.origin"]
         let headerDict = ["Content-Type":"application/json"]
-        let jsonObject = ["client":clientDict, "dataSetType":"continuous"] as [String : Any]
+        let jsonObject = ["client":clientDict, "dataSetType":"continuous", "deduplicator":deduplicatorDict] as [String : Any]
         let body: Data?
         do {
             body = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
@@ -372,7 +377,6 @@ class APIConnector {
                     DDLogInfo("Create new dataset returned nil!")
                 }
                 completion(uploadId)
-                //completion("3c6b5b9e46b5e40ed37d9db4befab115")
             } else {
                 // return nil to signal network request failure
                 DDLogInfo("Create new dataset failed!")
@@ -393,30 +397,16 @@ class APIConnector {
                 completion(Result.success(json))
             } else {
                 // Failure
+                if let httpResponse = response.response, httpResponse.statusCode ==  404 {
+                    DDLogInfo("No user settings found on service!")
+                } else {
+                    DDLogInfo("User settings fetched failed with result: \(response.result.error!)")
+                }
                 completion(Result.failure(response.result.error!))
             }
         }
     }
     
-
-// TODO: figure out how to process the JSON coming back into an array of keys
-//    func getAllViewableUsers(_ completion: @escaping (Result<JSON>) -> (Void)) {
-//        // Set our endpoint for the user profile
-//        // format is like: https://api.tidepool.org/access/groups/f934a287c4
-//        let endpoint = "access/groups/" + TidepoolMobileDataController.sharedInstance.currentUserId!
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        sendRequest(.get, endpoint: endpoint).responseJSON { response in
-//            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//            if ( response.result.isSuccess ) {
-//                let json = JSON(response.result.value!)
-//                completion(Result.success(json))
-//            } else {
-//                // Failure
-//                completion(Result.failure(response.result.error!))
-//            }
-//        }
-//    }
-
     // When offline just stash metrics in metricsCache array
     fileprivate var metricsCache: [String] = []
     // Used so we only have one metric send in progress at a time, to help balance service load a bit...
@@ -485,7 +475,7 @@ class APIConnector {
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if ( response.result.isSuccess ) {
                 DDLogInfo("Session token updated")
-                self.sessionToken = response.response!.allHeaderFields[self.kSessionIdHeader] as! String?
+                self.sessionToken = response.response!.allHeaderFields[self.kSessionTokenResponseId] as! String?
                 completion(true, response.response?.statusCode ?? 0)
             } else {
                 if let error = response.result.error {
@@ -588,8 +578,68 @@ class APIConnector {
 
     // MARK: - Internal methods
     
+    // User-agent string, based on that from Alamofire, but common regardless of whether Alamofire library is used
+    private func userAgentString() -> String {
+        if _userAgentString == nil {
+            _userAgentString = {
+                if let info = Bundle.main.infoDictionary {
+                    let executable = info[kCFBundleExecutableKey as String] as? String ?? "Unknown"
+                    let bundle = info[kCFBundleIdentifierKey as String] as? String ?? "Unknown"
+                    let appVersion = info["CFBundleShortVersionString"] as? String ?? "Unknown"
+                    let appBuild = info[kCFBundleVersionKey as String] as? String ?? "Unknown"
+                    
+                    let osNameVersion: String = {
+                        let version = ProcessInfo.processInfo.operatingSystemVersion
+                        let versionString = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
+                        
+                        let osName: String = {
+                            #if os(iOS)
+                            return "iOS"
+                            #elseif os(watchOS)
+                            return "watchOS"
+                            #elseif os(tvOS)
+                            return "tvOS"
+                            #elseif os(macOS)
+                            return "OS X"
+                            #elseif os(Linux)
+                            return "Linux"
+                            #else
+                            return "Unknown"
+                            #endif
+                        }()
+                        
+                        return "\(osName) \(versionString)"
+                    }()
+                    
+                    return "\(executable)/\(appVersion) (\(bundle); build:\(appBuild); \(osNameVersion))"
+                }
+                
+                return "TidepoolMobile"
+            }()
+        }
+        return _userAgentString!
+    }
+    private var _userAgentString: String?
+    
+    private func sessionManager() -> SessionManager {
+        if _sessionManager == nil {
+            // get the default headers
+            var alamoHeaders = Alamofire.SessionManager.defaultHTTPHeaders
+            // add our custom user-agent
+            alamoHeaders["User-Agent"] = self.userAgentString()
+            // create a custom session configuration
+            let configuration = URLSessionConfiguration.default
+            // add the headers
+            configuration.httpAdditionalHeaders = alamoHeaders
+            // create a session manager with the configuration
+            _sessionManager = Alamofire.SessionManager(configuration: configuration)
+        }
+        return _sessionManager!
+    }
+    private var _sessionManager: SessionManager?
+    
     // Sends a request to the specified endpoint
-    fileprivate func sendRequest(_ requestType: HTTPMethod? = .get,
+    private func sendRequest(_ requestType: HTTPMethod? = .get,
         endpoint: (String),
         parameters: [String: AnyObject]? = nil,
         headers: [String: String]? = nil) -> (DataRequest)
@@ -610,13 +660,15 @@ class APIConnector {
         }
         
         // Fire off the network request
-        //DDLogInfo("sendRequest url: \(url), params: \(parameters ?? [:]), headers: \(apiHeaders ?? [:])")
-        return Alamofire.request(url, method: requestType!, parameters: parameters, headers: apiHeaders).validate()
+        DDLogInfo("sendRequest url: \(url), params: \(parameters ?? [:]), headers: \(apiHeaders ?? [:])")
+        return self.sessionManager().request(url, method: requestType!, parameters: parameters, headers: apiHeaders).validate()
+        //debugPrint(result)
+        //return result
     }
     
     func getApiHeaders() -> [String: String]? {
         if ( sessionToken != nil ) {
-            return [kSessionIdHeader : sessionToken!]
+            return [kSessionTokenHeaderId : sessionToken!]
         }
         return nil
     }
@@ -642,7 +694,7 @@ class APIConnector {
         }
         
         DDLogInfo("postRequest url: \(url), headers: \(apiHeaders ?? [:])")
-        return Alamofire.upload(data, to: url, headers: apiHeaders).validate()
+        return self.sessionManager().upload(data, to: url, headers: apiHeaders).validate()
     }
 
     //
@@ -655,11 +707,7 @@ class APIConnector {
         
         let urlExtension = "/access/groups/" + TidepoolMobileDataController.sharedInstance.currentUserId!
         
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
-        
-        let preRequest = { () -> Void in
-            // Nothing to do
-        }
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)"]
         
         let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
             if let httpResponse = response as? HTTPURLResponse {
@@ -681,7 +729,7 @@ class APIConnector {
             }
         }
         
-        blipRequest("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+        blipRequest("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, completion: completion)
     }
 
     func getNotesForUserInDateRange(_ fetchWatcher: NoteAPIWatcher, userid: String, start: Date?, end: Date?) {
@@ -704,7 +752,7 @@ class APIConnector {
         }
         
         let urlExtension = "/message/notes/" + userid + startString + endString
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)"]
         
         let preRequest = { () -> Void in
             fetchWatcher.loadingNotes(true)
@@ -797,7 +845,7 @@ class APIConnector {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         let urlExtension = "/message/thread/" + messageId
         
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)"]
         
         let preRequest = { () -> Void in
             fetchWatcher.loadingNotes(true)
@@ -890,7 +938,7 @@ class APIConnector {
             urlExtension = "/message/send/" + note.groupid
         }
         
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)", "Content-Type":"application/json"]
         
         let jsonObject = note.dictionaryFromNote()
         let body: Data?
@@ -898,10 +946,6 @@ class APIConnector {
             body = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
         } catch {
             body = nil
-        }
-        
-        let preRequest = { () -> Void in
-            // nothing to do in prerequest
         }
         
         let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
@@ -925,7 +969,7 @@ class APIConnector {
             }
         }
         
-        blipRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
+        blipRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, completion: completion)
     }
 
     // update note or comment...
@@ -933,7 +977,7 @@ class APIConnector {
         
         let urlExtension = "/message/edit/" + originalNote.id
         
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)", "Content-Type":"application/json"]
         
         let jsonObject = editedNote.updatesFromNote()
         let body: Data?
@@ -941,10 +985,6 @@ class APIConnector {
             body = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
         } catch  {
             body = nil
-        }
-        
-        let preRequest = { () -> Void in
-            // nothing to do in the preRequest
         }
         
         let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
@@ -962,18 +1002,14 @@ class APIConnector {
             }
         }
         
-        blipRequest("PUT", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
+        blipRequest("PUT", urlExtension: urlExtension, headerDict: headerDict, body: body, completion: completion)
     }
     
     // delete note or comment...
     func deleteNote(_ deleteWatcher: NoteAPIWatcher, noteToDelete: BlipNote) {
         let urlExtension = "/message/remove/" + noteToDelete.id
         
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
-        
-        let preRequest = { () -> Void in
-            // nothing to do in the preRequest
-        }
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)"]
         
         let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
             if let httpResponse = response as? HTTPURLResponse {
@@ -990,7 +1026,7 @@ class APIConnector {
             }
         }
         
-        blipRequest("DELETE", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+        blipRequest("DELETE", urlExtension: urlExtension, headerDict: headerDict, body: nil, completion: completion)
     }
 
     
@@ -1038,14 +1074,13 @@ class APIConnector {
         return true
     }
 
-    func blipRequest(_ method: String, urlExtension: String, headerDict: [String: String], body: Data?, preRequest: () -> Void, subdomainRootOverride: String = "api", completion: @escaping (_ response: URLResponse?, _ data: Data?, _ error: NSError?) -> Void) {
+    func blipRequest(_ method: String, urlExtension: String, headerDict: [String: String], body: Data?, preRequest: (() -> Void)? = nil, completion: @escaping (_ response: URLResponse?, _ data: Data?, _ error: NSError?) -> Void) {
         
         if (self.isConnectedToNetwork()) {
-            preRequest()
+            preRequest?()
             
             let baseURL = kServers[currentService!]!
-            let baseUrlWithSubdomainRootOverride = baseURL.replacingOccurrences(of: "api", with: subdomainRootOverride)
-            var urlString = baseUrlWithSubdomainRootOverride + urlExtension
+            var urlString = baseURL + urlExtension
             urlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
             let url = URL(string: urlString)
             let request = NSMutableURLRequest(url: url!)
@@ -1053,6 +1088,8 @@ class APIConnector {
             for (field, value) in headerDict {
                 request.setValue(value, forHTTPHeaderField: field)
             }
+            // make user-agent similar to that from Alamofire
+            request.setValue(self.userAgentString(), forHTTPHeaderField: "User-Agent")
             request.httpBody = body
             
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -1070,7 +1107,7 @@ class APIConnector {
         }
     }
     
-    func blipMakeDataUploadRequest() throws -> URLRequest {
+    private func blipMakeDataUploadRequest(_ httpMethod: String) throws -> URLRequest {
         DDLogVerbose("trace")
         
         var error: NSError?
@@ -1097,16 +1134,18 @@ class APIConnector {
         }
         
         let urlExtension = "/v1/data_sets/" + currentUploadId + "/data"
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)", "Content-Type":"application/json"]
         let baseURL = kServers[currentService!]!
         var urlString = baseURL + urlExtension
         urlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         let url = URL(string: urlString)
         let request = NSMutableURLRequest(url: url!)
-        request.httpMethod = "POST"
+        request.httpMethod = httpMethod //"POST" or "DELETE"
         for (field, value) in headerDict {
             request.setValue(value, forHTTPHeaderField: field)
         }
+        // make user-agent similar to that from Alamofire
+        request.setValue(self.userAgentString(), forHTTPHeaderField: "User-Agent")
 
         return request as URLRequest
     }

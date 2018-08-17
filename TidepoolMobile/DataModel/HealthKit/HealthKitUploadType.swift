@@ -47,20 +47,20 @@ class HealthKitUploadType {
     internal let dateFormatter = DateFormatter()
 
     internal func addCommonFields(sampleToUploadDict: inout [String: AnyObject], sample: HKSample) {
-        sampleToUploadDict["guid"] = sample.uuid.uuidString as AnyObject?
-        
-        let sourceRevision = sample.sourceRevision
-        let source = sourceRevision.source
-        let sourceBundleIdentifier = source.bundleIdentifier
-        let deviceModel = self.deviceModelForSourceBundleIdentifier(sourceBundleIdentifier)
-        let deviceId = "\(deviceModel)_\(UIDevice.current.identifierForVendor!.uuidString)"
-        sampleToUploadDict["deviceId"] = deviceId as AnyObject
+        //TODO: remove when service no longer requires this...
+        sampleToUploadDict["deviceId"] = "deprecated" as AnyObject
 
         sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?
         
         // add optional application origin
         if let origin = sampleOrigin(sample) {
-            sampleToUploadDict["origin"] = origin as AnyObject
+            // Don't let invalid json crash the app during later serialization!
+            if JSONSerialization.isValidJSONObject(origin) {
+                // Add metadata values as the payload struct
+                sampleToUploadDict["origin"] = origin as AnyObject
+            } else {
+                DDLogError("Invalid origin failed to serialize: \(String(describing:origin)), for type: \(typeName), guid: \(sampleToUploadDict["guid"] ?? "no guid" as AnyObject)")
+            }
         }
     }
     
@@ -90,22 +90,80 @@ class HealthKitUploadType {
 
     }
     
-    internal func sampleOrigin(_ sample: HKSample) -> [String: String]? {
-        let sourceBundleName = sample.sourceRevision.source.bundleIdentifier.lowercased()
-        if isValidReverseDomain(sourceBundleName) {
-            var origin = [
-                "name": sample.sourceRevision.source.bundleIdentifier.lowercased()
-            ]
-            if let userEntered = sample.metadata?[HKMetadataKeyWasUserEntered] as? Bool {
-                if userEntered {
-                    origin["type"] = "manual"
-                }
+    internal func sampleOrigin(_ sample: HKSample) -> [String: AnyObject]? {
+        
+        var origin: [String: AnyObject] = [
+            "id": sample.uuid.uuidString as AnyObject,
+            "name": "com.apple.HealthKit" as AnyObject,
+            "type": "service" as AnyObject
+        ]
+
+        if let userEntered = sample.metadata?[HKMetadataKeyWasUserEntered] as? Bool {
+            if userEntered {
+                origin["type"] = "manual" as AnyObject
             }
-            return origin
-        } else {
-            DDLogInfo("Invalid reverse domain name: \(sourceBundleName)")
-            return nil
         }
+        
+        var payloadDict = [String: AnyObject]()
+        
+        //let sourceBundleName = sample.sourceRevision.source.bundleIdentifier.lowercased()
+        //TODO: sync syntax check with service!
+        //if isValidReverseDomain(sourceBundleName) {
+        //    payloadDict["sourceRevision"] = sourceBundleName as AnyObject
+        //}
+        
+        var sourceRevisionDict = [String: AnyObject]()
+        var sourceRevSrcDict = [String: String]()
+        sourceRevSrcDict["bundleIdentifier"] = sample.sourceRevision.source.bundleIdentifier
+        sourceRevSrcDict["name"] = sample.sourceRevision.source.name
+        sourceRevisionDict["source"] = sourceRevSrcDict as AnyObject
+        if let version = sample.sourceRevision.version {
+            sourceRevisionDict["version"] = version as AnyObject
+        }
+        if let productType = sample.sourceRevision.productType {
+            sourceRevisionDict["productType"] = productType as AnyObject
+        }
+        let version = sample.sourceRevision.operatingSystemVersion
+        let versionString = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
+        sourceRevisionDict["operatingSystemVersion"] = versionString as AnyObject
+        payloadDict["sourceRevision"] = sourceRevisionDict as AnyObject
+        
+        if let device = sample.device {
+            var deviceDict = [String: String]()
+            if let name = device.name {
+                deviceDict["name"] = name
+            }
+            if let model = device.model {
+                deviceDict["model"] = model
+            }
+            if let manufacturer = device.manufacturer {
+                deviceDict["manufacturer"] = manufacturer
+            }
+            if let udiDeviceIdentifier = device.udiDeviceIdentifier {
+                deviceDict["udiDeviceIdentifier"] = udiDeviceIdentifier
+            }
+            if let localIdentifier = device.localIdentifier {
+                deviceDict["localIdentifier"] = localIdentifier
+            }
+            if let firmwareVersion = device.firmwareVersion {
+                deviceDict["firmwareVersion"] = firmwareVersion
+            }
+            if let hardwareVersion = device.hardwareVersion {
+                deviceDict["hardwareVersion"] = hardwareVersion
+            }
+            if let softwareVersion = device.softwareVersion {
+                deviceDict["softwareVersion"] = softwareVersion
+            }
+            if !deviceDict.isEmpty {
+                payloadDict["device"] = deviceDict as AnyObject
+            }
+        }
+        
+        if !payloadDict.isEmpty {
+            origin["payload"] = payloadDict as AnyObject
+        }
+        
+        return origin
     }
     
     let reverseDomainTest = NSPredicate(format:"SELF MATCHES %@", reverseDomainRegEx)
@@ -131,11 +189,6 @@ class HealthKitUploadType {
     // override!
     internal func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
         return ""
-    }
-    
-    // override!
-    internal func typeSpecificMetadata() -> [(metaKey: String, metadatum: AnyObject)] {
-        return []
     }
     
     // override!

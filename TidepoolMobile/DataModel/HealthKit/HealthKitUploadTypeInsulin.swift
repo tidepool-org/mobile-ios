@@ -49,13 +49,6 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
         return sortedSamples
     }
     
-    // override!
-    internal override func typeSpecificMetadata() -> [(metaKey: String, metadatum: AnyObject)] {
-        DDLogVerbose("trace")
-        let metadata: [(metaKey: String, metadatum: AnyObject)] = []
-        return metadata
-    }
-    
     internal override func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
         DDLogInfo("Unknown insulin sourceBundleIdentifier: \(sourceBundleIdentifier)")
         let deviceModel = "Unknown: \(sourceBundleIdentifier)"

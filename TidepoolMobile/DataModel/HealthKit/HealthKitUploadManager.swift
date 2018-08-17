@@ -72,7 +72,7 @@ class HealthKitUploadManager:
             DDLogVerbose("helper type: \(uploadType.typeName), mode: \(mode.rawValue)")
             
             guard !self.isUploading[mode]! else {
-                DDLogInfo("Alreadg uploading, ignoring. Mode: \(mode)")
+                DDLogInfo("Already uploading, ignoring. Mode: \(mode)")
                 return
             }
             
@@ -334,7 +334,6 @@ class HealthKitUploadManager:
                         return
                     }
                     
-                    if uploadData.filteredSamples.count > 0 {
                         self.handleNewResults(reader: reader, uploadData: uploadData)
                     } else if uploadData.newOrDeletedSamplesWereDelivered {
                         self.promoteLastAnchor(reader: self.readers[reader.mode]!)
@@ -354,7 +353,7 @@ class HealthKitUploadManager:
             DDLogVerbose("helper type: \(uploadType.typeName), mode: \(reader.mode.rawValue), type: \(reader.uploadType.typeName)")
             
             do {
-                let request = try sharedInstance.makeDataUploadRequestHandler()
+                let request = try sharedInstance.makeDataUploadRequestHandler("POST")
                 
                 let message = "Start next upload for \(uploadData.filteredSamples.count) samples. Mode: \(reader.mode), type: \(self.uploadType.typeName)"
                 DDLogInfo(message)
@@ -453,7 +452,7 @@ class HealthKitUploadManager:
     }
     
 
-    var makeDataUploadRequestHandler: (() throws -> URLRequest) = {
+    var makeDataUploadRequestHandler: ((_ httpMethod: String) throws -> URLRequest) = {_ in
         DDLogVerbose("trace")
         
         throw NSError(domain: "HealthKitUploadManager", code: -2, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, no upload request handler is configured"])
