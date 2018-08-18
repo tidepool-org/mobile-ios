@@ -334,6 +334,7 @@ class HealthKitUploadManager:
                         return
                     }
                     
+                    if uploadData.filteredSamples.count > 0 || uploadData.deletedSamples.count > 0 {
                         self.handleNewResults(reader: reader, uploadData: uploadData)
                     } else if uploadData.newOrDeletedSamplesWereDelivered {
                         self.promoteLastAnchor(reader: self.readers[reader.mode]!)

@@ -49,13 +49,17 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
         DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
 
         // Prepare POST files for upload. Fine to do this on background thread
-        // TODO: this could be empty, should short-circuit here?
-        let batchSamplesPostBodyURL = try createBodyFileForBatchSamplesUpload(data: data)
-        
-        // Store this for later. We'll create the batch samples task once the metadata task finishes
-        UserDefaults.standard.set(request.url, forKey: prefixedLocalId(self.uploadSamplesRequestUrlKey))
-        UserDefaults.standard.set(request.allHTTPHeaderFields, forKey: prefixedLocalId(self.uploadSamplesRequestAllHTTPHeaderFieldsKey))
-        UserDefaults.standard.set(batchSamplesPostBodyURL, forKey: prefixedLocalId(self.uploadSamplesPostDataUrlKey))
+        // May be nil if no samples to upload
+        let batchSamplesPostBody = try createBodyForBatchSamplesUpload(data: data)
+        // May be nil if no samples to delete
+        let batchSamplesDeleteBodyURL = try createBodyFileForBatchSamplesDelete(data: data)
+       
+        UserDefaults.standard.set(batchSamplesDeleteBodyURL, forKey: prefixedLocalId(self.deleteSamplesRequestUrlKey))
+        if batchSamplesDeleteBodyURL != nil {
+            // Store this for later, for delete phase...
+            UserDefaults.standard.set(request.url, forKey: prefixedLocalId(self.uploadSamplesRequestUrlKey))
+            UserDefaults.standard.set(request.allHTTPHeaderFields, forKey: prefixedLocalId(self.uploadSamplesRequestAllHTTPHeaderFieldsKey))
+        }
         UserDefaults.standard.synchronize()
         
         DispatchQueue.main.async {
@@ -76,30 +80,43 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
                 return
             }
 
-            // Create upload task
-            if let uploadTaskRequestAllHTTPHeaderFields = UserDefaults.standard.dictionary(forKey: self.prefixedLocalId(self.uploadSamplesRequestAllHTTPHeaderFieldsKey)),
-                let uploadTaskRequestUrl = UserDefaults.standard.url(forKey: self.prefixedLocalId(self.uploadSamplesRequestUrlKey)),
-                let batchSamplesPostBodyURL = UserDefaults.standard.url(forKey: self.prefixedLocalId(self.uploadSamplesPostDataUrlKey))
-            {
+            // Create upload task if there are uploads to do...
+            if batchSamplesPostBody != nil {
                 self.setPendingUploadsState(uploadTaskIsPending: true)
-                
-                let batchSamplesRequest = NSMutableURLRequest(url: uploadTaskRequestUrl)
-                batchSamplesRequest.httpMethod = "POST"
-                for (field, value) in uploadTaskRequestAllHTTPHeaderFields {
-                    batchSamplesRequest.setValue(value as? String, forHTTPHeaderField: field)
-                }
-                let uploadTask = uploadSession!.uploadTask(with: batchSamplesRequest as URLRequest, fromFile: batchSamplesPostBodyURL)
+                let uploadTask = uploadSession!.uploadTask(with: request as URLRequest, from: batchSamplesPostBody!)
                 uploadTask.taskDescription = self.prefixedLocalId(self.uploadSamplesTaskDescription)
                 DDLogInfo("Created samples upload task: \(uploadTask.taskIdentifier)")
                 uploadTask.resume()
-            } else {
-                let message = "Failed to find stored POST body URL or stored request for samples upload"
+            // Otherwise check for deletes...
+            } else if !self.startDeleteTaskInSession(uploadSession!) {
+                let message = "Failed to find samples to upload or delete!"
                 let settingsError = NSError(domain: "HealthKitUploader", code: -3, userInfo: [NSLocalizedDescriptionKey: message])
                 DDLogError(message)
                 self.setPendingUploadsState(uploadTaskIsPending: false)
                 self.delegate?.sampleUploader(uploader: self, didCompleteUploadWithError: settingsError)
             }
         }
+    }
+    
+    func startDeleteTaskInSession(_ session: URLSession) -> Bool {
+        if let deleteSamplesPostBodyURL = UserDefaults.standard.url(forKey: self.prefixedLocalId(self.deleteSamplesRequestUrlKey)),
+            let deleteTaskRequestAllHTTPHeaderFields = UserDefaults.standard.dictionary(forKey: self.prefixedLocalId(self.uploadSamplesRequestAllHTTPHeaderFieldsKey)),
+            let deleteTaskRequestUrl = UserDefaults.standard.url(forKey: self.prefixedLocalId(self.uploadSamplesRequestUrlKey))
+        {
+            self.setPendingUploadsState(uploadTaskIsPending: true)
+            
+            let deleteSamplesRequest = NSMutableURLRequest(url: deleteTaskRequestUrl)
+            deleteSamplesRequest.httpMethod = "DELETE"
+            for (field, value) in deleteTaskRequestAllHTTPHeaderFields {
+                deleteSamplesRequest.setValue(value as? String, forHTTPHeaderField: field)
+            }
+            let deleteTask = session.uploadTask(with: deleteSamplesRequest as URLRequest, fromFile: deleteSamplesPostBodyURL)
+            deleteTask.taskDescription = self.prefixedLocalId(self.deleteSamplesTaskDescription)
+            DDLogInfo("Created samples delete task: \(deleteTask.taskIdentifier)")
+            deleteTask.resume()
+            return true
+        }
+        return false
     }
     
     func cancelTasks() {
@@ -160,7 +177,8 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
         } else if httpError != nil {
             self.setPendingUploadsState(uploadTaskIsPending: false)
             self.delegate?.sampleUploader(uploader: self, didCompleteUploadWithError: httpError)
-        } else if task.taskDescription == prefixedLocalId(self.uploadSamplesTaskDescription) {
+        } else if task.taskDescription == prefixedLocalId(self.uploadSamplesTaskDescription) && !self.startDeleteTaskInSession(session) {
+            // If we were doing uploads, and there are no deletes to start, we are done!
             self.setPendingUploadsState(uploadTaskIsPending: false)
             self.delegate?.sampleUploader(uploader: self, didCompleteUploadWithError: nil)
         }
@@ -208,7 +226,32 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
         DDLogInfo("Created upload session. isBackground:\(isBackground) Mode: \(self.mode)")
     }
 
-    fileprivate func createBodyFileForBatchSamplesUpload(data: HealthKitUploadData) throws -> URL {
+    fileprivate func createBodyFileForBatchSamplesDelete(data: HealthKitUploadData) throws -> URL? {
+        DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
+        
+        // Prepare upload delete body
+        let samplesToDeleteDictArray = data.uploadType.prepareDataForDelete(data)
+        var validatedSamples = [[String: AnyObject]]()
+        // Prevent serialization exceptions!
+        for sample in samplesToDeleteDictArray {
+            DDLogInfo("Next sample to upload: \(sample)")
+            if JSONSerialization.isValidJSONObject(sample) {
+                validatedSamples.append(sample)
+            } else {
+                DDLogError("Sample cannot be serialized to JSON!")
+                DDLogError("Sample: \(sample)")
+            }
+        }
+        print("Next samples to delete: \(validatedSamples)")
+        if validatedSamples.isEmpty {
+            return nil
+        }
+        let postBody = try JSONSerialization.data(withJSONObject: validatedSamples)
+        //print("Post body for upload: \(postBody)")
+        return try self.savePostBodyForUpload(body: postBody, identifier: HealthKitSettings.prefixedKey(prefix: "", type: self.typeString, key: "deleteBatchSamples.data"))
+    }
+
+    fileprivate func createBodyForBatchSamplesUpload(data: HealthKitUploadData) throws -> Data? {
         DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
 
         // Prepare upload post body
@@ -224,13 +267,41 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
                 DDLogError("Sample: \(sample)")
             }
         }
-        //print("Next samples to upload: \(samplesToUploadDictArray)")
+        print("Next samples to upload: \(samplesToUploadDictArray)")
+        if validatedSamples.isEmpty {
+            return nil
+        }
+        // Note: exceptions during serialization are NSException type, and won't get caught by a Swift do/catch, so pre-validate!
+        let postBody = try JSONSerialization.data(withJSONObject: validatedSamples)
+        return postBody
+    }
+    
+    fileprivate func createBodyFileForBatchSamplesUpload(data: HealthKitUploadData) throws -> URL? {
+        DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
+        
+        // Prepare upload post body
+        let samplesToUploadDictArray = data.uploadType.prepareDataForUpload(data)
+        var validatedSamples = [[String: AnyObject]]()
+        // Prevent serialization exceptions!
+        for sample in samplesToUploadDictArray {
+            DDLogInfo("Next sample to upload: \(sample)")
+            if JSONSerialization.isValidJSONObject(sample) {
+                validatedSamples.append(sample)
+            } else {
+                DDLogError("Sample cannot be serialized to JSON!")
+                DDLogError("Sample: \(sample)")
+            }
+        }
+        print("Next samples to upload: \(samplesToUploadDictArray)")
+        if validatedSamples.isEmpty {
+            return nil
+        }
         // Note: exceptions during serialization are NSException type, and won't get caught by a Swift do/catch, so pre-validate!
         let postBody = try JSONSerialization.data(withJSONObject: validatedSamples)
         //print("Post body for upload: \(postBody)")
         return try self.savePostBodyForUpload(body: postBody, identifier: HealthKitSettings.prefixedKey(prefix: "", type: self.typeString, key: "uploadBatchSamples.data"))
     }
-    
+
     fileprivate func savePostBodyForUpload(body: Data, identifier: String) throws -> URL {
         DDLogVerbose("identifier: \(identifier)")
         
@@ -256,10 +327,11 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     // use the following with prefixedLocalId to create ids unique to mode and upload type...
     fileprivate let backgroundUploadSessionIdentifier = "uploadSessionId"
     fileprivate let uploadSamplesTaskDescription = "upload samples"
-    
+    fileprivate let deleteSamplesTaskDescription = "delete samples"
+
     fileprivate let uploadSamplesRequestUrlKey = "uploadSamplesRequestUrl"
+    fileprivate let deleteSamplesRequestUrlKey = "deleteSamplesRequestUrl"
     fileprivate let uploadSamplesRequestAllHTTPHeaderFieldsKey = "uploadSamplesRequestAllHTTPHeaderFields"
-    fileprivate let uploadSamplesPostDataUrlKey = "uploadSamplesPostDataUrl"
 
     fileprivate func prefixedLocalId(_ key: String) -> String {
         return "\(self.mode)-\(self.typeString)\(key)"

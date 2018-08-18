@@ -89,11 +89,15 @@ class LoginViewController: BaseUIViewController {
     }
     
     @objc func reachabilityChanged(_ note: Notification) {
-        configureForReachability()
+        DispatchQueue.main.async {
+            self.configureForReachability()
+        }
     }
     
     @objc func switchedToNewServer(_ note: Notification) {
-        configureVersion()
+        DispatchQueue.main.async {
+            self.configureVersion()
+        }
     }
 
     fileprivate func configureForReachability() {

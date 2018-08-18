@@ -181,8 +181,9 @@ class APIConnector {
             let notification = Notification(name: Notification.Name(rawValue: "switchedToNewServer"), object: nil)
             NotificationCenter.default.post(notification)
             
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.logout()
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.logout()
+            }
         }
     }
     

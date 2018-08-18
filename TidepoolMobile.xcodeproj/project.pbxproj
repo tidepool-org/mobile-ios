@@ -455,6 +455,8 @@
 		4837CC681BA7394E00BA2CDE /* TidepoolMobileUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = TidepoolMobileUIButton.swift; path = Resources/TidepoolMobileUIButton.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuAccountSettingsViewController.swift; path = ViewControllers/MenuAccountSettingsViewController.swift; sourceTree = "<group>"; };
 		4839FD221EB7E16F003E5BF7 /* NoteListGraphCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListGraphCell.swift; path = ViewControllers/NoteListGraphCell.swift; sourceTree = "<group>"; };
+		483AFBCE2127929700C2A21B /* TidepoolMobileTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TidepoolMobileTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		483AFBCF212792CE00C2A21B /* TidepoolMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TidepoolMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUIViewController.swift; path = ViewControllers/BaseUIViewController.swift; sourceTree = "<group>"; };
 		483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewController.swift; path = ViewControllers/BaseUITableViewController.swift; sourceTree = "<group>"; };
 		4841BB6D1EC6326E007FBCEB /* TPConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TPConstants.swift; path = Resources/TPConstants.swift; sourceTree = "<group>"; };
@@ -818,6 +820,7 @@
 		4859FCB71B9A4DE4000C1269 /* TidepoolMobile */ = {
 			isa = PBXGroup;
 			children = (
+				483AFBCF212792CE00C2A21B /* TidepoolMobile-Bridging-Header.h */,
 				486EAA7B1C305E39003B4497 /* TidepoolMobile.entitlements */,
 				48AEB7C71C1CE33F00B2A214 /* Third Party */,
 				4859FCB81B9A4DE4000C1269 /* AppDelegate.swift */,
@@ -839,6 +842,7 @@
 		4859FCCF1B9A4DE5000C1269 /* TidepoolMobileTests */ = {
 			isa = PBXGroup;
 			children = (
+				483AFBCE2127929700C2A21B /* TidepoolMobileTests-Bridging-Header.h */,
 				4859FCD01B9A4DE5000C1269 /* apiConnectTests.swift */,
 				48B9D21F1F16A2FA00ECB5CB /* dateFormatterExtensionTests.swift */,
 				48B9D2201F16A2FA00ECB5CB /* hashtagBolderTests.swift */,

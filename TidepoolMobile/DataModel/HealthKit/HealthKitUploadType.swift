@@ -172,6 +172,20 @@ class HealthKitUploadType {
         return reverseDomainTest.evaluate(with: testStr)
     }
 
+    internal func prepareDataForDelete(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
+        DDLogInfo("trace")
+        var samplesToDeleteDictArray = [[String: AnyObject]]()
+        for sample in data.deletedSamples {
+            var sampleToDeleteDict = [String: AnyObject]()
+            let origin: [String: AnyObject] = [
+                "id": sample.uuid.uuidString as AnyObject
+            ]
+            sampleToDeleteDict["origin"] = origin as AnyObject
+            samplesToDeleteDictArray.append(sampleToDeleteDict)
+        }
+        return samplesToDeleteDictArray
+    }
+
     //
     //  MARK: - Override these methods!
     //
