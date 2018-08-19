@@ -69,7 +69,7 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
     }
 
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
-        DDLogInfo("blood glucose prepareDataForUpload")
+        //DDLogInfo("blood glucose prepareDataForUpload")
         //let dateFormatter = DateFormatter()
         var samplesToUploadDictArray = [[String: AnyObject]]()
         for sample in data.filteredSamples {
@@ -84,7 +84,7 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
                 let unit = HKUnit(from: units)
                 let value = quantitySample.quantity.doubleValue(for: unit)
                 sampleToUploadDict["value"] = value as AnyObject?
-                DDLogInfo("blood glucose value: \(String(describing: value))")
+                //DDLogInfo("blood glucose value: \(String(describing: value))")
 
                 // Add out-of-range annotation if needed
                 var annotationCode: String?

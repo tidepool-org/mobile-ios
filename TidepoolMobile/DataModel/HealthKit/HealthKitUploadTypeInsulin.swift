@@ -67,7 +67,8 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
 
                 let reason = sample.metadata?[HKMetadataKeyInsulinDeliveryReason] as? HKInsulinDeliveryReason.RawValue
                 if reason == nil {
-                    DDLogInfo("Skip insulin entry that has no reason!")
+                    //TODO: report as data error?
+                    DDLogError("Skip insulin entry that has no reason!")
                     continue
                 }
                 let value = quantitySample.quantity.doubleValue(for: .internationalUnit()) as AnyObject?
@@ -80,6 +81,8 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                     sampleToUploadDict["deliveryType"] = "temp" as AnyObject?
                     let duration = sample.endDate.timeIntervalSince(sample.startDate)*1000 // convert to milliseconds
                     if duration <= 0 {
+                        //TODO: report as data error?
+                        DDLogError("Skip basal insulin entry with non-positive duration: \(duration)")
                         continue
                     }
                     sampleToUploadDict["duration"] = Int(duration) as AnyObject
@@ -103,7 +106,8 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                     DDLogInfo("insulin bolus value = \(String(describing: value))")
 
                 default:
-                    DDLogInfo("Unknown key for insulin reason: \(String(describing: reason))")
+                    //TODO: report as data error?
+                    DDLogError("Unknown key for insulin reason: \(String(describing: reason))")
                     continue
                 }
                 

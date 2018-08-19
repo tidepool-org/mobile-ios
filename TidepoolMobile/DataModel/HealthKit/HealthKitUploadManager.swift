@@ -354,14 +354,12 @@ class HealthKitUploadManager:
             DDLogVerbose("helper type: \(uploadType.typeName), mode: \(reader.mode.rawValue), type: \(reader.uploadType.typeName)")
             
             do {
-                let request = try sharedInstance.makeDataUploadRequestHandler("POST")
-                
                 let message = "Start next upload for \(uploadData.filteredSamples.count) samples. Mode: \(reader.mode), type: \(self.uploadType.typeName)"
                 DDLogInfo(message)
                 UIApplication.localNotifyMessage(message)
 
                 self.stats[reader.mode]!.updateForUploadAttempt(sampleCount: uploadData.filteredSamples.count, uploadAttemptTime: Date(), earliestSampleTime: uploadData.earliestSampleTime, latestSampleTime: uploadData.latestSampleTime)
-                try self.uploaders[reader.mode]!.startUploadSessionTasks(with: request, data: uploadData)
+                try self.uploaders[reader.mode]!.startUploadSessionTasks(with: uploadData)
             } catch let error {
                 DDLogError("Failed to prepare upload. Mode: \(reader.mode). Error: \(String(describing: error))")
                 reader.stopReading(reason: HealthKitUploadReader.StoppedReason.error(error: error))
