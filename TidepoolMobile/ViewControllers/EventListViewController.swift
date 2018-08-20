@@ -77,6 +77,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // need to update when day changes
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.calendarDayDidChange(notification:)), name: NSNotification.Name.NSCalendarDayChanged, object: nil)
         // also when timezone changes...
+        // but first check that dataController has found any implicit tz changes
+        dataController.checkForTimezoneChange()
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.timezoneDidChange(notification:)), name: NSNotification.Name.NSSystemTimeZoneDidChange, object: nil)
 
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterForeground(_:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
@@ -123,8 +125,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     @objc internal func timezoneDidChange(notification : NSNotification) {
         DDLogInfo("\(#function)")
         DispatchQueue.main.async {
+            // first, log timezone change to data controller...
+            self.dataController.timezoneDidChange(notification)
+            // then, refresh display in case dates have changed!
             self.updateDisplayPending = true
             self.checkRefresh()
+            // and post any new events created, if we have uploads enabled...
+            self.dataController.postTimezoneEventChanges() {}
         }
     }
     

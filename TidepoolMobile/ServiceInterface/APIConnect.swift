@@ -386,6 +386,52 @@ class APIConnector {
         }
     }
 
+    func postTimezoneChangesEvent(_ tzChanges: [(time: String, newTzId: String, oldTzId: String?)], _ completion: @escaping (Bool) -> (Void)) {
+        let dataCtrl = TidepoolMobileDataController.sharedInstance
+        if let currentUploadId = dataCtrl.currentUploadId {
+            let endpoint = "/v1/data_sets/" + currentUploadId + "/data"
+            let headerDict = ["Content-Type":"application/json"]
+            var changesToUploadDictArray = [[String: AnyObject]]()
+            for tzChange in tzChanges {
+                var sampleToUploadDict = [String: AnyObject]()
+                sampleToUploadDict["time"] = tzChange.time as AnyObject
+                sampleToUploadDict["type"] = "deviceEvent" as AnyObject
+                sampleToUploadDict["subType"] = "timeChange" as AnyObject
+                let toDict = ["timeZoneName": tzChange.newTzId]
+                sampleToUploadDict["to"] = toDict as AnyObject
+                if let oldTzId = tzChange.oldTzId {
+                    let fromDict = ["timeZoneName": oldTzId]
+                    sampleToUploadDict["from"] = fromDict as AnyObject
+                }
+                changesToUploadDictArray.append(sampleToUploadDict)
+            }
+            let body: Data?
+            do {
+                body = try JSONSerialization.data(withJSONObject: changesToUploadDictArray, options: [])
+            } catch {
+                DDLogError("Failed to create body!")
+                completion(false)
+                return
+            }
+            
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            postRequest(body!, endpoint: endpoint, headers: headerDict).responseJSON { response in
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if ( response.result.isSuccess ) {
+                    DDLogInfo("Timezone change upload succeeded!")
+                    completion(true)
+                } else {
+                    // return nil to signal network request failure
+                    DDLogInfo("Timezone change upload failed!")
+                    completion(false)
+                }
+            }
+        } else {
+            DDLogInfo("Timezone change upload fail: no upload id!")
+            completion(false)
+        }
+    }
+    
     func fetchUserSettings(_ userId: String, _ completion: @escaping (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user profile
         // format is like: https://api.tidepool.org/metadata/f934a287c4/settings

@@ -34,6 +34,7 @@ class TidepoolMobileDataController: NSObject
 {
     /// Supports a singleton controller for the application.
     static let sharedInstance = TidepoolMobileDataController()
+    private let defaults = UserDefaults.standard
     
     // MARK: - Constants
     
@@ -252,20 +253,15 @@ class TidepoolMobileDataController: NSObject
     func saveCurrentViewedUserId() {
         if let user = self.currentViewedUser {
             let id = user.userid
-            let defaults = UserDefaults.standard
             defaults.setValue(id, forKey: kSavedCurrentViewerIdKey)
-            defaults.synchronize()
         }
     }
     
     func deleteSavedCurrentViewedUserId() {
-        let defaults = UserDefaults.standard
         defaults.removeObject(forKey: kSavedCurrentViewerIdKey)
-        defaults.synchronize()
     }
     
     func checkRestoreCurrentViewedUser(_ completion: @escaping () -> (Void)) {
-        let defaults = UserDefaults.standard
         if let userId = defaults.string(forKey: kSavedCurrentViewerIdKey) {
             if let loggedInUserId = currentLoggedInUser?.userid {
                 if userId != loggedInUserId {
@@ -306,6 +302,167 @@ class TidepoolMobileDataController: NSObject
         appHealthKitConfiguration.disableHealthKitInterface()
     }
 
+    //
+    // MARK: - Timezone change tracking, public interface
+    //
+
+    //TODO: consider moving to app delegate...
+    
+    /// Call to check for implicit timezone changes: e.g., when app first starts up.
+    func checkForTimezoneChange() {
+        NSLog("\(#function)")
+        let currentTimeZoneId = TimeZone.current.identifier
+        
+        if self.lastTimezoneId == nil {
+            // app launch, first read of this persisted variable
+            lastTimezoneId = defaults.string(forKey: kLastTimezoneIdSettingKey)
+            
+            //TODO: remove the !tzChangesHaveUploaded check when changes are persisted!
+            if lastTimezoneId == nil || !tzChangesHaveUploaded {
+                // first time app case (first timezone has not been set yet)
+                DDLogInfo("First timezone change to: \(currentTimeZoneId)")
+                self.addNewTimezoneChangeAtTime(Date(), newTimezoneId: currentTimeZoneId, previousTimezoneId: nil)
+                defaults.set(currentTimeZoneId, forKey: kLastTimezoneIdSettingKey)
+                lastTimezoneId = currentTimeZoneId
+                return
+            }
+        }
+        
+        // not first time case
+        if currentTimeZoneId != self.lastTimezoneId! {
+            DDLogInfo("Detected timezone change from: \(self.lastTimezoneId!) to: \(currentTimeZoneId)")
+            self.addNewTimezoneChangeAtTime(Date(), newTimezoneId: currentTimeZoneId, previousTimezoneId: self.lastTimezoneId!)
+            defaults.set(currentTimeZoneId, forKey: kLastTimezoneIdSettingKey)
+            lastTimezoneId = currentTimeZoneId
+        } else {
+            NSLog("\(#function): no tz change detected!")
+        }
+        
+    }
+    private let kLastTimezoneIdSettingKey = "kLastTimezoneId"
+    private var lastTimezoneId: String?
+
+    /// Pass along any timezone change notifications...
+    func timezoneDidChange(_ notification : NSNotification) {
+        NSLog("\(#function)")
+        //TODO: only store if new tz is different from last seen?
+        let newTimeZoneId = TimeZone.current.identifier
+        if newTimeZoneId == lastTimezoneId {
+            DDLogError("TZ change notification when TZ has not changed: \(newTimeZoneId)")
+            return
+        }
+        DDLogInfo("Changed to timezone id: \(newTimeZoneId)")
+        let previousTimeZone = notification.object as? TimeZone
+        var previousTimezoneId: String?
+        if previousTimeZone != nil {
+            previousTimezoneId = previousTimeZone!.identifier
+            DDLogInfo("Changed from timezone id: \(previousTimezoneId!)")
+        }
+        self.addNewTimezoneChangeAtTime(Date(), newTimezoneId: newTimeZoneId, previousTimezoneId: previousTimezoneId)
+        // update persisted value of last timezone seen...
+        defaults.set(newTimeZoneId, forKey: kLastTimezoneIdSettingKey)
+        lastTimezoneId = newTimeZoneId
+    }
+    
+    /// Recursively posts any pending timezone change events to service.
+    /// Only call in main, in foreground.
+    func postTimezoneEventChanges(_ completion: @escaping () -> (Void)) {
+        NSLog("\(#function)")
+        if changesUploading || UIApplication.shared.applicationState == UIApplicationState.background {
+            completion()
+        } else {
+            let changes = storedTimezoneChanges()
+            let changeCount = changes.count
+            if changeCount > 0 {
+                changesUploading = true
+                APIConnector.connector().postTimezoneChangesEvent(changes) {
+                    success in
+                    if success {
+                        self.removeStoredTimezoneChanges(changeCount)
+                        self.changesUploading = false
+                        // call recursively until all timezone changes have posted...
+                        self.postTimezoneEventChanges(completion)
+                    } else {
+                        self.changesUploading = false
+                        completion()
+                    }
+                }
+            } else {
+                completion()
+            }
+        }
+    }
+
+    //
+    // MARK: - Timezone change private...
+    //
+
+    // Set true when attempting to upload to service, so only one thread attempts this until it succeeds or fails
+    private var changesUploading: Bool = false
+    
+    //
+    private func storedTimezoneChanges() -> [(time: String, newTzId: String, oldTzId: String?)] {
+        NSLog("\(#function)")
+        return self.pendingChanges
+    }
+    
+    // To upload, set changesUploading, then call this to get an item to upload; when complete, call removeStoredTimezonChanges.
+    private func firstStoredTimezoneChange() -> (time: String, newTzId: String, oldTzId: String?)? {
+        NSLog("\(#function)")
+       //TODO: fetch from persistent store...
+        if self.pendingChanges.isEmpty {
+            return nil
+        } else {
+            return self.pendingChanges[0]
+        }
+    }
+
+    // Remove the oldest changeCount changes, presumably because they were successfully uploaded; set changesUploading false after this (should be true when this is called!)
+    private func removeStoredTimezoneChanges(_ changeCount: Int) {
+        NSLog("\(#function)")
+        if !changesUploading {
+            DDLogError("Should not be called when changesUploading flag has not been set!")
+            return
+        }
+        var changesToRemove = changeCount
+        while changesToRemove > 0 {
+            let e = self.pendingChanges.remove(at: 0)
+            DDLogInfo("Removed tz change entry: \(e.time), \(e.newTzId), \(e.oldTzId ?? "")")
+            changesToRemove -= 1
+        }
+        //TODO: remove this when we perist pending timezone changes!
+        // persist the fact that we have uploaded timezone changes
+        self.tzChangesHaveUploaded = true
+        changesUploading = false
+    }
+    
+    private var tzChangesHaveUploaded: Bool {
+        set(newValue) {
+            if _tzChangesHaveUploaded != newValue {
+                defaults.set(newValue, forKey: kLastTzIdUploadedSettingKey)
+                _tzChangesHaveUploaded = newValue
+            }
+        }
+        get {
+            if _tzChangesHaveUploaded == nil {
+                _tzChangesHaveUploaded = defaults.bool(forKey: kLastTzIdUploadedSettingKey)
+            }
+            return _tzChangesHaveUploaded!
+        }
+    }
+    private let kLastTzIdUploadedSettingKey = "kTzChangesHaveUploadedSettingKey"
+    private var _tzChangesHaveUploaded: Bool?
+    
+    //TODO: persist timezone changes that are not uploaded.
+    private var pendingChanges = [(time: String, newTzId: String, oldTzId: String?)]()
+    
+    private func addNewTimezoneChangeAtTime(_ timeNoticed: Date, newTimezoneId: String, previousTimezoneId: String?) {
+        NSLog("\(#function) added new timezone change event, to: \(newTimezoneId)")
+        let dateFormatter = DateFormatter()
+        let timeString = dateFormatter.isoStringFromDate(timeNoticed, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
+        self.pendingChanges.append((time: timeString, newTzId: newTimezoneId, oldTzId: previousTimezoneId))
+    }
+    
     //
     // MARK: - Private
     //

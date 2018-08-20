@@ -47,9 +47,6 @@ class HealthKitUploadType {
     internal let dateFormatter = DateFormatter()
 
     internal func addCommonFields(sampleToUploadDict: inout [String: AnyObject], sample: HKSample) {
-        //TODO: remove when service no longer requires this...
-        sampleToUploadDict["deviceId"] = "deprecated" as AnyObject
-
         sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?
         
         // add optional application origin

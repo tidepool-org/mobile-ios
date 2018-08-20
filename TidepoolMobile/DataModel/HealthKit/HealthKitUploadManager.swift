@@ -466,9 +466,14 @@ class HealthKitUploadManager:
         }
 
         APIConnector.connector().configureUploadId() {
-            if TidepoolMobileDataController.sharedInstance.currentUploadId != nil {
-                for helper in self.uploadHelpers {
-                    helper.startUploading(mode: mode, currentUserId: currentUserId)
+            let dataCtl = TidepoolMobileDataController.sharedInstance
+            if dataCtl.currentUploadId != nil {
+                // first drain any pending timezone change events, then resume HK uploads...
+                dataCtl.checkForTimezoneChange()
+                dataCtl.postTimezoneEventChanges() {
+                    for helper in self.uploadHelpers {
+                        helper.startUploading(mode: mode, currentUserId: currentUserId)
+                    }
                 }
             } else {
                 DDLogError("Unable to startUploading - no currentUploadId available!")
