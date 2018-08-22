@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="nIu-c1-BgG">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="nIu-c1-BgG">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,25 +23,25 @@
         <!--Sync Health Data-->
         <scene sceneID="Lcs-lz-AM7">
             <objects>
-                <viewController title="Sync Health Data" id="nIu-c1-BgG" userLabel="Sync Health Data" customClass="SyncHealthDataViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Sync Health Data" id="nIu-c1-BgG" userLabel="Sync Health Data" customClass="SyncHealthDataViewController" customModule="TidepoolMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4la-KJ-0xX" userLabel="SyncHealthScene">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IGv-OB-89N" userLabel="topView">
-                                <rect key="frame" x="0.0" y="64" width="0.0" height="394"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="394"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="sRq-HR-iBm" userLabel="statusContainerView">
-                                        <rect key="frame" x="0.0" y="20" width="0.0" height="117"/>
+                                        <rect key="frame" x="16" y="20" width="288" height="117"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Syncing all Health data" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sPM-kE-q5i" userLabel="healthStatusLine1">
-                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="19.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="288" height="19.5"/>
                                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="14"/>
                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OLE-bx-izL" userLabel="progressView">
-                                                <rect key="frame" x="0.0" y="27.5" width="0.0" height="40"/>
+                                                <rect key="frame" x="0.0" y="27.5" width="288" height="40"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ekz-fm-gY7" userLabel="indicatorView">
                                                         <rect key="frame" x="0.0" y="0.0" width="95" height="40"/>
@@ -52,7 +51,7 @@
                                                         </constraints>
                                                     </view>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="33%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lBd-Wt-hDF">
-                                                        <rect key="frame" x="0.0" y="10.5" width="28.5" height="19.5"/>
+                                                        <rect key="frame" x="130" y="10.5" width="28.5" height="19.5"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="14"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>
@@ -68,8 +67,8 @@
                                                     <constraint firstItem="lBd-Wt-hDF" firstAttribute="centerY" secondItem="OLE-bx-izL" secondAttribute="centerY" id="hDi-Kd-c2X"/>
                                                 </constraints>
                                             </view>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="1 of 200 days" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GL2-bV-RtC" userLabel="healthStatusLine2" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="75.5" width="0.0" height="14"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="1 of 200 days" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GL2-bV-RtC" userLabel="healthStatusLine2" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="75.5" width="288" height="14"/>
                                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                 <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -77,8 +76,8 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMinorStatus"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Note: your phone must stay awake and unlocked to sync)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="HBW-ck-My6">
-                                                <rect key="frame" x="0.0" y="97.5" width="0.0" height="19.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Note: your phone must stay awake and unlocked to sync)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="HBW-ck-My6" userLabel="redLineNote">
+                                                <rect key="frame" x="0.0" y="97.5" width="288" height="19.5"/>
                                                 <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="14"/>
                                                 <color key="textColor" red="1" green="0.1450980392" blue="0.098039215690000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -90,10 +89,10 @@
                                         </constraints>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JWI-TP-gtQ" userLabel="instructionsContainerView">
-                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="394"/>
+                                        <rect key="frame" x="16" y="0.0" width="288" height="394"/>
                                         <subviews>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fI2-Pm-nj8" userLabel="instructionsText">
-                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="364.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="288" height="364.5"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <string key="text">If you’re having trouble seeing your blood glucose data in Tidepool or Tidepool Mobile, you can try a manual sync.    
     
@@ -115,7 +114,7 @@ If you still can’t see your data, try syncing:</string>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Note: your phone must stay awake and unlocked to sync)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="JF6-Qg-7hT">
-                                                <rect key="frame" x="0.0" y="364.5" width="0.0" height="19.5"/>
+                                                <rect key="frame" x="0.0" y="364.5" width="288" height="19.5"/>
                                                 <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="14"/>
                                                 <color key="textColor" red="1" green="0.14509803921568626" blue="0.098039215686274508" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -145,10 +144,10 @@ If you still can’t see your data, try syncing:</string>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tkg-gS-RM9" userLabel="buttonContainerView">
-                                <rect key="frame" x="0.0" y="458" width="0.0" height="90"/>
+                                <rect key="frame" x="16" y="458" width="288" height="90"/>
                                 <subviews>
                                     <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Oj-s5-KQd" userLabel="Stop Button">
-                                        <rect key="frame" x="0.0" y="50" width="0.0" height="40"/>
+                                        <rect key="frame" x="0.0" y="50" width="288" height="40"/>
                                         <color key="backgroundColor" red="0.15686274510000001" green="0.098039215690000001" blue="0.27450980390000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="NEx-Kb-INV"/>
@@ -162,10 +161,10 @@ If you still can’t see your data, try syncing:</string>
                                         </connections>
                                     </button>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="sHs-BV-EHh">
-                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="90"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="288" height="90"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lRK-TP-9si" userLabel="Sync Last Two Weeks Button">
-                                                <rect key="frame" x="0.0" y="0.0" width="0.0" height="40"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="288" height="40"/>
                                                 <color key="backgroundColor" red="0.15686274509803921" green="0.098039215686274508" blue="0.27450980392156865" alpha="1" colorSpace="calibratedRGB"/>
                                                 <accessibility key="accessibilityConfiguration" label="Sync Last Two Weeks"/>
                                                 <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="14"/>
@@ -182,7 +181,7 @@ If you still can’t see your data, try syncing:</string>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xdv-UQ-gxv" userLabel="Sync All Button">
-                                                <rect key="frame" x="0.0" y="50" width="0.0" height="40"/>
+                                                <rect key="frame" x="0.0" y="50" width="288" height="40"/>
                                                 <color key="backgroundColor" red="0.15686274510000001" green="0.098039215690000001" blue="0.27450980390000002" alpha="1" colorSpace="calibratedRGB"/>
                                                 <accessibility key="accessibilityConfiguration" label="Sync All"/>
                                                 <constraints>
@@ -244,6 +243,7 @@ If you still can’t see your data, try syncing:</string>
                         <outlet property="instructionsText" destination="fI2-Pm-nj8" id="mEd-yX-PCk"/>
                         <outlet property="progressLabel" destination="lBd-Wt-hDF" id="gYM-dg-NNL"/>
                         <outlet property="progressView" destination="OLE-bx-izL" id="mQf-KI-RQX"/>
+                        <outlet property="redLineNote" destination="HBW-ck-My6" id="BmW-qN-AfA"/>
                         <outlet property="statusContainerView" destination="sRq-HR-iBm" id="A9Q-iB-Z0b"/>
                         <outlet property="stopButton" destination="5Oj-s5-KQd" id="Be1-q7-ILI"/>
                         <outlet property="syncAllButton" destination="Xdv-UQ-gxv" id="TFH-aY-abd"/>

@@ -35,7 +35,7 @@ class HealthKitUploadManager:
     }
 
     //
-    // MARK: Helper class to apply functions to each type of upload data
+    // MARK: - Helper class to apply functions to each type of upload data
     //
     class UploadHelper: HealthKitSampleUploaderDelegate, HealthKitUploadReaderDelegate {
         private(set) var uploadType: HealthKitUploadType
@@ -110,9 +110,14 @@ class HealthKitUploadManager:
                     }
                 }
             }
-            
-            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: mode))
-            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.TurnOnUploader), object: mode))
+ 
+            let uploadInfo : Dictionary<String, Any> = [
+                "type" : self.uploadType.typeName,
+                "mode" : mode
+                ]
+
+            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: mode, userInfo: uploadInfo))
+            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.TurnOnUploader), object: mode, userInfo: uploadInfo))
         }
  
         func stopUploading(mode: HealthKitUploadReader.Mode, reason: HealthKitUploadReader.StoppedReason) {
@@ -144,8 +149,14 @@ class HealthKitUploadManager:
                 }
             }
             
-            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: mode))
-            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.TurnOffUploader), object: mode, userInfo: ["reason": reason]))
+            let uploadInfo : Dictionary<String, Any> = [
+                "type" : self.uploadType.typeName,
+                "mode" : mode,
+                "reason": reason
+            ]
+            
+            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: mode, userInfo: uploadInfo))
+            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.TurnOffUploader), object: mode, userInfo: uploadInfo))
         }
 
         func stopUploading(reason: HealthKitUploadReader.StoppedReason) {
@@ -234,7 +245,65 @@ class HealthKitUploadManager:
             }
         }
         
-        // MARK: HealthKitUploadReaderDelegate methods
+        //
+        // MARK: - HealthKitSampleUploaderDelegate method
+        //
+
+        // NOTE: This is usually called on a background queue, not on main thread
+        func sampleUploader(uploader: HealthKitUploader, didCompleteUploadWithError error: Error?) {
+            DDLogVerbose("helper type: \(uploadType.typeName), mode: \(uploader.mode.rawValue), type: \(uploader.typeString)")
+            
+            DispatchQueue.main.async {
+                DDLogInfo("didCompleteUploadWithError on main thread")
+                
+                var cancelled = false
+                var completed = false
+                if let error = error as NSError? {
+                    if error.domain == NSURLErrorDomain && error.code == NSURLErrorCancelled {
+                        let message = "Upload task cancelled. Mode: \(uploader.mode), type: \(self.uploadType.typeName)"
+                        DDLogError(message)
+                        UIApplication.localNotifyMessage(message)
+                        cancelled = true
+                    } else {
+                        let message = "Upload batch failed, stop reading. Mode: \(uploader.mode), type: \(self.uploadType.typeName). Error: \(String(describing: error))"
+                        DDLogError(message)
+                        UIApplication.localNotifyMessage(message)
+                    }
+                } else {
+                    DDLogError("Upload session succeeded! Mode: \(uploader.mode)")
+                    self.stats[uploader.mode]!.updateForSuccessfulUpload(lastSuccessfulUploadTime: Date())
+                    self.promoteLastAnchor(reader: self.readers[uploader.mode]!)
+                    completed = true
+                }
+                
+                var keepReading = cancelled || completed
+                if uploader.mode == HealthKitUploadReader.Mode.Current && UIApplication.shared.applicationState == UIApplicationState.background {
+                    if completed {
+                        //TODO: ask Mark why? Doesn't this stop current uploads if the app is in the background for an extended time?
+                        keepReading = false // Just do one upload batch per background task for Current mode
+                    }
+                }
+                
+                if keepReading {
+                    if self.isUploading[uploader.mode]! {
+                        self.readers[uploader.mode]!.readMore()
+                    } else {
+                        DDLogError("Don't try to read more, not currently uploading. Mode: \(uploader.mode)")
+                    }
+                }
+                else {
+                    if let error = error {
+                        self.readers[uploader.mode]!.stopReading(reason: HealthKitUploadReader.StoppedReason.error(error: error))
+                    } else {
+                        self.readers[uploader.mode]!.stopReading(reason: HealthKitUploadReader.StoppedReason.noResultsFromQuery)
+                    }
+                }
+            }
+        }
+        
+        //
+        // MARK: - HealthKitUploadReaderDelegate methods
+        //
         
         func uploadReaderDidStartReading(reader: HealthKitUploadReader) {
             // Register background task for Current mode, if in background
@@ -266,57 +335,7 @@ class HealthKitUploadManager:
             }
         }
         
-        // NOTE: This is usually called on a background queue, not on main thread
-        func sampleUploader(uploader: HealthKitUploader, didCompleteUploadWithError error: Error?) {
-            DDLogVerbose("helper type: \(uploadType.typeName), mode: \(uploader.mode.rawValue), type: \(uploader.typeString)")
-            
-            DispatchQueue.main.async {
-                DDLogInfo("didCompleteUploadWithError on main thread")
-                
-                var cancelled = false
-                var completed = false
-                if let error = error as NSError? {
-                    if error.domain == NSURLErrorDomain && error.code == NSURLErrorCancelled {
-                        let message = "Upload task cancelled. Mode: \(uploader.mode), type: \(self.uploadType.typeName)"
-                        DDLogError(message)
-                        UIApplication.localNotifyMessage(message)
-                        cancelled = true
-                    } else {
-                        let message = "Upload batch failed, stop reading. Mode: \(uploader.mode), type: \(self.uploadType.typeName). Error: \(String(describing: error))"
-                        DDLogError(message)
-                        UIApplication.localNotifyMessage(message)
-                    }
-                } else {
-                    DDLogError("Upload session succeeded! Mode: \(uploader.mode)")
-                    self.stats[uploader.mode]!.updateForSuccessfulUpload(lastSuccessfulUploadTime: Date())
-                    self.promoteLastAnchor(reader: self.readers[uploader.mode]!)
-                    completed = true
-                }
-                
-                var keepReading = cancelled || completed
-                if uploader.mode == HealthKitUploadReader.Mode.Current && UIApplication.shared.applicationState == UIApplicationState.background {
-                    if completed {
-                        keepReading = false // Just do one upload batch per background task for Current mode
-                    }
-                }
-                
-                if keepReading {
-                    if self.isUploading[uploader.mode]! {
-                        self.readers[uploader.mode]!.readMore()
-                    } else {
-                        DDLogError("Don't try to read more, not currently uploading. Mode: \(uploader.mode)")
-                    }
-                }
-                else {
-                    if let error = error {
-                        self.readers[uploader.mode]!.stopReading(reason: HealthKitUploadReader.StoppedReason.error(error: error))
-                    } else {
-                        self.readers[uploader.mode]!.stopReading(reason: HealthKitUploadReader.StoppedReason.noResultsFromQuery)
-                    }
-                }
-            }
-        }
-        
+
         // NOTE: This is a query results handler called from HealthKit, not on main thread
         func uploadReader(reader: HealthKitUploadReader, didReadDataForUpload uploadData: HealthKitUploadData, error: Error?)
         {
@@ -349,6 +368,10 @@ class HealthKitUploadManager:
                 }
             }
         }
+
+        //
+        // MARK: - Private methods
+        //
 
         fileprivate func handleNewResults(reader: HealthKitUploadReader, uploadData: HealthKitUploadData) {
             DDLogVerbose("helper type: \(uploadType.typeName), mode: \(reader.mode.rawValue), type: \(reader.uploadType.typeName)")
@@ -384,7 +407,10 @@ class HealthKitUploadManager:
         }
 
     }
-   
+    //
+    // MARK: - End Helper class to apply functions to each type of upload data
+    //
+
     private var uploadHelpers: [UploadHelper] = []
     
     fileprivate override init() {
@@ -411,7 +437,7 @@ class HealthKitUploadManager:
         }
     }
 
-    // TODO: decide what to do with stats for other upload data, for now this just returns the stats for the first type... perhaps create an amalamated stats object for all types? Probably need to define UI first to see what we need...
+    // TODO: decide what to do with stats for other upload data, for now this just returns the stats for the first type... perhaps create an amalgamated stats object for all types? Probably need to define UI first to see what we need...
     func statsForMode(_ mode: HealthKitUploadReader.Mode) -> HealthKitUploadStats {
         //
         let firstHelper = uploadHelpers[0]
@@ -422,6 +448,7 @@ class HealthKitUploadManager:
         var result = false
         for helper in uploadHelpers {
             if helper.isUploading[mode]! {
+                //print("still uploading for type: \(helper.uploadType.typeName) and mode: \(mode)")
                 result = true
                 break
             }

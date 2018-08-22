@@ -72,9 +72,7 @@ class HealthKitUploadStats: NSObject {
     }
 
     func updateForUploadAttempt(sampleCount: Int, uploadAttemptTime: Date, earliestSampleTime: Date, latestSampleTime: Date) {
-        DDLogVerbose("trace")
-
-        DDLogInfo("Attempting to upload: \(sampleCount) samples, at: \(uploadAttemptTime), with latest sample time: \(latestSampleTime), mode: \(self.mode)")
+        DDLogInfo("Attempting to upload: \(sampleCount) samples, at: \(uploadAttemptTime), with latest sample time: \(latestSampleTime), mode: \(self.mode), type: \(self.uploadTypeName)")
         
         self.lastUploadAttemptTime = uploadAttemptTime
         self.lastUploadAttemptSampleCount = sampleCount
@@ -90,9 +88,14 @@ class HealthKitUploadStats: NSObject {
         
         UserDefaults.standard.synchronize()
         
+        let uploadInfo : Dictionary<String, Any> = [
+            "type" : self.uploadTypeName,
+            "mode" : self.mode
+        ]
+
         DispatchQueue.main.async {
-            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: self.mode))
-            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.AttemptUpload), object: self.mode))
+            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: self.mode, userInfo: uploadInfo))
+            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.AttemptUpload), object: self.mode, userInfo: uploadInfo))
         }
     }
     
@@ -127,9 +130,14 @@ class HealthKitUploadStats: NSObject {
             DDLogInfo("Uploaded \(self.currentDayHistorical) of \(self.totalDaysHistorical) days of historical data")
         }
 
+        let uploadInfo : Dictionary<String, Any> = [
+            "type" : self.uploadTypeName,
+            "mode" : self.mode
+        ]
+
         DispatchQueue.main.async {
-            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: self.mode))
-            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.UploadSuccessful), object: self.mode))
+            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: self.mode, userInfo: uploadInfo))
+            NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: HealthKitNotifications.UploadSuccessful), object: self.mode, userInfo: uploadInfo))
         }
     }
 

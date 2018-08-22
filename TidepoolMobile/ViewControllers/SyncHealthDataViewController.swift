@@ -31,6 +31,8 @@ class SyncHealthDataViewController: UIViewController {
     @IBOutlet weak var syncLast2WeeksButton: UIButton!
     @IBOutlet weak var syncAllButton: UIButton!
     
+    @IBOutlet weak var redLineNote: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -58,6 +60,8 @@ class SyncHealthDataViewController: UIViewController {
             // Disable idle timer when sync is in progress
             UIApplication.shared.isIdleTimerDisabled = true
         }
+        
+        redLineNote.isHidden = false
     }
     
     deinit {
@@ -109,39 +113,66 @@ class SyncHealthDataViewController: UIViewController {
     }
     
     @objc func handleStatsUpdatedNotification(_ notification: Notification) {
-        let mode = notification.object as! HealthKitUploadReader.Mode
-        if mode == HealthKitUploadReader.Mode.HistoricalAll
-            || mode == HealthKitUploadReader.Mode.HistoricalLastTwoWeeks {
-            updateForStatsUpdate(mode: mode)
-        }
-    }
-
-    @objc func handleTurnOffUploaderNotification(_ notification: Notification) {
-        let mode = notification.object as! HealthKitUploadReader.Mode
-        
-        if mode == HealthKitUploadReader.Mode.HistoricalAll
-            || mode == HealthKitUploadReader.Mode.HistoricalLastTwoWeeks {
-            // Update status
-            let reason = notification.userInfo!["reason"] as! HealthKitUploadReader.StoppedReason
-            switch reason {
-            case .turnOffInterface:
-                break
-            case .noResultsFromQuery:
-                updateProgress(1.0)
-                stopButton.isHidden = true
-                break
-            case .error(let error):
-                self.healthStatusLine2.text = error.localizedDescription
-                self.syncCompletedStatusText = error.localizedDescription
-                stopButton.isHidden = true
-                break
-            default:
-                break
+        DispatchQueue.main.async {
+            //let mode = notification.object as! HealthKitUploadReader.Mode
+            let userInfo = notification.userInfo!
+            let mode = userInfo["mode"] as! HealthKitUploadReader.Mode
+            let type = userInfo["type"] as! String
+            DDLogInfo("Type: \(type), Mode: \(mode)")
+            if mode == HealthKitUploadReader.Mode.HistoricalAll
+                || mode == HealthKitUploadReader.Mode.HistoricalLastTwoWeeks {
+                self.updateForStatsUpdate(mode: mode, type: type)
             }
         }
     }
 
-    func startUploading(mode: HealthKitUploadReader.Mode) {
+    @objc func handleTurnOffUploaderNotification(_ notification: Notification) {
+        DispatchQueue.main.async {
+            //let mode = notification.object as! HealthKitUploadReader.Mode
+            let userInfo = notification.userInfo!
+            let mode = userInfo["mode"] as! HealthKitUploadReader.Mode
+            let type = userInfo["type"] as! String
+            let reason = userInfo["reason"] as! HealthKitUploadReader.StoppedReason
+            DDLogInfo("Type: \(type), Mode: \(mode), Reason: \(reason)")
+
+            if mode == HealthKitUploadReader.Mode.HistoricalAll
+                || mode == HealthKitUploadReader.Mode.HistoricalLastTwoWeeks {
+                // Update status
+                switch reason {
+                case .turnOffInterface:
+                    break
+                case .noResultsFromQuery:
+                    self.checkForComplete()
+                    break
+                case .error(let error):
+                    self.lastErrorString = String("\(type) upload error: \(error.localizedDescription.prefix(50))")
+                    self.healthStatusLine2.text = self.lastErrorString
+                    self.checkForComplete()
+                    break
+                default:
+                    break
+                }
+            }
+        }
+    }
+    
+    private func checkForComplete() {
+        // Only complete when all types are complete!
+        if historicalSyncModeInProgress() == nil {
+            updateProgress(1.0)
+            stopButton.isHidden = true
+            var completedStr = "\(maxHistoricalDays) of \(maxHistoricalDays) days completed"
+            if lastErrorString != nil {
+                completedStr = "Unable to complete due to upload errors!"
+            }
+            redLineNote.isHidden = true
+            self.healthStatusLine2.text = completedStr
+            self.syncCompletedStatusText = completedStr
+            DDLogInfo("Complete!")
+        }
+    }
+
+    private func startUploading(mode: HealthKitUploadReader.Mode) {
         guard let currentUserId = TidepoolMobileDataController.sharedInstance.currentUserId else {
             return
         }
@@ -150,7 +181,7 @@ class SyncHealthDataViewController: UIViewController {
         self.updateHealthStatusLine1(mode: mode)
     }
     
-    func stopUploadingAndReset() {
+    private func stopUploadingAndReset() {
         
         HealthKitUploadManager.sharedInstance.stopUploading(reason: HealthKitUploadReader.StoppedReason.turnOffInterface)
         
@@ -163,17 +194,23 @@ class SyncHealthDataViewController: UIViewController {
     @IBOutlet weak var progressLabel: UILabel!
     
     private func historicalSyncModeInProgress() -> HealthKitUploadReader.Mode? {
+        //NSLog("\(#function)")
         let uploadManager = HealthKitUploadManager.sharedInstance
         if uploadManager.isUploadInProgressForMode(HealthKitUploadReader.Mode.HistoricalAll) {
+            //NSLog("historicalSyncModeInProgress: still uploading for mode HistoricalAll")
             return HealthKitUploadReader.Mode.HistoricalAll
         }
         if uploadManager.isUploadInProgressForMode(HealthKitUploadReader.Mode.HistoricalLastTwoWeeks) {
+            //NSLog("historicalSyncModeInProgress: still uploading for mode HistoricalLastTwoWeeks")
             return HealthKitUploadReader.Mode.HistoricalLastTwoWeeks
         }
+        //NSLog("historicalSyncModeInProgress: no longer still uploading for historical modes")
+
         return nil
     }
     
-    func updateForStatsUpdate(mode: HealthKitUploadReader.Mode) {
+    func updateForStatsUpdate(mode: HealthKitUploadReader.Mode, type: String? = nil) {
+        //NSLog("\(#function). Mode: \(mode)")
         if historicalSyncModeInProgress() != nil {
             // Disable idle timer when sync is in progress
             UIApplication.shared.isIdleTimerDisabled = true
@@ -182,16 +219,15 @@ class SyncHealthDataViewController: UIViewController {
             let stats = HealthKitUploadManager.sharedInstance.statsForMode(mode)
             var healthKitUploadStatusDaysUploadedText = ""
             var percentUploaded: CGFloat = 0.0
+            
             if stats.totalDaysHistorical > 0 {
                 percentUploaded = CGFloat((CGFloat)(stats.currentDayHistorical) / (CGFloat)(stats.totalDaysHistorical))
-                let healthKitUploadStatusDaysUploaded: String = "%d of %d days"
-                healthKitUploadStatusDaysUploadedText = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
+                let typeStr = type == nil ? "" : String(" \(type!) data")
+                healthKitUploadStatusDaysUploadedText = String("\(stats.currentDayHistorical) of \(stats.totalDaysHistorical) days\(typeStr)")
             }
             
-            // In case data has been written to HealthKit in non-sequential order (e.g. multiple sources?), keep tack of final upload percent and status text and use that when sync is complete
-            if percentUploaded > self.syncCompletedPercentUploaded {
-                self.syncCompletedPercentUploaded = percentUploaded
-                self.syncCompletedStatusText = healthKitUploadStatusDaysUploadedText
+            if stats.totalDaysHistorical > maxHistoricalDays {
+                maxHistoricalDays = stats.totalDaysHistorical
             }
             
             // Update progress
@@ -199,7 +235,10 @@ class SyncHealthDataViewController: UIViewController {
             
             // Update status lines
             updateHealthStatusLine1(mode: mode)
-            healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
+            if !healthKitUploadStatusDaysUploadedText.isEmpty {
+                healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
+                //NSLog("Progress update: \(healthKitUploadStatusDaysUploadedText)")
+            }
         } else {
             // Re-enable idle timer when there is no sync in progress
             UIApplication.shared.isIdleTimerDisabled = false
@@ -282,7 +321,9 @@ class SyncHealthDataViewController: UIViewController {
         }
     }
     
-    fileprivate var isInitialSync = false
-    fileprivate var syncCompletedPercentUploaded: CGFloat = 0.0
-    fileprivate var syncCompletedStatusText = ""
+    private var isInitialSync = false
+    private var syncCompletedPercentUploaded: CGFloat = 0.0
+    private var syncCompletedStatusText: String = ""
+    private var lastErrorString: String? = nil
+    private var maxHistoricalDays: Int = 0
 }
