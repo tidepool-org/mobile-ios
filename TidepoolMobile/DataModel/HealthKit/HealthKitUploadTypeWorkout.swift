@@ -32,14 +32,6 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
         return sortedSamples
     }
     
-    internal override func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
-        DDLogInfo("Unknown workout sourceBundleIdentifier: \(sourceBundleIdentifier)")
-        let deviceModel = "Unknown: \(sourceBundleIdentifier)"
-        // Note: this will return something like HealthKit_Unknown: com.apple.Health_060EF7B3-9D86-4B93-9EE1-2FC6C618A4AD
-        // TODO: figure out what workout apps might put here. Also, if we have com.apple.Health, and it is is user entered, this would be a direct user HK entry: what should we put?
-        return "HealthKit_\(deviceModel)"
-    }
-    
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
         DDLogInfo("workout prepareDataForUpload")
         var samplesToUploadDictArray = [[String: AnyObject]]()

@@ -32,14 +32,6 @@ class HealthKitUploadTypeCarb: HealthKitUploadType {
         return sortedSamples
     }
     
-    internal override func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
-        DDLogInfo("Unknown carb sourceBundleIdentifier: \(sourceBundleIdentifier)")
-        let deviceModel = "Unknown: \(sourceBundleIdentifier)"
-        // Note: this will return something like HealthKit_Unknown: com.apple.Health_060EF7B3-9D86-4B93-9EE1-2FC6C618A4AD
-        // TODO: figure out what LoopKit might put here. Also, if we have com.apple.Health, and it is is user entered, this would be a direct user HK entry: what should we put?
-        return "HealthKit_\(deviceModel)"
-    }
-    
     // Service validation parameters
     private let CarbohydrateNetGramsMaximum: Double  = 1000.0
     private let CarbohydrateNetGramsMinimum: Double  = 0.0

@@ -198,11 +198,6 @@ class HealthKitUploadType {
     }
     
     // override!
-    internal func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
-        return ""
-    }
-    
-    // override!
     internal func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
         return [[String: AnyObject]]()
     }

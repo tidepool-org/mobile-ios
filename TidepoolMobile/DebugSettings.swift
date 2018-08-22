@@ -52,7 +52,7 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
             self.handleEmailLogs()
         }))
 
-        
+        /*
         let isTreatingAllBloodGlucoseSourceTypesAsDexcom = UserDefaults.standard.bool(forKey: HealthKitSettings.TreatAllBloodGlucoseSourceTypesAsDexcomKey)
         if isTreatingAllBloodGlucoseSourceTypesAsDexcom {
             actionSheet.addAction(UIAlertAction(title: "Don't treat all sources as Dexcom", style: .default, handler: {
@@ -65,6 +65,7 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
                 self.handleTreatAllBloodGlucoseSourceTypesAsDexcom(treatAllAsDexcom: true)
             }))
         }
+         */
 
         let isBackgroundUploadNotificationEnabled = AppDelegate.testMode
         if isBackgroundUploadNotificationEnabled {
@@ -114,11 +115,14 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
         }
     }
     
+    /*
     fileprivate func handleTreatAllBloodGlucoseSourceTypesAsDexcom(treatAllAsDexcom: Bool) {
         UserDefaults.standard.set(treatAllAsDexcom, forKey: HealthKitSettings.TreatAllBloodGlucoseSourceTypesAsDexcomKey);
         UserDefaults.standard.synchronize()
     }
+    */
     
+    /*
     fileprivate func handleEmailExportOfBloodGlucoseData() {
         let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
         let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: nil, limit: HKObjectQueryNoLimit, sortDescriptors: nil) {
@@ -177,28 +181,28 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
         HKHealthStore().execute(sampleQuery)
     }
 
-//    fileprivate func handleCountBloodGlucoseSamples() {
-//        HealthKitManager.sharedInstance.countBloodGlucoseSamples {
-//            (error: Error?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) in
-//
-//            var alert: UIAlertController?
-//            let title = "HealthKit Blood Glucose Sample Count"
-//            var message = ""
-//            if error == nil {
-//                message = "There are \(totalSamplesCount) blood glucose samples and \(totalDexcomSamplesCount) Dexcom samples in HealthKit"
-//            } else if HealthKitManager.sharedInstance.authorizationRequestedForBloodGlucoseSamples() {
-//                message = "Error counting samples: \(String(describing: error))"
-//            } else {
-//                message = "Unable to count sample. Maybe you haven't connected to Health yet. Please login and connect to Health and try again."
-//            }
-//            DDLogInfo(message)
-//            alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-//            alert!.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-//            DispatchQueue.main.async(execute: {
-//                self.presentingViewController?.present(alert!, animated: true, completion: nil)
-//            })
-//        }
-//    }
+    fileprivate func handleCountBloodGlucoseSamples() {
+        HealthKitManager.sharedInstance.countBloodGlucoseSamples {
+            (error: Error?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) in
+
+            var alert: UIAlertController?
+            let title = "HealthKit Blood Glucose Sample Count"
+            var message = ""
+            if error == nil {
+                message = "There are \(totalSamplesCount) blood glucose samples and \(totalDexcomSamplesCount) Dexcom samples in HealthKit"
+            } else if HealthKitManager.sharedInstance.authorizationRequestedForBloodGlucoseSamples() {
+                message = "Error counting samples: \(String(describing: error))"
+            } else {
+                message = "Unable to count sample. Maybe you haven't connected to Health yet. Please login and connect to Health and try again."
+            }
+            DDLogInfo(message)
+            alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            alert!.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            DispatchQueue.main.async(execute: {
+                self.presentingViewController?.present(alert!, animated: true, completion: nil)
+            })
+        }
+    }
     
     fileprivate func handleFindDateRangeBloodGlucoseSamples() {
         let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
@@ -222,7 +226,8 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
             })
         }
     }
-    
+    */
+
     fileprivate func handleEmailLogs() {
         DDLog.flushLog()
         
@@ -256,6 +261,7 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
         controller.dismiss(animated: true, completion: nil)
     }
     
+    /*
     fileprivate func handleWriteLotsOfNonDexcomCBGTestDataToHealthKit() {
         var itemsToPush = [HKQuantitySample]()
         let calendar = Calendar.current
@@ -285,7 +291,7 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
             }
         })
     }
-    
+ 
     fileprivate func handleWriteNonDexcomCBGTestDataToHealthKit() {
         var itemsToPush = [HKQuantitySample]()
         let sampleTime = Date()
@@ -303,6 +309,7 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
         })
 
     }
+     */
 
     fileprivate func clearLogFiles() {
         // Clear log files

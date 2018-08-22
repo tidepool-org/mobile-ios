@@ -313,44 +313,4 @@ class HealthKitManager {
         healthStore?.execute(startDateSampleQuery)
     }
     
-    func readWorkoutSamples(_ resultsHandler: @escaping (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void) = {(_, _, _) in })
-    {
-        DDLogVerbose("trace")
-        
-        guard isHealthDataAvailable else {
-            DDLogError("Unexpected HealthKitManager call when health data not available")
-            return
-        }
-        
-        var queryAnchor: HKQueryAnchor?
-        let queryAnchorData = UserDefaults.standard.object(forKey: HealthKitSettings.WorkoutQueryAnchorKey)
-        if queryAnchorData != nil {
-            queryAnchor = NSKeyedUnarchiver.unarchiveObject(with: queryAnchorData as! Data) as? HKQueryAnchor
-        }
-        
-        let sampleType = HKObjectType.workoutType()
-        let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
-            predicate: nil,
-            anchor: queryAnchor,
-            limit: Int(HKObjectQueryNoLimit /* 100 */)) { // TODO: need to limit to like 100 or so once clients are properly handling the "more" case like we do for observing/caching blood glucose data
-                
-                (query, newSamples, deletedSamples, newAnchor, error) -> Void in
-                
-                resultsHandler(newSamples, deletedSamples, (error as NSError?))
-                
-                if error == nil && newAnchor != nil {
-                    let queryAnchorData = NSKeyedArchiver.archivedData(withRootObject: newAnchor!)
-                    UserDefaults.standard.set(queryAnchorData, forKey: HealthKitSettings.WorkoutQueryAnchorKey)
-                    UserDefaults.standard.synchronize()
-                }
-        }
-        healthStore?.execute(sampleQuery)
-    }
-    
-    // MARK: Private
-    
-    private var workoutsObservationSuccessful = false
-    private var workoutsObservationQuery: HKObserverQuery?
-    private var workoutsBackgroundDeliveryEnabled = false
-    private var workoutsQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)
 }

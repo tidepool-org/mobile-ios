@@ -50,24 +50,6 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
 //        return filteredSamples
     }
         
-    internal override func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
-        var deviceModel = ""
-        
-        // TODO: uploader - what about G6? others?
-        if sourceBundleIdentifier.lowercased().range(of: "com.dexcom.cgm") != nil {
-            deviceModel = "DexG5"
-        } else if sourceBundleIdentifier.lowercased().range(of: "com.dexcom.share2") != nil {
-            deviceModel = "DexG4"
-        } else {
-            DDLogInfo("Unknown cbg sourceBundleIdentifier: \(sourceBundleIdentifier)")
-            deviceModel = "Unknown: \(sourceBundleIdentifier)"
-            // Note: this will return something like HealthKit_Unknown: com.apple.Health_060EF7B3-9D86-4B93-9EE1-2FC6C618A4AD
-            // TODO: figure out what LoopKit might put here. Also, if we have com.apple.Health, and it is is user entered, this would be a direct user HK entry: what should we put?
-        }
-        
-        return "HealthKit_\(deviceModel)"
-    }
-
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
         //DDLogInfo("blood glucose prepareDataForUpload")
         //let dateFormatter = DateFormatter()

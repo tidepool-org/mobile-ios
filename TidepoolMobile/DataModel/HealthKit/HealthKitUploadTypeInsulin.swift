@@ -49,14 +49,6 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
         return sortedSamples
     }
     
-    internal override func deviceModelForSourceBundleIdentifier(_ sourceBundleIdentifier: String) -> String {
-        DDLogInfo("Unknown insulin sourceBundleIdentifier: \(sourceBundleIdentifier)")
-        let deviceModel = "Unknown: \(sourceBundleIdentifier)"
-        // Note: this will return something like HealthKit_Unknown: com.apple.Health_060EF7B3-9D86-4B93-9EE1-2FC6C618A4AD
-        // TODO: figure out what LoopKit might put here...
-        return "HealthKit_\(deviceModel)"
-    }
-    
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
         DDLogInfo("insulin prepareDataForUpload")
         var samplesToUploadDictArray = [[String: AnyObject]]()
