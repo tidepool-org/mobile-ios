@@ -270,7 +270,7 @@ class HealthKitUploadManager:
                         UIApplication.localNotifyMessage(message)
                     }
                 } else {
-                    DDLogError("Upload session succeeded! Mode: \(uploader.mode)")
+                    DDLogInfo("Upload session succeeded! Mode: \(uploader.mode)")
                     self.stats[uploader.mode]!.updateForSuccessfulUpload(lastSuccessfulUploadTime: Date())
                     self.promoteLastAnchor(reader: self.readers[uploader.mode]!)
                     completed = true
@@ -308,7 +308,7 @@ class HealthKitUploadManager:
         func uploadReaderDidStartReading(reader: HealthKitUploadReader) {
             // Register background task for Current mode, if in background
             if reader.mode == HealthKitUploadReader.Mode.Current && UIApplication.shared.applicationState == UIApplicationState.background {
-                sharedInstance.beginCurrentSamplesUploadBackgroundTask()
+                self.beginCurrentSamplesUploadBackgroundTask()
             }
         }
         
@@ -321,7 +321,7 @@ class HealthKitUploadManager:
                 
                 // End background task for Current mode, if in background
                 if reader.mode == HealthKitUploadReader.Mode.Current && UIApplication.shared.applicationState == UIApplicationState.background {
-                    sharedInstance.endCurrentSamplesUploadBackgroundTask()
+                    self.endCurrentSamplesUploadBackgroundTask()
                 }
                 
                 // If the reader mode is HealthKitUploadReader.Mode.Current, then we don't need to stop uploader when the reader
@@ -334,7 +334,6 @@ class HealthKitUploadManager:
                 }
             }
         }
-        
 
         // NOTE: This is a query results handler called from HealthKit, not on main thread
         func uploadReader(reader: HealthKitUploadReader, didReadDataForUpload uploadData: HealthKitUploadData, error: Error?)
@@ -368,6 +367,41 @@ class HealthKitUploadManager:
                 }
             }
         }
+
+        // Note that beginBackgroundTask calls need to be balanced with endBackgroundTask calls!
+        private func beginCurrentSamplesUploadBackgroundTask() {
+            if currentSamplesUploadBackgroundTaskIdentifier == nil {
+                self.currentSamplesUploadBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: {
+                    () -> Void in
+                    DispatchQueue.main.async {
+                        let message = "Background time expired"
+                        DDLogInfo(message)
+                        UIApplication.localNotifyMessage(message)
+                    }
+                })
+                
+                DispatchQueue.main.async {
+                    let message = "Begin background task for: \(self.uploadType.typeName). Remaining background time: \(UIApplication.shared.backgroundTimeRemaining)"
+                    DDLogInfo(message)
+                    UIApplication.localNotifyMessage(message)
+                }
+            }
+        }
+        
+        private func endCurrentSamplesUploadBackgroundTask() {
+            if let currentSamplesUploadBackgroundTaskIdentifier = self.currentSamplesUploadBackgroundTaskIdentifier {
+                UIApplication.shared.endBackgroundTask(currentSamplesUploadBackgroundTaskIdentifier)
+                self.currentSamplesUploadBackgroundTaskIdentifier = nil
+                
+                DispatchQueue.main.async {
+                    let message = "End background task for: \(self.uploadType.typeName). Remaining background time: \(UIApplication.shared.backgroundTimeRemaining)"
+                    DDLogInfo(message)
+                    UIApplication.localNotifyMessage(message)
+                }
+            }
+        }
+        
+        private var currentSamplesUploadBackgroundTaskIdentifier: UIBackgroundTaskIdentifier?
 
         //
         // MARK: - Private methods
@@ -538,41 +572,6 @@ class HealthKitUploadManager:
         }
 
     }
-    
-    fileprivate func beginCurrentSamplesUploadBackgroundTask() {
-        if currentSamplesUploadBackgroundTaskIdentifier == nil {
-            self.currentSamplesUploadBackgroundTaskIdentifier = UIApplication.shared.beginBackgroundTask(expirationHandler: {
-                () -> Void in
-                DispatchQueue.main.async {
-                    let message = "Background time expired"
-                    DDLogInfo(message)
-                    UIApplication.localNotifyMessage(message)
-                }
-            })
-            
-            DispatchQueue.main.async {
-                let message = "Begin background task. Remaining background time: \(UIApplication.shared.backgroundTimeRemaining)"
-                DDLogInfo(message)
-                UIApplication.localNotifyMessage(message)
-            }
-        }
-    }
-
-    fileprivate func endCurrentSamplesUploadBackgroundTask() {
-        if let currentSamplesUploadBackgroundTaskIdentifier = self.currentSamplesUploadBackgroundTaskIdentifier {
-            UIApplication.shared.endBackgroundTask(currentSamplesUploadBackgroundTaskIdentifier)
-            self.currentSamplesUploadBackgroundTaskIdentifier = nil
-
-            DispatchQueue.main.async {
-                let message = "End background task. Remaining background time: \(UIApplication.shared.backgroundTimeRemaining)"
-                DDLogInfo(message)
-                UIApplication.localNotifyMessage(message)
-            }
-        }
-    }
-
-    fileprivate var currentSamplesUploadBackgroundTaskIdentifier: UIBackgroundTaskIdentifier?
-    
     
     
 }

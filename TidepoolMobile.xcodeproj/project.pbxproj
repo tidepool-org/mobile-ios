@@ -198,6 +198,7 @@
 		488E44E11E831CC100A17AD7 /* HashtagBolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488E44DE1E831CC100A17AD7 /* HashtagBolder.swift */; };
 		488E44E21E831CC100A17AD7 /* HashtagsScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488E44DF1E831CC100A17AD7 /* HashtagsScrollView.swift */; };
 		488E44E31E831CC100A17AD7 /* HashtagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488E44E01E831CC100A17AD7 /* HashtagsView.swift */; };
+		4890277F212E1FDF0003DDBB /* TidepoolMobileUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC661BA730F000BA2CDE /* TidepoolMobileUILabel.swift */; };
 		4892996B1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */; };
 		489FDE501E833AF2000C4AC5 /* UrchinConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486894F41E831F89008B0732 /* UrchinConstants.swift */; };
 		489FDE531E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489FDE511E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift */; };
@@ -1687,6 +1688,7 @@
 				0334CA561BA8DDFC00013096 /* Note.swift in Sources */,
 				48DA110E1CE3C78500B99C35 /* NSDateExtension.swift in Sources */,
 				0334CA711BA8DDFC00013096 /* Status+CoreDataProperties.swift in Sources */,
+				4890277F212E1FDF0003DDBB /* TidepoolMobileUILabel.swift in Sources */,
 				0334CA921BA8DDFC00013096 /* Wizard.swift in Sources */,
 				487577A120EFE78E00CC1E5F /* HealthKitUploadManager.swift in Sources */,
 				48EF51FD210FBDBC0046EE6B /* HealthKitUploadTypeWorkout.swift in Sources */,
