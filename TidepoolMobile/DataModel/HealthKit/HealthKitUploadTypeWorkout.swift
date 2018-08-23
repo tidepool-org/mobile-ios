@@ -32,6 +32,7 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
         return sortedSamples
     }
     
+    private var kOneWeekInSeconds: TimeInterval = 1*60*60*24*7
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
         DDLogInfo("workout prepareDataForUpload")
         var samplesToUploadDictArray = [[String: AnyObject]]()
@@ -46,28 +47,39 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
                 // Service wants a string if we specify "other", but HK doesn't provide the user a way to enter one...
                 if workout.workoutActivityType != .other {
                     sampleToUploadDict["activityType"] = stringsForHKWorkoutActivityType(workout.workoutActivityType).tidepoolStr as AnyObject
+                } else {
+                    DDLogError("Workout sample with .other activity type, skipping activityType field!")
                 }
  
-                let duration = [
-                    "units": "seconds",
-                    "value": workout.duration
-                    ] as [String : Any]
-                sampleToUploadDict["duration"] = duration as AnyObject
+                // service syntax for optional duration value: [float64; required; 0 <= x <= 1 week in appropriate units]
+                if workout.duration < kOneWeekInSeconds && workout.duration >= 0.0 {
+                    let duration = [
+                        "units": "seconds",
+                        "value": workout.duration
+                        ] as [String : Any]
+                    sampleToUploadDict["duration"] = duration as AnyObject
+                } else {
+                    DDLogError("Workout sample with out-of-range duration: \(workout.duration) seconds, skipping duration field!")
+                }
                 
-                var miles: Double?
-                if let totalDistance = workout.totalDistance?.doubleValue(for: HKUnit.mile()) {
-                    miles = totalDistance
-                    // Need to do the same validation as on the service!
-                    if miles! > 0.0 && miles! < 100.0 {
+                var floatMiles: Float?
+                if let totalDistance = workout.totalDistance {
+                    let miles = totalDistance.doubleValue(for: HKUnit.mile())
+                    floatMiles = Float(miles)
+                    // service syntax for optional distance value: [float64; required; 0 <= x <= 100 miles in appropriate units]
+                    if miles > 0.0 && miles < 100.0 {
                         let distance = [
                             "units": "miles",
-                            "value": totalDistance
+                            "value": miles
                             ] as [String : Any]
                         sampleToUploadDict["distance"] = distance as AnyObject
+                    } else {
+                        DDLogError("Workout sample with out-of-range distance: \(miles) miles, skipping distance field!")
                     }
                 }
                 
                 if let energyBurned = workout.totalEnergyBurned?.doubleValue(for: HKUnit.largeCalorie()) {
+                    // service syntax for optional energy value: [float64; required]
                     let energy = [
                         "units": "kilocalories",
                         "value": energyBurned
@@ -77,8 +89,8 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
                 
                 // Default name format: "Run - 4.2 miles"
                 var name = self.stringsForHKWorkoutActivityType(workout.workoutActivityType).userStr
-                if let miles = miles {
-                    let floatMiles = Float(miles)
+                if let floatMiles = floatMiles {
+                    // service syntax for name: [string; optional; 0 < len <= 100]
                     name = name + " - " + String(format: "%.2f",floatMiles) + " miles"
                 }
                 if !name.isEmpty {

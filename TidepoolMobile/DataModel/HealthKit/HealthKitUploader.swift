@@ -23,7 +23,7 @@ protocol HealthKitSampleUploaderDelegate: class {
 
 // TODO: uploader - we should avoid using file based POSTs when in foreground (probably faster!? and simpler)
 
-class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
+class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, URLSessionDataDelegate {
     init(mode: HealthKitUploadReader.Mode, uploadType: HealthKitUploadType) {
         DDLogVerbose("type: \(uploadType.typeName), mode: \(mode.rawValue)")
         
@@ -175,7 +175,14 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
         if let response = task.response as? HTTPURLResponse {
             if !(200 ... 299 ~= response.statusCode) {
                 let message = "HTTP error on upload: \(response.statusCode)"
+                var responseMessage: String?
+                if let lastData = lastData  {
+                    responseMessage = String(data: lastData, encoding: .utf8)
+                }
                 DDLogError(message)
+                if let responseMessage = responseMessage {
+                    DDLogInfo("response message: \(responseMessage)")
+                }
                 httpError = NSError(domain: "HealthKitUploader", code: -2, userInfo: [NSLocalizedDescriptionKey: message])
             }
         }
@@ -202,6 +209,13 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
         self.setPendingUploadsState(uploadTaskIsPending: false)
         self.delegate?.sampleUploader(uploader: self, didCompleteUploadWithError: nil)
     }
+    
+    // Retain last upload response data for error message debugging...
+    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
+        lastData = data
+    }
+    var lastData: Data?
     
     func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
         DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")

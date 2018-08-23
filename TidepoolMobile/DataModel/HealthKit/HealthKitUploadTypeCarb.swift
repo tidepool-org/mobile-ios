@@ -50,6 +50,7 @@ class HealthKitUploadTypeCarb: HealthKitUploadType {
                 let unit = HKUnit(from: "g")
                 let value = quantitySample.quantity.doubleValue(for: unit)
                 DDLogInfo("carb value: \(String(describing: value))")
+                // service syntax check for carb net in optional nutrition field: [float64; required; 0.0 <= x <= 1000.0]
                 if value >= CarbohydrateNetGramsMinimum && value <= CarbohydrateNetGramsMaximum {
                     var nutrition = [String: AnyObject]()
                     let carbs = [
@@ -60,15 +61,17 @@ class HealthKitUploadTypeCarb: HealthKitUploadType {
                     sampleToUploadDict["nutrition"] = nutrition as AnyObject?
                 } else {
                     //TODO: log this some more obvious way?
-                    DDLogError("Carb sample with out-of-range value: \(value)")
+                    DDLogError("Carb sample with out-of-range value: \(value), skipping nutrition field!")
                 }
                 
                 // Add sample metadata payload props
                 if var metadata = sample.metadata {
                     if let foodType = metadata[HKMetadataKeyFoodType] as? String {
-                        // service has char length limit!
-                        sampleToUploadDict["name"] = foodType.prefix(NameLengthMaximum) as AnyObject
-                        metadata.removeValue(forKey: HKMetadataKeyFoodType)
+                        // service syntax for name: [string; optional; 0 < len <= 100]
+                        if !foodType.isEmpty {
+                            sampleToUploadDict["name"] = foodType.prefix(NameLengthMaximum) as AnyObject
+                            metadata.removeValue(forKey: HKMetadataKeyFoodType)
+                        }
                     }
                     // Add metadata values as the payload struct
                     addMetadata(&metadata, sampleToUploadDict: &sampleToUploadDict)

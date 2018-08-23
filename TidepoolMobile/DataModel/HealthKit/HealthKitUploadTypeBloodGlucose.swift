@@ -54,20 +54,25 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
         //DDLogInfo("blood glucose prepareDataForUpload")
         //let dateFormatter = DateFormatter()
         var samplesToUploadDictArray = [[String: AnyObject]]()
-        for sample in data.filteredSamples {
+        filterLoop: for sample in data.filteredSamples {
             var sampleToUploadDict = [String: AnyObject]()
             sampleToUploadDict["type"] = "cbg" as AnyObject?
             // Add fields common to all types: guid, deviceId, time, and origin
             super.addCommonFields(sampleToUploadDict: &sampleToUploadDict, sample: sample)
-
             if let quantitySample = sample as? HKQuantitySample {
                 let units = "mg/dL"
                 sampleToUploadDict["units"] = units as AnyObject?
                 let unit = HKUnit(from: units)
                 let value = quantitySample.quantity.doubleValue(for: unit)
+                // service syntax check: [required; 0 <= value <= 1000]
+                if value < 0 || value > 1000 {
+                    //TODO: log this some more obvious way?
+                    DDLogError("Blood glucose sample with out-of-range value: \(value)")
+                    continue filterLoop
+                }
                 sampleToUploadDict["value"] = value as AnyObject?
                 //DDLogInfo("blood glucose value: \(String(describing: value))")
-
+                
                 // Add out-of-range annotation if needed
                 var annotationCode: String?
                 var annotationValue: String?
@@ -92,21 +97,24 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
                     ]
                     sampleToUploadDict["annotations"] = annotations as AnyObject?
                 }
-            }
-            
-            // separate out receiver display time if it exists...
-            if var metadata = sample.metadata {
-                // If "HKWasUserEntered" exists and is true, change type to "smbg" and remove from metadata
-                if let wasUserEntered = metadata[HKMetadataKeyWasUserEntered] as? Bool {
-                    if wasUserEntered {
-                        sampleToUploadDict["type"] = "smbg" as AnyObject?
+                
+                
+                // separate out receiver display time if it exists...
+                if var metadata = sample.metadata {
+                    // If "HKWasUserEntered" exists and is true, change type to "smbg" and remove from metadata
+                    if let wasUserEntered = metadata[HKMetadataKeyWasUserEntered] as? Bool {
+                        if wasUserEntered {
+                            sampleToUploadDict["type"] = "smbg" as AnyObject?
+                        }
                     }
+                    // Add remaining metadata, if any, as payload struct
+                    addMetadata(&metadata, sampleToUploadDict: &sampleToUploadDict)
                 }
-                // Add remaining metadata, if any, as payload struct
-                addMetadata(&metadata, sampleToUploadDict: &sampleToUploadDict)
+                // Add sample
+                samplesToUploadDictArray.append(sampleToUploadDict)
+            } else {
+                DDLogError("Encountered HKSample that was not an HKQuantitySample!")
             }
-            // Add sample
-            samplesToUploadDictArray.append(sampleToUploadDict)
         }
         return samplesToUploadDictArray
     }

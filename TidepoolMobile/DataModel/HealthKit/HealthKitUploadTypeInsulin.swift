@@ -52,7 +52,7 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
         DDLogInfo("insulin prepareDataForUpload")
         var samplesToUploadDictArray = [[String: AnyObject]]()
-        for sample in data.filteredSamples {
+        filterLoop: for sample in data.filteredSamples {
             if let quantitySample = sample as? HKQuantitySample {
                 
                 var sampleToUploadDict = [String: AnyObject]()
@@ -61,46 +61,63 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                 if reason == nil {
                     //TODO: report as data error?
                     DDLogError("Skip insulin entry that has no reason!")
-                    continue
+                    continue filterLoop
                 }
-                let value = quantitySample.quantity.doubleValue(for: .internationalUnit()) as AnyObject?
-                
+                let value = quantitySample.quantity.doubleValue(for: .internationalUnit())
                 switch reason {
                 case HKInsulinDeliveryReasonBasal:
                     sampleToUploadDict["type"] = "basal" as AnyObject?
-                    sampleToUploadDict["rate"] = value
+                    // service syntax check: [required; 0.0 <= rate <= 20.0]
+                    if value < 0.0 || value > 20.0 {
+                        DDLogError("Skip basal insulin entry with out-of-range rate: \(value)")
+                        continue filterLoop
+                    }
+                    sampleToUploadDict["rate"] = value as AnyObject
                     DDLogInfo("insulin basal value = \(String(describing: value))")
                     sampleToUploadDict["deliveryType"] = "temp" as AnyObject?
                     let duration = sample.endDate.timeIntervalSince(sample.startDate)*1000 // convert to milliseconds
+                    // service syntax check: [required; 0 <= duration <= 86400000]
                     if duration <= 0 {
                         //TODO: report as data error?
                         DDLogError("Skip basal insulin entry with non-positive duration: \(duration)")
-                        continue
+                        continue filterLoop
+                    }
+                    if duration > 86400000 {
+                        DDLogError("Skip basal insulin entry with excessive duration: \(duration)")
+                        continue filterLoop
                     }
                     sampleToUploadDict["duration"] = Int(duration) as AnyObject
                     if let scheduledRate = sample.metadata?[MetadataKeyScheduledBasalRate] as? HKQuantity {
                         let unitsPerHour = HKUnit.internationalUnit().unitDivided(by: .hour())
                         if scheduledRate.is(compatibleWith: unitsPerHour) {
                             let scheduledRateValue = scheduledRate.doubleValue(for: unitsPerHour)
-                            let suppressed: [String : Any] = [
-                                "type": "basal",
-                                "deliveryType": "scheduled",
-                                "rate": scheduledRateValue
-                            ]
-                            sampleToUploadDict["suppressed"] = suppressed as AnyObject?
+                            // service syntax check: [required; 0.0 <= rate <= 20.0]
+                            if value >= 0.0 && value <= 20.0 {
+                                let suppressed: [String : Any] = [
+                                    "type": "basal",
+                                    "deliveryType": "scheduled",
+                                    "rate": scheduledRateValue
+                                ]
+                                sampleToUploadDict["suppressed"] = suppressed as AnyObject?
+                            }
                         }
                     }
 
                 case HKInsulinDeliveryReasonBolus:
+                    // service syntax check: [required; 0.0 <= normal <= 100.0]
+                    if value < 0.0 || value > 100.0 {
+                        DDLogError("Skip bolus insulin entry with out-of-range normal: \(value)")
+                        continue filterLoop
+                    }
                     sampleToUploadDict["type"] = "bolus" as AnyObject?
                     sampleToUploadDict["subType"] = "normal" as AnyObject?
-                    sampleToUploadDict["normal"] = value
+                    sampleToUploadDict["normal"] = value as AnyObject
                     DDLogInfo("insulin bolus value = \(String(describing: value))")
 
                 default:
                     //TODO: report as data error?
-                    DDLogError("Unknown key for insulin reason: \(String(describing: reason))")
-                    continue
+                    DDLogError("Skip insulin entry with unknown key for reason: \(String(describing: reason))")
+                    continue filterLoop
                 }
                 
                 // Add fields common to all types: guid, deviceId, time, and origin
