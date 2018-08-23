@@ -58,7 +58,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
         UserDefaults.standard.synchronize()
         
         DispatchQueue.main.async {
-            DDLogInfo("startUploadSessionTasks on main thread")
+            DDLogInfo("on main thread for type: \(self.typeString), mode: \(self.mode.rawValue)")
             
             // Choose the right session to start tasks with
             var uploadSession: URLSession?
@@ -85,7 +85,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
                     self.setPendingUploadsState(uploadTaskIsPending: true)
                     let uploadTask = uploadSession!.uploadTask(with: request, fromFile: batchSamplesPostBodyURL!)
                     uploadTask.taskDescription = self.prefixedLocalId(self.uploadSamplesTaskDescription)
-                    DDLogInfo("Created samples upload task: \(uploadTask.taskIdentifier)")
+                    DDLogInfo("Created samples upload task for type: \(self.typeString), mode: \(self.mode.rawValue): \(uploadTask.taskIdentifier)")
                     uploadTask.resume()
                     return
                 } catch {
@@ -119,7 +119,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
                 self.setPendingUploadsState(uploadTaskIsPending: true)
                 let deleteTask = session.uploadTask(with: deleteSamplesRequest, fromFile: deleteSamplesPostBodyURL)
                 deleteTask.taskDescription = self.prefixedLocalId(self.deleteSamplesTaskDescription)
-                DDLogInfo("Created samples delete task: \(deleteTask.taskIdentifier)")
+                DDLogInfo("Created samples delete task for type: \(self.typeString), mode: \(self.mode.rawValue): \(deleteTask.taskIdentifier)")
                 deleteTask.resume()
                 return true
            } catch {
@@ -144,7 +144,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
             }
             for uploadSession in uploadSessions {
                 uploadSession.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) -> Void in
-                    DDLogInfo("Canceling \(uploadTasks.count) tasks")
+                    DDLogInfo("Canceling \(uploadTasks.count) tasks for type: \(self.typeString), mode: \(self.mode.rawValue)")
                     if uploadTasks.count > 0 {
                         for uploadTask in uploadTasks {
                             DDLogInfo("Canceling task: \(uploadTask.taskIdentifier)")
@@ -321,11 +321,11 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     fileprivate var backgroundUploadSession: URLSession?
     
     // use the following with prefixedLocalId to create ids unique to mode and upload type...
-    fileprivate let backgroundUploadSessionIdentifier = "uploadSessionId"
-    fileprivate let uploadSamplesTaskDescription = "upload samples"
-    fileprivate let deleteSamplesTaskDescription = "delete samples"
+    fileprivate let backgroundUploadSessionIdentifier = "UploadSessionId"
+    fileprivate let uploadSamplesTaskDescription = "Upload samples"
+    fileprivate let deleteSamplesTaskDescription = "Delete samples"
     // nil if no deletes for this type, otherwise the file url for the delete body...
-    fileprivate let deleteSamplesDataUrlKey = "deleteSamplesDataUrl"
+    fileprivate let deleteSamplesDataUrlKey = "DeleteSamplesDataUrl"
  
     fileprivate func prefixedLocalId(_ key: String) -> String {
         return "\(self.mode)-\(self.typeString)\(key)"
