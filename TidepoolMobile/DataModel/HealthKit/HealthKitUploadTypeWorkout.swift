@@ -79,12 +79,18 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
                 }
                 
                 if let energyBurned = workout.totalEnergyBurned?.doubleValue(for: HKUnit.largeCalorie()) {
-                    // service syntax for optional energy value: [float64; required]
-                    let energy = [
-                        "units": "kilocalories",
-                        "value": energyBurned
-                    ] as [String : Any]
-                    sampleToUploadDict["energy"] = energy as AnyObject
+                    // service syntax for optional energy value: [float64; required]. Also, between 0 and 10000
+                    let kEnergyValueKilocaloriesMaximum = 10000.0
+                    let kEnergyValueKilocaloriesMinimum = 0.0
+                    if energyBurned < kEnergyValueKilocaloriesMinimum || energyBurned > kEnergyValueKilocaloriesMaximum {
+                        DDLogError("Workout sample with out-of-range energy: \(energyBurned) kcal, skipping energy field!")
+                    } else {
+                        let energy = [
+                            "units": "kilocalories",
+                            "value": energyBurned
+                            ] as [String : Any]
+                        sampleToUploadDict["energy"] = energy as AnyObject
+                    }
                 }
                 
                 // Default name format: "Run - 4.2 miles"
