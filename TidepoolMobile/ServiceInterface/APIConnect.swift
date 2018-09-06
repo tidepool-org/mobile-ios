@@ -79,7 +79,7 @@ class APIConnector {
             return _sessionToken
         }
     }
-    
+        
     // Dictionary of servers and their base URLs
     let kServers = [
         "Development" :  "https://dev-api.tidepool.org",
@@ -94,7 +94,7 @@ class APIConnector {
         //"Production"
     ]
     //fileprivate let kDefaultServerName = "Production"
-    fileprivate let kDefaultServerName = "Staging"
+    fileprivate let kDefaultServerName = "Integration"
 
     fileprivate var _currentService: String?
     var currentService: String? {
@@ -114,7 +114,10 @@ class APIConnector {
         get {
             if _currentService == nil {
                 if let service = UserDefaults.standard.string(forKey: kCurrentServiceDefaultKey) {
-                    _currentService = service
+                    // don't set a service this build does not support
+                    if kServers[service] != nil {
+                        _currentService = service
+                    }
                 }
             }
             if _currentService == nil || kServers[_currentService!] == nil {
@@ -348,7 +351,7 @@ class APIConnector {
         let endpoint = "v1/users/" + userId + "/data_sets"
 
         let clientDict = ["name": "org.tidepool.mobile", "version": "1.2.3"]
-        let deduplicatorDict = ["name": "org.tidepool.continuous.origin"]
+        let deduplicatorDict = ["name": "org.tidepool.deduplicator.dataset.delete.origin"]
         let headerDict = ["Content-Type":"application/json"]
         let jsonObject = ["client":clientDict, "dataSetType":"continuous", "deduplicator":deduplicatorDict] as [String : Any]
         let body: Data?

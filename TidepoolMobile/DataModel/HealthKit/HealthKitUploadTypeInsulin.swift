@@ -67,26 +67,30 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                 switch reason {
                 case HKInsulinDeliveryReasonBasal:
                     sampleToUploadDict["type"] = "basal" as AnyObject?
-                    // service syntax check: [required; 0.0 <= rate <= 20.0]
-                    if value < 0.0 || value > 20.0 {
-                        DDLogError("Skip basal insulin entry with out-of-range rate: \(value)")
+                    let seconds = sample.endDate.timeIntervalSince(sample.startDate) // duration in seconds
+                    let durationInMS = seconds*1000 // convert to milliseconds
+                    // service syntax check: [required; 0 <= duration <= 86400000]
+                    if durationInMS <= 0 {
+                        //TODO: report as data error?
+                        DDLogError("Skip basal insulin entry with non-positive duration: \(durationInMS)")
                         continue filterLoop
                     }
-                    sampleToUploadDict["rate"] = value as AnyObject
+                    if durationInMS > 86400000 {
+                        DDLogError("Skip basal insulin entry with excessive duration: \(durationInMS)")
+                        continue filterLoop
+                    }
+                    sampleToUploadDict["duration"] = Int(durationInMS) as AnyObject
+ 
+                    let hours = seconds/3600.0
+                    let rate = value/hours
+                    // service syntax check: [required; 0.0 <= rate <= 20.0]
+                    if rate < 0.0 || rate > 20.0 {
+                        DDLogError("Skip basal insulin entry with out-of-range rate: \(rate)")
+                        continue filterLoop
+                    }
+                    sampleToUploadDict["rate"] = rate as AnyObject
                     DDLogInfo("insulin basal value = \(String(describing: value))")
                     sampleToUploadDict["deliveryType"] = "temp" as AnyObject?
-                    let duration = sample.endDate.timeIntervalSince(sample.startDate)*1000 // convert to milliseconds
-                    // service syntax check: [required; 0 <= duration <= 86400000]
-                    if duration <= 0 {
-                        //TODO: report as data error?
-                        DDLogError("Skip basal insulin entry with non-positive duration: \(duration)")
-                        continue filterLoop
-                    }
-                    if duration > 86400000 {
-                        DDLogError("Skip basal insulin entry with excessive duration: \(duration)")
-                        continue filterLoop
-                    }
-                    sampleToUploadDict["duration"] = Int(duration) as AnyObject
                     if let scheduledRate = sample.metadata?[MetadataKeyScheduledBasalRate] as? HKQuantity {
                         let unitsPerHour = HKUnit.internationalUnit().unitDivided(by: .hour())
                         if scheduledRate.is(compatibleWith: unitsPerHour) {

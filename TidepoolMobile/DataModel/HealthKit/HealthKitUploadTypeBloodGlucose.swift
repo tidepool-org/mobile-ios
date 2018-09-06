@@ -55,11 +55,11 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
         //let dateFormatter = DateFormatter()
         var samplesToUploadDictArray = [[String: AnyObject]]()
         filterLoop: for sample in data.filteredSamples {
-            var sampleToUploadDict = [String: AnyObject]()
-            sampleToUploadDict["type"] = "cbg" as AnyObject?
-            // Add fields common to all types: guid, deviceId, time, and origin
-            super.addCommonFields(sampleToUploadDict: &sampleToUploadDict, sample: sample)
             if let quantitySample = sample as? HKQuantitySample {
+                var sampleToUploadDict = [String: AnyObject]()
+                sampleToUploadDict["type"] = "cbg" as AnyObject?
+                // Add fields common to all types: guid, deviceId, time, and origin
+                super.addCommonFields(sampleToUploadDict: &sampleToUploadDict, sample: sample)
                 let units = "mg/dL"
                 sampleToUploadDict["units"] = units as AnyObject?
                 let unit = HKUnit(from: units)
