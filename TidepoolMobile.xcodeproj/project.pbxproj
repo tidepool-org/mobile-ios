@@ -372,7 +372,7 @@
 			containerPortal = 4859FCAD1B9A4DE4000C1269 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 4859FCB41B9A4DE4000C1269;
-			remoteInfo = Nutshell;
+			remoteInfo = TidepoolMobile;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1076,7 +1076,7 @@
 			dependencies = (
 			);
 			name = TidepoolMobile;
-			productName = Nutshell;
+			productName = TidepoolMobile;
 			productReference = 4859FCB51B9A4DE4000C1269 /* TidepoolMobile.app */;
 			productType = "com.apple.product-type.application";
 		};
