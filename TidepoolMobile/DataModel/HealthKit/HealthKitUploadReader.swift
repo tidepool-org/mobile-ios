@@ -142,7 +142,7 @@ class HealthKitUploadReader: NSObject {
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictStartDate, .strictEndDate])
         
         // Read samples from anchor
-        HealthKitManager.sharedInstance.readSamplesFromAnchorForType(self.uploadType, predicate: predicate, anchor: anchor, limit: 2000, resultsHandler: self.samplesReadResultsHandler)
+        HealthKitManager.sharedInstance.readSamplesFromAnchorForType(self.uploadType, predicate: predicate, anchor: anchor, limit: 500, resultsHandler: self.samplesReadResultsHandler)
     }
     
     // MARK: Private
