@@ -72,7 +72,7 @@ class HealthKitUploadStats: NSObject {
     }
 
     func updateForUploadAttempt(sampleCount: Int, uploadAttemptTime: Date, earliestSampleTime: Date, latestSampleTime: Date) {
-        DDLogInfo("Attempting to upload: \(sampleCount) samples, at: \(uploadAttemptTime), with latest sample time: \(latestSampleTime), mode: \(self.mode), type: \(self.uploadTypeName)")
+        DDLogInfo("Attempting to upload: \(sampleCount) samples, at: \(uploadAttemptTime), with earliest sample time: \(earliestSampleTime), with latest sample time: \(latestSampleTime), mode: \(self.mode), type: \(self.uploadTypeName)")
         
         self.lastUploadAttemptTime = uploadAttemptTime
         self.lastUploadAttemptSampleCount = sampleCount
