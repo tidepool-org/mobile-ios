@@ -22,7 +22,6 @@ class HealthKitSettings {
     // Authorization
     static let AuthorizationRequestedForUploaderSamplesKey = "authorizationRequestedForUploaderSamples"
     static let AuthorizationRequestedForBloodGlucoseSampleWritesKey = "authorizationRequestedForBloodGlucoseSampleWrites"
-    static let AuthorizationRequestedForWorkoutSamplesKey = "authorizationRequestedForWorkoutSamples"
     
     // Workout anchor query
     static let WorkoutQueryAnchorKey = "WorkoutQueryAnchorKey"

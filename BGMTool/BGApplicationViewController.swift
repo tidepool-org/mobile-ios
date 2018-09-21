@@ -120,7 +120,7 @@ class BGApplicationViewController: UIViewController, CentralControllerDelegate {
     private func configureHKInterface() {
         hkEnabled = appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
         if !hkEnabled {
-            HealthKitManager.sharedInstance.authorize(shouldAuthorizeUploaderReads: true, shouldAuthorizeBloodGlucoseSampleWrites: true, shouldAuthorizeWorkoutSamples: false) {
+            HealthKitManager.sharedInstance.authorize(shouldAuthorizeUploaderSampleReads: true, shouldAuthorizeBloodGlucoseSampleWrites: true) {
                 success, error -> Void in
                 DispatchQueue.main.async(execute: {
                     if (error == nil) {

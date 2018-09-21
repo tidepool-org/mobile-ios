@@ -41,11 +41,7 @@ class HealthKitManager {
         return UserDefaults.standard.bool(forKey: HealthKitSettings.AuthorizationRequestedForBloodGlucoseSampleWritesKey)
     }
     
-    func authorizationRequestedForWorkoutSamples() -> Bool {
-        return UserDefaults.standard.bool(forKey: HealthKitSettings.AuthorizationRequestedForWorkoutSamplesKey)
-    }
-    
-    func authorize(shouldAuthorizeUploaderSampleReads: Bool, shouldAuthorizeBloodGlucoseSampleWrites: Bool, shouldAuthorizeWorkoutSamples: Bool, completion: @escaping (_ success:Bool, _ error:NSError?) -> Void = {(_, _) in })
+    func authorize(shouldAuthorizeUploaderSampleReads: Bool, shouldAuthorizeBloodGlucoseSampleWrites: Bool, completion: @escaping (_ success:Bool, _ error:NSError?) -> Void = {(_, _) in })
     {
         DDLogVerbose("trace")
         
@@ -168,7 +164,7 @@ class HealthKitManager {
                     success, error -> Void in
                     if error == nil {
                         uploadType.sampleBackgroundDeliveryEnabled = true
-                        DDLogError("Enabled background delivery of health data")
+                        DDLogInfo("Enabled background delivery of health data")
                     } else {
                         DDLogError("Error enabling background delivery of health data \(String(describing: error))")
                     }

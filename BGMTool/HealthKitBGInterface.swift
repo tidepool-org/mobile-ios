@@ -42,10 +42,10 @@ class HealthKitBGInterface: NSObject {
     func checkInterfaceEnabled() -> Bool {
         let hkManager = HealthKitManager.sharedInstance
         let hkCurrentEnable = hkManager.isHealthDataAvailable &&
-        hkManager.authorizationRequestedForBloodGlucoseSamples() && hkManager.authorizationRequestedForBloodGlucoseSampleWrites()
+        hkManager.authorizationRequestedForUploaderSamples() && hkManager.authorizationRequestedForBloodGlucoseSampleWrites()
         if !hkCurrentEnable {
             // first time download is attempted, need user authorization
-            HealthKitManager.sharedInstance.authorize(shouldAuthorizeUploaderReads: true, shouldAuthorizeBloodGlucoseSampleWrites: true, shouldAuthorizeWorkoutSamples: false) {
+            HealthKitManager.sharedInstance.authorize(shouldAuthorizeUploaderSampleReads: true, shouldAuthorizeBloodGlucoseSampleWrites: true) {
                 success, error -> Void in
                 
                 if (error == nil) {

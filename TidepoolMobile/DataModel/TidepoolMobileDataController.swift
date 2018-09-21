@@ -292,7 +292,7 @@ class TidepoolMobileDataController: NSObject
     /// Note: This sets the current tidepool user as the HealthKit user!
     func enableHealthKitInterface() {
         // Note: change if workout data is needed!
-        appHealthKitConfiguration.enableHealthKitInterface(currentUserName, userid: currentUserId, isDSAUser: isDSAUser, needsUploaderReads: true, needsGlucoseWrites: false, needsWorkoutReads: false)
+        appHealthKitConfiguration.enableHealthKitInterface(currentUserName, userid: currentUserId, isDSAUser: isDSAUser, needsUploaderReads: true, needsGlucoseWrites: false)
     }
     
     /// Disables HealthKit for current user

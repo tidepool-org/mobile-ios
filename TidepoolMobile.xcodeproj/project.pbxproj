@@ -462,6 +462,7 @@
 		483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewController.swift; path = ViewControllers/BaseUITableViewController.swift; sourceTree = "<group>"; };
 		4841BB6D1EC6326E007FBCEB /* TPConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TPConstants.swift; path = Resources/TPConstants.swift; sourceTree = "<group>"; };
 		484365D81CA1118A0046A2C5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Menu.storyboard; sourceTree = "<group>"; };
+		484CACA72154A14C008FF3C8 /* BGMTool-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "BGMTool-Bridging-Header.h"; path = "TidepoolMobile/BGMTool-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		48501BEF1C1FC5EC00A7ADA8 /* EventListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventListViewController.swift; path = ViewControllers/EventListViewController.swift; sourceTree = "<group>"; };
 		4851C6911BA6281800F8E0EE /* TidepoolMobileUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = TidepoolMobileUIView.swift; path = Resources/TidepoolMobileUIView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4851C6931BA628A500F8E0EE /* UIDesignNotes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = UIDesignNotes.rtf; path = Resources/UIDesignNotes.rtf; sourceTree = "<group>"; };
@@ -693,6 +694,7 @@
 		4823986F2022628300EBB13C /* BGMTool */ = {
 			isa = PBXGroup;
 			children = (
+				484CACA72154A14C008FF3C8 /* BGMTool-Bridging-Header.h */,
 				48B8C9352024E47C00437263 /* BGMTool.entitlements */,
 				482398862022650300EBB13C /* ToolSettings.swift */,
 				482398702022628300EBB13C /* AppDelegate.swift */,

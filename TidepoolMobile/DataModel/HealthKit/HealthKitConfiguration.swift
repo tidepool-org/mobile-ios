@@ -104,7 +104,7 @@ class HealthKitConfiguration
     /// Enables HealthKit for current user
     ///
     /// Note: This sets the current tidepool user as the HealthKit user!
-    func enableHealthKitInterface(_ username: String?, userid: String?, isDSAUser: Bool?, needsUploaderReads: Bool, needsGlucoseWrites: Bool, needsWorkoutReads: Bool) {
+    func enableHealthKitInterface(_ username: String?, userid: String?, isDSAUser: Bool?, needsUploaderReads: Bool, needsGlucoseWrites: Bool) {
         DDLogVerbose("trace")
  
         currentUserId = userid
@@ -132,7 +132,7 @@ class HealthKitConfiguration
             UserDefaults.standard.synchronize()
         }
         
-        HealthKitManager.sharedInstance.authorize(shouldAuthorizeUploaderSampleReads: needsUploaderReads, shouldAuthorizeBloodGlucoseSampleWrites: needsGlucoseWrites, shouldAuthorizeWorkoutSamples: needsWorkoutReads) {
+        HealthKitManager.sharedInstance.authorize(shouldAuthorizeUploaderSampleReads: needsUploaderReads, shouldAuthorizeBloodGlucoseSampleWrites: needsGlucoseWrites) {
             success, error -> Void in
             
             DDLogVerbose("trace")

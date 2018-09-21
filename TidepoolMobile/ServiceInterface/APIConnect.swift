@@ -333,7 +333,7 @@ class APIConnector {
                 // TEST: force failure...
                 //completion("")
             } else {
-                DDLogInfo("Fetch of existing dataset failed!")
+                DDLogError("Fetch of existing dataset failed!")
                 // return nil to signal failure
                 completion(nil)
             }
@@ -866,7 +866,7 @@ class APIConnector {
                     
                     fetchWatcher.addNotes(notes)
                 } else if (httpResponse.statusCode == 404) {
-                    DDLogError("No notes retrieved, status code: \(httpResponse.statusCode), userid: \(userid)")
+                    DDLogInfo("No notes retrieved, status code: \(httpResponse.statusCode), userid: \(userid)")
                 } else {
                     DDLogError("No notes retrieved - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
