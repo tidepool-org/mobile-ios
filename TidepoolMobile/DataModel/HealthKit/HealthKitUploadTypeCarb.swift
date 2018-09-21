@@ -60,7 +60,7 @@ class HealthKitUploadTypeCarb: HealthKitUploadType {
                     nutrition["carbohydrate"] = carbs as AnyObject?
                     sampleToUploadDict["nutrition"] = nutrition as AnyObject?
                 } else {
-                    //TODO: log this some more obvious way?
+                    //TODO: log this some more obvious way? Should entire sample be skipped?
                     DDLogError("Carb sample with out-of-range value: \(value), skipping nutrition field!")
                 }
                 

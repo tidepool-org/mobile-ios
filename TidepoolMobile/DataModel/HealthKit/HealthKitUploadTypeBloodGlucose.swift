@@ -58,6 +58,7 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
             if let quantitySample = sample as? HKQuantitySample {
                 var sampleToUploadDict = [String: AnyObject]()
                 sampleToUploadDict["type"] = "cbg" as AnyObject?
+ 
                 // Add fields common to all types: guid, deviceId, time, and origin
                 super.addCommonFields(sampleToUploadDict: &sampleToUploadDict, sample: sample)
                 let units = "mg/dL"
@@ -73,33 +74,6 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
                 sampleToUploadDict["value"] = value as AnyObject?
                 //DDLogInfo("blood glucose value: \(String(describing: value))")
                 
-                // Add out-of-range annotation if needed
-                var annotationCode: String?
-                var annotationValue: String?
-                var annotationThreshold = 0
-                if (value < 40) {
-                    annotationCode = "bg/out-of-range"
-                    annotationValue = "low"
-                    annotationThreshold = 40
-                } else if (value > 400) {
-                    annotationCode = "bg/out-of-range"
-                    annotationValue = "high"
-                    annotationThreshold = 400
-                }
-                if let annotationCode = annotationCode,
-                    let annotationValue = annotationValue {
-                    let annotations = [
-                        [
-                            "code": annotationCode,
-                            "value": annotationValue,
-                            "threshold": annotationThreshold
-                        ]
-                    ]
-                    sampleToUploadDict["annotations"] = annotations as AnyObject?
-                }
-                
-                
-                // separate out receiver display time if it exists...
                 if var metadata = sample.metadata {
                     // If "HKWasUserEntered" exists and is true, change type to "smbg" and remove from metadata
                     if let wasUserEntered = metadata[HKMetadataKeyWasUserEntered] as? Bool {
@@ -110,6 +84,7 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
                     // Add remaining metadata, if any, as payload struct
                     addMetadata(&metadata, sampleToUploadDict: &sampleToUploadDict)
                 }
+                
                 // Add sample
                 samplesToUploadDictArray.append(sampleToUploadDict)
             } else {

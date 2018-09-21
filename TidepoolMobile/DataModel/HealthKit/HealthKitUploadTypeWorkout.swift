@@ -67,7 +67,7 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
                     let miles = totalDistance.doubleValue(for: HKUnit.mile())
                     floatMiles = Float(miles)
                     // service syntax for optional distance value: [float64; required; 0 <= x <= 100 miles in appropriate units]
-                    if miles > 0.0 && miles < 100.0 {
+                    if miles >= 0.0 && miles <= 100.0 {
                         let distance = [
                             "units": "miles",
                             "value": miles
