@@ -107,7 +107,7 @@ class HealthKitBGInterface: NSObject {
     
     /// Step 1. Kick off a sync if current HealthKit user is logged in, a sync process is not already running, and enough time has elapsed since the last sync.
     ///
-    /// Starts an async load of data from the Tidepool service, and on completion continues the sync process by calling fetchLatestCachedData. Note that all Tidepool data is downloaded, not just the blood glucose samples, so this also serves to refresh the local database cache of Tidepool items for the application.
+    /// Starts an async load of data from the Tidepool service, and on completion continues the sync process by calling fetchLatestCachedData.
     ///
     /// Completion is called with: -1 on errors, 0 if no data was pushed, or positive count of new items sent to HealthKit.
     fileprivate func downloadNewItemsForHealthKit(fromDate: Date, toDate: Date, verifyOnly: Bool = false, _ completion: @escaping (Int) -> Void) {

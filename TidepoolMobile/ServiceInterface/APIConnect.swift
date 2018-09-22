@@ -79,7 +79,7 @@ class APIConnector {
             return _sessionToken
         }
     }
-        
+    
     // Dictionary of servers and their base URLs
     let kServers = [
         "Development" :  "https://dev-api.tidepool.org",
@@ -618,14 +618,6 @@ class APIConnector {
         }
     }
     
-    
-
-    func clearSessionToken() -> Void {
-        UserDefaults.standard.removeObject(forKey: kSessionTokenDefaultKey)
-        UserDefaults.standard.synchronize()
-        sessionToken = nil
-    }
-
     // MARK: - Internal methods
     
     // User-agent string, based on that from Alamofire, but common regardless of whether Alamofire library is used

@@ -64,19 +64,20 @@ class HealthKitConfiguration
         
         if interfaceEnabled {
             DDLogInfo("enable!")
-            self.turnOnInterface()
+            APIConnector.connector().configureUploadId() {
+                let dataCtl = TidepoolMobileDataController.sharedInstance
+                if dataCtl.currentUploadId != nil {
+                    self.turnOnInterface()
+                }
+            }
         } else {
             DDLogInfo("disable!")
             self.turnOffInterface()
         }
     }
 
-    //
-    // MARK: - Overrides to configure!
-    //
-
-    // Override for specific HealthKit interface enabling/disabling
-    func turnOnInterface() {
+    /// Turn on HK interface: start/resume uploading if possible...
+    private func turnOnInterface() {
         DDLogVerbose("trace")
 
         if self.currentUserId != nil {
@@ -91,7 +92,7 @@ class HealthKitConfiguration
         }
     }
 
-    func turnOffInterface() {
+    private func turnOffInterface() {
         DDLogVerbose("trace")
 
         HealthKitUploadManager.sharedInstance.stopUploading(reason: HealthKitUploadReader.StoppedReason.turnOffInterface)

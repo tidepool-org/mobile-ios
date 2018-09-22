@@ -526,19 +526,17 @@ class HealthKitUploadManager:
             return
         }
 
-        APIConnector.connector().configureUploadId() {
-            let dataCtl = TidepoolMobileDataController.sharedInstance
-            if dataCtl.currentUploadId != nil {
-                // first drain any pending timezone change events, then resume HK uploads...
-                dataCtl.checkForTimezoneChange()
-                dataCtl.postTimezoneEventChanges() {
-                    for helper in self.uploadHelpers {
-                        helper.startUploading(mode: mode, currentUserId: currentUserId)
-                    }
+        let dataCtl = TidepoolMobileDataController.sharedInstance
+        if dataCtl.currentUploadId != nil {
+            // first drain any pending timezone change events, then resume HK uploads...
+            dataCtl.checkForTimezoneChange()
+            dataCtl.postTimezoneEventChanges() {
+                for helper in self.uploadHelpers {
+                    helper.startUploading(mode: mode, currentUserId: currentUserId)
                 }
-            } else {
-                DDLogError("Unable to startUploading - no currentUploadId available!")
             }
+        } else {
+            DDLogError("Unable to startUploading - no currentUploadId available!")
         }
         
     }
@@ -559,19 +557,14 @@ class HealthKitUploadManager:
 
     func resumeUploadingIfResumable(currentUserId: String?) {
         DDLogVerbose("trace")
-        for helper in uploadHelpers {
-            helper.resumeUploadingIfResumable(currentUserId: currentUserId)
+        let dataCtl = TidepoolMobileDataController.sharedInstance
+        if dataCtl.currentUploadId != nil {
+            for helper in uploadHelpers {
+                helper.resumeUploadingIfResumable(currentUserId: currentUserId)
+            }
+        } else {
+            DDLogError("Unable to resumeUploading - no currentUploadId available!")
         }
     }
-
-    func resumeUploadingIfResumable(mode: HealthKitUploadReader.Mode, currentUserId: String?) {
-        DDLogVerbose("mode: \(mode.rawValue)")
-
-        for helper in uploadHelpers {
-            helper.resumeUploadingIfResumable(mode: mode, currentUserId: currentUserId)
-        }
-
-    }
-    
     
 }
