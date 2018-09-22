@@ -104,11 +104,16 @@ class TidepoolMobileDataController: NSObject
             if let user = self.currentUser {
                 if let uploadId = user.uploadId {
                     return uploadId
+                } else if let uploadId = UserDefaults.standard.string(forKey: HealthKitSettings.HKDataUploadIdKey) {
+                    // restore from persisted value if possible!
+                    user.uploadId = uploadId
+                    return uploadId
                 }
             }
             return nil
         }
         set {
+            UserDefaults.standard.setValue(newValue, forKey: HealthKitSettings.HKDataUploadIdKey)
             if let user = self.currentUser {
                 user.uploadId = newValue
             }
@@ -205,6 +210,7 @@ class TidepoolMobileDataController: NSObject
     func logoutUser() {
         self.deleteAnyTidepoolData()
         self.deleteSavedCurrentViewedUserId()
+        self.currentUploadId = nil
         self.currentUser = nil
         _currentUserId = nil
         _currentLoggedInUser = nil
@@ -300,6 +306,8 @@ class TidepoolMobileDataController: NSObject
     /// Note: This does not NOT clear the current HealthKit user!
     func disableHealthKitInterface() {
         appHealthKitConfiguration.disableHealthKitInterface()
+        // clear uploadId to be safe... also for logout.
+        self.currentUploadId = nil
     }
 
     //

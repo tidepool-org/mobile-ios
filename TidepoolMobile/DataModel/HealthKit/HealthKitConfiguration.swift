@@ -64,17 +64,30 @@ class HealthKitConfiguration
         
         if interfaceEnabled {
             DDLogInfo("enable!")
+            if turningOnHKInterface {
+                DDLogError("Ignoring turn on HK interface, already in progress!")
+                return
+            }
+            // set flag to prevent reentrancy!
+            turningOnHKInterface = true
             APIConnector.connector().configureUploadId() {
-                let dataCtl = TidepoolMobileDataController.sharedInstance
-                if dataCtl.currentUploadId != nil {
-                    self.turnOnInterface()
+                // if we are still turing on the HK interface after fetch of upload id, continue!
+                if self.turningOnHKInterface {
+                    let dataCtl = TidepoolMobileDataController.sharedInstance
+                    if dataCtl.currentUploadId != nil {
+                        self.turnOnInterface()
+                    }
+                    self.turningOnHKInterface = false
                 }
             }
         } else {
             DDLogInfo("disable!")
+            turningOnHKInterface = false
             self.turnOffInterface()
         }
     }
+    // flag to prevent reentry as part of this method may finish asynchronously...
+    private var turningOnHKInterface = false
 
     /// Turn on HK interface: start/resume uploading if possible...
     private func turnOnInterface() {
@@ -107,10 +120,10 @@ class HealthKitConfiguration
     /// Note: This sets the current tidepool user as the HealthKit user!
     func enableHealthKitInterface(_ username: String?, userid: String?, isDSAUser: Bool?, needsUploaderReads: Bool, needsGlucoseWrites: Bool) {
         DDLogVerbose("trace")
- 
+        
         currentUserId = userid
         self.isDSAUser = isDSAUser
-
+        
         guard let _ = currentUserId else {
             DDLogError("No logged in user at enableHealthKitInterface!")
             return
@@ -118,7 +131,7 @@ class HealthKitConfiguration
         
         func configureCurrentHealthKitUser() {
             DDLogVerbose("trace")
-
+            
             let defaults = UserDefaults.standard
             defaults.set(true, forKey: HealthKitSettings.InterfaceEnabledKey)
             if !self.healthKitInterfaceEnabledForCurrentUser() {
@@ -126,11 +139,12 @@ class HealthKitConfiguration
                     // Switching healthkit users, reset HealthKitUploadManager
                     HealthKitUploadManager.sharedInstance.resetPersistentState(switchingHealthKitUsers: true)
                 }
+                // force refetch of upload id because it may have changed for the new user...
+                TidepoolMobileDataController.sharedInstance.currentUploadId = nil
                 defaults.setValue(currentUserId!, forKey: HealthKitSettings.InterfaceUserIdKey)
                 // may be nil...
                 defaults.setValue(username, forKey: HealthKitSettings.InterfaceUserNameKey)
             }
-            UserDefaults.standard.synchronize()
         }
         
         HealthKitManager.sharedInstance.authorize(shouldAuthorizeUploaderSampleReads: needsUploaderReads, shouldAuthorizeBloodGlucoseSampleWrites: needsGlucoseWrites) {
@@ -156,7 +170,6 @@ class HealthKitConfiguration
         DDLogVerbose("trace")
 
         UserDefaults.standard.set(false, forKey: HealthKitSettings.InterfaceEnabledKey)
-        UserDefaults.standard.synchronize()
         configureHealthKitInterface(self.currentUserId, isDSAUser: self.isDSAUser)
     }
     
@@ -200,7 +213,7 @@ class HealthKitConfiguration
         let result = UserDefaults.standard.string(forKey: HealthKitSettings.InterfaceUserIdKey)
         return result
     }
-    
+
     /// If HealthKit interface is enabled, returns associated Tidepool account id
     func healthKitUserTidepoolUsername() -> String? {
         let result = UserDefaults.standard.string(forKey: HealthKitSettings.InterfaceUserNameKey)

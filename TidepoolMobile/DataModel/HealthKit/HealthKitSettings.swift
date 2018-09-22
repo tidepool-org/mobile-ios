@@ -18,7 +18,8 @@ class HealthKitSettings {
     static let InterfaceEnabledKey = "kHealthKitInterfaceEnabledKey"
     static let InterfaceUserIdKey = "kUserIdForHealthKitInterfaceKey"
     static let InterfaceUserNameKey = "kUserNameForHealthKitInterfaceKey"
-    
+    static let HKDataUploadIdKey = "kHKDataUploadIdKey"
+
     // Authorization
     static let AuthorizationRequestedForUploaderSamplesKey = "authorizationRequestedForUploaderSamples"
     static let AuthorizationRequestedForBloodGlucoseSampleWritesKey = "authorizationRequestedForBloodGlucoseSampleWrites"
