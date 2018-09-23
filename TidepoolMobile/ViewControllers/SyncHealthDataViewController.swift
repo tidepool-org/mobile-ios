@@ -277,7 +277,7 @@ class SyncHealthDataViewController: UIViewController {
         let textHighliteColor = UIColor(red: 40.0 / 255.0, green: 25.0 / 255.0, blue: 70.0 / 255.0, alpha: 1.0)
         
         if isInitialSync {
-            let attributedString = NSMutableAttributedString(string: "In order to see your Blood Glucose data in Tidepool and Tidepool Mobile, we need to sync your Health data.\n\nWe suggest syncing the past 2 weeks now (roughly 1 min to sync).\n\nYou can also sync all Blood Glucose data immediately (may take more than an hour to sync).", attributes: [
+            let attributedString = NSMutableAttributedString(string: "In order to see your diabetes data in Tidepool and Tidepool Mobile, we need to sync your Health data.\n\nWe suggest syncing the past 2 weeks now (roughly 1 min to sync).\n\nYou can also sync all diabetes data immediately (may take more than an hour to sync).", attributes: [
                 NSAttributedStringKey.font: regFont,
                 NSAttributedStringKey.foregroundColor: textColor,
                 NSAttributedStringKey.kern: -0.2

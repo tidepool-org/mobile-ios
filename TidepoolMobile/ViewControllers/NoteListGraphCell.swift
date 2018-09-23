@@ -103,24 +103,24 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     
     let kDataDelay: TimeInterval = (60*60*3)    // 3 hours
     func configureNoData() {
-        var dataIsComing = false
-        if appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser() {
-            if let note = note {
-                let passedTime = note.createdtime.timeIntervalSinceNow
-                if passedTime > -kDataDelay {
-                    dataIsComing = true
-                }
-            }
-        }
-        if dataIsComing {
-            dataIsComingLabel.isHidden = false
-            howToUploadButton.isHidden = true
-            noDataLabel.isHidden = true
-       } else {
+//        var dataIsComing = false
+//        if appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser() {
+//            if let note = note {
+//                let passedTime = note.timestamp.timeIntervalSinceNow
+//                if passedTime > -kDataDelay {
+//                    dataIsComing = true
+//                }
+//            }
+//        }
+//        if dataIsComing {
+//            dataIsComingLabel.isHidden = false
+//            howToUploadButton.isHidden = true
+//            noDataLabel.isHidden = true
+//       } else {
             dataIsComingLabel.isHidden = true
             howToUploadButton.isHidden = false
             noDataLabel.isHidden = false
-        }
+//        }
     }
     
     func hideNoDataViews(_ hide: Bool) {

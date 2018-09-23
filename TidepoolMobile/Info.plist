@@ -27,9 +27,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Tidepool reads Dexcom glucose data from HealthKit so you can view that data in Tidepool apps and other apps that connect to your Tidepool account.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>Tidepool writes glucose data to HealthKit so you can view data you‘ve uploaded to Tidepool using other apps on your iPhone.</string>
+	<string>Tidepool reads diabetes data (blood glucose, insulin, nutrition) from Health so you can view that data in Tidepool.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>OpenSans-Bold.ttf</string>
