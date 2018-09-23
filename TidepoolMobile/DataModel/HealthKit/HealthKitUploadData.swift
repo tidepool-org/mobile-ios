@@ -46,7 +46,7 @@ class HealthKitUploadData: NSObject {
     private(set) var newOrDeletedSamplesWereDelivered = false
     private(set) var deletedSamples = [HKDeletedObject]()
     
-    func updateSamples(samples: [HKSample]) {
+    private func updateSamples(samples: [HKSample]) {
         DDLogVerbose("type: \(uploadType.typeName)")
         
         // Sort by sample date

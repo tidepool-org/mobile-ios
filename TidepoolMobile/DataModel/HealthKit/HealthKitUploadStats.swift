@@ -77,6 +77,11 @@ class HealthKitUploadStats: NSObject {
         self.lastUploadAttemptTime = uploadAttemptTime
         self.lastUploadAttemptSampleCount = sampleCount
         
+        guard sampleCount > 0 else {
+            DDLogInfo("Upload with zero samples (deletes only)")
+            return
+        }
+        
         self.lastUploadAttemptEarliestSampleTime = earliestSampleTime
         UserDefaults.standard.set(self.lastUploadAttemptEarliestSampleTime, forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, type: self.uploadTypeName, key: HealthKitSettings.StatsLastUploadAttemptEarliestSampleTimeKey))
 
@@ -101,6 +106,11 @@ class HealthKitUploadStats: NSObject {
     
     func updateForSuccessfulUpload(lastSuccessfulUploadTime: Date) {
         DDLogVerbose("trace")
+        
+        guard self.lastUploadAttemptSampleCount > 0 else {
+            DDLogInfo("Skip update for delete only uploads, date range unknown")
+            return
+        }
         
         self.totalUploadCount += self.lastUploadAttemptSampleCount
         self.hasSuccessfullyUploaded = self.totalUploadCount > 0
