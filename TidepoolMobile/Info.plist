@@ -28,6 +28,8 @@
 	<true/>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Tidepool reads diabetes data (blood glucose, insulin, nutrition) from Health so you can view that data in Tidepool.</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>Tidepool writes diabetes data to HealthKit so you can view data you‘ve uploaded to Tidepool using other apps on your iPhone.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>OpenSans-Bold.ttf</string>
