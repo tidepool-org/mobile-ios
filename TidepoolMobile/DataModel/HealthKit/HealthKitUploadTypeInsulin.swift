@@ -83,8 +83,8 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
  
                     let hours = seconds/3600.0
                     let rate = value/hours
-                    // service syntax check: [required; 0.0 <= rate <= 20.0]
-                    if rate < 0.0 || rate > 20.0 {
+                    // service syntax check: [required; 0.0 <= rate <= 100.0 - note docs wrongly spec'ed 20.0]
+                    if rate < 0.0 || rate > 100.0 {
                         DDLogError("Skip basal insulin entry with out-of-range rate: \(rate)")
                         continue filterLoop
                     }
@@ -96,7 +96,7 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                         if scheduledRate.is(compatibleWith: unitsPerHour) {
                             let scheduledRateValue = scheduledRate.doubleValue(for: unitsPerHour)
                             // service syntax check: [required; 0.0 <= rate <= 20.0]
-                            if value >= 0.0 && value <= 20.0 {
+                            if value >= 0.0 && value <= 100.0 {
                                 let suppressed: [String : Any] = [
                                     "type": "basal",
                                     "deliveryType": "scheduled",

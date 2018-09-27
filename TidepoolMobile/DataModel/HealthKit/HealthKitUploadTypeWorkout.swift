@@ -43,13 +43,6 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
                 sampleToUploadDict["type"] = "physicalActivity" as AnyObject?
                 // Add fields common to all types: guid, deviceId, time, and origin
                 super.addCommonFields(sampleToUploadDict: &sampleToUploadDict, sample: sample)
-
-                // Service wants a string if we specify "other", but HK doesn't provide the user a way to enter one...
-                if workout.workoutActivityType != .other {
-                    sampleToUploadDict["activityType"] = stringsForHKWorkoutActivityType(workout.workoutActivityType).tidepoolStr as AnyObject
-                } else {
-                    DDLogError("Workout sample with .other activity type, skipping activityType field!")
-                }
  
                 // service syntax for optional duration value: [float64; required; 0 <= x <= 1 week in appropriate units]
                 if workout.duration < kOneWeekInSeconds && workout.duration >= 0.0 {
@@ -116,6 +109,7 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
     }
 
     // Convert HKWorkoutActivityType enum to (user string, Tidepool type string)
+    // Note: no default case, so this needs modification as HK adds or changes types.
     func stringsForHKWorkoutActivityType(_ type: HKWorkoutActivityType) -> (userStr: String, tidepoolStr: String) {
         
         switch( type ){
