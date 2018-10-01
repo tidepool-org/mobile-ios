@@ -350,7 +350,7 @@ class APIConnector {
         // format is: https://api.tidepool.org/v1/users/<user-id-here>/data_sets"
         let endpoint = "v1/users/" + userId + "/data_sets"
 
-        let clientDict = ["name": "org.tidepool.mobile", "version": "1.2.3"]
+        let clientDict = ["name": "org.tidepool.mobile", "version": UIApplication.appVersion()]
         let deduplicatorDict = ["name": "org.tidepool.deduplicator.dataset.delete.origin"]
         let headerDict = ["Content-Type":"application/json"]
         let jsonObject = ["client":clientDict, "dataSetType":"continuous", "deduplicator":deduplicatorDict] as [String : Any]
