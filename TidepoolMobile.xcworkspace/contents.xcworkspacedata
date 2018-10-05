@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:TidepoolMobileScratch.playground">
+   </FileRef>
+   <FileRef
       location = "group:TidepoolMobile.xcodeproj">
    </FileRef>
    <FileRef
