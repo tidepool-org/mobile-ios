@@ -26,6 +26,7 @@ class BlipUser {
     var bgTargetLow: NSNumber?
     var bgTargetHigh: NSNumber?
     var uploadId: String?
+    var biologicalSex: String?
     
     init(userid: String) {
         self.userid = userid
@@ -36,6 +37,7 @@ class BlipUser {
         if user.accountIsDSA != nil {
             self.patient = BlipPatient()
         }
+        self.biologicalSex = user.biologicalSex
         self.fullName = user.fullName
     }
 
@@ -43,13 +45,14 @@ class BlipUser {
     var isDSAUser: Bool {
         return patient != nil
     }
-
+    
     func processProfileJSON(_ json: JSON) {
         DDLogInfo("profile json: \(json)")
         fullName = json["fullName"].string
         let patient = json["patient"]
         if patient != JSON.null {
             self.patient = BlipPatient() // use empty patient for now
+            self.biologicalSex = patient["biologicalSex"].string
         }
     }
 

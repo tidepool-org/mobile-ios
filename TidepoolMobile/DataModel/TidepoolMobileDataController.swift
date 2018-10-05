@@ -104,7 +104,7 @@ class TidepoolMobileDataController: NSObject
             if let user = self.currentUser {
                 if let uploadId = user.uploadId {
                     return uploadId
-                } else if let uploadId = UserDefaults.standard.string(forKey: HealthKitSettings.HKDataUploadIdKey) {
+                } else if let uploadId = defaults.string(forKey: HealthKitSettings.HKDataUploadIdKey) {
                     // restore from persisted value if possible!
                     user.uploadId = uploadId
                     return uploadId
@@ -113,7 +113,7 @@ class TidepoolMobileDataController: NSObject
             return nil
         }
         set {
-            UserDefaults.standard.setValue(newValue, forKey: HealthKitSettings.HKDataUploadIdKey)
+            defaults.setValue(newValue, forKey: HealthKitSettings.HKDataUploadIdKey)
             if let user = self.currentUser {
                 user.uploadId = newValue
             }
@@ -229,6 +229,16 @@ class TidepoolMobileDataController: NSObject
         }
     }
     
+    /// Update user biological sex. Once persisted here, we should no longer try updating it on service...
+    func updateUserBiologicalSex(_ biologicalSex: String) {
+        if let user = currentLoggedInUser {
+            user.biologicalSex = biologicalSex
+        }
+        if let user = currentUser {
+            user.updateBiologicalSex(biologicalSex)
+        }
+    }
+    
     /// Courtesy call from the AppDelegate for any last minute save, probably not necessary.
     func appWillTerminate() {
         self.saveContext()
@@ -298,6 +308,7 @@ class TidepoolMobileDataController: NSObject
     /// Note: This sets the current tidepool user as the HealthKit user!
     func enableHealthKitInterface() {
         // Note: change if workout data is needed!
+        DDLogInfo("trace")
         appHealthKitConfiguration.enableHealthKitInterface(currentUserName, userid: currentUserId, isDSAUser: isDSAUser, needsUploaderReads: true, needsGlucoseWrites: false)
     }
     
@@ -305,6 +316,7 @@ class TidepoolMobileDataController: NSObject
     ///
     /// Note: This does not NOT clear the current HealthKit user!
     func disableHealthKitInterface() {
+        DDLogInfo("trace")
         appHealthKitConfiguration.disableHealthKitInterface()
         // clear uploadId to be safe... also for logout.
         self.currentUploadId = nil
@@ -460,6 +472,7 @@ class TidepoolMobileDataController: NSObject
     }
     private let kLastTzIdUploadedSettingKey = "kTzChangesHaveUploadedSettingKey"
     private var _tzChangesHaveUploaded: Bool?
+
     
     //TODO: persist timezone changes that are not uploaded.
     private var pendingChanges = [(time: String, newTzId: String, oldTzId: String?)]()
@@ -669,7 +682,7 @@ class TidepoolMobileDataController: NSObject
                 }
             }
         } catch let error as NSError {
-            print("Error getting user: \(error)")
+            DDLogInfo("Error getting user: \(error)")
         }
         return nil
     }

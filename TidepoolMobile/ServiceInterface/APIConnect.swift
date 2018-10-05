@@ -250,10 +250,86 @@ class APIConnector {
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if ( response.result.isSuccess ) {
                 let json = JSON(response.result.value!)
+                if let jsonStr = json.rawString() {
+                    DDLogInfo("profile json: \(jsonStr)")
+                }
                 completion(Result.success(json))
             } else {
                 // Failure
                 completion(Result.failure(response.result.error!))
+            }
+        }
+    }
+    
+    func updateProfile(_ userId: String, biologicalSex: String, _ completion: @escaping (Bool) -> (Void)) {
+        DDLogInfo("Try updating user profile with biological sex: \(biologicalSex)")
+        
+        func mergeBioSexWithProfile(_ profile: inout JSON) -> Data? {
+            let bioSexDict: [String: Any] = ["patient": [
+                "biologicalSex": biologicalSex
+                ]
+            ]
+            var result: Data?
+            do {
+                let bioSexJsonData = try JSONSerialization.data(withJSONObject: bioSexDict, options: [])
+                try profile.merge(with: JSON(bioSexJsonData))
+                let mergedData = try profile.rawData()
+                result = mergedData
+                if let mergedDataStr = String(data: mergedData, encoding: .utf8) {
+                    result = mergedData
+                    DDLogDebug("merged profile json: \(mergedDataStr)")
+                } else {
+                    DDLogError("Merged doesn't print!")
+                }
+            } catch {
+                DDLogError("Serialization errors merging json!")
+            }
+            return result
+        }
+        
+        fetchProfile(userId) {
+            (result:Alamofire.Result<JSON>) -> (Void) in
+            DDLogInfo("checkRestoreCurrentViewedUser profile fetch result: \(result)")
+            guard result.isSuccess else {
+                DDLogError("Failed to fetch profile!")
+                completion(false)
+                return
+            }
+            guard var profileJson = result.value else {
+                DDLogError("Error in fetched profile json!")
+                completion(false)
+                return
+            }
+            let patient = profileJson["patient"]
+            guard profileJson["patient"] != JSON.null else {
+                DDLogError("No patient record in the fetched profile, not a DSA user!")
+                completion(false)
+                return
+            }
+            if let currentBioSex = patient["biologicalSex"].string {
+                DDLogError("biological sex '\(currentBioSex)' already set in Tidepool, should not update!")
+                completion(false)
+                return
+            }
+            guard let body = mergeBioSexWithProfile(&profileJson) else {
+                DDLogError("Serialization errors merging json!")
+                completion(false)
+                return
+            }
+            // then repost!
+            let endpoint = "metadata/" + userId + "/profile"
+            let headerDict = ["Content-Type":"application/json"]
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            self.postRequest(body, endpoint: endpoint, headers: headerDict).responseJSON { response in
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if ( response.result.isSuccess ) {
+                    DDLogInfo("Posted updated profile successfully!")
+                    completion(true)
+                } else {
+                    // return nil to signal network request failure
+                    DDLogInfo("Post of updated profile failed!")
+                    completion(false)
+                }
             }
         }
     }

@@ -71,7 +71,7 @@ class HealthKitConfiguration
             // set flag to prevent reentrancy!
             turningOnHKInterface = true
             APIConnector.connector().configureUploadId() {
-                // if we are still turing on the HK interface after fetch of upload id, continue!
+                // if we are still turning on the HK interface after fetch of upload id, continue!
                 if self.turningOnHKInterface {
                     let dataCtl = TidepoolMobileDataController.sharedInstance
                     if dataCtl.currentUploadId != nil {
@@ -93,13 +93,16 @@ class HealthKitConfiguration
     private func turnOnInterface() {
         DDLogVerbose("trace")
 
-        if self.currentUserId != nil {
+        if let currentUserId = self.currentUserId {
             // Always start uploading HealthKitUploadReader.Mode.Current samples when interface is turned on
-            HealthKitUploadManager.sharedInstance.startUploading(mode: HealthKitUploadReader.Mode.Current, currentUserId: self.currentUserId!)
+            HealthKitUploadManager.sharedInstance.startUploading(mode: HealthKitUploadReader.Mode.Current, currentUserId: currentUserId)
 
             // Resume uploading other samples too, if resumable
             // TODO: uploader UI - Revisit this. Do we want even the non-current mode readers/uploads to resume automatically? Or should that be behind some explicit UI
-            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: self.currentUserId)
+            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: currentUserId)
+            
+            // Really just a one-time check to upload biological sex if Tidepool does not have it, but we can get it from HealthKit.
+            HealthKitManager.sharedInstance.updateProfileBioSexCheck()
         } else {
             DDLogInfo("No logged in user, unable to start uploading")
         }
