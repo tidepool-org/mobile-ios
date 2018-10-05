@@ -1105,7 +1105,7 @@ class APIConnector {
     }
     
     func alertIfNetworkIsUnreachable() -> Bool {
-        if APIConnector.connector().serviceAvailable() {
+        if serviceAvailable() {
             return false
         }
         let alert = UIAlertController(title: "Not Connected to Network", message: "This application requires a network to access the Tidepool service!", preferredStyle: .alert)
@@ -1114,6 +1114,20 @@ class APIConnector {
         }))
         presentAlert(alert)
         return true
+    }
+    
+    func alertWhileNetworkIsUnreachable(_ completion: @escaping () -> (Void)) {
+        if serviceAvailable() {
+            completion()
+            return
+        }
+        let alert = UIAlertController(title: "Not Connected to Network", message: "This application requires a network to access the Tidepool service!", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { Void in
+            self.alertWhileNetworkIsUnreachable {
+                completion()
+            }
+        }))
+        presentAlert(alert)
     }
 
     func blipRequest(_ method: String, urlExtension: String, headerDict: [String: String], body: Data?, preRequest: (() -> Void)? = nil, completion: @escaping (_ response: URLResponse?, _ data: Data?, _ error: NSError?) -> Void) {

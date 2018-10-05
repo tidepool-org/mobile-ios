@@ -189,6 +189,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let sb = UIStoryboard(name: "EventView", bundle: nil)
         if let vc = sb.instantiateInitialViewController() {
             self.window?.rootViewController = vc
+            
+            // TODO: uploader UI - Revisit this. Do we want even the non-current mode readers/uploaders to resume automatically? Or should that be behind some explicit UI
+            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
         }
     }
     
@@ -322,33 +325,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.needRefreshTokenOnDidBecomeActive = false
 
             let api = APIConnector.connector()
-            if api.isConnectedToNetwork() {
-                var message = "AppDelegate attempting to refresh token"
-                DDLogInfo(message)
-                
+            api.alertWhileNetworkIsUnreachable() {
+                DDLogInfo("AppDelegate attempting to refresh token")
                 api.refreshToken() { (succeeded, responseStatusCode) in
                     if succeeded {
-                        message = "Refresh token succeeded, statusCode: \(responseStatusCode)"
-                        DDLogInfo(message)
-                        
+                        DDLogInfo("Refresh token succeeded, statusCode: \(responseStatusCode)")
                         let dataController = TidepoolMobileDataController.sharedInstance
                         dataController.checkRestoreCurrentViewedUser {
                             dataController.configureHealthKitInterface()
                             self.setupUIForLoginSuccess()
                         }
                     } else {
-                        message = "Refresh token failed, need to log in normally, statusCode: \(responseStatusCode)"
-                        DDLogInfo(message)
+                        DDLogInfo("Refresh token failed, need to log in normally, statusCode: \(responseStatusCode)")
                         api.logout() {
                             self.setupUIForLogin()
                         }
                     }
                 }
             }
-        }
-        
-        // TODO: uploader UI - Revisit this. Do we want even the non-current mode readers/uploaders to resume automatically? Or should that be behind some explicit UI
-        HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
+         }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
