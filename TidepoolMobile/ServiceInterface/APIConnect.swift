@@ -465,18 +465,21 @@ class APIConnector {
         }
     }
 
-    func postTimezoneChangesEvent(_ tzChanges: [(time: String, newTzId: String, oldTzId: String?)], _ completion: @escaping (Bool) -> (Void)) {
+    /// Returns last timezone id uploaded on success, otherwise nil
+    func postTimezoneChangesEvent(_ tzChanges: [(time: String, newTzId: String, oldTzId: String?)], _ completion: @escaping (String?) -> (Void)) {
         let dataCtrl = TidepoolMobileDataController.sharedInstance
         if let currentUploadId = dataCtrl.currentUploadId {
             let endpoint = "/v1/data_sets/" + currentUploadId + "/data"
             let headerDict = ["Content-Type":"application/json"]
             var changesToUploadDictArray = [[String: AnyObject]]()
+            var lastTzUploaded: String?
             for tzChange in tzChanges {
                 var sampleToUploadDict = [String: AnyObject]()
                 sampleToUploadDict["time"] = tzChange.time as AnyObject
                 sampleToUploadDict["type"] = "deviceEvent" as AnyObject
                 sampleToUploadDict["subType"] = "timeChange" as AnyObject
                 let toDict = ["timeZoneName": tzChange.newTzId]
+                lastTzUploaded = tzChange.newTzId
                 sampleToUploadDict["to"] = toDict as AnyObject
                 if let oldTzId = tzChange.oldTzId {
                     let fromDict = ["timeZoneName": oldTzId]
@@ -487,9 +490,12 @@ class APIConnector {
             let body: Data?
             do {
                 body = try JSONSerialization.data(withJSONObject: changesToUploadDictArray, options: [])
+                if let postBodyJson = String(data: body!, encoding: .utf8) {
+                    DDLogInfo("Posting json for timechange: \(postBodyJson)")
+                }
             } catch {
                 DDLogError("Failed to create body!")
-                completion(false)
+                completion(nil)
                 return
             }
             
@@ -498,16 +504,16 @@ class APIConnector {
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if ( response.result.isSuccess ) {
                     DDLogInfo("Timezone change upload succeeded!")
-                    completion(true)
+                    completion(lastTzUploaded)
                 } else {
                     // return nil to signal network request failure
                     DDLogInfo("Timezone change upload failed!")
-                    completion(false)
+                    completion(nil)
                 }
             }
         } else {
             DDLogInfo("Timezone change upload fail: no upload id!")
-            completion(false)
+            completion(nil)
         }
     }
     

@@ -78,7 +78,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.calendarDayDidChange(notification:)), name: NSNotification.Name.NSCalendarDayChanged, object: nil)
         // also when timezone changes...
         // but first check that dataController has found any implicit tz changes
-        dataController.checkForTimezoneChange()
+        dataController.postTimezoneEventChanges(){}
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.timezoneDidChange(notification:)), name: NSNotification.Name.NSSystemTimeZoneDidChange, object: nil)
 
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterForeground(_:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
