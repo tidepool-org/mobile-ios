@@ -206,52 +206,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         deviceIsLocked = true
     }
     
-    // Support for background fetch
-    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        DDLogVerbose("trace")
-        
-        if HealthKitBloodGlucosePusher.sharedInstance.enabled {
-            // if device is locked, bail now because we can't read HealthKit data
-            if deviceIsLocked {
-                UIApplication.localNotifyMessage("TidepoolMobile skipping background fetch: device is locked!")
-                completionHandler(.failed)
-                return
-            }
-            
-            // next make sure we are logged in and have connectivity
-            let api = APIConnector.connector()
-            if api.sessionToken == nil {
-                DDLogInfo("No token available, user will need to log in!")
-                // Use local notifications to test background activity...
-                UIApplication.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: log in required!")
-                completionHandler(.failed)
-                return
-            }
-            
-            if !api.isConnectedToNetwork() {
-                DDLogInfo("No network available!")
-                // Use local notifications to test background activity...
-                UIApplication.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: no network available!")
-                
-                completionHandler(.failed)
-                return
-            }
-            
-            DispatchQueue.main.async {
-                // make sure HK interface is configured...
-                // Note: this can kick off a lot of activity!
-                // Note: configureHealthKitInterface is somewhat background-aware...
-                TidepoolMobileDataController.sharedInstance.configureHealthKitInterface()
-                // then call it...
-                HealthKitBloodGlucosePusher.sharedInstance.backgroundFetch { (fetchResult) -> Void in
-                    completionHandler(fetchResult)
-                }
-            }
-        } else {
-            completionHandler(.noData)
-        }
-    }
-
     func applicationWillResignActive(_ application: UIApplication) {
         DDLogVerbose("trace")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
