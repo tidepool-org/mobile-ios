@@ -109,7 +109,7 @@ class HealthKitUploadReader: NSObject {
     }
     
     func readMore() {
-        DDLogVerbose("type: \(uploadType.typeName), mode: \(mode.rawValue)")
+        DDLogInfo("type: \(uploadType.typeName), mode: \(mode.rawValue)")
 
         // Load the anchor
         var anchor: HKQueryAnchor?
@@ -122,6 +122,7 @@ class HealthKitUploadReader: NSObject {
         var startDate = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, type: uploadType.typeName, key: HealthKitSettings.UploadQueryStartDateKey)) as? Date
         var endDate = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, type: uploadType.typeName, key: HealthKitSettings.UploadQueryEndDateKey)) as? Date
         if (startDate == nil || endDate == nil) {
+            DDLogInfo("startDate nil: \(startDate == nil), endDate nil: \(endDate == nil)")
             if (self.mode == HealthKitUploadReader.Mode.Current) {
                 endDate = Date.distantFuture
                 startDate = Date()
@@ -132,13 +133,13 @@ class HealthKitUploadReader: NSObject {
                 endDate = Date()
                 startDate = Date.distantPast
             }
-
             UserDefaults.standard.set(endDate, forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, type: uploadType.typeName, key: HealthKitSettings.UploadQueryEndDateKey))
             UserDefaults.standard.set(startDate, forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, type: uploadType.typeName, key: HealthKitSettings.UploadQueryStartDateKey))
             UserDefaults.standard.synchronize()
         }
         
-        // Set up predicate
+        DDLogInfo("using query start: \(startDate!), end: \(endDate!)")
+       // Set up predicate
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictStartDate, .strictEndDate])
         
         // Read samples from anchor

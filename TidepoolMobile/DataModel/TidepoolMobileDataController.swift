@@ -446,7 +446,7 @@ class TidepoolMobileDataController: NSObject
     private var pendingChanges = [(time: String, newTzId: String, oldTzId: String?)]()
     
     private func addNewTimezoneChangeAtTime(_ timeNoticed: Date, newTimezoneId: String, previousTimezoneId: String?) {
-        NSLog("\(#function) added new timezone change event, to: \(newTimezoneId)")
+        DDLogInfo("\(#function) added new timezone change event, to: \(newTimezoneId), from: \(previousTimezoneId ?? "")")
         let dateFormatter = DateFormatter()
         let timeString = dateFormatter.isoStringFromDate(timeNoticed, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime)
         self.pendingChanges.append((time: timeString, newTzId: newTimezoneId, oldTzId: previousTimezoneId))
