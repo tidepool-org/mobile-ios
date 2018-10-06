@@ -5,7 +5,7 @@ platform :ios, '9.0'
 use_frameworks!
 
 def available_pods
-  pod 'Bugsee'
+  pod 'Bugsee', '1.18.15'
   pod 'Alamofire', '4.7.2'
   pod 'SwiftyJSON', '4.1.0'
   pod 'CocoaLumberjack/Swift', '~> 3.4.2'

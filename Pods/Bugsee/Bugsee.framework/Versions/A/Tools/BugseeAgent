@@ -29,6 +29,7 @@ import json
 import hashlib
 import shutil
 from optparse import OptionParser
+import fnmatch
 
 def isInUploadedList(images, imageList):
     for image in images:
@@ -110,6 +111,18 @@ def getIcon():
         return None
 
     return None
+
+def cleanBugseeFramework():
+    build_dir = os.environ['TARGET_BUILD_DIR'];
+    matches = []
+
+    for root, dirnames, filenames in os.walk(build_dir):
+        for file_name in ['BugseeAgent', 'Bugsee_archive_phase.sh', 'Bugsee_build_phase.sh']:
+            for filename in fnmatch.filter(filenames, file_name):
+                matches.append(os.path.join(root, filename))
+
+    for match_path in matches:
+        os.remove(match_path)
 
 def getVersionAndBuild(zipFile):
     version = None
@@ -253,6 +266,7 @@ def main():
 
 
     # cleanup
+    cleanBugseeFramework()
     shutil.rmtree(tempDir, ignore_errors=True)
 
 

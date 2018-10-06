@@ -145,6 +145,13 @@
 @property (nonatomic, assign) BOOL wifiOnlyUpload;
 
 /**
+ * Capture Device and wifi names.
+ * They are shown on the issue screen.
+ * Default: YES
+ */
+@property (nonatomic, assign) BOOL captureDeviceAndNetworkNames;
+
+/**
  * Bugsee will avoid using more disk space than specified. <br/>
  * Option has value of int type and should be specified in Mb. Value should not be smaller than 10.
  * Default: 50

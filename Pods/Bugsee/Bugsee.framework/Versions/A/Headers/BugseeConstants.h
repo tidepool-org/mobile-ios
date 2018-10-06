@@ -72,7 +72,8 @@ extern NSString *const _Nonnull BugseeShakeToReportKey,
                 *const _Nonnull BugseeMaxDataSizeKey,
                 *const _Nonnull BugseeVideoScaleKey,
                 *const _Nonnull BugseeBuildTargetKey,
-                *const _Nonnull BugseeBuildTypeKey
+                *const _Nonnull BugseeBuildTypeKey,
+                *const _Nonnull BugseeCaptureDeviceAndNetworkNames
 ;
 
 /**

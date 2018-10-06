@@ -99,6 +99,8 @@ if (!condition) {[Bugsee logAssert:description withLocation:[NSString stringWith
 
 + (nullable NSDictionary *)getLaunchOptions;
 
++ (nonnull NSString *) getDeviceId;
+
 /**
  *  Pause bugsee video and loggers
  */
