@@ -125,12 +125,13 @@ class HealthKitUploadReader: NSObject {
             DDLogInfo("startDate nil: \(startDate == nil), endDate nil: \(endDate == nil)")
             if (self.mode == HealthKitUploadReader.Mode.Current) {
                 endDate = Date.distantFuture
-                startDate = Date()
+                // try setting current mode to 4 hours prior in case there are some straggling events that will be posted for the current day. E.g., in the case of Loop, there is a 3 hour delay in getting some items posted...
+                startDate = Date().addingTimeInterval(-60 * 60 * 4)
             } else if (self.mode == HealthKitUploadReader.Mode.HistoricalLastTwoWeeks) {
-                endDate = Date()
+                endDate = Date().addingTimeInterval(-60 * 60 * 4)
                 startDate = endDate!.addingTimeInterval(-60 * 60 * 24 * 14) // Two weeks ago
             } else if (self.mode == HealthKitUploadReader.Mode.HistoricalAll) {
-                endDate = Date()
+                endDate = Date().addingTimeInterval(-60 * 60 * 4)
                 startDate = Date.distantPast
             }
             UserDefaults.standard.set(endDate, forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, type: uploadType.typeName, key: HealthKitSettings.UploadQueryEndDateKey))
