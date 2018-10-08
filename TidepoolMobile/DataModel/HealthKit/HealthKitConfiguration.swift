@@ -141,6 +141,8 @@ class HealthKitConfiguration
                 if self.healthKitInterfaceConfiguredForOtherUser() {
                     // Switching healthkit users, reset HealthKitUploadManager
                     HealthKitUploadManager.sharedInstance.resetPersistentState(switchingHealthKitUsers: true)
+                    // Also clear any persisted timezone data so an initial tz reading will be sent for this new user
+                        TidepoolMobileDataController.sharedInstance.clearTzCache()
                 }
                 // force refetch of upload id because it may have changed for the new user...
                 TidepoolMobileDataController.sharedInstance.currentUploadId = nil

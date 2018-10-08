@@ -307,7 +307,6 @@ class TidepoolMobileDataController: NSObject
     ///
     /// Note: This sets the current tidepool user as the HealthKit user!
     func enableHealthKitInterface() {
-        // Note: change if workout data is needed!
         DDLogInfo("trace")
         appHealthKitConfiguration.enableHealthKitInterface(currentUserName, userid: currentUserId, isDSAUser: isDSAUser, needsUploaderReads: true, needsGlucoseWrites: false)
     }
@@ -394,6 +393,12 @@ class TidepoolMobileDataController: NSObject
                 completion()
             }
         }
+    }
+    
+    /// Clear out timezone cache if current HK user changes
+    func clearTzCache() {
+        self.pendingChanges = []
+        self.lastUploadedTimezoneId = nil
     }
 
     //
