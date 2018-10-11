@@ -49,7 +49,56 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
 //        
 //        return filteredSamples
     }
+    
+    /// Whitelist for now to distinguish "cbg" types: all others are assumed to be "smbg"
+    private func determineTypeOfBG(_ sample: HKQuantitySample) -> String {
+        let bundleIdSeparators = CharacterSet(charactersIn: ".")
+        let whiteListSources = [
+            "Loop" : true,
+            "BGMTool" : true,
+            ]
+        let whiteListBundleIds = [
+            "com.dexcom.Share2" : true,
+            "com.dexcom.CGM" : true,
+            "com.dexcom.G6" : true,
+            ]
+        let whiteListBundleComponents = [
+            "loopkit" : true
+        ]
+        let kTypeCbg = "cbg"
+        let kTypeSmbg = "smbg"
         
+        // First check whitelisted sources for those we know are cbg sources...
+        let sourceName = sample.sourceRevision.source.name
+        if whiteListSources[sourceName] != nil {
+            return kTypeCbg
+        }
+        
+        // Also mark glucose data from HK as CGM data if any of the following are true:
+        // (1) HKSource.bundleIdentifier is one of the following: com.dexcom.Share2, com.dexcom.CGM, or com.dexcom.G6.
+
+        let bundleId = sample.sourceRevision.source.bundleIdentifier
+        if whiteListBundleIds[bundleId] != nil {
+            return kTypeCbg
+        }
+        
+        // (2) HKSource.bundleIdentifier ends in .Loop
+        if bundleId.hasSuffix(".Loop") {
+            return kTypeCbg
+        }
+                
+        // (3) HKSource.bundleIdentifier has loopkit as one of the (dot separated) components
+        let bundleIdComponents = bundleId.components(separatedBy: bundleIdSeparators)
+        for comp in bundleIdComponents {
+            if whiteListBundleComponents[comp] != nil {
+                return kTypeCbg
+            }
+        }
+        
+        // Assume everything else is smbg!
+        return kTypeSmbg
+    }
+
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
         //DDLogInfo("blood glucose prepareDataForUpload")
         //let dateFormatter = DateFormatter()
@@ -57,7 +106,8 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
         filterLoop: for sample in data.filteredSamples {
             if let quantitySample = sample as? HKQuantitySample {
                 var sampleToUploadDict = [String: AnyObject]()
-                sampleToUploadDict["type"] = "cbg" as AnyObject?
+                let bgType = determineTypeOfBG(quantitySample)
+                sampleToUploadDict["type"] = bgType as AnyObject?
  
                 // Add fields common to all types: guid, deviceId, time, and origin
                 super.addCommonFields(sampleToUploadDict: &sampleToUploadDict, sample: sample)
@@ -100,12 +150,23 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
                 }
 
                 if var metadata = sample.metadata {
-                    // If "HKWasUserEntered" exists and is true, change type to "smbg" and remove from metadata
-                    if let wasUserEntered = metadata[HKMetadataKeyWasUserEntered] as? Bool {
-                        if wasUserEntered {
-                            sampleToUploadDict["type"] = "smbg" as AnyObject?
+                    if bgType == "smbg" {
+                        // If the blood glucose data point is NOT from a whitelisted cbg source AND is flagged in HealthKit as HKMetadataKeyWasUserEntered, then label it as subtype = manual
+                        if let wasUserEntered = metadata[HKMetadataKeyWasUserEntered] as? Bool {
+                            if wasUserEntered {
+                                sampleToUploadDict["subType"] = "manual" as AnyObject?
+                            }
                         }
                     }
+                    // Special case for Dexcom, if "Receiver Display Time" exists, pass that as deviceTime and remove from metadata payload
+                    if let receiverTime = metadata["Receiver Display Time"] {
+                        if let date = receiverTime as? Date {
+                            let formattedDate = dateFormatter.isoStringFromDate(date, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateNoTimeZone)
+                            sampleToUploadDict["deviceTime"] = formattedDate as AnyObject?
+                            metadata.removeValue(forKey: "Receiver Display Time")
+                        }
+                    }
+
                     // Add remaining metadata, if any, as payload struct
                     addMetadata(&metadata, sampleToUploadDict: &sampleToUploadDict)
                 }
