@@ -499,6 +499,8 @@
 		4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileListTableViewCell.swift; path = ViewControllers/ProfileListTableViewCell.swift; sourceTree = "<group>"; };
 		4874E7921EBA966D00A3EBFA /* EditCommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditCommentViewController.swift; path = ViewControllers/EditCommentViewController.swift; sourceTree = "<group>"; };
 		4874E7971EBCC01700A3EBFA /* NoteListEditCommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListEditCommentCell.swift; path = ViewControllers/NoteListEditCommentCell.swift; sourceTree = "<group>"; };
+		48776A462170425400AFA451 /* WhitelistPlaygroundTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhitelistPlaygroundTest.swift; sourceTree = "<group>"; };
+		48776A4721704C1900AFA451 /* TestTimezoneChangeDetect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTimezoneChangeDetect.swift; sourceTree = "<group>"; };
 		487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolGraphData.swift; path = "GraphView/Tidepool Graph/TidepoolGraphData.swift"; sourceTree = "<group>"; };
 		48867CEF1E80A98C00C4E79D /* BlipNote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlipNote.swift; path = DataModel/BlipNote.swift; sourceTree = "<group>"; };
 		48867CF01E80A98C00C4E79D /* BlipPatient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BlipPatient.swift; path = DataModel/BlipPatient.swift; sourceTree = "<group>"; };
@@ -962,6 +964,8 @@
 			children = (
 				48A7925D1C4C0B39008D2244 /* Transitions between scenes.txt */,
 				48BA1EA41C18865100C1B71C /* Data Model.txt */,
+				48776A462170425400AFA451 /* WhitelistPlaygroundTest.swift */,
+				48776A4721704C1900AFA451 /* TestTimezoneChangeDetect.swift */,
 			);
 			name = "Manual Test Cases";
 			sourceTree = "<group>";
