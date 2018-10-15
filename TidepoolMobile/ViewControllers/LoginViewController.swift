@@ -67,14 +67,14 @@ class LoginViewController: BaseUIViewController {
 
         let notificationCenter = NotificationCenter.default
 
-        notificationCenter.addObserver(self, selector: #selector(LoginViewController.textFieldDidChange), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginViewController.textFieldDidChange), name: Notification.Name.UITextFieldTextDidChange, object: nil)
         updateButtonStates()
         
-        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.switchedToNewServer(_:)), name: NSNotification.Name(rawValue: "switchedToNewServer"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.switchedToNewServer(_:)), name: Notification.Name(rawValue: "switchedToNewServer"), object: nil)
 
         configureForReachability()
     }

@@ -51,9 +51,9 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         // Add notification observers...
         let notificationCenter = NotificationCenter.default
         // graph data changes
-        notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.graphDataChanged(_:)), name: Notification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
         // keyboard up/down
-        notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.keyboardWillShow(_:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
         configureTableSize()
     }
    

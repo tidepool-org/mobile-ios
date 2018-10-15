@@ -36,9 +36,9 @@ class SyncHealthDataViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleStatsUpdatedNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.Updated), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleStatsUpdatedNotification(_:)), name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleTurnOffUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.TurnOffUploader), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleTurnOffUploaderNotification(_:)), name: Notification.Name(rawValue: HealthKitNotifications.TurnOffUploader), object: nil)
 
         // Determine if this is the initial sync
         self.isInitialSync = !HealthKitUploadManager.sharedInstance.hasPresentedSyncUI

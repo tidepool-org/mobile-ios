@@ -88,11 +88,11 @@ class BGDownloadViewController: UIViewController {
 
         let notificationCenter = NotificationCenter.default
         
-        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.textFieldDidChange), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.textFieldDidChange), name: Notification.Name.UITextFieldTextDidChange, object: nil)
         updateButtonStates()
         
-        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.keyboardWillShow(_:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.keyboardWillHide(_:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(BGDownloadViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
         configureForReachability()

@@ -94,11 +94,11 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
         
         // Add observers for notificationCenter to handle keyboard events
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardDidShow(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardWillHide(_:)), name:NSNotification.Name.UIKeyboardWillHide, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardWillShow(_:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardDidShow(_:)), name: Notification.Name.UIKeyboardDidShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardWillHide(_:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
         // Add an observer to notificationCenter to handle hashtagPress events from HashtagsView
-        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.hashtagPressed(_:)), name: NSNotification.Name(rawValue: "hashtagPressed"), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.hashtagPressed(_:)), name: Notification.Name(rawValue: "hashtagPressed"), object: nil)
      }
 
      deinit {

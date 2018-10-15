@@ -55,7 +55,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         healthKitSwitch.onTintColor = Styles.brightBlueColor
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.Updated), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: nil)
     }
 
     deinit {
