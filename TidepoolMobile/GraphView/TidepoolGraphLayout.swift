@@ -110,7 +110,6 @@ class TidepoolGraphLayout: GraphLayout {
     let kGlucoseMinValue: CGFloat = 0.0
     let kGlucoseMaxValue: CGFloat = 340.0
     let kGlucoseRange: CGFloat = 340.0
-    let kGlucoseConversionToMgDl: CGFloat = 18.0
     var highBoundary: CGFloat = 180.0
     var lowBoundary: CGFloat = 80.0
     // Colors

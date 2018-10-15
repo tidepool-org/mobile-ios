@@ -37,8 +37,6 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
         return "cbg"
     }
 
-    fileprivate let kGlucoseConversionToMgDl: CGFloat = 18.0
-
     //
     // MARK: - Loading data
     //
@@ -79,7 +77,7 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
         // flip the Y to compensate for origin!
         let centerY: CGFloat = layout.yTopOfGlucose + layout.yPixelsGlucose - floor(value * pixelsPerValue)
         
-        let circleColor = value < layout.lowBoundary ? layout.lowColor : value < layout.highBoundary ? layout.targetColor : layout.highColor
+        let circleColor = value < layout.lowBoundary ? layout.lowColor : value <= layout.highBoundary ? layout.targetColor : layout.highColor
         let circleRect = CGRect(x: centerX-circleRadius, y: centerY-circleRadius, width: circleRadius*1.5, height: circleRadius*1.5)
         //let smallCircleRect = circleRect.insetBy(dx: 1.0, dy: 1.0)
         

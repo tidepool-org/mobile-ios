@@ -35,8 +35,6 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
         return "smbg"
     }
 
-    fileprivate let kGlucoseConversionToMgDl: CGFloat = 18.0
-
     //
     // MARK: - Loading data
     //
@@ -79,7 +77,7 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
         // flip the Y to compensate for origin!
         let centerY: CGFloat = layout.yTopOfGlucose + layout.yPixelsGlucose - floor(value * pixelsPerValue)
         
-        let circleColor = value < layout.lowBoundary ? layout.lowColor : value < layout.highBoundary ? layout.targetColor : layout.highColor
+        let circleColor = value < layout.lowBoundary ? layout.lowColor : value <= layout.highBoundary ? layout.targetColor : layout.highColor
 
         let largeCirclePath = UIBezierPath(ovalIn: CGRect(x: centerX-circleRadius, y: centerY-circleRadius, width: circleRadius*2, height: circleRadius*2))
         circleColor.setFill()

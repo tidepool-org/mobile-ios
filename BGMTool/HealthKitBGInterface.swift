@@ -337,7 +337,6 @@ class HealthKitBGInterface: NSObject {
     private func processJsonToItemsForHealthKit(_ eventsJSON: JSON) -> [HKQuantitySample] {
         
         var itemsToPush = [HKQuantitySample]()
-        let kGlucoseConversionToMgDl: Double = 18.0
         for (_, json) in eventsJSON {
             //NSLog("next json: \(json)")
             let event = TidepoolValue()
