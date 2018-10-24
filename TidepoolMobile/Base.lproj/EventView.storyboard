@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MlM-Oh-SBV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MlM-Oh-SBV">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -46,7 +47,7 @@
                                                 </constraints>
                                             </imageView>
                                             <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UK3-u0-owx" userLabel="searchButton">
-                                                <rect key="frame" x="14" y="14.5" width="22" height="22"/>
+                                                <rect key="frame" x="14" y="14" width="21.5" height="22"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="750" constant="21" id="Bjj-9W-avF"/>
                                                     <constraint firstAttribute="width" constant="21.5" id="Wpv-1b-q7q"/>
@@ -54,7 +55,7 @@
                                                 <state key="normal" image="searchIcon"/>
                                             </button>
                                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="G3r-qM-suN" userLabel="searchTextField" customClass="TidepoolMobileUITextField" customModule="TidepoolMobile" customModuleProvider="target">
-                                                <rect key="frame" x="50" y="0.0" width="262" height="50"/>
+                                                <rect key="frame" x="49.5" y="0.0" width="262.5" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                                                 <userDefinedRuntimeAttributes>
@@ -66,7 +67,7 @@
                                                 </connections>
                                             </textField>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JwL-dD-CDl" userLabel="searchPlaceholder" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
-                                                <rect key="frame" x="50" y="0.0" width="53.5" height="50"/>
+                                                <rect key="frame" x="49.5" y="0.0" width="53.5" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -147,7 +148,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NmN-1p-56X" userLabel="editButtonLargeHitArea" customClass="TPUIButton" customModule="TidepoolMobile" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="-14" width="60" height="60.5"/>
+                                                            <rect key="frame" x="255" y="-14" width="60" height="60"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="60" id="EET-tp-zut"/>
                                                                 <constraint firstAttribute="width" constant="60" id="iKg-xp-dle"/>
@@ -222,14 +223,14 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                             <subviews>
                                                                 <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ncw-Tt-9F9" userLabel="graphLayerContainer">
-                                                                    <rect key="frame" x="0.0" y="-0.5" width="320" height="180"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </view>
                                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gGn-g3-34M" userLabel="loadingAnimationView">
                                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EIK-1x-Wx8" userLabel="imageContainer">
-                                                                            <rect key="frame" x="40" y="15.5" width="240" height="150"/>
+                                                                            <rect key="frame" x="40" y="15" width="240" height="150"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="240" id="Sjf-Ir-vKP"/>
@@ -243,8 +244,8 @@
                                                                         <constraint firstItem="EIK-1x-Wx8" firstAttribute="centerY" secondItem="gGn-g3-34M" secondAttribute="centerY" id="AqG-Yb-gfA"/>
                                                                     </constraints>
                                                                 </view>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dexcom data is delayed 3 hours..." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9gx-DA-c2l" userLabel="dataIsComingLabel">
-                                                                    <rect key="frame" x="26" y="77" width="188" height="16.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We load diabetes data in as it’s posted to Health." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9gx-DA-c2l" userLabel="dataIsComingLabel">
+                                                                    <rect key="frame" x="26" y="77" width="271" height="16.5"/>
                                                                     <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                                     <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <nil key="highlightedColor"/>
@@ -318,7 +319,7 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addCommentIcon" translatesAutoresizingMaskIntoConstraints="NO" id="3tz-te-Sk5">
-                                                            <rect key="frame" x="16" y="13.5" width="23" height="19.5"/>
+                                                            <rect key="frame" x="16" y="13.5" width="23" height="19"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="19" id="74W-j9-Z9p"/>
                                                                 <constraint firstAttribute="width" constant="23" id="vYQ-Un-ZZa"/>
@@ -373,7 +374,7 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2eJ-Wn-2aL" userLabel="editButtonLargeHitArea" customClass="TPUIButton" customModule="TidepoolMobile" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="-0.5" width="60" height="60"/>
+                                                            <rect key="frame" x="255" y="-0.5" width="60" height="60.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="60" id="KFK-uS-YxW"/>
                                                                 <constraint firstAttribute="width" constant="60" id="XYd-nf-Tpz"/>
@@ -452,7 +453,7 @@
                                                             <constraint firstAttribute="width" constant="50" id="vxV-Xy-Wd1"/>
                                                         </constraints>
                                                     </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect Health to get your CGM data to start flowing in." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B4A-qb-qHW" userLabel="firstTimeHealthLabel" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect Health to sync your diabetes data with Tidepool." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B4A-qb-qHW" userLabel="firstTimeHealthLabel" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="90" y="20.5" width="184" height="61.5"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -808,7 +809,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vny-eQ-Lh0" userLabel="editButtonLargeHitArea" customClass="TPUIButton" customModule="TidepoolMobile" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="-14" width="60" height="60.5"/>
+                                                            <rect key="frame" x="255" y="-14" width="60" height="60"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="60" id="2UA-hD-Rlz"/>
                                                                 <constraint firstAttribute="height" constant="60" id="Z8V-oa-ejx"/>
@@ -889,7 +890,7 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="czQ-lv-cyn" userLabel="imageContainer">
-                                                                            <rect key="frame" x="40" y="15.5" width="240" height="150"/>
+                                                                            <rect key="frame" x="40" y="15" width="240" height="150"/>
                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="240" id="3C0-dl-bLQ"/>
@@ -906,8 +907,8 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8qg-TS-9wz" userLabel="noDataView">
                                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="180"/>
                                                                     <subviews>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dexcom data is delayed 3 hours..." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9bX-Pe-mqv" userLabel="dataIsComingLabel">
-                                                                            <rect key="frame" x="26" y="77" width="188" height="16.5"/>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="We load diabetes data in as it’s posted to Health." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9bX-Pe-mqv" userLabel="dataIsComingLabel">
+                                                                            <rect key="frame" x="26" y="77" width="271" height="16.5"/>
                                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12"/>
                                                                             <color key="textColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <nil key="highlightedColor"/>
@@ -1009,14 +1010,14 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                             </userDefinedRuntimeAttributes>
                                                         </label>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yNh-CL-w7U" userLabel="editButtonLargeHitArea" customClass="TPUIButton" customModule="TidepoolMobile" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="-16" width="60" height="60.5"/>
+                                                            <rect key="frame" x="255" y="-15.5" width="60" height="60"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="60" id="drh-aq-jrU"/>
                                                                 <constraint firstAttribute="height" constant="60" id="mPg-fI-UcQ"/>
                                                             </constraints>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rS3-P9-Gem" userLabel="editButton" customClass="TidepoolMobileSimpleUIButton" customModule="TidepoolMobile" customModuleProvider="target">
-                                                            <rect key="frame" x="270" y="-0.5" width="30" height="30.5"/>
+                                                            <rect key="frame" x="270" y="-0.5" width="30" height="30"/>
                                                             <state key="normal" title="Edit"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="editButton"/>
@@ -1083,14 +1084,14 @@ Last step: to get pump data, you need the Tidepool Uploader on your computer.</s
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardAppearance="alert"/>
                                                         </textView>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gjm-bk-lTD" userLabel="saveButtonLargeHitArea" customClass="TPUIButton" customModule="TidepoolMobile" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="-5.5" width="60" height="60"/>
+                                                            <rect key="frame" x="253" y="-6" width="60" height="60.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="60" id="365-4A-TNm"/>
                                                                 <constraint firstAttribute="height" constant="60" id="A9U-aR-0bL"/>
                                                             </constraints>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hjb-HN-EnG" userLabel="saveButton" customClass="TidepoolMobileSimpleUIButton" customModule="TidepoolMobile" customModuleProvider="target">
-                                                            <rect key="frame" x="270" y="9.5" width="30" height="30"/>
+                                                            <rect key="frame" x="266" y="9.5" width="34" height="30"/>
                                                             <state key="normal" title="Save"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="editButton"/>

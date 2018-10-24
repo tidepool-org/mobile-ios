@@ -249,7 +249,6 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     
     let healthKitUploadStatusLastUploadTime: String = "Last reading %@"
     let healthKitUploadStatusNoDataAvailableToUpload: String = "No data available to upload"
-    let healthKitUploadStatusDexcomDataDelayed3Hours: String = ""
     let healthKitUploadStatusDaysUploaded: String = "Syncing day %d of %d"
     let healthKitUploadStatusUploadPausesWhenPhoneIsLocked: String = "Your screen must stay awake and unlocked"
 
@@ -259,21 +258,15 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
         let uploadManager = HealthKitUploadManager.sharedInstance
         let isHistoricalAllActive = uploadManager.isUploadInProgressForMode(HealthKitUploadReader.Mode.HistoricalAll)
-        let isHistoricalTwoWeeksActive = uploadManager.isUploadInProgressForMode(HealthKitUploadReader.Mode.HistoricalLastTwoWeeks)
-        if isHistoricalAllActive || isHistoricalTwoWeeksActive {
+        if isHistoricalAllActive {
             if isHistoricalAllActive {
-                // TODO: decide what to do with stats for other upload data!
+                healthStatusLine1Text = "Syncing Health data…"
                 let stats = uploadManager.statsForMode(HealthKitUploadReader.Mode.HistoricalAll)
-                healthStatusLine1Text = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
-            } else {
-                // TODO: decide what to do with stats for other upload data!
-                let stats = uploadManager.statsForMode(HealthKitUploadReader.Mode.HistoricalLastTwoWeeks)
-                healthStatusLine1Text = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
+                healthStatusLine2Text = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
             }
-            healthStatusLine2Text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
             
-            healthStatusLine1.usage = "sidebarSettingHKMinorStatus"
-            healthStatusLine2.usage = "sidebarSettingHKMainStatus"
+            healthStatusLine1.usage = "sidebarSettingHKMainStatus"
+            healthStatusLine2.usage = "sidebarSettingHKMinorStatus"
         } else {
             // TODO: decide what to do with stats for other upload data!
             let stats = uploadManager.statsForMode(HealthKitUploadReader.Mode.Current)
@@ -283,7 +276,6 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
             } else {
                 healthStatusLine1Text = healthKitUploadStatusNoDataAvailableToUpload
             }
-            healthStatusLine2Text = healthKitUploadStatusDexcomDataDelayed3Hours
 
             healthStatusLine1.usage = "sidebarSettingHKMainStatus"
             healthStatusLine2.usage = "sidebarSettingHKMinorStatus"

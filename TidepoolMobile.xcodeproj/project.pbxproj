@@ -1224,7 +1224,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "COMMITS=$(git rev-list HEAD | wc -l)\nCOMMITS=$(($COMMITS))\ndefaults write \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH%.*}\" \"CFBundleVersion\" \"${COMMITS}\"";
+			shellScript = "COMMITS=$(git rev-list HEAD | wc -l)\nCOMMITS=$(($COMMITS))\ndefaults write \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH%.*}\" \"CFBundleVersion\" \"${COMMITS}\"\n";
 		};
 		4DCF24411EB5303100D963B8 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1237,7 +1237,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "SCRIPT_SRC=$(find \"$PROJECT_DIR\" -name 'BugseeAgent' | head -1)\nif [ ! \"${SCRIPT_SRC}\" ]; then\necho \"Error: BugseeAgent script not found.\"\necho \"If you link Bugsee.framework from outside the project folder, please copy the script\"\necho \"into your main project directory or manually update SCRIPT_SRC variable with the right path\"\nexit 1\nfi\n/usr/bin/python \"${SCRIPT_SRC}\" d3170420-a6f0-4db3-970c-c4c571e5d31a";
+			shellScript = "SCRIPT_SRC=$(find \"$PROJECT_DIR\" -name 'BugseeAgent' | head -1)\nif [ ! \"${SCRIPT_SRC}\" ]; then\necho \"Error: BugseeAgent script not found.\"\necho \"If you link Bugsee.framework from outside the project folder, please copy the script\"\necho \"into your main project directory or manually update SCRIPT_SRC variable with the right path\"\nexit 1\nfi\n/usr/bin/python \"${SCRIPT_SRC}\" d3170420-a6f0-4db3-970c-c4c571e5d31a\n";
 		};
 		648AB4E963DDBF699C190EAE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

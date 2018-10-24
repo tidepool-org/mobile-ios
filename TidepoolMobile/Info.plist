@@ -27,7 +27,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Tidepool reads diabetes data (blood glucose, insulin, nutrition) from Health so you can view that data in Tidepool.</string>
+	<string>Tidepool reads diabetes data (blood glucose, nutrition, insulin, etc) from Health so you can view that data in Tidepool.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Tidepool writes diabetes data to HealthKit so you can view data you‘ve uploaded to Tidepool using other apps on your iPhone.</string>
 	<key>UIAppFonts</key>
