@@ -37,7 +37,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
     // first time screens
     @IBOutlet weak var firstTimeHealthTip: TidepoolMobileUIView!
-    @IBOutlet weak var firstTimeAddNoteTip: TidepoolMobileUIView!
     @IBOutlet weak var firstTimeNeedUploaderTip: UIView!
     
     fileprivate struct NoteInEventListTable {
@@ -310,9 +309,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             return
         }
         performSegue(withIdentifier: "segueToAddNote", sender: self)
-        if !firstTimeAddNoteTip.isHidden {
-            firstTimeAddNoteTip.isHidden = true
-        }
     }
     
     //
@@ -748,14 +744,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             DDLogInfo("\(#function) loading notes...")
             return
         }
-        var hideAddNoteTip = true
         var hideNeedUploaderTip = true
         
         // only show other first time tips if we are not showing the healthkit tip!
         if firstTimeHealthTip.isHidden {
-            if self.sortedNotes.count == 0 {
-                hideAddNoteTip = false
-            } else if self.sortedNotes.count == 1 && oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
+            if self.sortedNotes.count == 1 && oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
                 // only show the "need uploader" tip if the user has not enabled healthKit syncing...
                 if !appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser() {
                     hideNeedUploaderTip = false
@@ -772,7 +765,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             }
         }
         
-        firstTimeAddNoteTip.isHidden = hideAddNoteTip
         firstTimeNeedUploaderTip.isHidden = hideNeedUploaderTip
     }
     
