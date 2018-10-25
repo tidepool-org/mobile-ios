@@ -28,7 +28,6 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var healthExplanation: UILabel!
     @IBOutlet weak var healthStatusLine1: TidepoolMobileUILabel!
     @IBOutlet weak var healthStatusLine2: TidepoolMobileUILabel!
-    @IBOutlet weak var healthStatusLine3: TidepoolMobileUILabel!
     @IBOutlet weak var syncHealthDataSeparator: TidepoolMobileUIView!
     @IBOutlet weak var syncHealthDataContainer: UIView!
 
@@ -283,7 +282,6 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
         healthStatusLine1.text = healthStatusLine1Text
         healthStatusLine2.text = healthStatusLine2Text
-        healthStatusLine3.text = ""
     }
     
     fileprivate var debugSettings: DebugSettings?

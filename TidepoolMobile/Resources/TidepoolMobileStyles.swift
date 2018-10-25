@@ -80,8 +80,8 @@ open class Styles: NSObject {
         "sidebarLogoutButton": (mediumSemiboldFont, darkGreyColor),
         "sidebarOtherLinks": (mediumSmallRegularFont, mediumLightGreyColor),
         "sidebarSettingHKEnable": (mediumSmallRegularFont, darkPurpleColor),
-        "sidebarSettingHKMainStatus": (verySmallSemiboldFont, mediumLightGreyColor),
-        "sidebarSettingHKMinorStatus": (verySmallRegularFont, mediumLightGreyColor),
+        "sidebarSettingHKMainStatus": (smallSemiboldFont, mediumLightGreyColor),
+        "sidebarSettingHKMinorStatus": (smallRegularFont, mediumLightGreyColor),
         // first time tips
         "firstTimeTipText": (mediumSmallSemiboldFont, whiteColor),
         "darkBackgroundButton": (mediumVerySmallSemiboldFont, whiteColor),

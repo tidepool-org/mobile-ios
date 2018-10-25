@@ -106,22 +106,12 @@
                                                             <action selector="enableHealthData:" destination="jOa-f6-dl3" eventType="valueChanged" id="fFy-Am-V5h"/>
                                                         </connections>
                                                     </switch>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" fixedFrame="YES" text="Allow Tidepool Mobile to read diabetes-related data from Apple Health" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y7a-Ke-na1" userLabel="healthExplanation" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="35.5" width="223" height="28"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
-                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMinorStatus"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6Yq-ge-9W3" userLabel="Health Status Container View">
                                                         <rect key="frame" x="16" y="36.5" width="223" height="42"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Syncing Health data…" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gp0-ie-YG8" userLabel="healthStatusLine1" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="223" height="14"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="10"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="223" height="17.5"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="12.5"/>
                                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
@@ -129,17 +119,8 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="3 days uploaded" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9S2-IE-Dpc" userLabel="healthStatusLine2" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="14" width="223" height="14"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
-                                                                <color key="textColor" red="0.49411764705882355" green="0.49411764705882355" blue="0.49411764705882355" alpha="1" colorSpace="calibratedRGB"/>
-                                                                <nil key="highlightedColor"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMinorStatus"/>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="FYI upload pauses when phone is locked" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IYw-eg-MRt" userLabel="healthStatusLine3" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="28" width="223" height="14"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
+                                                                <rect key="frame" x="0.0" y="17.5" width="223" height="24.5"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12.5"/>
                                                                 <color key="textColor" red="0.49411764705882355" green="0.49411764705882355" blue="0.49411764705882355" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
@@ -151,6 +132,15 @@
                                                             <constraint firstAttribute="height" constant="42" id="dFo-ma-rwn"/>
                                                         </constraints>
                                                     </stackView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Allow Tidepool Mobile to read diabetes-related data from Apple Health" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y7a-Ke-na1" userLabel="healthExplanation" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
+                                                        <rect key="frame" x="16" y="36.5" width="231" height="34.5"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12.5"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMinorStatus"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Ak-0F-p1s" userLabel="Sync Health Data Container View">
                                                         <rect key="frame" x="0.0" y="79.5" width="255" height="42"/>
                                                         <subviews>
@@ -225,6 +215,7 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="Y7a-Ke-na1" secondAttribute="trailing" constant="8" id="15F-Qd-bwZ"/>
                                                     <constraint firstItem="9Rq-xO-II6" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" id="2Ew-ki-vhM"/>
                                                     <constraint firstItem="M2n-bT-OD5" firstAttribute="centerY" secondItem="9g5-rw-efz" secondAttribute="centerY" id="3jW-ih-RHr"/>
                                                     <constraint firstAttribute="trailing" secondItem="7Ak-0F-p1s" secondAttribute="trailing" id="50q-zP-0X2"/>
@@ -232,11 +223,13 @@
                                                     <constraint firstItem="7Ak-0F-p1s" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" id="DvP-s1-9oX"/>
                                                     <constraint firstItem="7Ak-0F-p1s" firstAttribute="top" secondItem="6Yq-ge-9W3" secondAttribute="bottom" constant="1" id="Fr9-bA-YF4"/>
                                                     <constraint firstAttribute="trailing" secondItem="7Ak-0F-p1s" secondAttribute="trailing" id="ITw-qF-ZsX"/>
+                                                    <constraint firstItem="Y7a-Ke-na1" firstAttribute="leading" secondItem="M2n-bT-OD5" secondAttribute="leading" id="Mif-X7-Exd"/>
                                                     <constraint firstItem="6Yq-ge-9W3" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" constant="16" id="NTx-xk-Ryg"/>
                                                     <constraint firstItem="9g5-rw-efz" firstAttribute="leading" secondItem="M2n-bT-OD5" secondAttribute="trailing" constant="8" id="RTX-7V-4uf"/>
                                                     <constraint firstAttribute="bottom" secondItem="9Rq-xO-II6" secondAttribute="bottom" id="Tsr-o6-FOR"/>
                                                     <constraint firstItem="6Yq-ge-9W3" firstAttribute="top" secondItem="M2n-bT-OD5" secondAttribute="bottom" constant="8" id="UOc-mh-89v"/>
                                                     <constraint firstAttribute="trailing" secondItem="6Yq-ge-9W3" secondAttribute="trailing" constant="16" id="XeX-Pe-74o"/>
+                                                    <constraint firstItem="Y7a-Ke-na1" firstAttribute="top" secondItem="6Yq-ge-9W3" secondAttribute="top" id="go1-gi-98M"/>
                                                     <constraint firstAttribute="trailing" secondItem="9Rq-xO-II6" secondAttribute="trailing" id="hlo-TS-E5p"/>
                                                     <constraint firstItem="M2n-bT-OD5" firstAttribute="top" secondItem="9Ls-ZC-LIS" secondAttribute="top" constant="8" id="mDP-7c-Ahp"/>
                                                     <constraint firstItem="M2n-bT-OD5" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" constant="16" id="xCq-Nr-4az"/>
@@ -516,7 +509,6 @@
                         <outlet property="healthStatusContainerView" destination="6Yq-ge-9W3" id="vxl-OS-wxW"/>
                         <outlet property="healthStatusLine1" destination="Gp0-ie-YG8" id="LwV-cg-nwK"/>
                         <outlet property="healthStatusLine2" destination="9S2-IE-Dpc" id="Fc5-NR-lsv"/>
-                        <outlet property="healthStatusLine3" destination="IYw-eg-MRt" id="Wco-Dv-hDa"/>
                         <outlet property="loginAccount" destination="9sA-Dh-xzl" id="2XT-bE-ria"/>
                         <outlet property="sidebarView" destination="9OQ-uM-nfY" id="Ix6-bv-TsQ"/>
                         <outlet property="syncHealthDataContainer" destination="7Ak-0F-p1s" id="DAw-kW-FjU"/>
