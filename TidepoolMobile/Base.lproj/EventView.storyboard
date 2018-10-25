@@ -542,11 +542,8 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vAW-Kz-cbZ" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="304" width="320" height="200"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zbf-U4-kna" userLabel="firstTimeNeedUploaderLabel" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
-                                                        <rect key="frame" x="55" y="17" width="210" height="102.5"/>
-                                                        <string key="text">Woohoo!
-
-Last step: to get pump data, you need the Tidepool Uploader on your computer.</string>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="To get other diabetes pump data into Tidepool, you can install the Tidepool Uploader on your computer." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zbf-U4-kna" userLabel="firstTimeNeedUploaderLabel" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
+                                                        <rect key="frame" x="55" y="17" width="210" height="82"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         <nil key="highlightedColor"/>

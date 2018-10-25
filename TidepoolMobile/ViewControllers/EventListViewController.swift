@@ -756,8 +756,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             if self.sortedNotes.count == 0 {
                 hideAddNoteTip = false
             } else if self.sortedNotes.count == 1 && oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
-                hideNeedUploaderTip = false
-                oneShotCompleted("NeedUploaderTipHasBeenShown")
+                // only show the "need uploader" tip if the user has not enabled healthKit syncing...
+                if !appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser() {
+                    hideNeedUploaderTip = false
+                    oneShotCompleted("NeedUploaderTipHasBeenShown")
+                }
             } else {
                 // see if HK is enabled for this user, but user has not been asked to authorize the new items.
                 if appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
@@ -814,7 +817,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         self.present(emailVC, animated: true, completion: nil)
 
         firstTimeNeedUploaderTip.isHidden = true
-}
+    }
     
     func mailComposeController(_ controller: MFMailComposeViewController,
                                didFinishWith result: MFMailComposeResult, error: Error?) {
