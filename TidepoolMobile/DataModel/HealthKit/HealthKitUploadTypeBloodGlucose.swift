@@ -31,72 +31,62 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
         DDLogVerbose("trace")
         // For now, don't filter anything out!
         return sortedSamples
-
-//        // Filter out non-Dexcom data
-//        var filteredSamples = [HKSample]()
-//
-//        for sample in sortedSamples {
-//            let sourceRevision = sample.sourceRevision
-//            let source = sourceRevision.source
-//            let treatAllBloodGlucoseSourceTypesAsDexcom = UserDefaults.standard.bool(forKey: HealthKitSettings.TreatAllBloodGlucoseSourceTypesAsDexcomKey)
-//            if source.name.lowercased().range(of: "dexcom") == nil && !treatAllBloodGlucoseSourceTypesAsDexcom {
-//                DDLogInfo("Ignoring non-Dexcom glucose data from source: \(source.name)")
-//                continue
-//            }
-//
-//            filteredSamples.append(sample)
-//        }
-//        
-//        return filteredSamples
     }
     
-    /// Whitelist for now to distinguish "cbg" types: all others are assumed to be "smbg"
-    private func determineTypeOfBG(_ sample: HKQuantitySample) -> String {
+    /// Whitelist for now to distinguish "cbg" types: all others are assumed to be "smbg". Also passes back whether this is a "Dexcom" sample.
+    private func determineTypeOfBG(_ sample: HKQuantitySample) -> (type: String, isDexcom: Bool) {
         let bundleIdSeparators = CharacterSet(charactersIn: ".")
+        // source string, isDexcom?
         let whiteListSources = [
-            "Loop" : true,
-            "BGMTool" : true,
+            "loop" : false,
+            "bgmtool" : false,
             ]
+        // bundleId string, isDexcom?
         let whiteListBundleIds = [
-            "com.dexcom.Share2" : true,
-            "com.dexcom.CGM" : true,
-            "com.dexcom.G6" : true,
+            "com.dexcom.share2" : true,
+            "com.dexcom.cgm" : true,
+            "com.dexcom.g6" : true,
+            "org.nightscoutfoundation.spike" : false,
             ]
+        // bundleId component string, isDexcom?
         let whiteListBundleComponents = [
-            "loopkit" : true
+            "loopkit" : false
         ]
         let kTypeCbg = "cbg"
         let kTypeSmbg = "smbg"
-        
-        // First check whitelisted sources for those we know are cbg sources...
-        let sourceName = sample.sourceRevision.source.name
-        if whiteListSources[sourceName] != nil {
-            return kTypeCbg
-        }
-        
-        // Also mark glucose data from HK as CGM data if any of the following are true:
-        // (1) HKSource.bundleIdentifier is one of the following: com.dexcom.Share2, com.dexcom.CGM, or com.dexcom.G6.
 
-        let bundleId = sample.sourceRevision.source.bundleIdentifier
-        if whiteListBundleIds[bundleId] != nil {
-            return kTypeCbg
+        // First check whitelisted sources for those we know are cbg sources...
+        let sourceNameLowercased = sample.sourceRevision.source.name.lowercased()
+        var isDexcom = whiteListSources[sourceNameLowercased]
+        if isDexcom != nil {
+            return (kTypeCbg, isDexcom!)
         }
-        
+
+        // Also mark glucose data from HK as CGM data if any of the following are true:
+        // (1) HKSource.bundleIdentifier is one of the following: com.dexcom.Share2, com.dexcom.CGM, com.dexcom.G6, or org.nightscoutfoundation.spike.
+
+        let bundleIdLowercased = sample.sourceRevision.source.bundleIdentifier.lowercased()
+        isDexcom = whiteListBundleIds[bundleIdLowercased]
+        if isDexcom != nil {
+            return (kTypeCbg, isDexcom!)
+        }
+
         // (2) HKSource.bundleIdentifier ends in .Loop
-        if bundleId.hasSuffix(".Loop") {
-            return kTypeCbg
+        if bundleIdLowercased.hasSuffix(".loop") {
+            return (kTypeCbg, false)
         }
-                
+
         // (3) HKSource.bundleIdentifier has loopkit as one of the (dot separated) components
-        let bundleIdComponents = bundleId.components(separatedBy: bundleIdSeparators)
+        let bundleIdComponents = bundleIdLowercased.components(separatedBy: bundleIdSeparators)
         for comp in bundleIdComponents {
-            if whiteListBundleComponents[comp] != nil {
-                return kTypeCbg
+            isDexcom = whiteListBundleComponents[comp]
+            if isDexcom != nil {
+                return (kTypeCbg, isDexcom!)
             }
         }
-        
+
         // Assume everything else is smbg!
-        return kTypeSmbg
+        return (kTypeSmbg, false)
     }
 
     internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
@@ -106,51 +96,57 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
         filterLoop: for sample in data.filteredSamples {
             if let quantitySample = sample as? HKQuantitySample {
                 var sampleToUploadDict = [String: AnyObject]()
-                let bgType = determineTypeOfBG(quantitySample)
-                sampleToUploadDict["type"] = bgType as AnyObject?
+                let typeOfBGSample = determineTypeOfBG(quantitySample)
+                sampleToUploadDict["type"] = typeOfBGSample.type as AnyObject?
  
                 // Add fields common to all types: guid, deviceId, time, and origin
                 super.addCommonFields(sampleToUploadDict: &sampleToUploadDict, sample: sample)
                 let units = "mg/dL"
                 sampleToUploadDict["units"] = units as AnyObject?
                 let unit = HKUnit(from: units)
-                let value = quantitySample.quantity.doubleValue(for: unit)
+                var value = quantitySample.quantity.doubleValue(for: unit)
                 // service syntax check: [required; 0 <= value <= 1000]
                 if value < 0 || value > 1000 {
                     //TODO: log this some more obvious way?
                     DDLogError("Blood glucose sample with out-of-range value: \(value)")
                     continue filterLoop
                 }
+                
+                // Add out-of-range annotation if needed, and adjust value, but only for Dexcom samples...
+                if typeOfBGSample.isDexcom {
+                    var annotationCode: String?
+                    var annotationValue: String?
+                    var annotationThreshold = 0
+                    if (value < 40) {
+                        annotationCode = "bg/out-of-range"
+                        annotationValue = "low"
+                        annotationThreshold = 40
+                        // also set value to 39 as does the Tidepool Uploader...
+                        value = 39
+                    } else if (value > 400) {
+                        annotationCode = "bg/out-of-range"
+                        annotationValue = "high"
+                        annotationThreshold = 400
+                        // also set value to 401 as does the Tidepool Uploader...
+                        value = 401
+                    }
+                    if let annotationCode = annotationCode,
+                        let annotationValue = annotationValue {
+                        let annotations = [
+                            [
+                                "code": annotationCode,
+                                "value": annotationValue,
+                                "threshold": annotationThreshold
+                            ]
+                        ]
+                        sampleToUploadDict["annotations"] = annotations as AnyObject?
+                    }
+                }
                 sampleToUploadDict["value"] = value as AnyObject?
                 //DDLogInfo("blood glucose value: \(String(describing: value))")
-                
-                // Add out-of-range annotation if needed
-                var annotationCode: String?
-                var annotationValue: String?
-                var annotationThreshold = 0
-                if (value < 40) {
-                    annotationCode = "bg/out-of-range"
-                    annotationValue = "low"
-                    annotationThreshold = 40
-                } else if (value > 400) {
-                    annotationCode = "bg/out-of-range"
-                    annotationValue = "high"
-                    annotationThreshold = 400
-                }
-                if let annotationCode = annotationCode,
-                    let annotationValue = annotationValue {
-                    let annotations = [
-                        [
-                            "code": annotationCode,
-                            "value": annotationValue,
-                            "threshold": annotationThreshold
-                        ]
-                    ]
-                    sampleToUploadDict["annotations"] = annotations as AnyObject?
-                }
 
                 if var metadata = sample.metadata {
-                    if bgType == "smbg" {
+                    if typeOfBGSample.type == "smbg" {
                         // If the blood glucose data point is NOT from a whitelisted cbg source AND is flagged in HealthKit as HKMetadataKeyWasUserEntered, then label it as subtype = manual
                         if let wasUserEntered = metadata[HKMetadataKeyWasUserEntered] as? Bool {
                             if wasUserEntered {
