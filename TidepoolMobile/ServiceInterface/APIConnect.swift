@@ -85,16 +85,16 @@ class APIConnector {
         "Development" :  "https://dev-api.tidepool.org",
         "Staging" :      "https://stg-api.tidepool.org",
         "Integration" :  "https://int-api.tidepool.org",
-        //"Production" :   "https://api.tidepool.org"
+        "Production" :   "https://api.tidepool.org"
     ]
     let kSortedServerNames = [
         "Development",
         "Staging",
         "Integration",
-        //"Production"
+        "Production"
     ]
-    //fileprivate let kDefaultServerName = "Production"
-    fileprivate let kDefaultServerName = "Integration"
+    fileprivate let kDefaultServerName = "Production"
+    //fileprivate let kDefaultServerName = "Integration"
 
     fileprivate var _currentService: String?
     var currentService: String? {
