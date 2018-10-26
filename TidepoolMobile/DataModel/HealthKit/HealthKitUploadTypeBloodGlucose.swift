@@ -47,6 +47,7 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
             "com.dexcom.cgm" : true,
             "com.dexcom.g6" : true,
             "org.nightscoutfoundation.spike" : false,
+            "com.spike-app.spike": false, // old TestFlight distribution
             ]
         // bundleId component string, isDexcom?
         let whiteListBundleComponents = [
