@@ -949,7 +949,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         if let _ = self.sideMenuController()?.sideMenu?.isMenuOpen, !HealthKitUploadManager.sharedInstance.hasPresentedSyncUI, !sequeToSyncHealthHasBeenDone {
             // Since we'll get notifications for each type of uploader, make this a one-shot in the
             sequeToSyncHealthHasBeenDone = true
-            toggleSideMenu(self)
+            hideSideMenuView ()
             performSegue(withIdentifier: "segueToSyncHealthData", sender: self)
         }
     }

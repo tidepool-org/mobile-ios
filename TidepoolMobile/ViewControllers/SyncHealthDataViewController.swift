@@ -18,20 +18,46 @@ import CocoaLumberjack
 
 class SyncHealthDataViewController: UIViewController {
     
-    @IBOutlet weak var statusContainerView: UIStackView!
-    @IBOutlet weak var healthStatusLine1: TidepoolMobileUILabel!
-    @IBOutlet weak var healthStatusLine2: TidepoolMobileUILabel!
+    enum SyncUIState {
+        case initialStart
+        case manualStart
+        case syncing
+        case complete
+    }
+
+    // Top screen views
+    @IBOutlet weak var syncHealthTitle: UILabel!
+    @IBOutlet weak var syncHealthSubtitle: UILabel!
+    let kSyncTitleInitial = "Make Tidepool even better with Apple Health"
+    let kSyncTitleManual = "Manual Health Sync"
+    let kSyncTitleSyncing = "Syncing now"
+    let kSyncTitleComplete = "Sync complete"
+    let kSyncSubtitleInitial = "Automatically sync your diabetes data from your phone to Tidepool."
+
+    // Middle screen views
+    // (1) Show for SyncUIState.syncing
+    @IBOutlet weak var statusContainerView: UIView!
+    @IBOutlet weak var healthStatusLine2: UILabel!
     
+    // (2) Show for SyncUIState.manualStart
     @IBOutlet weak var instructionsContainerView: UIView!
-    
     @IBOutlet weak var instructionsText: UITextView!
 
-    @IBOutlet weak var buttonContainerView: UIView!
-    @IBOutlet weak var stopButton: UIButton!
-    @IBOutlet weak var syncLast2WeeksButton: UIButton!
-    @IBOutlet weak var syncAllButton: UIButton!
-    
+    // Bottom screen views
+    // (1) Show for SyncUIState.manualStart & SyncUIState.initialStart
+    @IBOutlet weak var syncHealthDataButton: UIButton!
+    // (2) Show for SyncUIState.syncing
     @IBOutlet weak var redLineNote: UILabel!
+    @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var cancelButtonOutline: UIView!
+    // (3) Show for SyncUIState.complete
+    @IBOutlet weak var continueButton: UIButton!
+
+    private var syncCompletedPercentUploaded: CGFloat = 0.0
+    private var syncCompletedStatusText: String = ""
+    private var lastErrorString: String? = nil
+    private var maxHistoricalDays: Int = 0
+    private var syncUIState: SyncUIState = .initialStart
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,18 +66,31 @@ class SyncHealthDataViewController: UIViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleTurnOffUploaderNotification(_:)), name: Notification.Name(rawValue: HealthKitNotifications.TurnOffUploader), object: nil)
 
-        // Determine if this is the initial sync
-        self.isInitialSync = !HealthKitUploadManager.sharedInstance.hasPresentedSyncUI
+        // Determine if this is the initial sync or just a manual sync...
+        let manualSync = HealthKitUploadManager.sharedInstance.hasPresentedSyncUI
+        self.syncUIState = manualSync ? .manualStart : .initialStart
+        self.navigationItem.title = manualSync ? "Manual Sync" : "Initial Sync"
 
         // Remember that we've presented the sync UI before
         HealthKitUploadManager.sharedInstance.hasPresentedSyncUI = true
         
         // Determine if this is initial setup, or if a sync is in progress
         let historicalSync = historicalSyncModeInProgress()
-        let syncIsInProgress = historicalSync != nil
+        if historicalSync != nil {
+            self.syncUIState = .syncing
+        }
+
+        // Round some corners
+        cancelButton.layer.cornerRadius = 10
+        cancelButtonOutline.layer.cornerRadius = 10
+        continueButton.layer.cornerRadius = 10
+        syncHealthDataButton.layer.cornerRadius = 10
+        progressView.layer.cornerRadius = 10
+        progressViewInset.layer.cornerRadius = 10
+        indicatorViewRounded.layer.cornerRadius = 10
 
         // Configure UI for initial sync and initial setup
-        configureLayout(isInitialSync: self.isInitialSync, isInitialSetup: !syncIsInProgress)
+        configureLayout()
         
         if let currentSyncMode = historicalSync {
             // Update stats
@@ -60,8 +99,6 @@ class SyncHealthDataViewController: UIViewController {
             // Disable idle timer when sync is in progress
             UIApplication.shared.isIdleTimerDisabled = true
         }
-        
-        redLineNote.isHidden = false
     }
     
     deinit {
@@ -72,36 +109,50 @@ class SyncHealthDataViewController: UIViewController {
     }
 
     /// Configure layout for initial or manual sync, instructions or progress views...
-    private func configureLayout(isInitialSync: Bool, isInitialSetup: Bool) {
-        self.navigationItem.title = isInitialSync ? "Initial Sync" : "Manual Sync"
-        buttonContainerView.isHidden = false
-        stopButton.isHidden = isInitialSetup
-        syncLast2WeeksButton.isHidden = !isInitialSetup
-        syncAllButton.isHidden = !isInitialSetup
-        instructionsContainerView.isHidden = !isInitialSetup
-        statusContainerView.isHidden = isInitialSetup
-        if isInitialSetup {
-            configureInstructions(isInitialSync: isInitialSync)
-        } else {
+    private func configureLayout() {
+        var title: String
+        switch syncUIState {
+        case .initialStart:
+            title = kSyncTitleInitial
             updateProgress(0.0)
+        case .manualStart:
+            title = kSyncTitleManual
+            updateProgress(0.0)
+            configureInstructions()
+        case .syncing:
+            title = kSyncTitleSyncing
+        case .complete:
+            title = kSyncTitleComplete
         }
+        syncHealthTitle.text = title
+        syncHealthSubtitle.text = syncUIState == .initialStart ? kSyncSubtitleInitial : ""
+
+        statusContainerView.isHidden = syncUIState != .syncing && syncUIState != .complete
+        healthStatusLine2.isHidden = syncUIState != .syncing && syncUIState != .complete
+        instructionsContainerView.isHidden = syncUIState != .manualStart
+        
+        syncHealthDataButton.isHidden = syncUIState != .manualStart && syncUIState != .initialStart
+        redLineNote.isHidden = syncUIState != .syncing
+        cancelButton.isHidden = syncUIState != .syncing
+        cancelButtonOutline.isHidden = cancelButton.isHidden
+        continueButton.isHidden = syncUIState != .complete
     }
     
     @IBAction func backArrowButtonTapped(_ sender: Any) {
         performSegue(withIdentifier: "unwindSegueToHome", sender: self)
     }
     
-    @IBAction func syncAllButtonTapped(_ sender: Any) {
+    @IBAction func syncHealthDataButtonTapped(_ sender: Any) {
         startUploading(mode: HealthKitUploadReader.Mode.HistoricalAll)
-        configureLayout(isInitialSync: self.isInitialSync, isInitialSetup: false)
+        self.syncUIState = .syncing
+        configureLayout()
     }
     
-    @IBAction func syncLastTwoWeeksButtonTapped(_ sender: Any) {
-        self.startUploading(mode: HealthKitUploadReader.Mode.HistoricalLastTwoWeeks)
-        configureLayout(isInitialSync: self.isInitialSync, isInitialSetup: false)
+    @IBAction func continueButtonTapped(_ sender: Any) {
+        self.backArrowButtonTapped(self)
     }
-    
-    @IBAction func stopButtonTapped(_ sender: Any) {
+
+    @IBAction func cancelButtonTapped(_ sender: Any) {
         let alert = UIAlertController(title: stopSyncingTitle, message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: stopSyncingCancel, style: .cancel, handler: { Void in
         }))
@@ -160,14 +211,17 @@ class SyncHealthDataViewController: UIViewController {
         // Only complete when all types are complete!
         if historicalSyncModeInProgress() == nil {
             updateProgress(1.0)
-            stopButton.isHidden = true
-            var completedStr = "\(maxHistoricalDays) of \(maxHistoricalDays) days completed"
+            //cancelButton.isHidden = true
+            //cancelButtonOutline.isHidden = true
+            var completedStr = "Day \(maxHistoricalDays) of \(maxHistoricalDays)"
             if lastErrorString != nil {
                 completedStr = "Unable to complete due to upload errors!"
             }
-            redLineNote.isHidden = true
+            //redLineNote.isHidden = true
             self.healthStatusLine2.text = completedStr
             self.syncCompletedStatusText = completedStr
+            self.syncUIState = .complete
+            configureLayout()
             DDLogInfo("Complete!")
         }
     }
@@ -178,7 +232,6 @@ class SyncHealthDataViewController: UIViewController {
         }
         
         HealthKitUploadManager.sharedInstance.startUploading(mode: mode, currentUserId: currentUserId)
-        self.updateHealthStatusLine1(mode: mode)
     }
     
     private func stopUploadingAndReset() {
@@ -188,8 +241,11 @@ class SyncHealthDataViewController: UIViewController {
         HealthKitUploadManager.sharedInstance.resetPersistentStateForMode(HealthKitUploadReader.Mode.HistoricalAll)
         HealthKitUploadManager.sharedInstance.resetPersistentStateForMode(HealthKitUploadReader.Mode.HistoricalLastTwoWeeks)
     }
-
+    
+    @IBOutlet weak var indicatorViewRounded: UIView!
+    @IBOutlet weak var indicatorView: UIView!
     @IBOutlet weak var progressView: UIView!
+    @IBOutlet weak var progressViewInset: UIView!
     @IBOutlet weak var indicatorViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var progressLabel: UILabel!
     
@@ -222,8 +278,7 @@ class SyncHealthDataViewController: UIViewController {
             
             if stats.totalDaysHistorical > 0 {
                 percentUploaded = CGFloat((CGFloat)(stats.currentDayHistorical) / (CGFloat)(stats.totalDaysHistorical))
-                let typeStr = type == nil ? "" : String(" \(type!) data")
-                healthKitUploadStatusDaysUploadedText = String("\(stats.currentDayHistorical) of \(stats.totalDaysHistorical) days\(typeStr)")
+                healthKitUploadStatusDaysUploadedText = String("Day \(stats.currentDayHistorical) of \(stats.totalDaysHistorical)")
             }
             
             if stats.totalDaysHistorical > maxHistoricalDays {
@@ -234,7 +289,6 @@ class SyncHealthDataViewController: UIViewController {
             updateProgress(percentUploaded)
             
             // Update status lines
-            updateHealthStatusLine1(mode: mode)
             if !healthKitUploadStatusDaysUploadedText.isEmpty {
                 healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
                 //NSLog("Progress update: \(healthKitUploadStatusDaysUploadedText)")
@@ -247,7 +301,6 @@ class SyncHealthDataViewController: UIViewController {
             updateProgress(self.syncCompletedPercentUploaded)
             
             // Update status lines
-            updateHealthStatusLine1(mode: mode)
             healthStatusLine2.text = self.syncCompletedStatusText
         }
     }
@@ -256,74 +309,62 @@ class SyncHealthDataViewController: UIViewController {
     func updateProgress(_ percentDone: CGFloat) {
         let progressString = String(Int(percentDone * 100))
         progressLabel.text = progressString + "%"
-        let progressWidth = progressView.frame.width
-        indicatorViewWidthConstraint.constant = progressWidth * percentDone
+        let progressWidth = progressViewInset.frame.width
+        let coverWidth: CGFloat = progressWidth * percentDone
+        // Note: this is a bit overly complicated due to use of regular views to implement this and the design having rounded rects - an alternative would be just to draw the view directly. The progress view consists of a number of subviews: (1) progressView, a round rect filled with gray; (2) progressViewInset, a round rect filled with white inset 1 pixel from progressView to give it the appearance of a round rect with a 1 pixel gray border; (3) indicatorViewRounded, a 20 pixel wide gray round rect representing 20 pixels of progress, only shown when we have that much progress; and (4) indicatorView, a square-cornered rectangle that starts 10 pixels in from the left of progressView and grows to within 10 pixels of the right side of progressView, and gives the square cornered progress right edge. When the progress gets to within 10 pixels of the end, updates are halted until progress reaches 100%, at which time the full gray round rect of progressView can be shown by hiding all the other views.
+        // (1) if indicator width is less than 20, we just keep indicators hidden
+        if coverWidth < 20 {
+            indicatorViewRounded.isHidden = true
+            indicatorView.isHidden = true
+            progressViewInset.isHidden = false
+        } else {
+            if coverWidth > (progressWidth - 10) {
+                if percentDone == 1.0 {
+                    // when completion jumps to 100%, just uncover the progress view!
+                    indicatorViewRounded.isHidden = true
+                    indicatorView.isHidden = true
+                    progressViewInset.isHidden = true
+                } else {
+                    indicatorViewRounded.isHidden = false
+                    indicatorView.isHidden = false
+                    progressViewInset.isHidden = false
+                    indicatorViewWidthConstraint.constant = progressWidth - 20
+                }
+            } else {
+                indicatorViewRounded.isHidden = false
+                indicatorView.isHidden = false
+                progressViewInset.isHidden = false
+                indicatorViewWidthConstraint.constant = coverWidth - 20
+            }
+        }
         statusContainerView.layoutIfNeeded()
     }
     
-    func updateHealthStatusLine1(mode: HealthKitUploadReader.Mode) {
-        if mode == HealthKitUploadReader.Mode.HistoricalAll {
-            self.healthStatusLine1.text = "Syncing all Health data"
-
-        } else if mode == HealthKitUploadReader.Mode.HistoricalLastTwoWeeks {
-            self.healthStatusLine1.text = "Syncing last two weeks of Health data"
-        }
-    }
-    
-    private func configureInstructions(isInitialSync: Bool) {
-        let regFont = UIFont(name: "OpenSans", size: 14.0)!
-        let semiBoldFont = UIFont(name: "OpenSans-SemiBold", size: 14.0)!
+    private func configureInstructions() {
+        let regFont = UIFont(name: "OpenSans", size: 16.0)!
+        let semiBoldFont = UIFont(name: "OpenSans-SemiBold", size: 16.0)!
         let textColor = UIColor(white: 61.0 / 255.0, alpha: 1.0)
         let textHighliteColor = UIColor(red: 40.0 / 255.0, green: 25.0 / 255.0, blue: 70.0 / 255.0, alpha: 1.0)
         
-        if isInitialSync {
-            let attributedString = NSMutableAttributedString(string: "In order to see your diabetes data in Tidepool and Tidepool Mobile, we need to sync your Health data.\n\nWe suggest syncing the past 2 weeks now (roughly 1 min to sync).\n\nYou can also sync all diabetes data immediately (may take more than an hour to sync).", attributes: [
-                NSAttributedStringKey.font: regFont,
-                NSAttributedStringKey.foregroundColor: textColor,
-                NSAttributedStringKey.kern: -0.2
-                ])
-            instructionsText.attributedText = attributedString
-        } else {
-            let attributedString = NSMutableAttributedString(string: "If you’re having trouble seeing your blood glucose data in Tidepool or Tidepool Mobile, you can try a manual sync.\n\nBefore syncing: \n •  Open the Health app\n •  Tap the Sources tab\n •  Tap Dexcom\n •  Make sure ALLOW “DEXCOM” TO WRITE DATA: Blood Glucose is enabled\n\nThen: \n •  Return to the Sources tab\n •  Tap Tidepool\n •  Make sure ALLOW “TIDEPOOL” TO READ DATA: Blood Glucose is enabled\n\nIf you still can’t see your data, try syncing:", attributes: [
-                NSAttributedStringKey.font: regFont,
-                NSAttributedStringKey.foregroundColor: textColor,
-                NSAttributedStringKey.kern: -0.2
-                ])
-            attributedString.addAttributes([
-                NSAttributedStringKey.font: semiBoldFont,
-                NSAttributedStringKey.foregroundColor: textHighliteColor
-                ], range: NSRange(location: 146, length: 6))
-            attributedString.addAttributes([
-                NSAttributedStringKey.font: semiBoldFont,
-                NSAttributedStringKey.foregroundColor: textHighliteColor
-                ], range: NSRange(location: 169, length: 7))
-            attributedString.addAttributes([
-                NSAttributedStringKey.font: semiBoldFont,
-                NSAttributedStringKey.foregroundColor: textHighliteColor
-                ], range: NSRange(location: 189, length: 6))
-            attributedString.addAttributes([
-                NSAttributedStringKey.font: semiBoldFont,
-                NSAttributedStringKey.foregroundColor: textHighliteColor
-                ], range: NSRange(location: 210, length: 43))
-            attributedString.addAttributes([
-                NSAttributedStringKey.font: semiBoldFont,
-                NSAttributedStringKey.foregroundColor: textHighliteColor
-                ], range: NSRange(location: 291, length: 7))
-            attributedString.addAttributes([
-                NSAttributedStringKey.font: semiBoldFont,
-                NSAttributedStringKey.foregroundColor: textHighliteColor
-                ], range: NSRange(location: 311, length: 8))
-            attributedString.addAttributes([
-                NSAttributedStringKey.font: semiBoldFont,
-                NSAttributedStringKey.foregroundColor: textHighliteColor
-                ], range: NSRange(location: 334, length: 44))
-            instructionsText.attributedText = attributedString
-        }
+        
+        let attributedString = NSMutableAttributedString(string: "If you’re having trouble seeing your diabetes data in Tidepool or Tidepool Mobile, you can try a manual sync.\n\nBefore syncing: \n •  Open the Health app\n •  Tap the Sources tab\n •  Tap Tidepool\n •  Turn on any switches you want to sync with Tidepool (blood glucose, nutrition, insulin, etc)", attributes: [
+            NSAttributedStringKey.font: regFont,
+            NSAttributedStringKey.foregroundColor: textColor,
+            NSAttributedStringKey.kern: -0.2
+            ])
+        attributedString.addAttributes([
+            NSAttributedStringKey.font: semiBoldFont,
+            NSAttributedStringKey.foregroundColor: textHighliteColor
+            ], range: NSRange(location: 141, length: 6))
+        attributedString.addAttributes([
+            NSAttributedStringKey.font: semiBoldFont,
+            NSAttributedStringKey.foregroundColor: textHighliteColor
+            ], range: NSRange(location: 164, length: 7))
+        attributedString.addAttributes([
+            NSAttributedStringKey.font: semiBoldFont,
+            NSAttributedStringKey.foregroundColor: textHighliteColor
+            ], range: NSRange(location: 184, length: 8))
+        instructionsText.attributedText = attributedString
     }
     
-    private var isInitialSync = false
-    private var syncCompletedPercentUploaded: CGFloat = 0.0
-    private var syncCompletedStatusText: String = ""
-    private var lastErrorString: String? = nil
-    private var maxHistoricalDays: Int = 0
 }
