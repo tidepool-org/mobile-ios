@@ -104,22 +104,14 @@ Before syncing:
                                                             <constraint firstAttribute="width" constant="10" id="eDL-Yj-azQ"/>
                                                         </constraints>
                                                     </view>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UKF-8O-eBa">
-                                                        <rect key="frame" x="133" y="29.5" width="20.5" height="19.5"/>
-                                                        <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="14"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="pdE-MH-Mbz" firstAttribute="top" secondItem="yEe-NE-Rxv" secondAttribute="top" id="4Cf-5s-cX3"/>
                                                     <constraint firstAttribute="bottom" secondItem="pdE-MH-Mbz" secondAttribute="bottom" id="C2J-g3-tRU"/>
-                                                    <constraint firstItem="UKF-8O-eBa" firstAttribute="centerY" secondItem="yEe-NE-Rxv" secondAttribute="centerY" id="bLN-5o-eB4"/>
                                                     <constraint firstItem="wqh-bW-yUG" firstAttribute="top" secondItem="yEe-NE-Rxv" secondAttribute="top" id="ex5-Zm-27V"/>
                                                     <constraint firstAttribute="bottom" secondItem="wqh-bW-yUG" secondAttribute="bottom" id="mc0-mo-7eQ"/>
                                                     <constraint firstItem="wqh-bW-yUG" firstAttribute="leading" secondItem="yEe-NE-Rxv" secondAttribute="leading" id="qzh-8R-Di4"/>
-                                                    <constraint firstItem="UKF-8O-eBa" firstAttribute="centerX" secondItem="yEe-NE-Rxv" secondAttribute="centerX" id="tup-LT-hnB"/>
                                                     <constraint firstItem="pdE-MH-Mbz" firstAttribute="leading" secondItem="yEe-NE-Rxv" secondAttribute="leading" constant="10" id="vtB-xU-bg3"/>
                                                 </constraints>
                                             </view>
