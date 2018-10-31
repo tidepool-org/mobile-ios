@@ -87,7 +87,6 @@ class SyncHealthDataViewController: UIViewController {
         syncHealthDataButton.layer.cornerRadius = 10
         progressView.layer.cornerRadius = 10
         progressViewInset.layer.cornerRadius = 10
-        indicatorViewRounded.layer.cornerRadius = 10
 
         // Configure UI for initial sync and initial setup
         configureLayout()
@@ -309,34 +308,8 @@ class SyncHealthDataViewController: UIViewController {
     func updateProgress(_ percentDone: CGFloat) {
         let progressString = String(Int(percentDone * 100))
         progressLabel.text = progressString + "%"
-        let progressWidth = progressViewInset.frame.width
-        let coverWidth: CGFloat = progressWidth * percentDone
-        // Note: this is a bit overly complicated due to use of regular views to implement this and the design having rounded rects - an alternative would be just to draw the view directly. The progress view consists of a number of subviews: (1) progressView, a round rect filled with gray; (2) progressViewInset, a round rect filled with white inset 1 pixel from progressView to give it the appearance of a round rect with a 1 pixel gray border; (3) indicatorViewRounded, a 20 pixel wide gray round rect representing 20 pixels of progress, only shown when we have that much progress; and (4) indicatorView, a square-cornered rectangle that starts 10 pixels in from the left of progressView and grows to within 10 pixels of the right side of progressView, and gives the square cornered progress right edge. When the progress gets to within 10 pixels of the end, updates are halted until progress reaches 100%, at which time the full gray round rect of progressView can be shown by hiding all the other views.
-        // (1) if indicator width is less than 20, we just keep indicators hidden
-        if coverWidth < 20 {
-            indicatorViewRounded.isHidden = true
-            indicatorView.isHidden = true
-            progressViewInset.isHidden = false
-        } else {
-            if coverWidth > (progressWidth - 10) {
-                if percentDone == 1.0 {
-                    // when completion jumps to 100%, just uncover the progress view!
-                    indicatorViewRounded.isHidden = true
-                    indicatorView.isHidden = true
-                    progressViewInset.isHidden = true
-                } else {
-                    indicatorViewRounded.isHidden = false
-                    indicatorView.isHidden = false
-                    progressViewInset.isHidden = false
-                    indicatorViewWidthConstraint.constant = progressWidth - 20
-                }
-            } else {
-                indicatorViewRounded.isHidden = false
-                indicatorView.isHidden = false
-                progressViewInset.isHidden = false
-                indicatorViewWidthConstraint.constant = coverWidth - 20
-            }
-        }
+        let progressWidth = progressViewInset.frame.width * percentDone
+        indicatorViewWidthConstraint.constant = progressWidth
         statusContainerView.layoutIfNeeded()
     }
     

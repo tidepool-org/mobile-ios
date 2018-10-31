@@ -87,18 +87,11 @@ Before syncing:
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OLE-bx-izL" userLabel="progressView">
                                         <rect key="frame" x="0.0" y="0.0" width="288" height="80"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yEe-NE-Rxv" userLabel="progressViewInset">
+                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yEe-NE-Rxv" userLabel="progressViewInset">
                                                 <rect key="frame" x="1" y="1" width="286" height="78"/>
                                                 <subviews>
-                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wqh-bW-yUG" userLabel="indicatorViewRounded">
-                                                        <rect key="frame" x="0.0" y="0.0" width="20" height="78"/>
-                                                        <color key="backgroundColor" red="0.59215686270000001" green="0.59215686270000001" blue="0.59215686270000001" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="width" constant="20" id="MiH-2b-1fD"/>
-                                                        </constraints>
-                                                    </view>
-                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pdE-MH-Mbz" userLabel="indicatorView">
-                                                        <rect key="frame" x="10" y="0.0" width="10" height="78"/>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pdE-MH-Mbz" userLabel="indicatorView">
+                                                        <rect key="frame" x="0.0" y="0.0" width="10" height="78"/>
                                                         <color key="backgroundColor" red="0.59215686270000001" green="0.59215686270000001" blue="0.59215686270000001" alpha="1" colorSpace="calibratedRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="10" id="eDL-Yj-azQ"/>
@@ -109,10 +102,7 @@ Before syncing:
                                                 <constraints>
                                                     <constraint firstItem="pdE-MH-Mbz" firstAttribute="top" secondItem="yEe-NE-Rxv" secondAttribute="top" id="4Cf-5s-cX3"/>
                                                     <constraint firstAttribute="bottom" secondItem="pdE-MH-Mbz" secondAttribute="bottom" id="C2J-g3-tRU"/>
-                                                    <constraint firstItem="wqh-bW-yUG" firstAttribute="top" secondItem="yEe-NE-Rxv" secondAttribute="top" id="ex5-Zm-27V"/>
-                                                    <constraint firstAttribute="bottom" secondItem="wqh-bW-yUG" secondAttribute="bottom" id="mc0-mo-7eQ"/>
-                                                    <constraint firstItem="wqh-bW-yUG" firstAttribute="leading" secondItem="yEe-NE-Rxv" secondAttribute="leading" id="qzh-8R-Di4"/>
-                                                    <constraint firstItem="pdE-MH-Mbz" firstAttribute="leading" secondItem="yEe-NE-Rxv" secondAttribute="leading" constant="10" id="vtB-xU-bg3"/>
+                                                    <constraint firstItem="pdE-MH-Mbz" firstAttribute="leading" secondItem="yEe-NE-Rxv" secondAttribute="leading" id="vtB-xU-bg3"/>
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="33%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lBd-Wt-hDF">
@@ -279,7 +269,6 @@ Before syncing:
                         <outlet property="continueButton" destination="Kh3-ah-bQt" id="m2d-pk-fri"/>
                         <outlet property="healthStatusLine2" destination="GL2-bV-RtC" id="YRP-vf-zR8"/>
                         <outlet property="indicatorView" destination="pdE-MH-Mbz" id="PT9-h0-g6D"/>
-                        <outlet property="indicatorViewRounded" destination="wqh-bW-yUG" id="Fjn-Ys-jWU"/>
                         <outlet property="indicatorViewWidthConstraint" destination="eDL-Yj-azQ" id="t1r-sl-6MT"/>
                         <outlet property="instructionsContainerView" destination="JWI-TP-gtQ" id="q9C-C9-VZm"/>
                         <outlet property="instructionsText" destination="fI2-Pm-nj8" id="mEd-yX-PCk"/>
