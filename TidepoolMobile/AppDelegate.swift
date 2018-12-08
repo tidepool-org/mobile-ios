@@ -297,7 +297,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                 }
             }
-         }
+        } else {
+            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
