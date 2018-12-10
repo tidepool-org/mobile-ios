@@ -57,7 +57,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if isRunningTestFlightBeta {
             Bugsee.launch(token:"d3170420-a6f0-4db3-970c-c4c571e5d31a")
         }
-        DDLogVerbose("trace")
+        
+        // Occasionally log full date to help with deciphering logs!
+        let dateString = DateFormatter().isoStringFromDate(Date())
+        DDLogVerbose("Log Date: \(dateString)")
 
         let applicationState = UIApplication.shared.applicationState
         let message = "didFinishLaunchingWithOptions, state: \(String(describing: applicationState.rawValue))"
@@ -265,8 +268,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     fileprivate var refreshTokenNextActive: Bool = false
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        DDLogVerbose("trace")
-        
+        // Occasionally log full date to help with deciphering logs!
+        let dateString = DateFormatter().isoStringFromDate(Date())
+        DDLogVerbose("Log Date: \(dateString)")
+
         self.didBecomeActiveAtLeastOnce = true
         
         if self.needSetUpForLoginSuccess {
