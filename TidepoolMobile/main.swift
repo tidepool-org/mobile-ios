@@ -38,7 +38,12 @@ class App: UIApplication {
         // Set up log level
         defaultDebugLevel = DDLogLevel.verbose
         let loggingEnabledObject = UserDefaults.standard.object(forKey: "LoggingEnabled")
-        if loggingEnabledObject == nil || !(loggingEnabledObject! as AnyObject).boolValue {
+        //if loggingEnabledObject == nil || !(loggingEnabledObject! as AnyObject).boolValue {
+        //    defaultDebugLevel = DDLogLevel.off
+        //}
+        // NOTE: For trial, default logging on unless it has explicitly been turned off!
+        // TODO: remove before general release!
+        if loggingEnabledObject != nil && !(loggingEnabledObject! as AnyObject).boolValue {
             defaultDebugLevel = DDLogLevel.off
         }
 #if DEBUG
