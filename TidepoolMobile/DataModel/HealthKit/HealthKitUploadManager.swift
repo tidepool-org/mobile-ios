@@ -458,7 +458,7 @@ class HealthKitUploadManager:
         }
 
         // Reset persistent uploader state if uploader version is upgraded
-        let latestUploaderVersion = 7
+        let latestUploaderVersion = 8
         let lastExecutedUploaderVersion = UserDefaults.standard.integer(forKey: HealthKitSettings.LastExecutedUploaderVersionKey)
         var resetPersistentData = false
         if latestUploaderVersion != lastExecutedUploaderVersion {
