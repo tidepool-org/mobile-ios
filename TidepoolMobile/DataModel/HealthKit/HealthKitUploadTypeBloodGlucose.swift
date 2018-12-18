@@ -40,6 +40,7 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
         let whiteListSources = [
             "loop" : false,
             "bgmtool" : false,
+            "dexcom" : true,
             ]
         // bundleId string, isDexcom?
         let whiteListBundleIds = [
