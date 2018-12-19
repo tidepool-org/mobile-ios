@@ -162,7 +162,7 @@ class HealthKitConfiguration
                     configureCurrentHealthKitUser()
                     self.configureHealthKitInterface(self.currentUserId, isDSAUser: self.isDSAUser)
                 } else {
-                    DDLogVerbose("Error authorizing health data \(String(describing: error)), \(error!.userInfo)")
+                    DDLogError("Error authorizing health data \(String(describing: error)), \(error!.userInfo)")
                 }
             })
         }
