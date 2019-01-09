@@ -347,10 +347,10 @@ class HealthKitManager {
 extension HKBiologicalSex {
     var stringRepresentation: String {
         switch self {
-        case .notSet: return "Unknown"
-        case .female: return "Female"
-        case .male: return "Male"
-        case .other: return "Other"
+        case .notSet: return "unknown"
+        case .female: return "female"
+        case .male: return "male"
+        case .other: return "other"
         }
     }
 }
