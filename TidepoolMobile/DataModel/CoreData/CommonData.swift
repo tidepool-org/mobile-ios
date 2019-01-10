@@ -25,7 +25,8 @@ class CommonData: NSManagedObject {
                 // The documentation indicates "deviceMeta", but the actual JSON shows "deviceEvent"
                 case "deviceEvent", "deviceMeta": newObject = DeviceMetadata.fromJSON(json, moc: moc)
                 
-                case "food":                newObject = Food.fromJSON(json, moc: moc)
+                // Note: just uses the carb portion of wizard, since this is for visualization only!
+                case "food":                newObject = Wizard.fromJSON(json, moc: moc)
                 case "grabbag":             newObject = GrabBag.fromJSON(json, moc: moc)
                 case "bloodKetone":         newObject = BloodKetone.fromJSON(json, moc: moc)
                 case "urineKetone":         newObject = UrineKetone.fromJSON(json, moc: moc)
@@ -47,7 +48,12 @@ class CommonData: NSManagedObject {
                      print("skipped record of type \(type) missing id")
                     return nil
                 }
+                
                 newObject.type = type as NSString?
+                // Note: this is a quick and dirty way of adding food carb visualization - turning a food sample into a wizard that has a carb value but no associated bolus, allowing the graphing of wizard carbs to be leveraged. 
+                if type == "food" {
+                    newObject.type = "wizard"
+                }
                 
                 if let timeString = json["time"].string {
                     if let time = TidepoolMobileUtils.dateFromJSON(timeString) {

@@ -14,7 +14,7 @@
 */
 
 import UIKit
-
+import CocoaLumberjack
 
 class WizardGraphDataType: GraphDataType {
 
@@ -45,14 +45,12 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
     // Bolus drawing will store rects here. E.g., Wizard circles are drawn just over associated Bolus labels.
     var bolusRects: [CGRect] = []
     
-    fileprivate let kWizardCircleDiameter: CGFloat = 31.0
-
     //
     // MARK: - Loading data
     //
 
     override func nominalPixelWidth() -> CGFloat {
-        return kWizardCircleDiameter
+        return layout.wizardCircleDiameter
     }
     
     override func typeString() -> String {
@@ -86,6 +84,8 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
         context = UIGraphicsGetCurrentContext()
    }
     
+    private let kPlaceWizardOnTopOfBolus = false
+    
     // override!
     override func drawDataPointAtXOffset(_ xOffset: CGFloat, dataPoint: GraphDataType) {
         
@@ -97,18 +97,25 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
         
         if let wizard = dataPoint as? WizardGraphDataType {
             let centerX = xOffset
-            let circleDiameter = kWizardCircleDiameter
+            let circleDiameter = layout.wizardCircleDiameter
             let value = round(dataPoint.value)
             // Carb circle should be centered at timeline
             let offsetX = centerX - (circleDiameter/2)
             var wizardRect = CGRect(x: offsetX, y: layout.yBottomOfWizard - circleDiameter, width: circleDiameter, height: circleDiameter)
-            var yAtBolusTop = bolusYAtPosition(wizardRect)
-            if wizard.bolusTopY != nil {
-                yAtBolusTop = wizard.bolusTopY
+            
+            let graphType = wizard.bolusId != nil ? "wizard" : "food"
+            DDLogVerbose("graphing carb for \(graphType)")
+            
+            if kPlaceWizardOnTopOfBolus {
+                var yAtBolusTop = bolusYAtPosition(wizardRect)
+                if wizard.bolusTopY != nil {
+                    yAtBolusTop = wizard.bolusTopY
+                }
+                if let yAtBolusTop = yAtBolusTop {
+                    wizardRect.origin.y = yAtBolusTop - circleDiameter
+                }
             }
-            if let yAtBolusTop = yAtBolusTop {
-                wizardRect.origin.y = yAtBolusTop - circleDiameter
-            }
+            
             let wizardOval = UIBezierPath(ovalIn: wizardRect)
             Styles.goldColor.setFill()
             wizardOval.fill()
