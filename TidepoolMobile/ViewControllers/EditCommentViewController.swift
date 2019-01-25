@@ -72,6 +72,10 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         
         // ensure row with edit is visible so keyboard will come up!
         self.tableView.scrollToRow(at: indexPathOfRowWithEdit(), at: .none, animated: false)
+        if let commentCell = currentCommentEditCell {
+            // tell cell to remember current height...
+            _ = commentCell.heightForTextGrew()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -241,7 +245,11 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
             editCell.saveButton.isEnabled = enableSave
             editCell.saveButtonLargeHitArea.isEnabled = enableSave
             
-            // adjust table if lines of text have changed...
+            // check for increased height; adjusting table for each edit character can cause jitter in some edge cases (e.g., when top of keyboard is close to bottom of edit cell).
+            if !editCell.heightForTextGrew() {
+                return
+            }
+            // adjust table if lines of text have increased...
             self.tableView.beginUpdates()
             self.tableView.endUpdates()
             

@@ -14,6 +14,7 @@
 */
 
 import UIKit
+import CocoaLumberjack
 
 class NoteListEditCommentCell: BaseUITableViewCell {
 
@@ -40,6 +41,22 @@ class NoteListEditCommentCell: BaseUITableViewCell {
     }
     
     override func prepareForReuse() {
+        textHeight = nil
+    }
+    
+    var textHeight: CGFloat?
+    func heightForTextGrew() -> Bool {
+        let boundRect = addCommentTextView.text.boundingRect(with: addCommentTextView.bounds.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: nil, context: nil)
+        let previousHeight = textHeight
+        textHeight = boundRect.height
+        // first time nil counts as no change since initial layout should be correct...
+        if let previous = previousHeight, let new = textHeight {
+            if previous < new {
+                DDLogVerbose("comment edit cell height grew from \(previous) to \(new)!")
+                return true
+            }
+        }
+        return false
     }
     
     func configureCell(note: BlipNote?, delegate: UITextViewDelegate? = nil) {
