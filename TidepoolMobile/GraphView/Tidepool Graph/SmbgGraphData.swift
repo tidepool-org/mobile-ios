@@ -27,7 +27,7 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
     
     // vars for drawing datapoints of this type
     var pixelsPerValue: CGFloat = 0.0
-    let circleRadius: CGFloat = 9.0
+    let circleRadius: CGFloat = 8.0
     var lastCircleDrawn = CGRect.null
     var context: CGContext?
 

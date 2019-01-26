@@ -29,7 +29,7 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
     
     // vars for drawing datapoints of this type
     var pixelsPerValue: CGFloat = 0.0
-    let circleRadius: CGFloat = 3.5
+    let circleRadius: CGFloat = 3.0
     var lastCircleDrawn = CGRect.null
 
 

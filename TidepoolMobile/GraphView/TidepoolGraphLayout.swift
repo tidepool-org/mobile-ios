@@ -94,7 +94,7 @@ class TidepoolGraphLayout: GraphLayout {
             lowBoundary = CGFloat(low)
             self.yAxisValuesWithLines = displayGridLines ? [low, high] : []
             // a bit of a hack to avoid numbers running into each other...
-            if low - 40 >= 40 {
+            if low - 40 >= 45 {
                 self.yAxisValuesWithLabels = [40, low, high, 300]
             } else {
                 self.yAxisValuesWithLabels = [low, high, 300]
@@ -144,13 +144,13 @@ class TidepoolGraphLayout: GraphLayout {
     // MARK: - Private constants
     //
     
-    fileprivate let kGraphWizardHeight: CGFloat = 32.0
+    fileprivate let kGraphWizardHeight: CGFloat = 27.0
     
-    // After removing a constant height for the header and wizard values, the remaining graph vertical space is divided into four sections based on the following fractions (which should add to 1.0)
-    fileprivate let kGraphFractionForGlucose: CGFloat = 122.0/190.0
-    fileprivate let kGraphFractionForBolusAndBasal: CGFloat = 68.0/190.0
+    // After removing a constant height for the header and wizard values, the remaining graph vertical space is divided into a bg graph section and a basal/bolus section. The following determines how much goes to the graph...
+    fileprivate let kGraphFractionForGlucose: CGFloat = 0.65
     // Each section has some base offset as well
-    fileprivate let kGraphGlucoseBaseOffset: CGFloat = 2.0
+    // The space below the glucose graph needs to accomdate the diameter of the SMBG sphere (in the case of a reading near zero), and the SMBG value text below that
+    fileprivate let kGraphGlucoseBaseOffset: CGFloat = 22.0
     fileprivate let kGraphWizardBaseOffset: CGFloat = 2.0
     fileprivate let kGraphBottomEdge: CGFloat = 0.0
     
@@ -185,7 +185,7 @@ class TidepoolGraphLayout: GraphLayout {
         wizardCircleDiameter = kGraphWizardHeight - 1
         
         // The pie to divide is what's left over after removing constant height areas
-        let graphHeight = graphViewHeight - headerHeight - kGraphWizardHeight - kGraphBottomEdge - footerHeight - kGraphGlucoseBaseOffset - kGraphWizardBaseOffset
+        let remainingHeight = graphViewHeight - headerHeight - kGraphWizardHeight - kGraphBottomEdge - footerHeight - kGraphGlucoseBaseOffset - kGraphWizardBaseOffset
         
         // Put the workout data at the top, over the X-axis
         yTopOfWorkout = 2.0
@@ -199,11 +199,11 @@ class TidepoolGraphLayout: GraphLayout {
         
         // The largest section is for the glucose readings just below the header
         self.yTopOfGlucose = headerHeight
-        self.yBottomOfGlucose = self.yTopOfGlucose + floor(kGraphFractionForGlucose * graphHeight) - kGraphGlucoseBaseOffset
+        self.yBottomOfGlucose = self.yTopOfGlucose + floor(kGraphFractionForGlucose * remainingHeight)
         self.yPixelsGlucose = self.yBottomOfGlucose - self.yTopOfGlucose
         
         // Wizard data sits above the bolus readings, in a fixed space area.
-        self.yBottomOfWizard = self.yBottomOfGlucose + kGraphWizardHeight
+        self.yBottomOfWizard = self.yBottomOfGlucose + kGraphWizardHeight + kGraphGlucoseBaseOffset
         
         // At the bottom are the bolus and basal readings
         self.yTopOfBolus = self.yBottomOfWizard + kGraphWizardBaseOffset
