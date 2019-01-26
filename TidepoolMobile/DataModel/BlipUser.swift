@@ -104,26 +104,33 @@ class BlipUser {
         if let jsonStr = json.rawString() {
             DDLogInfo("settings json: \(jsonStr)")
         }
-        if let bgLowNum = json["bgTarget"]["low"].number, let bgHighNum = json["bgTarget"]["high"].number, let bgUnits = json["units"]["bg"].string {
-            var bgLow: Int?
-            var bgHigh: Int?
-            if bgUnits == "mmol/L" {
-                bgLow = Int((Float(truncating: bgLowNum) * Float(kGlucoseConversionToMgDl)) + 0.5)
-                bgHigh = Int((Float(truncating: bgHighNum) * Float(kGlucoseConversionToMgDl)) + 0.5)
-            } else if bgUnits == "mg/dL" {
-                bgLow = Int(truncating: bgLowNum)
-                bgHigh = Int(truncating: bgHighNum)
-            } else {
-                DDLogError("Unrecognized settings units: \(bgUnits)")
-                return
-            }
-            // Tidepool will send us 79 and 166 when the user has set 80 and 165. Tidepool will set the graph lines at 80 and 165, and values landing exactly on these lines will be colored as normal.
-            bgLow = bgLow! + 1
-            bgHigh = bgHigh! - 1
-            DDLogInfo("Low: \(bgLow!), High: \(bgHigh!)")
-            self.bgTargetLow = bgLow!
-            self.bgTargetHigh = bgHigh!
+        guard let bgLowNum = json["bgTarget"]["low"].number else {
+            DDLogError("settings missing bgTarget.low")
+            return
         }
+        guard let bgHighNum = json["bgTarget"]["high"].number else {
+            DDLogError("settings missing bgTarget.high")
+            return
+        }
+        guard let bgUnits = json["units"]["bg"].string else {
+            DDLogError("settings missing units.bg")
+            return
+        }
+        var bgLow: Int?
+        var bgHigh: Int?
+        if bgUnits == "mmol/L" {
+            bgLow = Int((Float(truncating: bgLowNum) * Float(kGlucoseConversionToMgDl)) + 0.5)
+            bgHigh = Int((Float(truncating: bgHighNum) * Float(kGlucoseConversionToMgDl)) + 0.5)
+        } else if bgUnits == "mg/dL" {
+            bgLow = Int(truncating: bgLowNum)
+            bgHigh = Int(truncating: bgHighNum)
+        } else {
+            DDLogError("Unrecognized settings units: \(bgUnits)")
+            return
+        }
+        DDLogInfo("Low: \(bgLow!), High: \(bgHigh!)")
+        self.bgTargetLow = bgLow!
+        self.bgTargetHigh = bgHigh!
     }
 
 }
