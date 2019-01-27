@@ -173,10 +173,11 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         lastDeleteSamplePostBody = nil
         
         var message = ""
+        let taskDescr = task.taskDescription ?? ""
         if let error = error {
-            message = "Upload task failed: \(task.taskDescription!), with error: \(error), id: \(task.taskIdentifier), type: \(self.typeString)"
+            message = "Upload task failed: \(taskDescr), with error: \(error), id: \(task.taskIdentifier), type: \(self.typeString)"
         } else {
-            message = "Upload task completed: \(task.taskDescription!), id: \(task.taskIdentifier), type: \(self.typeString)"
+            message = "Upload task completed: \(taskDescr), id: \(task.taskIdentifier), type: \(self.typeString)"
         }
         DDLogInfo(message)
         UIApplication.localNotifyMessage(message)

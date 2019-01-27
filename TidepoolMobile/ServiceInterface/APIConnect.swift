@@ -887,58 +887,62 @@ class APIConnector {
             // End refreshing for refresh control
             fetchWatcher.endRefresh()
             
-            if let httpResponse = response as? HTTPURLResponse {
+            if let httpResponse = response as? HTTPURLResponse, let data = data {
                 if (httpResponse.statusCode == 200) {
                     DDLogInfo("Got notes for user (\(userid)) in given date range: \(startString) to \(endString)")
                     var notes: [BlipNote] = []
                     
-                    let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
-                    
-                    //DDLogInfo("notes: \(JSON(data!))")
-                    let messages: NSArray = jsonResult.value(forKey: "messages") as! NSArray
-                    
-                    let dateFormatter = DateFormatter()
-                    
-                    for message in messages {
-                        let id = (message as AnyObject).value(forKey: "id") as! String
-                        let otheruserid = (message as AnyObject).value(forKey: "userid") as! String
-                        let groupid = (message as AnyObject).value(forKey: "groupid") as! String
+                    if let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary) {
                         
+                        //DDLogInfo("notes: \(JSON(data!))")
+                        let messages: NSArray = jsonResult.value(forKey: "messages") as! NSArray
                         
-                        var timestamp: Date?
-                        let timestampString = (message as AnyObject).value(forKey: "timestamp") as? String
-                        if let timestampString = timestampString {
-                            timestamp = dateFormatter.dateFromISOString(timestampString)
-                        }
+                        let dateFormatter = DateFormatter()
                         
-                        var createdtime: Date?
-                        let createdtimeString = (message as AnyObject).value(forKey: "createdtime") as? String
-                        if let createdtimeString = createdtimeString {
-                            createdtime = dateFormatter.dateFromISOString(createdtimeString)
-                        } else {
-                            createdtime = timestamp
-                        }
+                        for message in messages {
+                            let id = (message as AnyObject).value(forKey: "id") as! String
+                            let otheruserid = (message as AnyObject).value(forKey: "userid") as! String
+                            let groupid = (message as AnyObject).value(forKey: "groupid") as! String
+                            
+                            
+                            var timestamp: Date?
+                            let timestampString = (message as AnyObject).value(forKey: "timestamp") as? String
+                            if let timestampString = timestampString {
+                                timestamp = dateFormatter.dateFromISOString(timestampString)
+                            }
+                            
+                            var createdtime: Date?
+                            let createdtimeString = (message as AnyObject).value(forKey: "createdtime") as? String
+                            if let createdtimeString = createdtimeString {
+                                createdtime = dateFormatter.dateFromISOString(createdtimeString)
+                            } else {
+                                createdtime = timestamp
+                            }
 
-                        if let timestamp = timestamp, let createdtime = createdtime {
-                            let messagetext = (message as AnyObject).value(forKey: "messagetext") as! String
-                            
-                            let otheruser = BlipUser(userid: otheruserid)
-                            let userDict = (message as AnyObject).value(forKey: "user") as! NSDictionary
-                            otheruser.processUserDict(userDict)
-                            
-                            let note = BlipNote(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
-                            notes.append(note)
-                        } else {
-                            if timestamp == nil {
-                                DDLogError("Ignoring fetched note with invalid format timestamp string: \(String(describing: timestampString))")
-                            }
-                            if createdtime == nil {
-                                DDLogError("Ignoring fetched note with invalid create time string: \(String(describing: createdtimeString))")
+                            if let timestamp = timestamp, let createdtime = createdtime {
+                                let messagetext = (message as AnyObject).value(forKey: "messagetext") as! String
+                                
+                                let otheruser = BlipUser(userid: otheruserid)
+                                let userDict = (message as AnyObject).value(forKey: "user") as! NSDictionary
+                                otheruser.processUserDict(userDict)
+                                
+                                let note = BlipNote(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
+                                notes.append(note)
+                            } else {
+                                if timestamp == nil {
+                                    DDLogError("Ignoring fetched note with invalid format timestamp string: \(String(describing: timestampString))")
+                                }
+                                if createdtime == nil {
+                                    DDLogError("Ignoring fetched note with invalid create time string: \(String(describing: createdtimeString))")
+                                }
                             }
                         }
+                        
+                        fetchWatcher.addNotes(notes)
+                    } else {
+                        DDLogError("No notes retrieved - unable to parse json result!")
+                        self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
                     }
-                    
-                    fetchWatcher.addNotes(notes)
                 } else if (httpResponse.statusCode == 404) {
                     DDLogInfo("No notes retrieved, status code: \(httpResponse.statusCode), userid: \(userid)")
                 } else {

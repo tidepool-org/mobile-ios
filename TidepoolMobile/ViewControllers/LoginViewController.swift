@@ -190,6 +190,8 @@ class LoginViewController: BaseUIViewController {
                         }
                         // if we were able to get a profile, try getting an uploadId
                         let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        // Note: this will change the window, don't want to animate keyboard down...
+                        NotificationCenter.default.removeObserver(self, name: nil, object: nil)
                         appDelegate.setupUIForLoginSuccess()
                      }
                     self.errorFeedbackLabel.text = "User not recognized!"
@@ -238,16 +240,23 @@ class LoginViewController: BaseUIViewController {
     fileprivate var viewAdjustAnimationTime: Float = 0.25
     fileprivate func adjustLogInView(_ keyboardHeight: CGFloat) {
         keyboardPlaceholdHeightConstraint.constant = keyboardHeight
-        UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
-            self.logInScene.layoutIfNeeded()
-        }) 
+        self.logInScene.layoutIfNeeded()
+        // Note: skip animation here, this VC may be going away, and a common crash happens somewhere in this area (not easily reproducible)...
+//        UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
+//            self.logInScene.layoutIfNeeded()
+//        })
     }
    
     // UIKeyboardWillShowNotification
     @objc func keyboardWillShow(_ notification: Notification) {
         // make space for the keyboard if needed
-        let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! Float
+        guard let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            DDLogError("keyboardWillShow, unable to parse keyboardFrame info")
+            return
+        }
+        if let viewAdjustTime = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? Float {
+            viewAdjustAnimationTime = viewAdjustTime
+        }
         DDLogInfo("keyboardWillShow, kbd height: \(keyboardFrame.height)")
         adjustLogInView(keyboardFrame.height)
     }
