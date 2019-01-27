@@ -454,7 +454,6 @@
 		4837CC681BA7394E00BA2CDE /* TidepoolMobileUIButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; name = TidepoolMobileUIButton.swift; path = Resources/TidepoolMobileUIButton.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		4837CC6A1BA749BD00BA2CDE /* MenuAccountSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MenuAccountSettingsViewController.swift; path = ViewControllers/MenuAccountSettingsViewController.swift; sourceTree = "<group>"; };
 		4839FD221EB7E16F003E5BF7 /* NoteListGraphCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NoteListGraphCell.swift; path = ViewControllers/NoteListGraphCell.swift; sourceTree = "<group>"; };
-		483AFBCE2127929700C2A21B /* TidepoolMobileTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TidepoolMobileTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		483AFBCF212792CE00C2A21B /* TidepoolMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "TidepoolMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		483E3C351B9F4A6300DA49E7 /* BaseUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUIViewController.swift; path = ViewControllers/BaseUIViewController.swift; sourceTree = "<group>"; };
 		483E3C381B9F4A9200DA49E7 /* BaseUITableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BaseUITableViewController.swift; path = ViewControllers/BaseUITableViewController.swift; sourceTree = "<group>"; };
@@ -544,6 +543,7 @@
 		48C491671C3B47A000F34630 /* BasalGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasalGraphData.swift; path = "GraphView/Tidepool Graph/BasalGraphData.swift"; sourceTree = "<group>"; };
 		48C491691C3B59B400F34630 /* BoluslGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BoluslGraphData.swift; path = "GraphView/Tidepool Graph/BoluslGraphData.swift"; sourceTree = "<group>"; };
 		48C4916B1C3B771200F34630 /* WizardGraphData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WizardGraphData.swift; path = "GraphView/Tidepool Graph/WizardGraphData.swift"; sourceTree = "<group>"; };
+		48CC772521FE74C7001717A4 /* TidepoolMobileTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TidepoolMobileTests-Bridging-Header.h"; path = "TidepoolMobile/TidepoolMobileTests-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		48D056961BDFDD20009D1591 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		48D62CFF1CA457FE00E063A4 /* Nutshell_v6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v6.xcdatamodel; sourceTree = "<group>"; };
 		48DA110C1CE3C77100B99C35 /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSDateExtension.swift; path = "Utilities and Extensions/NSDateExtension.swift"; sourceTree = "<group>"; };
@@ -842,7 +842,7 @@
 		4859FCCF1B9A4DE5000C1269 /* TidepoolMobileTests */ = {
 			isa = PBXGroup;
 			children = (
-				483AFBCE2127929700C2A21B /* TidepoolMobileTests-Bridging-Header.h */,
+				48CC772521FE74C7001717A4 /* TidepoolMobileTests-Bridging-Header.h */,
 				4859FCD01B9A4DE5000C1269 /* apiConnectTests.swift */,
 				48B9D21F1F16A2FA00ECB5CB /* dateFormatterExtensionTests.swift */,
 				48B9D2201F16A2FA00ECB5CB /* hashtagBolderTests.swift */,
