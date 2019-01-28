@@ -130,7 +130,7 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
             let labelStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
             labelStyle.alignment = .center
             
-            let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSAttributedStringKey.font: Styles.smallSemiboldFont, NSAttributedStringKey.foregroundColor: Styles.alt2DarkGreyColor, NSAttributedStringKey.paragraphStyle: labelStyle])
+            let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSAttributedString.Key.font: Styles.smallSemiboldFont, NSAttributedString.Key.foregroundColor: Styles.alt2DarkGreyColor, NSAttributedString.Key.paragraphStyle: labelStyle])
             
             let labelTextHeight: CGFloat = ceil(labelAttrStr.boundingRect(with: CGSize(width: labelRect.width, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil).size.height)
             

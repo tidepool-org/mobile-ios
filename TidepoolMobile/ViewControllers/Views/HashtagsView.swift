@@ -178,7 +178,7 @@ class HashtagsView: UIView {
         let hashtagButton = UIButton(frame: CGRect.zero)
         let hashtagText =  HashTagManager.sharedInstance.sortedHashTags[index].tag
         hashtagButton.setAttributedTitle(NSAttributedString(string: hashtagText,
-            attributes:[NSAttributedStringKey.foregroundColor: blackishColor, NSAttributedStringKey.font: mediumRegularFont]), for: UIControlState())
+            attributes:[NSAttributedString.Key.foregroundColor: blackishColor, NSAttributedString.Key.font: mediumRegularFont]), for: UIControl.State())
         hashtagButton.frame.size.height = hashtagHeight
         hashtagButton.sizeToFit()
         hashtagButton.frame.size.width = hashtagButton.frame.width + 4 * labelSpacing

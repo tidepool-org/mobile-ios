@@ -109,7 +109,7 @@ import UIKit
                 font = fontFromStyles
             }
             if let image = imageForButton(textColor: textColor, backColor: backColor, textAlign: textAlign, font: font, cornerRadius: radius) {
-                self.setImage(image, for: UIControlState.normal)
+                self.setImage(image, for: UIControl.State.normal)
             }
         }
         
@@ -119,7 +119,7 @@ import UIKit
                 font = fontFromStyles
             }
             if let image = imageForButton(textColor: textColor, backColor: backColor, textAlign: textAlign, font: font, cornerRadius: radius) {
-                self.setImage(image, for: UIControlState.highlighted)
+                self.setImage(image, for: UIControl.State.highlighted)
             }
         }
         styledToSize = self.bounds.size
@@ -151,7 +151,7 @@ import UIKit
         let rectangleTextContent = buttonTitle
         let rectangleStyle = NSMutableParagraphStyle()
         rectangleStyle.alignment = textAlign
-        let rectangleFontAttributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: textColor, NSAttributedStringKey.paragraphStyle: rectangleStyle]
+        let rectangleFontAttributes = [NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: textColor, NSAttributedString.Key.paragraphStyle: rectangleStyle]
         
         let rectangleTextHeight: CGFloat = rectangleTextContent.boundingRect(with: CGSize(width: rectangleInset.width, height: CGFloat.infinity), options: .usesLineFragmentOrigin, attributes: rectangleFontAttributes, context: nil).height
         context.saveGState()

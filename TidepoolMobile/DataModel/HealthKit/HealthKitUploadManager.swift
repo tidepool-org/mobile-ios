@@ -199,7 +199,7 @@ class HealthKitUploadManager:
                     self.startUploading(mode: mode, currentUserId: currentUserId!)
                 } else {
                     // Only resume HistoricalAll and HistoricalTwoWeeks if app is not in background state
-                    if UIApplication.shared.applicationState != UIApplicationState.background {
+                    if UIApplication.shared.applicationState != UIApplication.State.background {
                         self.startUploading(mode: mode, currentUserId: currentUserId!)
                     }
                 }
@@ -277,7 +277,7 @@ class HealthKitUploadManager:
                 }
                 
                 var keepReading = cancelled || completed
-                if uploader.mode == HealthKitUploadReader.Mode.Current && UIApplication.shared.applicationState == UIApplicationState.background {
+                if uploader.mode == HealthKitUploadReader.Mode.Current && UIApplication.shared.applicationState == UIApplication.State.background {
                     if completed {
                         //TODO: ask Mark why? Doesn't this stop current uploads if the app is in the background for an extended time?
                         keepReading = false // Just do one upload batch per background task for Current mode
@@ -307,7 +307,7 @@ class HealthKitUploadManager:
         
         func uploadReaderDidStartReading(reader: HealthKitUploadReader) {
             // Register background task for Current mode, if in background
-            if reader.mode == HealthKitUploadReader.Mode.Current && UIApplication.shared.applicationState == UIApplicationState.background {
+            if reader.mode == HealthKitUploadReader.Mode.Current && UIApplication.shared.applicationState == UIApplication.State.background {
                 self.beginCurrentSamplesUploadBackgroundTask()
             }
         }
@@ -320,7 +320,7 @@ class HealthKitUploadManager:
                 DDLogInfo("didStopReading on main thread")
                 
                 // End background task for Current mode, if in background
-                if reader.mode == HealthKitUploadReader.Mode.Current && UIApplication.shared.applicationState == UIApplicationState.background {
+                if reader.mode == HealthKitUploadReader.Mode.Current && UIApplication.shared.applicationState == UIApplication.State.background {
                     self.endCurrentSamplesUploadBackgroundTask()
                 }
                 

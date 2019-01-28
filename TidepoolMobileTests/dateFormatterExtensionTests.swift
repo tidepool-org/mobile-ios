@@ -39,9 +39,9 @@ class dateFormatterExtensionTests: XCTestCase {
         let date = Date(timeIntervalSince1970: 946729800)
         
         // Expected result of formatted string.
-        let expected = NSMutableAttributedString(string: "Saturday 1/1/00 12:30pm", attributes: [NSAttributedStringKey.foregroundColor: UIColor.black, NSAttributedStringKey.font: UIFont(name: "OpenSans", size: 12.5)!])
+        let expected = NSMutableAttributedString(string: "Saturday 1/1/00 12:30pm", attributes: [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont(name: "OpenSans", size: 12.5)!])
         // Bold the time at the end.
-        expected.addAttribute(NSAttributedStringKey.font, value: UIFont(name: "OpenSans-Bold", size: 12.5)!, range: NSRange(location: 16, length: 7))
+        expected.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "OpenSans-Bold", size: 12.5)!, range: NSRange(location: 16, length: 7))
         
         // Assert that the output and the expected, have the same formatting.
         XCTAssertEqual(dateFormatter.attributedStringFromDate(date), expected, "Assert that the date formatter properly bolds to expected.")

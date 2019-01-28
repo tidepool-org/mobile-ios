@@ -58,8 +58,8 @@ public extension DateFormatter {
         }
         
         // Bold the last (count) characters (the time)
-        let attrStr = NSMutableAttributedString(string: dateString, attributes: [NSAttributedStringKey.foregroundColor: noteTextColor, NSAttributedStringKey.font: smallRegularFont])
-        attrStr.addAttribute(NSAttributedStringKey.font, value: smallBoldFont, range: NSRange(location: attrStr.length - count, length: count))
+        let attrStr = NSMutableAttributedString(string: dateString, attributes: [NSAttributedString.Key.foregroundColor: noteTextColor, NSAttributedString.Key.font: smallRegularFont])
+        attrStr.addAttribute(NSAttributedString.Key.font, value: smallBoldFont, range: NSRange(location: attrStr.length - count, length: count))
         
         return attrStr
     }

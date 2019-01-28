@@ -67,7 +67,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             
             // Choose the right session to start tasks with
             var uploadSession: URLSession?
-            if UIApplication.shared.applicationState == UIApplicationState.background {
+            if UIApplication.shared.applicationState == UIApplication.State.background {
                 uploadSession = self.backgroundUploadSession
             } else {
                 uploadSession = self.foregroundUploadSession

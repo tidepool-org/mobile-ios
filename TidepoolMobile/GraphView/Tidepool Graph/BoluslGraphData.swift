@@ -205,7 +205,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             }
             let bolusLabelStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
             bolusLabelStyle.alignment = .center
-            let bolusLabelFontAttributes = [NSAttributedStringKey.font: Styles.smallSemiboldFont, NSAttributedStringKey.foregroundColor: kBolusTextBlue, NSAttributedStringKey.paragraphStyle: bolusLabelStyle]
+            let bolusLabelFontAttributes = [NSAttributedString.Key.font: Styles.smallSemiboldFont, NSAttributedString.Key.foregroundColor: kBolusTextBlue, NSAttributedString.Key.paragraphStyle: bolusLabelStyle]
             var bolusLabelTextSize = bolusLabelTextContent.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: bolusLabelFontAttributes, context: nil).size
             bolusLabelTextSize = CGSize(width: ceil(bolusLabelTextSize.width), height: ceil(bolusLabelTextSize.height))
 

@@ -69,7 +69,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         let moc = dataController.mocForLocalEvents()
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.databaseChanged(_:)), name: Notification.Name.NSManagedObjectContextObjectsDidChange, object: moc)
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChangeNotifyHandler(_:)), name:Notification.Name.UITextFieldTextDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChangeNotifyHandler(_:)), name:UITextField.textDidChangeNotification, object: nil)
         // graph data changes
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.graphDataChanged(_:)), name:Notification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
         
@@ -80,8 +80,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         dataController.postTimezoneEventChanges(){}
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.timezoneDidChange(_:)), name:Notification.Name.NSSystemTimeZoneDidChange, object: nil)
 
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterForeground(_:)), name:Notification.Name.UIApplicationWillEnterForeground, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterBackground(_:)), name:Notification.Name.UIApplicationDidEnterBackground, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterForeground(_:)), name:UIApplication.willEnterForegroundNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterBackground(_:)), name:UIApplication.didEnterBackgroundNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleUploadSuccessfulNotification(_:)), name:Notification.Name(rawValue: HealthKitNotifications.UploadSuccessful), object: nil)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleTurnOnUploader(_:)), name:Notification.Name(rawValue: HealthKitNotifications.TurnOnUploader), object: nil)
         
@@ -159,11 +159,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         eventListSceneContainer.setNeedsLayout()
         eventListSceneContainer.layoutIfNeeded()
 
-        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSAttributedStringKey.font: smallRegularFont, NSAttributedStringKey.foregroundColor: blackishColor])
-        self.refreshControl.addTarget(self, action: #selector(EventListViewController.refreshControlHandler), for: UIControlEvents.valueChanged)
+        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSAttributedString.Key.font: smallRegularFont, NSAttributedString.Key.foregroundColor: blackishColor])
+        self.refreshControl.addTarget(self, action: #selector(EventListViewController.refreshControlHandler), for: UIControl.Event.valueChanged)
         self.refreshControl.setNeedsLayout()
         self.tableView.addSubview(refreshControl)
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableView.automaticDimension
         // table seems to need a header for latest iOS, give it a small one...
         self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: 1.0))
     }
@@ -786,8 +786,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
         if !MFMailComposeViewController.canSendMail() || onSimulator {
             DDLogInfo("Mail services are not available")
-            let alertController = UIAlertController(title: "Error", message: "You must set up a mail service account in order to email a log!", preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            let alertController = UIAlertController(title: "Error", message: "You must set up a mail service account in order to email a log!", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
             return
         }
@@ -1106,7 +1106,7 @@ extension EventListViewController: UITableViewDelegate {
         if row == kGraphRow {
             return TPConstants.kGraphViewHeight
         } else {
-            return UITableViewAutomaticDimension;
+            return UITableView.automaticDimension;
         }
     }
     
@@ -1213,7 +1213,7 @@ extension EventListViewController: UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         let commentCount = filteredNotes[indexPath.section].comments.count
         let row = indexPath.row
         if row > kNoteRow {
@@ -1246,7 +1246,7 @@ extension EventListViewController: UITableViewDelegate {
             DDLogInfo("Error: note not found at \(#function)!")
             return nil
         }
-        let rowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "delete") {_,indexPath in
+        let rowAction = UITableViewRowAction(style: UITableViewRowAction.Style.default, title: "delete") {_,indexPath in
             // use dialog to confirm delete with user!
             var metric = "Swiped left to delete note"
             var title = trashAlertTitle

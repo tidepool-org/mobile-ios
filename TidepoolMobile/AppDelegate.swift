@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // one shot, UI should put up dialog letting user know we are in test mode!
     static var testModeNotification = false
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool
     {
         if let logger = BugseeLogger.sharedInstance() as? DDLogger {
             DDLog.add(logger)

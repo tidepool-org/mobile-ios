@@ -50,7 +50,4 @@ class App: UIApplication {
 }
 
 
-_ = UIApplicationMain(CommandLine.argc, UnsafeMutableRawPointer(CommandLine.unsafeArgv)
-    .bindMemory(
-        to: UnsafeMutablePointer<Int8>.self,
-        capacity: Int(CommandLine.argc)), NSStringFromClass(App.self), NSStringFromClass(AppDelegate.self))
+_ = UIApplicationMain(CommandLine.argc, CommandLine.unsafeArgv, NSStringFromClass(App.self), NSStringFromClass(AppDelegate.self))

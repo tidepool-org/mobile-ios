@@ -53,7 +53,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         // graph data changes
         notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.graphDataChanged(_:)), name: Notification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
         // keyboard up/down
-        notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.keyboardWillShow(_:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         configureTableSize()
     }
    
@@ -68,7 +68,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         
         editCommentSceneContainer.setNeedsLayout()
         editCommentSceneContainer.layoutIfNeeded()
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableView.automaticDimension
         
         // ensure row with edit is visible so keyboard will come up!
         self.tableView.scrollToRow(at: indexPathOfRowWithEdit(), at: .none, animated: false)
@@ -115,8 +115,8 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     // Capture keyboard sizing and appropriate scroll animation timing. Fine tune table sizing for current keyboard sizing, and place edit row at bottom of table view, just above the keyboard.
     @objc func keyboardWillShow(_ notification: Notification) {
         //DDLogInfo("EditCommentViewController \(#function)")
-        viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
-        EditCommentViewController.keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        viewAdjustAnimationTime = notification.userInfo![UIResponder.keyboardAnimationDurationUserInfoKey] as! TimeInterval
+        EditCommentViewController.keyboardFrame = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         self.configureTableSize() // first time, ensure table is correctly sized to leave room for keyboard
         self.adjustEditAboveKeyboard()
     }
@@ -312,7 +312,7 @@ extension EditCommentViewController: UITableViewDelegate {
         if row == kGraphRow {
             return TPConstants.kGraphViewHeight
         } else {
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         }
     }
 
@@ -321,7 +321,7 @@ extension EditCommentViewController: UITableViewDelegate {
         if row == kGraphRow {
             return TPConstants.kGraphViewHeight
         } else {
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         }
     }
     

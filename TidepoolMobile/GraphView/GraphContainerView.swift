@@ -124,7 +124,7 @@ class GraphContainerView: UIView {
             let collectLayout = UICollectionViewFlowLayout()
             collectLayout.itemSize = size
             collectLayout.targetContentOffset(forProposedContentOffset: targetOffset)
-            collectLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
+            collectLayout.scrollDirection = UICollectionView.ScrollDirection.horizontal
             graphCollectionView.setCollectionViewLayout(collectLayout, animated: false)
             //DDLogInfo("End content offset & size: \(graphCollectionView.contentOffset) & \(graphCollectionView.contentSize)")
             
@@ -142,7 +142,7 @@ class GraphContainerView: UIView {
     
     func centerGraphOnEvent(_ edgeOffset: CGFloat = 0.0, animated: Bool = false) {
         if let graphCollectionView = graphCollectionView {
-            graphCollectionView.scrollToItem(at: IndexPath(row: layout.graphCellFocusInCollection, section: 0), at: UICollectionViewScrollPosition.centeredHorizontally, animated: animated)
+            graphCollectionView.scrollToItem(at: IndexPath(row: layout.graphCellFocusInCollection, section: 0), at: UICollectionView.ScrollPosition.centeredHorizontally, animated: animated)
             
             // Setting an edge offset will put the center graph point at this x position within the graph view
             if !animated && edgeOffset != 0.0 {
@@ -231,7 +231,7 @@ class GraphContainerView: UIView {
             let collectLayout = UICollectionViewFlowLayout()
             self.cellSize = layout.cellViewSize
             collectLayout.itemSize = self.cellSize
-            collectLayout.scrollDirection = UICollectionViewScrollDirection.horizontal
+            collectLayout.scrollDirection = UICollectionView.ScrollDirection.horizontal
             graphCollectionView = UICollectionView(frame: self.bounds, collectionViewLayout: collectLayout)
             if let graphCollectionView = graphCollectionView {
                 graphCollectionView.backgroundColor = UIColor.clear
@@ -307,20 +307,20 @@ class GraphContainerView: UIView {
     @objc func pinchGestureHandler(_ sender: AnyObject) {
         //DDLogInfo("recognized pinch!")
         if let gesture = sender as? UIPinchGestureRecognizer {
-            if gesture.state == UIGestureRecognizerState.began {
+            if gesture.state == UIGestureRecognizer.State.began {
                 //DDLogInfo("gesture started: start cell size: \(cellSize)")
                 pinchStartCellSize = cellSize
                 pinchLocationInView = gesture.location(in: self)
                 return
             }
-            if gesture.state == UIGestureRecognizerState.changed {
+            if gesture.state == UIGestureRecognizer.State.changed {
                 //DDLogInfo("gesture state changed scale: \(gesture.scale)")
                 var newCellSize = pinchStartCellSize
                 newCellSize.width = round(newCellSize.width * CGFloat(gesture.scale))
                 zoomCellSize(newCellSize, xOffsetInView: pinchLocationInView.x)
                 return
             }
-            if gesture.state == UIGestureRecognizerState.ended {
+            if gesture.state == UIGestureRecognizer.State.ended {
                 //DDLogInfo("gesture ended with scale: \(gesture.scale)")
                 var newCellSize = pinchStartCellSize
                 newCellSize.width = round(newCellSize.width * CGFloat(gesture.scale))

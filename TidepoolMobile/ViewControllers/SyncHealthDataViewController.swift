@@ -321,21 +321,21 @@ class SyncHealthDataViewController: UIViewController {
         
         
         let attributedString = NSMutableAttributedString(string: "If you’re having trouble seeing your diabetes data in Tidepool or Tidepool Mobile, you can try a manual sync.\n\nBefore syncing: \n •  Open the Health app\n •  Tap the Sources tab\n •  Tap Tidepool\n •  Turn on any switches you want to sync with Tidepool (blood glucose, nutrition, insulin, etc)", attributes: [
-            NSAttributedStringKey.font: regFont,
-            NSAttributedStringKey.foregroundColor: textColor,
-            NSAttributedStringKey.kern: -0.2
+            NSAttributedString.Key.font: regFont,
+            NSAttributedString.Key.foregroundColor: textColor,
+            NSAttributedString.Key.kern: -0.2
             ])
         attributedString.addAttributes([
-            NSAttributedStringKey.font: semiBoldFont,
-            NSAttributedStringKey.foregroundColor: textHighliteColor
+            NSAttributedString.Key.font: semiBoldFont,
+            NSAttributedString.Key.foregroundColor: textHighliteColor
             ], range: NSRange(location: 141, length: 6))
         attributedString.addAttributes([
-            NSAttributedStringKey.font: semiBoldFont,
-            NSAttributedStringKey.foregroundColor: textHighliteColor
+            NSAttributedString.Key.font: semiBoldFont,
+            NSAttributedString.Key.foregroundColor: textHighliteColor
             ], range: NSRange(location: 164, length: 7))
         attributedString.addAttributes([
-            NSAttributedStringKey.font: semiBoldFont,
-            NSAttributedStringKey.foregroundColor: textHighliteColor
+            NSAttributedString.Key.font: semiBoldFont,
+            NSAttributedString.Key.foregroundColor: textHighliteColor
             ], range: NSRange(location: 184, length: 8))
         instructionsText.attributedText = attributedString
     }

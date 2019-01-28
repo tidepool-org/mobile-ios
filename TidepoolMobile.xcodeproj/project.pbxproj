@@ -1126,7 +1126,7 @@
 					4859FCB41B9A4DE4000C1269 = {
 						CreatedOnToolsVersion = 7.0;
 						DevelopmentTeam = 75U4X84TEG;
-						LastSwiftMigration = 0940;
+						LastSwiftMigration = 1010;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -1139,7 +1139,7 @@
 					};
 					4859FCCB1B9A4DE5000C1269 = {
 						CreatedOnToolsVersion = 7.0;
-						LastSwiftMigration = 0940;
+						LastSwiftMigration = 1010;
 						TestTargetID = 4859FCB41B9A4DE4000C1269;
 					};
 				};
@@ -2004,8 +2004,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "TidepoolMobile/TidepoolMobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -2030,8 +2029,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "TidepoolMobile/TidepoolMobile-Bridging-Header.h";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -2049,8 +2047,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "TidepoolMobile/TidepoolMobileTests-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TidepoolMobile.app/TidepoolMobile";
 			};
 			name = Debug;
@@ -2068,8 +2065,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.TidepoolMobileTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "TidepoolMobile/TidepoolMobileTests-Bridging-Header.h";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TidepoolMobile.app/TidepoolMobile";
 			};
 			name = Release;

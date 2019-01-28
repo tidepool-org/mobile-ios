@@ -90,7 +90,7 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
         let readingLabelTextContent = String(intValue)
         let readingLabelStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         readingLabelStyle.alignment = .center
-        let readingLabelFontAttributes = [NSAttributedStringKey.font: Styles.smallSemiboldFont, NSAttributedStringKey.foregroundColor: circleColor, NSAttributedStringKey.paragraphStyle: readingLabelStyle]
+        let readingLabelFontAttributes = [NSAttributedString.Key.font: Styles.smallSemiboldFont, NSAttributedString.Key.foregroundColor: circleColor, NSAttributedString.Key.paragraphStyle: readingLabelStyle]
         var readingLabelTextSize = readingLabelTextContent.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: readingLabelFontAttributes, context: nil).size
         readingLabelTextSize = CGSize(width: ceil(readingLabelTextSize.width), height: ceil(readingLabelTextSize.height))
         let readingLabelRect = CGRect(x: centerX-(readingLabelTextSize.width/2), y: centerY+circleRadius, width: readingLabelTextSize.width, height: readingLabelTextSize.height)

@@ -94,9 +94,9 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
         
         // Add observers for notificationCenter to handle keyboard events
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardWillShow(_:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardDidShow(_:)), name: Notification.Name.UIKeyboardDidShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardWillHide(_:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardDidShow(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         // Add an observer to notificationCenter to handle hashtagPress events from HashtagsView
         notificationCenter.addObserver(self, selector: #selector(EventAddEditViewController.hashtagPressed(_:)), name: Notification.Name(rawValue: "hashtagPressed"), object: nil)
      }
@@ -562,7 +562,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
     // UIKeyboardWillShowNotification
     @objc func keyboardWillShow(_ notification: Notification) {
         // Take the keyboardFrame for positioning
-        keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        keyboardFrame = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         if (!datePicker.isHidden) {
             // datePicker shown, close it, then condense the hashtags
             self.closeDatePicker()
@@ -576,7 +576,7 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
     // UIKeyboardDidShowNotification
     @objc func keyboardDidShow(_ notification: Notification) {
         // Take the keyboard frame for positioning
-        keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        keyboardFrame = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
     }
     
     // UIKeyboardWillHideNotification

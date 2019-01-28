@@ -67,11 +67,11 @@ class LoginViewController: BaseUIViewController {
 
         let notificationCenter = NotificationCenter.default
 
-        notificationCenter.addObserver(self, selector: #selector(LoginViewController.textFieldDidChange), name: Notification.Name.UITextFieldTextDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginViewController.textFieldDidChange), name: UITextField.textDidChangeNotification, object: nil)
         updateButtonStates()
         
-        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.switchedToNewServer(_:)), name: Notification.Name(rawValue: "switchedToNewServer"), object: nil)
@@ -225,10 +225,10 @@ class LoginViewController: BaseUIViewController {
         // login button
         if (emailTextField.text != "" && passwordTextField.text != "") {
             loginButton.isEnabled = true
-            loginButton.setTitleColor(UIColor.white, for:UIControlState())
+            loginButton.setTitleColor(UIColor.white, for:UIControl.State())
         } else {
             loginButton.isEnabled = false
-            loginButton.setTitleColor(UIColor.lightGray, for:UIControlState())
+            loginButton.setTitleColor(UIColor.lightGray, for:UIControl.State())
         }
     }
 
@@ -250,11 +250,11 @@ class LoginViewController: BaseUIViewController {
     // UIKeyboardWillShowNotification
     @objc func keyboardWillShow(_ notification: Notification) {
         // make space for the keyboard if needed
-        guard let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+        guard let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
             DDLogError("keyboardWillShow, unable to parse keyboardFrame info")
             return
         }
-        if let viewAdjustTime = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? Float {
+        if let viewAdjustTime = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Float {
             viewAdjustAnimationTime = viewAdjustTime
         }
         DDLogInfo("keyboardWillShow, kbd height: \(keyboardFrame.height)")
