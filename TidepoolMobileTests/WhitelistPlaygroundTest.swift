@@ -38,6 +38,12 @@ func determineTypeOfBG(sourceName: String, bundleId: String) -> (type: String, i
     if isDexcom != nil {
         return (kTypeCbg, isDexcom!)
     }
+    
+    // source name prefixed with "dexcom" also counts to catch European app with source == "Dexcom 6"
+    if sourceNameLowercased.hasPrefix("dexcom") {
+        return (kTypeCbg, true)
+    }
+    
     // Also mark glucose data from HK as CGM data if any of the following are true:
     // (1) HKSource.bundleIdentifier is one of the following: com.dexcom.Share2, com.dexcom.CGM, com.dexcom.G6, or org.nightscoutfoundation.spike.
     
@@ -75,6 +81,7 @@ let testCases = [
     (sourceName: "Mup", bundleId: "my.loopkit.bundle", type: "cbg", isDexcom: false),
     (sourceName: "Mup", bundleId: "my.notloopkit.bundle", type: "smbg", isDexcom: false),
     (sourceName: "Spike For iPhone/iPod Touch", bundleId: "org.Nightscoutfoundation.spike", type: "cbg", isDexcom: false),
+    (sourceName: "Dexcom 6", bundleId: "com.whatever", type: "cbg", isDexcom: true),
 ]
 
 for (sourceName, bundleId, type, isDexcom) in testCases {

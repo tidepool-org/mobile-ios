@@ -64,6 +64,11 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
             return (kTypeCbg, isDexcom!)
         }
 
+        // source name prefixed with "dexcom" also counts to catch European app with source == "Dexcom 6"
+        if sourceNameLowercased.hasPrefix("dexcom") {
+            return (kTypeCbg, true)
+        }
+
         // Also mark glucose data from HK as CGM data if any of the following are true:
         // (1) HKSource.bundleIdentifier is one of the following: com.dexcom.Share2, com.dexcom.CGM, com.dexcom.G6, or org.nightscoutfoundation.spike.
 
