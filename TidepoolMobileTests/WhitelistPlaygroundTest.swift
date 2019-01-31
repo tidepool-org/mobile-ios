@@ -8,6 +8,7 @@
 // Paste into playground to work on whitelisting logic for cbg samples
 
 import UIKit
+import SwiftyJSON
 
 func determineTypeOfBG(sourceName: String, bundleId: String) -> (type: String, isDexcom: Bool) {
     let bundleIdSeparators = CharacterSet(charactersIn: ".")
@@ -18,9 +19,9 @@ func determineTypeOfBG(sourceName: String, bundleId: String) -> (type: String, i
         ]
     // bundleId string, isDexcom?
     let whiteListBundleIds = [
-        "com.dexcom.share2" : true,
-        "com.dexcom.cgm" : true,
-        "com.dexcom.g6" : true,
+//        "com.dexcom.share2" : true,
+//        "com.dexcom.cgm" : true,
+//        "com.dexcom.g6" : true,
         "org.nightscoutfoundation.spike" : false,
         ]
     // bundleId component string, isDexcom?
@@ -46,11 +47,16 @@ func determineTypeOfBG(sourceName: String, bundleId: String) -> (type: String, i
     
     // Also mark glucose data from HK as CGM data if any of the following are true:
     // (1) HKSource.bundleIdentifier is one of the following: com.dexcom.Share2, com.dexcom.CGM, com.dexcom.G6, or org.nightscoutfoundation.spike.
+    // (1a) HKSource.bundleIdentifier has com.dexcom as a prefix (so more general compare)...
     
     //let bundleId = sample.sourceRevision.source.bundleIdentifier
     isDexcom = whiteListBundleIds[bundleIdLowercased]
     if isDexcom != nil {
         return (kTypeCbg, isDexcom!)
+    }
+    
+    if bundleIdLowercased.hasPrefix("com.dexcom") {
+        return (kTypeCbg, true)
     }
     
     // (2) HKSource.bundleIdentifier ends in .Loop
@@ -72,9 +78,10 @@ func determineTypeOfBG(sourceName: String, bundleId: String) -> (type: String, i
 }
 
 let testCases = [
-    (sourceName: "Dexcom", bundleId: "com.dexcom.Share2", type: "cbg", isDexcom: true),
-    (sourceName: "Dexcom", bundleId: "com.dexcom.CGM", type: "cbg", isDexcom: true),
-    (sourceName: "Dexcom", bundleId: "com.dexcom.G6", type: "cbg", isDexcom: true),
+    (sourceName: "-excom", bundleId: "com.dexcom.Share2", type: "cbg", isDexcom: true),
+    (sourceName: "-excom", bundleId: "com.dexcom.CGM", type: "cbg", isDexcom: true),
+    (sourceName: "-excom", bundleId: "com.dexcom.G6", type: "cbg", isDexcom: true),
+    (sourceName: "-excom", bundleId: "com.dexcom europe whatever.xx", type: "cbg", isDexcom: true),
     (sourceName: "Loop", bundleId: "any.bundle.id", type: "cbg", isDexcom: false),
     (sourceName: "Woop", bundleId: "any.bundle.loopkit", type: "cbg", isDexcom: false),
     (sourceName: "Zip", bundleId: "loopkit.bundle.loopkit", type: "cbg", isDexcom: false),

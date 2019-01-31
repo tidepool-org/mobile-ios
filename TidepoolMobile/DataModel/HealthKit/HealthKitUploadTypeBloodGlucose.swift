@@ -44,9 +44,6 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
             ]
         // bundleId string, isDexcom?
         let whiteListBundleIds = [
-            "com.dexcom.share2" : true,
-            "com.dexcom.cgm" : true,
-            "com.dexcom.g6" : true,
             "org.nightscoutfoundation.spike" : false,
             "com.spike-app.spike": false, // old TestFlight distribution
             ]
@@ -71,11 +68,16 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
 
         // Also mark glucose data from HK as CGM data if any of the following are true:
         // (1) HKSource.bundleIdentifier is one of the following: com.dexcom.Share2, com.dexcom.CGM, com.dexcom.G6, or org.nightscoutfoundation.spike.
+        // (1a) HKSource.bundleIdentifier has com.dexcom as a prefix (so more general compare)...
 
         let bundleIdLowercased = sample.sourceRevision.source.bundleIdentifier.lowercased()
         isDexcom = whiteListBundleIds[bundleIdLowercased]
         if isDexcom != nil {
             return (kTypeCbg, isDexcom!)
+        }
+
+        if bundleIdLowercased.hasPrefix("com.dexcom") {
+            return (kTypeCbg, true)
         }
 
         // (2) HKSource.bundleIdentifier ends in .Loop
