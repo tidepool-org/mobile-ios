@@ -112,9 +112,10 @@ class BlipUser {
             DDLogError("settings missing bgTarget.high")
             return
         }
-        guard let bgUnits = json["units"]["bg"].string else {
-            DDLogError("settings missing units.bg")
-            return
+        // default to mg/dL if there is no units field
+        var bgUnits = "mg/dL"
+        if let units = json["units"]["bg"].string {
+            bgUnits = units
         }
         var bgLow: Int?
         var bgHigh: Int?
