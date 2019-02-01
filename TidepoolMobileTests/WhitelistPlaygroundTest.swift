@@ -73,6 +73,11 @@ func determineTypeOfBG(sourceName: String, bundleId: String) -> (type: String, i
         }
     }
     
+    // (4) HKSource.bundleIdentifier has suffix of "xdripreader"
+    if bundleIdLowercased.hasSuffix("xdripreader") {
+        return (kTypeCbg, false)
+    }
+    
     // Assume everything else is smbg!
     return (kTypeSmbg, false)
 }
@@ -89,6 +94,7 @@ let testCases = [
     (sourceName: "Mup", bundleId: "my.notloopkit.bundle", type: "smbg", isDexcom: false),
     (sourceName: "Spike For iPhone/iPod Touch", bundleId: "org.Nightscoutfoundation.spike", type: "cbg", isDexcom: false),
     (sourceName: "Dexcom 6", bundleId: "com.whatever", type: "cbg", isDexcom: true),
+    (sourceName: "", bundleId: "com.johnherzfeld.iosxdripreader", type: "cbg", isDexcom: false),
 ]
 
 for (sourceName, bundleId, type, isDexcom) in testCases {

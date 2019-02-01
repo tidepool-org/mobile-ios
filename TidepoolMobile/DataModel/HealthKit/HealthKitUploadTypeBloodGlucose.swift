@@ -94,6 +94,11 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
             }
         }
 
+        // (4) HKSource.bundleIdentifier has suffix of "xdripreader"
+        if bundleIdLowercased.hasSuffix("xdripreader") {
+            return (kTypeCbg, false)
+        }
+
         // Assume everything else is smbg!
         return (kTypeSmbg, false)
     }
