@@ -25,6 +25,7 @@ class BlipUser {
     var patient: BlipPatient?
     var bgTargetLow: Int?       // in mg/dL
     var bgTargetHigh: Int?      // in mg/dL
+    var mMolPerLiterDisplay = false // if true, display in mMol/L!
     var uploadId: String?
     var biologicalSex: String?
     
@@ -122,6 +123,7 @@ class BlipUser {
         if bgUnits == "mmol/L" {
             bgLow = Int((Float(truncating: bgLowNum) * Float(kGlucoseConversionToMgDl)) + 0.5)
             bgHigh = Int((Float(truncating: bgHighNum) * Float(kGlucoseConversionToMgDl)) + 0.5)
+            self.mMolPerLiterDisplay = true
         } else if bgUnits == "mg/dL" {
             bgLow = Int(truncating: bgLowNum)
             bgHigh = Int(truncating: bgHighNum)

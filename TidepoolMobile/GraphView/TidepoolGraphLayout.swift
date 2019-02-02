@@ -37,8 +37,8 @@ class TidepoolGraphLayout: GraphLayout {
         let startTime = mainEventTime.addingTimeInterval(-graphTI/2.0)
         super.init(viewSize: viewSize, startTime: startTime, timeIntervalPerTile: cellTI, numberOfTiles: numberOfTiles, tilesInView: 1, tzOffsetSecs: tzOffsetSecs)
 
-        self.yAxisValuesWithLines = displayGridLines ? [70, 180] : []
-        self.yAxisValuesWithLabels = [70, 180, 300]
+        self.yAxisValuesWithLines = []
+        self.yAxisValuesWithLabels = []
     }
     
     /// Helper function to determine if user must have scrolled to this cell (i.e., not the main view cell, which is the middle cell in the collection).
@@ -87,19 +87,30 @@ class TidepoolGraphLayout: GraphLayout {
     // MARK: - Configuration vars
     //
 
-    func setLowAndHighBGBounds(low: Int?, high: Int?) {
+    var displayInMMol = false
+    func setLowAndHighBGBounds(low: Int?, high: Int?, mMolPerLiterDisplay: Bool = false) {
+        displayInMMol = mMolPerLiterDisplay
+        self.yAxisValuesWithLabels = []
+        self.yAxisValuesWithLines = []
         if let low = low, let high = high {
             DDLogInfo("\(#function), low: \(low), high: \(high)")
             highBoundary = CGFloat(high)
             lowBoundary = CGFloat(low)
-            self.yAxisValuesWithLines = displayGridLines ? [low, high] : []
-            // a bit of a hack to avoid numbers running into each other...
-            if low - 40 >= 45 {
-                self.yAxisValuesWithLabels = [40, low, high, 300]
-            } else {
-                self.yAxisValuesWithLabels = [low, high, 300]
+            if displayGridLines {
+                self.yAxisValuesWithLines = [low, high]
             }
-            
+            if displayInMMol {
+                let mmolLowStr = String(format: "%.1f", lowBoundary/kGlucoseConversionToMgDl)
+                let mmolHighStr = String(format: "%.1f", highBoundary/kGlucoseConversionToMgDl)
+                let mmolMaxStr = String(format: "%.1f", 300.0/kGlucoseConversionToMgDl)
+                self.yAxisValuesWithLabels.append(contentsOf: [(low, mmolLowStr), (high, mmolHighStr), (300, mmolMaxStr)])
+            } else {
+                // a bit of a hack to avoid numbers running into each other...
+                if low - 40 >= 45 {
+                    self.yAxisValuesWithLabels = [(40, "40")]
+                }
+                self.yAxisValuesWithLabels.append(contentsOf: [(low, String(low)), (high, String(high)), (300, "300")])
+            }
         }
     }
     
@@ -166,7 +177,7 @@ class TidepoolGraphLayout: GraphLayout {
         self.headerHeight = 24.0
         //self.footerHeight = 8.0
         self.footerHeight = 0.0
-        self.yAxisLineLeftMargin = 26.0
+        self.yAxisLineLeftMargin = displayInMMol ? 32.0 : 28.0
         self.yAxisLineRightMargin = 10.0
         self.yAxisLineColor = UIColor(hex: 0xe2e4e7)
         self.backgroundColor = UIColor(hex: 0xf6f6f6)

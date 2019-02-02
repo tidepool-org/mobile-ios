@@ -561,6 +561,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     
     @objc func refreshControlHandler() {
         APIConnector.connector().trackMetric("Swiped down to refresh")
+        dataController.loadUserSettings(force: true)
         refreshTable()
     }
     
