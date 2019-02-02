@@ -122,7 +122,7 @@ class GraphLayout {
     var yAxisLineColor: UIColor = UIColor.black
     var yAxisValuesWithLines: [Int] = []
     // left side labels, corresponding to yAxisRange and yAxisBase
-    var yAxisValuesWithLabels: [Int] = []
+    var yAxisValuesWithLabels: [(Int, String)] = []
     var yAxisRange: CGFloat = 0.0
     var yAxisBase: CGFloat = 0.0
     var yAxisPixels: CGFloat = 0.0

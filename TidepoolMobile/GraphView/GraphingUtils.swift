@@ -195,9 +195,9 @@ open class GraphingUtils {
             self.drawDashedHorizontalLine(CGPoint(x: yAxisLineLeftMargin, y: yOffset), length: viewSize.width - layout.yAxisLineRightMargin - yAxisLineLeftMargin - maxRightLabelWidth - lineLabelGap, lineWidth: 1.5)
         }
         
-        for label in layout.yAxisValuesWithLabels {
-            let yOffset = round(yAxisBase - (CGFloat(label) * pixelsPerValue))
-            drawLabelLeftOfPoint(String(label), rightCenter: CGPoint(x: yAxisLineLeftMargin - lineLabelGap, y: yOffset), font: layout.axesLabelTextFont, color: layout.axesLeftLabelTextColor)
+        for (value, label) in layout.yAxisValuesWithLabels {
+            let yOffset = round(yAxisBase - (CGFloat(value) * pixelsPerValue))
+            drawLabelLeftOfPoint(label, rightCenter: CGPoint(x: yAxisLineLeftMargin - lineLabelGap, y: yOffset), font: layout.axesLabelTextFont, color: layout.axesLeftLabelTextColor)
         }
         
         for label in layout.yAxisValuesWithRightEdgeLabels {

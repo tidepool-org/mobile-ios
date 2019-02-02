@@ -170,11 +170,11 @@ class TidepoolMobileDataController: NSObject
     }
     fileprivate var _currentViewedUser: BlipUser?
 
-    fileprivate func loadUserSettings() {
+    func loadUserSettings(force: Bool = false) {
         
         if let settingsUser = _currentViewedUser {
             // only fetch if we haven't yet...
-            if settingsUser.bgTargetLow == nil && settingsUser.bgTargetHigh == nil {
+            if force || settingsUser.bgTargetLow == nil && settingsUser.bgTargetHigh == nil {
                 APIConnector.connector().fetchUserSettings(settingsUser.userid) { (result:Alamofire.Result<JSON>) -> (Void) in
                     DDLogInfo("Settings fetch result: \(result)")
                     if (result.isSuccess) {
