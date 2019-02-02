@@ -16,6 +16,9 @@
 import HealthKit
 import CocoaLumberjack
 
+// Define this here since all builds include this file. Not ideal, but nice to have this in only one place! Tidepool stores all bg values in mmol/L and so does this app. However, Tidepool mobile currently only displays in mg/dL.
+let kGlucoseConversionToMgDl: CGFloat = 18.01559
+
 class HealthKitManager {
     
     // MARK: Access, availability, authorization
@@ -33,19 +36,15 @@ class HealthKitManager {
         return HKHealthStore.isHealthDataAvailable()
     }()
     
-    func authorizationRequestedForBloodGlucoseSamples() -> Bool {
-        return UserDefaults.standard.bool(forKey: HealthKitSettings.AuthorizationRequestedForBloodGlucoseSamplesKey)
+    func authorizationRequestedForUploaderSamples() -> Bool {
+        return UserDefaults.standard.bool(forKey: HealthKitSettings.AuthorizationRequestedForUploaderSamplesKey)
     }
     
     func authorizationRequestedForBloodGlucoseSampleWrites() -> Bool {
         return UserDefaults.standard.bool(forKey: HealthKitSettings.AuthorizationRequestedForBloodGlucoseSampleWritesKey)
     }
     
-    func authorizationRequestedForWorkoutSamples() -> Bool {
-        return UserDefaults.standard.bool(forKey: HealthKitSettings.AuthorizationRequestedForWorkoutSamplesKey)
-    }
-    
-    func authorize(shouldAuthorizeBloodGlucoseSampleReads: Bool, shouldAuthorizeBloodGlucoseSampleWrites: Bool, shouldAuthorizeWorkoutSamples: Bool, completion: @escaping (_ success:Bool, _ error:NSError?) -> Void = {(_, _) in })
+    func authorize(shouldAuthorizeUploaderSampleReads: Bool, shouldAuthorizeBloodGlucoseSampleWrites: Bool, completion: @escaping (_ success:Bool, _ error:NSError?) -> Void = {(_, _) in })
     {
         DDLogVerbose("trace")
         
@@ -65,21 +64,19 @@ class HealthKitManager {
             return
         }
         
-        var readTypes: Set<HKSampleType>?
+        var readTypes: Set<HKObjectType>?
         var writeTypes: Set<HKSampleType>?
-        if (shouldAuthorizeBloodGlucoseSampleReads) {
+        if (shouldAuthorizeUploaderSampleReads) {
             readTypes = Set<HKSampleType>()
-            readTypes!.insert(HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!)
+            for uploadType in appHealthKitConfiguration.healthKitUploadTypes {
+                readTypes!.insert(uploadType.hkSampleType()!)
+            }
+            let biologicalSex = HKObjectType.characteristicType(forIdentifier: .biologicalSex)
+            readTypes!.insert(biologicalSex!)
         }
         if (shouldAuthorizeBloodGlucoseSampleWrites) {
             writeTypes = Set<HKSampleType>()
-            writeTypes!.insert(HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!)
-        }
-        if (shouldAuthorizeWorkoutSamples) {
-            if readTypes == nil {
-                readTypes = Set<HKSampleType>()
-            }
-            readTypes!.insert(HKObjectType.workoutType())
+            writeTypes!.insert(HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!)
         }
         guard readTypes != nil || writeTypes != nil else {
             DDLogVerbose("No health data authorization requested, ignoring")
@@ -89,14 +86,11 @@ class HealthKitManager {
         if (isHealthDataAvailable) {
             healthStore!.requestAuthorization(toShare: writeTypes, read: readTypes) { (success, error) -> Void in
                 if success {
-                    if (shouldAuthorizeBloodGlucoseSampleReads) {
-                        UserDefaults.standard.set(true, forKey: HealthKitSettings.AuthorizationRequestedForBloodGlucoseSamplesKey)
+                    if (shouldAuthorizeUploaderSampleReads) {
+                        UserDefaults.standard.set(true, forKey: HealthKitSettings.AuthorizationRequestedForUploaderSamplesKey)
                     }
                     if (shouldAuthorizeBloodGlucoseSampleWrites) {
                         UserDefaults.standard.set(true, forKey: HealthKitSettings.AuthorizationRequestedForBloodGlucoseSampleWritesKey)
-                    }
-                    if shouldAuthorizeWorkoutSamples {
-                        UserDefaults.standard.set(true, forKey: HealthKitSettings.AuthorizationRequestedForWorkoutSamplesKey)
                     }
                     UserDefaults.standard.synchronize()
                 }
@@ -113,7 +107,7 @@ class HealthKitManager {
     
     // MARK: Observation
     
-    func startObservingBloodGlucoseSamples(_ observationHandler: @escaping (NSError?) -> (Void)) {
+    func startObservingSamplesForType(_ uploadType: HealthKitUploadType, _ observationHandler: @escaping (NSError?) -> (Void)) {
         DDLogVerbose("trace")
 
         guard isHealthDataAvailable else {
@@ -121,13 +115,13 @@ class HealthKitManager {
             return
         }
         
-        if bloodGlucoseObservationQuery != nil {
-            healthStore?.stop(bloodGlucoseObservationQuery!)
-            bloodGlucoseObservationQuery = nil
+        if uploadType.sampleObservationQuery != nil {
+            healthStore?.stop(uploadType.sampleObservationQuery!)
+            uploadType.sampleObservationQuery = nil
         }
         
-        let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
-        bloodGlucoseObservationQuery = HKObserverQuery(sampleType: sampleType, predicate: nil) {
+        let sampleType = uploadType.hkSampleType()!
+        uploadType.sampleObservationQuery = HKObserverQuery(sampleType: sampleType, predicate: nil) {
             (query, observerQueryCompletion, error) in
             
             DDLogVerbose("Observation query called")
@@ -141,10 +135,10 @@ class HealthKitManager {
             // Per HealthKit docs: Calling this block tells HealthKit that you have successfully received the background data. If you do not call this block, HealthKit continues to attempt to launch your app using a back off algorithm. If your app fails to respond three times, HealthKit assumes that your app cannot receive data, and stops sending you background updates            
             observerQueryCompletion()
         }
-        healthStore?.execute(bloodGlucoseObservationQuery!)
+        healthStore?.execute(uploadType.sampleObservationQuery!)
     }
     
-    func stopObservingBloodGlucoseSamples() {
+    func stopObservingSamplesForType(_ uploadType: HealthKitUploadType) {
         DDLogVerbose("trace")
 
         guard isHealthDataAvailable else {
@@ -152,63 +146,15 @@ class HealthKitManager {
             return
         }
         
-        if bloodGlucoseObservationQuery != nil {
-            healthStore?.stop(bloodGlucoseObservationQuery!)
-            bloodGlucoseObservationQuery = nil
-        }
-    }
-    
-    // NOTE: resultsHandler is called on a separate process queue!
-    func startObservingWorkoutSamples(_ resultsHandler: (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void)!) {
-        DDLogVerbose("trace")
-
-        guard isHealthDataAvailable else {
-            DDLogError("Unexpected HealthKitManager call when health data not available")
-            return
-        }
-        
-        if !workoutsObservationSuccessful {
-            if workoutsObservationQuery != nil {
-                healthStore?.stop(workoutsObservationQuery!)
-            }
-            
-            let sampleType = HKObjectType.workoutType()
-            workoutsObservationQuery = HKObserverQuery(sampleType: sampleType, predicate: nil) {
-                [unowned self](query, observerQueryCompletion, error) in
-                if error == nil {
-                    self.workoutsObservationSuccessful = true
-                    self.readWorkoutSamples(resultsHandler)
-                } else {
-                    DDLogError("HealthKit observation error \(String(describing: error))")
-                    resultsHandler?(nil, nil, error as NSError?)
-                }
-                
-                observerQueryCompletion()
-            }
-            healthStore?.execute(workoutsObservationQuery!)
-        }
-    }
-    
-    func stopObservingWorkoutSamples() {
-        DDLogVerbose("trace")
-
-        guard isHealthDataAvailable else {
-            DDLogError("Unexpected HealthKitManager call when health data not available")
-            return
-        }
-        
-        if workoutsObservationSuccessful {
-            if workoutsObservationQuery != nil {
-                healthStore?.stop(workoutsObservationQuery!)
-                workoutsObservationQuery = nil
-            }
-            workoutsObservationSuccessful = false
+        if uploadType.sampleObservationQuery != nil {
+            healthStore?.stop(uploadType.sampleObservationQuery!)
+            uploadType.sampleObservationQuery = nil
         }
     }
     
     // MARK: Background delivery
     
-    func enableBackgroundDeliveryBloodGlucoseSamples() {
+    func enableBackgroundDeliverySamplesForType(_ uploadType: HealthKitUploadType) {
         DDLogVerbose("trace")
 
         guard isHealthDataAvailable else {
@@ -216,14 +162,14 @@ class HealthKitManager {
             return
         }
         
-        if !bloodGlucoseBackgroundDeliveryEnabled {
+        if !uploadType.sampleBackgroundDeliveryEnabled {
             healthStore?.enableBackgroundDelivery(
-                for: HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!,
+                for: uploadType.hkSampleType()!,
                 frequency: HKUpdateFrequency.immediate) {
                     success, error -> Void in
                     if error == nil {
-                        self.bloodGlucoseBackgroundDeliveryEnabled = true
-                        DDLogError("Enabled background delivery of health data")
+                        uploadType.sampleBackgroundDeliveryEnabled = true
+                        DDLogInfo("Enabled background delivery of health data")
                     } else {
                         DDLogError("Error enabling background delivery of health data \(String(describing: error))")
                     }
@@ -231,7 +177,7 @@ class HealthKitManager {
         }
     }
     
-    func disableBackgroundDeliveryBloodGlucoseSamples() {
+    func disableBackgroundDeliverySamplesForType(_ uploadType: HealthKitUploadType) {
         DDLogVerbose("trace")
 
         guard isHealthDataAvailable else {
@@ -239,11 +185,11 @@ class HealthKitManager {
             return
         }
         
-        if bloodGlucoseBackgroundDeliveryEnabled {
-            healthStore?.disableBackgroundDelivery(for: HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!) {
+        if uploadType.sampleBackgroundDeliveryEnabled {
+            healthStore?.disableBackgroundDelivery(for: uploadType.hkSampleType()!) {
                 success, error -> Void in
                 if error == nil {
-                    self.bloodGlucoseBackgroundDeliveryEnabled = false
+                    uploadType.sampleBackgroundDeliveryEnabled = false
                     DDLogError("Disabled background delivery of health data")
                 } else {
                     DDLogError("Error disabling background delivery of health data \(String(describing: error)), \(String(describing: error!._userInfo))")
@@ -252,51 +198,7 @@ class HealthKitManager {
         }
     }
     
-    func enableBackgroundDeliveryWorkoutSamples() {
-        DDLogVerbose("trace")
-
-        guard isHealthDataAvailable else {
-            DDLogError("Unexpected HealthKitManager call when health data not available")
-            return
-        }
-        
-        if !workoutsBackgroundDeliveryEnabled {
-            healthStore?.enableBackgroundDelivery(
-                for: HKObjectType.workoutType(),
-                frequency: HKUpdateFrequency.immediate) {
-                    success, error -> Void in
-                    if error == nil {
-                        self.workoutsBackgroundDeliveryEnabled = true
-                        DDLogError("Enabled background delivery of health data")
-                    } else {
-                        DDLogError("Error enabling background delivery of health data \(String(describing: error))")
-                    }
-            }
-        }
-    }
-    
-    func disableBackgroundDeliveryWorkoutSamples() {
-        DDLogVerbose("trace")
-
-        guard isHealthDataAvailable else {
-            DDLogError("Unexpected HealthKitManager call when health data not available")
-            return
-        }
-        
-        if workoutsBackgroundDeliveryEnabled {
-            healthStore?.disableBackgroundDelivery(for: HKObjectType.workoutType()) {
-                success, error -> Void in
-                if error == nil {
-                    self.workoutsBackgroundDeliveryEnabled = false
-                    DDLogError("Disabled background delivery of health data")
-                } else {
-                    DDLogError("Error disabling background delivery of health data \(String(describing: error)), \((error! as NSError).userInfo)")
-                }
-            }
-        }
-    }
-    
-    func readBloodGlucoseSamplesFromAnchor(predicate: NSPredicate?, anchor: HKQueryAnchor?, limit: Int, resultsHandler: @escaping ((NSError?, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?) -> Void))
+    func readSamplesFromAnchorForType(_ uploadType: HealthKitUploadType, predicate: NSPredicate?, anchor: HKQueryAnchor?, limit: Int, resultsHandler: @escaping ((NSError?, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?) -> Void))
     {
         DDLogVerbose("trace")
         
@@ -305,7 +207,7 @@ class HealthKitManager {
             return
         }
         
-        let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
+        let sampleType = uploadType.hkSampleType()!
         let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
             predicate: predicate,
             anchor: anchor,
@@ -321,9 +223,9 @@ class HealthKitManager {
         healthStore?.execute(sampleQuery)
     }
 
-    func readBloodGlucoseSamples(startDate: Date, endDate: Date, limit: Int, resultsHandler: @escaping (((NSError?, [HKSample]?, HKQueryAnchor?) -> Void)))
+    func readSamplesForType(_ uploadType: HealthKitUploadType, startDate: Date, endDate: Date, limit: Int, resultsHandler: @escaping (((NSError?, [HKSample]?, HKQueryAnchor?) -> Void)))
     {
-        DDLogInfo("readBloodGlucoseSamples startDate: \(startDate), endDate: \(endDate), limit: \(limit)")
+        DDLogInfo("readSamplesForType uploadType: \(uploadType.typeName) startDate: \(startDate), endDate: \(endDate), limit: \(limit)")
         
         guard isHealthDataAvailable else {
             DDLogError("Unexpected HealthKitManager call when health data not available")
@@ -333,7 +235,7 @@ class HealthKitManager {
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictStartDate, .strictEndDate])
         let sortDescriptor = NSSortDescriptor(key:HKSampleSortIdentifierStartDate, ascending: false)
         
-        let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
+        let sampleType = uploadType.hkSampleType()!
         let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: limit, sortDescriptors: [sortDescriptor]) {
             (query, newSamples, error) -> Void in
             
@@ -346,6 +248,7 @@ class HealthKitManager {
         healthStore?.execute(sampleQuery)
     }
     
+    // Debug function, not currently called!
     func countBloodGlucoseSamples(_ completion: @escaping (_ error: NSError?, _ totalSamplesCount: Int, _ totalDexcomSamplesCount: Int) -> (Void)) {
         DDLogVerbose("trace")
         
@@ -411,48 +314,43 @@ class HealthKitManager {
         healthStore?.execute(startDateSampleQuery)
     }
     
-    func readWorkoutSamples(_ resultsHandler: @escaping (([HKSample]?, [HKDeletedObject]?, NSError?) -> Void) = {(_, _, _) in })
-    {
-        DDLogVerbose("trace")
-        
-        guard isHealthDataAvailable else {
-            DDLogError("Unexpected HealthKitManager call when health data not available")
-            return
-        }
-        
-        var queryAnchor: HKQueryAnchor?
-        let queryAnchorData = UserDefaults.standard.object(forKey: HealthKitSettings.WorkoutQueryAnchorKey)
-        if queryAnchorData != nil {
-            queryAnchor = NSKeyedUnarchiver.unarchiveObject(with: queryAnchorData as! Data) as? HKQueryAnchor
-        }
-        
-        let sampleType = HKObjectType.workoutType()
-        let sampleQuery = HKAnchoredObjectQuery(type: sampleType,
-            predicate: nil,
-            anchor: queryAnchor,
-            limit: Int(HKObjectQueryNoLimit /* 100 */)) { // TODO: need to limit to like 100 or so once clients are properly handling the "more" case like we do for observing/caching blood glucose data
-                
-                (query, newSamples, deletedSamples, newAnchor, error) -> Void in
-                
-                resultsHandler(newSamples, deletedSamples, (error as NSError?))
-                
-                if error == nil && newAnchor != nil {
-                    let queryAnchorData = NSKeyedArchiver.archivedData(withRootObject: newAnchor!)
-                    UserDefaults.standard.set(queryAnchorData, forKey: HealthKitSettings.WorkoutQueryAnchorKey)
-                    UserDefaults.standard.synchronize()
+    /// Fill in Tidepool biological sex of patient if it is missing, and we can get it from HealthKit.
+    func updateProfileBioSexCheck() {
+        // Fetch user sex in case it is needed for profile
+        DDLogInfo("trace")
+        if let healthStore = healthStore {
+            let dataCtl = TidepoolMobileDataController.sharedInstance
+            if let user = dataCtl.currentLoggedInUser {
+                if user.biologicalSex == nil {
+                    do {
+                        let sex = try healthStore.biologicalSex()
+                        let bioSexString = sex.biologicalSex.stringRepresentation
+                        guard sex.biologicalSex != .notSet else {
+                            DDLogInfo("biological sex not set in HK!")
+                            return
+                        }
+                        DDLogInfo("biologicalSex is \(bioSexString)")
+                        APIConnector.connector().updateProfile(user.userid, biologicalSex: bioSexString) {
+                            updateOk in
+                            DDLogInfo("Result of profile update: \(updateOk)")
+                            dataCtl.updateUserBiologicalSex(bioSexString)
+                        }
+                    } catch {
+                        DDLogInfo("throw from call for biologicalSex: not authorized?")
+                    }
                 }
+            }
         }
-        healthStore?.execute(sampleQuery)
     }
-    
-    // MARK: Private
-    
-    fileprivate var bloodGlucoseObservationQuery: HKObserverQuery?
-    fileprivate var bloodGlucoseBackgroundDeliveryEnabled = false
-    fileprivate var bloodGlucoseQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)
+}
 
-    fileprivate var workoutsObservationSuccessful = false
-    fileprivate var workoutsObservationQuery: HKObserverQuery?
-    fileprivate var workoutsBackgroundDeliveryEnabled = false
-    fileprivate var workoutsQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)
+extension HKBiologicalSex {
+    var stringRepresentation: String {
+        switch self {
+        case .notSet: return "unknown"
+        case .female: return "female"
+        case .male: return "male"
+        case .other: return "other"
+        }
+    }
 }

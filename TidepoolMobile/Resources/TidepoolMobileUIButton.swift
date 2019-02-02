@@ -45,13 +45,13 @@ import UIKit
     
     fileprivate func updateStyling() {
         if let image = Styles.backgroundImageofSize(self.bounds.size, style: usage) {
-            self.setBackgroundImage(image, for: UIControlState())
-            self.setBackgroundImage(image, for: UIControlState.disabled)
+            self.setBackgroundImage(image, for: UIControl.State())
+            self.setBackgroundImage(image, for: UIControl.State.disabled)
         }
         // Really shouldn't know about actual colors here, but shortcut to put in a reversed background color when button is pressed. Note this only supports 2 background colors!
         let reversedUsage = usage == "darkBackgroundButton" ? "brightBackgroundButton" : "darkBackgroundButton"
         if let image = Styles.backgroundImageofSize(self.bounds.size, style: reversedUsage) {
-            self.setBackgroundImage(image, for: UIControlState.highlighted)
+            self.setBackgroundImage(image, for: UIControl.State.highlighted)
         }
         if let (font, textColor) = Styles.usageToFontWithColor[usage] {
             if let titleLabel = titleLabel {
@@ -59,8 +59,8 @@ import UIKit
                 titleLabel.font = font
                 // Shortcut: this means the button only works with a single font color for disabled buttons: dimmedWhiteColor!
                 if let titleStr = titleLabel.text {
-                    let disabledTitle = NSAttributedString(string: titleStr, attributes:[NSFontAttributeName: titleLabel.font, NSForegroundColorAttributeName: Styles.dimmedWhiteColor])
-                    self.setAttributedTitle(disabledTitle, for: UIControlState.disabled)
+                    let disabledTitle = NSAttributedString(string: titleStr, attributes:[NSAttributedString.Key.font: titleLabel.font, NSAttributedString.Key.foregroundColor: Styles.dimmedWhiteColor])
+                    self.setAttributedTitle(disabledTitle, for: UIControl.State.disabled)
                 }
             }
         }

@@ -178,7 +178,7 @@ class HashtagsView: UIView {
         let hashtagButton = UIButton(frame: CGRect.zero)
         let hashtagText =  HashTagManager.sharedInstance.sortedHashTags[index].tag
         hashtagButton.setAttributedTitle(NSAttributedString(string: hashtagText,
-            attributes:[NSForegroundColorAttributeName: blackishColor, NSFontAttributeName: mediumRegularFont]), for: UIControlState())
+            attributes:[NSAttributedString.Key.foregroundColor: blackishColor, NSAttributedString.Key.font: mediumRegularFont]), for: UIControl.State())
         hashtagButton.frame.size.height = hashtagHeight
         hashtagButton.sizeToFit()
         hashtagButton.frame.size.width = hashtagButton.frame.width + 4 * labelSpacing
@@ -197,20 +197,20 @@ class HashtagsView: UIView {
     }
     
     // Hashtag was pressed, send notification to Add/EditNoteVC to add hashtag text to textbox
-    func hashtagPress(_ sender: UIButton) {
+    @objc func hashtagPress(_ sender: UIButton) {
         let notification = Notification(name: Notification.Name(rawValue: "hashtagPressed"), object: nil, userInfo: ["hashtag":sender.titleLabel!.text!])
         NotificationCenter.default.post(notification)
     }
     
     // Animate the hashtag to the normal color
-    func hashtagNormal(_ sender: UIButton) {
+    @objc func hashtagNormal(_ sender: UIButton) {
         UIView.animate(withDuration: 0.2, animations: { () -> Void in
             sender.backgroundColor = hashtagColor
         })
     }
     
     // Animate the hashtag to the highlighted color
-    func hashtagHighlight(_ sender: UIButton) {
+    @objc func hashtagHighlight(_ sender: UIButton) {
         UIView.animate(withDuration: 0.15, animations: { () -> Void in
             sender.backgroundColor = hashtagHighlightedColor
         })

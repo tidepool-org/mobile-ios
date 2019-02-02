@@ -14,7 +14,7 @@
 */
 
 import UIKit
-
+import CocoaLumberjack
 
 class WizardGraphDataType: GraphDataType {
 
@@ -45,14 +45,12 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
     // Bolus drawing will store rects here. E.g., Wizard circles are drawn just over associated Bolus labels.
     var bolusRects: [CGRect] = []
     
-    fileprivate let kWizardCircleDiameter: CGFloat = 31.0
-
     //
     // MARK: - Loading data
     //
 
     override func nominalPixelWidth() -> CGFloat {
-        return kWizardCircleDiameter
+        return layout.wizardCircleDiameter
     }
     
     override func typeString() -> String {
@@ -62,12 +60,12 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
     override func loadEvent(_ event: CommonData, timeOffset: TimeInterval) {
         if let event = event as? Wizard {
             let value = event.carbInput ?? 0.0
-            let floatValue = round(CGFloat(value))
+            let floatValue = round(CGFloat(truncating: value))
             dataArray.append(WizardGraphDataType(value: floatValue, timeOffset: timeOffset, bolusId: event.bolus, recommendedNet: event.recommendedNet))
             
             // Let recommended bolus values figure into the bolus value scaling as well!
             if let recommended = event.recommendedNet {
-                let recommendedValue = CGFloat(recommended)
+                let recommendedValue = CGFloat(truncating: recommended)
                 if recommendedValue > layout.maxBolus {
                     layout.maxBolus = recommendedValue
                 }
@@ -86,6 +84,8 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
         context = UIGraphicsGetCurrentContext()
    }
     
+    private let kPlaceWizardOnTopOfBolus = false
+    
     // override!
     override func drawDataPointAtXOffset(_ xOffset: CGFloat, dataPoint: GraphDataType) {
         
@@ -97,18 +97,25 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
         
         if let wizard = dataPoint as? WizardGraphDataType {
             let centerX = xOffset
-            let circleDiameter = kWizardCircleDiameter
+            let circleDiameter = layout.wizardCircleDiameter
             let value = round(dataPoint.value)
             // Carb circle should be centered at timeline
             let offsetX = centerX - (circleDiameter/2)
             var wizardRect = CGRect(x: offsetX, y: layout.yBottomOfWizard - circleDiameter, width: circleDiameter, height: circleDiameter)
-            var yAtBolusTop = bolusYAtPosition(wizardRect)
-            if wizard.bolusTopY != nil {
-                yAtBolusTop = wizard.bolusTopY
+            
+            let graphType = wizard.bolusId != nil ? "wizard" : "food"
+            DDLogVerbose("graphing carb for \(graphType)")
+            
+            if kPlaceWizardOnTopOfBolus {
+                var yAtBolusTop = bolusYAtPosition(wizardRect)
+                if wizard.bolusTopY != nil {
+                    yAtBolusTop = wizard.bolusTopY
+                }
+                if let yAtBolusTop = yAtBolusTop {
+                    wizardRect.origin.y = yAtBolusTop - circleDiameter
+                }
             }
-            if let yAtBolusTop = yAtBolusTop {
-                wizardRect.origin.y = yAtBolusTop - circleDiameter
-            }
+            
             let wizardOval = UIBezierPath(ovalIn: wizardRect)
             Styles.goldColor.setFill()
             wizardOval.fill()
@@ -123,7 +130,7 @@ class WizardGraphDataLayer: TidepoolGraphDataLayer {
             let labelStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
             labelStyle.alignment = .center
             
-            let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: Styles.darkPurpleColor, NSParagraphStyleAttributeName: labelStyle])
+            let labelAttrStr = NSMutableAttributedString(string: labelText, attributes: [NSAttributedString.Key.font: Styles.smallSemiboldFont, NSAttributedString.Key.foregroundColor: Styles.alt2DarkGreyColor, NSAttributedString.Key.paragraphStyle: labelStyle])
             
             let labelTextHeight: CGFloat = ceil(labelAttrStr.boundingRect(with: CGSize(width: labelRect.width, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil).size.height)
             

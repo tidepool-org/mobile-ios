@@ -37,7 +37,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
     // first time screens
     @IBOutlet weak var firstTimeHealthTip: TidepoolMobileUIView!
-    @IBOutlet weak var firstTimeAddNoteTip: TidepoolMobileUIView!
     @IBOutlet weak var firstTimeNeedUploaderTip: UIView!
     
     fileprivate struct NoteInEventListTable {
@@ -69,20 +68,22 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // Add a notification for when the database changes
         let moc = dataController.mocForLocalEvents()
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.databaseChanged(_:)), name: NSNotification.Name.NSManagedObjectContextObjectsDidChange, object: moc)
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChangeNotifyHandler(_:)), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.databaseChanged(_:)), name: Notification.Name.NSManagedObjectContextObjectsDidChange, object: moc)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.textFieldDidChangeNotifyHandler(_:)), name:UITextField.textDidChangeNotification, object: nil)
         // graph data changes
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.graphDataChanged(_:)), name:Notification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
         
         // need to update when day changes
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.calendarDayDidChange(notification:)), name: NSNotification.Name.NSCalendarDayChanged, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.calendarDayDidChange(notification:)), name:Notification.Name.NSCalendarDayChanged, object: nil)
         // also when timezone changes...
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.timezoneDidChange(notification:)), name: NSNotification.Name.NSSystemTimeZoneDidChange, object: nil)
+        // but first check that dataController has found any implicit tz changes
+        dataController.postTimezoneEventChanges(){}
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.timezoneDidChange(_:)), name:Notification.Name.NSSystemTimeZoneDidChange, object: nil)
 
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterForeground(_:)), name: NSNotification.Name.UIApplicationWillEnterForeground, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterBackground(_:)), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleUploadSuccessfulNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.UploadSuccessful), object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleTurnOnUploader(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.TurnOnUploader), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterForeground(_:)), name:UIApplication.willEnterForegroundNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterBackground(_:)), name:UIApplication.didEnterBackgroundNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleUploadSuccessfulNotification(_:)), name:Notification.Name(rawValue: HealthKitNotifications.UploadSuccessful), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleTurnOnUploader(_:)), name:Notification.Name(rawValue: HealthKitNotifications.TurnOnUploader), object: nil)
         
         if let sideMenu = self.sideMenuController()?.sideMenu {
             sideMenu.delegate = self
@@ -110,18 +111,27 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
     
     // Because many notes have times written as "Today at 2:00 pm" for example, they may be out of date when a day changes. Also, this will refresh UI the first time the user opens the app in the day.
-    internal func calendarDayDidChange(notification : NSNotification)
+    @objc internal func calendarDayDidChange(notification: Notification)
     {
-        DDLogInfo("\(#function)")
-        updateDisplayPending = true
-        checkRefresh()
+        DispatchQueue.main.async {
+                DDLogInfo("\(#function)")
+                self.updateDisplayPending = true
+                self.checkRefresh()
+        }
     }
     
     // Same is true when timezone changes!
-    internal func timezoneDidChange(notification : NSNotification) {
-        DDLogInfo("\(#function)")
-        updateDisplayPending = true
-        checkRefresh()
+    @objc internal func timezoneDidChange(_ notification: Notification) {
+         DispatchQueue.main.async {
+            DDLogInfo("\(#function)")
+           // first, log timezone change to data controller...
+            self.dataController.timezoneDidChange(notification)
+            // then, refresh display in case dates have changed!
+            self.updateDisplayPending = true
+            self.checkRefresh()
+            // and post any new events created, if we have uploads enabled...
+            self.dataController.postTimezoneEventChanges() {}
+        }
     }
     
     private func checkRefresh() {
@@ -149,11 +159,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         eventListSceneContainer.setNeedsLayout()
         eventListSceneContainer.layoutIfNeeded()
 
-        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSFontAttributeName: smallRegularFont, NSForegroundColorAttributeName: blackishColor])
-        self.refreshControl.addTarget(self, action: #selector(EventListViewController.refreshControlHandler), for: UIControlEvents.valueChanged)
+        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh", attributes: [NSAttributedString.Key.font: smallRegularFont, NSAttributedString.Key.foregroundColor: blackishColor])
+        self.refreshControl.addTarget(self, action: #selector(EventListViewController.refreshControlHandler), for: UIControl.Event.valueChanged)
         self.refreshControl.setNeedsLayout()
         self.tableView.addSubview(refreshControl)
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableView.automaticDimension
         // table seems to need a header for latest iOS, give it a small one...
         self.tableView.tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.size.width, height: 1.0))
     }
@@ -163,13 +173,13 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // Dispose of any resources that can be recreated.
     }
 
-    func appDidEnterForeground(_ notification: Notification) {
+    @objc func appDidEnterForeground(_ notification: Notification) {
         DDLogInfo("EventListViewController:appDidEnterForeground")
         appIsForeground = true
         checkRefresh()
     }
     
-    func appDidEnterBackground(_ notification: Notification) {
+    @objc func appDidEnterBackground(_ notification: Notification) {
         DDLogInfo("EventListViewController:appDidEnterBackground")
         appIsForeground = false
     }
@@ -279,7 +289,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                 appDelegate.logout()
                 viewIsForeground = false
             } else if let url = sideMenuController.userSelectedExternalLink {
-                UIApplication.shared.openURL(url)
+                UIApplication.shared.open(url)
             }
         }
     }
@@ -299,9 +309,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             return
         }
         performSegue(withIdentifier: "segueToAddNote", sender: self)
-        if !firstTimeAddNoteTip.isHidden {
-            firstTimeAddNoteTip.isHidden = true
-        }
     }
     
     //
@@ -552,7 +559,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
     
-    func refreshControlHandler() {
+    @objc func refreshControlHandler() {
         APIConnector.connector().trackMetric("Swiped down to refresh")
         refreshTable()
     }
@@ -704,7 +711,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
 
     fileprivate var eventListNeedsUpdate: Bool  = false
-    func databaseChanged(_ note: Notification) {
+    @objc func databaseChanged(_ note: Notification) {
         DDLogInfo("EventList: Database Change Notification")
         if eventListShowing() {
             // TODO: This will be needed if notes go into a database but unused right now...
@@ -737,22 +744,27 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             DDLogInfo("\(#function) loading notes...")
             return
         }
-        var hideAddNoteTip = true
         var hideNeedUploaderTip = true
         
         // only show other first time tips if we are not showing the healthkit tip!
         if firstTimeHealthTip.isHidden {
-            if self.sortedNotes.count == 0 {
-                hideAddNoteTip = false
-            } else if self.sortedNotes.count == 1 {
-                if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
+            if self.sortedNotes.count == 1 && oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
+                // only show the "need uploader" tip if the user has not enabled healthKit syncing...
+                if !appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser() {
                     hideNeedUploaderTip = false
                     oneShotCompleted("NeedUploaderTipHasBeenShown")
+                }
+            } else {
+                // see if HK is enabled for this user, but user has not been asked to authorize the new items.
+                if appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
+                {
+                    if !HealthKitManager.sharedInstance.authorizationRequestedForUploaderSamples() {
+                        TidepoolMobileDataController.sharedInstance.enableHealthKitInterface()
+                    }
                 }
             }
         }
         
-        firstTimeAddNoteTip.isHidden = hideAddNoteTip
         firstTimeNeedUploaderTip.isHidden = hideNeedUploaderTip
     }
     
@@ -774,8 +786,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
         if !MFMailComposeViewController.canSendMail() || onSimulator {
             DDLogInfo("Mail services are not available")
-            let alertController = UIAlertController(title: "Error", message: "You must set up a mail service account in order to email a log!", preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            let alertController = UIAlertController(title: "Error", message: "You must set up a mail service account in order to email a log!", preferredStyle: UIAlertController.Style.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
             return
         }
@@ -797,7 +809,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         self.present(emailVC, animated: true, completion: nil)
 
         firstTimeNeedUploaderTip.isHidden = true
-}
+    }
     
     func mailComposeController(_ controller: MFMailComposeViewController,
                                didFinishWith result: MFMailComposeResult, error: Error?) {
@@ -849,7 +861,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         searchTextField.resignFirstResponder()
     }
     
-    func textFieldDidChangeNotifyHandler(_ note: Notification) {
+    @objc func textFieldDidChangeNotifyHandler(_ note: Notification) {
         if !eventListShowing() {
             // not for us...
             return
@@ -930,16 +942,20 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     // MARK: - Graph support
     //
 
-    internal func handleTurnOnUploader(_ note: Notification) {
+    // The first time we get notified that an uploader has been turned on, bring up the manual sync UI.
+    @objc internal func handleTurnOnUploader(_ note: Notification) {
         DDLogVerbose("trace")
         
-        if let _ = self.sideMenuController()?.sideMenu?.isMenuOpen, !HealthKitBloodGlucoseUploadManager.sharedInstance.hasPresentedSyncUI {
-            toggleSideMenu(self)
+        if let _ = self.sideMenuController()?.sideMenu?.isMenuOpen, !HealthKitUploadManager.sharedInstance.hasPresentedSyncUI, !sequeToSyncHealthHasBeenDone {
+            // Since we'll get notifications for each type of uploader, make this a one-shot in the
+            sequeToSyncHealthHasBeenDone = true
+            hideSideMenuView ()
             performSegue(withIdentifier: "segueToSyncHealthData", sender: self)
         }
     }
+    private var sequeToSyncHealthHasBeenDone = false
     
-    internal func handleUploadSuccessfulNotification(_ note: Notification) {
+    @objc internal func handleUploadSuccessfulNotification(_ note: Notification) {
         DDLogInfo("inval cache and update graphs on successful upload")
         // TODO: make this more specific; for now, since uploads happen at most every 5 minutes, just do a graph update
         // reset cache fetch timeout so data will be refetched
@@ -948,7 +964,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     }
 
     fileprivate var graphNeedsUpdate: Bool  = false
-    func graphDataChanged(_ note: Notification) {
+    @objc func graphDataChanged(_ note: Notification) {
         DDLogInfo("\(#function)")
         graphNeedsUpdate = true
         checkRefresh()
@@ -958,7 +974,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         APIConnector.connector().trackMetric("Clicked how to upload button")
         let url = URL(string: TPConstants.kHowToUploadURL)
         if let url = url {
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url)
         }
     }
     
@@ -1039,7 +1055,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
     
-    func editPressed(_ sender: TidepoolMobileSimpleUIButton!) {
+    @objc func editPressed(_ sender: TidepoolMobileSimpleUIButton!) {
         DDLogInfo("cell with tag \(sender.tag) was pressed!")
         
         if APIConnector.connector().alertIfNetworkIsUnreachable() {
@@ -1061,10 +1077,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         }
     }
 
-    func howToUploadPressed(_ sender: UIButton!) {
+    @objc func howToUploadPressed(_ sender: UIButton!) {
         DDLogInfo("howToUploadPressed was pressed!")
         if let url = URL(string: TPConstants.kHowToUploadURL) {
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url)
         }
     }
     
@@ -1090,7 +1106,7 @@ extension EventListViewController: UITableViewDelegate {
         if row == kGraphRow {
             return TPConstants.kGraphViewHeight
         } else {
-            return UITableViewAutomaticDimension;
+            return UITableView.automaticDimension;
         }
     }
     
@@ -1197,7 +1213,7 @@ extension EventListViewController: UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         let commentCount = filteredNotes[indexPath.section].comments.count
         let row = indexPath.row
         if row > kNoteRow {
@@ -1230,7 +1246,7 @@ extension EventListViewController: UITableViewDelegate {
             DDLogInfo("Error: note not found at \(#function)!")
             return nil
         }
-        let rowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default, title: "delete") {_,indexPath in
+        let rowAction = UITableViewRowAction(style: UITableViewRowAction.Style.default, title: "delete") {_,indexPath in
             // use dialog to confirm delete with user!
             var metric = "Swiped left to delete note"
             var title = trashAlertTitle

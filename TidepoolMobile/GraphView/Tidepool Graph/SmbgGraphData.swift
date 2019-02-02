@@ -27,15 +27,13 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
     
     // vars for drawing datapoints of this type
     var pixelsPerValue: CGFloat = 0.0
-    let circleRadius: CGFloat = 9.0
+    let circleRadius: CGFloat = 8.0
     var lastCircleDrawn = CGRect.null
     var context: CGContext?
 
     override func typeString() -> String {
         return "smbg"
     }
-
-    fileprivate let kGlucoseConversionToMgDl: CGFloat = 18.0
 
     //
     // MARK: - Loading data
@@ -49,7 +47,7 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
         if let smbgEvent = event as? SelfMonitoringGlucose {
             //DDLogInfo("Adding smbg event: \(event)")
             if let value = smbgEvent.value {
-                let convertedValue = round(CGFloat(value) * kGlucoseConversionToMgDl)
+                let convertedValue = round(CGFloat(truncating: value) * kGlucoseConversionToMgDl)
                 dataArray.append(CbgGraphDataType(value: convertedValue, timeOffset: timeOffset))
             } else {
                 DDLogInfo("ignoring smbg event with nil value")
@@ -79,7 +77,7 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
         // flip the Y to compensate for origin!
         let centerY: CGFloat = layout.yTopOfGlucose + layout.yPixelsGlucose - floor(value * pixelsPerValue)
         
-        let circleColor = value < layout.lowBoundary ? layout.lowColor : value < layout.highBoundary ? layout.targetColor : layout.highColor
+        let circleColor = value < layout.lowBoundary ? layout.lowColor : value <= layout.highBoundary ? layout.targetColor : layout.highColor
 
         let largeCirclePath = UIBezierPath(ovalIn: CGRect(x: centerX-circleRadius, y: centerY-circleRadius, width: circleRadius*2, height: circleRadius*2))
         circleColor.setFill()
@@ -92,7 +90,7 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
         let readingLabelTextContent = String(intValue)
         let readingLabelStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         readingLabelStyle.alignment = .center
-        let readingLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: circleColor, NSParagraphStyleAttributeName: readingLabelStyle]
+        let readingLabelFontAttributes = [NSAttributedString.Key.font: Styles.smallSemiboldFont, NSAttributedString.Key.foregroundColor: circleColor, NSAttributedString.Key.paragraphStyle: readingLabelStyle]
         var readingLabelTextSize = readingLabelTextContent.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: readingLabelFontAttributes, context: nil).size
         readingLabelTextSize = CGSize(width: ceil(readingLabelTextSize.width), height: ceil(readingLabelTextSize.height))
         let readingLabelRect = CGRect(x: centerX-(readingLabelTextSize.width/2), y: centerY+circleRadius, width: readingLabelTextSize.width, height: readingLabelTextSize.height)

@@ -88,11 +88,11 @@ class BGDownloadViewController: UIViewController {
 
         let notificationCenter = NotificationCenter.default
         
-        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.textFieldDidChange), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.textFieldDidChange), name: Notification.Name.UITextFieldTextDidChange, object: nil)
         updateButtonStates()
         
-        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.keyboardWillShow(_:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.keyboardWillHide(_:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(BGDownloadViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
         configureForReachability()
@@ -122,7 +122,7 @@ class BGDownloadViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    func reachabilityChanged(_ note: Notification) {
+    @objc func reachabilityChanged(_ note: Notification) {
         DispatchQueue.main.async {
             self.configureForReachability()
         }
@@ -206,7 +206,7 @@ class BGDownloadViewController: UIViewController {
         }
     }
     
-    func textFieldDidChange() {
+    @objc func textFieldDidChange() {
         updateButtonStates()
     }
     
@@ -399,7 +399,7 @@ class BGDownloadViewController: UIViewController {
     }
     
     // UIKeyboardWillShowNotification
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         // make space for the keyboard if needed
         let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! Float
@@ -408,7 +408,7 @@ class BGDownloadViewController: UIViewController {
     }
     
     // UIKeyboardWillHideNotification
-    func keyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         // reposition login view if needed
         self.adjustLogInView(0.0)
     }

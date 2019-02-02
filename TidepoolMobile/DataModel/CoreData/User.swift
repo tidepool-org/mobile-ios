@@ -13,6 +13,7 @@ import CocoaLumberjack
 
 
 class User: NSManagedObject {
+    
     class func fromJSON(_ json: JSON, email: String? = nil, moc: NSManagedObjectContext) -> User? {
         if let entityDescription = NSEntityDescription.entity(forEntityName: "User", in: moc) {
             let me = User(entity: entityDescription, insertInto: nil)
@@ -22,7 +23,6 @@ class User: NSManagedObject {
             me.fullName = json["fullName"].string
             me.token = json["token"].string
             me.email = email
-            
             return me
         }
         return nil
@@ -39,6 +39,20 @@ class User: NSManagedObject {
         let isDSA = patient != JSON.null
         if isDSA {
             accountIsDSA = NSNumber.init(value: isDSA)
+            biologicalSex = patient["biologicalSex"].string
+        }
+    }
+    
+    func updateBiologicalSex(_ biologicalSex: String) {
+        self.biologicalSex = biologicalSex
+        guard let moc = self.managedObjectContext else {
+            return
+        }
+        do {
+            moc.refresh(self, mergeChanges: true)
+            try moc.save()
+        } catch {
+            DDLogError("Failed to save changes!")
         }
     }
 }

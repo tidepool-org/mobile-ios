@@ -94,7 +94,7 @@ class TidepoolGraphLayout: GraphLayout {
             lowBoundary = CGFloat(low)
             self.yAxisValuesWithLines = displayGridLines ? [low, high] : []
             // a bit of a hack to avoid numbers running into each other...
-            if low - 40 >= 40 {
+            if low - 40 >= 45 {
                 self.yAxisValuesWithLabels = [40, low, high, 300]
             } else {
                 self.yAxisValuesWithLabels = [low, high, 300]
@@ -110,9 +110,8 @@ class TidepoolGraphLayout: GraphLayout {
     let kGlucoseMinValue: CGFloat = 0.0
     let kGlucoseMaxValue: CGFloat = 340.0
     let kGlucoseRange: CGFloat = 340.0
-    let kGlucoseConversionToMgDl: CGFloat = 18.0
     var highBoundary: CGFloat = 180.0
-    var lowBoundary: CGFloat = 80.0
+    var lowBoundary: CGFloat = 70.0
     // Colors
     let highColor = Styles.purpleColor
     let targetColor = Styles.greenColor
@@ -124,6 +123,7 @@ class TidepoolGraphLayout: GraphLayout {
     var yPixelsGlucose: CGFloat = 0.0
     // Wizard readings overlap the bottom part of the glucose readings
     var yBottomOfWizard: CGFloat = 0.0
+    var wizardCircleDiameter: CGFloat = 0.0
     // Bolus and Basal readings go in a section below glucose
     var yTopOfBolus: CGFloat = 0.0
     var yBottomOfBolus: CGFloat = 0.0
@@ -145,15 +145,13 @@ class TidepoolGraphLayout: GraphLayout {
     //
     
     fileprivate let kGraphWizardHeight: CGFloat = 27.0
-    // After removing a constant height for the header and wizard values, the remaining graph vertical space is divided into four sections based on the following fractions (which should add to 1.0)
-    fileprivate let kGraphFractionForGlucose: CGFloat = 180.0/266.0
-    fileprivate let kGraphFractionForBolusAndBasal: CGFloat = 76.0/266.0
+    
+    // After removing a constant height for the header and wizard values, the remaining graph vertical space is divided into a bg graph section and a basal/bolus section. The following determines how much goes to the graph...
+    fileprivate let kGraphFractionForGlucose: CGFloat = 0.65
     // Each section has some base offset as well
-    fileprivate let kGraphGlucoseBaseOffset: CGFloat = 2.0
+    // The space below the glucose graph needs to accomdate the diameter of the SMBG sphere (in the case of a reading near zero), and the SMBG value text below that
+    fileprivate let kGraphGlucoseBaseOffset: CGFloat = 22.0
     fileprivate let kGraphWizardBaseOffset: CGFloat = 2.0
-    fileprivate let kGraphBolusBaseOffset: CGFloat = 2.0
-    fileprivate let kGraphBasalBaseOffset: CGFloat = 2.0
-    fileprivate let kGraphWorkoutBaseOffset: CGFloat = 2.0
     fileprivate let kGraphBottomEdge: CGFloat = 0.0
     
     //
@@ -166,7 +164,8 @@ class TidepoolGraphLayout: GraphLayout {
         super.configureGraph()
 
         self.headerHeight = 24.0
-        self.footerHeight = 8.0
+        //self.footerHeight = 8.0
+        self.footerHeight = 0.0
         self.yAxisLineLeftMargin = 26.0
         self.yAxisLineRightMargin = 10.0
         self.yAxisLineColor = UIColor(hex: 0xe2e4e7)
@@ -183,11 +182,10 @@ class TidepoolGraphLayout: GraphLayout {
         
         let graphViewHeight = ceil(graphViewSize.height) // often this is fractional
         
-        // Tweak: if height is less than 320 pixels, let the wizard circles drift up into the low area of the blood glucose data since that should be clear
-        let wizardHeight = graphViewHeight < 320.0 ? 0.0 : kGraphWizardHeight
-
+        wizardCircleDiameter = kGraphWizardHeight - 1
+        
         // The pie to divide is what's left over after removing constant height areas
-        let graphHeight = graphViewHeight - headerHeight - wizardHeight - kGraphBottomEdge - footerHeight
+        let remainingHeight = graphViewHeight - headerHeight - kGraphWizardHeight - kGraphBottomEdge - footerHeight - kGraphGlucoseBaseOffset - kGraphWizardBaseOffset
         
         // Put the workout data at the top, over the X-axis
         yTopOfWorkout = 2.0
@@ -201,12 +199,11 @@ class TidepoolGraphLayout: GraphLayout {
         
         // The largest section is for the glucose readings just below the header
         self.yTopOfGlucose = headerHeight
-        self.yBottomOfGlucose = self.yTopOfGlucose + floor(kGraphFractionForGlucose * graphHeight) - kGraphGlucoseBaseOffset
+        self.yBottomOfGlucose = self.yTopOfGlucose + floor(kGraphFractionForGlucose * remainingHeight)
         self.yPixelsGlucose = self.yBottomOfGlucose - self.yTopOfGlucose
         
-        // Wizard data sits above the bolus readings, in a fixed space area, possibly overlapping the bottom of the glucose graph which should be empty of readings that low.
-        // TODO: put wizard data on top of corresponding bolus data!
-        self.yBottomOfWizard = self.yBottomOfGlucose + wizardHeight
+        // Wizard data sits above the bolus readings, in a fixed space area.
+        self.yBottomOfWizard = self.yBottomOfGlucose + kGraphWizardHeight + kGraphGlucoseBaseOffset
         
         // At the bottom are the bolus and basal readings
         self.yTopOfBolus = self.yBottomOfWizard + kGraphWizardBaseOffset

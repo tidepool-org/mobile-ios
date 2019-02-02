@@ -9,7 +9,7 @@ import UIKit
 
 extension UIView {
     // Use for common override, resizable views will override
-    func checkAdjustSizing() {
+    @objc func checkAdjustSizing() {
     }
     
     // Adjust all resizable views in this view and its subview hierarchy

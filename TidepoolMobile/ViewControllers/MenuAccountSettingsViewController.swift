@@ -28,7 +28,6 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var healthExplanation: UILabel!
     @IBOutlet weak var healthStatusLine1: TidepoolMobileUILabel!
     @IBOutlet weak var healthStatusLine2: TidepoolMobileUILabel!
-    @IBOutlet weak var healthStatusLine3: TidepoolMobileUILabel!
     @IBOutlet weak var syncHealthDataSeparator: TidepoolMobileUIView!
     @IBOutlet weak var syncHealthDataContainer: UIView!
 
@@ -55,7 +54,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         healthKitSwitch.onTintColor = Styles.brightBlueColor
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: NSNotification.Name(rawValue: HealthKitNotifications.Updated), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: nil)
     }
 
     deinit {
@@ -174,12 +173,12 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         hkTimeRefreshTimer = nil
     }
 
-    func nextHKTimeRefresh() {
+    @objc func nextHKTimeRefresh() {
         //DDLogInfo("nextHKTimeRefresh")
         configureHKInterface()
     }
     
-    internal func handleUploaderNotification(_ notification: Notification) {
+    @objc internal func handleUploaderNotification(_ notification: Notification) {
         DDLogInfo("handleUploaderNotification: \(notification.name)")
         configureHKInterface()
     }
@@ -249,7 +248,6 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     
     let healthKitUploadStatusLastUploadTime: String = "Last reading %@"
     let healthKitUploadStatusNoDataAvailableToUpload: String = "No data available to upload"
-    let healthKitUploadStatusDexcomDataDelayed3Hours: String = "Dexcom data from Health is delayed 3 hours"
     let healthKitUploadStatusDaysUploaded: String = "Syncing day %d of %d"
     let healthKitUploadStatusUploadPausesWhenPhoneIsLocked: String = "Your screen must stay awake and unlocked"
 
@@ -257,30 +255,26 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         var healthStatusLine1Text = ""
         var healthStatusLine2Text = ""
 
-        let uploadManager = HealthKitBloodGlucoseUploadManager.sharedInstance
-        let isHistoricalAllActive = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll]!
-        let isHistoricalTwoWeeksActive = uploadManager.isUploading[HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks]!
-        if isHistoricalAllActive || isHistoricalTwoWeeksActive {
+        let uploadManager = HealthKitUploadManager.sharedInstance
+        let isHistoricalAllActive = uploadManager.isUploadInProgressForMode(HealthKitUploadReader.Mode.HistoricalAll)
+        if isHistoricalAllActive {
             if isHistoricalAllActive {
-                let stats = uploadManager.stats[HealthKitBloodGlucoseUploadReader.Mode.HistoricalAll]!
-                healthStatusLine1Text = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
-            } else {
-                let stats = uploadManager.stats[HealthKitBloodGlucoseUploadReader.Mode.HistoricalLastTwoWeeks]!
-                healthStatusLine1Text = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
+                healthStatusLine1Text = "Syncing Health data…"
+                let stats = uploadManager.statsForMode(HealthKitUploadReader.Mode.HistoricalAll)
+                healthStatusLine2Text = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
             }
-            healthStatusLine2Text = healthKitUploadStatusUploadPausesWhenPhoneIsLocked
             
-            healthStatusLine1.usage = "sidebarSettingHKMinorStatus"
-            healthStatusLine2.usage = "sidebarSettingHKMainStatus"
+            healthStatusLine1.usage = "sidebarSettingHKMainStatus"
+            healthStatusLine2.usage = "sidebarSettingHKMinorStatus"
         } else {
-            let stats = uploadManager.stats[HealthKitBloodGlucoseUploadReader.Mode.Current]!
+            // TODO: decide what to do with stats for other upload data!
+            let stats = uploadManager.statsForMode(HealthKitUploadReader.Mode.Current)
             if stats.hasSuccessfullyUploaded {
                 let lastUploadTimeAgoInWords = stats.lastSuccessfulUploadTime.timeAgoInWords(Date())
                 healthStatusLine1Text = String(format: healthKitUploadStatusLastUploadTime, lastUploadTimeAgoInWords)
             } else {
                 healthStatusLine1Text = healthKitUploadStatusNoDataAvailableToUpload
             }
-            healthStatusLine2Text = healthKitUploadStatusDexcomDataDelayed3Hours
 
             healthStatusLine1.usage = "sidebarSettingHKMainStatus"
             healthStatusLine2.usage = "sidebarSettingHKMinorStatus"
@@ -288,7 +282,6 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
         healthStatusLine1.text = healthStatusLine1Text
         healthStatusLine2.text = healthStatusLine2Text
-        healthStatusLine3.text = ""
     }
     
     fileprivate var debugSettings: DebugSettings?

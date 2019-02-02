@@ -44,7 +44,7 @@ class SwitchProfileTableViewController: BaseUITableViewController, UsersFetchAPI
         var profileUsers: [BlipUser] = []
         for userId in userIds {
             APIConnector.connector().fetchProfile(userId) { (result:Alamofire.Result<JSON>) -> (Void) in
-                DDLogInfo("Profile fetch result: \(result)")
+                DDLogInfo("viewableUsers profile fetch result: \(result)")
                 if (result.isSuccess) {
                     if let json = result.value {
                         let user = BlipUser(userid: userId)

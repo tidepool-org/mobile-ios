@@ -29,15 +29,13 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
     
     // vars for drawing datapoints of this type
     var pixelsPerValue: CGFloat = 0.0
-    let circleRadius: CGFloat = 3.5
+    let circleRadius: CGFloat = 3.0
     var lastCircleDrawn = CGRect.null
 
 
     override func typeString() -> String {
         return "cbg"
     }
-
-    fileprivate let kGlucoseConversionToMgDl: CGFloat = 18.0
 
     //
     // MARK: - Loading data
@@ -51,7 +49,7 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
         if let cbgEvent = event as? ContinuousGlucose {
             //DDLogInfo("Adding Cbg event: \(event)")
             if let value = cbgEvent.value {
-                let convertedValue = round(CGFloat(value) * kGlucoseConversionToMgDl)
+                let convertedValue = round(CGFloat(truncating: value) * kGlucoseConversionToMgDl)
                 dataArray.append(CbgGraphDataType(value: convertedValue, timeOffset: timeOffset))
             } else {
                 DDLogInfo("ignoring Cbg event with nil value")
@@ -79,7 +77,7 @@ class CbgGraphDataLayer: TidepoolGraphDataLayer {
         // flip the Y to compensate for origin!
         let centerY: CGFloat = layout.yTopOfGlucose + layout.yPixelsGlucose - floor(value * pixelsPerValue)
         
-        let circleColor = value < layout.lowBoundary ? layout.lowColor : value < layout.highBoundary ? layout.targetColor : layout.highColor
+        let circleColor = value < layout.lowBoundary ? layout.lowColor : value <= layout.highBoundary ? layout.targetColor : layout.highColor
         let circleRect = CGRect(x: centerX-circleRadius, y: centerY-circleRadius, width: circleRadius*1.5, height: circleRadius*1.5)
         //let smallCircleRect = circleRect.insetBy(dx: 1.0, dy: 1.0)
         

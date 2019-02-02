@@ -52,7 +52,7 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
             self.handleEmailLogs()
         }))
 
-        
+        /*
         let isTreatingAllBloodGlucoseSourceTypesAsDexcom = UserDefaults.standard.bool(forKey: HealthKitSettings.TreatAllBloodGlucoseSourceTypesAsDexcomKey)
         if isTreatingAllBloodGlucoseSourceTypesAsDexcom {
             actionSheet.addAction(UIAlertAction(title: "Don't treat all sources as Dexcom", style: .default, handler: {
@@ -65,6 +65,7 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
                 self.handleTreatAllBloodGlucoseSourceTypesAsDexcom(treatAllAsDexcom: true)
             }))
         }
+         */
 
         let isBackgroundUploadNotificationEnabled = AppDelegate.testMode
         if isBackgroundUploadNotificationEnabled {
@@ -109,15 +110,19 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
     
     fileprivate func handleEnableNotificationsForUploads(enable: Bool) {
         AppDelegate.testMode = enable
-        let notifySettings = UIUserNotificationSettings(types: .alert, categories: nil)
-        UIApplication.shared.registerUserNotificationSettings(notifySettings)
+        if enable {
+            UIApplication.enableLocalNotifyMessages()
+        }
     }
     
+    /*
     fileprivate func handleTreatAllBloodGlucoseSourceTypesAsDexcom(treatAllAsDexcom: Bool) {
         UserDefaults.standard.set(treatAllAsDexcom, forKey: HealthKitSettings.TreatAllBloodGlucoseSourceTypesAsDexcomKey);
         UserDefaults.standard.synchronize()
     }
+    */
     
+    /*
     fileprivate func handleEmailExportOfBloodGlucoseData() {
         let sampleType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)!
         let sampleQuery = HKSampleQuery(sampleType: sampleType, predicate: nil, limit: HKObjectQueryNoLimit, sortDescriptors: nil) {
@@ -179,7 +184,7 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
     fileprivate func handleCountBloodGlucoseSamples() {
         HealthKitManager.sharedInstance.countBloodGlucoseSamples {
             (error: Error?, totalSamplesCount: Int, totalDexcomSamplesCount: Int) in
-            
+
             var alert: UIAlertController?
             let title = "HealthKit Blood Glucose Sample Count"
             var message = ""
@@ -221,7 +226,8 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
             })
         }
     }
-    
+    */
+
     fileprivate func handleEmailLogs() {
         DDLog.flushLog()
         
@@ -255,6 +261,7 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
         controller.dismiss(animated: true, completion: nil)
     }
     
+    /*
     fileprivate func handleWriteLotsOfNonDexcomCBGTestDataToHealthKit() {
         var itemsToPush = [HKQuantitySample]()
         let calendar = Calendar.current
@@ -284,7 +291,7 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
             }
         })
     }
-    
+ 
     fileprivate func handleWriteNonDexcomCBGTestDataToHealthKit() {
         var itemsToPush = [HKQuantitySample]()
         let sampleTime = Date()
@@ -302,6 +309,7 @@ class DebugSettings : NSObject, MFMailComposeViewControllerDelegate {
         })
 
     }
+     */
 
     fileprivate func clearLogFiles() {
         // Clear log files

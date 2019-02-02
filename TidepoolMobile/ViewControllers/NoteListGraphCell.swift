@@ -68,21 +68,16 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     }
     
     func configureGraphContainer() {
-        var lowBGBounds: Int?
-        var highBGBounds: Int?
-        let dataController = TidepoolMobileDataController.sharedInstance
-        if let bgLowBounds = dataController.currentViewedUser?.bgTargetLow, let bgHighBounds = dataController.currentViewedUser?.bgTargetHigh {
-            lowBGBounds = Int(bgLowBounds)
-            highBGBounds = Int(bgHighBounds)
-        }
-        
         DDLogInfo("NoteListGraphCell: configureGraphContainer")
         removeGraphView()
         if let note = note {
             var graphFrame = self.bounds
             DDLogInfo("Configuring graph for note id: \(note.id), frame: \(graphFrame)")
             graphFrame.size.height = kGraphHeight
-            graphContainerView = TidepoolGraphView.init(frame: graphFrame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: 0, lowBGBounds: lowBGBounds, highBGBounds: highBGBounds)
+            let dataController = TidepoolMobileDataController.sharedInstance
+            let bgLowBounds = dataController.currentViewedUser?.bgTargetLow
+            let bgHighBounds = dataController.currentViewedUser?.bgTargetHigh
+            graphContainerView = TidepoolGraphView.init(frame: graphFrame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: 0, lowBGBounds: bgLowBounds, highBGBounds: bgHighBounds)
             if let graphContainerView = graphContainerView {
                 // while loading, and in between selections, put up loading view...
                 graphContainerView.configureGraph()
@@ -106,7 +101,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
         var dataIsComing = false
         if appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser() {
             if let note = note {
-                let passedTime = note.createdtime.timeIntervalSinceNow
+                let passedTime = note.timestamp.timeIntervalSinceNow
                 if passedTime > -kDataDelay {
                     dataIsComing = true
                 }
@@ -116,7 +111,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
             dataIsComingLabel.isHidden = false
             howToUploadButton.isHidden = true
             noDataLabel.isHidden = true
-       } else {
+        } else {
             dataIsComingLabel.isHidden = true
             howToUploadButton.isHidden = false
             noDataLabel.isHidden = false

@@ -1,7 +1,7 @@
 //
 //  TwitterTextEntity.m
 //
-//  Copyright 2012-2014 Twitter, Inc.
+//  Copyright 2012-2017 Twitter, Inc.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -26,11 +26,7 @@
 
 + (instancetype)entityWithType:(TwitterTextEntityType)type range:(NSRange)range
 {
-    TwitterTextEntity *entity = [[self alloc] initWithType:type range:range];
-#if !__has_feature(objc_arc)
-    [entity autorelease];
-#endif
-    return entity;
+    return [[self alloc] initWithType:type range:range];
 }
 
 - (NSComparisonResult)compare:(TwitterTextEntity *)right
@@ -40,7 +36,7 @@
     NSRange rightRange = right.range;
     NSUInteger rightLocation = rightRange.location;
     NSUInteger rightLength = rightRange.length;
-    
+
     if (leftLocation < rightLocation) {
         return NSOrderedAscending;
     } else if (leftLocation > rightLocation) {
@@ -72,6 +68,9 @@
             break;
         case TwitterTextEntitySymbol:
             typeString = @"Symbol";
+            break;
+        case TwitterTextEntityTweetChar:
+            typeString = @"TweetChar";
             break;
     }
     return [NSString stringWithFormat:@"<%@: %@ %@>", NSStringFromClass([self class]), typeString, NSStringFromRange(_range)];

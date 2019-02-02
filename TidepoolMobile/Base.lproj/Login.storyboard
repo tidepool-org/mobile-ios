@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="4G7-DP-gat">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="4G7-DP-gat">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -25,12 +24,12 @@
         <!--LoginViewController-->
         <scene sceneID="pQP-Fp-Xtu">
             <objects>
-                <viewController title="LoginViewController" id="4G7-DP-gat" customClass="LoginViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="LoginViewController" id="4G7-DP-gat" customClass="LoginViewController" customModule="TidepoolMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="zkr-4N-FyE"/>
                         <viewControllerLayoutGuide type="bottom" id="cJz-jh-nmi"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="lik-Jb-UNr" userLabel="LoginScene" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="lik-Jb-UNr" userLabel="LoginScene" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -91,8 +90,8 @@
                                                     <constraint firstAttribute="width" constant="262" id="l7b-vO-g9Q"/>
                                                 </constraints>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wrong email or password!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bJV-Wt-zLG" userLabel="errorFeedbackLabel" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                <rect key="frame" x="38" y="36" width="244.5" height="23.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wrong email or password!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bJV-Wt-zLG" userLabel="errorFeedbackLabel" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
+                                                <rect key="frame" x="38" y="45" width="244.5" height="14.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -103,7 +102,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ucb-jq-HNI" userLabel="InputContainerView">
                                                 <rect key="frame" x="26" y="63.5" width="268.5" height="190"/>
                                                 <subviews>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Email" adjustsFontSizeToFit="NO" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="6dr-nu-GmC" userLabel="emailTextField" customClass="TidepoolMobileUITextField" customModule="Nutshell" customModuleProvider="target">
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Email" adjustsFontSizeToFit="NO" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="6dr-nu-GmC" userLabel="emailTextField" customClass="TidepoolMobileUITextField" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="-0.5" width="268.5" height="47.5"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
@@ -120,7 +119,7 @@
                                                             <outlet property="delegate" destination="4G7-DP-gat" id="WY2-ls-rtx"/>
                                                         </connections>
                                                     </textField>
-                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yzu-4v-Bis" userLabel="passwordTextField" customClass="TidepoolMobileUITextField" customModule="Nutshell" customModuleProvider="target">
+                                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Password" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yzu-4v-Bis" userLabel="passwordTextField" customClass="TidepoolMobileUITextField" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="62" width="268.5" height="47.5"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <color key="textColor" red="0.88627450980392153" green="0.8901960784313725" blue="0.89411764705882346" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -133,7 +132,7 @@
                                                             <action selector="passwordEnterHandler:" destination="4G7-DP-gat" eventType="editingDidEndOnExit" id="Wse-nc-Bgd"/>
                                                         </connections>
                                                     </textField>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NjG-Wi-o84" userLabel="forgotPasswordButton" customClass="TidepoolMobileSimpleUIButton" customModule="Nutshell" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NjG-Wi-o84" userLabel="forgotPasswordButton" customClass="TidepoolMobileSimpleUIButton" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="109.5" width="140" height="36"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
                                                         <state key="normal" title="Forgot password?">
@@ -146,7 +145,7 @@
                                                             <action selector="forgotPasswordTapped:" destination="4G7-DP-gat" eventType="touchUpInside" id="W2P-qe-evN"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hWu-5X-znl" userLabel="loginButton" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hWu-5X-znl" userLabel="loginButton" customClass="TPMenuButton" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="154.5" y="144" width="114" height="46"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                         <constraints>
@@ -197,11 +196,11 @@
                                                     </mask>
                                                 </variation>
                                             </view>
-                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pok-KF-0aG" userLabel="offlineMessageView" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
+                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pok-KF-0aG" userLabel="offlineMessageView" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
                                                 <rect key="frame" x="26" y="63.5" width="268.5" height="190"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are not currently connected to a network!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nYu-JU-kh6" userLabel="offlineMessage" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="25" y="69" width="218.5" height="52"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are not currently connected to a network!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nYu-JU-kh6" userLabel="offlineMessage" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
+                                                        <rect key="frame" x="25" y="74.5" width="218.5" height="41"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -284,7 +283,7 @@
                                     <constraint firstItem="x8Q-os-z1s" firstAttribute="leading" secondItem="zV2-Yb-tzp" secondAttribute="leading" id="xeZ-Rt-Sm1"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Da0-SK-zSy" userLabel="Debug settings footer" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Da0-SK-zSy" userLabel="Debug settings footer" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="494" width="320" height="66"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <gestureRecognizers/>

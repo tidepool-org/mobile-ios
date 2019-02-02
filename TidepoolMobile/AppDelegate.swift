@@ -22,7 +22,12 @@ import Bugsee
 var fileLogger: DDFileLogger!
 
 /// Set up health kit configuration singleton, specialized version of HealthKitConfiguration
-let appHealthKitConfiguration = TidepoolMobileHealthKitConfiguration()
+let appHealthKitConfiguration = TidepoolMobileHealthKitConfiguration(healthKitUploadTypes: [
+    HealthKitUploadTypeBloodGlucose(),
+    HealthKitUploadTypeCarb(),
+    HealthKitUploadTypeInsulin(),
+    HealthKitUploadTypeWorkout(),
+    ])
 
 /// AppDelegate deals with app startup, restart, termination:
 /// - Switches UI between login and event controllers.
@@ -39,28 +44,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // one shot, UI should put up dialog letting user know we are in test mode!
     static var testModeNotification = false
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool
     {
-        let logger = BugseeLogger.sharedInstance() as? DDLogger
-        DDLog.add(logger)
+        if let logger = BugseeLogger.sharedInstance() as? DDLogger {
+            DDLog.add(logger)
+        } else {
+            DDLogError("Bugsee Logger NOT ADDED!")
+        }
 
         // Only enable Bugsee for TestFlight betas and debug builds, not for iTunes App Store releases (at least for now)
         let isRunningTestFlightBeta = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
         if isRunningTestFlightBeta {
             Bugsee.launch(token:"d3170420-a6f0-4db3-970c-c4c571e5d31a")
         }
-        DDLogVerbose("trace")
+        
+        // Occasionally log full date to help with deciphering logs!
+        let dateString = DateFormatter().isoStringFromDate(Date())
+        DDLogVerbose("Log Date: \(dateString)")
 
         let applicationState = UIApplication.shared.applicationState
         let message = "didFinishLaunchingWithOptions, state: \(String(describing: applicationState.rawValue))"
         DDLogInfo(message)
-        if AppDelegate.testMode  {
-            let localNotificationMessage = UILocalNotification()
-            localNotificationMessage.alertBody = message
-            DispatchQueue.main.async {
-                UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-            }
-        }
+        UIApplication.localNotifyMessage(message)
 
         // Override point for customization after application launch.
         Styles.configureTidepoolBarColoring(on: true)
@@ -86,16 +91,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if api.isConnectedToNetwork() {
                 var message = "AppDelegate attempting to refresh token"
                 DDLogInfo(message)
-                if AppDelegate.testMode  {
-                    self.localNotifyMessage(message)
-                }
+                UIApplication.localNotifyMessage(message)
                 
                 api.refreshToken() { (succeeded, responseStatusCode) in
                     if succeeded {
                         message = "Refresh token succeeded, statusCode: \(responseStatusCode)"
                         DDLogInfo(message)
                         if AppDelegate.testMode  {
-                            self.localNotifyMessage(message)
+                            UIApplication.localNotifyMessage(message)
                         }
                         
                         let dataController = TidepoolMobileDataController.sharedInstance
@@ -112,9 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         if shouldLogout {
                             message = "Refresh token failed, need to log in normally, statusCode: \(responseStatusCode)"
                             DDLogInfo(message)
-                            if AppDelegate.testMode  {
-                                self.localNotifyMessage(message)
-                            }
+                            UIApplication.localNotifyMessage(message)
                             api.logout() {
                                 if self.didBecomeActiveAtLeastOnce {
                                     self.setupUIForLogin()
@@ -125,9 +126,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         } else {
                             message = "Refresh token failed, no status code"
                             DDLogError(message)
-                            if AppDelegate.testMode  {
-                                self.localNotifyMessage(message)
-                            }
+                            UIApplication.localNotifyMessage(message)
 
                             if self.didBecomeActiveAtLeastOnce {
                                 api.logout() {
@@ -136,9 +135,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                             } else {
                                 message = "Try to use current user and token if refresh token failed in background due to client side error"
                                 DDLogError(message)
-                                if AppDelegate.testMode  {
-                                    self.localNotifyMessage(message)
-                                }
+                                UIApplication.localNotifyMessage(message)
+                                
                                 let dataController = TidepoolMobileDataController.sharedInstance
                                 dataController.checkRestoreCurrentViewedUser {
                                     dataController.configureHealthKitInterface()
@@ -194,6 +192,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let sb = UIStoryboard(name: "EventView", bundle: nil)
         if let vc = sb.instantiateInitialViewController() {
             self.window?.rootViewController = vc
+            
+            // TODO: uploader UI - Revisit this. Do we want even the non-current mode readers/uploaders to resume automatically? Or should that be behind some explicit UI
+            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
         }
     }
     
@@ -208,67 +209,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         deviceIsLocked = true
     }
     
-    // Support for background fetch
-    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        DDLogVerbose("trace")
-        
-        if HealthKitBloodGlucosePusher.sharedInstance.enabled {
-            // if device is locked, bail now because we can't read HealthKit data
-            if deviceIsLocked {
-                if AppDelegate.testMode  {
-                    self.localNotifyMessage("TidepoolMobile skipping background fetch: device is locked!")
-                }
-                completionHandler(.failed)
-                return
-            }
-            
-            // next make sure we are logged in and have connectivity
-            let api = APIConnector.connector()
-            if api.sessionToken == nil {
-                DDLogInfo("No token available, user will need to log in!")
-                // Use local notifications to test background activity...
-                if AppDelegate.testMode {
-                    self.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: log in required!")
-                }
-                completionHandler(.failed)
-                return
-            }
-            
-            if !api.isConnectedToNetwork() {
-                DDLogInfo("No network available!")
-                // Use local notifications to test background activity...
-                if AppDelegate.testMode {
-                    self.localNotifyMessage("TidepoolMobile was unable to download items from Tidepool: no network available!")
-                }
-                completionHandler(.failed)
-                return
-            }
-            
-            DispatchQueue.main.async {
-                // make sure HK interface is configured...
-                // Note: this can kick off a lot of activity!
-                // Note: configureHealthKitInterface is somewhat background-aware...
-                TidepoolMobileDataController.sharedInstance.configureHealthKitInterface()
-                // then call it...
-                HealthKitBloodGlucosePusher.sharedInstance.backgroundFetch { (fetchResult) -> Void in
-                    completionHandler(fetchResult)
-                }
-            }
-        } else {
-            completionHandler(.noData)
-        }
-    }
-
-    fileprivate func localNotifyMessage(_ msg: String) {
-        DDLogInfo("localNotifyMessage: \(msg)")
-        let localNotificationMessage = UILocalNotification()
-        localNotificationMessage.alertBody = msg
-        DispatchQueue.main.async {
-            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-        }
-    }
-    
-    
     func applicationWillResignActive(_ application: UIApplication) {
         DDLogVerbose("trace")
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -280,9 +220,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 
-        // Only the HealthKitBloodGlucoseUploadReader.Mode.Current uploads should continue in background
-        HealthKitBloodGlucoseUploadManager.sharedInstance.stopUploading(reason: HealthKitBloodGlucoseUploadReader.StoppedReason.background)
-        HealthKitBloodGlucoseUploadManager.sharedInstance.resumeUploadingIfResumable(mode: HealthKitBloodGlucoseUploadReader.Mode.Current, currentUserId: appHealthKitConfiguration.currentUserId)
+        // Only the HealthKitUploadReader.Mode.Current uploads should continue in background
+        HealthKitUploadManager.sharedInstance.stopUploading(reason: HealthKitUploadReader.StoppedReason.background)
+        //HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(mode: HealthKitUploadReader.Mode.Current, currentUserId: appHealthKitConfiguration.currentUserId)
+        //TODO: test this change!
+        HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
 
         // Re-enable idle timer (screen locking) when the app enters background. (May have been disabled during sync/upload.)
         UIApplication.shared.isIdleTimerDisabled = false
@@ -326,8 +268,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     fileprivate var refreshTokenNextActive: Bool = false
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        DDLogVerbose("trace")
-        
+        // Occasionally log full date to help with deciphering logs!
+        let dateString = DateFormatter().isoStringFromDate(Date())
+        DDLogVerbose("Log Date: \(dateString)")
+
         self.didBecomeActiveAtLeastOnce = true
         
         if self.needSetUpForLoginSuccess {
@@ -340,33 +284,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.needRefreshTokenOnDidBecomeActive = false
 
             let api = APIConnector.connector()
-            if api.isConnectedToNetwork() {
-                var message = "AppDelegate attempting to refresh token"
-                DDLogInfo(message)
-                
+            api.alertWhileNetworkIsUnreachable() {
+                DDLogInfo("AppDelegate attempting to refresh token")
                 api.refreshToken() { (succeeded, responseStatusCode) in
                     if succeeded {
-                        message = "Refresh token succeeded, statusCode: \(responseStatusCode)"
-                        DDLogInfo(message)
-                        
+                        DDLogInfo("Refresh token succeeded, statusCode: \(responseStatusCode)")
                         let dataController = TidepoolMobileDataController.sharedInstance
                         dataController.checkRestoreCurrentViewedUser {
                             dataController.configureHealthKitInterface()
                             self.setupUIForLoginSuccess()
                         }
                     } else {
-                        message = "Refresh token failed, need to log in normally, statusCode: \(responseStatusCode)"
-                        DDLogInfo(message)
+                        DDLogInfo("Refresh token failed, need to log in normally, statusCode: \(responseStatusCode)")
                         api.logout() {
                             self.setupUIForLogin()
                         }
                     }
                 }
             }
+        } else {
+            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
         }
-        
-        // TODO: uploader UI - Revisit this. Do we want even the non-current mode readers/uploaders to resume automatically? Or should that be behind some explicit UI
-        HealthKitBloodGlucoseUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -374,10 +312,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
         DDLogVerbose("trace")
 
-        if AppDelegate.testMode {
-            self.localNotifyMessage("applicationWillTerminate")
-        }
-
+        UIApplication.localNotifyMessage("applicationWillTerminate")
+        
         TidepoolMobileDataController.sharedInstance.appWillTerminate()
     }
 }

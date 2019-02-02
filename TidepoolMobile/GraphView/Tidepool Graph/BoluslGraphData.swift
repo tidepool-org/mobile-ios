@@ -28,23 +28,23 @@ class BolusGraphDataType: GraphDataType {
     init(event: Bolus, timeOffset: TimeInterval) {
         self.id = event.id! as String
         if event.extended != nil {
-            self.extendedValue = CGFloat(event.extended!)
+            self.extendedValue = CGFloat(truncating: event.extended!)
         }
         if event.duration != nil {
-            let durationInMS = Int(event.duration!)
+            let durationInMS = Int(truncating: event.duration!)
             self.duration = TimeInterval(durationInMS / 1000)
         }
         if event.expectedNormal != nil {
-            self.expectedNormal = CGFloat(event.expectedNormal!)
+            self.expectedNormal = CGFloat(truncating: event.expectedNormal!)
         }
         if event.expectedExtended != nil {
-            self.expectedExtended = CGFloat(event.expectedExtended!)
+            self.expectedExtended = CGFloat(truncating: event.expectedExtended!)
         }
         if event.expectedDuration != nil {
-            let expectedDurationInMS = Int(event.expectedDuration!)
+            let expectedDurationInMS = Int(truncating: event.expectedDuration!)
             self.expectedDuration = TimeInterval(expectedDurationInMS / 1000)
         }
-        let value = CGFloat(event.value!)
+        let value = CGFloat(truncating: event.value!)
         super.init(value: value, timeOffset: timeOffset)
     }
 
@@ -205,7 +205,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
             }
             let bolusLabelStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
             bolusLabelStyle.alignment = .center
-            let bolusLabelFontAttributes = [NSFontAttributeName: Styles.smallSemiboldFont, NSForegroundColorAttributeName: kBolusTextBlue, NSParagraphStyleAttributeName: bolusLabelStyle]
+            let bolusLabelFontAttributes = [NSAttributedString.Key.font: Styles.smallSemiboldFont, NSAttributedString.Key.foregroundColor: kBolusTextBlue, NSAttributedString.Key.paragraphStyle: bolusLabelStyle]
             var bolusLabelTextSize = bolusLabelTextContent.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: bolusLabelFontAttributes, context: nil).size
             bolusLabelTextSize = CGSize(width: ceil(bolusLabelTextSize.width), height: ceil(bolusLabelTextSize.height))
 
@@ -223,7 +223,7 @@ class BolusGraphDataLayer: TidepoolGraphDataLayer {
                     if recommended.floatValue != Float(bolusValue) {
                         override = true
                         wizardHasOriginal = true
-                        originalValue = CGFloat(recommended)
+                        originalValue = CGFloat(truncating: recommended)
                     }
                 }
             }

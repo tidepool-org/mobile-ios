@@ -51,9 +51,9 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         // Add notification observers...
         let notificationCenter = NotificationCenter.default
         // graph data changes
-        notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.graphDataChanged(_:)), name: NSNotification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.graphDataChanged(_:)), name: Notification.Name(rawValue: NewBlockRangeLoadedNotification), object: nil)
         // keyboard up/down
-        notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EditCommentViewController.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         configureTableSize()
     }
    
@@ -68,10 +68,14 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         
         editCommentSceneContainer.setNeedsLayout()
         editCommentSceneContainer.layoutIfNeeded()
-        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.rowHeight = UITableView.automaticDimension
         
         // ensure row with edit is visible so keyboard will come up!
         self.tableView.scrollToRow(at: indexPathOfRowWithEdit(), at: .none, animated: false)
+        if let commentCell = currentCommentEditCell {
+            // tell cell to remember current height...
+            _ = commentCell.heightForTextGrew()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -109,10 +113,10 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     static var keyboardFrame: CGRect?
     
     // Capture keyboard sizing and appropriate scroll animation timing. Fine tune table sizing for current keyboard sizing, and place edit row at bottom of table view, just above the keyboard.
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         //DDLogInfo("EditCommentViewController \(#function)")
-        viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! TimeInterval
-        EditCommentViewController.keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        viewAdjustAnimationTime = notification.userInfo![UIResponder.keyboardAnimationDurationUserInfoKey] as! TimeInterval
+        EditCommentViewController.keyboardFrame = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
         self.configureTableSize() // first time, ensure table is correctly sized to leave room for keyboard
         self.adjustEditAboveKeyboard()
     }
@@ -171,7 +175,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         performSegue(withIdentifier: "unwindFromEditComment", sender: self)
     }
     
-    func savePressed(_ sender: TidepoolMobileSimpleUIButton!) {
+    @objc func savePressed(_ sender: TidepoolMobileSimpleUIButton!) {
         //DDLogInfo("cell with tag \(sender.tag) was pressed!")
         if APIConnector.connector().alertIfNetworkIsUnreachable() {
             return
@@ -213,7 +217,7 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
     //
 
     fileprivate var graphNeedsUpdate: Bool  = false
-    func graphDataChanged(_ note: Notification) {
+    @objc func graphDataChanged(_ note: Notification) {
         graphNeedsUpdate = true
         if viewIsForeground {
             DDLogInfo("EditCommentVC: graphDataChanged, reloading")
@@ -241,7 +245,11 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
             editCell.saveButton.isEnabled = enableSave
             editCell.saveButtonLargeHitArea.isEnabled = enableSave
             
-            // adjust table if lines of text have changed...
+            // check for increased height; adjusting table for each edit character can cause jitter in some edge cases (e.g., when top of keyboard is close to bottom of edit cell).
+            if !editCell.heightForTextGrew() {
+                return
+            }
+            // adjust table if lines of text have increased...
             self.tableView.beginUpdates()
             self.tableView.endUpdates()
             
@@ -273,9 +281,9 @@ class EditCommentViewController: BaseUIViewController, UITextViewDelegate {
         return kPreCommentRows + commentCount
     }
 
-    func howToUploadPressed(_ sender: UIButton!) {
+    @objc func howToUploadPressed(_ sender: UIButton!) {
         if let url = URL(string: TPConstants.kHowToUploadURL) {
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url)
         }
     }
 
@@ -304,7 +312,7 @@ extension EditCommentViewController: UITableViewDelegate {
         if row == kGraphRow {
             return TPConstants.kGraphViewHeight
         } else {
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         }
     }
 
@@ -313,7 +321,7 @@ extension EditCommentViewController: UITableViewDelegate {
         if row == kGraphRow {
             return TPConstants.kGraphViewHeight
         } else {
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         }
     }
     

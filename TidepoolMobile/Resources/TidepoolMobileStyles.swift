@@ -80,8 +80,8 @@ open class Styles: NSObject {
         "sidebarLogoutButton": (mediumSemiboldFont, darkGreyColor),
         "sidebarOtherLinks": (mediumSmallRegularFont, mediumLightGreyColor),
         "sidebarSettingHKEnable": (mediumSmallRegularFont, darkPurpleColor),
-        "sidebarSettingHKMainStatus": (verySmallSemiboldFont, mediumLightGreyColor),
-        "sidebarSettingHKMinorStatus": (verySmallRegularFont, mediumLightGreyColor),
+        "sidebarSettingHKMainStatus": (smallSemiboldFont, mediumLightGreyColor),
+        "sidebarSettingHKMinorStatus": (smallRegularFont, mediumLightGreyColor),
         // first time tips
         "firstTimeTipText": (mediumSmallSemiboldFont, whiteColor),
         "darkBackgroundButton": (mediumVerySmallSemiboldFont, whiteColor),
@@ -105,7 +105,7 @@ open class Styles: NSObject {
     class func configureTidepoolBarColoring(on: Bool) {
         UINavigationBar.appearance().barTintColor = Styles.darkPurpleColor
         UINavigationBar.appearance().isTranslucent = false
-        UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: Styles.navTitleFont]
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: Styles.navTitleFont]
     }
 
     //

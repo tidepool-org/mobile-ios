@@ -11,7 +11,8 @@
 
 @interface BugseeOptions : NSObject
 
-+ (BugseeOptions *) defaultOptions;
++ (nullable BugseeOptions *) optionsFrom:(NSDictionary*_Nullable) options;
++ (nonnull BugseeOptions *) defaultOptions;
 
 /**
  * Update with old style options.
@@ -30,7 +31,7 @@
  * Keys for old style options you can find in BugseeConstants.h
  * Options documentation: https://docs.bugsee.com/sdk/ios/configuration/
  */
-- (void)updateLaunchOptions:(NSDictionary*)dict;
+- (void)updateLaunchOptions:(nonnull NSDictionary*)dict;
 
 /**
  * Use to change bugsee style to Light Dusk or Based on status bar
@@ -144,6 +145,13 @@
 @property (nonatomic, assign) BOOL wifiOnlyUpload;
 
 /**
+ * Capture Device and wifi names.
+ * They are shown on the issue screen.
+ * Default: YES
+ */
+@property (nonatomic, assign) BOOL captureDeviceAndNetworkNames;
+
+/**
  * Bugsee will avoid using more disk space than specified. <br/>
  * Option has value of int type and should be specified in Mb. Value should not be smaller than 10.
  * Default: 50
@@ -153,12 +161,12 @@
 /**
  *  Name of the project target
  */
-@property (nonatomic, strong) NSString * buildTarget;
+@property (nonatomic, strong) NSString * _Nullable buildTarget;
 
 /**
  *  debug, release, etc...
  */
-@property (nonatomic, strong) NSString * buildType;
+@property (nonatomic, strong) NSString * _Nullable buildType;
 
 @property (nonatomic, assign) uint maxFramerate;
 @property (nonatomic, assign) uint minFramerate;
@@ -170,7 +178,7 @@
 @property (nonatomic, assign) float videoScale;
 
 - (int) maxBodyDataLength;
-- (NSDictionary *) dictionary;
-- (id)objectForKeyedSubscript:(NSString*)key;
+- (nullable NSDictionary*) dictionary;
+- (nullable id)objectForKeyedSubscript:(nonnull NSString*)key;
 
 @end

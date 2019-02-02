@@ -23,8 +23,10 @@ class BlipUser {
     var fullName: String?
     let userid: String
     var patient: BlipPatient?
-    var bgTargetLow: NSNumber?
-    var bgTargetHigh: NSNumber?
+    var bgTargetLow: Int?       // in mg/dL
+    var bgTargetHigh: Int?      // in mg/dL
+    var uploadId: String?
+    var biologicalSex: String?
     
     init(userid: String) {
         self.userid = userid
@@ -35,6 +37,7 @@ class BlipUser {
         if user.accountIsDSA != nil {
             self.patient = BlipPatient()
         }
+        self.biologicalSex = user.biologicalSex
         self.fullName = user.fullName
     }
 
@@ -42,13 +45,14 @@ class BlipUser {
     var isDSAUser: Bool {
         return patient != nil
     }
-
+    
     func processProfileJSON(_ json: JSON) {
         DDLogInfo("profile json: \(json)")
         fullName = json["fullName"].string
         let patient = json["patient"]
         if patient != JSON.null {
             self.patient = BlipPatient() // use empty patient for now
+            self.biologicalSex = patient["biologicalSex"].string
         }
     }
 
@@ -97,10 +101,37 @@ class BlipUser {
      }
     */
     func processSettingsJSON(_ json: JSON) {
-        DDLogInfo("settings json: \(json)")
-        self.bgTargetLow = json["bgTarget"]["low"].number
-        self.bgTargetHigh = json["bgTarget"]["high"].number
-        DDLogInfo("Low: \(String(describing: bgTargetLow)), High: \(String(describing: bgTargetHigh))")
+        if let jsonStr = json.rawString() {
+            DDLogInfo("settings json: \(jsonStr)")
+        }
+        guard let bgLowNum = json["bgTarget"]["low"].number else {
+            DDLogError("settings missing bgTarget.low")
+            return
+        }
+        guard let bgHighNum = json["bgTarget"]["high"].number else {
+            DDLogError("settings missing bgTarget.high")
+            return
+        }
+        // default to mg/dL if there is no units field
+        var bgUnits = "mg/dL"
+        if let units = json["units"]["bg"].string {
+            bgUnits = units
+        }
+        var bgLow: Int?
+        var bgHigh: Int?
+        if bgUnits == "mmol/L" {
+            bgLow = Int((Float(truncating: bgLowNum) * Float(kGlucoseConversionToMgDl)) + 0.5)
+            bgHigh = Int((Float(truncating: bgHighNum) * Float(kGlucoseConversionToMgDl)) + 0.5)
+        } else if bgUnits == "mg/dL" {
+            bgLow = Int(truncating: bgLowNum)
+            bgHigh = Int(truncating: bgHighNum)
+        } else {
+            DDLogError("Unrecognized settings units: \(bgUnits)")
+            return
+        }
+        DDLogInfo("Low: \(bgLow!), High: \(bgHigh!)")
+        self.bgTargetLow = bgLow!
+        self.bgTargetHigh = bgHigh!
     }
 
 }

@@ -19,11 +19,13 @@ import CocoaLumberjack
 class App: UIApplication {
     override init() {
         // Set up Xcode and system logging
-        DDASLLogger.sharedInstance().logFormatter = LogFormatter()
-        DDTTYLogger.sharedInstance().logFormatter = LogFormatter()
-        DDLog.add(DDASLLogger.sharedInstance())
-        DDLog.add(DDTTYLogger.sharedInstance())
+        DDTTYLogger.sharedInstance.logFormatter = LogFormatter()
+        DDLog.add(DDTTYLogger.sharedInstance)
         
+        //Only needed if no file logging is set (below)...
+        //DDASLLogger.sharedInstance.logFormatter = LogFormatter()
+        //DDLog.add(DDASLLogger.sharedInstance)
+
         // Set up file logging
         fileLogger = DDFileLogger()
         fileLogger.logFormatter = LogFormatter()
@@ -48,7 +50,4 @@ class App: UIApplication {
 }
 
 
-UIApplicationMain(CommandLine.argc, UnsafeMutableRawPointer(CommandLine.unsafeArgv)
-    .bindMemory(
-        to: UnsafeMutablePointer<Int8>.self,
-        capacity: Int(CommandLine.argc)), NSStringFromClass(App.self), NSStringFromClass(AppDelegate.self))
+_ = UIApplicationMain(CommandLine.argc, CommandLine.unsafeArgv, NSStringFromClass(App.self), NSStringFromClass(AppDelegate.self))

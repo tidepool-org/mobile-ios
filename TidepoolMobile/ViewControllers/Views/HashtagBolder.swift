@@ -27,11 +27,11 @@ class HashtagBolder {
         let color = highlighted ? Styles.whiteColor : isComment ? UIColor(hex: 0x8c8c8c) : Styles.blackishColor
         let attributedText = NSMutableAttributedString(string: text as String)
 
-        attributedText.addAttributes([NSFontAttributeName: regularFont, NSForegroundColorAttributeName: color], range: NSRange(location: 0, length: attributedText.length))
+        attributedText.addAttributes([NSAttributedString.Key.font: regularFont, NSAttributedString.Key.foregroundColor: color], range: NSRange(location: 0, length: attributedText.length))
         
         let hashTags = TwitterText.hashtags(inText: text as String, checkingURLOverlap: false)
-        for hashtag in hashTags! {
-            attributedText.addAttributes([NSFontAttributeName: boldFont], range: (hashtag as AnyObject).range)
+        for hashtag in hashTags {
+            attributedText.addAttributes([NSAttributedString.Key.font: boldFont], range: (hashtag as AnyObject).range)
         }
 
         return attributedText

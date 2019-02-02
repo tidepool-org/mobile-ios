@@ -123,7 +123,7 @@ open class ENSideMenu : NSObject, UIGestureRecognizerDelegate {
         }
     }
     fileprivate var menuPosition:ENSideMenuPosition = .left
-    fileprivate var blurStyle: UIBlurEffectStyle = .light
+    fileprivate var blurStyle: UIBlurEffect.Style = .light
     ///  A Boolean value indicating whether the bouncing effect is enabled. The default value is TRUE.
     open var bouncingEnabled :Bool = true
     /// The duration of the slide animation. Used only when `bouncingEnabled` is FALSE.
@@ -151,7 +151,7 @@ open class ENSideMenu : NSObject, UIGestureRecognizerDelegate {
     
     :returns: An initialized `ENSideMenu` object, added to the specified view.
     */
-    public init(sourceView: UIView, menuPosition: ENSideMenuPosition, blurStyle: UIBlurEffectStyle = .light) {
+    public init(sourceView: UIView, menuPosition: ENSideMenuPosition, blurStyle: UIBlurEffect.Style = .light) {
         super.init()
         self.sourceView = sourceView
         self.menuPosition = menuPosition
@@ -168,12 +168,12 @@ open class ENSideMenu : NSObject, UIGestureRecognizerDelegate {
         // Add right swipe gesture recognizer
         let rightSwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(ENSideMenu.handleGesture(_:)))
         rightSwipeGestureRecognizer.delegate = self
-        rightSwipeGestureRecognizer.direction =  UISwipeGestureRecognizerDirection.right
+        rightSwipeGestureRecognizer.direction =  UISwipeGestureRecognizer.Direction.right
         
         // Add left swipe gesture recognizer
         let leftSwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(ENSideMenu.handleGesture(_:)))
         leftSwipeGestureRecognizer.delegate = self
-        leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizerDirection.left
+        leftSwipeGestureRecognizer.direction = UISwipeGestureRecognizer.Direction.left
         
         if (menuPosition == .left) {
             sourceView.addGestureRecognizer(rightSwipeGestureRecognizer)
@@ -194,7 +194,7 @@ open class ENSideMenu : NSObject, UIGestureRecognizerDelegate {
     
     :returns: An initialized `ENSideMenu` object, added to the specified view, containing the specified menu view controller.
     */
-    public convenience init(sourceView: UIView, menuViewController: UIViewController, menuPosition: ENSideMenuPosition, blurStyle: UIBlurEffectStyle = .light) {
+    public convenience init(sourceView: UIView, menuViewController: UIViewController, menuPosition: ENSideMenuPosition, blurStyle: UIBlurEffect.Style = .light) {
         self.init(sourceView: sourceView, menuPosition: menuPosition, blurStyle: blurStyle)
         self.menuViewController = menuViewController
         self.menuViewController.view.frame = sideMenuContainerView.bounds
@@ -309,7 +309,7 @@ open class ENSideMenu : NSObject, UIGestureRecognizerDelegate {
                 to: CGPoint(x: boundaryPointX, y: height))
             animator.addBehavior(collisionBehavior)
             
-            let pushBehavior = UIPushBehavior(items: [sideMenuContainerView], mode: UIPushBehaviorMode.instantaneous)
+            let pushBehavior = UIPushBehavior(items: [sideMenuContainerView], mode: UIPushBehavior.Mode.instantaneous)
             pushBehavior.magnitude = pushMagnitude
             animator.addBehavior(pushBehavior)
             
@@ -407,12 +407,12 @@ open class ENSideMenu : NSObject, UIGestureRecognizerDelegate {
         return true
     }
     
-    internal func handleGesture(_ gesture: UISwipeGestureRecognizer) {
+    @objc internal func handleGesture(_ gesture: UISwipeGestureRecognizer) {
         toggleMenu((self.menuPosition == .right && gesture.direction == .left)
                 || (self.menuPosition == .left && gesture.direction == .right))
     }
     
-    internal func handlePan(_ recognizer : UIPanGestureRecognizer){
+    @objc internal func handlePan(_ recognizer : UIPanGestureRecognizer){
         
         let leftToRight = recognizer.velocity(in: recognizer.view).x > 0
         

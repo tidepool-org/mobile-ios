@@ -114,7 +114,7 @@ open class GraphingUtils {
     fileprivate func drawLabelLeftOfPoint(_ label: String, rightCenter: CGPoint, font: UIFont, color: UIColor) {
         let alignRightStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         alignRightStyle.alignment = .right
-        let labelFontAttributes = [NSFontAttributeName: font, NSForegroundColorAttributeName: color, NSParagraphStyleAttributeName: alignRightStyle]
+        let labelFontAttributes = [NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: color, NSAttributedString.Key.paragraphStyle: alignRightStyle]
         
         let textSize = label.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: labelFontAttributes, context: nil).size
         let textHeight = ceil(textSize.height)
@@ -130,14 +130,14 @@ open class GraphingUtils {
     }
     
     fileprivate func measureText(_ label: String, font: UIFont) -> CGSize {
-        let textSize = label.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSFontAttributeName: font], context: nil).size
+        let textSize = label.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil).size
         return textSize
     }
     
     func drawLabelRightOfPoint(_ label: String, leftCenter: CGPoint, font: UIFont, color: UIColor) {
         let alignLeftStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         alignLeftStyle.alignment = .right
-        let labelFontAttributes = [NSFontAttributeName: font, NSForegroundColorAttributeName: color, NSParagraphStyleAttributeName: alignLeftStyle]
+        let labelFontAttributes = [NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: color, NSAttributedString.Key.paragraphStyle: alignLeftStyle]
         
         let textSize = label.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: labelFontAttributes, context: nil).size
         let textHeight = ceil(textSize.height)
@@ -252,11 +252,11 @@ open class GraphingUtils {
             let hourlabelStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
             hourlabelStyle.alignment = .left
             
-            let labelAttrStr = NSMutableAttributedString(string: timeStr, attributes: [NSFontAttributeName: layout.xLabelRegularFont, NSForegroundColorAttributeName: layout.axesLabelTextColor, NSParagraphStyleAttributeName: hourlabelStyle])
+            let labelAttrStr = NSMutableAttributedString(string: timeStr, attributes: [NSAttributedString.Key.font: layout.xLabelRegularFont, NSAttributedString.Key.foregroundColor: layout.axesLabelTextColor, NSAttributedString.Key.paragraphStyle: hourlabelStyle])
             
             if lightenLastLetter {
                 // Make " a" or " p" lighter
-                labelAttrStr.addAttribute(NSFontAttributeName, value: layout.xLabelLightFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
+                labelAttrStr.addAttribute(NSAttributedString.Key.font, value: layout.xLabelLightFont, range: NSRange(location: labelAttrStr.length - 2, length: 2))
             }
             
             var sizeNeeded = labelAttrStr.boundingRect(with: CGSize(width: CGFloat.infinity, height: CGFloat.infinity), options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil).size

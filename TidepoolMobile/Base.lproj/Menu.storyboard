@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -23,12 +23,12 @@
         <!--Menu Account Settings View Controller-->
         <scene sceneID="Tz8-D7-tVt">
             <objects>
-                <viewController storyboardIdentifier="sidebarController" id="jOa-f6-dl3" customClass="MenuAccountSettingsViewController" customModule="Nutshell" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="sidebarController" id="jOa-f6-dl3" customClass="MenuAccountSettingsViewController" customModule="TidepoolMobile" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Yfg-jr-ctW"/>
                         <viewControllerLayoutGuide type="bottom" id="Ijt-Qt-Glr"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Msq-rR-Cxe" userLabel="sceneContainerWithBackground" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="Msq-rR-Cxe" userLabel="sceneContainerWithBackground" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="255" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -36,7 +36,7 @@
                                 <rect key="frame" x="0.0" y="44" width="255" height="460"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="YmC-Iq-jpn">
-                                        <rect key="frame" x="0.0" y="0.0" width="255" height="302"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="255" height="344"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wmi-HA-2WR" userLabel="usernameSection">
                                                 <rect key="frame" x="0.0" y="0.0" width="255" height="54"/>
@@ -57,8 +57,8 @@
                                                             <constraint firstAttribute="height" constant="24" id="uSQ-Dy-oQi"/>
                                                         </constraints>
                                                     </imageView>
-                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Name Here" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8eU-B6-eOM" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="50" y="17" width="119.5" height="20.5"/>
+                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Name Here" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8eU-B6-eOM" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
+                                                        <rect key="frame" x="50" y="17" width="123" height="20.5"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
                                                         <color key="textColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -83,10 +83,10 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Ls-ZC-LIS" userLabel="Health Section">
-                                                <rect key="frame" x="0.0" y="54" width="255" height="80"/>
+                                                <rect key="frame" x="0.0" y="54" width="255" height="122"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect to Health" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2n-bT-OD5" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="8" width="126.5" height="20.5"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Connect to Health" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2n-bT-OD5" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
+                                                        <rect key="frame" x="16" y="8" width="136" height="20.5"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Bold" family="Open Sans" pointSize="15"/>
                                                         <color key="textColor" red="0.15686274509803921" green="0.098039215686274508" blue="0.27450980392156865" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
@@ -94,8 +94,8 @@
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKEnable"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
-                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="9g5-rw-efz" customClass="ScaledSwitch" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="156.875" y="6.875" width="38.916666666666657" height="23.25"/>
+                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="9g5-rw-efz" customClass="ScaledSwitch" customModule="TidepoolMobile" customModuleProvider="target">
+                                                        <rect key="frame" x="160" y="3" width="51" height="31"/>
                                                         <color key="tintColor" red="0.38431372549019605" green="0.48627450980392156" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="number" keyPath="scale">
@@ -106,40 +106,21 @@
                                                             <action selector="enableHealthData:" destination="jOa-f6-dl3" eventType="valueChanged" id="fFy-Am-V5h"/>
                                                         </connections>
                                                     </switch>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" fixedFrame="YES" text="Allow Tidepool Mobile to read diabetes-related data from Apple Health" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y7a-Ke-na1" userLabel="healthExplanation" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="16" y="35.5" width="223" height="28"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
-                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                        <userDefinedRuntimeAttributes>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMinorStatus"/>
-                                                        </userDefinedRuntimeAttributes>
-                                                    </label>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="6Yq-ge-9W3" userLabel="Health Status Container View">
                                                         <rect key="frame" x="16" y="36.5" width="223" height="42"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Uploading complete history of Dexcom data" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gp0-ie-YG8" userLabel="healthStatusLine1" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="223" height="14"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="10"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Syncing Health data…" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gp0-ie-YG8" userLabel="healthStatusLine1" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="223" height="17.5"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="12.5"/>
                                                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMainStatus"/>
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="3 of 10 days" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9S2-IE-Dpc" userLabel="healthStatusLine2" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="14" width="223" height="14"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
-                                                                <color key="textColor" red="0.49411764705882355" green="0.49411764705882355" blue="0.49411764705882355" alpha="1" colorSpace="calibratedRGB"/>
-                                                                <nil key="highlightedColor"/>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMinorStatus"/>
-                                                                </userDefinedRuntimeAttributes>
-                                                            </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="FYI upload pauses when phone is locked" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IYw-eg-MRt" userLabel="healthStatusLine3" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="28" width="223" height="14"/>
-                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="3 days uploaded" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9S2-IE-Dpc" userLabel="healthStatusLine2" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="17.5" width="223" height="24.5"/>
+                                                                <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12.5"/>
                                                                 <color key="textColor" red="0.49411764705882355" green="0.49411764705882355" blue="0.49411764705882355" alpha="1" colorSpace="calibratedRGB"/>
                                                                 <nil key="highlightedColor"/>
                                                                 <userDefinedRuntimeAttributes>
@@ -151,10 +132,19 @@
                                                             <constraint firstAttribute="height" constant="42" id="dFo-ma-rwn"/>
                                                         </constraints>
                                                     </stackView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Allow Tidepool Mobile to read diabetes-related data from Apple Health" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y7a-Ke-na1" userLabel="healthExplanation" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
+                                                        <rect key="frame" x="16" y="36.5" width="231" height="34.5"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="12.5"/>
+                                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMinorStatus"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Ak-0F-p1s" userLabel="Sync Health Data Container View">
-                                                        <rect key="frame" x="0.0" y="79.5" width="255" height="0.0"/>
+                                                        <rect key="frame" x="0.0" y="79.5" width="255" height="42"/>
                                                         <subviews>
-                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Irc-lA-p4P" userLabel="Sync Health Data Line Separator" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Irc-lA-p4P" userLabel="Sync Health Data Line Separator" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="255" height="1"/>
                                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                 <constraints>
@@ -164,8 +154,8 @@
                                                                     <userDefinedRuntimeAttribute type="string" keyPath="usage" value="rowSeparator"/>
                                                                 </userDefinedRuntimeAttributes>
                                                             </view>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uzo-u6-ezM" userLabel="Sync Health Data Button" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="255" height="0.0"/>
+                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uzo-u6-ezM" userLabel="Sync Health Data Button" customClass="TPMenuButton" customModule="TidepoolMobile" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="255" height="42"/>
                                                                 <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
                                                                 <state key="normal">
                                                                     <color key="titleColor" red="0.38431372549999998" green="0.48627450979999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -180,7 +170,7 @@
                                                                 </connections>
                                                             </button>
                                                             <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DxO-RW-Vfw" userLabel="Sync Health Data Right Disclosure View">
-                                                                <rect key="frame" x="215" y="-42" width="40" height="42"/>
+                                                                <rect key="frame" x="215" y="0.0" width="40" height="42"/>
                                                                 <subviews>
                                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rightDisclosureArrow" highlightedImage="rightDisclosureArrow" translatesAutoresizingMaskIntoConstraints="NO" id="KXR-5u-mqs">
                                                                         <rect key="frame" x="13" y="12.5" width="11" height="17"/>
@@ -212,8 +202,8 @@
                                                             <constraint firstAttribute="bottom" secondItem="DxO-RW-Vfw" secondAttribute="bottom" id="zzV-Py-tvr"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Rq-xO-II6" userLabel="Health Section Line Separator" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="79" width="255" height="1"/>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Rq-xO-II6" userLabel="Health Section Line Separator" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="121" width="255" height="1"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="1" id="zLG-cE-aHd"/>
@@ -225,6 +215,7 @@
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                 <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="Y7a-Ke-na1" secondAttribute="trailing" constant="8" id="15F-Qd-bwZ"/>
                                                     <constraint firstItem="9Rq-xO-II6" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" id="2Ew-ki-vhM"/>
                                                     <constraint firstItem="M2n-bT-OD5" firstAttribute="centerY" secondItem="9g5-rw-efz" secondAttribute="centerY" id="3jW-ih-RHr"/>
                                                     <constraint firstAttribute="trailing" secondItem="7Ak-0F-p1s" secondAttribute="trailing" id="50q-zP-0X2"/>
@@ -232,20 +223,22 @@
                                                     <constraint firstItem="7Ak-0F-p1s" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" id="DvP-s1-9oX"/>
                                                     <constraint firstItem="7Ak-0F-p1s" firstAttribute="top" secondItem="6Yq-ge-9W3" secondAttribute="bottom" constant="1" id="Fr9-bA-YF4"/>
                                                     <constraint firstAttribute="trailing" secondItem="7Ak-0F-p1s" secondAttribute="trailing" id="ITw-qF-ZsX"/>
+                                                    <constraint firstItem="Y7a-Ke-na1" firstAttribute="leading" secondItem="M2n-bT-OD5" secondAttribute="leading" id="Mif-X7-Exd"/>
                                                     <constraint firstItem="6Yq-ge-9W3" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" constant="16" id="NTx-xk-Ryg"/>
                                                     <constraint firstItem="9g5-rw-efz" firstAttribute="leading" secondItem="M2n-bT-OD5" secondAttribute="trailing" constant="8" id="RTX-7V-4uf"/>
                                                     <constraint firstAttribute="bottom" secondItem="9Rq-xO-II6" secondAttribute="bottom" id="Tsr-o6-FOR"/>
                                                     <constraint firstItem="6Yq-ge-9W3" firstAttribute="top" secondItem="M2n-bT-OD5" secondAttribute="bottom" constant="8" id="UOc-mh-89v"/>
                                                     <constraint firstAttribute="trailing" secondItem="6Yq-ge-9W3" secondAttribute="trailing" constant="16" id="XeX-Pe-74o"/>
+                                                    <constraint firstItem="Y7a-Ke-na1" firstAttribute="top" secondItem="6Yq-ge-9W3" secondAttribute="top" id="go1-gi-98M"/>
                                                     <constraint firstAttribute="trailing" secondItem="9Rq-xO-II6" secondAttribute="trailing" id="hlo-TS-E5p"/>
                                                     <constraint firstItem="M2n-bT-OD5" firstAttribute="top" secondItem="9Ls-ZC-LIS" secondAttribute="top" constant="8" id="mDP-7c-Ahp"/>
                                                     <constraint firstItem="M2n-bT-OD5" firstAttribute="leading" secondItem="9Ls-ZC-LIS" secondAttribute="leading" constant="16" id="xCq-Nr-4az"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WpE-yY-uh1" userLabel="switchProfileSection">
-                                                <rect key="frame" x="0.0" y="134" width="255" height="42"/>
+                                                <rect key="frame" x="0.0" y="176" width="255" height="42"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GeI-ZX-uYF" userLabel="switchProfileButton" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GeI-ZX-uYF" userLabel="switchProfileButton" customClass="TPMenuButton" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="255" height="41"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
                                                         <state key="normal">
@@ -278,7 +271,7 @@
                                                             <constraint firstItem="hIF-jS-azo" firstAttribute="centerY" secondItem="oNz-63-LPT" secondAttribute="centerY" id="zCt-NF-wcE"/>
                                                         </constraints>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c4a-ZP-hud" userLabel="line separator" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c4a-ZP-hud" userLabel="line separator" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="41" width="255" height="1"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
@@ -305,9 +298,9 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xpv-Zp-SJ9" userLabel="supportSection">
-                                                <rect key="frame" x="0.0" y="176" width="255" height="42"/>
+                                                <rect key="frame" x="0.0" y="218" width="255" height="42"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kci-7b-geJ" userLabel="supportButton" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kci-7b-geJ" userLabel="supportButton" customClass="TPMenuButton" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="255" height="41"/>
                                                         <state key="normal">
                                                             <color key="titleColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="calibratedRGB"/>
@@ -320,7 +313,7 @@
                                                             <action selector="supportButtonHandler:" destination="jOa-f6-dl3" eventType="touchUpInside" id="327-b0-GWQ"/>
                                                         </connections>
                                                     </button>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="96K-N3-aoH" userLabel="line separator" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="96K-N3-aoH" userLabel="line separator" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="41" width="255" height="1"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
@@ -344,9 +337,9 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="w3P-pi-kIM" userLabel="privacySection">
-                                                <rect key="frame" x="0.0" y="218" width="255" height="42"/>
+                                                <rect key="frame" x="0.0" y="260" width="255" height="42"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kNg-yc-pvp" userLabel="privacyButton" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kNg-yc-pvp" userLabel="privacyButton" customClass="TPMenuButton" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="255" height="41"/>
                                                         <state key="normal">
                                                             <color key="titleColor" red="0.4941176471" green="0.4941176471" blue="0.4941176471" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -359,7 +352,7 @@
                                                             <action selector="privacyButtonTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="uMA-Vl-qY6"/>
                                                         </connections>
                                                     </button>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FYI-4X-1Ue" userLabel="line separator" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FYI-4X-1Ue" userLabel="line separator" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="41" width="255" height="1"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
@@ -383,7 +376,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AkY-6Y-8Cr" userLabel="logoutSection">
-                                                <rect key="frame" x="0.0" y="260" width="255" height="42"/>
+                                                <rect key="frame" x="0.0" y="302" width="255" height="42"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S8U-Ev-vEo" userLabel="saveSpaceForLogoutButtonText">
                                                         <rect key="frame" x="0.0" y="0.0" width="80" height="42"/>
@@ -392,7 +385,7 @@
                                                             <constraint firstAttribute="width" constant="80" id="Q25-WY-qPK"/>
                                                         </constraints>
                                                     </view>
-                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="john@doe.com" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="9sA-Dh-xzl" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="john@doe.com" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="9sA-Dh-xzl" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="166.5" y="15.5" width="72.5" height="14"/>
                                                         <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="10"/>
                                                         <color key="textColor" red="0.49411764705882355" green="0.49411764705882355" blue="0.49411764705882355" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -401,7 +394,7 @@
                                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="sidebarSettingHKMainStatus"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </label>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M98-PL-e0L" userLabel="logOutButton" customClass="TPMenuButton" customModule="Nutshell" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M98-PL-e0L" userLabel="logOutButton" customClass="TPMenuButton" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="255" height="41"/>
                                                         <state key="normal">
                                                             <color key="titleColor" red="0.49411764705882355" green="0.49411764705882355" blue="0.49411764705882355" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -414,7 +407,7 @@
                                                             <action selector="logOutTapped:" destination="jOa-f6-dl3" eventType="touchUpInside" id="Pyd-hq-8ve"/>
                                                         </connections>
                                                     </button>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Me0-Pg-1UA" userLabel="line separator" customClass="TidepoolMobileUIView" customModule="Nutshell" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Me0-Pg-1UA" userLabel="line separator" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="41" width="255" height="1"/>
                                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
@@ -452,7 +445,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mA2-zl-vsY" userLabel="versionView">
                                                 <rect key="frame" x="0.0" y="0.0" width="255" height="42"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.3 on Production" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FRD-xW-MeJ" userLabel="versionString" customClass="TidepoolMobileUILabel" customModule="Nutshell" customModuleProvider="target">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.3 on Production" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FRD-xW-MeJ" userLabel="versionString" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
                                                         <rect key="frame" x="86" y="14" width="83" height="14"/>
                                                         <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="10"/>
                                                         <color key="textColor" red="0.30196078431372547" green="0.30588235294117649" blue="0.29803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -516,7 +509,6 @@
                         <outlet property="healthStatusContainerView" destination="6Yq-ge-9W3" id="vxl-OS-wxW"/>
                         <outlet property="healthStatusLine1" destination="Gp0-ie-YG8" id="LwV-cg-nwK"/>
                         <outlet property="healthStatusLine2" destination="9S2-IE-Dpc" id="Fc5-NR-lsv"/>
-                        <outlet property="healthStatusLine3" destination="IYw-eg-MRt" id="Wco-Dv-hDa"/>
                         <outlet property="loginAccount" destination="9sA-Dh-xzl" id="2XT-bE-ria"/>
                         <outlet property="sidebarView" destination="9OQ-uM-nfY" id="Ix6-bv-TsQ"/>
                         <outlet property="syncHealthDataContainer" destination="7Ak-0F-p1s" id="DAw-kW-FjU"/>

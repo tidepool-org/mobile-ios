@@ -55,7 +55,8 @@ class APIConnector {
     
     fileprivate let kSessionTokenDefaultKey = "SToken"
     fileprivate let kCurrentServiceDefaultKey = "SCurrentService"
-    fileprivate let kSessionIdHeader = "x-tidepool-session-token"
+    fileprivate let kSessionTokenHeaderId = "X-Tidepool-Session-Token"
+    fileprivate let kSessionTokenResponseId = "x-tidepool-session-token"
 
     // Error domain and codes
     fileprivate let kTidepoolMobileErrorDomain = "TidepoolMobileErrorDomain"
@@ -93,6 +94,7 @@ class APIConnector {
         "Production"
     ]
     fileprivate let kDefaultServerName = "Production"
+    //fileprivate let kDefaultServerName = "Integration"
 
     fileprivate var _currentService: String?
     var currentService: String? {
@@ -112,7 +114,10 @@ class APIConnector {
         get {
             if _currentService == nil {
                 if let service = UserDefaults.standard.string(forKey: kCurrentServiceDefaultKey) {
-                    _currentService = service
+                    // don't set a service this build does not support
+                    if kServers[service] != nil {
+                        _currentService = service
+                    }
                 }
             }
             if _currentService == nil || kServers[_currentService!] == nil {
@@ -148,7 +153,7 @@ class APIConnector {
     
     /// Creator of APIConnector must call this function after init!
     func configure() -> APIConnector {
-        HealthKitBloodGlucoseUploadManager.sharedInstance.makeBloodGlucoseDataUploadRequestHandler = self.blipMakeBloodGlucoseDataUploadRequest
+        HealthKitUploadManager.sharedInstance.makeDataUploadRequestHandler = self.blipMakeDataUploadRequest
         self.baseUrl = URL(string: kServers[currentService!]!)!
         DDLogInfo("Using service: \(String(describing: self.baseUrl))")
         self.sessionToken = UserDefaults.standard.string(forKey: kSessionTokenDefaultKey)
@@ -179,8 +184,9 @@ class APIConnector {
             let notification = Notification(name: Notification.Name(rawValue: "switchedToNewServer"), object: nil)
             NotificationCenter.default.post(notification)
             
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.logout()
+            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                appDelegate.logout()
+            }
         }
     }
     
@@ -208,7 +214,7 @@ class APIConnector {
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if ( response.result.isSuccess ) {
                 // Look for the auth token
-                self.sessionToken = response.response!.allHeaderFields[self.kSessionIdHeader] as! String?
+                self.sessionToken = response.response!.allHeaderFields[self.kSessionTokenResponseId] as! String?
                 let json = JSON(response.result.value!)
                 
                 // Create the User object
@@ -239,10 +245,14 @@ class APIConnector {
         // format is like: https://api.tidepool.org/metadata/f934a287c4/profile
         let endpoint = "metadata/" + userId + "/profile"
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        DDLogInfo("fetchProfile endpoint: \(endpoint)")
         sendRequest(.get, endpoint: endpoint).responseJSON { response in
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if ( response.result.isSuccess ) {
                 let json = JSON(response.result.value!)
+                if let jsonStr = json.rawString() {
+                    DDLogInfo("profile json: \(jsonStr)")
+                }
                 completion(Result.success(json))
             } else {
                 // Failure
@@ -250,7 +260,263 @@ class APIConnector {
             }
         }
     }
+    
+    func updateProfile(_ userId: String, biologicalSex: String, _ completion: @escaping (Bool) -> (Void)) {
+        DDLogInfo("Try updating user profile with biological sex: \(biologicalSex)")
+        
+        func mergeBioSexWithProfile(_ profile: inout JSON) -> Data? {
+            let bioSexDict: [String: Any] = ["patient": [
+                "biologicalSex": biologicalSex
+                ]
+            ]
+            var result: Data?
+            do {
+                let bioSexJsonData = try JSONSerialization.data(withJSONObject: bioSexDict, options: [])
+                try profile.merge(with: JSON(bioSexJsonData))
+                let mergedData = try profile.rawData()
+                result = mergedData
+                if let mergedDataStr = String(data: mergedData, encoding: .utf8) {
+                    result = mergedData
+                    DDLogDebug("merged profile json: \(mergedDataStr)")
+                } else {
+                    DDLogError("Merged doesn't print!")
+                }
+            } catch {
+                DDLogError("Serialization errors merging json!")
+            }
+            return result
+        }
+        
+        fetchProfile(userId) {
+            (result:Alamofire.Result<JSON>) -> (Void) in
+            DDLogInfo("checkRestoreCurrentViewedUser profile fetch result: \(result)")
+            guard result.isSuccess else {
+                DDLogError("Failed to fetch profile!")
+                completion(false)
+                return
+            }
+            guard var profileJson = result.value else {
+                DDLogError("Error in fetched profile json!")
+                completion(false)
+                return
+            }
+            let patient = profileJson["patient"]
+            guard profileJson["patient"] != JSON.null else {
+                DDLogError("No patient record in the fetched profile, not a DSA user!")
+                completion(false)
+                return
+            }
+            if let currentBioSex = patient["biologicalSex"].string {
+                DDLogError("biological sex '\(currentBioSex)' already set in Tidepool, should not update!")
+                completion(false)
+                return
+            }
+            guard let body = mergeBioSexWithProfile(&profileJson) else {
+                DDLogError("Serialization errors merging json!")
+                completion(false)
+                return
+            }
+            // then repost!
+            let endpoint = "metadata/" + userId + "/profile"
+            let headerDict = ["Content-Type":"application/json"]
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            self.postRequest(body, endpoint: endpoint, headers: headerDict).responseJSON { response in
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if ( response.result.isSuccess ) {
+                    DDLogInfo("Posted updated profile successfully!")
+                    completion(true)
+                } else {
+                    // return nil to signal network request failure
+                    DDLogInfo("Post of updated profile failed!")
+                    completion(false)
+                }
+            }
+        }
+    }
+    
+    /// Call this after fetching user profile, as part of configureHealthKitInterface, to ensure we have a dataset id for health data uploads (if so enabled).
+    /// - parameter completion: Method that will be called when this async operation has completed. If successful, currentUploadId in TidepoolMobileDataController will be set; if not, it will still be nil.
+    func configureUploadId(_ completion: @escaping () -> (Void)) {
+        let dataCtrl = TidepoolMobileDataController.sharedInstance
+        if let user = dataCtrl.currentLoggedInUser, let isDSAUser = dataCtrl.isDSAUser {
+            // if we don't have an uploadId, first try fetching one from the server...
+            if isDSAUser && dataCtrl.currentUploadId == nil {
+                self.fetchDataset(user.userid) {
+                    (result: String?) -> (Void) in
+                    if result != nil && !result!.isEmpty {
+                        DDLogInfo("Dataset fetched existing: \(result!)")
+                        dataCtrl.currentUploadId = result
+                        completion()
+                        return
+                    }
+                    if result == nil {
+                        // network failure for fetchDataset, don't try creating a new one in case one already does exist...
+                        completion()
+                        return
+                    }
+                    // Existing dataset fetch failed, try creating a new one...
+                    DDLogInfo("Dataset fetch failed, try creating new dataset!")
+                    self.createDataset(user.userid) {
+                        (result: String?) -> (Void) in
+                        if result != nil && !result!.isEmpty {
+                            DDLogInfo("New dataset created: \(result!)")
+                            dataCtrl.currentUploadId = result!
+                        } else {
+                            DDLogError("Unable to fetch existing upload dataset or create a new one!")
+                        }
+                        completion()
+                    }
+                }
+            } else {
+                DDLogInfo("Not a DSA user or userid nil or uploadId is not nil")
+                completion()
+            }
+        } else {
+            DDLogInfo("No current user or isDSAUser is nil")
+            completion()
+        }
+    }
 
+    /// Ask service for the existing mobile app upload id for this user, if one exists.
+    /// - parameter userId: Current user id
+    /// - parameter completion: Method that accepts an optional String which will be nil if the network request did not complete, an empty string if an uploadId for this user does not yet exist, and the upload id if it does exist.
+    private func fetchDataset(_ userId: String, _ completion: @escaping (String?) -> (Void)) {
+        DDLogInfo("Try fetching existing dataset!")
+        // Set our endpoint for the dataset fetch
+        // format is: https://api.tidepool.org/v1/users/<user-id-here>/data_sets?client.name=tidepool.mobile&size=1"
+        let endpoint = "v1/users/" + userId + "/data_sets"
+        let parameters = ["client.name": "org.tidepool.mobile", "size": "1"]
+        let headerDict = ["Content-Type":"application/json"]
+
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        sendRequest(.get, endpoint: endpoint, parameters: parameters as [String : AnyObject]?, headers: headerDict).responseJSON { response in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            if ( response.result.isSuccess ) {
+                let json = JSON(response.result.value!)
+                print("\(json)")
+                var uploadId: String?
+                if let resultDict = json[0].dictionary {
+                    uploadId = resultDict["uploadId"]?.string
+                }
+                if uploadId != nil {
+                    DDLogInfo("Fetched existing dataset: \(uploadId!)")
+                } else {
+                    // return empty string to signal network request completed ok
+                    uploadId = ""
+                    DDLogInfo("Fetch of existing dataset returned nil!")
+                }
+                completion(uploadId)
+                // TEST: force failure...
+                //completion("")
+            } else {
+                DDLogError("Fetch of existing dataset failed!")
+                // return nil to signal failure
+                completion(nil)
+            }
+        }
+    }
+    
+    /// Ask service to create a new upload id. Should only be called after fetchDataSet returns a nil array (no existing upload id).
+    /// - parameter userId: Current user id
+    /// - parameter completion: Method that accepts an optional String which will be nil if the network request did not complete, an empty string if the create did not result in an uploadId, and the upload id if a new id was successfully created.
+    private func createDataset(_ userId: String, _ completion: @escaping (String?) -> (Void)) {
+        DDLogInfo("Try creating a new dataset!")
+
+        // Set our endpoint for the dataset create
+        // format is: https://api.tidepool.org/v1/users/<user-id-here>/data_sets"
+        let endpoint = "v1/users/" + userId + "/data_sets"
+
+        let clientDict = ["name": "org.tidepool.mobile", "version": UIApplication.appVersion()]
+        let deduplicatorDict = ["name": "org.tidepool.deduplicator.dataset.delete.origin"]
+        let headerDict = ["Content-Type":"application/json"]
+        let jsonObject = ["client":clientDict, "dataSetType":"continuous", "deduplicator":deduplicatorDict] as [String : Any]
+        let body: Data?
+        do {
+            body = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
+        } catch {
+            DDLogError("Failed to create body!")
+            // return nil to signal failure
+            completion(nil)
+            return
+        }
+        
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        postRequest(body!, endpoint: endpoint, headers: headerDict).responseJSON { response in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            if ( response.result.isSuccess ) {
+                let json = JSON(response.result.value!)
+                var uploadId: String?
+                if let dataDict = json["data"].dictionary {
+                    uploadId = dataDict["uploadId"]?.string
+                }
+                if uploadId != nil {
+                    DDLogInfo("Create new dataset success: \(uploadId!)")
+                } else {
+                    // return empty string to signal network request completed ok
+                    uploadId = ""
+                    DDLogInfo("Create new dataset returned nil!")
+                }
+                completion(uploadId)
+            } else {
+                // return nil to signal network request failure
+                DDLogInfo("Create new dataset failed!")
+                completion(nil)
+            }
+        }
+    }
+
+    /// Returns last timezone id uploaded on success, otherwise nil
+    func postTimezoneChangesEvent(_ tzChanges: [(time: String, newTzId: String, oldTzId: String?)], _ completion: @escaping (String?) -> (Void)) {
+        let dataCtrl = TidepoolMobileDataController.sharedInstance
+        if let currentUploadId = dataCtrl.currentUploadId {
+            let endpoint = "/v1/data_sets/" + currentUploadId + "/data"
+            let headerDict = ["Content-Type":"application/json"]
+            var changesToUploadDictArray = [[String: AnyObject]]()
+            var lastTzUploaded: String?
+            for tzChange in tzChanges {
+                var sampleToUploadDict = [String: AnyObject]()
+                sampleToUploadDict["time"] = tzChange.time as AnyObject
+                sampleToUploadDict["type"] = "deviceEvent" as AnyObject
+                sampleToUploadDict["subType"] = "timeChange" as AnyObject
+                let toDict = ["timeZoneName": tzChange.newTzId]
+                lastTzUploaded = tzChange.newTzId
+                sampleToUploadDict["to"] = toDict as AnyObject
+                if let oldTzId = tzChange.oldTzId {
+                    let fromDict = ["timeZoneName": oldTzId]
+                    sampleToUploadDict["from"] = fromDict as AnyObject
+                }
+                changesToUploadDictArray.append(sampleToUploadDict)
+            }
+            let body: Data?
+            do {
+                body = try JSONSerialization.data(withJSONObject: changesToUploadDictArray, options: [])
+                if let postBodyJson = String(data: body!, encoding: .utf8) {
+                    DDLogInfo("Posting json for timechange: \(postBodyJson)")
+                }
+            } catch {
+                DDLogError("Failed to create body!")
+                completion(nil)
+                return
+            }
+            
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            postRequest(body!, endpoint: endpoint, headers: headerDict).responseJSON { response in
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if ( response.result.isSuccess ) {
+                    DDLogInfo("Timezone change upload succeeded!")
+                    completion(lastTzUploaded)
+                } else {
+                    // return nil to signal network request failure
+                    DDLogInfo("Timezone change upload failed!")
+                    completion(nil)
+                }
+            }
+        } else {
+            DDLogInfo("Timezone change upload fail: no upload id!")
+            completion(nil)
+        }
+    }
+    
     func fetchUserSettings(_ userId: String, _ completion: @escaping (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user profile
         // format is like: https://api.tidepool.org/metadata/f934a287c4/settings
@@ -263,30 +529,16 @@ class APIConnector {
                 completion(Result.success(json))
             } else {
                 // Failure
+                if let httpResponse = response.response, httpResponse.statusCode ==  404 {
+                    DDLogInfo("No user settings found on service!")
+                } else {
+                    DDLogInfo("User settings fetched failed with result: \(response.result.error!)")
+                }
                 completion(Result.failure(response.result.error!))
             }
         }
     }
     
-
-// TODO: figure out how to process the JSON coming back into an array of keys
-//    func getAllViewableUsers(_ completion: @escaping (Result<JSON>) -> (Void)) {
-//        // Set our endpoint for the user profile
-//        // format is like: https://api.tidepool.org/access/groups/f934a287c4
-//        let endpoint = "access/groups/" + TidepoolMobileDataController.sharedInstance.currentUserId!
-//        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-//        sendRequest(.get, endpoint: endpoint).responseJSON { response in
-//            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-//            if ( response.result.isSuccess ) {
-//                let json = JSON(response.result.value!)
-//                completion(Result.success(json))
-//            } else {
-//                // Failure
-//                completion(Result.failure(response.result.error!))
-//            }
-//        }
-//    }
-
     // When offline just stash metrics in metricsCache array
     fileprivate var metricsCache: [String] = []
     // Used so we only have one metric send in progress at a time, to help balance service load a bit...
@@ -355,20 +607,14 @@ class APIConnector {
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             if ( response.result.isSuccess ) {
                 DDLogInfo("Session token updated")
-                self.sessionToken = response.response!.allHeaderFields[self.kSessionIdHeader] as! String?
+                self.sessionToken = response.response!.allHeaderFields[self.kSessionTokenResponseId] as! String?
                 completion(true, response.response?.statusCode ?? 0)
             } else {
                 if let error = response.result.error {
                     let message = "Refresh token failed, error: \(error)"
                     DDLogError(message)
-                    if AppDelegate.testMode  {
-                        let localNotificationMessage = UILocalNotification()
-                        localNotificationMessage.alertBody = message
-                        DispatchQueue.main.async {
-                            UIApplication.shared.presentLocalNotificationNow(localNotificationMessage)
-                        }
-                    }
-                    
+                    UIApplication.localNotifyMessage(message)
+
                     // TODO: handle network offline!
                 }
                 completion(false, response.response?.statusCode ?? 0)
@@ -397,7 +643,7 @@ class APIConnector {
         }
     }
     
-    func getReadOnlyUserData(_ startDate: Date? = nil, endDate: Date? = nil, objectTypes: String = "smbg,bolus,cbg,wizard,basal", completion: @escaping (Result<JSON>) -> (Void)) {
+    func getReadOnlyUserData(_ startDate: Date? = nil, endDate: Date? = nil, objectTypes: String = "smbg,bolus,cbg,wizard,basal,food", completion: @escaping (Result<JSON>) -> (Void)) {
         // Set our endpoint for the user data
         // TODO: centralize define of read-only events!
         // request format is like: https://api.tidepool.org/data/f934a287c4?endDate=2015-11-17T08%3A00%3A00%2E000Z&startDate=2015-11-16T12%3A00%3A00%2E000Z&type=smbg%2Cbolus%2Ccbg%2Cwizard%2Cbasal
@@ -422,7 +668,7 @@ class APIConnector {
                 let json = JSON(response.result.value!)
                 var validResult = true
                 if let status = json["status"].number {
-                    let statusCode = Int(status)
+                    let statusCode = Int(truncating: status)
                     DDLogInfo("getReadOnlyUserData includes status field: \(statusCode)")
                     // TODO: determine if any status is indicative of failure here! Note that if call was successful, there will be no status field in the json result. The only verified error response is 403 which happens when we pass an invalid token.
                     if statusCode == 401 || statusCode == 403 {
@@ -454,18 +700,70 @@ class APIConnector {
         }
     }
     
-    
-
-    func clearSessionToken() -> Void {
-        UserDefaults.standard.removeObject(forKey: kSessionTokenDefaultKey)
-        UserDefaults.standard.synchronize()
-        sessionToken = nil
-    }
-
     // MARK: - Internal methods
     
+    // User-agent string, based on that from Alamofire, but common regardless of whether Alamofire library is used
+    private func userAgentString() -> String {
+        if _userAgentString == nil {
+            _userAgentString = {
+                if let info = Bundle.main.infoDictionary {
+                    let executable = info[kCFBundleExecutableKey as String] as? String ?? "Unknown"
+                    let bundle = info[kCFBundleIdentifierKey as String] as? String ?? "Unknown"
+                    let appVersion = info["CFBundleShortVersionString"] as? String ?? "Unknown"
+                    let appBuild = info[kCFBundleVersionKey as String] as? String ?? "Unknown"
+                    
+                    let osNameVersion: String = {
+                        let version = ProcessInfo.processInfo.operatingSystemVersion
+                        let versionString = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
+                        
+                        let osName: String = {
+                            #if os(iOS)
+                            return "iOS"
+                            #elseif os(watchOS)
+                            return "watchOS"
+                            #elseif os(tvOS)
+                            return "tvOS"
+                            #elseif os(macOS)
+                            return "OS X"
+                            #elseif os(Linux)
+                            return "Linux"
+                            #else
+                            return "Unknown"
+                            #endif
+                        }()
+                        
+                        return "\(osName) \(versionString)"
+                    }()
+                    
+                    return "\(executable)/\(appVersion) (\(bundle); build:\(appBuild); \(osNameVersion))"
+                }
+                
+                return "TidepoolMobile"
+            }()
+        }
+        return _userAgentString!
+    }
+    private var _userAgentString: String?
+    
+    private func sessionManager() -> SessionManager {
+        if _sessionManager == nil {
+            // get the default headers
+            var alamoHeaders = Alamofire.SessionManager.defaultHTTPHeaders
+            // add our custom user-agent
+            alamoHeaders["User-Agent"] = self.userAgentString()
+            // create a custom session configuration
+            let configuration = URLSessionConfiguration.default
+            // add the headers
+            configuration.httpAdditionalHeaders = alamoHeaders
+            // create a session manager with the configuration
+            _sessionManager = Alamofire.SessionManager(configuration: configuration)
+        }
+        return _sessionManager!
+    }
+    private var _sessionManager: SessionManager?
+    
     // Sends a request to the specified endpoint
-    fileprivate func sendRequest(_ requestType: HTTPMethod? = .get,
+    private func sendRequest(_ requestType: HTTPMethod? = .get,
         endpoint: (String),
         parameters: [String: AnyObject]? = nil,
         headers: [String: String]? = nil) -> (DataRequest)
@@ -486,17 +784,43 @@ class APIConnector {
         }
         
         // Fire off the network request
-        //DDLogInfo("sendRequest url: \(url), params: \(parameters ?? [:]), headers: \(apiHeaders ?? [:])")
-        return Alamofire.request(url, method: requestType!, parameters: parameters, headers: apiHeaders).validate()
+        DDLogInfo("sendRequest url: \(url), params: \(parameters ?? [:]), headers: \(apiHeaders ?? [:])")
+        return self.sessionManager().request(url, method: requestType!, parameters: parameters, headers: apiHeaders).validate()
+        //debugPrint(result)
+        //return result
     }
     
     func getApiHeaders() -> [String: String]? {
         if ( sessionToken != nil ) {
-            return [kSessionIdHeader : sessionToken!]
+            return [kSessionTokenHeaderId : sessionToken!]
         }
         return nil
     }
     
+    // Sends a request to the specified endpoint
+    fileprivate func postRequest(_ data: Data,
+                                 endpoint: (String),
+                                 headers: [String: String]? = nil) -> (DataRequest)
+    {
+        let url = baseUrl!.appendingPathComponent(endpoint)
+        
+        // Get our API headers (the session token) and add any headers supplied by the caller
+        var apiHeaders = getApiHeaders()
+        if ( apiHeaders != nil ) {
+            if ( headers != nil ) {
+                for(k, v) in headers! {
+                    _ = apiHeaders?.updateValue(v, forKey: k)
+                }
+            }
+        } else {
+            // We have no headers of our own to use- just use the caller's directly
+            apiHeaders = headers
+        }
+        
+        DDLogInfo("postRequest url: \(url), headers: \(apiHeaders ?? [:])")
+        return self.sessionManager().upload(data, to: url, headers: apiHeaders).validate()
+    }
+
     //
     // MARK: - Note fetching and uploading
     //
@@ -507,11 +831,7 @@ class APIConnector {
         
         let urlExtension = "/access/groups/" + TidepoolMobileDataController.sharedInstance.currentUserId!
         
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
-        
-        let preRequest = { () -> Void in
-            // Nothing to do
-        }
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)"]
         
         let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
             if let httpResponse = response as? HTTPURLResponse {
@@ -533,7 +853,7 @@ class APIConnector {
             }
         }
         
-        blipRequest("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+        blipRequest("GET", urlExtension: urlExtension, headerDict: headerDict, body: nil, completion: completion)
     }
 
     func getNotesForUserInDateRange(_ fetchWatcher: NoteAPIWatcher, userid: String, start: Date?, end: Date?) {
@@ -556,7 +876,7 @@ class APIConnector {
         }
         
         let urlExtension = "/message/notes/" + userid + startString + endString
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)"]
         
         let preRequest = { () -> Void in
             fetchWatcher.loadingNotes(true)
@@ -567,60 +887,64 @@ class APIConnector {
             // End refreshing for refresh control
             fetchWatcher.endRefresh()
             
-            if let httpResponse = response as? HTTPURLResponse {
+            if let httpResponse = response as? HTTPURLResponse, let data = data {
                 if (httpResponse.statusCode == 200) {
                     DDLogInfo("Got notes for user (\(userid)) in given date range: \(startString) to \(endString)")
                     var notes: [BlipNote] = []
                     
-                    let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary)!
-                    
-                    //DDLogInfo("notes: \(JSON(data!))")
-                    let messages: NSArray = jsonResult.value(forKey: "messages") as! NSArray
-                    
-                    let dateFormatter = DateFormatter()
-                    
-                    for message in messages {
-                        let id = (message as AnyObject).value(forKey: "id") as! String
-                        let otheruserid = (message as AnyObject).value(forKey: "userid") as! String
-                        let groupid = (message as AnyObject).value(forKey: "groupid") as! String
+                    if let jsonResult: NSDictionary = ((try? JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)) as? NSDictionary) {
                         
+                        //DDLogInfo("notes: \(JSON(data!))")
+                        let messages: NSArray = jsonResult.value(forKey: "messages") as! NSArray
                         
-                        var timestamp: Date?
-                        let timestampString = (message as AnyObject).value(forKey: "timestamp") as? String
-                        if let timestampString = timestampString {
-                            timestamp = dateFormatter.dateFromISOString(timestampString)
-                        }
+                        let dateFormatter = DateFormatter()
                         
-                        var createdtime: Date?
-                        let createdtimeString = (message as AnyObject).value(forKey: "createdtime") as? String
-                        if let createdtimeString = createdtimeString {
-                            createdtime = dateFormatter.dateFromISOString(createdtimeString)
-                        } else {
-                            createdtime = timestamp
-                        }
+                        for message in messages {
+                            let id = (message as AnyObject).value(forKey: "id") as! String
+                            let otheruserid = (message as AnyObject).value(forKey: "userid") as! String
+                            let groupid = (message as AnyObject).value(forKey: "groupid") as! String
+                            
+                            
+                            var timestamp: Date?
+                            let timestampString = (message as AnyObject).value(forKey: "timestamp") as? String
+                            if let timestampString = timestampString {
+                                timestamp = dateFormatter.dateFromISOString(timestampString)
+                            }
+                            
+                            var createdtime: Date?
+                            let createdtimeString = (message as AnyObject).value(forKey: "createdtime") as? String
+                            if let createdtimeString = createdtimeString {
+                                createdtime = dateFormatter.dateFromISOString(createdtimeString)
+                            } else {
+                                createdtime = timestamp
+                            }
 
-                        if let timestamp = timestamp, let createdtime = createdtime {
-                            let messagetext = (message as AnyObject).value(forKey: "messagetext") as! String
-                            
-                            let otheruser = BlipUser(userid: otheruserid)
-                            let userDict = (message as AnyObject).value(forKey: "user") as! NSDictionary
-                            otheruser.processUserDict(userDict)
-                            
-                            let note = BlipNote(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
-                            notes.append(note)
-                        } else {
-                            if timestamp == nil {
-                                DDLogError("Ignoring fetched note with invalid format timestamp string: \(String(describing: timestampString))")
-                            }
-                            if createdtime == nil {
-                                DDLogError("Ignoring fetched note with invalid create time string: \(String(describing: createdtimeString))")
+                            if let timestamp = timestamp, let createdtime = createdtime {
+                                let messagetext = (message as AnyObject).value(forKey: "messagetext") as! String
+                                
+                                let otheruser = BlipUser(userid: otheruserid)
+                                let userDict = (message as AnyObject).value(forKey: "user") as! NSDictionary
+                                otheruser.processUserDict(userDict)
+                                
+                                let note = BlipNote(id: id, userid: otheruserid, groupid: groupid, timestamp: timestamp, createdtime: createdtime, messagetext: messagetext, user: otheruser)
+                                notes.append(note)
+                            } else {
+                                if timestamp == nil {
+                                    DDLogError("Ignoring fetched note with invalid format timestamp string: \(String(describing: timestampString))")
+                                }
+                                if createdtime == nil {
+                                    DDLogError("Ignoring fetched note with invalid create time string: \(String(describing: createdtimeString))")
+                                }
                             }
                         }
+                        
+                        fetchWatcher.addNotes(notes)
+                    } else {
+                        DDLogError("No notes retrieved - unable to parse json result!")
+                        self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
                     }
-                    
-                    fetchWatcher.addNotes(notes)
                 } else if (httpResponse.statusCode == 404) {
-                    DDLogError("No notes retrieved, status code: \(httpResponse.statusCode), userid: \(userid)")
+                    DDLogInfo("No notes retrieved, status code: \(httpResponse.statusCode), userid: \(userid)")
                 } else {
                     DDLogError("No notes retrieved - invalid status code \(httpResponse.statusCode)")
                     self.alertWithOkayButton(self.unknownError, message: self.unknownErrorMessage)
@@ -649,7 +973,7 @@ class APIConnector {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         let urlExtension = "/message/thread/" + messageId
         
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)"]
         
         let preRequest = { () -> Void in
             fetchWatcher.loadingNotes(true)
@@ -742,7 +1066,7 @@ class APIConnector {
             urlExtension = "/message/send/" + note.groupid
         }
         
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)", "Content-Type":"application/json"]
         
         let jsonObject = note.dictionaryFromNote()
         let body: Data?
@@ -750,10 +1074,6 @@ class APIConnector {
             body = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
         } catch {
             body = nil
-        }
-        
-        let preRequest = { () -> Void in
-            // nothing to do in prerequest
         }
         
         let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
@@ -777,7 +1097,7 @@ class APIConnector {
             }
         }
         
-        blipRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
+        blipRequest("POST", urlExtension: urlExtension, headerDict: headerDict, body: body, completion: completion)
     }
 
     // update note or comment...
@@ -785,7 +1105,7 @@ class APIConnector {
         
         let urlExtension = "/message/edit/" + originalNote.id
         
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)", "Content-Type":"application/json"]
         
         let jsonObject = editedNote.updatesFromNote()
         let body: Data?
@@ -793,10 +1113,6 @@ class APIConnector {
             body = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
         } catch  {
             body = nil
-        }
-        
-        let preRequest = { () -> Void in
-            // nothing to do in the preRequest
         }
         
         let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
@@ -814,18 +1130,14 @@ class APIConnector {
             }
         }
         
-        blipRequest("PUT", urlExtension: urlExtension, headerDict: headerDict, body: body, preRequest: preRequest, completion: completion)
+        blipRequest("PUT", urlExtension: urlExtension, headerDict: headerDict, body: body, completion: completion)
     }
     
     // delete note or comment...
     func deleteNote(_ deleteWatcher: NoteAPIWatcher, noteToDelete: BlipNote) {
         let urlExtension = "/message/remove/" + noteToDelete.id
         
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)"]
-        
-        let preRequest = { () -> Void in
-            // nothing to do in the preRequest
-        }
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)"]
         
         let completion = { (response: URLResponse?, data: Data?, error: NSError?) -> Void in
             if let httpResponse = response as? HTTPURLResponse {
@@ -842,7 +1154,7 @@ class APIConnector {
             }
         }
         
-        blipRequest("DELETE", urlExtension: urlExtension, headerDict: headerDict, body: nil, preRequest: preRequest, completion: completion)
+        blipRequest("DELETE", urlExtension: urlExtension, headerDict: headerDict, body: nil, completion: completion)
     }
 
     
@@ -879,7 +1191,7 @@ class APIConnector {
     }
     
     func alertIfNetworkIsUnreachable() -> Bool {
-        if APIConnector.connector().serviceAvailable() {
+        if serviceAvailable() {
             return false
         }
         let alert = UIAlertController(title: "Not Connected to Network", message: "This application requires a network to access the Tidepool service!", preferredStyle: .alert)
@@ -889,15 +1201,28 @@ class APIConnector {
         presentAlert(alert)
         return true
     }
+    
+    func alertWhileNetworkIsUnreachable(_ completion: @escaping () -> (Void)) {
+        if serviceAvailable() {
+            completion()
+            return
+        }
+        let alert = UIAlertController(title: "Not Connected to Network", message: "This application requires a network to access the Tidepool service!", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: { Void in
+            self.alertWhileNetworkIsUnreachable {
+                completion()
+            }
+        }))
+        presentAlert(alert)
+    }
 
-    func blipRequest(_ method: String, urlExtension: String, headerDict: [String: String], body: Data?, preRequest: () -> Void, subdomainRootOverride: String = "api", completion: @escaping (_ response: URLResponse?, _ data: Data?, _ error: NSError?) -> Void) {
+    func blipRequest(_ method: String, urlExtension: String, headerDict: [String: String], body: Data?, preRequest: (() -> Void)? = nil, completion: @escaping (_ response: URLResponse?, _ data: Data?, _ error: NSError?) -> Void) {
         
         if (self.isConnectedToNetwork()) {
-            preRequest()
+            preRequest?()
             
             let baseURL = kServers[currentService!]!
-            let baseUrlWithSubdomainRootOverride = baseURL.replacingOccurrences(of: "api", with: subdomainRootOverride)
-            var urlString = baseUrlWithSubdomainRootOverride + urlExtension
+            var urlString = baseURL + urlExtension
             urlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
             let url = URL(string: urlString)
             let request = NSMutableURLRequest(url: url!)
@@ -905,11 +1230,15 @@ class APIConnector {
             for (field, value) in headerDict {
                 request.setValue(value, forHTTPHeaderField: field)
             }
+            // make user-agent similar to that from Alamofire
+            request.setValue(self.userAgentString(), forHTTPHeaderField: "User-Agent")
             request.httpBody = body
             
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
             let task = URLSession.shared.dataTask(with: request as URLRequest) {
                 (data, response, error) -> Void in
                 DispatchQueue.main.async(execute: {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     completion(response, data, (error as NSError?))
                 })
                 return
@@ -920,7 +1249,7 @@ class APIConnector {
         }
     }
     
-    func blipMakeBloodGlucoseDataUploadRequest() throws -> URLRequest {
+    private func blipMakeDataUploadRequest(_ httpMethod: String) throws -> URLRequest {
         DDLogVerbose("trace")
         
         var error: NSError?
@@ -932,32 +1261,33 @@ class APIConnector {
         }
         
         guard self.isConnectedToNetwork() else {
-            error = NSError(domain: "APIConnect-blipMakeBloodGlucoseDataUploadRequest", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, not connected to network"])
+            error = NSError(domain: "APIConnect-blipMakeDataUploadRequest", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, not connected to network"])
             throw error!
         }
         
-        guard let currentUserId = TidepoolMobileDataController.sharedInstance.currentUserId else {
-            error = NSError(domain: "APIConnect-blipMakeBloodGlucoseDataUploadRequest", code: -2, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, no user is logged in"])
+        guard let currentUploadId = TidepoolMobileDataController.sharedInstance.currentUploadId else {
+            error = NSError(domain: "APIConnect-blipMakeDataUploadRequest", code: -2, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, no upload id is available"])
             throw error!
         }
         
         guard sessionToken != nil else {
-            error = NSError(domain: "APIConnect-blipMakeBloodGlucoseDataUploadRequest", code: -3, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, session token exists"])
+            error = NSError(domain: "APIConnect-blipMakeDataUploadRequest", code: -3, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, no session token exists"])
             throw error!
         }
         
-        let urlExtension = "/data/" + currentUserId
-        let headerDict = ["x-tidepool-session-token":"\(sessionToken!)", "Content-Type":"application/json"]
+        let urlExtension = "/v1/data_sets/" + currentUploadId + "/data"
+        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)", "Content-Type":"application/json"]
         let baseURL = kServers[currentService!]!
-        let baseUrlWithSubdomainRootOverride = baseURL.replacingOccurrences(of: "api", with: "uploads")
-        var urlString = baseUrlWithSubdomainRootOverride + urlExtension
+        var urlString = baseURL + urlExtension
         urlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
         let url = URL(string: urlString)
         let request = NSMutableURLRequest(url: url!)
-        request.httpMethod = "POST"
+        request.httpMethod = httpMethod //"POST" or "DELETE"
         for (field, value) in headerDict {
             request.setValue(value, forHTTPHeaderField: field)
         }
+        // make user-agent similar to that from Alamofire
+        request.setValue(self.userAgentString(), forHTTPHeaderField: "User-Agent")
 
         return request as URLRequest
     }

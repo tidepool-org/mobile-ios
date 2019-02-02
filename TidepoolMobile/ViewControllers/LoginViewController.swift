@@ -67,14 +67,14 @@ class LoginViewController: BaseUIViewController {
 
         let notificationCenter = NotificationCenter.default
 
-        notificationCenter.addObserver(self, selector: #selector(LoginViewController.textFieldDidChange), name: NSNotification.Name.UITextFieldTextDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginViewController.textFieldDidChange), name: UITextField.textDidChangeNotification, object: nil)
         updateButtonStates()
         
-        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.switchedToNewServer(_:)), name: NSNotification.Name(rawValue: "switchedToNewServer"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.switchedToNewServer(_:)), name: Notification.Name(rawValue: "switchedToNewServer"), object: nil)
 
         configureForReachability()
     }
@@ -88,12 +88,16 @@ class LoginViewController: BaseUIViewController {
         }
     }
     
-    func reachabilityChanged(_ note: Notification) {
-        configureForReachability()
+    @objc func reachabilityChanged(_ note: Notification) {
+        DispatchQueue.main.async {
+            self.configureForReachability()
+        }
     }
     
-    func switchedToNewServer(_ note: Notification) {
-        configureVersion()
+    @objc func switchedToNewServer(_ note: Notification) {
+        DispatchQueue.main.async {
+            self.configureVersion()
+        }
     }
 
     fileprivate func configureForReachability() {
@@ -156,13 +160,13 @@ class LoginViewController: BaseUIViewController {
 
     @IBAction func signUpButtonTapped(_ sender: Any) {
         if let url = URL(string: "http://tidepool.org/signup") {
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url)
         }
     }
     
     @IBAction func forgotPasswordTapped(_ sender: Any) {
         if let url = URL(string: "https://app.tidepool.org/request-password-reset") {
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url)
         }
     }
 
@@ -176,16 +180,23 @@ class LoginViewController: BaseUIViewController {
         if (result.isSuccess) {
             if let user=result.value {
                 DDLogInfo("Login success: \(user)")
+                self.loginIndicator.startAnimating()
                 APIConnector.connector().fetchProfile(TidepoolMobileDataController.sharedInstance.currentUserId!) { (result:Alamofire.Result<JSON>) -> (Void) in
-                        DDLogInfo("Profile fetch result: \(result)")
+                        DDLogInfo("processLoginResult profile fetch result: \(result)")
+                    self.loginIndicator.stopAnimating()
                     if (result.isSuccess) {
                         if let json = result.value {
                             TidepoolMobileDataController.sharedInstance.processLoginProfileFetch(json)
                         }
+                        // if we were able to get a profile, try getting an uploadId
                         let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        // Note: this will change the window, don't want to animate keyboard down...
+                        NotificationCenter.default.removeObserver(self, name: nil, object: nil)
                         appDelegate.setupUIForLoginSuccess()
-                        //self.performSegue(withIdentifier: "showEventListSegue", sender: self)
-                    }
+                     }
+                    self.errorFeedbackLabel.text = "User not recognized!"
+                    self.errorFeedbackLabel.isHidden = false
+                    self.passwordTextField.text = ""
                 }
             } else {
                 // This should not happen- we should not succeed without a user!
@@ -205,9 +216,7 @@ class LoginViewController: BaseUIViewController {
         }
     }
     
-    
-    
-    func textFieldDidChange() {
+    @objc func textFieldDidChange() {
         updateButtonStates()
     }
 
@@ -216,10 +225,10 @@ class LoginViewController: BaseUIViewController {
         // login button
         if (emailTextField.text != "" && passwordTextField.text != "") {
             loginButton.isEnabled = true
-            loginButton.setTitleColor(UIColor.white, for:UIControlState())
+            loginButton.setTitleColor(UIColor.white, for:UIControl.State())
         } else {
             loginButton.isEnabled = false
-            loginButton.setTitleColor(UIColor.lightGray, for:UIControlState())
+            loginButton.setTitleColor(UIColor.lightGray, for:UIControl.State())
         }
     }
 
@@ -231,22 +240,29 @@ class LoginViewController: BaseUIViewController {
     fileprivate var viewAdjustAnimationTime: Float = 0.25
     fileprivate func adjustLogInView(_ keyboardHeight: CGFloat) {
         keyboardPlaceholdHeightConstraint.constant = keyboardHeight
-        UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
-            self.logInScene.layoutIfNeeded()
-        }) 
+        self.logInScene.layoutIfNeeded()
+        // Note: skip animation here, this VC may be going away, and a common crash happens somewhere in this area (not easily reproducible)...
+//        UIView.animate(withDuration: TimeInterval(viewAdjustAnimationTime), animations: {
+//            self.logInScene.layoutIfNeeded()
+//        })
     }
    
     // UIKeyboardWillShowNotification
-    func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         // make space for the keyboard if needed
-        let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! Float
+        guard let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            DDLogError("keyboardWillShow, unable to parse keyboardFrame info")
+            return
+        }
+        if let viewAdjustTime = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Float {
+            viewAdjustAnimationTime = viewAdjustTime
+        }
         DDLogInfo("keyboardWillShow, kbd height: \(keyboardFrame.height)")
         adjustLogInView(keyboardFrame.height)
     }
     
     // UIKeyboardWillHideNotification
-    func keyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         // reposition login view if needed
         self.adjustLogInView(0.0)
     }
