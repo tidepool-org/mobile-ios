@@ -87,7 +87,10 @@ class SmbgGraphDataLayer: TidepoolGraphDataLayer {
         largeCirclePath.stroke()
         
         let intValue = Int(valueForLabel)
-        let readingLabelTextContent = String(intValue)
+        var readingLabelTextContent = String(intValue)
+        if layout.displayInMMol {
+            readingLabelTextContent = String(format: "%.1f", valueForLabel/kGlucoseConversionToMgDl)
+        }
         let readingLabelStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         readingLabelStyle.alignment = .center
         let readingLabelFontAttributes = [NSAttributedString.Key.font: Styles.smallSemiboldFont, NSAttributedString.Key.foregroundColor: circleColor, NSAttributedString.Key.paragraphStyle: readingLabelStyle]

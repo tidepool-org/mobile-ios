@@ -20,9 +20,9 @@ class TidepoolGraphView: GraphContainerView {
  
     fileprivate var tidepoolLayout: TidepoolGraphLayout!
 
-    init(frame: CGRect, delegate: GraphContainerViewDelegate?, mainEventTime: Date, tzOffsetSecs: Int, lowBGBounds: Int? = nil, highBGBounds: Int? = nil) {
+    init(frame: CGRect, delegate: GraphContainerViewDelegate?, mainEventTime: Date, tzOffsetSecs: Int, lowBGBounds: Int? = 70, highBGBounds: Int? = 180, mMolPerLiterDisplay: Bool = false) {
         let layout = TidepoolGraphLayout(viewSize: frame.size, mainEventTime: mainEventTime, tzOffsetSecs: tzOffsetSecs)
-        layout.setLowAndHighBGBounds(low: lowBGBounds, high: highBGBounds)
+        layout.setLowAndHighBGBounds(low: lowBGBounds ?? 70, high: highBGBounds ?? 180, mMolPerLiterDisplay: mMolPerLiterDisplay)
         super.init(frame: frame, delegate: delegate, layout: layout)
         tidepoolLayout = layout
     }

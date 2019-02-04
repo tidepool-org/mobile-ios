@@ -77,7 +77,8 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
             let dataController = TidepoolMobileDataController.sharedInstance
             let bgLowBounds = dataController.currentViewedUser?.bgTargetLow
             let bgHighBounds = dataController.currentViewedUser?.bgTargetHigh
-            graphContainerView = TidepoolGraphView.init(frame: graphFrame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: 0, lowBGBounds: bgLowBounds, highBGBounds: bgHighBounds)
+            let mMolPerLiterDisplay = dataController.currentViewedUser?.mMolPerLiterDisplay ?? false
+            graphContainerView = TidepoolGraphView.init(frame: graphFrame, delegate: self, mainEventTime: note.timestamp, tzOffsetSecs: 0, lowBGBounds: bgLowBounds, highBGBounds: bgHighBounds, mMolPerLiterDisplay: mMolPerLiterDisplay)
             if let graphContainerView = graphContainerView {
                 // while loading, and in between selections, put up loading view...
                 graphContainerView.configureGraph()
