@@ -14,7 +14,6 @@
  */
 
 import Foundation
-import CocoaLumberjack
 import HealthKit
 
 class HealthKitUploadTypeCarb: HealthKitUploadType {

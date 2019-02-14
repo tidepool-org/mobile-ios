@@ -14,8 +14,7 @@
 */
 
 import HealthKit
-import CocoaLumberjack
-import CryptoSwift
+//import CryptoSwift
 
 // NOTE: These delegate methods are usually called indirectly from HealthKit or a URLSession delegate, on a background queue, not on main thread
 protocol HealthKitUploadReaderDelegate: class {
@@ -114,8 +113,12 @@ class HealthKitUploadReader: NSObject {
         // Load the anchor
         var anchor: HKQueryAnchor?
         let anchorData = UserDefaults.standard.object(forKey: HealthKitSettings.prefixedKey(prefix: self.mode.rawValue, type: uploadType.typeName, key: HealthKitSettings.UploadQueryAnchorKey))
-        if anchorData != nil {
-            anchor = NSKeyedUnarchiver.unarchiveObject(with: anchorData as! Data) as? HKQueryAnchor
+        if let anchorData = anchorData {
+            do {
+                anchor = try NSKeyedUnarchiver.unarchivedObject(ofClasses: [HKQueryAnchor.self], from: anchorData as! Data) as? HKQueryAnchor
+            } catch {
+                
+            }
         }
 
         // Get the start and end dates for the predicate

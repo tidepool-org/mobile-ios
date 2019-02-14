@@ -14,7 +14,6 @@
 */
 
 import HealthKit
-import CocoaLumberjack
 
 // Define this here since all builds include this file. Not ideal, but nice to have this in only one place! Tidepool stores all bg values in mmol/L and so does this app. However, Tidepool mobile currently only displays in mg/dL.
 let kGlucoseConversionToMgDl: CGFloat = 18.01559
@@ -68,7 +67,7 @@ class HealthKitManager {
         var writeTypes: Set<HKSampleType>?
         if (shouldAuthorizeUploaderSampleReads) {
             readTypes = Set<HKSampleType>()
-            for uploadType in appHealthKitConfiguration.healthKitUploadTypes {
+            for uploadType in HealthKitConfiguration.sharedInstance!.healthKitUploadTypes {
                 readTypes!.insert(uploadType.hkSampleType()!)
             }
             let biologicalSex = HKObjectType.characteristicType(forIdentifier: .biologicalSex)

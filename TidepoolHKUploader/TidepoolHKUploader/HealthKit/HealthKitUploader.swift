@@ -14,8 +14,7 @@
 */
 
 import HealthKit
-import CocoaLumberjack
-import CryptoSwift
+//import CryptoSwift
 
 protocol HealthKitSampleUploaderDelegate: class {
     func sampleUploader(uploader: HealthKitUploader, didCompleteUploadWithError error: Error?)
@@ -180,7 +179,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
             message = "Upload task completed: \(taskDescr), id: \(task.taskIdentifier), type: \(self.typeString)"
         }
         DDLogInfo(message)
-        UIApplication.localNotifyMessage(message)
+        //UIApplication.localNotifyMessage(message)
 
         var httpError: NSError?
         if let response = task.response as? HTTPURLResponse {

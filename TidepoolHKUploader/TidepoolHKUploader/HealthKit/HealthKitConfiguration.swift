@@ -14,12 +14,13 @@
  */
 
 import HealthKit
-import CocoaLumberjack
 
 class HealthKitConfiguration
 {
+    static var sharedInstance: HealthKitConfiguration?
     init(healthKitUploadTypes: [HealthKitUploadType]) {
         self.healthKitUploadTypes = healthKitUploadTypes
+        HealthKitConfiguration.sharedInstance = self
     }
     
     // MARK: Access, availability, authorization
@@ -70,11 +71,10 @@ class HealthKitConfiguration
             }
             // set flag to prevent reentrancy!
             turningOnHKInterface = true
-            APIConnector.connector().configureUploadId() {
+            TPUploaderServiceAPI.connector?.configureUploadId() {
                 // if we are still turning on the HK interface after fetch of upload id, continue!
                 if self.turningOnHKInterface {
-                    let dataCtl = TidepoolMobileDataController.sharedInstance
-                    if dataCtl.currentUploadId != nil {
+                    if HKUploader.sharedInstance.currentUploadId != nil {
                         self.turnOnInterface()
                     }
                     self.turningOnHKInterface = false

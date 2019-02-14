@@ -96,29 +96,6 @@ class TidepoolMobileDataController: NSObject
         }
     }
     
-    /// Used for filling out a health data upload request...
-    ///
-    /// Read only - returns nil string if no user or uploadId is available.
-    var currentUploadId: String? {
-        get {
-            if let user = self.currentUser {
-                if let uploadId = user.uploadId {
-                    return uploadId
-                } else if let uploadId = defaults.string(forKey: HealthKitSettings.HKDataUploadIdKey) {
-                    // restore from persisted value if possible!
-                    user.uploadId = uploadId
-                    return uploadId
-                }
-            }
-            return nil
-        }
-        set {
-            defaults.setValue(newValue, forKey: HealthKitSettings.HKDataUploadIdKey)
-            if let user = self.currentUser {
-                user.uploadId = newValue
-            }
-        }
-    }
 
     /// Used for filling out an email for the user to send to themselves; from the current user login, or nil.
     ///

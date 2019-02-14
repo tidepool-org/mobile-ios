@@ -14,8 +14,7 @@
  */
 
 import HealthKit
-import CocoaLumberjack
-import CryptoSwift
+//import CryptoSwift
 
 class HealthKitUploadData: NSObject {
     var uploadType: HealthKitUploadType

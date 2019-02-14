@@ -14,8 +14,7 @@
 */
 
 import HealthKit
-import CocoaLumberjack
-import CryptoSwift
+//import CryptoSwift
 
 
 class HealthKitUploadManager:
@@ -234,11 +233,11 @@ class HealthKitUploadManager:
                         message = "Observation query called, already reading \(self.uploadType.typeName) samples"
                     }
                     DDLogInfo(message)
-                    UIApplication.localNotifyMessage(message)
+                    //UIApplication.localNotifyMessage(message)
                 } else {
                     let message = "Observation query called, with pending \(self.uploadType.typeName) upload tasks. Cancel pending tasks. Will then try reading/uploading again"
                     DDLogInfo(message)
-                    UIApplication.localNotifyMessage(message)
+                    //UIApplication.localNotifyMessage(message)
 
                     self.uploaders[mode]!.cancelTasks()
                 }
@@ -262,12 +261,12 @@ class HealthKitUploadManager:
                     if error.domain == NSURLErrorDomain && error.code == NSURLErrorCancelled {
                         let message = "Upload task cancelled. Mode: \(uploader.mode), type: \(self.uploadType.typeName)"
                         DDLogError(message)
-                        UIApplication.localNotifyMessage(message)
+                        //UIApplication.localNotifyMessage(message)
                         cancelled = true
                     } else {
                         let message = "Upload batch failed, stop reading. Mode: \(uploader.mode), type: \(self.uploadType.typeName). Error: \(String(describing: error))"
                         DDLogError(message)
-                        UIApplication.localNotifyMessage(message)
+                        //UIApplication.localNotifyMessage(message)
                     }
                 } else {
                     DDLogInfo("Upload session succeeded! Mode: \(uploader.mode)")
@@ -376,14 +375,14 @@ class HealthKitUploadManager:
                     DispatchQueue.main.async {
                         let message = "Background time expired"
                         DDLogInfo(message)
-                        UIApplication.localNotifyMessage(message)
+                        //UIApplication.localNotifyMessage(message)
                     }
                 })
                 
                 DispatchQueue.main.async {
                     let message = "Begin background task for: \(self.uploadType.typeName). Remaining background time: \(UIApplication.shared.backgroundTimeRemaining)"
                     DDLogInfo(message)
-                    UIApplication.localNotifyMessage(message)
+                    //UIApplication.localNotifyMessage(message)
                 }
             }
         }
@@ -396,7 +395,7 @@ class HealthKitUploadManager:
                 DispatchQueue.main.async {
                     let message = "End background task for: \(self.uploadType.typeName). Remaining background time: \(UIApplication.shared.backgroundTimeRemaining)"
                     DDLogInfo(message)
-                    UIApplication.localNotifyMessage(message)
+                    //UIApplication.localNotifyMessage(message)
                 }
             }
         }
@@ -452,7 +451,7 @@ class HealthKitUploadManager:
         DDLogVerbose("trace")
 
         super.init()
-        for uploadType in appHealthKitConfiguration.healthKitUploadTypes {
+        for uploadType in HealthKitConfiguration.sharedInstance!.healthKitUploadTypes {
             let helper = UploadHelper(uploadType)
             uploadHelpers.append(helper)
         }

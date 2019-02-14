@@ -1,0 +1,431 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		48708A062212570800559AFD /* TidepoolHKUploader.h in Headers */ = {isa = PBXBuildFile; fileRef = 48708A042212570800559AFD /* TidepoolHKUploader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		48708A2122133DA700559AFD /* ServiceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A2022133DA700559AFD /* ServiceAPI.swift */; };
+		48708A2322133DF500559AFD /* HKUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A2222133DF500559AFD /* HKUploader.swift */; };
+		48708A3422134DD000559AFD /* HealthKitUploadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A2522134DD000559AFD /* HealthKitUploadManager.swift */; };
+		48708A3522134DD000559AFD /* HealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A2622134DD000559AFD /* HealthKitConfiguration.swift */; };
+		48708A3622134DD000559AFD /* HealthKitUploadTypeCarb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A2822134DD000559AFD /* HealthKitUploadTypeCarb.swift */; };
+		48708A3722134DD000559AFD /* HealthKitUploadTypeBloodGlucose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A2922134DD000559AFD /* HealthKitUploadTypeBloodGlucose.swift */; };
+		48708A3822134DD000559AFD /* HealthKitUploadTypeInsulin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A2A22134DD000559AFD /* HealthKitUploadTypeInsulin.swift */; };
+		48708A3922134DD000559AFD /* HealthKitUploadType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A2B22134DD000559AFD /* HealthKitUploadType.swift */; };
+		48708A3A22134DD000559AFD /* HealthKitUploadTypeWorkout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A2C22134DD000559AFD /* HealthKitUploadTypeWorkout.swift */; };
+		48708A3B22134DD000559AFD /* HealthKitUploadData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A2D22134DD000559AFD /* HealthKitUploadData.swift */; };
+		48708A3C22134DD000559AFD /* HealthKitUploadStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A2E22134DD000559AFD /* HealthKitUploadStats.swift */; };
+		48708A3D22134DD000559AFD /* HealthKitSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A2F22134DD000559AFD /* HealthKitSettings.swift */; };
+		48708A3E22134DD000559AFD /* HealthKitUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A3022134DD000559AFD /* HealthKitUploader.swift */; };
+		48708A3F22134DD000559AFD /* HealthKitUploadReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A3122134DD000559AFD /* HealthKitUploadReader.swift */; };
+		48708A4022134DD000559AFD /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A3222134DD000559AFD /* HealthKitManager.swift */; };
+		48708A4122134DD000559AFD /* HealthKitNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A3322134DD000559AFD /* HealthKitNotifications.swift */; };
+		48708A452214EF7A00559AFD /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48708A442214EF7A00559AFD /* SwiftyJSON.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		48708A012212570800559AFD /* TidepoolHKUploader.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TidepoolHKUploader.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		48708A042212570800559AFD /* TidepoolHKUploader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TidepoolHKUploader.h; sourceTree = "<group>"; };
+		48708A052212570800559AFD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		48708A2022133DA700559AFD /* ServiceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAPI.swift; sourceTree = "<group>"; };
+		48708A2222133DF500559AFD /* HKUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HKUploader.swift; sourceTree = "<group>"; };
+		48708A2522134DD000559AFD /* HealthKitUploadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitUploadManager.swift; sourceTree = "<group>"; };
+		48708A2622134DD000559AFD /* HealthKitConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitConfiguration.swift; sourceTree = "<group>"; };
+		48708A2822134DD000559AFD /* HealthKitUploadTypeCarb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitUploadTypeCarb.swift; sourceTree = "<group>"; };
+		48708A2922134DD000559AFD /* HealthKitUploadTypeBloodGlucose.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitUploadTypeBloodGlucose.swift; sourceTree = "<group>"; };
+		48708A2A22134DD000559AFD /* HealthKitUploadTypeInsulin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitUploadTypeInsulin.swift; sourceTree = "<group>"; };
+		48708A2B22134DD000559AFD /* HealthKitUploadType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitUploadType.swift; sourceTree = "<group>"; };
+		48708A2C22134DD000559AFD /* HealthKitUploadTypeWorkout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitUploadTypeWorkout.swift; sourceTree = "<group>"; };
+		48708A2D22134DD000559AFD /* HealthKitUploadData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitUploadData.swift; sourceTree = "<group>"; };
+		48708A2E22134DD000559AFD /* HealthKitUploadStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitUploadStats.swift; sourceTree = "<group>"; };
+		48708A2F22134DD000559AFD /* HealthKitSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitSettings.swift; sourceTree = "<group>"; };
+		48708A3022134DD000559AFD /* HealthKitUploader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitUploader.swift; sourceTree = "<group>"; };
+		48708A3122134DD000559AFD /* HealthKitUploadReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitUploadReader.swift; sourceTree = "<group>"; };
+		48708A3222134DD000559AFD /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		48708A3322134DD000559AFD /* HealthKitNotifications.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitNotifications.swift; sourceTree = "<group>"; };
+		48708A442214EF7A00559AFD /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwiftyJSON.swift; path = TidepoolHKUploader/ThirdParty/SwiftyJSON.swift; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		487089FE2212570800559AFD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		487089F72212570800559AFD = {
+			isa = PBXGroup;
+			children = (
+				48708A032212570800559AFD /* TidepoolHKUploader */,
+				48708A022212570800559AFD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		48708A022212570800559AFD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				48708A012212570800559AFD /* TidepoolHKUploader.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		48708A032212570800559AFD /* TidepoolHKUploader */ = {
+			isa = PBXGroup;
+			children = (
+				48708A432214EF5F00559AFD /* Third Party */,
+				48708A2422134D3500559AFD /* HealthKit */,
+				48708A042212570800559AFD /* TidepoolHKUploader.h */,
+				48708A052212570800559AFD /* Info.plist */,
+				48708A2022133DA700559AFD /* ServiceAPI.swift */,
+				48708A2222133DF500559AFD /* HKUploader.swift */,
+			);
+			path = TidepoolHKUploader;
+			sourceTree = "<group>";
+		};
+		48708A2422134D3500559AFD /* HealthKit */ = {
+			isa = PBXGroup;
+			children = (
+				48708A2622134DD000559AFD /* HealthKitConfiguration.swift */,
+				48708A3222134DD000559AFD /* HealthKitManager.swift */,
+				48708A3322134DD000559AFD /* HealthKitNotifications.swift */,
+				48708A2F22134DD000559AFD /* HealthKitSettings.swift */,
+				48708A2D22134DD000559AFD /* HealthKitUploadData.swift */,
+				48708A3022134DD000559AFD /* HealthKitUploader.swift */,
+				48708A2522134DD000559AFD /* HealthKitUploadManager.swift */,
+				48708A3122134DD000559AFD /* HealthKitUploadReader.swift */,
+				48708A2E22134DD000559AFD /* HealthKitUploadStats.swift */,
+				48708A2722134DD000559AFD /* Types */,
+			);
+			path = HealthKit;
+			sourceTree = "<group>";
+		};
+		48708A2722134DD000559AFD /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				48708A2822134DD000559AFD /* HealthKitUploadTypeCarb.swift */,
+				48708A2922134DD000559AFD /* HealthKitUploadTypeBloodGlucose.swift */,
+				48708A2A22134DD000559AFD /* HealthKitUploadTypeInsulin.swift */,
+				48708A2B22134DD000559AFD /* HealthKitUploadType.swift */,
+				48708A2C22134DD000559AFD /* HealthKitUploadTypeWorkout.swift */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
+		48708A432214EF5F00559AFD /* Third Party */ = {
+			isa = PBXGroup;
+			children = (
+				48708A442214EF7A00559AFD /* SwiftyJSON.swift */,
+			);
+			path = "Third Party";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		487089FC2212570800559AFD /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48708A062212570800559AFD /* TidepoolHKUploader.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		48708A002212570800559AFD /* TidepoolHKUploader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 48708A092212570800559AFD /* Build configuration list for PBXNativeTarget "TidepoolHKUploader" */;
+			buildPhases = (
+				487089FC2212570800559AFD /* Headers */,
+				487089FD2212570800559AFD /* Sources */,
+				487089FE2212570800559AFD /* Frameworks */,
+				487089FF2212570800559AFD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TidepoolHKUploader;
+			productName = TidepoolHKUploader;
+			productReference = 48708A012212570800559AFD /* TidepoolHKUploader.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		487089F82212570800559AFD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = Tidepool;
+				TargetAttributes = {
+					48708A002212570800559AFD = {
+						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
+					};
+				};
+			};
+			buildConfigurationList = 487089FB2212570800559AFD /* Build configuration list for PBXProject "TidepoolHKUploader" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 487089F72212570800559AFD;
+			productRefGroup = 48708A022212570800559AFD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				48708A002212570800559AFD /* TidepoolHKUploader */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		487089FF2212570800559AFD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		487089FD2212570800559AFD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				48708A3C22134DD000559AFD /* HealthKitUploadStats.swift in Sources */,
+				48708A2322133DF500559AFD /* HKUploader.swift in Sources */,
+				48708A3F22134DD000559AFD /* HealthKitUploadReader.swift in Sources */,
+				48708A3B22134DD000559AFD /* HealthKitUploadData.swift in Sources */,
+				48708A3922134DD000559AFD /* HealthKitUploadType.swift in Sources */,
+				48708A3722134DD000559AFD /* HealthKitUploadTypeBloodGlucose.swift in Sources */,
+				48708A3D22134DD000559AFD /* HealthKitSettings.swift in Sources */,
+				48708A3E22134DD000559AFD /* HealthKitUploader.swift in Sources */,
+				48708A4022134DD000559AFD /* HealthKitManager.swift in Sources */,
+				48708A3522134DD000559AFD /* HealthKitConfiguration.swift in Sources */,
+				48708A3622134DD000559AFD /* HealthKitUploadTypeCarb.swift in Sources */,
+				48708A3422134DD000559AFD /* HealthKitUploadManager.swift in Sources */,
+				48708A3A22134DD000559AFD /* HealthKitUploadTypeWorkout.swift in Sources */,
+				48708A2122133DA700559AFD /* ServiceAPI.swift in Sources */,
+				48708A452214EF7A00559AFD /* SwiftyJSON.swift in Sources */,
+				48708A3822134DD000559AFD /* HealthKitUploadTypeInsulin.swift in Sources */,
+				48708A4122134DD000559AFD /* HealthKitNotifications.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		48708A072212570800559AFD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		48708A082212570800559AFD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		48708A0A2212570800559AFD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 75U4X84TEG;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = TidepoolHKUploader/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = tidepool.org.TidepoolHKUploader;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		48708A0B2212570800559AFD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 75U4X84TEG;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = TidepoolHKUploader/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = tidepool.org.TidepoolHKUploader;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		487089FB2212570800559AFD /* Build configuration list for PBXProject "TidepoolHKUploader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				48708A072212570800559AFD /* Debug */,
+				48708A082212570800559AFD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		48708A092212570800559AFD /* Build configuration list for PBXNativeTarget "TidepoolHKUploader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				48708A0A2212570800559AFD /* Debug */,
+				48708A0B2212570800559AFD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 487089F82212570800559AFD /* Project object */;
+}
