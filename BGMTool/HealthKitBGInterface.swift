@@ -347,7 +347,7 @@ class HealthKitBGInterface: NSObject {
                     event.time = TidepoolMobileUtils.dateFromJSON(json["time"].string)
                     event.deviceId = json["deviceId"].string
                     if let value = json["value"].number {
-                        event.value = round(Double(value.floatValue) * kGlucoseConversionToMgDl)
+                        event.value = round(Double(value.floatValue) * Double(kGlucoseConversionToMgDl))
                     }
                     if let subType = json["subType"].string {
                         if subType == "manual" {

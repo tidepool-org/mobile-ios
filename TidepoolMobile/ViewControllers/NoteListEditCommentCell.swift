@@ -20,7 +20,8 @@ class NoteListEditCommentCell: BaseUITableViewCell {
 
     @IBOutlet weak var addCommentTextView: UITextView!
     @IBOutlet weak var editTopSeparator: TidepoolMobileUIView!
-
+    @IBOutlet weak var textWidthMeasureView: UIView!
+    
     @IBOutlet weak var saveButton: TidepoolMobileSimpleUIButton!
     @IBOutlet weak var saveButtonLargeHitArea: TPUIButton!
     
@@ -41,16 +42,25 @@ class NoteListEditCommentCell: BaseUITableViewCell {
     }
     
     override func prepareForReuse() {
-        textHeight = nil
+        maxTextHeight = nil
     }
     
-    var textHeight: CGFloat?
+    var maxTextHeight: CGFloat?
     func heightForTextGrew() -> Bool {
-        let boundRect = addCommentTextView.text.boundingRect(with: addCommentTextView.bounds.size, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: nil, context: nil)
-        let previousHeight = textHeight
-        textHeight = boundRect.height
+        let previousMaxHeight = maxTextHeight
+        let fixedWidth = textWidthMeasureView.frame.size.width
+        let sizeThatFitsHeight = addCommentTextView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude)).height
+        if maxTextHeight == nil {
+            maxTextHeight = sizeThatFitsHeight
+            return true
+        }
+        if sizeThatFitsHeight > maxTextHeight! {
+            maxTextHeight = sizeThatFitsHeight
+        }
+        //DDLogVerbose("addCommentTextView.bounds.size: \(addCommentTextView.bounds.size)")
+        //DDLogVerbose("addCommentTextView sizeThatFitsHeight: \(sizeThatFitsHeight)")
         // first time nil counts as no change since initial layout should be correct...
-        if let previous = previousHeight, let new = textHeight {
+        if let previous = previousMaxHeight, let new = maxTextHeight {
             if previous < new {
                 DDLogVerbose("comment edit cell height grew from \(previous) to \(new)!")
                 return true
