@@ -88,11 +88,11 @@ class BGDownloadViewController: UIViewController {
 
         let notificationCenter = NotificationCenter.default
         
-        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.textFieldDidChange), name: Notification.Name.UITextFieldTextDidChange, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.textFieldDidChange), name: UITextField.textDidChangeNotification, object: nil)
         updateButtonStates()
         
-        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.keyboardWillShow(_:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.keyboardWillHide(_:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(BGDownloadViewController.keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(BGDownloadViewController.reachabilityChanged(_:)), name: ReachabilityChangedNotification, object: nil)
         configureForReachability()
@@ -221,10 +221,10 @@ class BGDownloadViewController: UIViewController {
         // login button
         if (emailTextField.text != "" && passwordTextField.text != "") {
             loginButton.isEnabled = true
-            loginButton.setTitleColor(UIColor.white, for:UIControlState())
+            loginButton.setTitleColor(UIColor.white, for:UIControl.State())
         } else {
             loginButton.isEnabled = false
-            loginButton.setTitleColor(UIColor.lightGray, for:UIControlState())
+            loginButton.setTitleColor(UIColor.lightGray, for:UIControl.State())
         }
     }
     
@@ -401,8 +401,8 @@ class BGDownloadViewController: UIViewController {
     // UIKeyboardWillShowNotification
     @objc func keyboardWillShow(_ notification: Notification) {
         // make space for the keyboard if needed
-        let keyboardFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        viewAdjustAnimationTime = notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! Float
+        let keyboardFrame = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        viewAdjustAnimationTime = notification.userInfo![UIResponder.keyboardAnimationDurationUserInfoKey] as! Float
         DDLogInfo("keyboardWillShow, kbd height: \(keyboardFrame.height)")
         adjustLogInView(keyboardFrame.height)
     }
