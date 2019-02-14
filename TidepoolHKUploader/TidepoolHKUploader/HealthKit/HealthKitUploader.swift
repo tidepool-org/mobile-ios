@@ -14,7 +14,6 @@
 */
 
 import HealthKit
-//import CryptoSwift
 
 protocol HealthKitSampleUploaderDelegate: class {
     func sampleUploader(uploader: HealthKitUploader, didCompleteUploadWithError error: Error?)

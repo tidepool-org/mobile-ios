@@ -14,7 +14,6 @@
 */
 
 import HealthKit
-//import CryptoSwift
 
 // NOTE: These delegate methods are usually called indirectly from HealthKit or a URLSession delegate, on a background queue, not on main thread
 protocol HealthKitUploadReaderDelegate: class {

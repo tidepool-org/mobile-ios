@@ -74,7 +74,7 @@ class HealthKitConfiguration
             TPUploaderServiceAPI.connector?.configureUploadId() {
                 // if we are still turning on the HK interface after fetch of upload id, continue!
                 if self.turningOnHKInterface {
-                    if HKUploader.sharedInstance.currentUploadId != nil {
+                    if TPUploaderServiceAPI.connector?.currentUploadId != nil {
                         self.turnOnInterface()
                     }
                     self.turningOnHKInterface = false
@@ -145,7 +145,7 @@ class HealthKitConfiguration
                         TidepoolMobileDataController.sharedInstance.clearTzCache()
                 }
                 // force refetch of upload id because it may have changed for the new user...
-                TidepoolMobileDataController.sharedInstance.currentUploadId = nil
+                TPUploaderServiceAPI.connector?.currentUploadId = nil
                 defaults.setValue(currentUserId!, forKey: HealthKitSettings.InterfaceUserIdKey)
                 // may be nil...
                 defaults.setValue(username, forKey: HealthKitSettings.InterfaceUserNameKey)

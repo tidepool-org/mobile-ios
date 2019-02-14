@@ -4,7 +4,6 @@ PODS:
   - CocoaLumberjack/Default (3.4.2)
   - CocoaLumberjack/Swift (3.4.2):
     - CocoaLumberjack/Default
-  - CryptoSwift (0.10.0)
   - FLAnimatedImage (1.0.12)
   - SwiftyJSON (4.2.0)
   - twitter-text (2.0.5)
@@ -13,7 +12,6 @@ DEPENDENCIES:
   - Alamofire (= 4.7.3)
   - Bugsee (= 1.18.15)
   - CocoaLumberjack/Swift (~> 3.4.2)
-  - CryptoSwift (~> 0.10.0)
   - FLAnimatedImage (~> 1.0.12)
   - SwiftyJSON (= 4.2)
   - twitter-text (~> 2.0.5)
@@ -23,7 +21,6 @@ SPEC REPOS:
     - Alamofire
     - Bugsee
     - CocoaLumberjack
-    - CryptoSwift
     - FLAnimatedImage
     - SwiftyJSON
     - twitter-text
@@ -32,11 +29,10 @@ SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Bugsee: 475aee81cfcc7ce9c620d98dfcd891b6562b178f
   CocoaLumberjack: db7cc9e464771f12054c22ff6947c5a58d43a0fd
-  CryptoSwift: 6c778d69282bed3b4e975ff97a79d074f20bb011
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
   twitter-text: 307465760033198827fe48335785de16917d783d
 
-PODFILE CHECKSUM: ea6dc3f9b64a0cbe5be6c535e74b25b80edb93aa
+PODFILE CHECKSUM: 00740350e0e26e8caab9a488233e0f113bf5e775
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.0

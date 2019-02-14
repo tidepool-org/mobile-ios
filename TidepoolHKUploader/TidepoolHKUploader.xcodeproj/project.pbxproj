@@ -80,7 +80,7 @@
 		48708A032212570800559AFD /* TidepoolHKUploader */ = {
 			isa = PBXGroup;
 			children = (
-				48708A432214EF5F00559AFD /* Third Party */,
+				48708A432214EF5F00559AFD /* ThirdParty */,
 				48708A2422134D3500559AFD /* HealthKit */,
 				48708A042212570800559AFD /* TidepoolHKUploader.h */,
 				48708A052212570800559AFD /* Info.plist */,
@@ -119,12 +119,12 @@
 			path = Types;
 			sourceTree = "<group>";
 		};
-		48708A432214EF5F00559AFD /* Third Party */ = {
+		48708A432214EF5F00559AFD /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
 				48708A442214EF7A00559AFD /* SwiftyJSON.swift */,
 			);
-			path = "Third Party";
+			path = ThirdParty;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

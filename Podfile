@@ -9,7 +9,6 @@ def available_pods
   pod 'Alamofire', '4.7.3'
   pod 'SwiftyJSON', '4.2'
   pod 'CocoaLumberjack/Swift', '~> 3.4.2'
-  pod 'CryptoSwift', '~> 0.10.0'
   pod 'twitter-text', '~> 2.0.5'
   pod 'FLAnimatedImage', '~> 1.0.12'
 end
@@ -26,5 +25,4 @@ target 'BGMTool' do
     pod 'Alamofire', '4.7.3'
     pod 'SwiftyJSON', '4.2'
     pod 'CocoaLumberjack/Swift', '~> 3.4.2'
-    pod 'CryptoSwift', '~> 0.10.0'
 end

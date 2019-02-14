@@ -15,9 +15,6 @@
 
 import HealthKit
 
-// Define this here since all builds include this file. Not ideal, but nice to have this in only one place! Tidepool stores all bg values in mmol/L and so does this app. However, Tidepool mobile currently only displays in mg/dL.
-let kGlucoseConversionToMgDl: CGFloat = 18.01559
-
 class HealthKitManager {
     
     // MARK: Access, availability, authorization

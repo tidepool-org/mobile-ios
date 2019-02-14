@@ -14,7 +14,6 @@
  */
 
 import HealthKit
-//import CryptoSwift
 
 class HealthKitUploadData: NSObject {
     var uploadType: HealthKitUploadType
