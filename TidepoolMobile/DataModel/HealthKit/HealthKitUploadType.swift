@@ -97,7 +97,7 @@ class HealthKitUploadType {
 
         if let userEntered = sample.metadata?[HKMetadataKeyWasUserEntered] as? Bool {
             if userEntered {
-                origin["type"] = "manual" as AnyObject
+                origin["type"] = "service" as AnyObject
             }
         }
         
