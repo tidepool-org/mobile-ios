@@ -6,6 +6,7 @@ PODS:
     - CocoaLumberjack/Default
   - FLAnimatedImage (1.0.12)
   - SwiftyJSON (4.2.0)
+  - TPHealthKitUploader (1.0.0-alpha)
   - twitter-text (2.0.5)
 
 DEPENDENCIES:
@@ -14,6 +15,7 @@ DEPENDENCIES:
   - CocoaLumberjack/Swift (~> 3.4.2)
   - FLAnimatedImage (~> 1.0.12)
   - SwiftyJSON (= 4.2)
+  - TPHealthKitUploader (from `https://github.com/tidepool-org/healthkit-uploader`, tag `1.0.0-wip`)
   - twitter-text (~> 2.0.5)
 
 SPEC REPOS:
@@ -25,14 +27,25 @@ SPEC REPOS:
     - SwiftyJSON
     - twitter-text
 
+EXTERNAL SOURCES:
+  TPHealthKitUploader:
+    :git: https://github.com/tidepool-org/healthkit-uploader
+    :tag: 1.0.0-wip
+
+CHECKOUT OPTIONS:
+  TPHealthKitUploader:
+    :git: https://github.com/tidepool-org/healthkit-uploader
+    :tag: 1.0.0-wip
+
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Bugsee: 475aee81cfcc7ce9c620d98dfcd891b6562b178f
   CocoaLumberjack: db7cc9e464771f12054c22ff6947c5a58d43a0fd
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
+  TPHealthKitUploader: f63dcf87cfb2ebb0b7052c38a3927cb840522225
   twitter-text: 307465760033198827fe48335785de16917d783d
 
-PODFILE CHECKSUM: 00740350e0e26e8caab9a488233e0f113bf5e775
+PODFILE CHECKSUM: 5cc894ac39623ce66d309ce3f0470ad0461f071d
 
 COCOAPODS: 1.6.0

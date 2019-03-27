@@ -102,7 +102,7 @@ class HealthKitConfiguration
             HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: currentUserId)
             
             // Really just a one-time check to upload biological sex if Tidepool does not have it, but we can get it from HealthKit.
-            HealthKitManager.sharedInstance.updateProfileBioSexCheck()
+            TPUploaderServiceAPI.connector?.updateProfileBioSexCheck()
         } else {
             DDLogInfo("No logged in user, unable to start uploading")
         }
@@ -142,7 +142,7 @@ class HealthKitConfiguration
                     // Switching healthkit users, reset HealthKitUploadManager
                     HealthKitUploadManager.sharedInstance.resetPersistentState(switchingHealthKitUsers: true)
                     // Also clear any persisted timezone data so an initial tz reading will be sent for this new user
-                        TidepoolMobileDataController.sharedInstance.clearTzCache()
+                        TPTimeZoneTracker.tracker?.clearTzCache()
                 }
                 // force refetch of upload id because it may have changed for the new user...
                 TPUploaderServiceAPI.connector?.currentUploadId = nil

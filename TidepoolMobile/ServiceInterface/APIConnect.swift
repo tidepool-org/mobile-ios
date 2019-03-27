@@ -129,7 +129,8 @@ class APIConnector {
     
     // Base URL for API calls, set during initialization
     var baseUrl: URL?
- 
+    var baseUrlString: String?
+
     // Reachability object, valid during lifetime of this APIConnector, and convenience function that uses this
     // Register for ReachabilityChangedNotification to monitor reachability changes             
     var reachability: Reachability?
@@ -153,8 +154,8 @@ class APIConnector {
     
     /// Creator of APIConnector must call this function after init!
     func configure() -> APIConnector {
-        HealthKitUploadManager.sharedInstance.makeDataUploadRequestHandler = self.blipMakeDataUploadRequest
-        self.baseUrl = URL(string: kServers[currentService!]!)!
+        self.baseUrlString = kServers[currentService!]!
+        self.baseUrl = URL(string: baseUrlString!)!
         DDLogInfo("Using service: \(String(describing: self.baseUrl))")
         self.sessionToken = UserDefaults.standard.string(forKey: kSessionTokenDefaultKey)
         if let reachability = reachability {
@@ -258,262 +259,6 @@ class APIConnector {
                 // Failure
                 completion(Result.failure(response.result.error!))
             }
-        }
-    }
-    
-    func updateProfile(_ userId: String, biologicalSex: String, _ completion: @escaping (Bool) -> (Void)) {
-        DDLogInfo("Try updating user profile with biological sex: \(biologicalSex)")
-        
-        func mergeBioSexWithProfile(_ profile: inout JSON) -> Data? {
-            let bioSexDict: [String: Any] = ["patient": [
-                "biologicalSex": biologicalSex
-                ]
-            ]
-            var result: Data?
-            do {
-                let bioSexJsonData = try JSONSerialization.data(withJSONObject: bioSexDict, options: [])
-                try profile.merge(with: JSON(bioSexJsonData))
-                let mergedData = try profile.rawData()
-                result = mergedData
-                if let mergedDataStr = String(data: mergedData, encoding: .utf8) {
-                    result = mergedData
-                    DDLogDebug("merged profile json: \(mergedDataStr)")
-                } else {
-                    DDLogError("Merged doesn't print!")
-                }
-            } catch {
-                DDLogError("Serialization errors merging json!")
-            }
-            return result
-        }
-        
-        fetchProfile(userId) {
-            (result:Alamofire.Result<JSON>) -> (Void) in
-            DDLogInfo("checkRestoreCurrentViewedUser profile fetch result: \(result)")
-            guard result.isSuccess else {
-                DDLogError("Failed to fetch profile!")
-                completion(false)
-                return
-            }
-            guard var profileJson = result.value else {
-                DDLogError("Error in fetched profile json!")
-                completion(false)
-                return
-            }
-            let patient = profileJson["patient"]
-            guard profileJson["patient"] != JSON.null else {
-                DDLogError("No patient record in the fetched profile, not a DSA user!")
-                completion(false)
-                return
-            }
-            if let currentBioSex = patient["biologicalSex"].string {
-                DDLogError("biological sex '\(currentBioSex)' already set in Tidepool, should not update!")
-                completion(false)
-                return
-            }
-            guard let body = mergeBioSexWithProfile(&profileJson) else {
-                DDLogError("Serialization errors merging json!")
-                completion(false)
-                return
-            }
-            // then repost!
-            let endpoint = "metadata/" + userId + "/profile"
-            let headerDict = ["Content-Type":"application/json"]
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
-            self.postRequest(body, endpoint: endpoint, headers: headerDict).responseJSON { response in
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if ( response.result.isSuccess ) {
-                    DDLogInfo("Posted updated profile successfully!")
-                    completion(true)
-                } else {
-                    // return nil to signal network request failure
-                    DDLogInfo("Post of updated profile failed!")
-                    completion(false)
-                }
-            }
-        }
-    }
-    
-    /// Call this after fetching user profile, as part of configureHealthKitInterface, to ensure we have a dataset id for health data uploads (if so enabled).
-    /// - parameter completion: Method that will be called when this async operation has completed. If successful, currentUploadId in TidepoolMobileDataController will be set; if not, it will still be nil.
-    func configureUploadId(_ completion: @escaping () -> (Void)) {
-        let dataCtrl = TidepoolMobileDataController.sharedInstance
-        if let user = dataCtrl.currentLoggedInUser, let isDSAUser = dataCtrl.isDSAUser {
-            // if we don't have an uploadId, first try fetching one from the server...
-            if isDSAUser && dataCtrl.currentUploadId == nil {
-                self.fetchDataset(user.userid) {
-                    (result: String?) -> (Void) in
-                    if result != nil && !result!.isEmpty {
-                        DDLogInfo("Dataset fetched existing: \(result!)")
-                        dataCtrl.currentUploadId = result
-                        completion()
-                        return
-                    }
-                    if result == nil {
-                        // network failure for fetchDataset, don't try creating a new one in case one already does exist...
-                        completion()
-                        return
-                    }
-                    // Existing dataset fetch failed, try creating a new one...
-                    DDLogInfo("Dataset fetch failed, try creating new dataset!")
-                    self.createDataset(user.userid) {
-                        (result: String?) -> (Void) in
-                        if result != nil && !result!.isEmpty {
-                            DDLogInfo("New dataset created: \(result!)")
-                            dataCtrl.currentUploadId = result!
-                        } else {
-                            DDLogError("Unable to fetch existing upload dataset or create a new one!")
-                        }
-                        completion()
-                    }
-                }
-            } else {
-                DDLogInfo("Not a DSA user or userid nil or uploadId is not nil")
-                completion()
-            }
-        } else {
-            DDLogInfo("No current user or isDSAUser is nil")
-            completion()
-        }
-    }
-
-    /// Ask service for the existing mobile app upload id for this user, if one exists.
-    /// - parameter userId: Current user id
-    /// - parameter completion: Method that accepts an optional String which will be nil if the network request did not complete, an empty string if an uploadId for this user does not yet exist, and the upload id if it does exist.
-    private func fetchDataset(_ userId: String, _ completion: @escaping (String?) -> (Void)) {
-        DDLogInfo("Try fetching existing dataset!")
-        // Set our endpoint for the dataset fetch
-        // format is: https://api.tidepool.org/v1/users/<user-id-here>/data_sets?client.name=tidepool.mobile&size=1"
-        let endpoint = "v1/users/" + userId + "/data_sets"
-        let parameters = ["client.name": "org.tidepool.mobile", "size": "1"]
-        let headerDict = ["Content-Type":"application/json"]
-
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        sendRequest(.get, endpoint: endpoint, parameters: parameters as [String : AnyObject]?, headers: headerDict).responseJSON { response in
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            if ( response.result.isSuccess ) {
-                let json = JSON(response.result.value!)
-                print("\(json)")
-                var uploadId: String?
-                if let resultDict = json[0].dictionary {
-                    uploadId = resultDict["uploadId"]?.string
-                }
-                if uploadId != nil {
-                    DDLogInfo("Fetched existing dataset: \(uploadId!)")
-                } else {
-                    // return empty string to signal network request completed ok
-                    uploadId = ""
-                    DDLogInfo("Fetch of existing dataset returned nil!")
-                }
-                completion(uploadId)
-                // TEST: force failure...
-                //completion("")
-            } else {
-                DDLogError("Fetch of existing dataset failed!")
-                // return nil to signal failure
-                completion(nil)
-            }
-        }
-    }
-    
-    /// Ask service to create a new upload id. Should only be called after fetchDataSet returns a nil array (no existing upload id).
-    /// - parameter userId: Current user id
-    /// - parameter completion: Method that accepts an optional String which will be nil if the network request did not complete, an empty string if the create did not result in an uploadId, and the upload id if a new id was successfully created.
-    private func createDataset(_ userId: String, _ completion: @escaping (String?) -> (Void)) {
-        DDLogInfo("Try creating a new dataset!")
-
-        // Set our endpoint for the dataset create
-        // format is: https://api.tidepool.org/v1/users/<user-id-here>/data_sets"
-        let endpoint = "v1/users/" + userId + "/data_sets"
-
-        let clientDict = ["name": "org.tidepool.mobile", "version": UIApplication.appVersion()]
-        let deduplicatorDict = ["name": "org.tidepool.deduplicator.dataset.delete.origin"]
-        let headerDict = ["Content-Type":"application/json"]
-        let jsonObject = ["client":clientDict, "dataSetType":"continuous", "deduplicator":deduplicatorDict] as [String : Any]
-        let body: Data?
-        do {
-            body = try JSONSerialization.data(withJSONObject: jsonObject, options: [])
-        } catch {
-            DDLogError("Failed to create body!")
-            // return nil to signal failure
-            completion(nil)
-            return
-        }
-        
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        postRequest(body!, endpoint: endpoint, headers: headerDict).responseJSON { response in
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            if ( response.result.isSuccess ) {
-                let json = JSON(response.result.value!)
-                var uploadId: String?
-                if let dataDict = json["data"].dictionary {
-                    uploadId = dataDict["uploadId"]?.string
-                }
-                if uploadId != nil {
-                    DDLogInfo("Create new dataset success: \(uploadId!)")
-                } else {
-                    // return empty string to signal network request completed ok
-                    uploadId = ""
-                    DDLogInfo("Create new dataset returned nil!")
-                }
-                completion(uploadId)
-            } else {
-                // return nil to signal network request failure
-                DDLogInfo("Create new dataset failed!")
-                completion(nil)
-            }
-        }
-    }
-
-    /// Returns last timezone id uploaded on success, otherwise nil
-    func postTimezoneChangesEvent(_ tzChanges: [(time: String, newTzId: String, oldTzId: String?)], _ completion: @escaping (String?) -> (Void)) {
-        let dataCtrl = TidepoolMobileDataController.sharedInstance
-        if let currentUploadId = dataCtrl.currentUploadId {
-            let endpoint = "/v1/data_sets/" + currentUploadId + "/data"
-            let headerDict = ["Content-Type":"application/json"]
-            var changesToUploadDictArray = [[String: AnyObject]]()
-            var lastTzUploaded: String?
-            for tzChange in tzChanges {
-                var sampleToUploadDict = [String: AnyObject]()
-                sampleToUploadDict["time"] = tzChange.time as AnyObject
-                sampleToUploadDict["type"] = "deviceEvent" as AnyObject
-                sampleToUploadDict["subType"] = "timeChange" as AnyObject
-                let toDict = ["timeZoneName": tzChange.newTzId]
-                lastTzUploaded = tzChange.newTzId
-                sampleToUploadDict["to"] = toDict as AnyObject
-                if let oldTzId = tzChange.oldTzId {
-                    let fromDict = ["timeZoneName": oldTzId]
-                    sampleToUploadDict["from"] = fromDict as AnyObject
-                }
-                changesToUploadDictArray.append(sampleToUploadDict)
-            }
-            let body: Data?
-            do {
-                body = try JSONSerialization.data(withJSONObject: changesToUploadDictArray, options: [])
-                if let postBodyJson = String(data: body!, encoding: .utf8) {
-                    DDLogInfo("Posting json for timechange: \(postBodyJson)")
-                }
-            } catch {
-                DDLogError("Failed to create body!")
-                completion(nil)
-                return
-            }
-            
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
-            postRequest(body!, endpoint: endpoint, headers: headerDict).responseJSON { response in
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if ( response.result.isSuccess ) {
-                    DDLogInfo("Timezone change upload succeeded!")
-                    completion(lastTzUploaded)
-                } else {
-                    // return nil to signal network request failure
-                    DDLogInfo("Timezone change upload failed!")
-                    completion(nil)
-                }
-            }
-        } else {
-            DDLogInfo("Timezone change upload fail: no upload id!")
-            completion(nil)
         }
     }
     
@@ -797,35 +542,10 @@ class APIConnector {
         return nil
     }
     
-    // Sends a request to the specified endpoint
-    fileprivate func postRequest(_ data: Data,
-                                 endpoint: (String),
-                                 headers: [String: String]? = nil) -> (DataRequest)
-    {
-        let url = baseUrl!.appendingPathComponent(endpoint)
-        
-        // Get our API headers (the session token) and add any headers supplied by the caller
-        var apiHeaders = getApiHeaders()
-        if ( apiHeaders != nil ) {
-            if ( headers != nil ) {
-                for(k, v) in headers! {
-                    _ = apiHeaders?.updateValue(v, forKey: k)
-                }
-            }
-        } else {
-            // We have no headers of our own to use- just use the caller's directly
-            apiHeaders = headers
-        }
-        
-        DDLogInfo("postRequest url: \(url), headers: \(apiHeaders ?? [:])")
-        return self.sessionManager().upload(data, to: url, headers: apiHeaders).validate()
-    }
 
     //
     // MARK: - Note fetching and uploading
     //
-    // TODO: Taken from BlipNotes, should really use AlamoFire, etc.
-    
     
     func getAllViewableUsers(_ fetchWatcher: UsersFetchAPIWatcher) {
         
@@ -1249,46 +969,4 @@ class APIConnector {
         }
     }
     
-    private func blipMakeDataUploadRequest(_ httpMethod: String) throws -> URLRequest {
-        DDLogVerbose("trace")
-        
-        var error: NSError?
-        
-        defer {
-            if error != nil {
-                DDLogError("Upload failed: \(String(describing: error)), \(String(describing: error?.userInfo))")
-            }
-        }
-        
-        guard self.isConnectedToNetwork() else {
-            error = NSError(domain: "APIConnect-blipMakeDataUploadRequest", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, not connected to network"])
-            throw error!
-        }
-        
-        guard let currentUploadId = TidepoolMobileDataController.sharedInstance.currentUploadId else {
-            error = NSError(domain: "APIConnect-blipMakeDataUploadRequest", code: -2, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, no upload id is available"])
-            throw error!
-        }
-        
-        guard sessionToken != nil else {
-            error = NSError(domain: "APIConnect-blipMakeDataUploadRequest", code: -3, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, no session token exists"])
-            throw error!
-        }
-        
-        let urlExtension = "/v1/data_sets/" + currentUploadId + "/data"
-        let headerDict = [kSessionTokenHeaderId:"\(sessionToken!)", "Content-Type":"application/json"]
-        let baseURL = kServers[currentService!]!
-        var urlString = baseURL + urlExtension
-        urlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
-        let url = URL(string: urlString)
-        let request = NSMutableURLRequest(url: url!)
-        request.httpMethod = httpMethod //"POST" or "DELETE"
-        for (field, value) in headerDict {
-            request.setValue(value, forHTTPHeaderField: field)
-        }
-        // make user-agent similar to that from Alamofire
-        request.setValue(self.userAgentString(), forHTTPHeaderField: "User-Agent")
-
-        return request as URLRequest
-    }
  }

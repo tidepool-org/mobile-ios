@@ -15,19 +15,23 @@
 
 import Foundation
 
-public protocol HKUploaderConfigInfo {
-    func sessionToken() -> String?
-    func baseURL() -> URL?
-    func currentService() -> String
-    func currentUserId() -> String?     // current logged in user id
-    func isDSAUser() -> Bool            // account for current user is a DSA
+public protocol TPUploaderConfigInfo {
     func isConnectedToNetwork() -> Bool
     // get/set variables
-    var bioSex: String? { get set }
-    
-    func logVerbose(_ str: String)
-    func logError(_ str: String)
+    func sessionToken() -> String?
+    func baseURL() -> URL? // remove, unused: can be created from currentService
+    func currentService() -> String
     // optional?
     func trackMetric(_ metric: String)
+
+    func currentUserId() -> String?     // current logged in user id
+    func isDSAUser() -> Bool            // account for current user is a DSA
+    var bioSex: String? { get set }
+    
+    // logging callbacks...
+    func logVerbose(_ str: String)
+    func logError(_ str: String)
+    func logInfo(_ str: String)
+    func logDebug(_ str: String)
 }
 

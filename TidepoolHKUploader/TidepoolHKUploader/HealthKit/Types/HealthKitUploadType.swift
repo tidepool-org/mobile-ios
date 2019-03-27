@@ -44,6 +44,7 @@ class HealthKitUploadType {
     //  MARK: - Subclass utility functions
     //
     internal let dateFormatter = DateFormatter()
+    internal let iso8601dateZuluTime: String = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
     internal func addCommonFields(sampleToUploadDict: inout [String: AnyObject], sample: HKSample) {
         sampleToUploadDict["time"] = dateFormatter.isoStringFromDate(sample.startDate, zone: TimeZone(secondsFromGMT: 0), dateFormat: iso8601dateZuluTime) as AnyObject?

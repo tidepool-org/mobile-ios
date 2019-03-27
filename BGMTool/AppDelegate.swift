@@ -12,11 +12,6 @@ import HealthKit
 
 var fileLogger: DDFileLogger!
 
-/// Set up health kit configuration singleton, specialized version of HealthKitConfiguration
-let appHealthKitConfiguration = TidepoolMobileHealthKitConfiguration(healthKitUploadTypes: [
-    HealthKitUploadTypeBloodGlucose(),
-    ])
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

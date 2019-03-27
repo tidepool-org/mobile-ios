@@ -14,15 +14,10 @@
 */
 
 enum HealthKitNotifications {
-    // NOTE: This is not very granular, but, not clear yet that clients need more granularity. This 'Updated' notification
-    // covers the following: start/stop uploading, samples uploaded, user reset (switch users), transition between
-    // uploader phases (e.g. most recent last two weeks, initial historical sample upload, and final phase of 
-    // just keeping up with ongoing uploading of new samples), etc
+    /// Updated is always posted just before each of the others
     static let Updated = "HealthKitDataUpload-Updated"
     
+    static let UploadSuccessful = "HealthKitDataUpload-UploadSuccessful"
     static let TurnOnUploader = "HealthKitDataUpload-TurnOnUploader"
     static let TurnOffUploader = "HealthKitDataUpload-TurnOffUploader"
-    static let PhaseTransition = "HealthKitDataUpload-PhaseTransition"
-    static let AttemptUpload = "HealthKitDataUpload-AttemptUpload"
-    static let UploadSuccessful = "HealthKitDataUpload-UploadSuccessful"
 }

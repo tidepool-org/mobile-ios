@@ -15,24 +15,28 @@
 
 import Foundation
 
-func DDLogVerbose(_ str: String) {}
-func DDLogInfo(_ str: String) {}
-func DDLogDebug(_ str: String) {}
-func DDLogError(_ str: String) {}
+func DDLogVerbose(_ str: String) { TPUploader.sharedInstance?.config.logVerbose(str) }
+func DDLogInfo(_ str: String) { TPUploader.sharedInstance?.config.logInfo(str) }
+func DDLogDebug(_ str: String) { TPUploader.sharedInstance?.config.logDebug(str) }
+func DDLogError(_ str: String) { TPUploader.sharedInstance?.config.logError(str) }
 
-public class HKUploader {
+public class TPUploader {
     
     /// Nil if not instance not configured yet...
-    public static var sharedInstance: HKUploader?
+    public static var sharedInstance: TPUploader? 
     
     /// Configures framework
-    public init(_ config: HKUploaderConfigInfo) {
+    public init(_ config: TPUploaderConfigInfo) {
         // fail if already configured!
         self.config = config
-        
-        HKUploader.sharedInstance = self
+        self.service = TPUploaderServiceAPI(config)
+        // configure this last, it might use the service to send up an initial timezone...
+        self.tzTracker = TPTimeZoneTracker()
+        TPUploader.sharedInstance = self
     }
-    private var config: HKUploaderConfigInfo
+    var config: TPUploaderConfigInfo
+    var service: TPUploaderServiceAPI
+    var tzTracker: TPTimeZoneTracker
     
     /// Disables HealthKit for current user
     ///
@@ -41,7 +45,7 @@ public class HKUploader {
         DDLogInfo("trace")
         HealthKitConfiguration.sharedInstance?.disableHealthKitInterface()
         // clear uploadId to be safe... also for logout.
-        HKUploaderServiceAPI.connector!.currentUploadId = nil
+        TPUploaderServiceAPI.connector!.currentUploadId = nil
     }
 
 

@@ -411,7 +411,6 @@ class HealthKitUploadManager:
             do {
                 let message = "Start next upload for \(uploadData.filteredSamples.count) samples, and \(uploadData.deletedSamples.count) deleted samples. Mode: \(reader.mode), type: \(self.uploadType.typeName)"
                 DDLogInfo(message)
-                UIApplication.localNotifyMessage(message)
 
                 self.stats[reader.mode]!.updateForUploadAttempt(sampleCount: uploadData.filteredSamples.count, uploadAttemptTime: Date(), earliestSampleTime: uploadData.earliestSampleTime, latestSampleTime: uploadData.latestSampleTime)
 
@@ -525,13 +524,9 @@ class HealthKitUploadManager:
             return
         }
 
-        let dataCtl = TidepoolMobileDataController.sharedInstance
-        if dataCtl.currentUploadId != nil {
-            // first drain any pending timezone change events, then resume HK uploads...
-            dataCtl.postTimezoneEventChanges() {
-                for helper in self.uploadHelpers {
-                    helper.startUploading(mode: mode, currentUserId: currentUserId)
-                }
+        if TPUploaderServiceAPI.connector?.currentUploadId != nil {
+            for helper in self.uploadHelpers {
+                helper.startUploading(mode: mode, currentUserId: currentUserId)
             }
         } else {
             DDLogError("Unable to startUploading - no currentUploadId available!")
@@ -555,8 +550,7 @@ class HealthKitUploadManager:
 
     func resumeUploadingIfResumable(currentUserId: String?) {
         DDLogVerbose("trace")
-        let dataCtl = TidepoolMobileDataController.sharedInstance
-        if dataCtl.currentUploadId != nil {
+        if TPUploaderServiceAPI.connector?.currentUploadId != nil {
             for helper in uploadHelpers {
                 helper.resumeUploadingIfResumable(currentUserId: currentUserId)
             }

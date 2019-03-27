@@ -100,7 +100,7 @@ class NoteListGraphCell: UITableViewCell, GraphContainerViewDelegate {
     let kDataDelay: TimeInterval = (60*60*3)    // 3 hours
     func configureNoData() {
         var dataIsComing = false
-        if appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser() {
+        if TPUploaderAPI.connector().uploader().healthKitInterfaceEnabledForCurrentUser() {
             if let note = note {
                 let passedTime = note.timestamp.timeIntervalSinceNow
                 if passedTime > -kDataDelay {

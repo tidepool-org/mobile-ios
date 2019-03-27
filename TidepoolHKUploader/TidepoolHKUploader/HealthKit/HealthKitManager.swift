@@ -309,44 +309,4 @@ class HealthKitManager {
         }
         healthStore?.execute(startDateSampleQuery)
     }
-    
-    /// Fill in Tidepool biological sex of patient if it is missing, and we can get it from HealthKit.
-    func updateProfileBioSexCheck() {
-        // Fetch user sex in case it is needed for profile
-        DDLogInfo("trace")
-        if let healthStore = healthStore {
-            let dataCtl = TidepoolMobileDataController.sharedInstance
-            if let user = dataCtl.currentLoggedInUser {
-                if user.biologicalSex == nil {
-                    do {
-                        let sex = try healthStore.biologicalSex()
-                        let bioSexString = sex.biologicalSex.stringRepresentation
-                        guard sex.biologicalSex != .notSet else {
-                            DDLogInfo("biological sex not set in HK!")
-                            return
-                        }
-                        DDLogInfo("biologicalSex is \(bioSexString)")
-                        APIConnector.connector().updateProfile(user.userid, biologicalSex: bioSexString) {
-                            updateOk in
-                            DDLogInfo("Result of profile update: \(updateOk)")
-                            dataCtl.updateUserBiologicalSex(bioSexString)
-                        }
-                    } catch {
-                        DDLogInfo("throw from call for biologicalSex: not authorized?")
-                    }
-                }
-            }
-        }
-    }
-}
-
-extension HKBiologicalSex {
-    var stringRepresentation: String {
-        switch self {
-        case .notSet: return "unknown"
-        case .female: return "female"
-        case .male: return "male"
-        case .other: return "other"
-        }
-    }
 }

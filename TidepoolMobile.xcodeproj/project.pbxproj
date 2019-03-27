@@ -101,6 +101,9 @@
 		48103E961C1DE4CC0055C27A /* ENSideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E941C1DE4CC0055C27A /* ENSideMenu.swift */; };
 		48103E971C1DE4CC0055C27A /* ENSideMenuNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E951C1DE4CC0055C27A /* ENSideMenuNavigationController.swift */; };
 		48103E991C1DE7BC0055C27A /* EventViewNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48103E981C1DE7BC0055C27A /* EventViewNavController.swift */; };
+		4813AD3C224AB0FB008041F9 /* TidepoolMobileUploaderAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4813AD3B224AB0FB008041F9 /* TidepoolMobileUploaderAPI.swift */; };
+		4813AD3D224AB860008041F9 /* TidepoolMobileUploaderAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4813AD3B224AB0FB008041F9 /* TidepoolMobileUploaderAPI.swift */; };
+		4813AD3E224AB861008041F9 /* TidepoolMobileUploaderAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4813AD3B224AB0FB008041F9 /* TidepoolMobileUploaderAPI.swift */; };
 		4814FEC31BB0D9D100F66379 /* Basal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334C9EB1BA8DDFC00013096 /* Basal.swift */; };
 		4820ED6A1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
 		4820ED6B1C21E8E3008C754A /* GraphDataTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4820ED691C21E8E3008C754A /* GraphDataTypes.swift */; };
@@ -170,7 +173,6 @@
 		4872118F1E8DC33200BAD5CE /* ProfileListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */; };
 		4874E7931EBA966D00A3EBFA /* EditCommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4874E7921EBA966D00A3EBFA /* EditCommentViewController.swift */; };
 		4874E7981EBCC01700A3EBFA /* NoteListEditCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4874E7971EBCC01700A3EBFA /* NoteListEditCommentCell.swift */; };
-		4875779820EFE6C400CC1E5F /* TidepoolMobileHealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */; };
 		487ED2511C3DA40A00EE36DF /* TidepoolGraphData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487ED2501C3DA40A00EE36DF /* TidepoolGraphData.swift */; };
 		48867CF51E80AEAE00C4E79D /* BlipNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CEF1E80A98C00C4E79D /* BlipNote.swift */; };
 		48867CF61E819F2000C4E79D /* BlipNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48867CEF1E80A98C00C4E79D /* BlipNote.swift */; };
@@ -190,7 +192,6 @@
 		488E44E21E831CC100A17AD7 /* HashtagsScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488E44DF1E831CC100A17AD7 /* HashtagsScrollView.swift */; };
 		488E44E31E831CC100A17AD7 /* HashtagsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 488E44E01E831CC100A17AD7 /* HashtagsView.swift */; };
 		4890277F212E1FDF0003DDBB /* TidepoolMobileUILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4837CC661BA730F000BA2CDE /* TidepoolMobileUILabel.swift */; };
-		4892996B1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */; };
 		489FDE501E833AF2000C4AC5 /* UrchinConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486894F41E831F89008B0732 /* UrchinConstants.swift */; };
 		489FDE531E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489FDE511E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift */; };
 		489FDE541E833D47000C4AC5 /* Hashtag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 489FDE521E833D47000C4AC5 /* Hashtag.swift */; };
@@ -271,8 +272,7 @@
 		48B8C9252022AF7B00437263 /* TimeChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA081BA8DDFC00013096 /* TimeChange.swift */; };
 		48B8C9262022AF7B00437263 /* UrineKetone+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0B1BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift */; };
 		48B8C9272022AF7B00437263 /* UrineKetone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0C1BA8DDFC00013096 /* UrineKetone.swift */; };
-		48B8C9282022B19E00437263 /* TidepoolMobileHealthKitConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */; };
-		48B8C92F2022B1C000437263 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		48B8C92F2022B1C000437263 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		48B8C9342023A05E00437263 /* BLEController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B8C9332023A05E00437263 /* BLEController.swift */; };
 		48B8C9362024E47C00437263 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 486EAA791C305E38003B4497 /* HealthKit.framework */; };
 		48B8C938202540EC00437263 /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B8C937202540EC00437263 /* BaseTabBarController.swift */; };
@@ -330,14 +330,20 @@
 			remoteGlobalIDString = 4859FCB41B9A4DE4000C1269;
 			remoteInfo = TidepoolMobile;
 		};
-		48708A16221257D000559AFD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 48708A12221257D000559AFD /* TidepoolHKUploader.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 48708A012212570800559AFD;
-			remoteInfo = TidepoolHKUploader;
-		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		48A17365221E0EF700CE8F55 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0334C8931BA7814700013096 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -394,6 +400,7 @@
 		48103E941C1DE4CC0055C27A /* ENSideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ENSideMenu.swift; path = "Third Party/ENSideMenu/ENSideMenu.swift"; sourceTree = "<group>"; };
 		48103E951C1DE4CC0055C27A /* ENSideMenuNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ENSideMenuNavigationController.swift; path = "Third Party/ENSideMenu/ENSideMenuNavigationController.swift"; sourceTree = "<group>"; };
 		48103E981C1DE7BC0055C27A /* EventViewNavController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EventViewNavController.swift; path = ViewControllers/EventViewNavController.swift; sourceTree = "<group>"; };
+		4813AD3B224AB0FB008041F9 /* TidepoolMobileUploaderAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TidepoolMobileUploaderAPI.swift; sourceTree = "<group>"; };
 		4814FEBC1BB0D5A100F66379 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "Pods/../build/Debug-iphoneos/Pods-TidepoolMobile/SwiftyJSON.framework"; sourceTree = "<group>"; };
 		4820ED691C21E8E3008C754A /* GraphDataTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphDataTypes.swift; path = GraphView/GraphDataTypes.swift; sourceTree = "<group>"; };
 		4823986E2022628200EBB13C /* BGMTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BGMTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -459,7 +466,6 @@
 		486F5E391BA0E53600BA2A57 /* UIDateFormatterExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIDateFormatterExtension.swift; path = "Utilities and Extensions/UIDateFormatterExtension.swift"; sourceTree = "<group>"; };
 		486F5E751BA35CD800BA2A57 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		486F5E771BA3891600BA2A57 /* TidepoolMobileUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolMobileUtils.swift; path = "Utilities and Extensions/TidepoolMobileUtils.swift"; sourceTree = "<group>"; };
-		48708A12221257D000559AFD /* TidepoolHKUploader.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = TidepoolHKUploader.xcodeproj; path = TidepoolHKUploader/TidepoolHKUploader.xcodeproj; sourceTree = "<group>"; };
 		4872118C1E8D818300BAD5CE /* SwitchProfileTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SwitchProfileTableViewController.swift; path = ViewControllers/SwitchProfileTableViewController.swift; sourceTree = "<group>"; };
 		4872118E1E8DC33200BAD5CE /* ProfileListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileListTableViewCell.swift; path = ViewControllers/ProfileListTableViewCell.swift; sourceTree = "<group>"; };
 		4874E7921EBA966D00A3EBFA /* EditCommentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EditCommentViewController.swift; path = ViewControllers/EditCommentViewController.swift; sourceTree = "<group>"; };
@@ -476,7 +482,6 @@
 		488E44DE1E831CC100A17AD7 /* HashtagBolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HashtagBolder.swift; path = ViewControllers/Views/HashtagBolder.swift; sourceTree = "<group>"; };
 		488E44DF1E831CC100A17AD7 /* HashtagsScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HashtagsScrollView.swift; path = ViewControllers/Views/HashtagsScrollView.swift; sourceTree = "<group>"; };
 		488E44E01E831CC100A17AD7 /* HashtagsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HashtagsView.swift; path = ViewControllers/Views/HashtagsView.swift; sourceTree = "<group>"; };
-		4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TidepoolMobileHealthKitConfiguration.swift; path = DataModel/TidepoolMobileHealthKitConfiguration.swift; sourceTree = "<group>"; };
 		4899436D1C442837004774BA /* Nutshell_v5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nutshell_v5.xcdatamodel; sourceTree = "<group>"; };
 		489FDE511E833D47000C4AC5 /* Hashtag +CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Hashtag +CoreDataProperties.swift"; sourceTree = "<group>"; };
 		489FDE521E833D47000C4AC5 /* Hashtag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hashtag.swift; sourceTree = "<group>"; };
@@ -733,7 +738,6 @@
 		4859FCAC1B9A4DE4000C1269 = {
 			isa = PBXGroup;
 			children = (
-				48708A12221257D000559AFD /* TidepoolHKUploader.xcodeproj */,
 				486F5E751BA35CD800BA2A57 /* LICENSE */,
 				4859FCB71B9A4DE4000C1269 /* TidepoolMobile */,
 				4859FCCF1B9A4DE5000C1269 /* TidepoolMobileTests */,
@@ -851,7 +855,7 @@
 				4859FCBF1B9A4DE4000C1269 /* TidepoolMobile.xcdatamodeld */,
 				0334C9E51BA8DDFC00013096 /* CoreData */,
 				48FB1E4C1C17C38500C89F8E /* TidepoolMobileDataController.swift */,
-				4892996A1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift */,
+				4813AD3B224AB0FB008041F9 /* TidepoolMobileUploaderAPI.swift */,
 				48B9D21B1F15809500ECB5CB /* HashTagManager.swift */,
 			);
 			name = DataModel;
@@ -868,14 +872,6 @@
 				4806E33B1E99621D0024A497 /* UIViewExtension.swift */,
 			);
 			name = Extensions;
-			sourceTree = "<group>";
-		};
-		48708A13221257D000559AFD /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				48708A17221257D000559AFD /* TidepoolHKUploader.framework */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		488E44E41E831CCF00A17AD7 /* Views */ = {
@@ -1003,6 +999,7 @@
 				48FE49E41E8AD871005B103C /* ShellScript */,
 				DA97F439745BB4E48E8FCA3A /* [CP] Embed Pods Frameworks */,
 				4DCF24411EB5303100D963B8 /* ShellScript */,
+				48A17365221E0EF700CE8F55 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1086,12 +1083,6 @@
 			mainGroup = 4859FCAC1B9A4DE4000C1269;
 			productRefGroup = 4859FCB61B9A4DE4000C1269 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 48708A13221257D000559AFD /* Products */;
-					ProjectRef = 48708A12221257D000559AFD /* TidepoolHKUploader.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				4859FCB41B9A4DE4000C1269 /* TidepoolMobile */,
@@ -1100,16 +1091,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		48708A17221257D000559AFD /* TidepoolHKUploader.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = TidepoolHKUploader.framework;
-			remoteRef = 48708A16221257D000559AFD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		4823986C2022628200EBB13C /* Resources */ = {
@@ -1196,12 +1177,14 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/TPHealthKitUploader/TPHealthKitUploader.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TPHealthKitUploader.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1255,6 +1238,7 @@
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/TPHealthKitUploader/TPHealthKitUploader.framework",
 				"${BUILT_PRODUCTS_DIR}/twitter-text/twitter_text.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -1263,6 +1247,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TPHealthKitUploader.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/twitter_text.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1299,6 +1284,7 @@
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/TPHealthKitUploader/TPHealthKitUploader.framework",
 				"${BUILT_PRODUCTS_DIR}/twitter-text/twitter_text.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -1307,6 +1293,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TPHealthKitUploader.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/twitter_text.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1325,18 +1312,18 @@
 				48B8C9252022AF7B00437263 /* TimeChange.swift in Sources */,
 				48B8C8FA2022AD0200437263 /* ContinuousGlucose.swift in Sources */,
 				48B8C8E62022A60B00437263 /* TidepoolMobileUtils.swift in Sources */,
-				48B8C9282022B19E00437263 /* TidepoolMobileHealthKitConfiguration.swift in Sources */,
 				48B8C9072022AD5400437263 /* User+CoreDataProperties.swift in Sources */,
 				48B8C8E02022A5DE00437263 /* TidepoolMobileDataController.swift in Sources */,
 				48B8C8E72022A61E00437263 /* UrchinConstants.swift in Sources */,
 				488DE48C203CF6B200D1FB54 /* TPMenuButton.swift in Sources */,
 				48B8C9242022AF7B00437263 /* TimeChange+CoreDataProperties.swift in Sources */,
-				48B8C92F2022B1C000437263 /* (null) in Sources */,
+				48B8C92F2022B1C000437263 /* BuildFile in Sources */,
 				488DE48B203CF61E00D1FB54 /* TidepoolMobileUIView.swift in Sources */,
 				48B8C9062022AD4E00437263 /* Upload.swift in Sources */,
 				48B8C8FE2022AD2000437263 /* Note.swift in Sources */,
 				48B8C8DA2022A5AE00437263 /* DebugSettings.swift in Sources */,
 				48B8C9142022AF7B00437263 /* DeviceMetadata+CoreDataProperties.swift in Sources */,
+				4813AD3E224AB861008041F9 /* TidepoolMobileUploaderAPI.swift in Sources */,
 				482398752022628300EBB13C /* BGDeviceViewController.swift in Sources */,
 				48B8C8E32022A5FD00437263 /* DatabaseUtils.swift in Sources */,
 				48B8C8FC2022AD0F00437263 /* EventItem.swift in Sources */,
@@ -1483,9 +1470,9 @@
 				4841BB6E1EC6326E007FBCEB /* TPConstants.swift in Sources */,
 				0334CA161BA8DDFC00013096 /* Activity.swift in Sources */,
 				483E3C391B9F4A9200DA49E7 /* BaseUITableViewController.swift in Sources */,
-				4892996B1CB4297B001F24D6 /* TidepoolMobileHealthKitConfiguration.swift in Sources */,
 				4872118F1E8DC33200BAD5CE /* ProfileListTableViewCell.swift in Sources */,
 				0334CA1C1BA8DDFC00013096 /* Alarm.swift in Sources */,
+				4813AD3C224AB0FB008041F9 /* TidepoolMobileUploaderAPI.swift in Sources */,
 				48BA05B01E53911500212486 /* GraphCursorLayer.swift in Sources */,
 				0334CA911BA8DDFC00013096 /* Wizard.swift in Sources */,
 				48B9D21C1F15809500ECB5CB /* HashTagManager.swift in Sources */,
@@ -1545,7 +1532,6 @@
 				0334CA7A1BA8DDFC00013096 /* TimeChange.swift in Sources */,
 				0334CA171BA8DDFC00013096 /* Activity.swift in Sources */,
 				0334CA5F1BA8DDFC00013096 /* ReservoirChange+CoreDataProperties.swift in Sources */,
-				4875779820EFE6C400CC1E5F /* TidepoolMobileHealthKitConfiguration.swift in Sources */,
 				0334CA651BA8DDFC00013096 /* SelfMonitoringGlucose+CoreDataProperties.swift in Sources */,
 				48B9D21D1F1580A600ECB5CB /* HashTagManager.swift in Sources */,
 				0334CA1A1BA8DDFC00013096 /* Alarm+CoreDataProperties.swift in Sources */,
@@ -1574,6 +1560,7 @@
 				0334CA741BA8DDFC00013096 /* Status.swift in Sources */,
 				0334CA1D1BA8DDFC00013096 /* Alarm.swift in Sources */,
 				0334CA201BA8DDFC00013096 /* Basal+CoreDataProperties.swift in Sources */,
+				4813AD3D224AB860008041F9 /* TidepoolMobileUploaderAPI.swift in Sources */,
 				0334CA471BA8DDFC00013096 /* Food.swift in Sources */,
 				4D73716D20166F6B0051E6BF /* DebugSettings.swift in Sources */,
 				4859FCD11B9A4DE5000C1269 /* apiConnectTests.swift in Sources */,
@@ -1885,6 +1872,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1B3B50F29FA991E2FE17110B /* Pods-TidepoolMobile.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TidepoolMobile/TidepoolMobile.entitlements;
@@ -1910,6 +1898,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = FB31F88D7ADAE8ADCC179FDC /* Pods-TidepoolMobile.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TidepoolMobile/TidepoolMobile.entitlements;

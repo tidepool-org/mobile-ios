@@ -1,24 +1,19 @@
-//
-//  TPUploaderServiceAPI.swift
-//  TPUploaderServiceAPI
-//
-//  Copyright © 2019 Tidepool. All rights reserved.
-//
+/*
+ * Copyright (c) 2019, Tidepool Project
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the associated License, which is identical to the BSD 2-Clause
+ * License as published by the Open Source Initiative at opensource.org.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the License for more details.
+ *
+ * You should have received a copy of the License along with this program; if
+ * not, you can obtain one from Tidepool Project at tidepool.org.
+ */
 
 import Foundation
-
-public protocol TPUploaderConfigInfo {
-    func sessionToken() -> String?
-    func baseURL() -> URL?
-    func currentService() -> String
-    func currentUserId() -> String?     // current logged in user id
-    func isDSAUser() -> Bool            // account for current user is a DSA
-    func isConnectedToNetwork() -> Bool
-    func logVerbose(_ str: String)
-    func logError(_ str: String)
-    // optional?
-    func trackMetric(_ metric: String)
-}
 
 // TODO:
 // - needs callback to get service token
@@ -58,13 +53,41 @@ public class TPUploaderServiceAPI {
 
     // MARK: - Profile updating with Bio-sex
     
+    /// Fill in Tidepool biological sex of patient if it is missing, and we can get it from HealthKit.
+    func updateProfileBioSexCheck() {
+        // Fetch user sex in case it is needed for profile
+        DDLogInfo("trace")
+        if let healthStore = HealthKitManager.sharedInstance.healthStore {
+            if config.bioSex == nil {
+                do {
+                    let sex = try healthStore.biologicalSex()
+                    let bioSexString = sex.biologicalSex.stringRepresentation
+                    guard sex.biologicalSex != .notSet else {
+                        DDLogInfo("biological sex not set in HK!")
+                        return
+                    }
+                    DDLogInfo("biologicalSex is \(bioSexString)")
+                    if let userId = config.currentUserId() {
+                        self.updateProfile(userId, biologicalSex: bioSexString) {
+                            updateOk in
+                            DDLogInfo("Result of profile update: \(updateOk)")
+                            self.config.bioSex = bioSexString
+                        }
+                    }
+                } catch {
+                    DDLogInfo("throw from call for biologicalSex: not authorized?")
+                }
+            }
+        }
+    }
+    
     func fetchProfile(_ userId: String, _ completion: @escaping (_ response: SendRequestResponse) -> (Void)) {
         // Set our endpoint for the user profile
         // format is like: https://api.tidepool.org/metadata/f934a287c4/profile
         let urlExtension = "/metadata/" + userId + "/profile"
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         DDLogInfo("fetchProfile endpoint: \(urlExtension)")
-        sendRequest("GET", urlExtension: urlExtension, body: nil, completion: completion)
+        sendRequest("GET", urlExtension: urlExtension, contentType: nil, completion: completion)
     }
     
     func updateProfile(_ userId: String, biologicalSex: String, _ completion: @escaping (Bool) -> (Void)) {
@@ -126,7 +149,7 @@ public class TPUploaderServiceAPI {
             // then repost!
             let urlExtension = "/metadata/" + userId + "/profile"
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-            self.sendRequest("POST", urlExtension: urlExtension, body: body) {
+            self.sendRequest("POST", urlExtension: urlExtension, contentType: .json, body: body) {
                 (result: SendRequestResponse) -> (Void) in
                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 if (result.isSuccess()) {
@@ -190,13 +213,13 @@ public class TPUploaderServiceAPI {
         DDLogInfo("Try fetching existing dataset!")
         // Set our endpoint for the dataset fetch
         // format is: https://api.tidepool.org/v1/users/<user-id-here>/data_sets?client.name=tidepool.mobile&size=1"
-        let urlExtension = "/v1/users/" + userId + "/data_sets"
-        let parameters = ["client.name": "org.tidepool.mobile", "size": "1"]
+        let urlExtension = "/v1/users/" + userId + "/data_sets?client.name=org.tidepool.mobile&size=1"
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        sendRequest("GET", urlExtension: urlExtension, parameters: parameters as [String : AnyObject]?, headers: headerDict).responseJSON { response in
+        sendRequest("GET", urlExtension: urlExtension, contentType: .urlEncoded) {
+            (result: SendRequestResponse) -> (Void) in
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            if ( response.result.isSuccess ) {
-                let json = JSON(response.result.value!)
+            if (result.isSuccess()) {
+                let json = JSON(result.data!)
                 print("\(json)")
                 var uploadId: String?
                 if let resultDict = json[0].dictionary {
@@ -228,11 +251,10 @@ public class TPUploaderServiceAPI {
         
         // Set our endpoint for the dataset create
         // format is: https://api.tidepool.org/v1/users/<user-id-here>/data_sets"
-        let endpoint = "v1/users/" + userId + "/data_sets"
+        let urlExtension = "v1/users/" + userId + "/data_sets"
         
         let clientDict = ["name": "org.tidepool.mobile", "version": UIApplication.appVersion()]
         let deduplicatorDict = ["name": "org.tidepool.deduplicator.dataset.delete.origin"]
-        let headerDict = ["Content-Type":"application/json"]
         let jsonObject = ["client":clientDict, "dataSetType":"continuous", "deduplicator":deduplicatorDict] as [String : Any]
         let body: Data?
         do {
@@ -245,10 +267,11 @@ public class TPUploaderServiceAPI {
         }
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        postRequest(body!, endpoint: endpoint, headers: headerDict).responseJSON { response in
+        sendRequest("POST", urlExtension: urlExtension, contentType: .json, body: body) {
+            (result: SendRequestResponse) -> (Void) in
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
-            if ( response.result.isSuccess ) {
-                let json = JSON(response.result.value!)
+            if (result.isSuccess()) {
+                let json = JSON(result.data!)
                 var uploadId: String?
                 if let dataDict = json["data"].dictionary {
                     uploadId = dataDict["uploadId"]?.string
@@ -271,9 +294,8 @@ public class TPUploaderServiceAPI {
     
     /// Returns last timezone id uploaded on success, otherwise nil
     func postTimezoneChangesEvent(_ tzChanges: [(time: String, newTzId: String, oldTzId: String?)], _ completion: @escaping (String?) -> (Void)) {
-        if let currentUploadId = HKUploader.sharedInstance.currentUploadId {
-            let endpoint = "/v1/data_sets/" + currentUploadId + "/data"
-            let headerDict = ["Content-Type":"application/json"]
+        if let currentUploadId = self.currentUploadId {
+            let urlExtension = "/v1/data_sets/" + currentUploadId + "/data"
             var changesToUploadDictArray = [[String: AnyObject]]()
             var lastTzUploaded: String?
             for tzChange in tzChanges {
@@ -303,9 +325,9 @@ public class TPUploaderServiceAPI {
             }
             
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
-            postRequest(body!, endpoint: endpoint, headers: headerDict).responseJSON { response in
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                if ( response.result.isSuccess ) {
+            sendRequest("POST", urlExtension: urlExtension, contentType: .json, body: body) {
+               (result: SendRequestResponse) -> (Void) in UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                if (result.isSuccess()) {
                     DDLogInfo("Timezone change upload succeeded!")
                     completion(lastTzUploaded)
                 } else {
@@ -324,7 +346,7 @@ public class TPUploaderServiceAPI {
     // MARK: - Lower-level networking methods
     //
     class SendRequestResponse {
-        let request: NSMutableURLRequest?
+        let request: URLRequest?
         var response: URLResponse?
         var data: Data?
         var error: NSError?
@@ -332,7 +354,7 @@ public class TPUploaderServiceAPI {
             return response as? HTTPURLResponse
         }
         init(
-            request: NSMutableURLRequest? = nil,
+            request: URLRequest? = nil,
             response: HTTPURLResponse? = nil,
             data: Data? = nil,
             error: NSError? = nil)
@@ -353,22 +375,30 @@ public class TPUploaderServiceAPI {
         }
     }
 
-    func sendRequest(_ method: String, urlExtension: String, body: Data?, completion: @escaping (_ response: SendRequestResponse) -> Void) {
+    enum ContentType {
+        case json
+        case urlEncoded
+    }
+    
+    func sendRequest(_ method: String, urlExtension: String, contentType: ContentType? = nil, body: Data? = nil, completion: @escaping (_ response: SendRequestResponse) -> Void) {
         
         if (config.isConnectedToNetwork()) {
             let baseURL = config.currentService()
             var urlString = baseURL + urlExtension
             urlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
             let url = URL(string: urlString)
-            let request = NSMutableURLRequest(url: url!)
+            var request = URLRequest(url: url!)
             let sendResponse = SendRequestResponse(request: request)
             
             request.httpMethod = method
-            // TODO: only for post and put?
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            if let contentType = contentType {
+                let contentTypeStr = contentType == .json ? "application/json" : "application/x-www-form-urlencoded; charset=utf-8"
+                request.setValue(contentTypeStr, forHTTPHeaderField: "Content-Type")
+           }
 
             guard let token = config.sessionToken() else {
-                let error = NSError(domain: "APIConnect-blipMakeDataUploadRequest", code: -3, userInfo: [NSLocalizedDescriptionKey: "Unable to upload, no session token exists"])
+                let error = NSError(domain: "TidepoolHKUploader service API", code: -1, userInfo: [NSLocalizedDescriptionKey: "No session token exists, \(method) failed to endpoint \(urlExtension)"])
                 sendResponse.error = error
                 completion(sendResponse)
                 return
@@ -387,7 +417,6 @@ public class TPUploaderServiceAPI {
                     sendResponse.response = response
                     sendResponse.data = data
                     sendResponse.error = error as NSError?
-                    sendResponse.r
                     completion(sendResponse)
                 })
                 return

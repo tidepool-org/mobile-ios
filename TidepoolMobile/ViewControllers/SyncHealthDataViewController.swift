@@ -15,6 +15,7 @@
 
 import UIKit
 import CocoaLumberjack
+import TPHealthKitUploader
 
 class SyncHealthDataViewController: UIViewController {
     
@@ -58,21 +59,24 @@ class SyncHealthDataViewController: UIViewController {
     private var lastErrorString: String? = nil
     private var maxHistoricalDays: Int = 0
     private var syncUIState: SyncUIState = .initialStart
-    
+    private let hkUploader = TPUploaderAPI.connector().uploader()
+
+    var hasPresentedSyncUI = false
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleStatsUpdatedNotification(_:)), name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleStatsUpdatedNotification(_:)), name: Notification.Name(rawValue: TPUploaderNotifications.Updated), object: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleTurnOffUploaderNotification(_:)), name: Notification.Name(rawValue: HealthKitNotifications.TurnOffUploader), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleTurnOffUploaderNotification(_:)), name: Notification.Name(rawValue: TPUploaderNotifications.TurnOffUploader), object: nil)
 
         // Determine if this is the initial sync or just a manual sync...
-        let manualSync = HealthKitUploadManager.sharedInstance.hasPresentedSyncUI
+        let manualSync = hasPresentedSyncUI /*HealthKitUploadManager.sharedInstance.hasPresentedSyncUI*/
         self.syncUIState = manualSync ? .manualStart : .initialStart
         self.navigationItem.title = manualSync ? "Manual Sync" : "Initial Sync"
 
         // Remember that we've presented the sync UI before
-        HealthKitUploadManager.sharedInstance.hasPresentedSyncUI = true
+        /*HealthKitUploadManager.sharedInstance.hasPresentedSyncUI = true*/
+        hasPresentedSyncUI = true
         
         // Determine if this is initial setup, or if a sync is in progress
         let historicalSync = historicalSyncModeInProgress()
@@ -142,7 +146,7 @@ class SyncHealthDataViewController: UIViewController {
     }
     
     @IBAction func syncHealthDataButtonTapped(_ sender: Any) {
-        startUploading(mode: HealthKitUploadReader.Mode.HistoricalAll)
+        startUploading(mode: TPUploader.Mode.HistoricalAll)
         self.syncUIState = .syncing
         configureLayout()
     }
@@ -164,13 +168,11 @@ class SyncHealthDataViewController: UIViewController {
     
     @objc func handleStatsUpdatedNotification(_ notification: Notification) {
         DispatchQueue.main.async {
-            //let mode = notification.object as! HealthKitUploadReader.Mode
             let userInfo = notification.userInfo!
-            let mode = userInfo["mode"] as! HealthKitUploadReader.Mode
+            let mode = userInfo["mode"] as! TPUploader.Mode
             let type = userInfo["type"] as! String
             DDLogInfo("Type: \(type), Mode: \(mode)")
-            if mode == HealthKitUploadReader.Mode.HistoricalAll
-                || mode == HealthKitUploadReader.Mode.HistoricalLastTwoWeeks {
+            if mode == TPUploader.Mode.HistoricalAll {
                 self.updateForStatsUpdate(mode: mode, type: type)
             }
         }
@@ -178,15 +180,13 @@ class SyncHealthDataViewController: UIViewController {
 
     @objc func handleTurnOffUploaderNotification(_ notification: Notification) {
         DispatchQueue.main.async {
-            //let mode = notification.object as! HealthKitUploadReader.Mode
             let userInfo = notification.userInfo!
-            let mode = userInfo["mode"] as! HealthKitUploadReader.Mode
+            let mode = userInfo["mode"] as! TPUploader.Mode
             let type = userInfo["type"] as! String
-            let reason = userInfo["reason"] as! HealthKitUploadReader.StoppedReason
+            let reason = userInfo["reason"] as! TPUploader.StoppedReason
             DDLogInfo("Type: \(type), Mode: \(mode), Reason: \(reason)")
 
-            if mode == HealthKitUploadReader.Mode.HistoricalAll
-                || mode == HealthKitUploadReader.Mode.HistoricalLastTwoWeeks {
+            if mode == TPUploader.Mode.HistoricalAll {
                 // Update status
                 switch reason {
                 case .turnOffInterface:
@@ -225,20 +225,19 @@ class SyncHealthDataViewController: UIViewController {
         }
     }
 
-    private func startUploading(mode: HealthKitUploadReader.Mode) {
-        guard let currentUserId = TidepoolMobileDataController.sharedInstance.currentUserId else {
+    private func startUploading(mode: TPUploader.Mode) {
+        let dataCtl = TidepoolMobileDataController.sharedInstance
+        guard let _ = dataCtl.currentUserId else {
             return
         }
-        
-        HealthKitUploadManager.sharedInstance.startUploading(mode: mode, currentUserId: currentUserId)
+        // start HK uploads...
+        hkUploader.startUploading(mode)
     }
     
     private func stopUploadingAndReset() {
-        
-        HealthKitUploadManager.sharedInstance.stopUploading(reason: HealthKitUploadReader.StoppedReason.turnOffInterface)
-        
-        HealthKitUploadManager.sharedInstance.resetPersistentStateForMode(HealthKitUploadReader.Mode.HistoricalAll)
-        HealthKitUploadManager.sharedInstance.resetPersistentStateForMode(HealthKitUploadReader.Mode.HistoricalLastTwoWeeks)
+        //hkUploader.stopUploading(mode)
+//        HealthKitUploadManager.sharedInstance.stopUploading(reason: TPUploader.StoppedReason.turnOffInterface)
+//        HealthKitUploadManager.sharedInstance.resetPersistentStateForMode(TPUploader.Mode.HistoricalAll)
     }
     
     @IBOutlet weak var indicatorViewRounded: UIView!
@@ -248,40 +247,34 @@ class SyncHealthDataViewController: UIViewController {
     @IBOutlet weak var indicatorViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var progressLabel: UILabel!
     
-    private func historicalSyncModeInProgress() -> HealthKitUploadReader.Mode? {
-        //NSLog("\(#function)")
-        let uploadManager = HealthKitUploadManager.sharedInstance
-        if uploadManager.isUploadInProgressForMode(HealthKitUploadReader.Mode.HistoricalAll) {
-            //NSLog("historicalSyncModeInProgress: still uploading for mode HistoricalAll")
-            return HealthKitUploadReader.Mode.HistoricalAll
+    private func historicalSyncModeInProgress() -> TPUploader.Mode? {
+        DDLogVerbose("\(#function)")
+        if hkUploader.isUploadInProgressForMode(TPUploader.Mode.HistoricalAll) {
+            DDLogVerbose("historicalSyncModeInProgress: still uploading for mode HistoricalAll")
+            return TPUploader.Mode.HistoricalAll
         }
-        if uploadManager.isUploadInProgressForMode(HealthKitUploadReader.Mode.HistoricalLastTwoWeeks) {
-            //NSLog("historicalSyncModeInProgress: still uploading for mode HistoricalLastTwoWeeks")
-            return HealthKitUploadReader.Mode.HistoricalLastTwoWeeks
-        }
-        //NSLog("historicalSyncModeInProgress: no longer still uploading for historical modes")
-
+        DDLogVerbose("historicalSyncModeInProgress: no longer still uploading for historical modes")
         return nil
     }
     
-    func updateForStatsUpdate(mode: HealthKitUploadReader.Mode, type: String? = nil) {
+    func updateForStatsUpdate(mode: TPUploader.Mode, type: String? = nil) {
         //NSLog("\(#function). Mode: \(mode)")
         if historicalSyncModeInProgress() != nil {
             // Disable idle timer when sync is in progress
             UIApplication.shared.isIdleTimerDisabled = true
             
             // Determine percent progress and upload healthStatusLine2 text
-            let stats = HealthKitUploadManager.sharedInstance.statsForMode(mode)
+            let (current, total) = TPUploaderAPI.connector().lastHistoricalUpload()
+
             var healthKitUploadStatusDaysUploadedText = ""
             var percentUploaded: CGFloat = 0.0
             
-            if stats.totalDaysHistorical > 0 {
-                percentUploaded = CGFloat((CGFloat)(stats.currentDayHistorical) / (CGFloat)(stats.totalDaysHistorical))
-                healthKitUploadStatusDaysUploadedText = String("Day \(stats.currentDayHistorical) of \(stats.totalDaysHistorical)")
-            }
-            
-            if stats.totalDaysHistorical > maxHistoricalDays {
-                maxHistoricalDays = stats.totalDaysHistorical
+            if let current = current, let total = total, total > 0 {
+                percentUploaded = CGFloat((CGFloat)(current) / (CGFloat)(total))
+                healthKitUploadStatusDaysUploadedText = String("Day \(current) of \(total)")
+                if total > maxHistoricalDays {
+                    maxHistoricalDays = total
+                }
             }
             
             // Update progress

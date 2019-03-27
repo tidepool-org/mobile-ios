@@ -16,18 +16,10 @@
 import UIKit
 import CoreData
 import CocoaLumberjack
-import HealthKit
+import TPHealthKitUploader
 import Bugsee
 
 var fileLogger: DDFileLogger!
-
-/// Set up health kit configuration singleton, specialized version of HealthKitConfiguration
-let appHealthKitConfiguration = TidepoolMobileHealthKitConfiguration(healthKitUploadTypes: [
-    HealthKitUploadTypeBloodGlucose(),
-    HealthKitUploadTypeCarb(),
-    HealthKitUploadTypeInsulin(),
-    HealthKitUploadTypeWorkout(),
-    ])
 
 /// AppDelegate deals with app startup, restart, termination:
 /// - Switches UI between login and event controllers.
@@ -194,7 +186,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.rootViewController = vc
             
             // TODO: uploader UI - Revisit this. Do we want even the non-current mode readers/uploaders to resume automatically? Or should that be behind some explicit UI
-            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
+//            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
         }
     }
     
@@ -220,11 +212,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 
-        // Only the HealthKitUploadReader.Mode.Current uploads should continue in background
-        HealthKitUploadManager.sharedInstance.stopUploading(reason: HealthKitUploadReader.StoppedReason.background)
-        //HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(mode: HealthKitUploadReader.Mode.Current, currentUserId: appHealthKitConfiguration.currentUserId)
-        //TODO: test this change!
-        HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
+//        // Only the HealthKitUploadReader.Mode.Current uploads should continue in background
+//        HealthKitUploadManager.sharedInstance.stopUploading(reason: HealthKitUploadReader.StoppedReason.background)
+//        //HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(mode: HealthKitUploadReader.Mode.Current, currentUserId: appHealthKitConfiguration.currentUserId)
+//        //TODO: test this change!
+//        HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
 
         // Re-enable idle timer (screen locking) when the app enters background. (May have been disabled during sync/upload.)
         UIApplication.shared.isIdleTimerDisabled = false
@@ -303,7 +295,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         } else {
-            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
+//            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
         }
     }
 

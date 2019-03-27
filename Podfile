@@ -1,10 +1,11 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-platform :ios, '9.0'
+platform :ios, '11.0'
 
 use_frameworks!
 
 def available_pods
+  pod 'TPHealthKitUploader', :git => 'https://github.com/tidepool-org/healthkit-uploader', :tag => '1.0.0-wip'
   pod 'Bugsee', '1.18.15'
   pod 'Alamofire', '4.7.3'
   pod 'SwiftyJSON', '4.2'
@@ -22,7 +23,8 @@ target 'TidepoolMobileTests' do
 end
 
 target 'BGMTool' do
-    pod 'Alamofire', '4.7.3'
-    pod 'SwiftyJSON', '4.2'
-    pod 'CocoaLumberjack/Swift', '~> 3.4.2'
+  pod 'TPHealthKitUploader', :git => 'https://github.com/tidepool-org/healthkit-uploader', :tag => '1.0.0-wip'
+  pod 'Alamofire', '4.7.3'
+  pod 'SwiftyJSON', '4.2'
+  pod 'CocoaLumberjack/Swift', '~> 3.4.2'
 end

@@ -8,6 +8,7 @@
 
 import UIKit
 import CocoaLumberjack
+import TPHealthKitUploader
 
 class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
 
@@ -34,7 +35,8 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var privacyTextField: UITextView!
     var hkTimeRefreshTimer: Timer?
     fileprivate let kHKTimeRefreshInterval: TimeInterval = 30.0
-
+    private let hkUploader = TPUploaderAPI.connector().uploader()
+    
     //
     // MARK: - Base Methods
     //
@@ -54,7 +56,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         healthKitSwitch.onTintColor = Styles.brightBlueColor
 
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: Notification.Name(rawValue: HealthKitNotifications.Updated), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(MenuAccountSettingsViewController.handleUploaderNotification(_:)), name: Notification.Name(rawValue: TPUploaderNotifications.Updated), object: nil)
     }
 
     deinit {
@@ -184,7 +186,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     }
 
     private func configureHKInterface() {
-        let hkCurrentEnable = appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
+        let hkCurrentEnable = hkUploader.healthKitInterfaceEnabledForCurrentUser()
         healthKitSwitch.isOn = hkCurrentEnable
         configureHKInterfaceForState(hkCurrentEnable)
         configureSyncHealthButton(hkCurrentEnable)
@@ -202,7 +204,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         
         // TODO: UI polish - this whole section should be removed from the stacked view if hideHealthKitUI is true, rather than showing empty space!
         
-        let hideHealthKitUI = !appHealthKitConfiguration.shouldShowHealthKitUI()
+        let hideHealthKitUI = !hkUploader.shouldShowHealthKitUI()
         syncHealthDataContainer.isHidden = hideHealthKitUI
         healthKitSwitch.isHidden = hideHealthKitUI
         healthKitLabel.isHidden = hideHealthKitUI
@@ -226,9 +228,9 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     }
     
     private func enableHealthKitInterfaceForCurrentUser() {
-        if appHealthKitConfiguration.healthKitInterfaceConfiguredForOtherUser() {
+        if hkUploader.healthKitInterfaceConfiguredForOtherUser() {
             // use dialog to confirm delete with user!
-            let curHKUserName = appHealthKitConfiguration.healthKitUserTidepoolUsername() ?? "Unknown"
+            let curHKUserName = hkUploader.curHKUserName() ?? "Unknown"
             //let curUserName = usernameLabel.text!
             let titleString = "Are you sure?"
             let messageString = "A different account (" + curHKUserName + ") is currently associated with Health Data on this device"
@@ -246,7 +248,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-    let healthKitUploadStatusLastUploadTime: String = "Last reading %@"
+    let healthKitUploadStatusLastUploadTime: String = "Last %@ reading %@"
     let healthKitUploadStatusNoDataAvailableToUpload: String = "No data available to upload"
     let healthKitUploadStatusDaysUploaded: String = "Syncing day %d of %d"
     let healthKitUploadStatusUploadPausesWhenPhoneIsLocked: String = "Your screen must stay awake and unlocked"
@@ -255,27 +257,43 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
         var healthStatusLine1Text = ""
         var healthStatusLine2Text = ""
 
-        let uploadManager = HealthKitUploadManager.sharedInstance
-        let isHistoricalAllActive = uploadManager.isUploadInProgressForMode(HealthKitUploadReader.Mode.HistoricalAll)
+        let isHistoricalAllActive = hkUploader.isUploadInProgressForMode(TPUploader.Mode.HistoricalAll)
         if isHistoricalAllActive {
-            if isHistoricalAllActive {
-                healthStatusLine1Text = "Syncing Health data…"
-                let stats = uploadManager.statsForMode(HealthKitUploadReader.Mode.HistoricalAll)
-                healthStatusLine2Text = String(format: healthKitUploadStatusDaysUploaded, stats.currentDayHistorical, stats.totalDaysHistorical)
-            }
+            let (current, total) = TPUploaderAPI.connector().lastHistoricalUpload()
             
+            healthStatusLine1Text = "Syncing Health data…"
+            if let current = current, let total = total {
+                healthStatusLine2Text = String(format: healthKitUploadStatusDaysUploaded, current, total)
+            } else {
+                healthStatusLine2Text = " "
+            }
             healthStatusLine1.usage = "sidebarSettingHKMainStatus"
             healthStatusLine2.usage = "sidebarSettingHKMinorStatus"
         } else {
-            // TODO: decide what to do with stats for other upload data!
-            let stats = uploadManager.statsForMode(HealthKitUploadReader.Mode.Current)
-            if stats.hasSuccessfullyUploaded {
-                let lastUploadTimeAgoInWords = stats.lastSuccessfulUploadTime.timeAgoInWords(Date())
-                healthStatusLine1Text = String(format: healthKitUploadStatusLastUploadTime, lastUploadTimeAgoInWords)
+            var hadSuccessfulUpload = false
+            var lastUploadTime = Date.distantPast
+            var lastType = " "
+            
+            let currentStats = hkUploader.currentUploadStats()
+            for stat in currentStats {
+                if stat.hasSuccessfullyUploaded {
+                    hadSuccessfulUpload = true
+                    if stat.lastSuccessfulUploadTime.compare(lastUploadTime) == .orderedDescending {
+                        lastUploadTime = stat.lastSuccessfulUploadTime
+                        lastType = stat.typeName
+                    }
+                    DDLogInfo("Mode: \(stat.mode.rawValue)")
+                    DDLogInfo("Type: \(stat.typeName)")
+                    DDLogInfo("Last successful upload time: \(stat.lastSuccessfulUploadTime)")
+                    DDLogInfo("")
+                }
+            }
+            if hadSuccessfulUpload {
+                let lastUploadTimeAgoInWords = lastUploadTime.timeAgoInWords(Date())
+                healthStatusLine1Text = String(format: healthKitUploadStatusLastUploadTime, lastType, lastUploadTimeAgoInWords)
             } else {
                 healthStatusLine1Text = healthKitUploadStatusNoDataAvailableToUpload
             }
-
             healthStatusLine1.usage = "sidebarSettingHKMainStatus"
             healthStatusLine2.usage = "sidebarSettingHKMinorStatus"
         }

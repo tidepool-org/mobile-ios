@@ -17,10 +17,10 @@ import UIKit
 import CoreData
 import MessageUI
 import CocoaLumberjack
+import TPHealthKitUploader
 
 class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPIWatcher, UIScrollViewDelegate, UITextViewDelegate, MFMailComposeViewControllerDelegate {
 
-    
     @IBOutlet weak var eventListSceneContainer: UIControl!
     @IBOutlet weak var navItem: UINavigationItem!
     
@@ -53,7 +53,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     var loadingNotes = false
     
     // misc
-    let dataController = TidepoolMobileDataController.sharedInstance
+    private let dataController = TidepoolMobileDataController.sharedInstance
+    private let hkUploader = TPUploaderAPI.connector().uploader()
+
 
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -76,14 +78,12 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // need to update when day changes
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.calendarDayDidChange(notification:)), name:Notification.Name.NSCalendarDayChanged, object: nil)
         // also when timezone changes...
-        // but first check that dataController has found any implicit tz changes
-        dataController.postTimezoneEventChanges(){}
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.timezoneDidChange(_:)), name:Notification.Name.NSSystemTimeZoneDidChange, object: nil)
 
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterForeground(_:)), name:UIApplication.willEnterForegroundNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(EventListViewController.appDidEnterBackground(_:)), name:UIApplication.didEnterBackgroundNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleUploadSuccessfulNotification(_:)), name:Notification.Name(rawValue: HealthKitNotifications.UploadSuccessful), object: nil)
-        notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleTurnOnUploader(_:)), name:Notification.Name(rawValue: HealthKitNotifications.TurnOnUploader), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleUploadSuccessfulNotification(_:)), name:Notification.Name(rawValue: TPUploaderNotifications.UploadSuccessful), object: nil)
+        notificationCenter.addObserver(self, selector: #selector(EventListViewController.handleTurnOnUploader(_:)), name:Notification.Name(rawValue: TPUploaderNotifications.TurnOnUploader), object: nil)
         
         if let sideMenu = self.sideMenuController()?.sideMenu {
             sideMenu.delegate = self
@@ -124,13 +124,9 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     @objc internal func timezoneDidChange(_ notification: Notification) {
          DispatchQueue.main.async {
             DDLogInfo("\(#function)")
-           // first, log timezone change to data controller...
-            self.dataController.timezoneDidChange(notification)
-            // then, refresh display in case dates have changed!
+            // refresh display in case dates have changed!
             self.updateDisplayPending = true
             self.checkRefresh()
-            // and post any new events created, if we have uploads enabled...
-            self.dataController.postTimezoneEventChanges() {}
         }
     }
     
@@ -731,7 +727,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     static var oneShotTestCelebrate = false
     private func firstTimeHealthKitConnectCheck() {
         // Show connect to health celebration
-        if (EventListViewController.oneShotTestCelebrate || (appHealthKitConfiguration.shouldShowHealthKitUI() && oneShotIncompleteCheck("ConnectToHealthCelebrationHasBeenShown"))) {
+        if (EventListViewController.oneShotTestCelebrate || (hkUploader.shouldShowHealthKitUI() && oneShotIncompleteCheck("ConnectToHealthCelebrationHasBeenShown"))) {
             EventListViewController.oneShotTestCelebrate = false
             // One-shot finished!
             oneShotCompleted("ConnectToHealthCelebrationHasBeenShown")
@@ -751,15 +747,15 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         if firstTimeHealthTip.isHidden {
             if self.sortedNotes.count == 1 && oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
                 // only show the "need uploader" tip if the user has not enabled healthKit syncing...
-                if !appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser() {
+                if !hkUploader.healthKitInterfaceEnabledForCurrentUser() {
                     hideNeedUploaderTip = false
                     oneShotCompleted("NeedUploaderTipHasBeenShown")
                 }
             } else {
                 // see if HK is enabled for this user, but user has not been asked to authorize the new items.
-                if appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
+                if hkUploader.healthKitInterfaceEnabledForCurrentUser()
                 {
-                    if !HealthKitManager.sharedInstance.authorizationRequestedForUploaderSamples() {
+                    if !hkUploader.authorizationRequestedForHKUpload() {
                         TidepoolMobileDataController.sharedInstance.enableHealthKitInterface()
                     }
                 }
@@ -942,12 +938,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     //
     // MARK: - Graph support
     //
-
     // The first time we get notified that an uploader has been turned on, bring up the manual sync UI.
     @objc internal func handleTurnOnUploader(_ note: Notification) {
         DDLogVerbose("trace")
         
-        if let _ = self.sideMenuController()?.sideMenu?.isMenuOpen, !HealthKitUploadManager.sharedInstance.hasPresentedSyncUI, !sequeToSyncHealthHasBeenDone {
+        if let _ = self.sideMenuController()?.sideMenu?.isMenuOpen, !hkUploader.hasPresentedSyncUI, !sequeToSyncHealthHasBeenDone {
             // Since we'll get notifications for each type of uploader, make this a one-shot in the
             sequeToSyncHealthHasBeenDone = true
             hideSideMenuView ()
