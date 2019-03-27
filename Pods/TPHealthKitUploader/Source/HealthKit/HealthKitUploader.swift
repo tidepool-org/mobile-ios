@@ -31,8 +31,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         
         super.init()
 
-        self.ensureUploadSession(isBackground: false)
-        self.ensureUploadSession(isBackground: true)
+        self.ensureUploadSession()
     }
 
     private(set) var mode: TPUploader.Mode
@@ -64,14 +63,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         DispatchQueue.main.async {
             DDLogInfo("(\(self.typeString), mode: \(self.mode.rawValue)) [main]")
             
-            // Choose the right session to start tasks with
-            var uploadSession: URLSession?
-            if UIApplication.shared.applicationState == UIApplication.State.background {
-                uploadSession = self.backgroundUploadSession
-            } else {
-                uploadSession = self.foregroundUploadSession
-            }
-            guard uploadSession != nil else {
+            guard let uploadSession = self.uploadSession else {
                 let message = "Unable to start upload tasks, session does not exist, it was probably invalidated. This is unexpected"
                 let error = NSError(domain: "HealthKitUploader", code: -1, userInfo: [NSLocalizedDescriptionKey: message])
                 DDLogError(message)
@@ -87,7 +79,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                 do {
                     let request = try TPUploaderServiceAPI.connector!.makeDataUploadRequest("POST")
                     self.setPendingUploadsState(uploadTaskIsPending: true)
-                    let uploadTask = uploadSession!.uploadTask(with: request, fromFile: batchSamplesPostBodyURL!)
+                    let uploadTask = uploadSession.uploadTask(with: request, fromFile: batchSamplesPostBodyURL!)
                     uploadTask.taskDescription = self.prefixedLocalId(self.uploadSamplesTaskDescription)
                     DDLogInfo("(\(self.typeString), \(self.mode.rawValue)) Created samples upload task: \(uploadTask.taskIdentifier)")
                     uploadTask.resume()
@@ -97,7 +89,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                 }
             }
             // Otherwise check for deletes...
-            else if self.startDeleteTaskInSession(uploadSession!) == true {
+            else if self.startDeleteTaskInSession(uploadSession) == true {
                 // delete task started successfully, just return...
                 return
             }
@@ -136,27 +128,18 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
     func cancelTasks() {
         DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
         
-        if self.backgroundUploadSession == nil && self.foregroundUploadSession == nil {
+        if self.uploadSession == nil {
             self.setPendingUploadsState(uploadTaskIsPending: false)
         } else {
-            var uploadSessions = [URLSession]()
-            if let uploadSession = self.foregroundUploadSession {
-                uploadSessions.append(uploadSession)
-            }
-            if let uploadSession = self.backgroundUploadSession {
-                uploadSessions.append(uploadSession)
-            }
-            for uploadSession in uploadSessions {
-                uploadSession.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) -> Void in
-                    DDLogInfo("(\(self.typeString), \(self.mode.rawValue)) Canceling \(uploadTasks.count) tasks")
-                    if uploadTasks.count > 0 {
-                        for uploadTask in uploadTasks {
-                            DDLogInfo("Canceling task: \(uploadTask.taskIdentifier)")
-                            uploadTask.cancel()
-                        }
-                    } else {
-                        self.setPendingUploadsState(uploadTaskIsPending: false)
+            self.uploadSession!.getTasksWithCompletionHandler { (dataTasks, uploadTasks, downloadTasks) -> Void in
+                DDLogInfo("(\(self.typeString), \(self.mode.rawValue)) Canceling \(uploadTasks.count) tasks")
+                if uploadTasks.count > 0 {
+                    for uploadTask in uploadTasks {
+                        DDLogInfo("Canceling task: \(uploadTask.taskIdentifier)")
+                        uploadTask.cancel()
                     }
+                } else {
+                    self.setPendingUploadsState(uploadTaskIsPending: false)
                 }
             }
         }
@@ -248,42 +231,28 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
 
         DispatchQueue.main.async {
-            if session == self.foregroundUploadSession {
-                DDLogInfo("Foreground upload session became invalid. Mode: \(self.mode)")
-                self.foregroundUploadSession = nil
-                self.ensureUploadSession(isBackground: false)
-            } else if session == self.backgroundUploadSession {
-                DDLogInfo("Background upload session became invalid. Mode: \(self.mode)")
-                self.backgroundUploadSession = nil
-                self.ensureUploadSession(isBackground: true)
-            }
+            DDLogInfo("Upload session became invalid. Mode: \(self.mode)")
+            self.uploadSession = nil
+            self.ensureUploadSession()
         }
     }
     
     // MARK: Private
     
-    private func ensureUploadSession(isBackground: Bool) {
+    private func ensureUploadSession() {
         DDLogVerbose("type: \(typeString), mode: \(mode.rawValue)")
         
-        guard (isBackground && self.backgroundUploadSession == nil) || (!isBackground && self.foregroundUploadSession == nil) else {
+        guard self.uploadSession == nil else {
             return
         }
         
-        var configuration = URLSessionConfiguration.default
-        if isBackground {
-            configuration = URLSessionConfiguration.background(withIdentifier: prefixedLocalId(self.backgroundUploadSessionIdentifier))
-        }
+        let configuration = URLSessionConfiguration.background(withIdentifier: prefixedLocalId(self.backgroundUploadSessionIdentifier))
         configuration.timeoutIntervalForResource = 60 // 60 seconds
-        let uploadSession = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
-        uploadSession.delegateQueue.maxConcurrentOperationCount = 1 // So we can serialize the metadata and samples upload POSTs
+        let newUploadSession = URLSession(configuration: configuration, delegate: self, delegateQueue: nil)
+        newUploadSession.delegateQueue.maxConcurrentOperationCount = 1 // So we can serialize the metadata and samples upload POSTs
+        self.uploadSession = newUploadSession
 
-        if isBackground {            
-            self.backgroundUploadSession = uploadSession
-        } else {
-            self.foregroundUploadSession = uploadSession
-        }
-
-        DDLogInfo("Created upload session. isBackground:\(isBackground) Mode: \(self.mode)")
+        DDLogInfo("Created upload session. Mode: \(self.mode)")
     }
 
     private func createBodyFileForBatchSamplesDelete(data: HealthKitUploadData) throws -> (URL?, Data?) {
@@ -361,8 +330,7 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
         uploaderSettings.updateBoolSettingForKey(.hasPendingUploadsKey, value: uploadTaskIsPending)
     }
 
-    private var foregroundUploadSession: URLSession?
-    private var backgroundUploadSession: URLSession?
+    private var uploadSession: URLSession?
     
     // use the following with prefixedLocalId to create ids unique to mode and upload type...
     private let backgroundUploadSessionIdentifier = "UploadSessionId"

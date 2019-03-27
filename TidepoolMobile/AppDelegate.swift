@@ -184,9 +184,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let sb = UIStoryboard(name: "EventView", bundle: nil)
         if let vc = sb.instantiateInitialViewController() {
             self.window?.rootViewController = vc
-            
-            // TODO: uploader UI - Revisit this. Do we want even the non-current mode readers/uploaders to resume automatically? Or should that be behind some explicit UI
-//            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
+            TidepoolMobileDataController.sharedInstance.configureHealthKitInterface()
         }
     }
     
@@ -211,12 +209,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DDLogVerbose("trace")
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-
-//        // Only the HealthKitUploadReader.Mode.Current uploads should continue in background
-//        HealthKitUploadManager.sharedInstance.stopUploading(reason: HealthKitUploadReader.StoppedReason.background)
-//        //HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(mode: HealthKitUploadReader.Mode.Current, currentUserId: appHealthKitConfiguration.currentUserId)
-//        //TODO: test this change!
-//        HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
 
         // Re-enable idle timer (screen locking) when the app enters background. (May have been disabled during sync/upload.)
         UIApplication.shared.isIdleTimerDisabled = false
@@ -295,7 +287,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         } else {
-//            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: appHealthKitConfiguration.currentUserId)
+            TidepoolMobileDataController.sharedInstance.configureHealthKitInterface()
         }
     }
 

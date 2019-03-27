@@ -61,7 +61,6 @@ class SyncHealthDataViewController: UIViewController {
     private var syncUIState: SyncUIState = .initialStart
     private let hkUploader = TPUploaderAPI.connector().uploader()
 
-    var hasPresentedSyncUI = false
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -70,13 +69,10 @@ class SyncHealthDataViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(SyncHealthDataViewController.handleTurnOffUploaderNotification(_:)), name: Notification.Name(rawValue: TPUploaderNotifications.TurnOffUploader), object: nil)
 
         // Determine if this is the initial sync or just a manual sync...
-        let manualSync = hasPresentedSyncUI /*HealthKitUploadManager.sharedInstance.hasPresentedSyncUI*/
+        let manualSync = hkUploader.hasPresentedSyncUI
         self.syncUIState = manualSync ? .manualStart : .initialStart
         self.navigationItem.title = manualSync ? "Manual Sync" : "Initial Sync"
-
-        // Remember that we've presented the sync UI before
-        /*HealthKitUploadManager.sharedInstance.hasPresentedSyncUI = true*/
-        hasPresentedSyncUI = true
+        hkUploader.hasPresentedSyncUI = true
         
         // Determine if this is initial setup, or if a sync is in progress
         let historicalSync = historicalSyncModeInProgress()
@@ -235,9 +231,8 @@ class SyncHealthDataViewController: UIViewController {
     }
     
     private func stopUploadingAndReset() {
-        //hkUploader.stopUploading(mode)
-//        HealthKitUploadManager.sharedInstance.stopUploading(reason: TPUploader.StoppedReason.turnOffInterface)
-//        HealthKitUploadManager.sharedInstance.resetPersistentStateForMode(TPUploader.Mode.HistoricalAll)
+        hkUploader.stopUploading(mode: .HistoricalAll, reason: .turnOffInterface)
+        hkUploader.resetPersistentStateForMode(.HistoricalAll)
     }
     
     @IBOutlet weak var indicatorViewRounded: UIView!
@@ -264,7 +259,7 @@ class SyncHealthDataViewController: UIViewController {
             UIApplication.shared.isIdleTimerDisabled = true
             
             // Determine percent progress and upload healthStatusLine2 text
-            let (current, total) = TPUploaderAPI.connector().lastHistoricalUpload()
+            let (current, total, _, _) = hkUploader.lastHistoricalUploadStats()
 
             var healthKitUploadStatusDaysUploadedText = ""
             var percentUploaded: CGFloat = 0.0

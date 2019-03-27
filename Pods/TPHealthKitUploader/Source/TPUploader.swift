@@ -44,19 +44,25 @@ public class TPUploader {
         // configure this last, it might use the service to send up an initial timezone...
         self.tzTracker = TPTimeZoneTracker()
         // TODO: allow this to be passed in as array of enums!
-        _ = HealthKitConfiguration.init(config, healthKitUploadTypes: [
+        self.hkConfig = HealthKitConfiguration.init(config, healthKitUploadTypes: [
             HealthKitUploadTypeBloodGlucose(),
             HealthKitUploadTypeCarb(),
             HealthKitUploadTypeInsulin(),
             HealthKitUploadTypeWorkout(),
             ])
+        self.hkUploadMgr = HealthKitUploadManager.sharedInstance
+        self.hkMgr = HealthKitManager.sharedInstance
         TPUploader.sharedInstance = self
     }
     var config: TPUploaderConfigInfo
     var service: TPUploaderServiceAPI
     var tzTracker: TPTimeZoneTracker
     let settings = GlobalSettings.sharedInstance
-
+    
+    let hkUploadMgr: HealthKitUploadManager
+    let hkMgr: HealthKitManager
+    let hkConfig: HealthKitConfiguration
+    
     public func version() -> String {
         return "1.0.0-alpha"
     }
@@ -67,19 +73,19 @@ public class TPUploader {
     
     /// Call this whenever the current user changes, after login/logout, token refresh(?), ...
     public func configure() {
-        HealthKitConfiguration.sharedInstance.configureHealthKitInterface()
+        hkConfig.configureHealthKitInterface()
     }
     
     /// Does this device support HealthKit and is current logged in user account a DSA account?
     public func shouldShowHealthKitUI() -> Bool {
         //DDLogVerbose("\(#function)")
-        return HealthKitManager.sharedInstance.isHealthDataAvailable && config.isDSAUser()
+        return hkMgr.isHealthDataAvailable && config.isDSAUser()
     }
 
     /// Have we already requested authorization for HK uploading?
     public func authorizationRequestedForHKUpload() -> Bool {
         //DDLogVerbose("\(#function)")
-        return HealthKitManager.sharedInstance.authorizationRequestedForUploaderSamples()
+        return hkMgr.authorizationRequestedForUploaderSamples()
     }
 
     /// Disables HealthKit for current user
@@ -87,7 +93,7 @@ public class TPUploader {
     /// Note: This does not NOT clear the current HealthKit user!
     public func disableHealthKitInterface() {
         DDLogInfo("\(#function)")
-        HealthKitConfiguration.sharedInstance.disableHealthKitInterface()
+        hkConfig.disableHealthKitInterface()
         // clear uploadId to be safe... also for logout.
         TPUploaderServiceAPI.connector!.currentUploadId = nil
     }
@@ -97,44 +103,98 @@ public class TPUploader {
     /// Note: This will force switch of HK user if necessary!
     public func enableHealthKitInterface() {
         DDLogInfo("\(#function)")
-        HealthKitConfiguration.sharedInstance.enableHealthKitInterface()
+        hkConfig.enableHealthKitInterface()
     }
 
     /// Returns true only if the HealthKit interface is enabled and configured for the current user
     public func healthKitInterfaceEnabledForCurrentUser() -> Bool {
         DDLogInfo("\(#function)")
-        return HealthKitConfiguration.sharedInstance.healthKitInterfaceEnabledForCurrentUser()
+        return hkConfig.healthKitInterfaceEnabledForCurrentUser()
     }
     
     /// Returns true if the HealthKit interface has been configured for a tidepool id different from the current user - ignores whether the interface is currently enabled.
     public func healthKitInterfaceConfiguredForOtherUser() -> Bool {
         DDLogInfo("\(#function)")
-        return HealthKitConfiguration.sharedInstance.healthKitInterfaceConfiguredForOtherUser()
+        return hkConfig.healthKitInterfaceConfiguredForOtherUser()
     }
 
     public func curHKUserName() -> String? {
-        return HealthKitConfiguration.sharedInstance.healthKitUserTidepoolUsername()
+        return hkConfig.healthKitUserTidepoolUsername()
     }
     
     public func currentUploadStats() -> [TPUploaderStats] {
-        let uploadMgr = HealthKitUploadManager.sharedInstance
-        return uploadMgr.statsForMode(TPUploader.Mode.Current)
+        return hkUploadMgr.statsForMode(TPUploader.Mode.Current)
     }
 
-    public func historicalUploadStats() -> [TPUploaderStats] {        let uploadMgr = HealthKitUploadManager.sharedInstance
-        return uploadMgr.statsForMode(TPUploader.Mode.HistoricalAll)
+    public func historicalUploadStats() -> [TPUploaderStats] {
+        return hkUploadMgr.statsForMode(TPUploader.Mode.HistoricalAll)
+    }
+    
+    public func lastHistoricalUploadStats() -> (current: Int?, total: Int?, type: String?, date: Date?) {
+        let historicalStats = historicalUploadStats()
+        var current: Int?
+        var total: Int?
+        var lastUpload: Date?
+        var lastType: String?
+        for stat in historicalStats {
+            // For now just return stats for the last type uploaded...
+            if stat.hasSuccessfullyUploaded {
+                if current == nil || total == nil || lastUpload == nil {
+                    current = stat.currentDayHistorical
+                    total = stat.totalDaysHistorical
+                    lastUpload = stat.lastSuccessfulUploadTime
+                    lastType = stat.typeName
+                } else {
+                    if lastUpload!.compare(stat.lastSuccessfulUploadTime) == .orderedAscending {
+                        current = stat.currentDayHistorical
+                        total = stat.totalDaysHistorical
+                        lastUpload = stat.lastSuccessfulUploadTime
+                    }
+                }
+            }
+        }
+        return (current: current, total: total, type: lastType, date: lastUpload)
+    }
+    
+    public func lastCurrentUploadStats() -> (lastType: String?, lastTime: Date?) {
+        var lastUploadTime: Date?
+        var lastType: String?
+        
+        let currentStats = currentUploadStats()
+        for stat in currentStats {
+            if stat.hasSuccessfullyUploaded {
+                if lastType == nil || lastUploadTime == nil {
+                    lastUploadTime = stat.lastSuccessfulUploadTime
+                    lastType = stat.typeName
+                } else {
+                    if stat.lastSuccessfulUploadTime.compare(lastUploadTime!) == .orderedDescending {
+                        lastUploadTime = stat.lastSuccessfulUploadTime
+                        lastType = stat.typeName
+                    }
+                }
+            }
+        }
+        return (lastType: lastType, lastTime: lastUploadTime)
     }
     
     public func isUploadInProgressForMode(_ mode: TPUploader.Mode) -> Bool {
-        return HealthKitUploadManager.sharedInstance.isUploadInProgressForMode(mode)
+        return hkUploadMgr.isUploadInProgressForMode(mode)
     }
     
     public func startUploading(_ mode: TPUploader.Mode) {
         if let currentId = config.currentUserId() {
-            HealthKitUploadManager.sharedInstance.startUploading(mode: mode, currentUserId: currentId)
+            hkUploadMgr.startUploading(mode: mode, currentUserId: currentId)
         } else {
             DDLogVerbose("ERR: startUploading ignored, no current user!")
         }
+    }
+    
+    public func stopUploading(mode: TPUploader.Mode, reason: TPUploader.StoppedReason) {
+        hkUploadMgr.stopUploading(mode: mode, reason: reason)
+    }
+    
+    public func resetPersistentStateForMode(_ mode: TPUploader.Mode) {
+        hkUploadMgr.resetPersistentStateForMode(mode)
     }
     
     public var hasPresentedSyncUI: Bool {

@@ -85,7 +85,7 @@ class TPUploaderAPI: TPUploaderConfigInfo {
 
     func isDSAUser() -> Bool {
         let result = dataCtrl.currentLoggedInUser?.isDSAUser
-        DDLogInfo("\(#function) - TPUploaderConfigInfo protocol, returning: \(result)")
+        DDLogInfo("\(#function) - TPUploaderConfigInfo protocol, returning: \(String(describing: result))")
         return result == nil ? false : result!
     }
     
@@ -115,34 +115,4 @@ class TPUploaderAPI: TPUploaderConfigInfo {
         DDLogDebug(str, file: uploadFrameWork, function: uploadFrameWork)
     }
 
-    //
-    // MARK: - Utilities used by client
-    //
-    
-    // TODO: move to uploader framework?
-    
-    func lastHistoricalUpload() -> (current: Int?, total: Int?) {
-        let historicalStats = uploader().historicalUploadStats()
-        var current: Int?
-        var total: Int?
-        var lastUpload: Date?
-        for stat in historicalStats {
-            // For now just show stats for the last type uploaded...
-            if stat.hasSuccessfullyUploaded {
-                
-                if current == nil || total == nil || lastUpload == nil {
-                    current = stat.currentDayHistorical
-                    total = stat.totalDaysHistorical
-                    lastUpload = stat.lastSuccessfulUploadTime
-                } else {
-                    if lastUpload!.compare(stat.lastSuccessfulUploadTime) == .orderedAscending {
-                        current = stat.currentDayHistorical
-                        total = stat.totalDaysHistorical
-                        lastUpload = stat.lastSuccessfulUploadTime
-                    }
-                }
-            }
-        }
-        return (current: current, total: total)
-    }
 }
