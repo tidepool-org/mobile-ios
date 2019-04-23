@@ -25,18 +25,8 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
         return HKSampleType.workoutType()
     }
 
-    internal override func filterSamples(sortedSamples: [HKSample]) -> [HKSample] {
-        DDLogVerbose("\(#function)")
-        // For workouts, don't filter anything out yet!
-        return sortedSamples
-    }
-    
     private var kOneWeekInSeconds: TimeInterval = 1*60*60*24*7
-    internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
-        DDLogInfo("workout prepareDataForUpload")
-        var samplesToUploadDictArray = [[String: AnyObject]]()
-        
-        for sample in data.filteredSamples {
+    override func prepareDataForUpload(_ sample: HKSample) -> [String: AnyObject]? {
             if let workout = sample as? HKWorkout {
                 var sampleToUploadDict = [String: AnyObject]()
                 sampleToUploadDict["type"] = "physicalActivity" as AnyObject?
@@ -44,7 +34,7 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
                 super.addCommonFields(sampleToUploadDict: &sampleToUploadDict, sample: sample)
  
                 // service syntax for optional duration value: [float64; required; 0 <= x <= 1 week in appropriate units]
-                if workout.duration < kOneWeekInSeconds && workout.duration >= 0.0 {
+                if kDebugTurnOffSampleChecks || (workout.duration < kOneWeekInSeconds && workout.duration >= 0.0) {
                     let duration = [
                         "units": "seconds",
                         "value": workout.duration
@@ -59,7 +49,7 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
                     let miles = totalDistance.doubleValue(for: HKUnit.mile())
                     floatMiles = Float(miles)
                     // service syntax for optional distance value: [float64; required; 0 <= x <= 100 miles in appropriate units]
-                    if miles >= 0.0 && miles <= 100.0 {
+                    if kDebugTurnOffSampleChecks || (miles >= 0.0 && miles <= 100.0) {
                         let distance = [
                             "units": "miles",
                             "value": miles
@@ -74,7 +64,7 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
                     // service syntax for optional energy value: [float64; required]. Also, between 0 and 10000
                     let kEnergyValueKilocaloriesMaximum = 10000.0
                     let kEnergyValueKilocaloriesMinimum = 0.0
-                    if energyBurned < kEnergyValueKilocaloriesMinimum || energyBurned > kEnergyValueKilocaloriesMaximum {
+                    if !kDebugTurnOffSampleChecks && (energyBurned < kEnergyValueKilocaloriesMinimum || energyBurned > kEnergyValueKilocaloriesMaximum)  {
                         DDLogError("Workout sample with out-of-range energy: \(energyBurned) kcal, skipping energy field!")
                     } else {
                         let energy = [
@@ -100,11 +90,10 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
                     addMetadata(&metadata, sampleToUploadDict: &sampleToUploadDict)
                 }
 
-                samplesToUploadDictArray.append(sampleToUploadDict)
-            }
-            
+                return(sampleToUploadDict)
+            } else {
+                return nil
         }
-        return samplesToUploadDictArray
     }
 
     // Convert HKWorkoutActivityType enum to (user string, Tidepool type string)

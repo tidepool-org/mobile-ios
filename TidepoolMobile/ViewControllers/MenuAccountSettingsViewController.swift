@@ -263,50 +263,55 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
     fileprivate func configureHealthStatusLines() {
         var healthStatusLine1Text = ""
         var healthStatusLine2Text = ""
-
-        let isHistoricalAllActive = hkUploader.isUploadInProgressForMode(TPUploader.Mode.HistoricalAll)
-        if isHistoricalAllActive {
-            let (current, total, _, _) = hkUploader.lastHistoricalUploadStats()
-            
+        healthStatusLine1.usage = "sidebarSettingHKMainStatus"
+        healthStatusLine2.usage = "sidebarSettingHKMinorStatus"
+        let progress = hkUploader.uploaderProgress()
+        
+        if hkUploader.isUploadInProgressForMode(TPUploader.Mode.HistoricalAll) {
             healthStatusLine1Text = "Syncing Health data…"
-            if let current = current, let total = total {
+            let current = progress.currentDayHistorical
+            let total = progress.totalDaysHistorical
+            if total != 0 {
                 healthStatusLine2Text = String(format: healthKitUploadStatusDaysUploaded, current, total)
             } else {
                 healthStatusLine2Text = " "
             }
-            healthStatusLine1.usage = "sidebarSettingHKMainStatus"
-            healthStatusLine2.usage = "sidebarSettingHKMinorStatus"
         } else {
-            var hadSuccessfulUpload = false
-            var lastUploadTime = Date.distantPast
-            var lastType = " "
-            
-            let currentStats = hkUploader.currentUploadStats()
-            for stat in currentStats {
-                if stat.hasSuccessfullyUploaded {
-                    hadSuccessfulUpload = true
-                    if stat.lastSuccessfulUploadTime.compare(lastUploadTime) == .orderedDescending {
-                        lastUploadTime = stat.lastSuccessfulUploadTime
-                        lastType = stat.typeName
-                    }
-                    DDLogInfo("Mode: \(stat.mode.rawValue)")
-                    DDLogInfo("Type: \(stat.typeName)")
-                    DDLogInfo("Last successful upload time: \(stat.lastSuccessfulUploadTime)")
-                    DDLogInfo("")
-                }
-            }
-            if hadSuccessfulUpload {
-                let lastUploadTimeAgoInWords = lastUploadTime.timeAgoInWords(Date())
+            if let lastSuccessfulUpload = progress.lastSuccessfulCurrentUploadTime, let lastType = self.lastCurrentUploadType() {
+                let lastUploadTimeAgoInWords = lastSuccessfulUpload.timeAgoInWords(Date())
                 healthStatusLine1Text = String(format: healthKitUploadStatusLastUploadTime, lastType.lowercased(), lastUploadTimeAgoInWords)
             } else {
                 healthStatusLine1Text = healthKitUploadStatusNoDataAvailableToUpload
             }
-            healthStatusLine1.usage = "sidebarSettingHKMainStatus"
-            healthStatusLine2.usage = "sidebarSettingHKMinorStatus"
         }
 
         healthStatusLine1.text = healthStatusLine1Text
         healthStatusLine2.text = healthStatusLine2Text
+    }
+    
+    private func lastCurrentUploadType() -> String? {
+        var lastUploadTime: Date?
+        var lastType: String?
+        
+        let currentStats = hkUploader.currentUploadStats()
+        for stat in currentStats {
+            if stat.hasSuccessfullyUploaded {
+                if lastType == nil || lastUploadTime == nil {
+                    lastUploadTime = stat.lastSuccessfulUploadTime
+                    lastType = stat.typeName
+                } else {
+                    if stat.lastSuccessfulUploadTime != nil, stat.lastSuccessfulUploadTime!.compare(lastUploadTime!) == .orderedDescending {
+                        lastUploadTime = stat.lastSuccessfulUploadTime
+                        lastType = stat.typeName
+                    }
+                }
+                DDLogInfo("Mode: \(stat.mode.rawValue)")
+                DDLogInfo("Type: \(stat.typeName)")
+                DDLogInfo("Last successful upload time: \(stat.lastSuccessfulUploadTime)")
+                DDLogInfo("")
+            }
+        }
+        return lastType
     }
     
     fileprivate var debugSettings: DebugSettings?

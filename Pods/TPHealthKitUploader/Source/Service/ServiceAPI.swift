@@ -15,10 +15,6 @@
 
 import Foundation
 
-// TODO:
-// - needs callback to get service token
-// - needs callback to get current user
-//
 public class TPUploaderServiceAPI {
     
     static var connector: TPUploaderServiceAPI?
@@ -31,7 +27,6 @@ public class TPUploaderServiceAPI {
     }
     
     private var config: TPUploaderConfigInfo
-    // TODO: where are these going?
     private var defaults = UserDefaults.standard
 
     /// Used for filling out a health data upload request...
@@ -51,6 +46,11 @@ public class TPUploaderServiceAPI {
     }
     private var _currentUploadId: String?
 
+    /// Use passed in configuration protocol object for connectivity
+    func isConnectedToNetwork() -> Bool {
+        return config.isConnectedToNetwork()
+    }
+    
     // MARK: - Profile updating with Bio-sex
     
     /// Fill in Tidepool biological sex of patient if it is missing, and we can get it from HealthKit.
@@ -136,7 +136,7 @@ public class TPUploaderServiceAPI {
                 completion(false)
                 return
             }
-            if let currentBioSex = patient["biologicalSex"].string {
+            if let currentBioSex = patient["biologicalSex"].string, currentBioSex.lowercased() != "unknown" {
                 DDLogError("biological sex '\(currentBioSex)' already set in Tidepool, should not update!")
                 completion(false)
                 return

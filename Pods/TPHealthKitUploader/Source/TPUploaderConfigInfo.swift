@@ -17,21 +17,20 @@ import Foundation
 
 /// User of the TPHealthKitUploader framework must configure the framework passing an object with this protocol which the framework will use as documented below.
 public protocol TPUploaderConfigInfo {
-    /// TODO: require a call instead?
     func isConnectedToNetwork() -> Bool
     /// Nil when logged out
     func sessionToken() -> String?
     /// base string to constuct url for current service.
     func baseUrlString() -> String?
-    // optional?
-    func trackMetric(_ metric: String)
-
-    func currentUserId() -> String?     // current logged in user id
-    func isDSAUser() -> Bool            // account for current user is a DSA
+    /// current logged in user id
+    func currentUserId() -> String?
+    /// account for current user is a DSA
+    func isDSAUser() -> Bool
     var currentUserName: String? { get }
+    /// biological sex is gleaned from HealthKit, and uploaded when missing in the service.
     var bioSex: String? { get set }
     
-    // logging callbacks...
+    /// logging callbacks...
     func logVerbose(_ str: String)
     func logError(_ str: String)
     func logInfo(_ str: String)

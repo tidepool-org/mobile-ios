@@ -16,17 +16,12 @@
 import Foundation
 import HealthKit
 
-// For parameter checking...
-// Reverse domain string needs to
-// (1) begin with 2 to 63 lower case letters
-// (2) followed by one or more groups of:
-//      period
-//      0 or more lower case letters or numerals or dashes
-//      1 lower case letter or number
-let reverseDomainRegEx = "^[a-z]{2,63}(\\.([a-z0-9]|[a-z0-9][a-z0-9-]{0,61}[a-z0-9]))+$"
+// NOTE: should be false when checked in!!!
+let kDebugTurnOffSampleChecks = false
 
 class HealthKitUploadType {
     private(set) var typeName: String
+    
     init(_ typeName: String) {
         self.typeName = typeName
     }
@@ -39,7 +34,30 @@ class HealthKitUploadType {
     var sampleObservationQuery: HKObserverQuery?
     var sampleBackgroundDeliveryEnabled = false
     var sampleQueryAnchor = Int(HKAnchoredObjectQueryNoAnchor)
+
+    //
+    //  MARK: - Public methods
+    //
     
+    // override!
+    internal func hkSampleType() -> HKSampleType? {
+        return nil
+    }
+    
+    // override!
+    internal func prepareDataForUpload(_ sample: HKSample) -> [String: AnyObject]? {
+        return [String: AnyObject]()
+    }
+
+    internal func prepareDataForDelete(_ deletedSample: HKDeletedObject) -> [String: AnyObject] {
+        var sampleToDeleteDict = [String: AnyObject]()
+        let origin: [String: AnyObject] = [
+            "id": deletedSample.uuid.uuidString as AnyObject
+        ]
+        sampleToDeleteDict["origin"] = origin as AnyObject
+        return sampleToDeleteDict
+    }
+
     //
     //  MARK: - Subclass utility functions
     //
@@ -161,45 +179,6 @@ class HealthKitUploadType {
         }
         
         return origin
-    }
-    
-    let reverseDomainTest = NSPredicate(format:"SELF MATCHES %@", reverseDomainRegEx)
-    // Service requirement: Must start with 2-63 lower-case alpha characters, followed by a period, followed by lower-case alpha or 0-9 characters. E.g., failures include "com.Apple" (includes uppercase), "q5awl8wcy6.imapmyrunplus" (has numbers in the first part), etc.
-    internal func isValidReverseDomain(_ testStr:String) -> Bool {
-        return reverseDomainTest.evaluate(with: testStr)
-    }
-
-    internal func prepareDataForDelete(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
-        DDLogInfo("\(#function)")
-        var samplesToDeleteDictArray = [[String: AnyObject]]()
-        for sample in data.deletedSamples {
-            var sampleToDeleteDict = [String: AnyObject]()
-            let origin: [String: AnyObject] = [
-                "id": sample.uuid.uuidString as AnyObject
-            ]
-            sampleToDeleteDict["origin"] = origin as AnyObject
-            samplesToDeleteDictArray.append(sampleToDeleteDict)
-        }
-        return samplesToDeleteDictArray
-    }
-
-    //
-    //  MARK: - Override these methods!
-    //
-  
-    // override!
-    internal func hkSampleType() -> HKSampleType? {
-        return nil
-    }
-    
-    // override!
-    internal func filterSamples(sortedSamples: [HKSample]) -> [HKSample] {
-        return sortedSamples
-    }
-    
-    // override!
-    internal func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
-        return [[String: AnyObject]]()
     }
     
 }

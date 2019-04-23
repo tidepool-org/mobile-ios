@@ -55,7 +55,7 @@ class TPTimeZoneTracker {
     /// Pass along any timezone change notifications. Note: this could simply call the checkForTimeZoneChange method above, except that this notification gives us the previous timezone as well, which may not have been saved.
     func tzDidChange(_ notification : Notification) {
         NSLog("\(#function)")
-        //TODO: only store if new tz is different from last seen?
+
         let newTimeZoneId = TimeZone.current.identifier
         if newTimeZoneId == lastStoredTzId() {
             DDLogError("TZ change notification when TZ has not changed: \(newTimeZoneId)")

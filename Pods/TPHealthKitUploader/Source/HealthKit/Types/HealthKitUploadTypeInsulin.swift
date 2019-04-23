@@ -42,16 +42,8 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
         return HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.insulinDelivery)
     }
 
-    internal override func filterSamples(sortedSamples: [HKSample]) -> [HKSample] {
-        DDLogVerbose("\(#function)")
-        // For insulin, don't filter anything out yet!
-        return sortedSamples
-    }
-    
-    internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
+    override func prepareDataForUpload(_ sample: HKSample) -> [String: AnyObject]? {
         DDLogInfo("insulin prepareDataForUpload")
-        var samplesToUploadDictArray = [[String: AnyObject]]()
-        filterLoop: for sample in data.filteredSamples {
             if let quantitySample = sample as? HKQuantitySample {
                 
                 var sampleToUploadDict = [String: AnyObject]()
@@ -60,7 +52,7 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                 if reason == nil {
                     //TODO: report as data error?
                     DDLogError("Skip insulin entry that has no reason!")
-                    continue filterLoop
+                    return nil
                 }
                 let value = quantitySample.quantity.doubleValue(for: .internationalUnit())
                 switch reason {
@@ -72,11 +64,16 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                     if durationInMS <= 0 {
                         //TODO: report as data error?
                         DDLogError("Skip basal insulin entry with non-positive duration: \(durationInMS)")
-                        continue filterLoop
+                        if !kDebugTurnOffSampleChecks {
+                            return nil
+                        }
                     }
-                    if durationInMS > 86400000 {
-                        DDLogError("Skip basal insulin entry with excessive duration: \(durationInMS)")
-                        continue filterLoop
+                    // 7 days max!
+                    if durationInMS > 604800000 {
+                        DDLogError("Skip basal insulin entry with > 7-day duration: \(durationInMS)")
+                        if !kDebugTurnOffSampleChecks {
+                            return nil
+                        }
                     }
                     sampleToUploadDict["duration"] = Int(durationInMS) as AnyObject
  
@@ -85,7 +82,9 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                     // service syntax check: [required; 0.0 <= rate <= 100.0 - note docs wrongly spec'ed 20.0]
                     if rate < 0.0 || rate > 100.0 {
                         DDLogError("Skip basal insulin entry with out-of-range rate: \(rate)")
-                        continue filterLoop
+                        if !kDebugTurnOffSampleChecks {
+                            return nil
+                        }
                     }
                     sampleToUploadDict["rate"] = rate as AnyObject
                     DDLogInfo("insulin basal value = \(String(describing: value))")
@@ -110,7 +109,9 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                     // service syntax check: [required; 0.0 <= normal <= 100.0]
                     if value < 0.0 || value > 100.0 {
                         DDLogError("Skip bolus insulin entry with out-of-range normal: \(value)")
-                        continue filterLoop
+                        if !kDebugTurnOffSampleChecks {
+                            return nil
+                        }
                     }
                     sampleToUploadDict["type"] = "bolus" as AnyObject?
                     sampleToUploadDict["subType"] = "normal" as AnyObject?
@@ -120,7 +121,7 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                 default:
                     //TODO: report as data error?
                     DDLogError("Skip insulin entry with unknown key for reason: \(String(describing: reason))")
-                    continue filterLoop
+                    return nil
                 }
                 
                 // Add fields common to all types: guid, deviceId, time, and origin
@@ -136,11 +137,12 @@ class HealthKitUploadTypeInsulin: HealthKitUploadType {
                     addMetadata(&metadata, sampleToUploadDict: &sampleToUploadDict)
                 }
                 
-                // Add sample if valid...
-                samplesToUploadDictArray.append(sampleToUploadDict)
+                // return sample if valid...
+                return(sampleToUploadDict)
+            } else {
+                DDLogError("Encountered HKSample that was not an HKQuantitySample!")
+                return nil
             }
-        }
-        return samplesToUploadDictArray
     }
 
 }

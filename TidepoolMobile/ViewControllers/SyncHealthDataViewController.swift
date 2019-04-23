@@ -185,9 +185,9 @@ class SyncHealthDataViewController: UIViewController {
             if mode == TPUploader.Mode.HistoricalAll {
                 // Update status
                 switch reason {
-                case .turnOffInterface:
+                case .interfaceTurnedOff:
                     break
-                case .noResultsFromQuery:
+                case .uploadingComplete:
                     self.checkForComplete()
                     break
                 case .error(let error):
@@ -231,7 +231,7 @@ class SyncHealthDataViewController: UIViewController {
     }
     
     private func stopUploadingAndReset() {
-        hkUploader.stopUploading(mode: .HistoricalAll, reason: .turnOffInterface)
+        hkUploader.stopUploading(mode: .HistoricalAll, reason: .interfaceTurnedOff)
         hkUploader.resetPersistentStateForMode(.HistoricalAll)
     }
     
@@ -253,37 +253,39 @@ class SyncHealthDataViewController: UIViewController {
     }
     
     func updateForStatsUpdate(mode: TPUploader.Mode, type: String? = nil) {
-        //NSLog("\(#function). Mode: \(mode)")
-        if historicalSyncModeInProgress() != nil {
-            // Disable idle timer when sync is in progress
-            UIApplication.shared.isIdleTimerDisabled = true
-            
-            // Determine percent progress and upload healthStatusLine2 text
-            let (current, total, _, _) = hkUploader.lastHistoricalUploadStats()
-
-            var healthKitUploadStatusDaysUploadedText = ""
-            var percentUploaded: CGFloat = 0.0
-            
-            if let current = current, let total = total, total > 0 {
-                percentUploaded = CGFloat((CGFloat)(current) / (CGFloat)(total))
-                healthKitUploadStatusDaysUploadedText = String("Day \(current) of \(total)")
-                if total > maxHistoricalDays {
-                    maxHistoricalDays = total
-                }
+        NSLog("\(#function). Mode: \(mode)")
+        
+        // Disable idle timer when sync is in progress
+        UIApplication.shared.isIdleTimerDisabled = true
+        
+        // Determine percent progress and upload healthStatusLine2 text
+        let progress = hkUploader.uploaderProgress()
+        let current = progress.currentDayHistorical
+        let total = progress.totalDaysHistorical
+        
+        var healthKitUploadStatusDaysUploadedText = ""
+        var percentUploaded: CGFloat = 0.0
+        
+        if total > 0 {
+            percentUploaded = CGFloat((CGFloat)(current) / (CGFloat)(total))
+            healthKitUploadStatusDaysUploadedText = String("Day \(current) of \(total)")
+            if total > maxHistoricalDays {
+                maxHistoricalDays = total
             }
-            
-            // Update progress
-            updateProgress(percentUploaded)
-            
-            // Update status lines
-            if !healthKitUploadStatusDaysUploadedText.isEmpty {
-                healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
-                //NSLog("Progress update: \(healthKitUploadStatusDaysUploadedText)")
-            }
-        } else {
+        }
+        
+        // Update progress
+        updateProgress(percentUploaded)
+        
+        // Update status lines
+        if !healthKitUploadStatusDaysUploadedText.isEmpty {
+            healthStatusLine2.text = healthKitUploadStatusDaysUploadedText
+            //NSLog("Progress update: \(healthKitUploadStatusDaysUploadedText)")
+        }
+        if historicalSyncModeInProgress() == nil  {
             // Re-enable idle timer when there is no sync in progress
             UIApplication.shared.isIdleTimerDisabled = false
-
+            
             // Update progress
             updateProgress(self.syncCompletedPercentUploaded)
             
@@ -295,6 +297,7 @@ class SyncHealthDataViewController: UIViewController {
     // Pass percentDone from 0.0 to 1.0
     func updateProgress(_ percentDone: CGFloat) {
         let progressString = String(Int(percentDone * 100))
+        DDLogVerbose("updating progress to \(progressString)")
         progressLabel.text = progressString + "%"
         let progressWidth = progressViewInset.frame.width * percentDone
         indicatorViewWidthConstraint.constant = progressWidth

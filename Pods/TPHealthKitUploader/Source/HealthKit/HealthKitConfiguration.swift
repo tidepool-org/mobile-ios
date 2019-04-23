@@ -24,7 +24,7 @@ class HealthKitConfiguration
         HealthKitConfiguration.sharedInstance = self
     }
 
-    let settings = GlobalSettings.sharedInstance
+    let settings = HKGlobalSettings.sharedInstance
     
     // MARK: Access, availability, authorization
 
@@ -33,7 +33,7 @@ class HealthKitConfiguration
     
     /// Call this whenever the current user changes, at login/logout, token refresh(?), and upon enabling or disabling the HealthKit interface.
     func configureHealthKitInterface() {
-        DDLogVerbose("\(#function)")
+        DDLogVerbose("version 1")
         
         if !HealthKitManager.sharedInstance.isHealthDataAvailable {
             DDLogInfo("HKHealthStore data is not available")
@@ -79,15 +79,21 @@ class HealthKitConfiguration
 
     /// Turn on HK interface: start/resume uploading if possible...
     private func turnOnInterface() {
-        DDLogVerbose("\(#function)")
-
+        DDLogVerbose("HealthKitConfiguration")
+        
+        let hkManager = HealthKitUploadManager.sharedInstance
+        guard !hkManager.isUploadInProgressForMode(.Current) else {
+            DDLogVerbose("uploader already on, ignoring call!")
+            return
+        }
+        
         if let currentUserId = config.currentUserId() {
             // Always start uploading TPUploader.Mode.Current samples when interface is turned on
-            HealthKitUploadManager.sharedInstance.startUploading(mode: TPUploader.Mode.Current, currentUserId: currentUserId)
+            hkManager.startUploading(mode: TPUploader.Mode.Current, currentUserId: currentUserId)
 
             // Resume uploading other samples too, if resumable
             // TODO: uploader UI - Revisit this. Do we want even the non-current mode readers/uploads to resume automatically? Or should that be behind some explicit UI
-            HealthKitUploadManager.sharedInstance.resumeUploadingIfResumable(currentUserId: currentUserId)
+            hkManager.resumeUploadingIfResumable(currentUserId: currentUserId)
             
             // Really just a one-time check to upload biological sex if Tidepool does not have it, but we can get it from HealthKit.
             TPUploaderServiceAPI.connector?.updateProfileBioSexCheck()
@@ -99,7 +105,7 @@ class HealthKitConfiguration
     private func turnOffInterface() {
         DDLogVerbose("\(#function)")
 
-        HealthKitUploadManager.sharedInstance.stopUploading(reason: TPUploader.StoppedReason.turnOffInterface)
+        HealthKitUploadManager.sharedInstance.stopUploading(reason: TPUploader.StoppedReason.interfaceTurnedOff)
     }
 
     //
@@ -124,7 +130,7 @@ class HealthKitConfiguration
         func configureCurrentHealthKitUser() {
             DDLogVerbose("\(#function)")
             
-            settings.updateBoolForKey(.interfaceEnabledKey, value: true)
+            settings.interfaceEnabled.value = true
             if !self.healthKitInterfaceEnabledForCurrentUser() {
                 if self.healthKitInterfaceConfiguredForOtherUser() {
                     // Switching healthkit users, reset HealthKitUploadManager
@@ -134,8 +140,8 @@ class HealthKitConfiguration
                 }
                 // force refetch of upload id because it may have changed for the new user...
                 TPUploaderServiceAPI.connector?.currentUploadId = nil
-                settings.updateStringForKey(.interfaceUserIdKey, value: config.currentUserId()!)
-                settings.updateStringForKey(.interfaceUserNameKey, value: username)
+                settings.interfaceUserId.value = config.currentUserId()!
+                settings.interfaceUserName.value = username
             }
         }
         
@@ -160,7 +166,7 @@ class HealthKitConfiguration
     /// Note: This does NOT clear the current HealthKit user!
     func disableHealthKitInterface() {
         DDLogVerbose("\(#function)")
-        settings.updateBoolForKey(.interfaceEnabledKey, value: false)
+        settings.interfaceEnabled.value = false
         configureHealthKitInterface()
     }
     
@@ -196,17 +202,16 @@ class HealthKitConfiguration
     ///
     /// Note: separately, we may enable/disable the current interface to HealthKit.
     fileprivate func healthKitInterfaceEnabled() -> Bool {
-        return settings.boolForKey(.interfaceEnabledKey)
+        return settings.interfaceEnabled.value
     }
     
     /// If HealthKit interface is enabled, returns associated Tidepool account id
     func healthKitUserTidepoolId() -> String? {
-        return settings.stringForKey(.interfaceUserIdKey)
-
+        return settings.interfaceUserId.value
     }
 
     /// If HealthKit interface is enabled, returns associated Tidepool account id
     func healthKitUserTidepoolUsername() -> String? {
-        return settings.stringForKey(.interfaceUserNameKey)
+        return settings.interfaceUserName.value
     }
 }

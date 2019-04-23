@@ -1173,7 +1173,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BGMTool/Pods-BGMTool-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-BGMTool/Pods-BGMTool-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
@@ -1188,7 +1188,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BGMTool/Pods-BGMTool-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BGMTool/Pods-BGMTool-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8D29B92685CED5FC17AC117B /* [CP] Check Pods Manifest.lock */ = {
@@ -1233,7 +1233,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
@@ -1252,7 +1252,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EA39DC8E43BB352ED10B1485 /* [CP] Check Pods Manifest.lock */ = {
@@ -1279,7 +1279,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
@@ -1298,7 +1298,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

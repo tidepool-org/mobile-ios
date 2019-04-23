@@ -26,12 +26,6 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
         return HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bloodGlucose)
     }
 
-    internal override func filterSamples(sortedSamples: [HKSample]) -> [HKSample] {
-        DDLogVerbose("\(#function)")
-        // For now, don't filter anything out!
-        return sortedSamples
-    }
-    
     /// Whitelist for now to distinguish "cbg" types: all others are assumed to be "smbg". Also passes back whether this is a "Dexcom" sample.
     private func determineTypeOfBG(_ sample: HKQuantitySample) -> (type: String, isDexcom: Bool) {
         let bundleIdSeparators = CharacterSet(charactersIn: ".")
@@ -102,11 +96,9 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
         return (kTypeSmbg, false)
     }
 
-    internal override func prepareDataForUpload(_ data: HealthKitUploadData) -> [[String: AnyObject]] {
+    override func prepareDataForUpload(_ sample: HKSample) -> [String: AnyObject]? {
         //DDLogInfo("blood glucose prepareDataForUpload")
         //let dateFormatter = DateFormatter()
-        var samplesToUploadDictArray = [[String: AnyObject]]()
-        filterLoop: for sample in data.filteredSamples {
             if let quantitySample = sample as? HKQuantitySample {
                 var sampleToUploadDict = [String: AnyObject]()
                 let typeOfBGSample = determineTypeOfBG(quantitySample)
@@ -122,7 +114,9 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
                 if value < 0 || value > 1000 {
                     //TODO: log this some more obvious way?
                     DDLogError("Blood glucose sample with out-of-range value: \(value)")
-                    continue filterLoop
+                    if !kDebugTurnOffSampleChecks {
+                        return nil
+                    }
                 }
                 
                 // Add out-of-range annotation if needed, and adjust value, but only for Dexcom samples...
@@ -180,13 +174,13 @@ class HealthKitUploadTypeBloodGlucose: HealthKitUploadType {
                     addMetadata(&metadata, sampleToUploadDict: &sampleToUploadDict)
                 }
                 
-                // Add sample
-                samplesToUploadDictArray.append(sampleToUploadDict)
+                // return sample
+                return(sampleToUploadDict)
             } else {
                 DDLogError("Encountered HKSample that was not an HKQuantitySample!")
+                return nil
             }
         }
-        return samplesToUploadDictArray
-    }
+
 }
 

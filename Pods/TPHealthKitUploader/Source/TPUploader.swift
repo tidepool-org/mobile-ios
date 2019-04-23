@@ -19,6 +19,7 @@ public class TPUploader {
     
     /// Nil if not instance not configured yet...
     static var sharedInstance: TPUploader? 
+    static var configDebugger: TPUploaderConfigInfo?
     
     //
     // MARK: - public enums
@@ -30,15 +31,15 @@ public class TPUploader {
     
     public enum StoppedReason {
         case error(error: Error)
-        case background
-        case turnOffInterface
-        case noResultsFromQuery
+        case backgroundTimeExpired
+        case interfaceTurnedOff
+        case uploadingComplete
     }
 
     /// Configures framework
     public init(_ config: TPUploaderConfigInfo) {
+        debugConfig = config // special copy to get debug output during init!
         DDLogInfo("TPUploader init - version 1.0.0")
-        // TODO: fail if already configured! Should probably just have the init private, and provide access via a connector() method like other singletons that require initialization data.
         self.config = config
         self.service = TPUploaderServiceAPI(config)
         // configure this last, it might use the service to send up an initial timezone...
@@ -57,21 +58,17 @@ public class TPUploader {
     var config: TPUploaderConfigInfo
     var service: TPUploaderServiceAPI
     var tzTracker: TPTimeZoneTracker
-    let settings = GlobalSettings.sharedInstance
+    let settings = HKGlobalSettings.sharedInstance
     
     let hkUploadMgr: HealthKitUploadManager
     let hkMgr: HealthKitManager
     let hkConfig: HealthKitConfiguration
     
-    public func version() -> String {
-        return "1.0.0-alpha"
-    }
-    
     //
     // MARK: - public methods
     //
     
-    /// Call this whenever the current user changes, after login/logout, token refresh(?), ...
+    /// Call this whenever the current user changes, after login/logout, token refresh(?), connectivity changes, etc.
     public func configure() {
         hkConfig.configureHealthKitInterface()
     }
@@ -126,57 +123,14 @@ public class TPUploader {
         return hkUploadMgr.statsForMode(TPUploader.Mode.Current)
     }
 
+    public func uploaderProgress() -> TPUploaderGlobalStats {
+        return settings.currentProgress()
+    }
+
     public func historicalUploadStats() -> [TPUploaderStats] {
         return hkUploadMgr.statsForMode(TPUploader.Mode.HistoricalAll)
     }
-    
-    public func lastHistoricalUploadStats() -> (current: Int?, total: Int?, type: String?, date: Date?) {
-        let historicalStats = historicalUploadStats()
-        var current: Int?
-        var total: Int?
-        var lastUpload: Date?
-        var lastType: String?
-        for stat in historicalStats {
-            // For now just return stats for the last type uploaded...
-            if stat.hasSuccessfullyUploaded {
-                if current == nil || total == nil || lastUpload == nil {
-                    current = stat.currentDayHistorical
-                    total = stat.totalDaysHistorical
-                    lastUpload = stat.lastSuccessfulUploadTime
-                    lastType = stat.typeName
-                } else {
-                    if lastUpload!.compare(stat.lastSuccessfulUploadTime) == .orderedAscending {
-                        current = stat.currentDayHistorical
-                        total = stat.totalDaysHistorical
-                        lastUpload = stat.lastSuccessfulUploadTime
-                    }
-                }
-            }
-        }
-        return (current: current, total: total, type: lastType, date: lastUpload)
-    }
-    
-    public func lastCurrentUploadStats() -> (lastType: String?, lastTime: Date?) {
-        var lastUploadTime: Date?
-        var lastType: String?
-        
-        let currentStats = currentUploadStats()
-        for stat in currentStats {
-            if stat.hasSuccessfullyUploaded {
-                if lastType == nil || lastUploadTime == nil {
-                    lastUploadTime = stat.lastSuccessfulUploadTime
-                    lastType = stat.typeName
-                } else {
-                    if stat.lastSuccessfulUploadTime.compare(lastUploadTime!) == .orderedDescending {
-                        lastUploadTime = stat.lastSuccessfulUploadTime
-                        lastType = stat.typeName
-                    }
-                }
-            }
-        }
-        return (lastType: lastType, lastTime: lastUploadTime)
-    }
-    
+   
     public func isUploadInProgressForMode(_ mode: TPUploader.Mode) -> Bool {
         return hkUploadMgr.isUploadInProgressForMode(mode)
     }
@@ -199,10 +153,10 @@ public class TPUploader {
     
     public var hasPresentedSyncUI: Bool {
         get {
-            return settings.boolForKey(.hasPresentedSyncUI)
+            return settings.hasPresentedSyncUI.value
         }
         set {
-            settings.updateBoolForKey(.hasPresentedSyncUI, value: newValue)
+            settings.hasPresentedSyncUI.value = newValue
         }
     }
 
