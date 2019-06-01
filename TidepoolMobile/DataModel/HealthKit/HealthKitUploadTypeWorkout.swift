@@ -263,8 +263,8 @@ class HealthKitUploadTypeWorkout: HealthKitUploadType {
             return ("Wrestling", "wrestling")
         case .yoga:
             return ("Yoga", "yoga")
-        //default:
-        //    return ("Other Activity", "other")
+        default:
+            return ("Other Activity", "other")
         }
     }
 
