@@ -480,7 +480,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             // added a note...
             // keep hashtags up-to-date
             HashTagManager.sharedInstance.updateTagsForNote(oldNote: nil, newNote: note)
-            self.sortedNotes.insert(NoteInEventListTable(note: note, opened: false, comments: []), at: 0)
+            self.sortedNotes.insert(NoteInEventListTable(note: note, opened: true, comments: []), at: 0)
             // sort the notes, reload notes table
             sortNotesAndReload()
         }
