@@ -752,10 +752,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         
         // only show other first time tips if we are not showing the healthkit tip!
         if firstTimeHealthTip.isHidden {
-            // only show Add Note tip if we haven't shown it before and we haven't shown
-            // uploader tip before. Add Note tip should be shown first on fresh installs,
-            // but for users upgrading to new version we shouldn't show it again
-            if oneShotIncompleteCheck("AddNoteTipHasBeenShown") && oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
+            if oneShotIncompleteCheck("AddNoteTipHasBeenShown") {
                 hideAddNoteTip = false
             } else if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
                 // only show the "need uploader" tip if the user has not enabled healthKit syncing...
