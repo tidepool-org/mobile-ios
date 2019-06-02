@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MlM-Oh-SBV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MlM-Oh-SBV">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -489,6 +489,53 @@
                                             <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkPurple75Color"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W3p-JG-ig2" userLabel="firstTimeAddNoteTip" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="firstTimeUpArrow" translatesAutoresizingMaskIntoConstraints="NO" id="dWe-oT-pXc">
+                                                <rect key="frame" x="281" y="0.0" width="22" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="22" id="4zz-xP-Kzc"/>
+                                                    <constraint firstAttribute="height" constant="50" id="dfj-ht-OWj"/>
+                                                </constraints>
+                                            </imageView>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PBq-C5-9mp" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
+                                                <rect key="frame" x="13" y="38" width="294" height="64"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Now, add an event, a meal, or note." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2uq-Ah-EPW" userLabel="firstTimeAddNoteLabel" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
+                                                        <rect key="frame" x="20" y="11.5" width="254" height="41"/>
+                                                        <fontDescription key="fontDescription" name="OpenSans-Semibold" family="Open Sans" pointSize="15"/>
+                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <nil key="highlightedColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="firstTimeTipText"/>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </label>
+                                                </subviews>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="64" id="8rS-Qi-ZAX"/>
+                                                    <constraint firstItem="2uq-Ah-EPW" firstAttribute="centerY" secondItem="PBq-C5-9mp" secondAttribute="centerY" id="Ije-aV-2Xk"/>
+                                                    <constraint firstItem="2uq-Ah-EPW" firstAttribute="leading" secondItem="PBq-C5-9mp" secondAttribute="leading" constant="20" id="gLc-Is-tdp"/>
+                                                    <constraint firstAttribute="trailing" secondItem="2uq-Ah-EPW" secondAttribute="trailing" constant="20" id="jMp-Zn-UJX"/>
+                                                </constraints>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="usage" value="brightBackground"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.15686274510000001" green="0.098039215690000001" blue="0.27450980390000002" alpha="0.74898330479999997" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="PBq-C5-9mp" firstAttribute="top" secondItem="dWe-oT-pXc" secondAttribute="bottom" constant="-12" id="2iI-hJ-lSh"/>
+                                            <constraint firstItem="PBq-C5-9mp" firstAttribute="leading" secondItem="W3p-JG-ig2" secondAttribute="leading" constant="13" id="C4H-HW-dZE"/>
+                                            <constraint firstAttribute="trailing" secondItem="PBq-C5-9mp" secondAttribute="trailing" constant="13" id="IFS-5R-sMI"/>
+                                            <constraint firstItem="dWe-oT-pXc" firstAttribute="trailing" secondItem="PBq-C5-9mp" secondAttribute="trailing" constant="-4" id="Myt-R7-4mu"/>
+                                            <constraint firstItem="PBq-C5-9mp" firstAttribute="top" secondItem="W3p-JG-ig2" secondAttribute="top" constant="38" id="d8Q-4x-Owl"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="usage" value="darkPurple75Color"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Dyq-A2-0VW" userLabel="firstTimeNeedUploaderTip">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                         <subviews>
@@ -578,11 +625,15 @@
                                     <constraint firstAttribute="bottom" secondItem="p1Z-R3-s10" secondAttribute="bottom" id="88L-ov-nwA"/>
                                     <constraint firstAttribute="trailing" secondItem="W4V-dI-wa3" secondAttribute="trailing" id="BAS-nG-leJ"/>
                                     <constraint firstItem="Dyq-A2-0VW" firstAttribute="leading" secondItem="p1Z-R3-s10" secondAttribute="leading" id="CZC-oQ-lgO"/>
+                                    <constraint firstItem="W3p-JG-ig2" firstAttribute="bottom" secondItem="p1Z-R3-s10" secondAttribute="bottom" id="E0N-KN-bKF"/>
+                                    <constraint firstItem="W3p-JG-ig2" firstAttribute="trailing" secondItem="p1Z-R3-s10" secondAttribute="trailing" id="FwO-5p-2Ix"/>
+                                    <constraint firstItem="W3p-JG-ig2" firstAttribute="top" secondItem="p1Z-R3-s10" secondAttribute="top" id="GHH-5G-bt1"/>
                                     <constraint firstItem="p1Z-R3-s10" firstAttribute="top" secondItem="Yu7-Gk-FTH" secondAttribute="top" id="I0e-Zd-0ve"/>
                                     <constraint firstAttribute="trailing" secondItem="p1Z-R3-s10" secondAttribute="trailing" id="IBo-Xv-iRX"/>
                                     <constraint firstItem="Dyq-A2-0VW" firstAttribute="top" secondItem="p1Z-R3-s10" secondAttribute="top" id="M34-CU-YXj"/>
                                     <constraint firstItem="Dyq-A2-0VW" firstAttribute="trailing" secondItem="p1Z-R3-s10" secondAttribute="trailing" id="Tyy-RN-39E"/>
                                     <constraint firstItem="W4V-dI-wa3" firstAttribute="leading" secondItem="Yu7-Gk-FTH" secondAttribute="leading" id="dpW-Dk-QGU"/>
+                                    <constraint firstItem="W3p-JG-ig2" firstAttribute="leading" secondItem="p1Z-R3-s10" secondAttribute="leading" id="em9-xA-Ah8"/>
                                     <constraint firstItem="IgM-HA-v6s" firstAttribute="bottom" secondItem="p1Z-R3-s10" secondAttribute="bottom" id="n58-Mk-c48"/>
                                     <constraint firstItem="IgM-HA-v6s" firstAttribute="leading" secondItem="p1Z-R3-s10" secondAttribute="leading" id="oEA-9q-XkZ"/>
                                     <constraint firstItem="IgM-HA-v6s" firstAttribute="top" secondItem="p1Z-R3-s10" secondAttribute="top" id="wqa-fp-lqO"/>
@@ -615,6 +666,7 @@
                     <connections>
                         <outlet property="coverView" destination="p1Z-R3-s10" id="x9s-ca-Xdd"/>
                         <outlet property="eventListSceneContainer" destination="Yu7-Gk-FTH" id="8kb-NH-Nyl"/>
+                        <outlet property="firstTimeAddNoteTip" destination="W3p-JG-ig2" id="aHY-23-egq"/>
                         <outlet property="firstTimeHealthTip" destination="IgM-HA-v6s" id="9BT-Jn-LAo"/>
                         <outlet property="firstTimeNeedUploaderTip" destination="Dyq-A2-0VW" id="rYz-ER-blp"/>
                         <outlet property="menuButton" destination="71N-mf-LhE" id="YjU-Sn-W49"/>
@@ -933,7 +985,7 @@
                                                 <rect key="frame" x="0.0" y="306" width="320" height="50"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Pfl-So-Me3" id="XTq-a4-ksr">
-                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="49.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="750" verticalHuggingPriority="751" verticalCompressionResistancePriority="751" text="Jill Jellyfish" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="34S-pq-Xwd" userLabel="userLabel" customClass="TidepoolMobileUILabel" customModule="TidepoolMobile" customModuleProvider="target">
@@ -1009,16 +1061,9 @@
                                                 <rect key="frame" x="0.0" y="356" width="320" height="46"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZhG-SS-gkk" id="vyN-4N-9vr">
-                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="46"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="45.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tsc-TD-vmZ" userLabel="textWidthMeasure">
-                                                            <rect key="frame" x="0.0" y="0.0" width="248" height="1"/>
-                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" constant="1" id="Wi6-ce-4hx"/>
-                                                            </constraints>
-                                                        </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Ll-0H-y8i" userLabel="editTopSeparator" customClass="TidepoolMobileUIView" customModule="TidepoolMobile" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
                                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -1030,20 +1075,20 @@
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="752" verticalCompressionResistancePriority="752" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text=" " translatesAutoresizingMaskIntoConstraints="NO" id="cm5-Qi-KGg" userLabel="editCommentTextView">
-                                                            <rect key="frame" x="15" y="10" width="14" height="28.5"/>
+                                                            <rect key="frame" x="15" y="10" width="245" height="28.5"/>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                             <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="15"/>
                                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardAppearance="alert"/>
                                                         </textView>
                                                         <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gjm-bk-lTD" userLabel="saveButtonLargeHitArea" customClass="TPUIButton" customModule="TidepoolMobile" customModuleProvider="target">
-                                                            <rect key="frame" x="255" y="-6" width="60" height="60.5"/>
+                                                            <rect key="frame" x="253" y="-6" width="60" height="60.5"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="60" id="365-4A-TNm"/>
                                                                 <constraint firstAttribute="height" constant="60" id="A9U-aR-0bL"/>
                                                             </constraints>
                                                         </button>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hjb-HN-EnG" userLabel="saveButton" customClass="TidepoolMobileSimpleUIButton" customModule="TidepoolMobile" customModuleProvider="target">
-                                                            <rect key="frame" x="270" y="9.5" width="30" height="30"/>
+                                                            <rect key="frame" x="266" y="9.5" width="34" height="30"/>
                                                             <state key="normal" title="Save"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="usage" value="editButton"/>
@@ -1065,17 +1110,14 @@
                                                         <constraint firstItem="cm5-Qi-KGg" firstAttribute="leading" secondItem="vyN-4N-9vr" secondAttribute="leading" constant="15" id="83N-Em-6E3"/>
                                                         <constraint firstAttribute="bottom" secondItem="cm5-Qi-KGg" secondAttribute="bottom" constant="7" id="Bib-T9-nsg"/>
                                                         <constraint firstItem="Hjb-HN-EnG" firstAttribute="centerY" secondItem="cm5-Qi-KGg" secondAttribute="centerY" id="Dk4-Tz-kpo"/>
-                                                        <constraint firstItem="tsc-TD-vmZ" firstAttribute="trailing" secondItem="gjm-bk-lTD" secondAttribute="leading" constant="-7" id="Gef-YB-KK9"/>
-                                                        <constraint firstItem="gjm-bk-lTD" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="cm5-Qi-KGg" secondAttribute="trailing" constant="-7" id="I8Q-HV-w9j"/>
                                                         <constraint firstAttribute="trailing" secondItem="6Ll-0H-y8i" secondAttribute="trailing" id="K8Z-fz-NZ7"/>
                                                         <constraint firstAttribute="bottom" secondItem="oIy-WP-tWx" secondAttribute="bottom" id="LMv-Sb-G7K"/>
                                                         <constraint firstItem="6Ll-0H-y8i" firstAttribute="top" secondItem="vyN-4N-9vr" secondAttribute="top" id="UCC-Ch-cbK"/>
                                                         <constraint firstItem="gjm-bk-lTD" firstAttribute="centerY" secondItem="Hjb-HN-EnG" secondAttribute="centerY" id="XM0-L5-MQY"/>
-                                                        <constraint firstItem="tsc-TD-vmZ" firstAttribute="leading" secondItem="6Ll-0H-y8i" secondAttribute="leading" id="YVX-IR-gqD"/>
                                                         <constraint firstAttribute="trailing" secondItem="oIy-WP-tWx" secondAttribute="trailing" id="ZIR-TA-bsv"/>
-                                                        <constraint firstItem="tsc-TD-vmZ" firstAttribute="top" secondItem="6Ll-0H-y8i" secondAttribute="top" id="fOQ-HF-5nI"/>
                                                         <constraint firstItem="gjm-bk-lTD" firstAttribute="centerX" secondItem="Hjb-HN-EnG" secondAttribute="centerX" id="iIW-ym-bun"/>
                                                         <constraint firstItem="cm5-Qi-KGg" firstAttribute="top" secondItem="vyN-4N-9vr" secondAttribute="top" constant="10" id="pIu-PB-Tiy"/>
+                                                        <constraint firstAttribute="trailing" secondItem="cm5-Qi-KGg" secondAttribute="trailing" constant="60" id="rdZ-VN-ApM"/>
                                                         <constraint firstItem="oIy-WP-tWx" firstAttribute="leading" secondItem="vyN-4N-9vr" secondAttribute="leading" id="vCU-bx-4oh"/>
                                                         <constraint firstItem="6Ll-0H-y8i" firstAttribute="leading" secondItem="vyN-4N-9vr" secondAttribute="leading" id="zJW-49-4ap"/>
                                                     </constraints>
@@ -1085,7 +1127,6 @@
                                                     <outlet property="editTopSeparator" destination="6Ll-0H-y8i" id="ikY-lT-tW0"/>
                                                     <outlet property="saveButton" destination="Hjb-HN-EnG" id="wdO-Lo-90p"/>
                                                     <outlet property="saveButtonLargeHitArea" destination="gjm-bk-lTD" id="dqT-WZ-AK1"/>
-                                                    <outlet property="textWidthMeasureView" destination="tsc-TD-vmZ" id="LN2-lS-mqo"/>
                                                 </connections>
                                             </tableViewCell>
                                         </prototypes>

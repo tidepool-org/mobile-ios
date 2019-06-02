@@ -37,6 +37,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
     // first time screens
     @IBOutlet weak var firstTimeHealthTip: TidepoolMobileUIView!
+    @IBOutlet weak var firstTimeAddNoteTip: TidepoolMobileUIView!
     @IBOutlet weak var firstTimeNeedUploaderTip: UIView!
     
     fileprivate struct NoteInEventListTable {
@@ -249,8 +250,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // one-time check for health tip screen!
         if !firstTimeHealthTip.isHidden {
             firstTimeHealthTip.isHidden = true
-            // after hiding the health tip, other tips may be shown!
-            checkDisplayFirstTimeScreens()
+            oneShotCompleted("ConnectToHealthCelebrationHasBeenShown")
         }
     }
     
@@ -292,6 +292,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                 UIApplication.shared.open(url)
             }
         }
+
+        checkDisplayFirstTimeScreens()
     }
     
     func sideMenuDidOpen() {
@@ -309,6 +311,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             return
         }
         performSegue(withIdentifier: "segueToAddNote", sender: self)
+        if !firstTimeAddNoteTip.isHidden {
+            firstTimeAddNoteTip.isHidden = true
+            oneShotCompleted("AddNoteTipHasBeenShown")
+        }
     }
     
     //
@@ -488,8 +494,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             if let deletedNotePath = self.indexPathForNoteId(deletedNote.id) {
                 self.sortedNotes.remove(at: deletedNotePath.section)
                 sortNotesAndReload()
-                // in case we went to zero...
-                checkDisplayFirstTimeScreens()
             }
         } else {
             // deleted comment, only need to refetch comments for this note...
@@ -709,6 +713,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
     @IBAction func cancel(_ segue: UIStoryboardSegue) {
         DDLogInfo("unwind segue to eventList cancel")
+        checkDisplayFirstTimeScreens()
     }
 
     fileprivate var eventListNeedsUpdate: Bool  = false
@@ -733,9 +738,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // Show connect to health celebration
         if (EventListViewController.oneShotTestCelebrate || (appHealthKitConfiguration.shouldShowHealthKitUI() && oneShotIncompleteCheck("ConnectToHealthCelebrationHasBeenShown"))) {
             EventListViewController.oneShotTestCelebrate = false
-            // One-shot finished!
-            oneShotCompleted("ConnectToHealthCelebrationHasBeenShown")
-            firstTimeHealthTip.isHidden = false
         }
     }
     
@@ -745,15 +747,23 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             DDLogInfo("\(#function) loading notes...")
             return
         }
+        var hideAddNoteTip = true
         var hideNeedUploaderTip = true
         
         // only show other first time tips if we are not showing the healthkit tip!
         if firstTimeHealthTip.isHidden {
-            if self.sortedNotes.count == 1 && oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
+            // only show Add Note tip if we haven't shown it before and we haven't shown
+            // uploader tip before. Add Note tip should be shown first on fresh installs,
+            // but for users upgrading to new version we shouldn't show it again
+            if oneShotIncompleteCheck("AddNoteTipHasBeenShown") && oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
+                hideAddNoteTip = false
+            } else if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
                 // only show the "need uploader" tip if the user has not enabled healthKit syncing...
                 if !appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser() {
+                    DDLogInfo("show uploader tip")
                     hideNeedUploaderTip = false
-                    oneShotCompleted("NeedUploaderTipHasBeenShown")
+                } else {
+                    DDLogInfo("don't uploader tip")
                 }
             } else {
                 // see if HK is enabled for this user, but user has not been asked to authorize the new items.
@@ -766,6 +776,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             }
         }
         
+        firstTimeAddNoteTip.isHidden = hideAddNoteTip
         firstTimeNeedUploaderTip.isHidden = hideNeedUploaderTip
     }
     
@@ -808,8 +819,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         
         // Present the view controller modally.
         self.present(emailVC, animated: true, completion: nil)
-
-        firstTimeNeedUploaderTip.isHidden = true
     }
     
     func mailComposeController(_ controller: MFMailComposeViewController,
@@ -837,6 +846,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     @IBAction func firstTimeNeedUploaderOkButtonHandler(_ sender: Any) {
         APIConnector.connector().trackMetric("Clicked first time need uploader")
         firstTimeNeedUploaderTip.isHidden = true
+        oneShotCompleted("NeedUploaderTipHasBeenShown")
     }
     
     //
