@@ -738,6 +738,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // Show connect to health celebration
         if (EventListViewController.oneShotTestCelebrate || (appHealthKitConfiguration.shouldShowHealthKitUI() && oneShotIncompleteCheck("ConnectToHealthCelebrationHasBeenShown"))) {
             EventListViewController.oneShotTestCelebrate = false
+            firstTimeHealthTip.isHidden = false
         }
     }
     
