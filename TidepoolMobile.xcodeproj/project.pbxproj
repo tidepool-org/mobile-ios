@@ -2030,6 +2030,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "TidepoolMobile/TidepoolMobile-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Osize";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
