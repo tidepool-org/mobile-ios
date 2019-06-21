@@ -50,6 +50,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     fileprivate var sortedNotes: [NoteInEventListTable] = []
     fileprivate var filteredNotes: [NoteInEventListTable] = []
     fileprivate var filterString = ""
+    var justPerformedUnwindToDoneAddNote = false
     // Fetch all notes for now...
     var loadingNotes = false
     
@@ -198,10 +199,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             sideMenu.allowPanGesture = true
        }
 
-        if sortedNotes.isEmpty || eventListNeedsUpdate {
+        if (sortedNotes.isEmpty || eventListNeedsUpdate) && !justPerformedUnwindToDoneAddNote {
             eventListNeedsUpdate = false
             loadNotes()
         }
+        justPerformedUnwindToDoneAddNote = false
 
         // periodically check for authentication issues in case we need to force a new login
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
@@ -672,6 +674,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         } else {
             DDLogInfo("Unknown segue source!")
         }
+        justPerformedUnwindToDoneAddNote = true
     }
 
     // Save button from edit comment.
