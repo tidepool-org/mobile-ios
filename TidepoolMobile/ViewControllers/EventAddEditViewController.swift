@@ -493,6 +493,8 @@ class EventAddEditViewController: BaseUIViewController, UITextViewDelegate {
         if (messageBox.text != defaultMessage && !messageBox.text.isEmpty) {
             APIConnector.connector().trackMetric("Clicked Post Note")
             
+            self.note.createdtime = Date()
+
             // if messageBox has text (not default message or empty) --> set the note to have values
             self.note.messagetext = self.messageBox.text
             self.note.groupid = self.group.userid

@@ -37,6 +37,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
     // first time screens
     @IBOutlet weak var firstTimeHealthTip: TidepoolMobileUIView!
+    @IBOutlet weak var firstTimeAddNoteTip: TidepoolMobileUIView!
     @IBOutlet weak var firstTimeNeedUploaderTip: UIView!
     
     fileprivate struct NoteInEventListTable {
@@ -49,6 +50,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     fileprivate var sortedNotes: [NoteInEventListTable] = []
     fileprivate var filteredNotes: [NoteInEventListTable] = []
     fileprivate var filterString = ""
+    var justPerformedUnwindToDoneAddNote = false
     // Fetch all notes for now...
     var loadingNotes = false
     
@@ -100,6 +102,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             
         // Note: one-time check to show first time healthKit connect tip. This needs to be shown first, before other first time screens, so check for it here. If this is up, the other screens will be deferred...
         firstTimeHealthKitConnectCheck()
+        
+        checkDisplayFirstTimeScreens()
     }
    
     private var appIsForeground: Bool = true
@@ -191,10 +195,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             sideMenu.allowPanGesture = true
        }
 
-        if sortedNotes.isEmpty || eventListNeedsUpdate {
+        if (sortedNotes.isEmpty || eventListNeedsUpdate) && !justPerformedUnwindToDoneAddNote {
             eventListNeedsUpdate = false
             loadNotes()
         }
+        justPerformedUnwindToDoneAddNote = false
 
         // periodically check for authentication issues in case we need to force a new login
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
@@ -245,8 +250,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // one-time check for health tip screen!
         if !firstTimeHealthTip.isHidden {
             firstTimeHealthTip.isHidden = true
-            // after hiding the health tip, other tips may be shown!
-            checkDisplayFirstTimeScreens()
+            oneShotCompleted("ConnectToHealthCelebrationHasBeenShown")
         }
     }
     
@@ -288,6 +292,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
                 UIApplication.shared.open(url)
             }
         }
+
+        checkDisplayFirstTimeScreens()
     }
     
     func sideMenuDidOpen() {
@@ -305,6 +311,10 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             return
         }
         performSegue(withIdentifier: "segueToAddNote", sender: self)
+        if !firstTimeAddNoteTip.isHidden {
+            firstTimeAddNoteTip.isHidden = true
+            oneShotCompleted("AddNoteTipHasBeenShown")
+        }
     }
     
     //
@@ -470,7 +480,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             // added a note...
             // keep hashtags up-to-date
             HashTagManager.sharedInstance.updateTagsForNote(oldNote: nil, newNote: note)
-            self.sortedNotes.insert(NoteInEventListTable(note: note, opened: false, comments: []), at: 0)
+            self.sortedNotes.insert(NoteInEventListTable(note: note, opened: true, comments: []), at: 0)
             // sort the notes, reload notes table
             sortNotesAndReload()
         }
@@ -484,8 +494,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             if let deletedNotePath = self.indexPathForNoteId(deletedNote.id) {
                 self.sortedNotes.remove(at: deletedNotePath.section)
                 sortNotesAndReload()
-                // in case we went to zero...
-                checkDisplayFirstTimeScreens()
             }
         } else {
             // deleted comment, only need to refetch comments for this note...
@@ -653,6 +661,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         if let eventAddVC = segue.source as? EventAddEditViewController {
             if let newNote = eventAddVC.newNote {
                 APIConnector.connector().doPostWithNote(self, note: newNote)
+                checkDisplayFirstTimeScreens()
                 // will be called back at postComplete on successful post!
                 // TODO: also handle unsuccessful posts?
             } else {
@@ -661,6 +670,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         } else {
             DDLogInfo("Unknown segue source!")
         }
+        justPerformedUnwindToDoneAddNote = true
     }
 
     // Save button from edit comment.
@@ -705,6 +715,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
 
     @IBAction func cancel(_ segue: UIStoryboardSegue) {
         DDLogInfo("unwind segue to eventList cancel")
+        checkDisplayFirstTimeScreens()
     }
 
     fileprivate var eventListNeedsUpdate: Bool  = false
@@ -729,8 +740,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         // Show connect to health celebration
         if (EventListViewController.oneShotTestCelebrate || (hkUploader.shouldShowHealthKitUI() && oneShotIncompleteCheck("ConnectToHealthCelebrationHasBeenShown"))) {
             EventListViewController.oneShotTestCelebrate = false
-            // One-shot finished!
-            oneShotCompleted("ConnectToHealthCelebrationHasBeenShown")
             firstTimeHealthTip.isHidden = false
         }
     }
@@ -741,16 +750,18 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             DDLogInfo("\(#function) loading notes...")
             return
         }
+        var hideAddNoteTip = true
         var hideNeedUploaderTip = true
         
         // only show other first time tips if we are not showing the healthkit tip!
         if firstTimeHealthTip.isHidden {
-            if self.sortedNotes.count == 1 && oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") {
-                // only show the "need uploader" tip if the user has not enabled healthKit syncing...
-                if !hkUploader.healthKitInterfaceEnabledForCurrentUser() {
-                    hideNeedUploaderTip = false
-                    oneShotCompleted("NeedUploaderTipHasBeenShown")
-                }
+            if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") && !appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
+            {
+                DDLogInfo("Show Uploader tip")
+                hideNeedUploaderTip = false
+            } else if oneShotIncompleteCheck("AddNoteTipHasBeenShown") {
+                DDLogInfo("Show Add Note tip")
+                hideAddNoteTip = false
             } else {
                 // see if HK is enabled for this user, but user has not been asked to authorize the new items.
                 if hkUploader.healthKitInterfaceEnabledForCurrentUser()
@@ -762,7 +773,11 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             }
         }
         
+        firstTimeAddNoteTip.isHidden = hideAddNoteTip
         firstTimeNeedUploaderTip.isHidden = hideNeedUploaderTip
+
+        let disableAddNoteButton: Bool = !firstTimeHealthTip.isHidden || !hideNeedUploaderTip || !coverView.isHidden
+        self.navigationItem.rightBarButtonItem?.isEnabled = !disableAddNoteButton
     }
     
     fileprivate func oneShotIncompleteCheck(_ oneShotId: String) -> Bool {
@@ -804,8 +819,6 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         
         // Present the view controller modally.
         self.present(emailVC, animated: true, completion: nil)
-
-        firstTimeNeedUploaderTip.isHidden = true
     }
     
     func mailComposeController(_ controller: MFMailComposeViewController,
@@ -833,6 +846,8 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
     @IBAction func firstTimeNeedUploaderOkButtonHandler(_ sender: Any) {
         APIConnector.connector().trackMetric("Clicked first time need uploader")
         firstTimeNeedUploaderTip.isHidden = true
+        oneShotCompleted("NeedUploaderTipHasBeenShown")
+        checkDisplayFirstTimeScreens()
     }
     
     //
@@ -1129,7 +1144,6 @@ extension EventListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
- 
         let noteSection = indexPath.section
         let row = indexPath.row
         let comments = filteredNotes[indexPath.section].comments
@@ -1167,8 +1181,15 @@ extension EventListViewController: UITableViewDelegate {
                     noteCell.configureFirstTimeTip("Tap to close note")
                 }
             } else if noteCell.firstTimeTipShowing() {
-                oneShotCompleted("TapToCloseNoteHasBeenShown")
-                noteCell.configureFirstTimeTip(nil)
+                oneShotCompleted("TapToCloseNoteHasBeenShown")                
+                if oneShotIncompleteCheck("TapToViewDataHasBeenShown") {
+                    // We may have auto-opened a note for Add Note before user has ever tapped a note to view data, so,
+                    // if we haven't dismissed the TapToViewDataHasBeenShown tip before due to user action by tapping on
+                    // a closed note to open it, then show that tip here
+                    noteCell.configureFirstTimeTip("Tap to view data")
+                } else {
+                    noteCell.configureFirstTimeTip(nil)
+                }
             }
         }
         if !noteCell.firstTimeTipShowing() {
@@ -1317,8 +1338,12 @@ extension EventListViewController: UITableViewDataSource {
                         cell.configureFirstTimeTip("Tap to close note")
                     }
                 } else {
-                    if oneShotIncompleteCheck("TapToViewDataHasBeenShown") {
-                        cell.configureFirstTimeTip("Tap to view data")
+                    // Don't show this tip for newly created notes since we auto-open those notes
+                    let now = Date()
+                    if now.timeIntervalSince(note.createdtime) > 1 {
+                        if oneShotIncompleteCheck("TapToViewDataHasBeenShown") {
+                            cell.configureFirstTimeTip("Tap to view data")
+                        }
                     }
                 }
             }
