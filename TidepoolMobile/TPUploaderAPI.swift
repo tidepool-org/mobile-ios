@@ -10,7 +10,7 @@ import TPHealthKitUploader
 
 /// The singleton of this class, accessed and initialized via TidepoolMobileUploaderAPI.connector(), initializes the uploader interface and provides it with the necessary callback functions.
 class TPUploaderAPI: TPUploaderConfigInfo {
-    
+        
     static var _connector: TPUploaderAPI?
     /// Supports a singleton for the application.
     class func connector() -> TPUploaderAPI {
@@ -58,6 +58,15 @@ class TPUploaderAPI: TPUploaderConfigInfo {
         return result
     }
     
+    // token expired? Log out to force token refresh, but should probably just do a refresh!
+    // TODO: add a call to refresh!
+    func authorizationErrorReceived() {
+        service.logout() {
+             let notification = Notification(name: Notification.Name(rawValue: "serviceLoggedOut"), object: nil)
+             NotificationCenter.default.post(notification)
+        }
+     }
+
     func baseUrlString() -> String? {
         let result = service.baseUrlString
         DDLogInfo("\(#function) - TPUploaderConfigInfo protocol, returning: \(result ?? "nil")")
@@ -96,6 +105,12 @@ class TPUploaderAPI: TPUploaderConfigInfo {
         set {
             dataCtrl.currentLoggedInUser?.biologicalSex = newValue
         }
+    }
+    
+    func onTurnOnInterface() {
+    }
+    
+    func onTurnOffInterface() {
     }
     
     let uploadFrameWork: StaticString = "uploader"

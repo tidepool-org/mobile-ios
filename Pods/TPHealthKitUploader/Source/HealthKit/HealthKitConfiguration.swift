@@ -80,13 +80,15 @@ class HealthKitConfiguration
     /// Turn on HK interface: start/resume uploading if possible...
     private func turnOnInterface() {
         DDLogVerbose("HealthKitConfiguration")
-        
+
         let hkManager = HealthKitUploadManager.sharedInstance
         guard !hkManager.isUploadInProgressForMode(.Current) else {
             DDLogVerbose("uploader already on, ignoring call!")
             return
         }
         
+        config.onTurnOnInterface();
+
         if let currentUserId = config.currentUserId() {
             // Always start uploading TPUploader.Mode.Current samples when interface is turned on
             hkManager.startUploading(mode: TPUploader.Mode.Current, currentUserId: currentUserId)
@@ -105,6 +107,8 @@ class HealthKitConfiguration
     private func turnOffInterface() {
         DDLogVerbose("\(#function)")
 
+        config.onTurnOffInterface();
+
         HealthKitUploadManager.sharedInstance.stopUploading(reason: TPUploader.StoppedReason.interfaceTurnedOff)
     }
 
@@ -119,7 +123,6 @@ class HealthKitConfiguration
         
         DDLogVerbose("\(#function)")
         
-        let needsUploaderReads = true
         let username = self.config.currentUserName
         
         guard self.config.currentUserId() != nil else {
@@ -130,7 +133,6 @@ class HealthKitConfiguration
         func configureCurrentHealthKitUser() {
             DDLogVerbose("\(#function)")
             
-            settings.interfaceEnabled.value = true
             if !self.healthKitInterfaceEnabledForCurrentUser() {
                 if self.healthKitInterfaceConfiguredForOtherUser() {
                     // Switching healthkit users, reset HealthKitUploadManager
@@ -143,6 +145,8 @@ class HealthKitConfiguration
                 settings.interfaceUserId.value = config.currentUserId()!
                 settings.interfaceUserName.value = username
             }
+            // Note: set this at the end because above will clear this value if switching current HK user!
+            settings.interfaceEnabled.value = true
         }
         
         HealthKitManager.sharedInstance.authorize() {
@@ -191,7 +195,7 @@ class HealthKitConfiguration
                     return true
                 }
             } else {
-                DDLogError("No logged in user at healthKitInterfaceEnabledForOtherUser!")
+                DDLogError("No logged in user at healthKitInterfaceConfiguredForOtherUser!")
                 return true
             }
         }

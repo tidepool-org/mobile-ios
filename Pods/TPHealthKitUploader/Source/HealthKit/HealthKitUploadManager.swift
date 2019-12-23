@@ -37,13 +37,9 @@ class HealthKitUploadManager:
         // Reset persistent uploader state if uploader version is upgraded
         let latestUploaderVersion = 8
         let lastExecutedUploaderVersion = settings.lastExecutedUploaderVersion.value
-        var resetPersistentData = false
         if latestUploaderVersion != lastExecutedUploaderVersion {
             DDLogInfo("Migrating uploader to \(latestUploaderVersion)")
             settings.lastExecutedUploaderVersion.value = latestUploaderVersion
-            resetPersistentData = true
-        }
-        if resetPersistentData {
             self.resetPersistentState(switchingHealthKitUsers: false)
         }
     }
@@ -84,7 +80,7 @@ class HealthKitUploadManager:
         currentHelper.resetPersistentState()
         historicalHelper.resetPersistentState()
         if switchingHealthKitUsers {
-            settings.hasPresentedSyncUI.reset()
+            settings.resetAll()
         }
     }
     
@@ -213,22 +209,15 @@ private class HealthKitUploadHelper: HealthKitSampleUploaderDelegate, HealthKitU
     func resetPersistentState() {
         DDLogVerbose("helper resetPersistentState (\(mode.rawValue))")
         for reader in readers {
-            reader.resetPersistentState()
-            reader.readerSettings.resetPersistentState()
+            reader.resetPersistentStateOfReader()
         }
         resetUploadBuffers()
     }
     
-    func markNotResumable() {
-        // Clear out the upload reader...
-        DDLogVerbose("(mode: \(mode.rawValue))")
-        resetPersistentState()
-    }
-    
     private func resetUploadBuffers() {
         // reset current samples...
-        self.samplesToUpload = [[String: AnyObject]]()
-        self.samplesToDelete = [[String: AnyObject]]()
+        self.samplesToUpload = []
+        self.samplesToDelete = []
         self.firstSampleDate = nil
         self.lastSampleDate = nil
     }
@@ -369,6 +358,11 @@ private class HealthKitUploadHelper: HealthKitSampleUploaderDelegate, HealthKitU
             }
         }
         
+        guard self.isUploading else {
+          DDLogInfo("Stopped uploading, don't post TPUploaderNotifications.TurnOnUploader.")
+          return
+        }
+
         postNotifications([TPUploaderNotifications.Updated, TPUploaderNotifications.TurnOnUploader], mode: mode)
     }
     

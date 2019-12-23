@@ -197,12 +197,17 @@ class HealthKitUploadReader: NSObject {
         return result
     }
     
-    func resetPersistentState() {
+    func resetPersistentStateOfReader() {
         DDLogVerbose("HealthKitUploadReader (\(uploadType.typeName), \(mode.rawValue))")
+        stopObservingSamples() // just in case...
         readerSettings.resetAllReaderKeys()
+        readerSettings.resetAllStatsKeys()
         readerSettings.startDateHistoricalSamples.value = nil
         readerSettings.endDateHistoricalSamples.value = nil
         self.lastHistoricalReadCount = nil
+        self.queryAnchor = nil
+        self.sortedSamples = []
+        self.deletedSamples = []
     }
 
     func startReading() {

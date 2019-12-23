@@ -80,14 +80,13 @@ class HKGlobalSettings {
         self.hasPendingCurrentUploads = HKSettingBool(key: "hasPendingCurrentUploadsKey")
         self.lastSuccessfulCurrentUploadTime = HKSettingDate(key: "lastSuccessfulCurrentUploadTime")
 
-        // for global reset
+        // additional settings for global reset, used when switching HK user (all except lastExecutedUploaderVersion)
         self.userSettings = [
             self.interfaceEnabled,
             self.interfaceUserId,
             self.interfaceUserName,
             self.hkDataUploadId,
             self.authorizationRequestedForUploaderSamples,
-            self.lastExecutedUploaderVersion,
             self.hasPresentedSyncUI,
         ]
         self.historicalUploadSettings = [

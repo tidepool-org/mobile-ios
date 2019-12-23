@@ -22,6 +22,8 @@ public protocol TPUploaderConfigInfo {
     func sessionToken() -> String?
     /// base string to constuct url for current service.
     func baseUrlString() -> String?
+    /// http status 401 encountered, token has probably expired!
+    func authorizationErrorReceived()
     /// current logged in user id
     func currentUserId() -> String?
     /// account for current user is a DSA
@@ -29,8 +31,12 @@ public protocol TPUploaderConfigInfo {
     var currentUserName: String? { get }
     /// biological sex is gleaned from HealthKit, and uploaded when missing in the service.
     var bioSex: String? { get set }
-    
-    /// logging callbacks...
+  
+    /// interface callbacks
+    func onTurnOnInterface();
+    func onTurnOffInterface();
+
+    /// logging callbacks
     func logVerbose(_ str: String)
     func logError(_ str: String)
     func logInfo(_ str: String)

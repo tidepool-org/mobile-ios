@@ -307,7 +307,7 @@ class MenuAccountSettingsViewController: UIViewController, UITextViewDelegate {
                 }
                 DDLogInfo("Mode: \(stat.mode.rawValue)")
                 DDLogInfo("Type: \(stat.typeName)")
-                DDLogInfo("Last successful upload time: \(stat.lastSuccessfulUploadTime)")
+                DDLogInfo("Last successful upload time: \(String(describing: stat.lastSuccessfulUploadTime))")
                 DDLogInfo("")
             }
         }

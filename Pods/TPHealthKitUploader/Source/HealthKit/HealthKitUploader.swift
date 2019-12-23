@@ -183,6 +183,9 @@ class HealthKitUploader: NSObject, URLSessionDelegate, URLSessionTaskDelegate, U
                         } catch {
                             DDLogError("Unable to parse response message as dictionary!")
                         }
+                    } else if response.statusCode == 401 {
+                        // token expired? Notify service connector to handle this!
+                        TPUploaderServiceAPI.connector!.receivedAuthErrorOnUpload()
                     }
                 }
                 DDLogError(message)

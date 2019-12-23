@@ -26,7 +26,7 @@ class HKTypeModeSettings {
     var lastSuccessfulUploadTime: HKSettingDate
     var lastSuccessfulUploadLatestSampleTime: HKSettingDate
     var lastSuccessfulUploadEarliestSampleTime: HKSettingDate
-    // other
+    // Reader settings
     var queryAnchor: HKSettingAnchor
     var queryStartDate: HKSettingDate
     var queryEndDate: HKSettingDate
@@ -60,11 +60,21 @@ class HKTypeModeSettings {
         return result
     }
     
+    func resetAttemptStats() {
+        DDLogVerbose("HKTypeModeSettings: (\(typeName), \(mode.rawValue))")
+        lastUploadAttemptEarliestSampleTime = nil
+        lastUploadAttemptLatestSampleTime = nil
+        lastUploadAttemptTime = nil
+        lastUploadAttemptSampleCount = 0
+    }
+
     func resetAllStatsKeys() {
         DDLogVerbose("HKTypeModeSettings (\(typeName), \(mode))")
         for setting in statSettings {
             setting.reset()
         }
+        // also reset all the non-persisted info
+        resetAttemptStats()
     }
     
     func resetAllReaderKeys() {
@@ -74,21 +84,6 @@ class HKTypeModeSettings {
         }
     }
     
-    func resetPersistentState() {
-        DDLogVerbose("HKTypeModeSettings: (\(typeName), \(mode.rawValue))")
-        resetAllStatsKeys()
-        // also reset all the non-persisted info
-        resetAttemptStats()
-    }
-
-    func resetAttemptStats() {
-        DDLogVerbose("HKTypeModeSettings: (\(typeName), \(mode.rawValue))")
-        lastUploadAttemptEarliestSampleTime = nil
-        lastUploadAttemptLatestSampleTime = nil
-        lastUploadAttemptTime = nil
-        lastUploadAttemptSampleCount = 0
-    }
-
     func updateForHistoricalSampleRange(startDate: Date, endDate: Date) {
         self.startDateHistoricalSamples.value = startDate
         self.endDateHistoricalSamples.value = endDate

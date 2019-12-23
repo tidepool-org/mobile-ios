@@ -272,7 +272,7 @@
 		48B8C9252022AF7B00437263 /* TimeChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA081BA8DDFC00013096 /* TimeChange.swift */; };
 		48B8C9262022AF7B00437263 /* UrineKetone+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0B1BA8DDFC00013096 /* UrineKetone+CoreDataProperties.swift */; };
 		48B8C9272022AF7B00437263 /* UrineKetone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0334CA0C1BA8DDFC00013096 /* UrineKetone.swift */; };
-		48B8C92F2022B1C000437263 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
+		48B8C92F2022B1C000437263 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		48B8C9342023A05E00437263 /* BLEController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B8C9332023A05E00437263 /* BLEController.swift */; };
 		48B8C9362024E47C00437263 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 486EAA791C305E38003B4497 /* HealthKit.framework */; };
 		48B8C938202540EC00437263 /* BaseTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48B8C937202540EC00437263 /* BaseTabBarController.swift */; };
@@ -998,7 +998,6 @@
 				4859FCB31B9A4DE4000C1269 /* Resources */,
 				48FE49E41E8AD871005B103C /* ShellScript */,
 				DA97F439745BB4E48E8FCA3A /* [CP] Embed Pods Frameworks */,
-				4DCF24411EB5303100D963B8 /* ShellScript */,
 				48A17365221E0EF700CE8F55 /* Embed Frameworks */,
 			);
 			buildRules = (
@@ -1037,7 +1036,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1120;
 				ORGANIZATIONNAME = Tidepool;
 				TargetAttributes = {
 					4823986D2022628200EBB13C = {
@@ -1155,26 +1154,13 @@
 			shellPath = /bin/sh;
 			shellScript = "COMMITS=$(git rev-list HEAD --count)\nCOMMITS=$(($COMMITS))\ndefaults write \"${BUILT_PRODUCTS_DIR}/${INFOPLIST_PATH%.*}\" \"CFBundleVersion\" \"${COMMITS}\"\n";
 		};
-		4DCF24411EB5303100D963B8 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "SCRIPT_SRC=$(find \"$PROJECT_DIR\" -name 'BugseeAgent' | head -1)\nif [ ! \"${SCRIPT_SRC}\" ]; then\necho \"Error: BugseeAgent script not found.\"\necho \"If you link Bugsee.framework from outside the project folder, please copy the script\"\necho \"into your main project directory or manually update SCRIPT_SRC variable with the right path\"\nexit 1\nfi\n/usr/bin/python \"${SCRIPT_SRC}\" d3170420-a6f0-4db3-970c-c4c571e5d31a\n";
-		};
 		648AB4E963DDBF699C190EAE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-BGMTool/Pods-BGMTool-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-BGMTool/Pods-BGMTool-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
@@ -1189,7 +1175,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BGMTool/Pods-BGMTool-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BGMTool/Pods-BGMTool-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8D29B92685CED5FC17AC117B /* [CP] Check Pods Manifest.lock */ = {
@@ -1234,7 +1220,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
@@ -1253,7 +1239,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TidepoolMobile/Pods-TidepoolMobile-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EA39DC8E43BB352ED10B1485 /* [CP] Check Pods Manifest.lock */ = {
@@ -1280,7 +1266,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
@@ -1299,7 +1285,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TidepoolMobileTests/Pods-TidepoolMobileTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1318,7 +1304,7 @@
 				48B8C8E72022A61E00437263 /* UrchinConstants.swift in Sources */,
 				488DE48C203CF6B200D1FB54 /* TPMenuButton.swift in Sources */,
 				48B8C9242022AF7B00437263 /* TimeChange+CoreDataProperties.swift in Sources */,
-				48B8C92F2022B1C000437263 /* BuildFile in Sources */,
+				48B8C92F2022B1C000437263 /* (null) in Sources */,
 				488DE48B203CF61E00D1FB54 /* TidepoolMobileUIView.swift in Sources */,
 				48B8C9062022AD4E00437263 /* Upload.swift in Sources */,
 				48B8C8FE2022AD2000437263 /* Note.swift in Sources */,
@@ -1766,6 +1752,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1822,6 +1809,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;

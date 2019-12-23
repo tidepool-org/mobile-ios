@@ -539,7 +539,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             let indexPathOfEditedNote = self.indexPathForNoteId(originalNote.parentmessage!)
             if let noteIndexPath = indexPathOfEditedNote {
                 let noteIndex = noteIndexPath.section
-                var comments = filteredNotes[noteIndex].comments
+                let comments = filteredNotes[noteIndex].comments
                 for i in 0..<comments.count {
                     if comments[i].id == originalNote.id {
                         tableView.reloadRows(at: [IndexPath(row: i+kFirstCommentRow, section: noteIndex)], with: .automatic)
@@ -755,7 +755,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
         
         // only show other first time tips if we are not showing the healthkit tip!
         if firstTimeHealthTip.isHidden {
-            if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") && !appHealthKitConfiguration.healthKitInterfaceEnabledForCurrentUser()
+            if oneShotIncompleteCheck("NeedUploaderTipHasBeenShown") && !hkUploader.healthKitInterfaceEnabledForCurrentUser()
             {
                 DDLogInfo("Show Uploader tip")
                 hideNeedUploaderTip = false

@@ -17,7 +17,6 @@ import UIKit
 import CoreData
 import CocoaLumberjack
 import TPHealthKitUploader
-import Bugsee
 
 var fileLogger: DDFileLogger!
 
@@ -38,18 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool
     {
-        if let logger = BugseeLogger.sharedInstance() as? DDLogger {
-            DDLog.add(logger)
-        } else {
-            DDLogError("Bugsee Logger NOT ADDED!")
-        }
-
-        // Only enable Bugsee for TestFlight betas and debug builds, not for iTunes App Store releases (at least for now)
-        let isRunningTestFlightBeta = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
-        if isRunningTestFlightBeta {
-            Bugsee.launch(token:"d3170420-a6f0-4db3-970c-c4c571e5d31a")
-        }
-        
         // Occasionally log full date to help with deciphering logs!
         let dateString = DateFormatter().isoStringFromDate(Date())
         DDLogVerbose("Log Date: \(dateString)")

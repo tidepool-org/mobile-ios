@@ -5,8 +5,7 @@ platform :ios, '11.0'
 use_frameworks!
 
 def available_pods
-  pod 'TPHealthKitUploader', :git => 'https://github.com/tidepool-org/healthkit-uploader', :tag => '0.9.1'
-  pod 'Bugsee', '1.18.15'
+  pod 'TPHealthKitUploader', :git => 'https://github.com/tidepool-org/healthkit-uploader', :tag => '0.9.5'
   pod 'Alamofire', '4.7.3'
   pod 'SwiftyJSON', '4.2'
   pod 'CocoaLumberjack/Swift', '~> 3.4.2'
@@ -23,7 +22,7 @@ target 'TidepoolMobileTests' do
 end
 
 target 'BGMTool' do
-  pod 'TPHealthKitUploader', :git => 'https://github.com/tidepool-org/healthkit-uploader', :tag => '0.9.1'
+  pod 'TPHealthKitUploader', :git => 'https://github.com/tidepool-org/healthkit-uploader', :tag => '0.9.5'
   pod 'Alamofire', '4.7.3'
   pod 'SwiftyJSON', '4.2'
   pod 'CocoaLumberjack/Swift', '~> 3.4.2'
