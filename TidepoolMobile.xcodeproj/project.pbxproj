@@ -2002,7 +2002,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 2.1.13;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-D\" \"DEBUG\"";
-				PRODUCT_BUNDLE_IDENTIFIER = "test.1-451";
+				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
 				PRODUCT_NAME = TidepoolMobile;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2030,7 +2030,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 2.1.13;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-D\" \"RELEASE\"";
-				PRODUCT_BUNDLE_IDENTIFIER = "test.1.-451";
+				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
 				PRODUCT_NAME = TidepoolMobile;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
