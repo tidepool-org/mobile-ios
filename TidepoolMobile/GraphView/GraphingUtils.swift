@@ -213,12 +213,12 @@ open class GraphingUtils {
     fileprivate let kHourInSecs:TimeInterval = 3600.0
     fileprivate func drawXAxisHeader() {
         //// General Declarations
-        let context = UIGraphicsGetCurrentContext()
+        _ = UIGraphicsGetCurrentContext()
         layout.figureXAxisTickTiming()
         let tickTiming = layout.curXAxisLabelTickTiming
         
         //// Frames - use whole view for background
-        let contents = CGRect(x: 0, y: 0, width: viewSize.width, height: viewSize.height)
+        _ = CGRect(x: 0, y: 0, width: viewSize.width, height: viewSize.height)
         var graphStartSecs = startTime.timeIntervalSinceReferenceDate
         if layout.useRelativeTimes {
             graphStartSecs = startTime.timeIntervalSince(layout.graphStartTime as Date)

@@ -59,7 +59,7 @@ import UIKit
                 titleLabel.font = font
                 // Shortcut: this means the button only works with a single font color for disabled buttons: dimmedWhiteColor!
                 if let titleStr = titleLabel.text {
-                    let disabledTitle = NSAttributedString(string: titleStr, attributes:[NSAttributedString.Key.font: titleLabel.font, NSAttributedString.Key.foregroundColor: Styles.dimmedWhiteColor])
+                    let disabledTitle = NSAttributedString(string: titleStr, attributes:[NSAttributedString.Key.font: titleLabel.font!, NSAttributedString.Key.foregroundColor: Styles.dimmedWhiteColor])
                     self.setAttributedTitle(disabledTitle, for: UIControl.State.disabled)
                 }
             }

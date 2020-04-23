@@ -1125,7 +1125,7 @@
 					};
 					4859FCB41B9A4DE4000C1269 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = 75U4X84TEG;
+						DevelopmentTeam = UTCT485GR5;
 						LastSwiftMigration = 1140;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -1995,12 +1995,14 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 75U4X84TEG;
+				CURRENT_PROJECT_VERSION = 620;
+				DEVELOPMENT_TEAM = UTCT485GR5;
 				INFOPLIST_FILE = TidepoolMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.1.13;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-D\" \"DEBUG\"";
-				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
+				PRODUCT_BUNDLE_IDENTIFIER = "test.1-451";
 				PRODUCT_NAME = TidepoolMobile;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2021,12 +2023,14 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 75U4X84TEG;
+				CURRENT_PROJECT_VERSION = 620;
+				DEVELOPMENT_TEAM = UTCT485GR5;
 				INFOPLIST_FILE = TidepoolMobile/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 2.1.13;
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-D\" \"RELEASE\"";
-				PRODUCT_BUNDLE_IDENTIFIER = org.tidepool.blipnotes;
+				PRODUCT_BUNDLE_IDENTIFIER = "test.1.-451";
 				PRODUCT_NAME = TidepoolMobile;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
