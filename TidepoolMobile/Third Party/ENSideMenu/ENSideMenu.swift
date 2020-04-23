@@ -40,19 +40,19 @@ public extension UIViewController {
     /**
     Changes current state of side menu view.
     */
-    public func toggleSideMenuView () {
+    func toggleSideMenuView () {
         sideMenuController()?.sideMenu?.toggleMenu()
     }
     /**
     Hides the side menu view.
     */
-    public func hideSideMenuView () {
+    func hideSideMenuView () {
         sideMenuController()?.sideMenu?.hideSideMenu()
     }
     /**
     Shows the side menu view.
     */
-    public func showSideMenuView () {
+    func showSideMenuView () {
         
         sideMenuController()?.sideMenu?.showSideMenu()
     }
@@ -62,7 +62,7 @@ public extension UIViewController {
     
     :returns: BOOL value
     */
-    public func isSideMenuOpen () -> Bool {
+    func isSideMenuOpen () -> Bool {
         let sieMenuOpen = self.sideMenuController()?.sideMenu?.isMenuOpen
         return sieMenuOpen!
     }
@@ -82,7 +82,7 @@ public extension UIViewController {
     
     :returns: A `UIViewController`responding to `ENSideMenuProtocol` protocol
     */
-    public func sideMenuController () -> ENSideMenuProtocol? {
+    func sideMenuController () -> ENSideMenuProtocol? {
         var iteration : UIViewController? = self.parent
         if (iteration == nil) {
             return topMostController()

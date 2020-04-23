@@ -543,7 +543,7 @@ class EventListViewController: BaseUIViewController, ENSideMenuDelegate, NoteAPI
             let indexPathOfEditedNote = self.indexPathForNoteId(originalNote.parentmessage!)
             if let noteIndexPath = indexPathOfEditedNote {
                 let noteIndex = noteIndexPath.section
-                var comments = filteredNotes[noteIndex].comments
+                let comments = filteredNotes[noteIndex].comments
                 for i in 0..<comments.count {
                     if comments[i].id == originalNote.id {
                         tableView.reloadRows(at: [IndexPath(row: i+kFirstCommentRow, section: noteIndex)], with: .automatic)
